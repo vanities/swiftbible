@@ -33,6 +33,5 @@ struct SearchBar: View {
 }
 
 #Preview {
-    @Previewable @State var text: String = ""
-    SearchBar(text: $text)
+    //SearchBar(text: $text)
 }
