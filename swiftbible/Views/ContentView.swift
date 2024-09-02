@@ -52,7 +52,9 @@ struct ContentView: View {
                 }
             }
             .onAppear {
-                bibleData = BibleService.shared.fetchBibleData()
+                if bibleData.newTestament.isEmpty {
+                    bibleData = BibleService.shared.fetchBibleData()
+                }
             }
             .navigationTitle("Bible")
             .ignoresSafeArea(.all, edges: .horizontal)

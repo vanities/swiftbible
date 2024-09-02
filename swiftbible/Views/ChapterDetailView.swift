@@ -13,13 +13,7 @@ struct ChapterDetailView: View {
 
 
     var body: some View {
-        VStack(alignment: .center) {
-            Text(book.name)
-                .font(.title)
-
-            Text("Chapter \(chapter)")
-                .font(.headline)
-
+        VStack(alignment: .center, spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
                     ForEach(book.chapters[chapter]!.enumerated().map { ($0, $1) }, id: \.1) { index, verse in
@@ -32,6 +26,9 @@ struct ChapterDetailView: View {
                 .padding()
             }
         }
+        .navigationTitle(
+            Text("\(book.name) \(chapter)")
+        )
     }
 }
 
