@@ -67,12 +67,12 @@
 		954BC9D22C84EDBE00FFCFA6 /* swiftbible */ = {
 			isa = PBXGroup;
 			children = (
-				954BC9F52C85456400FFCFA6 /* Info.plist */,
 				954BC9EB2C85011800FFCFA6 /* Views */,
 				954BC9E52C8500C200FFCFA6 /* Models */,
 				954BC9E82C8500EE00FFCFA6 /* Services */,
 				954BC9E22C85001900FFCFA6 /* Text */,
 				954BC9D32C84EDBE00FFCFA6 /* swiftbibleApp.swift */,
+				954BC9F52C85456400FFCFA6 /* Info.plist */,
 				954BC9D72C84EDBF00FFCFA6 /* Assets.xcassets */,
 				954BC9D92C84EDBF00FFCFA6 /* swiftbible.entitlements */,
 				954BC9DA2C84EDBF00FFCFA6 /* Preview Content */,
