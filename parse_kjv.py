@@ -167,13 +167,16 @@ def parse_bible_file(file_path):
                 chapter, verse = line.split(":", 1)
                 if int(chapter) != current_chapter:
                     current_chapter = int(chapter)
-                    current_book["chapters"][current_chapter] = []
-                current_book["chapters"][current_chapter].append(
-                    line.split(maxsplit=1)[1]
-                )
+                    current_book["chapters"][current_chapter] = {}
+                verse_number = int(verse.split()[0])
+                current_book["chapters"][current_chapter][verse_number] = line.split(
+                    maxsplit=1
+                )[1]
             else:
                 if current_book and current_chapter:
-                    current_book["chapters"][current_chapter][-1] += " " + line
+                    current_book["chapters"][current_chapter][verse_number] += (
+                        " " + line
+                    )
 
     if current_book:
         bible_data.append(current_book)

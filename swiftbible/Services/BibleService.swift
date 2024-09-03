@@ -17,9 +17,7 @@ class BibleService {
         do {
             let data = try Data(contentsOf: baseURL)
             let decoder = JSONDecoder()
-            print("hello")
             var bibleData = try decoder.decode([Book].self, from: data)
-            print("test \(bibleData)")
 
             for i in bibleData.indices {
                 if Testament.oldNames.contains(bibleData[i].name) {

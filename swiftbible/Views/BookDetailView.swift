@@ -12,13 +12,7 @@ struct BookDetailView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            List(book.chapters.keys.sorted(by: { (key1, key2) -> Bool in
-                    guard let intKey1 = Int(key1), let intKey2 = Int(key2) else {
-                        return key1 < key2
-                    }
-                    return intKey1 < intKey2
-                }
-            ), id: \.self) { chapter in
+            List(book.chapters.keys.sorted(by: sorter), id: \.self) { chapter in
                  NavigationLink(destination: ChapterDetailView(book: book, chapter: chapter)) {
                      Text("Chapter \(chapter)")
                  }
