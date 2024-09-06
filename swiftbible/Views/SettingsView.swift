@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Supabase
 
 struct SettingsView: View {
     @AppStorage("supabaseAccessToken") private var supabaseAccessToken: String?
@@ -31,6 +30,7 @@ struct SettingsView: View {
                 } else {
                     TextField("Email", text: $email)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.emailAddress)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
 

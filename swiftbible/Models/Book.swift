@@ -5,7 +5,16 @@
 //  Created by Adam Mischke on 9/1/24.
 //
 
-// MARK: - Bible
+struct Paragragph: Codable {
+    let startingVerse: String
+    let text: String
+}
+struct Chapter: Codable {
+    let number: Int
+    let paragraph: Paragragph
+}
+
+// MARK: - Book
 struct Book: Codable {
     let name: String
     let description: String
