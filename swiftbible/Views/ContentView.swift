@@ -57,7 +57,18 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Bible")
+            .navigationBarItems(trailing: settingsButton)
+            .navigationDestination(for: String.self) { value in
+                if value == "settings" {
+                    SettingsView()
+                }
+            }
             .ignoresSafeArea(.all, edges: .horizontal)
+            .onAppear {
+                Task {
+                    await SupabaseService.shared.refreshToken()
+                }
+            }
         }
 
     }
@@ -71,6 +82,16 @@ struct ContentView: View {
         }
     }
 
+    var settingsButton: some View {
+        NavigationLink(value: "settings") {
+            Image(systemName: Constants.settingsIcon)
+                .foregroundColor(Color.primary)
+        }
+    }
+
+    struct Constants {
+        static let settingsIcon = "gear"
+    }
 }
 
 #Preview {
