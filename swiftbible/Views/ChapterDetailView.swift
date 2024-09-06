@@ -11,6 +11,8 @@ struct ChapterDetailView: View {
     let book: Book
     let chapter: String
 
+    @State private var isHiding = false
+
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             ScrollView {
@@ -30,11 +32,23 @@ struct ChapterDetailView: View {
                     }
                 }
                 .padding()
+                .onScrollingChange(onScrollingDown: {
+                    isHiding = true
+                }, onScrollingUp: {
+                    isHiding = false
+                }, onScrollingStopped: {
+                })
             }
+            .toolbar(isHiding ? .hidden : .visible, for: .navigationBar)
+            .toolbar(isHiding ? .hidden : .visible, for: .tabBar)
+            .animation(.easeIn, value: isHiding)
         }
         .navigationTitle(
             Text("\(book.name) \(chapter)")
         )
+        .onTapGesture {
+            isHiding.toggle()
+        }
     }
 }
 
