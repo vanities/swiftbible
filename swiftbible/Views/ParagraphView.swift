@@ -44,7 +44,6 @@ struct ParagraphView: View {
 
         let remainingText = String(paragraph[startIndex...].trimmingCharacters(in: .whitespaces))
         result.append((number: nil, text: remainingText))
-        print(result)
 
         return result.reduce(Text(""), {
             $0
@@ -52,7 +51,7 @@ struct ParagraphView: View {
                 .foregroundStyle(.gray)
                 .font(.footnote)
                 .baselineOffset(6.0)
-            + Text("\($1.text) ")}
+            + Text("\($1.text)")}
         )
     }
 }
