@@ -18,6 +18,8 @@
 		952F39CF2C8BA7F3009A412D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39CE2C8BA7F3009A412D /* ContentView.swift */; };
 		952F39D22C8BAB72009A412D /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39D12C8BAB72009A412D /* View.swift */; };
 		952F39D52C8BABB3009A412D /* OnScrollingChangeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39D42C8BABB3009A412D /* OnScrollingChangeViewModifier.swift */; };
+		952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */; };
+		952F39DA2C8BBD3C009A412D /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 952F39D92C8BBD3C009A412D /* MarkdownUI */; };
 		9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9537E25D2C893FBD00FD56B9 /* Supabase */; };
 		9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */; };
 		9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E2632C89502400FD56B9 /* VerificationView.swift */; };
@@ -42,6 +44,7 @@
 		952F39CE2C8BA7F3009A412D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		952F39D12C8BAB72009A412D /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		952F39D42C8BABB3009A412D /* OnScrollingChangeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnScrollingChangeViewModifier.swift; sourceTree = "<group>"; };
+		952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDevotionalView.swift; sourceTree = "<group>"; };
 		9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
 		9537E2632C89502400FD56B9 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		9537E2662C8A9E1E00FD56B9 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
@@ -67,6 +70,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				95186D092C893C8100C0949D /* PostgREST in Frameworks */,
+				952F39DA2C8BBD3C009A412D /* MarkdownUI in Frameworks */,
 				95186D072C893C8100C0949D /* Functions in Frameworks */,
 				9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */,
 				95186D052C893C8100C0949D /* Auth in Frameworks */,
@@ -129,12 +133,12 @@
 		954BC9D22C84EDBE00FFCFA6 /* swiftbible */ = {
 			isa = PBXGroup;
 			children = (
-				952F39D32C8BABA0009A412D /* Modifiers */,
-				952F39D02C8BAB64009A412D /* Extensions */,
-				9537E2652C8A9E0800FD56B9 /* ViewModels */,
 				954BC9EB2C85011800FFCFA6 /* Views */,
+				9537E2652C8A9E0800FD56B9 /* ViewModels */,
 				954BC9E52C8500C200FFCFA6 /* Models */,
 				954BC9E82C8500EE00FFCFA6 /* Services */,
+				952F39D02C8BAB64009A412D /* Extensions */,
+				952F39D32C8BABA0009A412D /* Modifiers */,
 				954BC9E22C85001900FFCFA6 /* Text */,
 				954BC9D32C84EDBE00FFCFA6 /* swiftbibleApp.swift */,
 				954BC9F52C85456400FFCFA6 /* Info.plist */,
@@ -184,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				952F39CE2C8BA7F3009A412D /* ContentView.swift */,
+				952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */,
 				954BC9D52C84EDBE00FFCFA6 /* BibleView.swift */,
 				954BC9EC2C85012200FFCFA6 /* BookDetailView.swift */,
 				954BC9EF2C8501C900FFCFA6 /* ChapterDetailView.swift */,
@@ -241,6 +246,7 @@
 			mainGroup = 954BC9C72C84EDBE00FFCFA6;
 			packageReferences = (
 				95186D112C893F2F00C0949D /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				952F39D82C8BBD3C009A412D /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 			);
 			productRefGroup = 954BC9D12C84EDBE00FFCFA6 /* Products */;
 			projectDirPath = "";
@@ -278,6 +284,7 @@
 				954BC9D62C84EDBE00FFCFA6 /* BibleView.swift in Sources */,
 				954BC9D42C84EDBE00FFCFA6 /* swiftbibleApp.swift in Sources */,
 				95186D102C893E7500C0949D /* SettingsView.swift in Sources */,
+				952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */,
 				954BC9E72C8500D800FFCFA6 /* Book.swift in Sources */,
 				9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */,
 				952F39D52C8BABB3009A412D /* OnScrollingChangeViewModifier.swift in Sources */,
@@ -532,6 +539,14 @@
 				minimumVersion = 2.5.1;
 			};
 		};
+		952F39D82C8BBD3C009A412D /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -559,6 +574,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 95186D032C893C8100C0949D /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Storage;
+		};
+		952F39D92C8BBD3C009A412D /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 952F39D82C8BBD3C009A412D /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
 		};
 		9537E25D2C893FBD00FD56B9 /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;

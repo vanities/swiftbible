@@ -12,10 +12,14 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            Tab("Bible", systemImage: "tray.and.arrow.down.fill") {
+            Tab("Bible", systemImage: "book.fill") {
                 BibleView()
             }
-            Tab("Settings", systemImage: "person.crop.circle.fill") {
+            Tab("Daily Devotional", systemImage: "sun.horizon.fill") {
+                DailyDevotionalView()
+            }
+            Tab("Settings", systemImage: "gearshape.fill") {
+            //Tab("Settings", systemImage: "person.crop.circle.fill") {
                 SettingsView()
             }
         }
