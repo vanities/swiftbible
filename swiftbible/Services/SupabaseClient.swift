@@ -9,6 +9,7 @@ import SwiftUI
 import Supabase
 
 class SupabaseService {
+    @AppStorage("supabaseRefreshToken") private var supabaseRefreshToken: String?
     static let shared = SupabaseService()
 
     private let supabaseURL: URL = {
@@ -34,5 +35,32 @@ class SupabaseService {
     
     var auth: AuthClient {
         return client.auth
+    }
+
+    var session: Session?
+    var user: User?
+
+    func refreshToken() async {
+        do {
+            session = try await self.auth.refreshSession(refreshToken: supabaseRefreshToken)
+            print("Successfully refreshed session")
+        }
+        catch {
+            print("Could not refresh session: \(error)")
+        }
+    }
+
+    func getUser() async -> User? {
+        do {
+            user = try await self.auth.user()
+            if let user {
+                return user
+            }
+            print("Successfully got user")
+        }
+        catch {
+            print("Could not get user: \(error)")
+        }
+        return nil
     }
 }

@@ -9,16 +9,20 @@ import SwiftUI
 import Supabase
 
 struct SettingsView: View {
+    @AppStorage("supabaseAccessToken") private var supabaseAccessToken: String?
+    @AppStorage("supabaseRefreshToken") private var supabaseRefreshToken: String?
+
     @State private var isSignedIn = false
     @State private var email = ""
     @State private var verificationCode = ""
     @State private var showVerificationView = false
+    @State private var user: User?
 
     var body: some View {
         Form {
             Section(header: Text("Supabase Authentication")) {
-                if isSignedIn {
-                    Text("Signed in as: \(email)")
+                if let user {
+                    Text("Signed in as: \(user.email ?? "")")
                     Button("Sign Out") {
                         Task {
                             await signOut()
@@ -43,8 +47,17 @@ struct SettingsView: View {
             }
         }
         .navigationBarTitle("Settings")
+        .onChange(of: isSignedIn) {
+            if isSignedIn {
+                Task {
+                    user = await SupabaseService.shared.getUser()
+                }
+            }
+        }
         .onAppear {
-            //checkAuthStatus()
+            Task {
+                user = await SupabaseService.shared.getUser()
+            }
         }
     }
 
@@ -60,7 +73,7 @@ struct SettingsView: View {
         do {
             try await SupabaseService.shared.auth.signOut()
             print("Sign-out successful.")
-            removeToken()
+            removeAuth()
             isSignedIn = false
             email = ""
         } catch {
@@ -68,12 +81,9 @@ struct SettingsView: View {
         }
     }
 
-    private func retrieveToken() -> String? {
-        return UserDefaults.standard.string(forKey: "supabaseToken")
-    }
-
-    private func removeToken() {
-        UserDefaults.standard.removeObject(forKey: "supabaseToken")
+    private func removeAuth() {
+        supabaseAccessToken = ""
+        supabaseRefreshToken = ""
     }
 }
 

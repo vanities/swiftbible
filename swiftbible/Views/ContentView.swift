@@ -64,6 +64,11 @@ struct ContentView: View {
                 }
             }
             .ignoresSafeArea(.all, edges: .horizontal)
+            .onAppear {
+                Task {
+                    await SupabaseService.shared.refreshToken()
+                }
+            }
         }
 
     }
