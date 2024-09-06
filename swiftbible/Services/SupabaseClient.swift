@@ -9,6 +9,7 @@ import SwiftUI
 import Supabase
 
 class SupabaseService {
+    @AppStorage("supabaseAccessToken") private var supabaseAccessToken: String?
     @AppStorage("supabaseRefreshToken") private var supabaseRefreshToken: String?
     static let shared = SupabaseService()
 
@@ -38,12 +39,50 @@ class SupabaseService {
     }
 
     var session: Session?
-    var user: User?
+
+    func signIn(email: String) async {
+        do {
+            try await self.auth.signInWithOTP(email: email)
+        } catch {
+            print("Sign-in error: \(error.localizedDescription)")
+        }
+    }
+
+    func verifyOTP(email: String, verificationCode: String) async throws {
+        do {
+            /*
+             {
+               "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNjI3MjkxNTc3LCJzdWIiOiJmYTA2NTQ1Zi1kYmI1LTQxY2EtYjk1NC1kOGUyOTg4YzcxOTEiLCJlbWFpbCI6IiIsInBob25lIjoiNjU4NzUyMjAyOSIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6InBob25lIn0sInVzZXJfbWV0YWRhdGEiOnt9LCJyb2xlIjoiYXV0aGVudGljYXRlZCJ9.1BqRi0NbS_yr1f6hnr4q3s1ylMR3c1vkiJ4e_N55dhM",
+               "token_type": "bearer",
+               "expires_in": 3600,
+               "refresh_token": "LSp8LglPPvf0DxGMSj-vaQ",
+               "user": {...}
+             }
+             */
+            let authResponse = try await self.auth.verifyOTP(email: email, token: verificationCode, type: .email)
+            guard let session = authResponse.session else {
+                print("Wrong verify")
+                return
+            }
+            supabaseAccessToken = session.accessToken
+            supabaseRefreshToken = session.refreshToken
+            print("Sign-in successful. Token: \(String(describing: session.accessToken))")
+        } catch {
+            print("Sign-in error: \(error.localizedDescription)")
+            throw error
+        }
+    }
 
     func refreshToken() async {
         do {
-            session = try await self.auth.refreshSession(refreshToken: supabaseRefreshToken)
-            print("Successfully refreshed session")
+            session = try await self.auth.refreshSession()
+            guard let session else {
+                print("Wrong verify")
+                return
+            }
+            supabaseAccessToken = session.accessToken
+            supabaseRefreshToken = session.refreshToken
+            print("Successfully refreshed session \(supabaseRefreshToken ?? "")")
         }
         catch {
             print("Could not refresh session: \(error)")
@@ -52,15 +91,27 @@ class SupabaseService {
 
     func getUser() async -> User? {
         do {
-            user = try await self.auth.user()
-            if let user {
-                return user
-            }
+            let user = try await self.auth.user()
             print("Successfully got user")
+            return user
         }
         catch {
             print("Could not get user: \(error)")
         }
         return nil
     }
+
+
+    func signOut() async throws {
+        do {
+            try await self.auth.signOut()
+            supabaseAccessToken = ""
+            supabaseRefreshToken = ""
+            print("Sign-out successful.")
+        } catch {
+            print("Sign-out error: \(error.localizedDescription)")
+            throw error
+        }
+    }
+
 }

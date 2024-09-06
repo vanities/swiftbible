@@ -17,6 +17,7 @@
 		9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9537E25D2C893FBD00FD56B9 /* Supabase */; };
 		9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */; };
 		9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E2632C89502400FD56B9 /* VerificationView.swift */; };
+		9537E2672C8A9E1E00FD56B9 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E2662C8A9E1E00FD56B9 /* UserViewModel.swift */; };
 		954BC9D42C84EDBE00FFCFA6 /* swiftbibleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9D32C84EDBE00FFCFA6 /* swiftbibleApp.swift */; };
 		954BC9D62C84EDBE00FFCFA6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9D52C84EDBE00FFCFA6 /* ContentView.swift */; };
 		954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 954BC9D72C84EDBF00FFCFA6 /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 		95186D0F2C893E7500C0949D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
 		9537E2632C89502400FD56B9 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
+		9537E2662C8A9E1E00FD56B9 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		954BC9D02C84EDBE00FFCFA6 /* swiftbible.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = swiftbible.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		954BC9D32C84EDBE00FFCFA6 /* swiftbibleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swiftbibleApp.swift; sourceTree = "<group>"; };
 		954BC9D52C84EDBE00FFCFA6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,6 +77,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9537E2652C8A9E0800FD56B9 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				9537E2662C8A9E1E00FD56B9 /* UserViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		954BC9C72C84EDBE00FFCFA6 = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +105,7 @@
 		954BC9D22C84EDBE00FFCFA6 /* swiftbible */ = {
 			isa = PBXGroup;
 			children = (
+				9537E2652C8A9E0800FD56B9 /* ViewModels */,
 				954BC9EB2C85011800FFCFA6 /* Views */,
 				954BC9E52C8500C200FFCFA6 /* Models */,
 				954BC9E82C8500EE00FFCFA6 /* Services */,
@@ -239,6 +250,7 @@
 				95186D102C893E7500C0949D /* SettingsView.swift in Sources */,
 				954BC9E72C8500D800FFCFA6 /* Book.swift in Sources */,
 				9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */,
+				9537E2672C8A9E1E00FD56B9 /* UserViewModel.swift in Sources */,
 				95186D022C86BA7D00C0949D /* Sorter.swift in Sources */,
 				954BC9ED2C85012200FFCFA6 /* BookDetailView.swift in Sources */,
 				954BC9F42C8513A900FFCFA6 /* Testament.swift in Sources */,

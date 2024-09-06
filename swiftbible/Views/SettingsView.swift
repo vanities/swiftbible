@@ -12,16 +12,16 @@ struct SettingsView: View {
     @AppStorage("supabaseAccessToken") private var supabaseAccessToken: String?
     @AppStorage("supabaseRefreshToken") private var supabaseRefreshToken: String?
 
-    @State private var isSignedIn = false
+    @Environment(UserViewModel.self) private var userViewModel
+
     @State private var email = ""
     @State private var verificationCode = ""
     @State private var showVerificationView = false
-    @State private var user: User?
 
     var body: some View {
         Form {
             Section(header: Text("Supabase Authentication")) {
-                if let user {
+                if let user = userViewModel.user {
                     Text("Signed in as: \(user.email ?? "")")
                     Button("Sign Out") {
                         Task {
@@ -36,54 +36,27 @@ struct SettingsView: View {
 
                     Button("Sign In") {
                         Task {
-                            await signIn()
+                            await SupabaseService.shared.signIn(email: email)
                             showVerificationView = true
                         }
                     }
                     .sheet(isPresented: $showVerificationView) {
-                        VerificationView(email: email, isSignedIn: $isSignedIn)
+                        VerificationView(email: email)
                     }
                 }
             }
         }
         .navigationBarTitle("Settings")
-        .onChange(of: isSignedIn) {
-            if isSignedIn {
-                Task {
-                    user = await SupabaseService.shared.getUser()
-                }
-            }
-        }
-        .onAppear {
-            Task {
-                user = await SupabaseService.shared.getUser()
-            }
-        }
-    }
-
-    private func signIn() async {
-        do {
-            try await SupabaseService.shared.auth.signInWithOTP(email: email)
-        } catch {
-            print("Sign-in error: \(error.localizedDescription)")
-        }
     }
 
     private func signOut() async {
         do {
             try await SupabaseService.shared.auth.signOut()
-            print("Sign-out successful.")
-            removeAuth()
-            isSignedIn = false
             email = ""
+            userViewModel.user = nil
         } catch {
             print("Sign-out error: \(error.localizedDescription)")
         }
-    }
-
-    private func removeAuth() {
-        supabaseAccessToken = ""
-        supabaseRefreshToken = ""
     }
 }
 
