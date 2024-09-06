@@ -11,6 +11,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var bibleData: (oldTestament: [Book], newTestament: [Book]) = ([], [])
     @State private var searchText = ""
+    @State private var userViewModel = UserViewModel()
 
     var filteredOldTestament: [Book] {
         if searchText.isEmpty {
@@ -67,10 +68,11 @@ struct ContentView: View {
             .onAppear {
                 Task {
                     await SupabaseService.shared.refreshToken()
+                    userViewModel.user = await SupabaseService.shared.getUser()
                 }
             }
         }
-
+        .environment(userViewModel)
     }
 
     func Title(_ name: String, _ description: String) -> some View {
