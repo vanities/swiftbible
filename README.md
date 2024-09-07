@@ -9,17 +9,20 @@ Use this link to join the TestFlight: https://testflight.apple.com/join/MHYwBxpQ
 
 - Elegant and intuitive user interface designed with SwiftUI
 - Complete King James Version (KJV) of the Bible, including both the Old and New Testaments
+- Light and dark mode support to suit your reading preferences
+- Daily devotionals
+
+## Upcoming Features
 - Easy navigation between books, chapters, and verses
 - Search functionality to quickly find specific passages or keywords
 - Adjustable font size for improved readability
 - Bookmark your favorite verses for quick access
 - Share verses with friends and family via social media, email, or text messages
-- Light and dark mode support to suit your reading preferences
 
 ## Requirements
 
-- iOS 14.0 or later
-- Xcode 12 or later
+- iOS 18.0 or later
+- Xcode 16 or later
 - Swift 5 or later
 
 ## Installation
