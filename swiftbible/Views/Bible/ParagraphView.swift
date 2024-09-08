@@ -13,6 +13,7 @@ struct Verse: Hashable {
 }
 
 struct ParagraphView: View {
+    @AppStorage("fontSize") private var fontSize: Int = 20
     let paragraph: String
 
     var body: some View {
@@ -47,11 +48,13 @@ struct ParagraphView: View {
 
         return result.reduce(Text(""), {
             $0
-            + Text("\($1.number != nil ? " \($1.number!)" : "")")
+            + Text("\($1.number != nil ? " \($1.number!) " : "")")
                 .foregroundStyle(.gray)
                 .font(.footnote)
                 .baselineOffset(6.0)
-            + Text("\($1.text)")}
+            + Text("\($1.text)")
+                .font(Font.system(size: CGFloat(fontSize)))
+        }
         )
     }
 }

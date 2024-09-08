@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BookDetailView: View {
+    @AppStorage("fontSize") private var fontSize: Int = 20
     let book: Book
 
     var body: some View {
@@ -15,6 +16,7 @@ struct BookDetailView: View {
             List(book.chapters.keys.sorted(by: sorter), id: \.self) { chapter in
                  NavigationLink(destination: ChapterDetailView(book: book, chapter: chapter)) {
                      Text("Chapter \(chapter)")
+                         .font(Font.system(size: CGFloat(fontSize)))
                  }
              }
         }

@@ -14,7 +14,7 @@ struct ChapterDetailView: View {
     @State private var isHiding = false
 
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
                     ForEach(
@@ -22,12 +22,10 @@ struct ChapterDetailView: View {
                             id: \.key
                     ) { verse in
                         HStack(alignment: .top) {
-                            Group {
-                                Text(verse.key)
-                                    .font(.footnote)
-                                    .foregroundColor(.gray)
-                                ParagraphView(paragraph: verse.value)
-                            }
+                            Text(verse.key)
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                            ParagraphView(paragraph: verse.value)
                         }
                     }
                 }

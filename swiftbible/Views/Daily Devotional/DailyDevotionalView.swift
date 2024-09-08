@@ -15,11 +15,16 @@ struct DailyDevotional: Decodable {
 }
 
 struct DailyDevotionalView: View {
+    @AppStorage("fontSize") private var fontSize: Int = 20
+    @Environment(UserViewModel.self) private var userViewModel
     @State private var messsage: String = ""
     @State private var isLoading: Bool = false
-    
+
     var body: some View {
         VStack {
+            if userViewModel.user == nil {
+                Text("You must login to see Daily Devotionals")
+            }
             if isLoading {
                 ProgressView("Loading...")
             } else {
@@ -37,31 +42,33 @@ struct DailyDevotionalView: View {
                 }
             }
         }
+        .font(Font.system(size: CGFloat(fontSize)))
         .onAppear {
             Task {
                 await fetchDailyDevotional()
             }
         }
     }
-    
+
     private func fetchDailyDevotional() async {
         isLoading = true
-        
+
         do {
             let devotional: DailyDevotional = try await SupabaseService.shared.client
-              .from("Daily Devotional")
-              .select()
-              .order("id", ascending: false)
-              .limit(1)
-              .single()
-              .execute()
-              .value
+                .from("Daily Devotional")
+                .select()
+                .order("id", ascending: false)
+                .limit(1)
+                .single()
+                .execute()
+                .value
 
             messsage = devotional.message
+            print("Successfully got Daily Devotional: \(devotional)")
         } catch {
             print("Error fetching daily devotional: \(error)")
         }
-        
+
         isLoading = false
     }
 }
