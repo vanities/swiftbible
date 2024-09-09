@@ -64,13 +64,22 @@ struct ChapterDetailView: View {
             }
         )
         .onLongPressGesture {
-            showActionSheet = true
+            if !selectedText.isEmpty {
+                showActionSheet = true
+            }
         }
         .actionSheet(isPresented: $showActionSheet) {
-            ActionSheet(title: Text("Selected Verses"), buttons: [
+            ActionSheet(title: Text("Selected \(selectedText.count > 1 ? "verses" : "Verse") \(book.name) \(chapter): \(selectedText.joined(separator: ","))"), buttons: [
                 .default(Text("Copy")) {
-                    let selectedVerses = selectedText.joined(separator: " ")
-                    UIPasteboard.general.string = selectedVerses
+
+                    var copiedString = "\(book.name) \(chapter) "
+                    let selectedVerses = book.chapters[chapter]?.filter({ selectedText.contains($0.key) })
+
+                    selectedVerses?.forEach { verse in
+                        copiedString += "\(verse.key) \(verse.value)"
+                    }
+
+                    UIPasteboard.general.string = copiedString
                     selectedText = Set<String>()
                 },
                 .default(Text("Highlight")) {
