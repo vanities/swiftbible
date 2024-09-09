@@ -25,7 +25,10 @@ struct ChapterDetailView: View {
                             Text(verse.key)
                                 .font(.footnote)
                                 .foregroundColor(.gray)
-                            ParagraphView(paragraph: verse.value)
+                            ParagraphView(
+                                firstVerseNumber: verse.key,
+                                paragraph: verse.value
+                            )
                         }
                     }
                 }
