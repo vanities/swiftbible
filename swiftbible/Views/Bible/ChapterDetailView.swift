@@ -71,15 +71,7 @@ struct ChapterDetailView: View {
         .actionSheet(isPresented: $showActionSheet) {
             ActionSheet(title: Text("Selected \(selectedText.count > 1 ? "verses" : "Verse") \(book.name) \(chapter): \(selectedText.joined(separator: ","))"), buttons: [
                 .default(Text("Copy")) {
-
-                    var copiedString = "\(book.name) \(chapter) "
-                    let selectedVerses = book.chapters[chapter]?.filter({ selectedText.contains($0.key) })
-
-                    selectedVerses?.forEach { verse in
-                        copiedString += "\(verse.key) \(verse.value)"
-                    }
-
-                    UIPasteboard.general.string = copiedString
+                    UIPasteboard.general.string = getStringFromSelectedVerses()
                     selectedText = Set<String>()
                 },
                 .default(Text("Highlight")) {
@@ -89,10 +81,8 @@ struct ChapterDetailView: View {
                             startingVerse: startingVerse
                         )
 
-                        let alreadyHighlighted = highlightedVerses.contains { $0.book == book.name && $0.startingVerse == startingVerse }
-
-                        if alreadyHighlighted {
-                            context.delete(highlightedVerse)
+                        if let alreadyHighlightedVerse = highlightedVerses.first(where: { $0.book == book.name && $0.startingVerse == startingVerse }) {
+                            context.delete(alreadyHighlightedVerse)
                         } else {
                             context.insert(highlightedVerse)
                         }
@@ -104,9 +94,26 @@ struct ChapterDetailView: View {
                     }
                     selectedText = Set<String>()
                 },
+                .default(Text("Share")) {
+                    let shareText = getStringFromSelectedVerses()
+                    let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
+                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                        windowScene.windows.first?.rootViewController?.present(activityViewController, animated: true, completion: nil)
+                    }
+                },
                 .cancel()
             ])
         }
+    }
+
+    func getStringFromSelectedVerses() -> String {
+        var result = "\(book.name) Chapter \(chapter) "
+        let selectedVerses = book.chapters[chapter]?.filter({ selectedText.contains($0.key) })
+
+        selectedVerses?.forEach { verse in
+            result += "\(verse.key): \(verse.value)"
+        }
+        return result
     }
 }
 
