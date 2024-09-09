@@ -13,5 +13,6 @@ struct swiftbibleApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: HighlightedVerse.self, isUndoEnabled: true)
     }
 }

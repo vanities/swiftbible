@@ -7,28 +7,31 @@
 
 import SwiftUI
 
-struct Verse: Hashable {
-    let number: String?
-    let text: String
-}
 
 struct ParagraphView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
-    let firstVerseNumber: Int
+    let firstVerseNumber: String
     let verses: [Verse]
 
-    @State private var selectedText = false
+    @Binding private var selectedText: Set<String>
 
-    init(firstVerseNumber: String, paragraph: String) {
-        self.firstVerseNumber = Int(firstVerseNumber) ?? 0
+    init(firstVerseNumber: String,
+         paragraph: String,
+         selectedText: Binding<Set<String>>) {
+        self.firstVerseNumber = firstVerseNumber
         self.verses = ParagraphParser.parse(paragraph)
+        self._selectedText = selectedText
     }
 
     var body: some View {
         VerseText()
-            .underline(selectedText)
+            .underline(selectedText.contains(firstVerseNumber))
             .onTapGesture {
-                selectedText.toggle()
+                if selectedText.contains(firstVerseNumber) {
+                    selectedText.remove(firstVerseNumber)
+                } else {
+                    selectedText.insert(firstVerseNumber)
+                }
             }
     }
 
@@ -52,6 +55,7 @@ struct ParagraphView: View {
 #Preview {
     ParagraphView(
         firstVerseNumber: "13",
-        paragraph: "And when he went out the second day, behold, two men of the Hebrews strove together: and he said to him that did the wrong, Wherefore smitest thou thy fellow? 2:14 And he said, Who made thee a prince and a judge over us? intendest thou to kill me, as thou killedst the Egyptian? And Moses feared, and said, Surely this thing is known."
+        paragraph: "And when he went out the second day, behold, two men of the Hebrews strove together: and he said to him that did the wrong, Wherefore smitest thou thy fellow? 2:14 And he said, Who made thee a prince and a judge over us? intendest thou to kill me, as thou killedst the Egyptian? And Moses feared, and said, Surely this thing is known.",
+        selectedText: .constant(Set<String>())
     )
 }
