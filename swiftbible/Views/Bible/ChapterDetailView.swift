@@ -11,32 +11,39 @@ import SwiftData
 struct ChapterDetailView: View {
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Environment(\.modelContext) private var context
+
     let book: Book
-    let chapter: String
+    let chapter: Chapter
 
     @State private var isHiding = false
-    @State private var selectedText = Set<String>()
+    @State private var selectedParagraph: Paragraph?
     @State private var showActionSheet = false
+    @State private var alreadyHighlighted: HighlightedVerse?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 10) {
+                LazyVStack(alignment: .leading, spacing: 10) {
                     ForEach(
-                        book.chapters[chapter]?.sorted(by: { Int($0.key)! < Int($1.key)! }) ?? [],
-                        id: \.key
-                    ) { verse in
+                        chapter.paragraphs,
+                        id: \.startingVerse
+                    ) { paragraph in
                         HStack(alignment: .top) {
-                            Text(verse.key)
+                            Text("\(paragraph.startingVerse)")
                                 .font(.footnote)
                                 .foregroundColor(.gray)
                             ParagraphView(
-                                firstVerseNumber: verse.key,
-                                paragraph: verse.value,
-                                selectedText: $selectedText
+                                firstVerseNumber: paragraph.startingVerse,
+                                paragraph: paragraph.text
                             )
                             .background {
-                                highlightedVerses.contains { $0.book == book.name && $0.startingVerse == verse.key } ? Color.yellow : .clear
+                                highlightedVerses.contains { $0.book == book.name && $0.startingVerse == paragraph.startingVerse } ? Color.yellow : .clear
+                            }
+                            .underline(selectedParagraph == paragraph)
+                            .onLongPressGesture {
+                                selectedParagraph = paragraph
+                                alreadyHighlighted = highlightedVerses.first(where: { $0.book == book.name && $0.startingVerse == selectedParagraph!.startingVerse })
+                                showActionSheet = true
                             }
                         }
                     }
@@ -54,7 +61,7 @@ struct ChapterDetailView: View {
             .animation(.easeIn, value: isHiding)
         }
         .navigationTitle(
-            Text("\(book.name) \(chapter)")
+            Text("\(book.name) \(chapter.number)")
         )
         .simultaneousGesture(
             TapGesture().onEnded {
@@ -63,60 +70,53 @@ struct ChapterDetailView: View {
                 }
             }
         )
-        .onLongPressGesture {
-            if !selectedText.isEmpty {
-                showActionSheet = true
-            }
-        }
         .actionSheet(isPresented: $showActionSheet) {
-            ActionSheet(title: Text("Selected \(selectedText.count > 1 ? "verses" : "Verse") \(book.name) \(chapter): \(selectedText.joined(separator: ","))"), buttons: [
+            ActionSheet(title: Text("Selected Verse \(book.name) \(chapter.number): \(selectedParagraph?.startingVerse ?? 0)"), buttons: [
                 .default(Text("Copy")) {
-                    UIPasteboard.general.string = getStringFromSelectedVerses()
-                    selectedText = Set<String>()
+                    UIPasteboard.general.string = getStringFromSelectedParagraph()
+                    selectedParagraph = nil
+                    alreadyHighlighted = nil
                 },
                 .default(Text("Highlight")) {
-                    selectedText.forEach { startingVerse in
-                        let highlightedVerse = HighlightedVerse(
-                            book: book.name,
-                            startingVerse: startingVerse
-                        )
+                    guard selectedParagraph != nil else { return }
+                    let highlightedVerse = HighlightedVerse(
+                        book: book.name,
+                        startingVerse: selectedParagraph!.startingVerse
+                    )
 
-                        if let alreadyHighlightedVerse = highlightedVerses.first(where: { $0.book == book.name && $0.startingVerse == startingVerse }) {
-                            context.delete(alreadyHighlightedVerse)
-                        } else {
-                            context.insert(highlightedVerse)
-                        }
-                        do {
-                            try context.save()
-                        } catch {
-                            print(error.localizedDescription)
-                        }
+                    if let alreadyHighlightedVerse = alreadyHighlighted {
+                        context.delete(alreadyHighlightedVerse)
+                    } else {
+                        context.insert(highlightedVerse)
                     }
-                    selectedText = Set<String>()
+                    do {
+                        try context.save()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                    selectedParagraph = nil
+                    alreadyHighlighted = nil
                 },
                 .default(Text("Share")) {
-                    let shareText = getStringFromSelectedVerses()
+                    let shareText = getStringFromSelectedParagraph()
                     let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
                     if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                         windowScene.windows.first?.rootViewController?.present(activityViewController, animated: true, completion: nil)
                     }
+                    selectedParagraph = nil
+                    alreadyHighlighted = nil
                 },
                 .cancel()
             ])
         }
     }
 
-    func getStringFromSelectedVerses() -> String {
-        var result = "\(book.name) Chapter \(chapter) "
-        let selectedVerses = book.chapters[chapter]?.filter({ selectedText.contains($0.key) })
-
-        selectedVerses?.forEach { verse in
-            result += "\(verse.key): \(verse.value)"
-        }
-        return result
+    func getStringFromSelectedParagraph() -> String {
+        guard selectedParagraph != nil else { return "" }
+        return "\(book.name) Chapter \(chapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
     }
 }
 
 #Preview {
-    ChapterDetailView(book: Book.genesis, chapter: "1")
+    ChapterDetailView(book: Book.genesis, chapter: .init(number: 1, paragraphs: [.init(startingVerse: 1, text: "testing")]))
 }

@@ -143,7 +143,8 @@ books = [
 def parse_bible_file(file_path):
     bible_data = []
     current_book = {}
-    current_chapter = 0
+    current_chapter = {}
+    current_paragraph = {}
 
     with open(file_path, "r", encoding="utf-8-sig") as file:
         content = file.read()
@@ -153,32 +154,56 @@ def parse_bible_file(file_path):
             line = line.strip()
 
             if line in book_titles:
-                current_chapter = 0
-                book_description = line
+                if current_book and current_chapter:
+                    if current_paragraph:
+                        if "paragraphs" not in current_chapter:
+                            current_chapter["paragraphs"] = []
+                        current_chapter["paragraphs"].append(current_paragraph)
+                    current_book["chapters"].append(current_chapter)
                 if current_book:
                     bible_data.append(current_book)
+                book_description = line
                 print(f"book {line} {books[len(bible_data)]}")
                 current_book = {
                     "name": books[len(bible_data)],
                     "description": book_description,
-                    "chapters": {},
+                    "chapters": [],
                 }
+                current_chapter = {
+                    "number": 0,
+                    "paragraphs": [],
+                }
+                current_paragraph = {}
             elif re.match(r"\d+:\d+", line):
-                chapter, verse = line.split(":", 1)
-                if int(chapter) != current_chapter:
-                    current_chapter = int(chapter)
-                    current_book["chapters"][current_chapter] = {}
-                verse_number = int(verse.split()[0])
-                current_book["chapters"][current_chapter][verse_number] = line.split(
-                    maxsplit=1
-                )[1]
+                chapter_number, verse_number = line.split(":", 1)
+                if current_chapter and current_paragraph:
+                    if "paragraphs" not in current_chapter:
+                        current_chapter["paragraphs"] = []
+                    current_chapter["paragraphs"].append(current_paragraph)
+                if (
+                    current_chapter
+                    and "number" in current_chapter
+                    and int(chapter_number) != current_chapter["number"]
+                ):
+                    if current_chapter["number"] != 0:
+                        current_book["chapters"].append(current_chapter)
+                    current_chapter = {
+                        "number": int(chapter_number),
+                        "paragraphs": [],
+                    }
+                current_paragraph = {
+                    "startingVerse": int(verse_number.split()[0]),
+                    "text": line.split(maxsplit=1)[1],
+                }
             else:
-                if current_book and current_chapter:
-                    current_book["chapters"][current_chapter][verse_number] += (
-                        " " + line
-                    )
+                if current_paragraph:
+                    current_paragraph["text"] += " " + line
 
-    if current_book:
+    if current_book and current_chapter and current_paragraph:
+        if "paragraphs" not in current_chapter:
+            current_chapter["paragraphs"] = []
+        current_chapter["paragraphs"].append(current_paragraph)
+        current_book["chapters"].append(current_chapter)
         bible_data.append(current_book)
 
     return bible_data

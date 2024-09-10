@@ -13,9 +13,9 @@ struct BookDetailView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            List(book.chapters.keys.sorted(by: sorter), id: \.self) { chapter in
+            List(book.chapters, id: \.self) { chapter in
                  NavigationLink(destination: ChapterDetailView(book: book, chapter: chapter)) {
-                     Text("Chapter \(chapter)")
+                     Text("Chapter \(chapter.number)")
                          .font(Font.system(size: CGFloat(fontSize)))
                  }
              }

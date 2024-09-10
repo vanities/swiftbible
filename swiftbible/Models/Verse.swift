@@ -13,9 +13,9 @@ final class HighlightedVerse: Identifiable {
 
     @Attribute(.unique) var id: String = UUID().uuidString
     var book: String
-    var startingVerse: String
+    var startingVerse: Int
 
-    init(id: String = UUID().uuidString, book: String, startingVerse: String) {
+    init(id: String = UUID().uuidString, book: String, startingVerse: Int) {
         self.id = id
         self.book = book
         self.startingVerse = startingVerse
@@ -23,7 +23,7 @@ final class HighlightedVerse: Identifiable {
 }
 
 struct Verse: Hashable {
-    let number: String?
+    let number: Int?
     let text: String
 }
 

@@ -25,7 +25,7 @@ class ParagraphParser {
             let verseNumber = String(paragraph[Range(match.range, in: paragraph)!])
             let components = verseNumber.split(separator: ":")
             if components.count == 2 {
-                result.append(Verse(number: String(components[1]), text: ""))
+                result.append(Verse(number: Int(components[1]), text: ""))
             }
 
             startIndex = paragraph.index(paragraph.startIndex, offsetBy: match.range.location + match.range.length)
