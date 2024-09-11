@@ -45,7 +45,7 @@ struct NoteModalView: View {
                 }
 
                 Section {
-                    Button("Edit") {
+                    Button("Save") {
                         onSave(note)
                     }
                     Button("Cancel") {

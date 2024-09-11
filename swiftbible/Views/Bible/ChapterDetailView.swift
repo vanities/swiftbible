@@ -10,7 +10,7 @@ import SwiftData
 
 struct ChapterDetailView: View {
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
-    @AppStorage("notedColor") private var notedColor: String = "FFFFE0"
+    @AppStorage("notedColor") private var notedColor: String = "00ff04"
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []
@@ -44,7 +44,7 @@ struct ChapterDetailView: View {
                                     $0.version == book.version.rawValue &&
                                     $0.book == book.name &&
                                     $0.chapter == chapter.number &&
-                                    $0.startingVerse == selectedParagraph!.startingVerse
+                                    $0.startingVerse == paragraph.startingVerse
                                 }) {
                                     Capsule()
                                         .fill(Color(hex: notedColor))

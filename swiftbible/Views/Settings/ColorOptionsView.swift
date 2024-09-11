@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ColorOptionsView: View {
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
-    @AppStorage("notedColor") private var notedColor: String = "FFFFE0"
+    @AppStorage("notedColor") private var notedColor: String = "00ff04"
     @State private var highlightColor = Color.yellow
     @State private var noteColor = Color.yellow
 
