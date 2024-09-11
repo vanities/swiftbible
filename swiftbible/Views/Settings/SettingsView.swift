@@ -23,11 +23,11 @@ struct SettingsView: View {
                 }
 
                 Section(header: Text("Appearance")) {
-                    NavigationLink(destination: FontSizeView()) {
-                        Label("Font Size", systemImage: "textformat.size")
+                    NavigationLink(destination: FontOptionsView()) {
+                        Label("Font Options", systemImage: "textformat.size")
                     }
-                    NavigationLink(destination: HighlightedColorView()) {
-                        Label("Highlighted Color", systemImage: "highlighter")
+                    NavigationLink(destination: ColorOptionsView()) {
+                        Label("Color Options", systemImage: "highlighter")
                     }
                 }
             }

@@ -1,21 +1,22 @@
 //
-//  Verse.swift
+//  Note.swift
 //  swiftbible
 //
-//  Created by Adam Mischke on 9/9/24.
+//  Created by Adam Mischke on 9/11/24.
 //
 
 import SwiftUI
 import SwiftData
 
 @Model
-final class HighlightedVerse: Identifiable {
+final class Note: Identifiable {
 
     @Attribute(.unique) var id: String = UUID().uuidString
     var version: String
     var book: String
     var chapter: Int
     var startingVerse: Int
+    var text: String
     var created: Date
 
     init(
@@ -24,6 +25,7 @@ final class HighlightedVerse: Identifiable {
         book: String,
         chapter: Int,
         startingVerse: Int,
+        text: String,
         created: Date = .init()
     ) {
         self.id = id
@@ -31,12 +33,7 @@ final class HighlightedVerse: Identifiable {
         self.book = book
         self.chapter = chapter
         self.startingVerse = startingVerse
+        self.text = text
         self.created = created
     }
 }
-
-struct Verse: Hashable {
-    let number: Int?
-    let text: String
-}
-

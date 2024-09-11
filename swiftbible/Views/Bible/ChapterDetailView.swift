@@ -10,7 +10,11 @@ import SwiftData
 
 struct ChapterDetailView: View {
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
+    @AppStorage("notedColor") private var notedColor: String = "FFFFE0"
+
     @Query private var highlightedVerses: [HighlightedVerse] = []
+    @Query private var notes: [Note] = []
+    
     @Environment(\.modelContext) private var context
 
     let book: Book
@@ -19,7 +23,9 @@ struct ChapterDetailView: View {
     @State private var isHiding = false
     @State private var selectedParagraph: Paragraph?
     @State private var showActionSheet = false
+    @State private var showNoteModal = false
     @State private var alreadyHighlighted: HighlightedVerse?
+    @State private var alreadyNoted: Note?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -30,15 +36,28 @@ struct ChapterDetailView: View {
                         id: \.startingVerse
                     ) { paragraph in
                         HStack(alignment: .top) {
-                            Text("\(paragraph.startingVerse)")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
+                            VStack(alignment: .center) {
+                                Text("\(paragraph.startingVerse)")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                if notes.contains(where: {
+                                    $0.version == book.version.rawValue &&
+                                    $0.book == book.name &&
+                                    $0.chapter == chapter.number &&
+                                    $0.startingVerse == selectedParagraph!.startingVerse
+                                }) {
+                                    Capsule()
+                                        .fill(Color(hex: notedColor))
+                                        .frame(width: 5)
+                                }
+                            }
                             ParagraphView(
                                 firstVerseNumber: paragraph.startingVerse,
                                 paragraph: paragraph.text
                             )
                             .background {
                                 highlightedVerses.contains {
+                                    $0.version == book.version.rawValue &&
                                     $0.book == book.name &&
                                     $0.startingVerse == paragraph.startingVerse &&
                                     $0.chapter == chapter.number
@@ -48,10 +67,17 @@ struct ChapterDetailView: View {
                             .onLongPressGesture {
                                 selectedParagraph = paragraph
                                 alreadyHighlighted = highlightedVerses.first(where: {
+                                    $0.version == book.version.rawValue &&
                                     $0.book == book.name &&
                                     $0.chapter == chapter.number &&
                                     $0.startingVerse == selectedParagraph!.startingVerse
                                 })
+                                alreadyNoted = notes.first(where: {
+                                    $0.version == book.version.rawValue &&
+                                    $0.book == book.name &&
+                                    $0.chapter == chapter.number &&
+                                    $0.startingVerse == selectedParagraph!.startingVerse
+                                } )
                                 showActionSheet = true
                             }
                         }
@@ -82,11 +108,50 @@ struct ChapterDetailView: View {
         .actionSheet(isPresented: $showActionSheet) {
             ActionSheetView()
         }
+        .sheet(isPresented: $showNoteModal) {
+            NoteModalView(
+                note: alreadyNoted != nil ? alreadyNoted! : Note(
+                    version: book.version.rawValue,
+                    book: book.name,
+                    chapter: chapter.number,
+                    startingVerse: selectedParagraph!.startingVerse,
+                    text: ""
+                ),
+                onSave: { note in
+                    context.insert(note)
+                    do {
+                        try context.save()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                    selectedParagraph = nil
+                    alreadyHighlighted = nil
+                    showNoteModal = false
+                },
+                onCancel: {
+                    selectedParagraph = nil
+                    alreadyHighlighted = nil
+                    showNoteModal = false
+                },
+                onDelete: { note in
+                    context.delete(note)
+                    do {
+                        try context.save()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                    selectedParagraph = nil
+                    alreadyHighlighted = nil
+                    showNoteModal = false
+                }
+
+            )
+        }
     }
 
     func getStringFromSelectedParagraph() -> String {
         guard selectedParagraph != nil else { return "" }
-        return "\(book.name) Chapter \(chapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
+        return "\(book.version) Version \(book.version) Version \(book.name) Chapter \(chapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
     }
 
     func ActionSheetView() -> ActionSheet {
@@ -99,6 +164,7 @@ struct ChapterDetailView: View {
             .default(Text("\(alreadyHighlighted != nil ? "Unhighlight" : "Highlight")")) {
                 guard selectedParagraph != nil else { return }
                 let highlightedVerse = HighlightedVerse(
+                    version: book.version.rawValue,
                     book: book.name,
                     chapter: chapter.number,
                     startingVerse: selectedParagraph!.startingVerse
@@ -117,6 +183,9 @@ struct ChapterDetailView: View {
                 selectedParagraph = nil
                 alreadyHighlighted = nil
             },
+            .default(Text("\(alreadyNoted != nil ? "Update" : "Add") Note")) {
+                showNoteModal = true
+            },
             .default(Text("Share")) {
                 let shareText = getStringFromSelectedParagraph()
                 let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
@@ -133,4 +202,15 @@ struct ChapterDetailView: View {
 
 #Preview {
     ChapterDetailView(book: Book.genesis, chapter: .init(number: 1, paragraphs: [.init(startingVerse: 1, text: "testing")]))
+}
+
+
+struct NoteIndicatorShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+        return path
+    }
 }

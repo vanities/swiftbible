@@ -21,15 +21,18 @@
 		952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */; };
 		952F39DA2C8BBD3C009A412D /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 952F39D92C8BBD3C009A412D /* MarkdownUI */; };
 		952F39DD2C8E36A7009A412D /* AuthenticateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39DC2C8E36A7009A412D /* AuthenticateView.swift */; };
-		952F39DF2C8E36E5009A412D /* FontSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39DE2C8E36E5009A412D /* FontSizeView.swift */; };
+		952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39DE2C8E36E5009A412D /* FontOptionsView.swift */; };
 		952F39E32C8F4874009A412D /* ParagraphParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39E22C8F4874009A412D /* ParagraphParser.swift */; };
 		952F39E52C8F48B8009A412D /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39E42C8F48B8009A412D /* Collection.swift */; };
 		952F39E72C8F61E0009A412D /* Verse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39E62C8F61E0009A412D /* Verse.swift */; };
 		952F39EB2C90710B009A412D /* Paragraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39EA2C90710B009A412D /* Paragraph.swift */; };
 		952F39EF2C907159009A412D /* Chapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39EE2C907159009A412D /* Chapter.swift */; };
 		952F39F12C909E3B009A412D /* chapterSummaries.json in Resources */ = {isa = PBXBuildFile; fileRef = 952F39F02C909E31009A412D /* chapterSummaries.json */; };
-		952F39F32C9114A4009A412D /* HighlightedColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F22C9114A4009A412D /* HighlightedColorView.swift */; };
+		952F39F32C9114A4009A412D /* ColorOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F22C9114A4009A412D /* ColorOptionsView.swift */; };
 		952F39F52C9115F8009A412D /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F42C9115F8009A412D /* Color.swift */; };
+		952F39F72C920666009A412D /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F62C920666009A412D /* Note.swift */; };
+		952F39F92C920778009A412D /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F82C920778009A412D /* Version.swift */; };
+		952F39FB2C9209FF009A412D /* NoteModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39FA2C9209FF009A412D /* NoteModalView.swift */; };
 		9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9537E25D2C893FBD00FD56B9 /* Supabase */; };
 		9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */; };
 		9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E2632C89502400FD56B9 /* VerificationView.swift */; };
@@ -56,15 +59,18 @@
 		952F39D42C8BABB3009A412D /* OnScrollingChangeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnScrollingChangeViewModifier.swift; sourceTree = "<group>"; };
 		952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDevotionalView.swift; sourceTree = "<group>"; };
 		952F39DC2C8E36A7009A412D /* AuthenticateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateView.swift; sourceTree = "<group>"; };
-		952F39DE2C8E36E5009A412D /* FontSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSizeView.swift; sourceTree = "<group>"; };
+		952F39DE2C8E36E5009A412D /* FontOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontOptionsView.swift; sourceTree = "<group>"; };
 		952F39E22C8F4874009A412D /* ParagraphParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphParser.swift; sourceTree = "<group>"; };
 		952F39E42C8F48B8009A412D /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		952F39E62C8F61E0009A412D /* Verse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Verse.swift; sourceTree = "<group>"; };
 		952F39EA2C90710B009A412D /* Paragraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paragraph.swift; sourceTree = "<group>"; };
 		952F39EE2C907159009A412D /* Chapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chapter.swift; sourceTree = "<group>"; };
 		952F39F02C909E31009A412D /* chapterSummaries.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = chapterSummaries.json; sourceTree = "<group>"; };
-		952F39F22C9114A4009A412D /* HighlightedColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedColorView.swift; sourceTree = "<group>"; };
+		952F39F22C9114A4009A412D /* ColorOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorOptionsView.swift; sourceTree = "<group>"; };
 		952F39F42C9115F8009A412D /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		952F39F62C920666009A412D /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		952F39F82C920778009A412D /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		952F39FA2C9209FF009A412D /* NoteModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModalView.swift; sourceTree = "<group>"; };
 		9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
 		9537E2632C89502400FD56B9 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		9537E2662C8A9E1E00FD56B9 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
@@ -126,8 +132,8 @@
 				95186D0F2C893E7500C0949D /* SettingsView.swift */,
 				952F39DC2C8E36A7009A412D /* AuthenticateView.swift */,
 				9537E2632C89502400FD56B9 /* VerificationView.swift */,
-				952F39DE2C8E36E5009A412D /* FontSizeView.swift */,
-				952F39F22C9114A4009A412D /* HighlightedColorView.swift */,
+				952F39DE2C8E36E5009A412D /* FontOptionsView.swift */,
+				952F39F22C9114A4009A412D /* ColorOptionsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -140,6 +146,7 @@
 				954BC9EF2C8501C900FFCFA6 /* ChapterDetailView.swift */,
 				952F39CC2C8B58A0009A412D /* ParagraphView.swift */,
 				954BC9F12C85112D00FFCFA6 /* SearchBar.swift */,
+				952F39FA2C9209FF009A412D /* NoteModalView.swift */,
 			);
 			path = Bible;
 			sourceTree = "<group>";
@@ -228,6 +235,8 @@
 				954BC9F32C8513A900FFCFA6 /* Testament.swift */,
 				952F39E62C8F61E0009A412D /* Verse.swift */,
 				952F39EA2C90710B009A412D /* Paragraph.swift */,
+				952F39F62C920666009A412D /* Note.swift */,
+				952F39F82C920778009A412D /* Version.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -330,9 +339,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				952F39FB2C9209FF009A412D /* NoteModalView.swift in Sources */,
 				952F39EB2C90710B009A412D /* Paragraph.swift in Sources */,
 				952F39D22C8BAB72009A412D /* View.swift in Sources */,
-				952F39F32C9114A4009A412D /* HighlightedColorView.swift in Sources */,
+				952F39F32C9114A4009A412D /* ColorOptionsView.swift in Sources */,
 				954BC9F22C85112D00FFCFA6 /* SearchBar.swift in Sources */,
 				954BC9EA2C8500F900FFCFA6 /* BibleService.swift in Sources */,
 				952F39CD2C8B58A0009A412D /* ParagraphView.swift in Sources */,
@@ -342,10 +352,11 @@
 				954BC9D42C84EDBE00FFCFA6 /* swiftbibleApp.swift in Sources */,
 				95186D102C893E7500C0949D /* SettingsView.swift in Sources */,
 				952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */,
-				952F39DF2C8E36E5009A412D /* FontSizeView.swift in Sources */,
+				952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */,
 				954BC9E72C8500D800FFCFA6 /* Book.swift in Sources */,
 				952F39E72C8F61E0009A412D /* Verse.swift in Sources */,
 				9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */,
+				952F39F92C920778009A412D /* Version.swift in Sources */,
 				952F39D52C8BABB3009A412D /* OnScrollingChangeViewModifier.swift in Sources */,
 				952F39F52C9115F8009A412D /* Color.swift in Sources */,
 				952F39EF2C907159009A412D /* Chapter.swift in Sources */,
@@ -353,6 +364,7 @@
 				952F39CF2C8BA7F3009A412D /* ContentView.swift in Sources */,
 				95186D022C86BA7D00C0949D /* Sorter.swift in Sources */,
 				954BC9ED2C85012200FFCFA6 /* BookDetailView.swift in Sources */,
+				952F39F72C920666009A412D /* Note.swift in Sources */,
 				952F39E32C8F4874009A412D /* ParagraphParser.swift in Sources */,
 				952F39DD2C8E36A7009A412D /* AuthenticateView.swift in Sources */,
 				954BC9F42C8513A900FFCFA6 /* Testament.swift in Sources */,

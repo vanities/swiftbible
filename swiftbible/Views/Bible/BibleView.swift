@@ -9,8 +9,11 @@ import SwiftUI
 
 
 struct BibleView: View {
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
+
     @Environment(UserViewModel.self) private var userViewModel
+
     @State private var bibleData: (oldTestament: [Book], newTestament: [Book]) = ([], [])
     @State private var searchText = ""
 
@@ -53,7 +56,7 @@ struct BibleView: View {
                     }
                 }
             }
-            .font(Font.system(size: CGFloat(fontSize)))
+            .font(Font.custom(fontName, size: CGFloat(fontSize)))
             .onAppear {
                 if bibleData.newTestament.isEmpty {
                     bibleData = BibleService.shared.fetchBibleData()

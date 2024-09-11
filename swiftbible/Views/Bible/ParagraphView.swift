@@ -9,10 +9,11 @@ import SwiftUI
 
 
 struct ParagraphView: View {
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
+
     let firstVerseNumber: Int
     let verses: [Verse]
-
 
     init(firstVerseNumber: Int,
          paragraph: String) {
@@ -34,7 +35,7 @@ struct ParagraphView: View {
                     .font(.footnote)
                     .baselineOffset(6.0)
                 + Text("\($1.text)")
-                    .font(Font.system(size: CGFloat(fontSize)))
+                    .font(Font.custom(fontName, size: CGFloat(fontSize)))
             }
         )
     }

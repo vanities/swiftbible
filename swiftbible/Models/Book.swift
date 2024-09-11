@@ -90,4 +90,5 @@ struct Book: Codable {
               ])
 
     var testament: Testament? = .old
+    var version: Version = .kjv
 }

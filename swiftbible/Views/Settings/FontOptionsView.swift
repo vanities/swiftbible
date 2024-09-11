@@ -8,11 +8,32 @@
 import SwiftUI
 
 
-struct FontSizeView: View {
+struct FontOptionsView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
+
+    let fontNames = [
+        "Helvetica",
+        "Arial",
+        "Times New Roman",
+        "Courier",
+        "Verdana",
+        "Georgia"
+    ]
+
 
     var body: some View {
         Form {
+            Section(header: Text("Font")) {
+                Picker("Font", selection: $fontName) {
+                    ForEach(fontNames, id: \.self) { fontName in
+                        Text(fontName)
+                            .font(.custom(fontName, size: 16))
+                    }
+                }
+                .pickerStyle(.wheel)
+            }
+
             Section(header: Text("Font Size")) {
                 HStack(spacing: 0) {
                     Slider(value: Binding(get: {
@@ -46,12 +67,12 @@ struct FontSizeView: View {
                 .padding(.horizontal, 5)
             }
         }
-        .navigationBarTitle("Font Size")
+        .navigationBarTitle("Font Options")
     }
 }
 
 #Preview {
-    FontSizeView()
+    FontOptionsView()
         .environment(UserViewModel())
 }
 
