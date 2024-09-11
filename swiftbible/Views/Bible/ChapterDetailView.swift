@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ChapterDetailView: View {
+    @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Environment(\.modelContext) private var context
 
@@ -37,12 +38,20 @@ struct ChapterDetailView: View {
                                 paragraph: paragraph.text
                             )
                             .background {
-                                highlightedVerses.contains { $0.book == book.name && $0.startingVerse == paragraph.startingVerse } ? Color.yellow : .clear
+                                highlightedVerses.contains {
+                                    $0.book == book.name &&
+                                    $0.startingVerse == paragraph.startingVerse &&
+                                    $0.chapter == chapter.number
+                                } ? Color(hex: highlightedColor) : .clear
                             }
                             .underline(selectedParagraph == paragraph)
                             .onLongPressGesture {
                                 selectedParagraph = paragraph
-                                alreadyHighlighted = highlightedVerses.first(where: { $0.book == book.name && $0.startingVerse == selectedParagraph!.startingVerse })
+                                alreadyHighlighted = highlightedVerses.first(where: {
+                                    $0.book == book.name &&
+                                    $0.chapter == chapter.number &&
+                                    $0.startingVerse == selectedParagraph!.startingVerse
+                                })
                                 showActionSheet = true
                             }
                         }
@@ -71,7 +80,7 @@ struct ChapterDetailView: View {
             }
         )
         .actionSheet(isPresented: $showActionSheet) {
-            ActionSheet(title: Text("Selected Verse \(book.name) \(chapter.number): \(selectedParagraph?.startingVerse ?? 0)"), buttons: [
+            ActionSheet(title: Text("Selected Verse \(book.name) \(chapter.number):\(selectedParagraph?.startingVerse ?? 0)"), buttons: [
                 .default(Text("Copy")) {
                     UIPasteboard.general.string = getStringFromSelectedParagraph()
                     selectedParagraph = nil
@@ -81,6 +90,7 @@ struct ChapterDetailView: View {
                     guard selectedParagraph != nil else { return }
                     let highlightedVerse = HighlightedVerse(
                         book: book.name,
+                        chapter: chapter.number,
                         startingVerse: selectedParagraph!.startingVerse
                     )
 

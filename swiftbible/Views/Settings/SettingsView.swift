@@ -9,10 +9,6 @@ import SwiftUI
 
 
 struct SettingsView: View {
-    @AppStorage("supabaseAccessToken") private var supabaseAccessToken: String?
-    @AppStorage("supabaseRefreshToken") private var supabaseRefreshToken: String?
-
-
     var body: some View {
         NavigationView {
             List {
@@ -25,6 +21,9 @@ struct SettingsView: View {
                 Section(header: Text("Appearance")) {
                     NavigationLink(destination: FontSizeView()) {
                         Label("Font Size", systemImage: "textformat.size")
+                    }
+                    NavigationLink(destination: HighlightedColorView()) {
+                        Label("Highlighted Color", systemImage: "highlighter")
                     }
                 }
             }

@@ -27,6 +27,9 @@
 		952F39E72C8F61E0009A412D /* Verse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39E62C8F61E0009A412D /* Verse.swift */; };
 		952F39EB2C90710B009A412D /* Paragraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39EA2C90710B009A412D /* Paragraph.swift */; };
 		952F39EF2C907159009A412D /* Chapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39EE2C907159009A412D /* Chapter.swift */; };
+		952F39F12C909E3B009A412D /* chapterSummaries.json in Resources */ = {isa = PBXBuildFile; fileRef = 952F39F02C909E31009A412D /* chapterSummaries.json */; };
+		952F39F32C9114A4009A412D /* HighlightedColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F22C9114A4009A412D /* HighlightedColorView.swift */; };
+		952F39F52C9115F8009A412D /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F42C9115F8009A412D /* Color.swift */; };
 		9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9537E25D2C893FBD00FD56B9 /* Supabase */; };
 		9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */; };
 		9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E2632C89502400FD56B9 /* VerificationView.swift */; };
@@ -59,6 +62,9 @@
 		952F39E62C8F61E0009A412D /* Verse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Verse.swift; sourceTree = "<group>"; };
 		952F39EA2C90710B009A412D /* Paragraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paragraph.swift; sourceTree = "<group>"; };
 		952F39EE2C907159009A412D /* Chapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chapter.swift; sourceTree = "<group>"; };
+		952F39F02C909E31009A412D /* chapterSummaries.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = chapterSummaries.json; sourceTree = "<group>"; };
+		952F39F22C9114A4009A412D /* HighlightedColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedColorView.swift; sourceTree = "<group>"; };
+		952F39F42C9115F8009A412D /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
 		9537E2632C89502400FD56B9 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		9537E2662C8A9E1E00FD56B9 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
@@ -101,6 +107,7 @@
 			children = (
 				952F39D12C8BAB72009A412D /* View.swift */,
 				952F39E42C8F48B8009A412D /* Collection.swift */,
+				952F39F42C9115F8009A412D /* Color.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -118,7 +125,9 @@
 			children = (
 				95186D0F2C893E7500C0949D /* SettingsView.swift */,
 				952F39DC2C8E36A7009A412D /* SignInView.swift */,
+				9537E2632C89502400FD56B9 /* VerificationView.swift */,
 				952F39DE2C8E36E5009A412D /* FontSizeView.swift */,
+				952F39F22C9114A4009A412D /* HighlightedColorView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -205,6 +214,7 @@
 		954BC9E22C85001900FFCFA6 /* Text */ = {
 			isa = PBXGroup;
 			children = (
+				952F39F02C909E31009A412D /* chapterSummaries.json */,
 				954BC9E32C85005900FFCFA6 /* bible.json */,
 			);
 			path = Text;
@@ -240,7 +250,6 @@
 				952F39E02C8E383B009A412D /* Bible */,
 				952F39E12C8E3852009A412D /* Daily Devotional */,
 				952F39DB2C8E366A009A412D /* Settings */,
-				9537E2632C89502400FD56B9 /* VerificationView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -309,6 +318,7 @@
 			files = (
 				954BC9DC2C84EDBF00FFCFA6 /* Preview Assets.xcassets in Resources */,
 				954BC9E42C85005900FFCFA6 /* bible.json in Resources */,
+				952F39F12C909E3B009A412D /* chapterSummaries.json in Resources */,
 				954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -322,6 +332,7 @@
 			files = (
 				952F39EB2C90710B009A412D /* Paragraph.swift in Sources */,
 				952F39D22C8BAB72009A412D /* View.swift in Sources */,
+				952F39F32C9114A4009A412D /* HighlightedColorView.swift in Sources */,
 				954BC9F22C85112D00FFCFA6 /* SearchBar.swift in Sources */,
 				954BC9EA2C8500F900FFCFA6 /* BibleService.swift in Sources */,
 				952F39CD2C8B58A0009A412D /* ParagraphView.swift in Sources */,
@@ -336,6 +347,7 @@
 				952F39E72C8F61E0009A412D /* Verse.swift in Sources */,
 				9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */,
 				952F39D52C8BABB3009A412D /* OnScrollingChangeViewModifier.swift in Sources */,
+				952F39F52C9115F8009A412D /* Color.swift in Sources */,
 				952F39EF2C907159009A412D /* Chapter.swift in Sources */,
 				9537E2672C8A9E1E00FD56B9 /* UserViewModel.swift in Sources */,
 				952F39CF2C8BA7F3009A412D /* ContentView.swift in Sources */,
