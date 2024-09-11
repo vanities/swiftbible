@@ -80,50 +80,54 @@ struct ChapterDetailView: View {
             }
         )
         .actionSheet(isPresented: $showActionSheet) {
-            ActionSheet(title: Text("Selected Verse \(book.name) \(chapter.number):\(selectedParagraph?.startingVerse ?? 0)"), buttons: [
-                .default(Text("Copy")) {
-                    UIPasteboard.general.string = getStringFromSelectedParagraph()
-                    selectedParagraph = nil
-                    alreadyHighlighted = nil
-                },
-                .default(Text("Highlight")) {
-                    guard selectedParagraph != nil else { return }
-                    let highlightedVerse = HighlightedVerse(
-                        book: book.name,
-                        chapter: chapter.number,
-                        startingVerse: selectedParagraph!.startingVerse
-                    )
-
-                    if let alreadyHighlightedVerse = alreadyHighlighted {
-                        context.delete(alreadyHighlightedVerse)
-                    } else {
-                        context.insert(highlightedVerse)
-                    }
-                    do {
-                        try context.save()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                    selectedParagraph = nil
-                    alreadyHighlighted = nil
-                },
-                .default(Text("Share")) {
-                    let shareText = getStringFromSelectedParagraph()
-                    let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                        windowScene.windows.first?.rootViewController?.present(activityViewController, animated: true, completion: nil)
-                    }
-                    selectedParagraph = nil
-                    alreadyHighlighted = nil
-                },
-                .cancel()
-            ])
+            ActionSheetView()
         }
     }
 
     func getStringFromSelectedParagraph() -> String {
         guard selectedParagraph != nil else { return "" }
         return "\(book.name) Chapter \(chapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
+    }
+
+    func ActionSheetView() -> ActionSheet {
+        return ActionSheet(title: Text("Selected Verse \(book.name) \(chapter.number):\(selectedParagraph?.startingVerse ?? 0)"), buttons: [
+            .default(Text("Copy")) {
+                UIPasteboard.general.string = getStringFromSelectedParagraph()
+                selectedParagraph = nil
+                alreadyHighlighted = nil
+            },
+            .default(Text("\(alreadyHighlighted != nil ? "Unhighlight" : "Highlight")")) {
+                guard selectedParagraph != nil else { return }
+                let highlightedVerse = HighlightedVerse(
+                    book: book.name,
+                    chapter: chapter.number,
+                    startingVerse: selectedParagraph!.startingVerse
+                )
+
+                if let alreadyHighlightedVerse = alreadyHighlighted {
+                    context.delete(alreadyHighlightedVerse)
+                } else {
+                    context.insert(highlightedVerse)
+                }
+                do {
+                    try context.save()
+                } catch {
+                    print(error.localizedDescription)
+                }
+                selectedParagraph = nil
+                alreadyHighlighted = nil
+            },
+            .default(Text("Share")) {
+                let shareText = getStringFromSelectedParagraph()
+                let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    windowScene.windows.first?.rootViewController?.present(activityViewController, animated: true, completion: nil)
+                }
+                selectedParagraph = nil
+                alreadyHighlighted = nil
+            },
+            .cancel()
+        ])
     }
 }
 

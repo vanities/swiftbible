@@ -11,4 +11,5 @@ import Supabase
 @Observable
 class UserViewModel {
     var user: User?
+    var showSignInFlow: Bool = false
 }

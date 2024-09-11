@@ -9,12 +9,16 @@ import SwiftUI
 
 
 struct SettingsView: View {
+    @Environment(UserViewModel.self) private var userViewModel
+
     var body: some View {
-        NavigationView {
+        @Bindable var userViewModel = userViewModel
+
+        NavigationStack {
             List {
                 Section(header: Text("Account")) {
-                    NavigationLink(destination: SignInView()) {
-                        Label("Sign In", systemImage: "person.circle")
+                    NavigationLink(destination: AuthenticateView()) {
+                        Label("Authenticate", systemImage: "person.circle")
                     }
                 }
 
@@ -28,6 +32,12 @@ struct SettingsView: View {
                 }
             }
             .navigationBarTitle("Settings")
+            .navigationDestination(
+                isPresented: $userViewModel.showSignInFlow,
+                destination: {
+                    AuthenticateView()
+                }
+            )
         }
     }
 }

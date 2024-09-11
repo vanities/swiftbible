@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SignInView: View {
+struct AuthenticateView: View {
     @State private var email = ""
     @State private var verificationCode = ""
     @State private var showVerificationView = false
@@ -33,7 +33,7 @@ struct SignInView: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
 
-                    Button("Sign In") {
+                    Button("Create Account / Sign In") {
                         Task {
                             await SupabaseService.shared.signIn(email: email)
                             showVerificationView = true
@@ -45,7 +45,7 @@ struct SignInView: View {
                 }
             }
         }
-        .navigationBarTitle("Sign In")
+        .navigationBarTitle("Authenticate")
     }
 
     private func signOut() async {
@@ -61,6 +61,6 @@ struct SignInView: View {
 
 
 #Preview {
-    SignInView()
+    AuthenticateView()
         .environment(UserViewModel())
 }
