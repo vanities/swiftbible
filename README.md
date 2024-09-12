@@ -2,6 +2,14 @@
 
 SwiftBible is an iOS application that provides users with the King James Version (KJV) of the Bible, beautifully designed and developed using the SwiftUI framework. The app allows users to easily access and read the sacred texts, enabling them to deepen their understanding of the scriptures and strengthen their faith.
 
+## Screenshots
+![alt text](github_assets/bible.png)
+![alt text](github_assets/verse.png)
+![alt text](github_assets/select_verse.png)
+![alt text](github_assets/add_note.png)
+![alt text](github_assets/devo.png)
+![alt text](github_assets/settings.png)
+
 ## Testing
 Use this link to join the TestFlight: https://testflight.apple.com/join/MHYwBxpQ
 
@@ -14,11 +22,12 @@ Use this link to join the TestFlight: https://testflight.apple.com/join/MHYwBxpQ
 - Daily devotionals, written by Hermes 405B
 - Adjustable font size for improved readability
 - Highlight and copy verses
+- Add notes to your favorite verses and able to quick access them
+- Share verses with friends and family via social media, email, or text messages
 
 ## Upcoming Features
 - Search functionality to quickly find specific passages or keywords
-- Bookmark your favorite verses for quick access
-- Share verses with friends and family via social media, email, or text messages
+- Chapter and verse titles
 
 ## Requirements
 
