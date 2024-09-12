@@ -7,7 +7,11 @@
 
 import SwiftUI
 
-struct Book: Codable {
+struct Book: Codable, Equatable {
+    static func == (lhs: Book, rhs: Book) -> Bool {
+        lhs.name == rhs.name
+    }
+
     let name: String
     let description: String
     let chapters: [Chapter]

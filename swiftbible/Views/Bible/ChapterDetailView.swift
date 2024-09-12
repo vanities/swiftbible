@@ -67,20 +67,7 @@ struct ChapterDetailView: View {
                             }
                             .underline(selectedParagraph == paragraph)
                             .onLongPressGesture {
-                                selectedParagraph = paragraph
-                                alreadyHighlighted = highlightedVerses.first(where: {
-                                    $0.version == book.version.rawValue &&
-                                    $0.book == book.name &&
-                                    $0.chapter == chapter.number &&
-                                    $0.startingVerse == selectedParagraph!.startingVerse
-                                })
-                                alreadyNoted = notes.first(where: {
-                                    $0.version == book.version.rawValue &&
-                                    $0.book == book.name &&
-                                    $0.chapter == chapter.number &&
-                                    $0.startingVerse == selectedParagraph!.startingVerse
-                                } )
-                                showActionSheet = true
+                                handleLongPress(paragraph: paragraph)
                             }
                         }
                     }
@@ -123,6 +110,23 @@ struct ChapterDetailView: View {
                   let verse = appViewModel.selectedVerse?.verse else { return }
             scrollPosition = verse
         }
+    }
+
+    func handleLongPress(paragraph: Paragraph) {
+        selectedParagraph = paragraph
+        alreadyHighlighted = highlightedVerses.first(where: {
+            $0.version == book.version.rawValue &&
+            $0.book == book.name &&
+            $0.chapter == chapter.number &&
+            $0.startingVerse == selectedParagraph!.startingVerse
+        })
+        alreadyNoted = notes.first(where: {
+            $0.version == book.version.rawValue &&
+            $0.book == book.name &&
+            $0.chapter == chapter.number &&
+            $0.startingVerse == selectedParagraph!.startingVerse
+        } )
+        showActionSheet = true
     }
 
     func getStringFromSelectedParagraph() -> String {
