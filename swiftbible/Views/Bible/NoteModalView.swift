@@ -17,43 +17,34 @@ struct NoteModalView: View {
 
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Note Details")) {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text(note.version.capitalized)
-                            .foregroundColor(.gray)
+            VStack {
+                Form {
+                    Section(header: Text("Note Details")) {
+                        Text("\(note.version.uppercased()) \(note.book) \(note.chapter):\(note.startingVerse)")
+                            .font(.headline)
                     }
-                    HStack {
-                        Text("Book")
-                        Spacer()
-                        Text(note.book)
-                            .foregroundColor(.gray)
-                    }
-                    HStack {
-                        Text("Verse")
-                        Spacer()
-                        Text("Chapter \(note.chapter):\(note.startingVerse)")
-                            .foregroundColor(.gray)
-                    }
-                }
 
-                Section(header: Text("Note")) {
-                    TextEditor(text: $note.text)
-                        .frame(minHeight: 100)
-                }
+                    Section(header: Text("Note")) {
+                        TextEditor(text: $note.text)
+                            .frame(minHeight: 100)
+                    }
 
+                }
                 Section {
                     Button("Save") {
                         onSave(note)
                     }
+                    .bold()
+                    .padding()
                     Button("Cancel") {
                         onCancel()
                     }
+                    .foregroundColor(.gray)
+                    .padding()
                     Button("Delete") {
                         onDelete(note)
                     }
+                    .padding()
                     .foregroundColor(.red)
                 }
             }

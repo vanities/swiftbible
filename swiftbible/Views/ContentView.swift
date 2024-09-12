@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @State private var appViewModel = AppViewModel()
     @State private var userViewModel = UserViewModel()
     @State private var selectedTab: Int = 0
 
@@ -21,8 +22,7 @@ struct ContentView: View {
                 DailyDevotionalView(selectedTab: $selectedTab)
             }
             Tab("Settings", systemImage: "gearshape.fill", value: 2) {
-            //Tab("Settings", systemImage: "person.crop.circle.fill") {
-                SettingsView()
+                SettingsView(selectedTab: $selectedTab)
             }
         }
         .onAppear {
@@ -31,11 +31,13 @@ struct ContentView: View {
                 userViewModel.user = await SupabaseService.shared.getUser()
             }
         }
+        .environment(appViewModel)
         .environment(userViewModel)
     }
 }
 
 #Preview {
     ContentView()
+        .environment(AppViewModel())
         .environment(UserViewModel())
 }

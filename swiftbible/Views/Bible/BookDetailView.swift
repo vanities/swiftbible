@@ -16,11 +16,11 @@ struct BookDetailView: View {
     var body: some View {
         VStack(spacing: 0) {
             List(book.chapters, id: \.self) { chapter in
-                 NavigationLink(destination: ChapterDetailView(book: book, chapter: chapter)) {
-                     Text("Chapter \(chapter.number)")
-                         .font(Font.custom(fontName, size: CGFloat(fontSize)))
-                 }
-             }
+                NavigationLink(destination: ChapterDetailView(book: book, chapter: chapter)) {
+                    Text("Chapter \(chapter.number)")
+                        .font(Font.custom(fontName, size: CGFloat(fontSize)))
+                }
+            }
         }
         .navigationTitle(
             Text(book.name)

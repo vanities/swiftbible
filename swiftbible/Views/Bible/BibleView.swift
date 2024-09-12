@@ -9,6 +9,8 @@ import SwiftUI
 
 
 struct BibleView: View {
+    @Environment(AppViewModel.self) private var appViewModel
+
     @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
 
@@ -34,9 +36,12 @@ struct BibleView: View {
     }
 
     var body: some View {
+        @Bindable var appViewModel = appViewModel
+        
         NavigationStack {
             VStack {
                 SearchBar(text: $searchText)
+                    .padding(.horizontal)
 
                 List {
                     Section(header: Text("Old Testament")) {
@@ -60,9 +65,19 @@ struct BibleView: View {
             .onAppear {
                 if bibleData.newTestament.isEmpty {
                     bibleData = BibleService.shared.fetchBibleData()
+                    appViewModel.allBibleData = bibleData.oldTestament + bibleData.newTestament
                 }
             }
             .navigationTitle("Bible")
+            .navigationDestination(isPresented: $appViewModel.showSelectedVerse) {
+                if let book = appViewModel.selectedVerse?.book,
+                   let chapter = appViewModel.selectedVerse?.chapter {
+                    ChapterDetailView(
+                        book: book,
+                        chapter: chapter
+                    )
+                }
+            }
             .ignoresSafeArea(.all, edges: .horizontal)
         }
     }

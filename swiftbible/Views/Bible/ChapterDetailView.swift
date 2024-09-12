@@ -14,7 +14,8 @@ struct ChapterDetailView: View {
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []
-    
+
+    @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
 
     let book: Book
@@ -26,6 +27,7 @@ struct ChapterDetailView: View {
     @State private var showNoteModal = false
     @State private var alreadyHighlighted: HighlightedVerse?
     @State private var alreadyNoted: Note?
+    @State private var scrollPosition: Int?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -83,6 +85,7 @@ struct ChapterDetailView: View {
                         }
                     }
                 }
+                .scrollTargetLayout()
                 .padding()
                 .onScrollingChange(onScrollingDown: {
                     isHiding = true
@@ -95,6 +98,7 @@ struct ChapterDetailView: View {
             .toolbar(isHiding ? .hidden : .visible, for: .tabBar)
             .animation(.easeIn, value: isHiding)
         }
+        .scrollPosition(id: $scrollPosition)
         .navigationTitle(
             Text("\(book.name) \(chapter.number)")
         )
@@ -109,49 +113,61 @@ struct ChapterDetailView: View {
             ActionSheetView()
         }
         .sheet(isPresented: $showNoteModal) {
-            NoteModalView(
-                note: alreadyNoted != nil ? alreadyNoted! : Note(
-                    version: book.version.rawValue,
-                    book: book.name,
-                    chapter: chapter.number,
-                    startingVerse: selectedParagraph!.startingVerse,
-                    text: ""
-                ),
-                onSave: { note in
-                    context.insert(note)
-                    do {
-                        try context.save()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                    selectedParagraph = nil
-                    alreadyHighlighted = nil
-                    showNoteModal = false
-                },
-                onCancel: {
-                    selectedParagraph = nil
-                    alreadyHighlighted = nil
-                    showNoteModal = false
-                },
-                onDelete: { note in
-                    context.delete(note)
-                    do {
-                        try context.save()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                    selectedParagraph = nil
-                    alreadyHighlighted = nil
-                    showNoteModal = false
-                }
-
-            )
+            NoteModalViewView()
+        }
+        .onAppear {
+            guard let book = appViewModel.selectedVerse?.book,
+                  book == self.book,
+                  let chapter = appViewModel.selectedVerse?.chapter,
+                  chapter == self.chapter,
+                  let verse = appViewModel.selectedVerse?.verse else { return }
+            scrollPosition = verse
         }
     }
 
     func getStringFromSelectedParagraph() -> String {
         guard selectedParagraph != nil else { return "" }
         return "\(book.version) Version \(book.version) Version \(book.name) Chapter \(chapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
+    }
+
+    func NoteModalViewView() -> some View {
+        return NoteModalView(
+            note: alreadyNoted != nil ? alreadyNoted! : Note(
+                version: book.version.rawValue,
+                book: book.name,
+                chapter: chapter.number,
+                startingVerse: selectedParagraph!.startingVerse,
+                text: ""
+            ),
+            onSave: { note in
+                context.insert(note)
+                do {
+                    try context.save()
+                } catch {
+                    print(error.localizedDescription)
+                }
+                selectedParagraph = nil
+                alreadyHighlighted = nil
+                showNoteModal = false
+            },
+            onCancel: {
+                selectedParagraph = nil
+                alreadyHighlighted = nil
+                showNoteModal = false
+            },
+            onDelete: { note in
+                context.delete(note)
+                do {
+                    try context.save()
+                } catch {
+                    print(error.localizedDescription)
+                }
+                selectedParagraph = nil
+                alreadyHighlighted = nil
+                showNoteModal = false
+            }
+
+        )
     }
 
     func ActionSheetView() -> ActionSheet {
@@ -183,7 +199,7 @@ struct ChapterDetailView: View {
                 selectedParagraph = nil
                 alreadyHighlighted = nil
             },
-            .default(Text("\(alreadyNoted != nil ? "Update" : "Add") Note")) {
+            .default(Text("\(alreadyNoted != nil ? "View" : "Add") Note")) {
                 showNoteModal = true
             },
             .default(Text("Share")) {
