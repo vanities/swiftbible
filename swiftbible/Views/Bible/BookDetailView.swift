@@ -8,17 +8,13 @@
 import SwiftUI
 
 struct BookDetailView: View {
-    @AppStorage("fontName") private var fontName: String = "Helvetica"
-    @AppStorage("fontSize") private var fontSize: Int = 20
-
     let book: Book
 
     var body: some View {
         VStack(spacing: 0) {
             List(book.chapters, id: \.self) { chapter in
                 NavigationLink(destination: ChapterDetailView(book: book, chapter: chapter)) {
-                    Text("Chapter \(chapter.number)")
-                        .font(Font.custom(fontName, size: CGFloat(fontSize)))
+                    NavigationTitle(name: "Chapter \(chapter.number)", description: chapterSummaries[book.name]?[String(chapter.number)])
                 }
             }
         }

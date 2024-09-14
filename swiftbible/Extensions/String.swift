@@ -19,8 +19,6 @@ extension String {
             .replacingOccurrences(of: "/", with: "%2F")
             .replacingOccurrences(of: "‘", with: "%91")
             .replacingOccurrences(of: ",", with: "%2C")
-            .replacingOccurrences(of: "-", with: "%2D")
-            .replacingOccurrences(of: "@", with: "%40")
             //more symbols fixes here: https://mykindred.com/htmlspecialchars.php
     }
 }

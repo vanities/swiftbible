@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct ChapterDetailView: View {
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
     @AppStorage("notedColor") private var notedColor: String = "00ff04"
 
@@ -38,6 +40,13 @@ struct ChapterDetailView: View {
                         chapter.paragraphs,
                         id: \.startingVerse
                     ) { paragraph in
+                        if let summary = summaries[book.name]?["\(chapter.number):\(paragraph.startingVerse)"] {
+                            Text(summary)
+                                .bold()
+                                .padding(.top)
+                                .font(Font.custom(fontName, size: CGFloat(fontSize+1)))
+
+                        }
                         HStack(alignment: .top) {
                             VStack(alignment: .center) {
                                 Text("\(paragraph.startingVerse)")

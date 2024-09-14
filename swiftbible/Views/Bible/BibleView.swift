@@ -11,9 +11,6 @@ import SwiftUI
 struct BibleView: View {
     @Environment(AppViewModel.self) private var appViewModel
 
-    @AppStorage("fontName") private var fontName: String = "Helvetica"
-    @AppStorage("fontSize") private var fontSize: Int = 20
-
     @Environment(UserViewModel.self) private var userViewModel
 
     @State private var bibleData: (oldTestament: [Book], newTestament: [Book]) = ([], [])
@@ -47,7 +44,7 @@ struct BibleView: View {
                     Section(header: Text("Old Testament")) {
                         ForEach(filteredOldTestament, id: \.name) { book in
                             NavigationLink(destination: BookDetailView(book: book)) {
-                                Title(book.name, book.description)
+                                NavigationTitle(name: book.name, description: book.description)
                             }
                         }
                     }
@@ -55,13 +52,12 @@ struct BibleView: View {
                     Section(header: Text("New Testament")) {
                         ForEach(filteredNewTestament, id: \.name) { book in
                             NavigationLink(destination: BookDetailView(book: book)) {
-                                Title(book.name, book.description)
+                                NavigationTitle(name: book.name, description: book.description)
                             }
                         }
                     }
                 }
             }
-            .font(Font.custom(fontName, size: CGFloat(fontSize)))
             .onAppear {
                 if bibleData.newTestament.isEmpty {
                     bibleData = BibleService.shared.fetchBibleData()
@@ -79,15 +75,6 @@ struct BibleView: View {
                 }
             }
             .ignoresSafeArea(.all, edges: .horizontal)
-        }
-    }
-
-    func Title(_ name: String, _ description: String) -> some View {
-        VStack(alignment: .leading) {
-            Text(name)
-            Text(description)
-                .font(.footnote)
-                .fontWeight(.light)
         }
     }
 }
