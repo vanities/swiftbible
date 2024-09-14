@@ -15,6 +15,7 @@ struct ChapterDetailView: View {
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []
 
+    @Environment(\.presentationMode) var presentationMode
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
 
@@ -74,24 +75,18 @@ struct ChapterDetailView: View {
                 }
                 .scrollTargetLayout()
                 .padding()
-                .onScrollingChange(onScrollingDown: {
-                    isHiding = true
-                }, onScrollingUp: {
-                    isHiding = false
-                }, onScrollingStopped: {
-                })
             }
             .toolbar(isHiding ? .hidden : .visible, for: .navigationBar)
             .toolbar(isHiding ? .hidden : .visible, for: .tabBar)
             .animation(.easeIn, value: isHiding)
         }
-        .scrollPosition(id: $scrollPosition)
+        //.scrollPosition(id: $scrollPosition)
         .navigationTitle(
             Text("\(book.name) \(chapter.number)")
         )
         .simultaneousGesture(
             TapGesture().onEnded {
-                if isHiding {
+                withAnimation {
                     isHiding.toggle()
                 }
             }
@@ -103,12 +98,16 @@ struct ChapterDetailView: View {
             NoteModalViewView()
         }
         .onAppear {
+            isHiding = true
             guard let book = appViewModel.selectedVerse?.book,
                   book == self.book,
                   let chapter = appViewModel.selectedVerse?.chapter,
                   chapter == self.chapter,
                   let verse = appViewModel.selectedVerse?.verse else { return }
             scrollPosition = verse
+        }
+        .onDisappear {
+            isHiding = false
         }
     }
 
@@ -225,12 +224,5 @@ struct ChapterDetailView: View {
 }
 
 
-struct NoteIndicatorShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.minX, y: rect.midY))
 
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
-        return path
-    }
-}
+
