@@ -16,7 +16,7 @@ Deno.serve(async (req) => {
     baseURL: "https://api.lambdalabs.com/v1",
     apiKey: Deno.env.get("LAMBDA_API_KEY"),
   });
-  const query = `Create a daily devotional for a Bible app based on a random Bible verse. Incorporate todays date: ${new Date()} into it, if it makes sense to. You can use markdown syntax to format the text.`;
+  const query = `Create a daily devotional for a Bible app based on a random Bible verse, don't quote the NIV, only quote the KJV, NKJV, or the ESV.. Incorporate todays date: ${new Date()} into it, if it makes sense to. You can use markdown syntax to format the text.`;
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: "user", content: query }],
     model: "hermes-3-llama-3.1-405b-fp8",
