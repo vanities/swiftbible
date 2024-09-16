@@ -23,6 +23,7 @@ struct DailyDevotionalView: View {
 
     var body: some View {
         VStack {
+            /*
             if userViewModel.user == nil {
                 VStack(alignment: .center) {
                     VStack(spacing: 0) {
@@ -51,6 +52,7 @@ struct DailyDevotionalView: View {
                 }
             }
             else {
+             */
                 if isLoading {
                     ProgressView("Loading...")
                 } else {
@@ -67,7 +69,7 @@ struct DailyDevotionalView: View {
                             }
                     }
                 }
-            }
+            //}
         }
         .font(Font.system(size: CGFloat(fontSize)))
         .onAppear {
