@@ -20,12 +20,6 @@ struct SettingsView: View {
 
         NavigationStack {
             List {
-                Section(header: Text("Account")) {
-                    NavigationLink(destination: AuthenticateView()) {
-                        Label("Authenticate", systemImage: "person.circle")
-                    }
-                }
-
                 Section(header: Text("Appearance")) {
                     NavigationLink(destination: FontOptionsView()) {
                         Label("Font Options", systemImage: "textformat.size")

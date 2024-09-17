@@ -149,7 +149,8 @@ struct ChapterDetailView: View {
                 book: book.name,
                 chapter: chapter.number,
                 startingVerse: selectedParagraph!.startingVerse,
-                text: ""
+                text: "",
+                created: .now
             ),
             onSave: { note in
                 context.insert(note)

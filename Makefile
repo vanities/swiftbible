@@ -2,6 +2,7 @@
 
 functions:
 	supabase functions deploy daily-devotional --project-ref yvanxjoayoiocwzfpkfm
+	supabase functions deploy user-self-deletion --project-ref yvanxjoayoiocwzfpkfm
 
 test_daily_devotional:
 	curl -X POST 'https://yvanxjoayoiocwzfpkfm.supabase.co/functions/v1/daily-devotional' \
