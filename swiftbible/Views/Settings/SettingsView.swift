@@ -6,12 +6,10 @@
 //
 
 import SwiftUI
-import StoreKit
 
 
 struct SettingsView: View {
     @Environment(UserViewModel.self) private var userViewModel
-    @Environment(\.requestReview) var requestReview
 
     @Binding var selectedTab: Int
 
@@ -64,12 +62,6 @@ struct SettingsView: View {
                          UIApplication.shared.open(url)
                     }) {
                         Label("View on App Store", systemImage: "apple.logo")
-                    }
-
-                    Button(action: {
-                        requestReview()
-                    }) {
-                        Label("Rate This App", systemImage: "star.fill")
                     }
 
                     Button(action: {

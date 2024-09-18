@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import StoreKit
 
 
 struct BibleView: View {
     @Environment(AppViewModel.self) private var appViewModel
-
     @Environment(UserViewModel.self) private var userViewModel
+    @Environment(\.requestReview) var requestReview
 
     @State private var bibleData: (oldTestament: [Book], newTestament: [Book]) = ([], [])
     @State private var searchText = ""
@@ -63,6 +64,7 @@ struct BibleView: View {
                     bibleData = BibleService.shared.fetchBibleData()
                     appViewModel.allBibleData = bibleData.oldTestament + bibleData.newTestament
                 }
+                requestReview()
             }
             .navigationTitle("Bible")
             .navigationDestination(isPresented: $appViewModel.showSelectedVerse) {
