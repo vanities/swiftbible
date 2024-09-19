@@ -13,14 +13,16 @@
   </p>
 </p>
 
-
 SwiftBible is an iOS application that provides users with the King James Version (KJV) of the Bible, beautifully designed and developed using the SwiftUI framework. The app allows users to easily access and read the sacred texts, enabling them to deepen their understanding of the scriptures and strengthen their faith.
 
 ## Screenshots
+
 <img src="github_assets/bible.png" alt="screenshot" width="300"> <img src="github_assets/verse.png" alt="screenshot" width="300"> <img src="github_assets/select_verse.png" alt="screenshot" width="300"> <img src="github_assets/add_note.png" alt="screenshot" width="300"> <img src="github_assets/devo.png" alt="screenshot" width="300"> <img src="github_assets/settings.png" alt="screenshot" width="300">
 
 ## Testing
-Use this link to join the TestFlight: https://testflight.apple.com/join/MHYwBxpQ
+
+Use this link to download the latest on the AppStore: <https://apps.apple.com/us/app/swiftbible/id6670373108>
+Use this link to join the TestFlight: <https://testflight.apple.com/join/MHYwBxpQ>
 
 ## Features
 
@@ -35,6 +37,7 @@ Use this link to join the TestFlight: https://testflight.apple.com/join/MHYwBxpQ
 - Share verses with friends and family via social media, email, or text messages
 
 ## Upcoming Features
+
 - Search functionality to quickly find specific passages or keywords
 - Chapter and verse titles
 
@@ -47,12 +50,14 @@ Use this link to join the TestFlight: https://testflight.apple.com/join/MHYwBxpQ
 ## Installation
 
 1. Clone the repository:
-   ```
+
+   ```bash
    git clone https://github.com/vanities/swiftbible.git
    ```
 
 2. Open the project in Xcode:
-   ```
+
+   ```bash
    cd swiftbible
    xed .
    ```
