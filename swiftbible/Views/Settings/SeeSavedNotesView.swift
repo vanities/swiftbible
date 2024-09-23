@@ -20,7 +20,7 @@ struct SeeSavedNotesView: View {
         VStack {
             if notes.isEmpty {
                 Text("No Notes saved")
-
+                
             } else {
                 List {
                     ForEach(notes) { note in
@@ -40,13 +40,13 @@ struct SeeSavedNotesView: View {
                             VStack(alignment: .leading) {
                                 Text(note.text)
                                     .font(.headline)
-
-
+                                
+                                
                                 Text("\(note.version.uppercased()) \(note.book) \(note.chapter):\(note.startingVerse)")
                                     .font(.headline)
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
-
+                                
                                 Text("Created: \(note.created.formatted(date: .long, time: .omitted))")
                                     .font(.caption)
                                     .foregroundColor(.gray)
@@ -55,6 +55,7 @@ struct SeeSavedNotesView: View {
                     }
                 }
             }
+        }
         .navigationBarTitle("Saved Notes")
     }
 }
