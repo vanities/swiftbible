@@ -17,38 +17,44 @@ struct SeeSavedNotesView: View {
     @Binding var selectedTab: Int
 
     var body: some View {
-        List {
-            ForEach(notes) { note in
-                Button(action: {
-                    guard let bibleData = appViewModel.allBibleData,
-                        let book = bibleData.first(where: { $0.name == note.book }),
-                          let chapter = book.chapters.first(where: { $0.number == note.chapter })
-                    else { return }
-                    selectedTab = 0
-                    appViewModel.selectedVerse = SelectedVerse(
-                        book: book,
-                        chapter: chapter,
-                        verse: note.startingVerse
-                    )
-                    appViewModel.showSelectedVerse = true
-                }) {
-                    VStack(alignment: .leading) {
-                        Text(note.text)
-                            .font(.headline)
+        VStack {
+            if notes.isEmpty {
+                Text("No Notes saved")
+
+            } else {
+                List {
+                    ForEach(notes) { note in
+                        Button(action: {
+                            guard let bibleData = appViewModel.allBibleData,
+                                  let book = bibleData.first(where: { $0.name == note.book }),
+                                  let chapter = book.chapters.first(where: { $0.number == note.chapter })
+                            else { return }
+                            selectedTab = 0
+                            appViewModel.selectedVerse = SelectedVerse(
+                                book: book,
+                                chapter: chapter,
+                                verse: note.startingVerse
+                            )
+                            appViewModel.showSelectedVerse = true
+                        }) {
+                            VStack(alignment: .leading) {
+                                Text(note.text)
+                                    .font(.headline)
 
 
-                        Text("\(note.version.uppercased()) \(note.book) \(note.chapter):\(note.startingVerse)")
-                            .font(.headline)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                                Text("\(note.version.uppercased()) \(note.book) \(note.chapter):\(note.startingVerse)")
+                                    .font(.headline)
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
 
-                        Text("Created: \(note.created.formatted(date: .long, time: .omitted))")
-                            .font(.caption)
-                            .foregroundColor(.gray)
+                                Text("Created: \(note.created.formatted(date: .long, time: .omitted))")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                        }
                     }
                 }
             }
-        }
         .navigationBarTitle("Saved Notes")
     }
 }

@@ -45,8 +45,14 @@ struct ChapterDetailView: View {
                                 .bold()
                                 .padding(.top)
                                 .font(Font.custom(fontName, size: CGFloat(fontSize+1)))
-
                         }
+                        let isHighlighted = highlightedVerses.contains {
+                            $0.version == book.version.rawValue &&
+                            $0.book == book.name &&
+                            $0.startingVerse == paragraph.startingVerse &&
+                            $0.chapter == chapter.number
+                        }
+
                         HStack(alignment: .top) {
                             VStack(alignment: .center) {
                                 Text("\(paragraph.startingVerse)")
@@ -67,14 +73,8 @@ struct ChapterDetailView: View {
                                 firstVerseNumber: paragraph.startingVerse,
                                 paragraph: paragraph.text
                             )
-                            .background {
-                                highlightedVerses.contains {
-                                    $0.version == book.version.rawValue &&
-                                    $0.book == book.name &&
-                                    $0.startingVerse == paragraph.startingVerse &&
-                                    $0.chapter == chapter.number
-                                } ? Color(hex: highlightedColor) : .clear
-                            }
+                            .background { isHighlighted ? Color(hex: highlightedColor) : .clear }
+                            .foregroundStyle(isHighlighted ? Color(hex: highlightedColor).accessibleFontColor : Color.primary)
                             .underline(selectedParagraph == paragraph)
                             .onLongPressGesture {
                                 handleLongPress(paragraph: paragraph)
@@ -93,16 +93,71 @@ struct ChapterDetailView: View {
         .navigationTitle(
             Text("\(book.name) \(chapter.number)")
         )
-        .simultaneousGesture(
-            TapGesture().onEnded {
-                withAnimation {
-                    isHiding.toggle()
+        .onTapGesture {
+            withAnimation {
+                isHiding.toggle()
+            }
+        }
+        .confirmationDialog(
+            "Selected Verse \(book.name) \(chapter.number):\(selectedParagraph?.startingVerse ?? 0)",
+            isPresented: $showActionSheet,
+            actions: {
+                Button {
+                    UIPasteboard.general.string = getStringFromSelectedParagraph()
+                    selectedParagraph = nil
+                    alreadyHighlighted = nil
+                } label: {
+                    Text("Copy")
                 }
+                Button {
+                    guard selectedParagraph != nil else { return }
+                    let highlightedVerse = HighlightedVerse(
+                        version: book.version.rawValue,
+                        book: book.name,
+                        chapter: chapter.number,
+                        startingVerse: selectedParagraph!.startingVerse
+                    )
+
+                    if let alreadyHighlightedVerse = alreadyHighlighted {
+                        context.delete(alreadyHighlightedVerse)
+                    } else {
+                        context.insert(highlightedVerse)
+                    }
+                    do {
+                        try context.save()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                    selectedParagraph = nil
+                    alreadyHighlighted = nil
+                } label: {
+                    Text("\(alreadyHighlighted != nil ? "Unhighlight" : "Highlight")")
+                }
+                Button {
+                    showNoteModal = true
+                } label: {
+                    Text("\(alreadyNoted != nil ? "View" : "Add") Note")
+                }
+                Button {
+                    let shareText = getStringFromSelectedParagraph()
+                    let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
+                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                        windowScene.windows.first?.rootViewController?.present(activityViewController, animated: true, completion: nil)
+                    }
+                    selectedParagraph = nil
+                    alreadyHighlighted = nil
+                } label: {
+                    Text("Share")
+                }
+                Button("Cancel", role: .cancel) {
+                    selectedParagraph = nil
+                }
+
+            },
+            message: {
+
             }
         )
-        .actionSheet(isPresented: $showActionSheet) {
-            ActionSheetView()
-        }
         .sheet(isPresented: $showNoteModal) {
             NoteModalViewView()
         }
@@ -139,7 +194,7 @@ struct ChapterDetailView: View {
 
     func getStringFromSelectedParagraph() -> String {
         guard selectedParagraph != nil else { return "" }
-        return "\(book.version) Version \(book.version) Version \(book.name) Chapter \(chapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
+        return "\(book.version.rawValue.uppercased()) Version \(book.name) Chapter \(chapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
     }
 
     func NoteModalViewView() -> some View {
@@ -181,51 +236,6 @@ struct ChapterDetailView: View {
             }
 
         )
-    }
-
-    func ActionSheetView() -> ActionSheet {
-        return ActionSheet(title: Text("Selected Verse \(book.name) \(chapter.number):\(selectedParagraph?.startingVerse ?? 0)"), buttons: [
-            .default(Text("Copy")) {
-                UIPasteboard.general.string = getStringFromSelectedParagraph()
-                selectedParagraph = nil
-                alreadyHighlighted = nil
-            },
-            .default(Text("\(alreadyHighlighted != nil ? "Unhighlight" : "Highlight")")) {
-                guard selectedParagraph != nil else { return }
-                let highlightedVerse = HighlightedVerse(
-                    version: book.version.rawValue,
-                    book: book.name,
-                    chapter: chapter.number,
-                    startingVerse: selectedParagraph!.startingVerse
-                )
-
-                if let alreadyHighlightedVerse = alreadyHighlighted {
-                    context.delete(alreadyHighlightedVerse)
-                } else {
-                    context.insert(highlightedVerse)
-                }
-                do {
-                    try context.save()
-                } catch {
-                    print(error.localizedDescription)
-                }
-                selectedParagraph = nil
-                alreadyHighlighted = nil
-            },
-            .default(Text("\(alreadyNoted != nil ? "View" : "Add") Note")) {
-                showNoteModal = true
-            },
-            .default(Text("Share")) {
-                let shareText = getStringFromSelectedParagraph()
-                let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                    windowScene.windows.first?.rootViewController?.present(activityViewController, animated: true, completion: nil)
-                }
-                selectedParagraph = nil
-                alreadyHighlighted = nil
-            },
-            .cancel()
-        ])
     }
 }
 
