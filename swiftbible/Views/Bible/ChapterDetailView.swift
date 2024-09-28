@@ -24,7 +24,7 @@ struct ChapterDetailView: View {
     let book: Book
     let chapter: Chapter
 
-    @State private var isHiding = false
+    @State private var showNavAndTab = true
     @State private var selectedParagraph: Paragraph?
     @State private var showActionSheet = false
     @State private var showNoteModal = false
@@ -85,17 +85,17 @@ struct ChapterDetailView: View {
                 .scrollTargetLayout()
                 .padding()
             }
-            .toolbar(isHiding ? .hidden : .visible, for: .navigationBar)
-            .toolbar(isHiding ? .hidden : .visible, for: .tabBar)
-            .animation(.easeIn, value: isHiding)
+            .toolbar(showNavAndTab ? .visible : .hidden, for: .navigationBar)
+            .toolbar(showNavAndTab ? .visible : .hidden, for: .tabBar)
+            .animation(.easeIn, value: showNavAndTab)
         }
-        //.scrollPosition(id: $scrollPosition)
+        .scrollPosition(id: $scrollPosition, anchor: .top)
         .navigationTitle(
             Text("\(book.name) \(chapter.number)")
         )
         .onTapGesture {
             withAnimation {
-                isHiding.toggle()
+                showNavAndTab.toggle()
             }
         }
         .confirmationDialog(
@@ -154,24 +154,19 @@ struct ChapterDetailView: View {
                 }
 
             },
-            message: {
-
-            }
+            message: { }
         )
         .sheet(isPresented: $showNoteModal) {
             NoteModalViewView()
         }
         .onAppear {
-            isHiding = true
+            showNavAndTab = false
             guard let book = appViewModel.selectedVerse?.book,
                   book == self.book,
                   let chapter = appViewModel.selectedVerse?.chapter,
                   chapter == self.chapter,
                   let verse = appViewModel.selectedVerse?.verse else { return }
             scrollPosition = verse
-        }
-        .onDisappear {
-            isHiding = false
         }
     }
 

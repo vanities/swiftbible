@@ -14,7 +14,7 @@ struct SeeSavedNotesView: View {
     
     @Query private var notes: [Note] = []
 
-    @Binding var selectedTab: Int
+    @Binding var selectedTab: Tabs
 
     var body: some View {
         VStack {
@@ -25,17 +25,12 @@ struct SeeSavedNotesView: View {
                 List {
                     ForEach(notes) { note in
                         Button(action: {
-                            guard let bibleData = appViewModel.allBibleData,
-                                  let book = bibleData.first(where: { $0.name == note.book }),
-                                  let chapter = book.chapters.first(where: { $0.number == note.chapter })
-                            else { return }
-                            selectedTab = 0
-                            appViewModel.selectedVerse = SelectedVerse(
-                                book: book,
-                                chapter: chapter,
-                                verse: note.startingVerse
+                            selectedTab = .bible
+                            appViewModel.navigateToVerse(
+                                bookName: note.book,
+                                chapterNumber: note.chapter,
+                                verseNumber: note.startingVerse
                             )
-                            appViewModel.showSelectedVerse = true
                         }) {
                             VStack(alignment: .leading) {
                                 Text(note.text)
@@ -61,6 +56,6 @@ struct SeeSavedNotesView: View {
 }
 
 #Preview {
-    SeeSavedNotesView(selectedTab: .constant(2))
+    SeeSavedNotesView(selectedTab: .constant(.bible))
         .environment(UserViewModel())
 }

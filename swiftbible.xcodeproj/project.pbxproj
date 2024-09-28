@@ -52,6 +52,8 @@
 		954BC9F02C8501C900FFCFA6 /* ChapterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9EF2C8501C900FFCFA6 /* ChapterDetailView.swift */; };
 		954BC9F22C85112D00FFCFA6 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9F12C85112D00FFCFA6 /* SearchBar.swift */; };
 		954BC9F42C8513A900FFCFA6 /* Testament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9F32C8513A900FFCFA6 /* Testament.swift */; };
+		95978F1A2CA888E600C520EF /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F192CA888E600C520EF /* Tab.swift */; };
+		95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +98,8 @@
 		954BC9F12C85112D00FFCFA6 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		954BC9F32C8513A900FFCFA6 /* Testament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testament.swift; sourceTree = "<group>"; };
 		954BC9F52C85456400FFCFA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		95978F192CA888E600C520EF /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
+		95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,6 +239,7 @@
 		954BC9E52C8500C200FFCFA6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				95978F192CA888E600C520EF /* Tab.swift */,
 				952F39EE2C907159009A412D /* Chapter.swift */,
 				954BC9E62C8500D800FFCFA6 /* Book.swift */,
 				954BC9F32C8513A900FFCFA6 /* Testament.swift */,
@@ -262,9 +267,18 @@
 				952F39CE2C8BA7F3009A412D /* ContentView.swift */,
 				952F39E02C8E383B009A412D /* Bible */,
 				952F39E12C8E3852009A412D /* Daily Devotional */,
+				95978F1B2CA88B7200C520EF /* Search */,
 				952F39DB2C8E366A009A412D /* Settings */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		95978F1B2CA88B7200C520EF /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -343,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				952F39FB2C9209FF009A412D /* NoteModalView.swift in Sources */,
+				95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */,
 				952F39EB2C90710B009A412D /* Paragraph.swift in Sources */,
 				952F39F32C9114A4009A412D /* ColorOptionsView.swift in Sources */,
 				9510097C2C92766A0040B21A /* String.swift in Sources */,
@@ -365,6 +380,7 @@
 				9510098A2C95364C0040B21A /* ChapterSummaries.swift in Sources */,
 				952F39EF2C907159009A412D /* Chapter.swift in Sources */,
 				9537E2672C8A9E1E00FD56B9 /* UserViewModel.swift in Sources */,
+				95978F1A2CA888E600C520EF /* Tab.swift in Sources */,
 				951009882C9525250040B21A /* summaries.swift in Sources */,
 				951009862C9520600040B21A /* UINavigationController.swift in Sources */,
 				9510098C2C9537350040B21A /* NavigationTitle.swift in Sources */,

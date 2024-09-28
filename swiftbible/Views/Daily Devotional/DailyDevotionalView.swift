@@ -19,7 +19,6 @@ struct DailyDevotionalView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @State private var messsage: String = ""
     @State private var isLoading: Bool = false
-    @Binding var selectedTab: Int
 
     var body: some View {
         VStack {
@@ -69,4 +68,9 @@ struct DailyDevotionalView: View {
 
         isLoading = false
     }
+}
+
+#Preview {
+    DailyDevotionalView()
+        .environment(UserViewModel())
 }

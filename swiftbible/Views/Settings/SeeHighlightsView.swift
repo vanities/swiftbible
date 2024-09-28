@@ -14,8 +14,8 @@ struct SeeHighlightsView: View {
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
 
-    @Binding var selectedTab: Int
-    
+    @Binding var selectedTab: Tabs
+
     var body: some View {
         VStack {
             if highlightedVerses.isEmpty {
@@ -25,17 +25,12 @@ struct SeeHighlightsView: View {
                 List {
                     ForEach(highlightedVerses) { highlightedVerse in
                         Button(action: {
-                            guard let bibleData = appViewModel.allBibleData,
-                                  let book = bibleData.first(where: { $0.name == highlightedVerse.book }),
-                                  let chapter = book.chapters.first(where: { $0.number == highlightedVerse.chapter })
-                            else { return }
-                            selectedTab = 0
-                            appViewModel.selectedVerse = SelectedVerse(
-                                book: book,
-                                chapter: chapter,
-                                verse: highlightedVerse.startingVerse
+                            selectedTab = .bible
+                            appViewModel.navigateToVerse(
+                                bookName: highlightedVerse.book,
+                                chapterNumber: highlightedVerse.chapter,
+                                verseNumber: highlightedVerse.startingVerse
                             )
-                            appViewModel.showSelectedVerse = true
                         }) {
                             VStack(alignment: .leading) {
                                 Text("\(highlightedVerse.version.uppercased()) \(highlightedVerse.book) \(highlightedVerse.chapter):\(highlightedVerse.startingVerse)")
@@ -56,6 +51,6 @@ struct SeeHighlightsView: View {
 
 
 #Preview {
-    SeeHighlightsView(selectedTab: .constant(2))
+    SeeHighlightsView(selectedTab: .constant(.bible))
         .environment(UserViewModel())
 }

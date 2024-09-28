@@ -11,20 +11,24 @@ import SwiftData
 struct ContentView: View {
     @State private var appViewModel = AppViewModel()
     @State private var userViewModel = UserViewModel()
-    @State private var selectedTab: Int = 0
+    @State private var selectedTab: Tabs = .bible
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            Tab("Bible", systemImage: "book.fill", value: 0) {
+            Tab("Bible", systemImage: "book.fill", value: .bible) {
                 BibleView()
             }
-            Tab("Daily Devotional", systemImage: "sun.horizon.fill", value: 1) {
-                DailyDevotionalView(selectedTab: $selectedTab)
+            Tab("Daily Devotional", systemImage: "sun.horizon.fill", value: .dailyDevotional) {
+                DailyDevotionalView()
             }
-            Tab("Settings", systemImage: "gearshape.fill", value: 2) {
+            Tab("Search", systemImage: "magnifyingglass", value: .search, role: .search) {
+                SearchDetailView(selectedTab: $selectedTab)
+            }
+            Tab("Settings", systemImage: "gearshape.fill", value: .settings) {
                 SettingsView(selectedTab: $selectedTab)
             }
         }
+        .tabViewStyle(.sidebarAdaptable)
         .onAppear {
             Task {
                 await SupabaseService.shared.refreshToken()

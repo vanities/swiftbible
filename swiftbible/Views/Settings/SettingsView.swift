@@ -11,7 +11,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(UserViewModel.self) private var userViewModel
 
-    @Binding var selectedTab: Int
+    @Binding var selectedTab: Tabs
 
     var body: some View {
         @Bindable var userViewModel = userViewModel
@@ -104,7 +104,7 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView(selectedTab: .constant(2))
+    SettingsView(selectedTab: .constant(.bible))
         .environment(UserViewModel())
 }
 
