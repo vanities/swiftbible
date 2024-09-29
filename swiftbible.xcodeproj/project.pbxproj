@@ -54,6 +54,7 @@
 		954BC9F42C8513A900FFCFA6 /* Testament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9F32C8513A900FFCFA6 /* Testament.swift */; };
 		95978F1A2CA888E600C520EF /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F192CA888E600C520EF /* Tab.swift */; };
 		95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */; };
+		95978F1F2CAA051F00C520EF /* OnScrollingChangeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F1E2CAA051F00C520EF /* OnScrollingChangeViewModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +101,7 @@
 		954BC9F52C85456400FFCFA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		95978F192CA888E600C520EF /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
+		95978F1E2CAA051F00C520EF /* OnScrollingChangeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnScrollingChangeViewModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,6 +256,7 @@
 		954BC9E82C8500EE00FFCFA6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				95978F1E2CAA051F00C520EF /* OnScrollingChangeViewModifier.swift */,
 				9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */,
 				954BC9E92C8500F900FFCFA6 /* BibleService.swift */,
 				952F39E22C8F4874009A412D /* ParagraphParser.swift */,
@@ -380,6 +383,7 @@
 				9510098A2C95364C0040B21A /* ChapterSummaries.swift in Sources */,
 				952F39EF2C907159009A412D /* Chapter.swift in Sources */,
 				9537E2672C8A9E1E00FD56B9 /* UserViewModel.swift in Sources */,
+				95978F1F2CAA051F00C520EF /* OnScrollingChangeViewModifier.swift in Sources */,
 				95978F1A2CA888E600C520EF /* Tab.swift in Sources */,
 				951009882C9525250040B21A /* summaries.swift in Sources */,
 				951009862C9520600040B21A /* UINavigationController.swift in Sources */,

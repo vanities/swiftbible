@@ -13,6 +13,7 @@ struct ChapterDetailView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
     @AppStorage("notedColor") private var notedColor: String = "00ff04"
+    @AppStorage("hideNavAndTabOnScroll") var hideNavAndTabOnScroll = true
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []
@@ -84,20 +85,27 @@ struct ChapterDetailView: View {
                 }
                 .scrollTargetLayout()
                 .padding()
+                .onScrollingChange(onScrollingDown: {
+                    if hideNavAndTabOnScroll {
+                        withAnimation(.easeIn) {
+                            showNavAndTab = false
+                        }
+                    }
+                }, onScrollingUp: {
+                    if hideNavAndTabOnScroll {
+                        withAnimation(.easeIn) {
+                            showNavAndTab = true
+                        }
+                    }
+                })
+                .toolbar(showNavAndTab ? .visible : .hidden, for: .navigationBar)
+                .toolbar(showNavAndTab ? .visible : .hidden, for: .tabBar)
             }
-            .toolbar(showNavAndTab ? .visible : .hidden, for: .navigationBar)
-            .toolbar(showNavAndTab ? .visible : .hidden, for: .tabBar)
-            .animation(.easeIn, value: showNavAndTab)
         }
         .scrollPosition(id: $scrollPosition, anchor: .top)
         .navigationTitle(
             Text("\(book.name) \(chapter.number)")
         )
-        .onTapGesture {
-            withAnimation {
-                showNavAndTab.toggle()
-            }
-        }
         .confirmationDialog(
             "Selected Verse \(book.name) \(chapter.number):\(selectedParagraph?.startingVerse ?? 0)",
             isPresented: $showActionSheet,
@@ -160,7 +168,6 @@ struct ChapterDetailView: View {
             NoteModalViewView()
         }
         .onAppear {
-            showNavAndTab = false
             guard let book = appViewModel.selectedVerse?.book,
                   book == self.book,
                   let chapter = appViewModel.selectedVerse?.chapter,
