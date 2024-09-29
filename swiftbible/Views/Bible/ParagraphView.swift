@@ -11,6 +11,7 @@ import SwiftUI
 struct ParagraphView: View {
     @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
+    @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
 
     let firstVerseNumber: Int
     let verses: [Verse]
@@ -48,7 +49,7 @@ struct ParagraphView: View {
                     verseText = verseText
                         + Text(text)
                             .font(Font.custom(fontName, size: CGFloat(fontSize)))
-                            .foregroundColor(.red)
+                            .foregroundColor(showJesusWordsInRed ? .red : .primary)
                 }
             }
 

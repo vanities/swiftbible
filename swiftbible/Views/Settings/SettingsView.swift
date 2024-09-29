@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(UserViewModel.self) private var userViewModel
+    @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
 
     @Binding var selectedTab: Tabs
 
@@ -25,6 +26,7 @@ struct SettingsView: View {
                     NavigationLink(destination: ColorOptionsView()) {
                         Label("Color Options", systemImage: "paintpalette.fill")
                     }
+                    Toggle("Show Jesus's Words in Red", isOn: $showJesusWordsInRed)
                 }
 
                 Section(header: Text("App")) {
