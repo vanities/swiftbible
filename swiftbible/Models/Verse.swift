@@ -31,8 +31,14 @@ final class HighlightedVerse: Identifiable {
     }
 }
 
-struct Verse: Hashable {
+struct Verse: Identifiable {
+    let id = UUID()
     let number: Int?
-    let text: String
+    let segments: [TextSegment]
+}
+
+enum TextSegment {
+    case regular(String)
+    case jesus(String)
 }
 

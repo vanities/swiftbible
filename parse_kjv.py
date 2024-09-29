@@ -1,5 +1,20 @@
 import json
 import re
+import regex as rep
+import string
+
+matched = set()
+lower_matched = set()
+
+def wrap_jesus_words(match):
+    if match.group(0) not in matched:
+        global num_of_matched_phrases
+        num_of_matched_phrases += 1
+        matched.add(match.group(0))
+        lower_matched.add(match.group(0).lower())
+        return f"<JESUS>{match.group(0)}</JESUS>"
+    else:
+        return match.group(0)
 
 book_titles = [
     "The First Book of Moses: Called Genesis",
@@ -139,29 +154,46 @@ books = [
     "Revelation",
 ]
 
+def normalize_text(text):
+    return text.translate(str.maketrans('', '', string.punctuation)).lower().strip()
 
-def parse_bible_file(file_path):
+num_of_matched_phrases = 0
+
+def parse_bible_file(file_path, jesus_words_list_matthew, jesus_words_list_mark, jesus_words_list_luke, jesus_words_list_john):
+
+
     bible_data = []
     current_book = {}
     current_chapter = {}
     current_paragraph = {}
+
+    # Compile the regex pattern outside the loop for efficiency
+    jesus_pattern_matthew = rep.compile(r"\L<words>", words=jesus_words_list_matthew, flags=re.IGNORECASE)
+    jesus_pattern_mark = rep.compile(r"\L<words>", words=jesus_words_list_mark, flags=re.IGNORECASE)
+    jesus_pattern_luke = rep.compile(r"\L<words>", words=jesus_words_list_luke, flags=re.IGNORECASE)
+    jesus_pattern_john = rep.compile(r"\L<words>", words=jesus_words_list_john, flags=re.IGNORECASE)
+
+    transl_table = dict( [ (ord(x), ord(y)) for x,y in zip( u"‘’´“”–-",  u"'''\"\"--") ] ) 
+
 
     with open(file_path, "r", encoding="utf-8-sig") as file:
         content = file.read()
         lines = content.split("\n")
 
         for line in lines:
-            line = line.strip()
+            line = line.strip().translate(transl_table)
 
             if line in book_titles:
-                if current_book and current_chapter:
-                    if current_paragraph:
-                        if "paragraphs" not in current_chapter:
-                            current_chapter["paragraphs"] = []
-                        current_chapter["paragraphs"].append(current_paragraph)
-                    current_book["chapters"].append(current_chapter)
+                # Save the last paragraph and chapter of the previous book
                 if current_book:
+                    if current_paragraph:
+                        current_chapter["paragraphs"].append(current_paragraph)
+                        current_paragraph = {}
+                    if current_chapter:
+                        current_book["chapters"].append(current_chapter)
+                        current_chapter = {}
                     bible_data.append(current_book)
+                # Start a new book
                 book_description = line
                 print(f"book {line} {books[len(bible_data)]}")
                 current_book = {
@@ -169,54 +201,94 @@ def parse_bible_file(file_path):
                     "description": book_description,
                     "chapters": [],
                 }
-                current_chapter = {
-                    "number": 0,
-                    "paragraphs": [],
-                }
+                current_chapter = {}
                 current_paragraph = {}
             elif re.match(r"\d+:\d+", line):
-                chapter_number, verse_number = line.split(":", 1)
-                if current_chapter and current_paragraph:
-                    if "paragraphs" not in current_chapter:
-                        current_chapter["paragraphs"] = []
+                # Parse chapter and verse numbers
+                chapter_number, verse_rest = line.split(":", 1)
+                verse_number, verse_text = verse_rest.strip().split(" ", 1)
+                chapter_number = int(chapter_number)
+                verse_number = int(verse_number)
+
+                # Save the current paragraph before starting a new one
+                if current_paragraph:
                     current_chapter["paragraphs"].append(current_paragraph)
+                    current_paragraph = {}
+
+                # Check if the chapter number has changed
                 if (
                     current_chapter
                     and "number" in current_chapter
-                    and int(chapter_number) != current_chapter["number"]
+                    and chapter_number != current_chapter["number"]
                 ):
-                    if current_chapter["number"] != 0:
-                        current_book["chapters"].append(current_chapter)
+                    current_book["chapters"].append(current_chapter)
                     current_chapter = {
-                        "number": int(chapter_number),
+                        "number": chapter_number,
                         "paragraphs": [],
                     }
+                elif not current_chapter:
+                    current_chapter = {
+                        "number": chapter_number,
+                        "paragraphs": [],
+                    }
+
+                # Start a new paragraph
                 current_paragraph = {
-                    "startingVerse": int(verse_number.split()[0]),
-                    "text": line.split(maxsplit=1)[1],
+                    "startingVerse": verse_number,
+                    "text": verse_text,
                 }
             else:
                 if current_paragraph:
                     current_paragraph["text"] += " " + line
 
-    if current_book and current_chapter and current_paragraph:
-        if "paragraphs" not in current_chapter:
-            current_chapter["paragraphs"] = []
-        current_chapter["paragraphs"].append(current_paragraph)
-        current_book["chapters"].append(current_chapter)
-        bible_data.append(current_book)
+            if current_paragraph.get("text") and current_book["name"] == "Matthew":
+                current_paragraph["text"] = jesus_pattern_matthew.sub(wrap_jesus_words, current_paragraph["text"])
+            if current_paragraph.get("text") and current_book["name"] == "Mark":
+                current_paragraph["text"] = jesus_pattern_mark.sub(wrap_jesus_words, current_paragraph["text"])
+            if current_paragraph.get("text") and current_book["name"] == "Luke":
+                current_paragraph["text"] = jesus_pattern_luke.sub(wrap_jesus_words, current_paragraph["text"])
+            if current_paragraph.get("text") and current_book["name"] == "John":
+                current_paragraph["text"] = jesus_pattern_john.sub(wrap_jesus_words, current_paragraph["text"])
+
+
+        # After the loop, save any remaining data
+        if current_paragraph:
+            current_chapter["paragraphs"].append(current_paragraph)
+        if current_chapter:
+            current_book["chapters"].append(current_chapter)
+        if current_book:
+            bible_data.append(current_book)
 
     return bible_data
 
-
 def save_to_json(bible_data, output_file):
-    with open(output_file, "w") as file:
-        json.dump(bible_data, file, indent=4)
+    with open(output_file, "w", encoding="utf-8") as file:
+        json.dump(bible_data, file, ensure_ascii=False, indent=4)
 
+# **Step 1: Load the jesus.json file**
 
-# Usage example
+# Load the list of Jesus's words from jesus.json
+with open('jesus.json', 'r', encoding='utf-8') as f:
+    jesus_words_list = json.load(f)
+
+# **Usage example**
 bible_file = "kjv.txt"
 output_file = "swiftbible/Text/bible.json"
 
-bible_data = parse_bible_file(bible_file)
+
+jesus_words_list_matthew = sorted(set(jesus_words_list["Matthew"]), key=len, reverse=True)
+jesus_words_list_mark = sorted(set(jesus_words_list["Mark"]), key=len, reverse=True)
+jesus_words_list_luke = sorted(set(jesus_words_list["Luke"]), key=len, reverse=True)
+jesus_words_list_john = sorted(set(jesus_words_list["John"]), key=len, reverse=True)
+
+bible_data = parse_bible_file(bible_file, jesus_words_list_matthew, jesus_words_list_mark, jesus_words_list_luke, jesus_words_list_john)
+
 save_to_json(bible_data, output_file)
+
+print(f"Total: {len(jesus_words_list_matthew) + len(jesus_words_list_mark) + len(jesus_words_list_luke) + len(jesus_words_list_john)}")
+print(f"Matched {num_of_matched_phrases}")
+
+all_words = [w.lower() for w in jesus_words_list_matthew] + [w.lower() for w in jesus_words_list_mark] + [w.lower() for w in jesus_words_list_luke] + [w.lower() for w in jesus_words_list_john]
+for j in all_words:
+    if j not in lower_matched:
+        print(j)

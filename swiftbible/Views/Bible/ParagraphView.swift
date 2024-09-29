@@ -15,8 +15,7 @@ struct ParagraphView: View {
     let firstVerseNumber: Int
     let verses: [Verse]
 
-    init(firstVerseNumber: Int,
-         paragraph: String) {
+    init(firstVerseNumber: Int, paragraph: String) {
         self.firstVerseNumber = firstVerseNumber
         self.verses = ParagraphParser.parse(paragraph)
     }
@@ -26,21 +25,38 @@ struct ParagraphView: View {
     }
 
     func VerseText() -> Text {
-        return verses.reduce(
-            Text(""),
-            {
-                $0
-                + Text("\($1.number != nil ? " \($1.number!) " : "")")
-                    .foregroundStyle(.gray)
-                    .font(.footnote)
-                    .baselineOffset(6.0)
-                + Text("\($1.text)")
-                    .font(Font.custom(fontName, size: CGFloat(fontSize)))
-            }
-        )
-    }
+        return verses.reduce(Text(""), { acc, verse in
+            var verseText = acc
 
+            // Append verse number if available
+            if let number = verse.number {
+                verseText = verseText
+                    + Text(" \(number) ")
+                        .foregroundColor(.gray)
+                        .font(.footnote)
+                        .baselineOffset(6.0)
+            }
+
+            // Append verse segments
+            for segment in verse.segments {
+                switch segment {
+                case .regular(let text):
+                    verseText = verseText
+                        + Text(text)
+                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
+                case .jesus(let text):
+                    verseText = verseText
+                        + Text(text)
+                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
+                            .foregroundColor(.red)
+                }
+            }
+
+            return verseText
+        })
+    }
 }
+
 
 #Preview {
     ParagraphView(

@@ -31,17 +31,29 @@ struct SearchDetailView: View {
 
     var body: some View {
         NavigationStack {
-            List(searchResults) { result in
-                Button(action: {
-                    selectVerse(result)
-                }) {
-                    VStack(alignment: .leading) {
-                        Text("\(result.bookName) \(result.chapterNumber):\(result.verseNumber)")
-                            .font(.headline)
-                        Text(result.verseText)
-                            .font(.subheadline)
-                            .lineLimit(2)
+            ZStack {
+                if searchResults.isEmpty && !searchText.isEmpty {
+                    VStack {
+                        Text("No results found.")
+                            .foregroundColor(.gray)
+                            .padding()
                     }
+                } else {
+                    List(searchResults) { result in
+                        Button(action: {
+                            selectVerse(result)
+                        }) {
+                            VStack(alignment: .leading) {
+                                Text("\(result.bookName) \(result.chapterNumber):\(result.verseNumber)")
+                                    .font(.headline)
+                                Text(result.verseText)
+                                    .font(.subheadline)
+                                    .lineLimit(2)
+                            }
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .scrollDismissesKeyboard(.immediately)
                 }
             }
             .navigationTitle("Search")
