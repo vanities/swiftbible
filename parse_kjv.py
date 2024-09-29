@@ -159,7 +159,17 @@ def normalize_text(text):
 
 num_of_matched_phrases = 0
 
-def parse_bible_file(file_path, jesus_words_list_matthew, jesus_words_list_mark, jesus_words_list_luke, jesus_words_list_john):
+def parse_bible_file(
+        file_path,
+        jesus_words_list_matthew,
+        jesus_words_list_mark,
+        jesus_words_list_luke,
+        jesus_words_list_john,
+        jesus_words_list_acts,
+        jesus_words_list_1cor,
+        jesus_words_list_2cor,
+        jesus_words_list_rev
+):
 
 
     bible_data = []
@@ -172,6 +182,10 @@ def parse_bible_file(file_path, jesus_words_list_matthew, jesus_words_list_mark,
     jesus_pattern_mark = rep.compile(r"\L<words>", words=jesus_words_list_mark, flags=re.IGNORECASE)
     jesus_pattern_luke = rep.compile(r"\L<words>", words=jesus_words_list_luke, flags=re.IGNORECASE)
     jesus_pattern_john = rep.compile(r"\L<words>", words=jesus_words_list_john, flags=re.IGNORECASE)
+    jesus_pattern_acts = rep.compile(r"\L<words>", words=jesus_words_list_acts, flags=re.IGNORECASE)
+    jesus_pattern_1cor = rep.compile(r"\L<words>", words=jesus_words_list_1cor, flags=re.IGNORECASE)
+    jesus_pattern_2cor = rep.compile(r"\L<words>", words=jesus_words_list_2cor, flags=re.IGNORECASE)
+    jesus_pattern_rev = rep.compile(r"\L<words>", words=jesus_words_list_rev, flags=re.IGNORECASE)
 
     transl_table = dict( [ (ord(x), ord(y)) for x,y in zip( u"‘’´“”–-",  u"'''\"\"--") ] ) 
 
@@ -249,6 +263,14 @@ def parse_bible_file(file_path, jesus_words_list_matthew, jesus_words_list_mark,
                 current_paragraph["text"] = jesus_pattern_luke.sub(wrap_jesus_words, current_paragraph["text"])
             if current_paragraph.get("text") and current_book["name"] == "John":
                 current_paragraph["text"] = jesus_pattern_john.sub(wrap_jesus_words, current_paragraph["text"])
+            if current_paragraph.get("text") and current_book["name"] == "Acts":
+                current_paragraph["text"] = jesus_pattern_acts.sub(wrap_jesus_words, current_paragraph["text"])
+            if current_paragraph.get("text") and current_book["name"] == "1 Corinthians":
+                current_paragraph["text"] = jesus_pattern_1cor.sub(wrap_jesus_words, current_paragraph["text"])
+            if current_paragraph.get("text") and current_book["name"] == "2 Corinthians":
+                current_paragraph["text"] = jesus_pattern_2cor.sub(wrap_jesus_words, current_paragraph["text"])
+            if current_paragraph.get("text") and current_book["name"] == "Revelation":
+                current_paragraph["text"] = jesus_pattern_rev.sub(wrap_jesus_words, current_paragraph["text"])
 
 
         # After the loop, save any remaining data
@@ -280,15 +302,19 @@ jesus_words_list_matthew = sorted(set(jesus_words_list["Matthew"]), key=len, rev
 jesus_words_list_mark = sorted(set(jesus_words_list["Mark"]), key=len, reverse=True)
 jesus_words_list_luke = sorted(set(jesus_words_list["Luke"]), key=len, reverse=True)
 jesus_words_list_john = sorted(set(jesus_words_list["John"]), key=len, reverse=True)
+jesus_words_list_acts = sorted(set(jesus_words_list["Acts"]), key=len, reverse=True)
+jesus_words_list_1cor = sorted(set(jesus_words_list["1 Corinthians"]), key=len, reverse=True)
+jesus_words_list_2cor = sorted(set(jesus_words_list["2 Corinthians"]), key=len, reverse=True)
+jesus_words_list_rev = sorted(set(jesus_words_list["Revelation"]), key=len, reverse=True)
 
-bible_data = parse_bible_file(bible_file, jesus_words_list_matthew, jesus_words_list_mark, jesus_words_list_luke, jesus_words_list_john)
+bible_data = parse_bible_file(bible_file, jesus_words_list_matthew, jesus_words_list_mark, jesus_words_list_luke, jesus_words_list_john, jesus_words_list_acts, jesus_words_list_1cor, jesus_words_list_2cor, jesus_words_list_rev)
 
 save_to_json(bible_data, output_file)
 
-print(f"Total: {len(jesus_words_list_matthew) + len(jesus_words_list_mark) + len(jesus_words_list_luke) + len(jesus_words_list_john)}")
+print(f"Total: {len(jesus_words_list_matthew) + len(jesus_words_list_mark) + len(jesus_words_list_luke) + len(jesus_words_list_john) + len(jesus_words_list_acts)+ len(jesus_words_list_1cor)+ len(jesus_words_list_2cor)+ len(jesus_words_list_rev)}")
 print(f"Matched {num_of_matched_phrases}")
 
-all_words = [w.lower() for w in jesus_words_list_matthew] + [w.lower() for w in jesus_words_list_mark] + [w.lower() for w in jesus_words_list_luke] + [w.lower() for w in jesus_words_list_john]
+all_words = [w.lower() for w in jesus_words_list_matthew] + [w.lower() for w in jesus_words_list_mark] + [w.lower() for w in jesus_words_list_luke] + [w.lower() for w in jesus_words_list_john]+ [w.lower() for w in jesus_words_list_acts]+ [w.lower() for w in jesus_words_list_1cor]+ [w.lower() for w in jesus_words_list_2cor]+ [w.lower() for w in jesus_words_list_rev]
 for j in all_words:
     if j not in lower_matched:
         print(j)
