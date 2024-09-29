@@ -1,20 +1,14 @@
 import json
 import re
 import regex as rep
-import string
 
-matched = set()
 lower_matched = set()
 
 def wrap_jesus_words(match):
-    if match.group(0) not in matched:
-        global num_of_matched_phrases
-        num_of_matched_phrases += 1
-        matched.add(match.group(0))
-        lower_matched.add(match.group(0).lower())
-        return f"<JESUS>{match.group(0)}</JESUS>"
-    else:
-        return match.group(0)
+    global num_of_matched_phrases
+    num_of_matched_phrases += 1
+    lower_matched.add(match.group(0).lower())
+    return f"<JESUS>{match.group(0)}</JESUS>"
 
 book_titles = [
     "The First Book of Moses: Called Genesis",
@@ -154,38 +148,15 @@ books = [
     "Revelation",
 ]
 
-def normalize_text(text):
-    return text.translate(str.maketrans('', '', string.punctuation)).lower().strip()
-
 num_of_matched_phrases = 0
 
-def parse_bible_file(
-        file_path,
-        jesus_words_list_matthew,
-        jesus_words_list_mark,
-        jesus_words_list_luke,
-        jesus_words_list_john,
-        jesus_words_list_acts,
-        jesus_words_list_1cor,
-        jesus_words_list_2cor,
-        jesus_words_list_rev
-):
+def parse_bible_file(file_path):
 
 
     bible_data = []
     current_book = {}
     current_chapter = {}
     current_paragraph = {}
-
-    # Compile the regex pattern outside the loop for efficiency
-    jesus_pattern_matthew = rep.compile(r"\L<words>", words=jesus_words_list_matthew, flags=re.IGNORECASE)
-    jesus_pattern_mark = rep.compile(r"\L<words>", words=jesus_words_list_mark, flags=re.IGNORECASE)
-    jesus_pattern_luke = rep.compile(r"\L<words>", words=jesus_words_list_luke, flags=re.IGNORECASE)
-    jesus_pattern_john = rep.compile(r"\L<words>", words=jesus_words_list_john, flags=re.IGNORECASE)
-    jesus_pattern_acts = rep.compile(r"\L<words>", words=jesus_words_list_acts, flags=re.IGNORECASE)
-    jesus_pattern_1cor = rep.compile(r"\L<words>", words=jesus_words_list_1cor, flags=re.IGNORECASE)
-    jesus_pattern_2cor = rep.compile(r"\L<words>", words=jesus_words_list_2cor, flags=re.IGNORECASE)
-    jesus_pattern_rev = rep.compile(r"\L<words>", words=jesus_words_list_rev, flags=re.IGNORECASE)
 
     transl_table = dict( [ (ord(x), ord(y)) for x,y in zip( u"‘’´“”–-",  u"'''\"\"--") ] ) 
 
@@ -255,24 +226,6 @@ def parse_bible_file(
                 if current_paragraph:
                     current_paragraph["text"] += " " + line
 
-            if current_paragraph.get("text") and current_book["name"] == "Matthew":
-                current_paragraph["text"] = jesus_pattern_matthew.sub(wrap_jesus_words, current_paragraph["text"])
-            if current_paragraph.get("text") and current_book["name"] == "Mark":
-                current_paragraph["text"] = jesus_pattern_mark.sub(wrap_jesus_words, current_paragraph["text"])
-            if current_paragraph.get("text") and current_book["name"] == "Luke":
-                current_paragraph["text"] = jesus_pattern_luke.sub(wrap_jesus_words, current_paragraph["text"])
-            if current_paragraph.get("text") and current_book["name"] == "John":
-                current_paragraph["text"] = jesus_pattern_john.sub(wrap_jesus_words, current_paragraph["text"])
-            if current_paragraph.get("text") and current_book["name"] == "Acts":
-                current_paragraph["text"] = jesus_pattern_acts.sub(wrap_jesus_words, current_paragraph["text"])
-            if current_paragraph.get("text") and current_book["name"] == "1 Corinthians":
-                current_paragraph["text"] = jesus_pattern_1cor.sub(wrap_jesus_words, current_paragraph["text"])
-            if current_paragraph.get("text") and current_book["name"] == "2 Corinthians":
-                current_paragraph["text"] = jesus_pattern_2cor.sub(wrap_jesus_words, current_paragraph["text"])
-            if current_paragraph.get("text") and current_book["name"] == "Revelation":
-                current_paragraph["text"] = jesus_pattern_rev.sub(wrap_jesus_words, current_paragraph["text"])
-
-
         # After the loop, save any remaining data
         if current_paragraph:
             current_chapter["paragraphs"].append(current_paragraph)
@@ -297,17 +250,24 @@ with open('jesus.json', 'r', encoding='utf-8') as f:
 bible_file = "kjv.txt"
 output_file = "swiftbible/Text/bible.json"
 
+# Function to find a book by name
+def find_book(books, book_name):
+    for book in books:
+        if book.get('name', '').lower() == book_name.lower():
+            return book
+    return None
 
-jesus_words_list_matthew = sorted(set(jesus_words_list["Matthew"]), key=len, reverse=True)
-jesus_words_list_mark = sorted(set(jesus_words_list["Mark"]), key=len, reverse=True)
-jesus_words_list_luke = sorted(set(jesus_words_list["Luke"]), key=len, reverse=True)
-jesus_words_list_john = sorted(set(jesus_words_list["John"]), key=len, reverse=True)
-jesus_words_list_acts = sorted(set(jesus_words_list["Acts"]), key=len, reverse=True)
-jesus_words_list_1cor = sorted(set(jesus_words_list["1 Corinthians"]), key=len, reverse=True)
-jesus_words_list_2cor = sorted(set(jesus_words_list["2 Corinthians"]), key=len, reverse=True)
-jesus_words_list_rev = sorted(set(jesus_words_list["Revelation"]), key=len, reverse=True)
 
 bible_data = parse_bible_file(bible_file, jesus_words_list_matthew, jesus_words_list_mark, jesus_words_list_luke, jesus_words_list_john, jesus_words_list_acts, jesus_words_list_1cor, jesus_words_list_2cor, jesus_words_list_rev)
+
+for book_name in jesus_words_list.keys():
+    jesus_words = sorted(set(jesus_words_list[book_name]), key=len, reverse=True)
+    jesus_pattern = rep.compile(r"\L<words>", words=jesus_words, flags=re.IGNORECASE)
+    book = find_book(bible_data, book_name)
+    if book:
+        for chapter in book.get('chapters', []):
+            for paragraph in chapter.get('paragraphs', []):
+                paragraph["text"] = jesus_pattern.sub(wrap_jesus_words, paragraph["text"])
 
 save_to_json(bible_data, output_file)
 
