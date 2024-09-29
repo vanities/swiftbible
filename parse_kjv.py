@@ -2,13 +2,6 @@ import json
 import re
 import regex as rep
 
-lower_matched = set()
-
-def wrap_jesus_words(match):
-    global num_of_matched_phrases
-    num_of_matched_phrases += 1
-    lower_matched.add(match.group(0).lower())
-    return f"<JESUS>{match.group(0)}</JESUS>"
 
 book_titles = [
     "The First Book of Moses: Called Genesis",
@@ -148,8 +141,6 @@ books = [
     "Revelation",
 ]
 
-num_of_matched_phrases = 0
-
 def parse_bible_file(file_path):
 
 
@@ -236,45 +227,58 @@ def parse_bible_file(file_path):
 
     return bible_data
 
+num_of_matched_phrases = 0
+def parse_jesus_words():
+    lower_matched = set()
+    total_matches = 0
+    all_lowered_words = []
+    jesus_words = None
+    jesus_pattern = None
+
+    def find_book(books, book_name):
+        for book in books:
+            if book.get('name', '').lower() == book_name.lower():
+                return book
+        return None
+
+    def wrap_jesus_words(match):
+        global num_of_matched_phrases
+        num_of_matched_phrases += 1
+        lower_matched.add(match.group(0).lower())
+        return f"<JESUS>{match.group(0)}</JESUS>"
+
+    with open('jesus.json', 'r', encoding='utf-8') as f:
+        jesus_words_list = json.load(f)
+
+    for book_name in jesus_words_list.keys():
+        jesus_words = sorted(set(jesus_words_list[book_name]), key=len, reverse=True)
+        all_lowered_words += [w.lower() for w in jesus_words]
+        total_matches += len(jesus_words)
+        jesus_pattern = rep.compile(r"\L<words>", words=jesus_words, flags=re.IGNORECASE)
+        book = find_book(bible_data, book_name)
+        if book:
+            for chapter in book.get('chapters', []):
+                for paragraph in chapter.get('paragraphs', []):
+                    paragraph["text"] = jesus_pattern.sub(wrap_jesus_words, paragraph["text"])
+
+    print(f"Total: {total_matches}")
+    print(f"Matched {num_of_matched_phrases}")
+
+    for j in all_lowered_words:
+        if j not in lower_matched:
+            print(j)
+
+    for i in lower_matched:
+        if i not in all_lowered_words:
+            print(i)
+
 def save_to_json(bible_data, output_file):
     with open(output_file, "w", encoding="utf-8") as file:
         json.dump(bible_data, file, ensure_ascii=False, indent=4)
 
-# **Step 1: Load the jesus.json file**
 
-# Load the list of Jesus's words from jesus.json
-with open('jesus.json', 'r', encoding='utf-8') as f:
-    jesus_words_list = json.load(f)
-
-# **Usage example**
 bible_file = "kjv.txt"
-output_file = "swiftbible/Text/bible.json"
+bible_data = parse_bible_file(bible_file)
+parse_jesus_words()
+save_to_json(bible_data, "swiftbible/Text/bible.json")
 
-# Function to find a book by name
-def find_book(books, book_name):
-    for book in books:
-        if book.get('name', '').lower() == book_name.lower():
-            return book
-    return None
-
-
-bible_data = parse_bible_file(bible_file, jesus_words_list_matthew, jesus_words_list_mark, jesus_words_list_luke, jesus_words_list_john, jesus_words_list_acts, jesus_words_list_1cor, jesus_words_list_2cor, jesus_words_list_rev)
-
-for book_name in jesus_words_list.keys():
-    jesus_words = sorted(set(jesus_words_list[book_name]), key=len, reverse=True)
-    jesus_pattern = rep.compile(r"\L<words>", words=jesus_words, flags=re.IGNORECASE)
-    book = find_book(bible_data, book_name)
-    if book:
-        for chapter in book.get('chapters', []):
-            for paragraph in chapter.get('paragraphs', []):
-                paragraph["text"] = jesus_pattern.sub(wrap_jesus_words, paragraph["text"])
-
-save_to_json(bible_data, output_file)
-
-print(f"Total: {len(jesus_words_list_matthew) + len(jesus_words_list_mark) + len(jesus_words_list_luke) + len(jesus_words_list_john) + len(jesus_words_list_acts)+ len(jesus_words_list_1cor)+ len(jesus_words_list_2cor)+ len(jesus_words_list_rev)}")
-print(f"Matched {num_of_matched_phrases}")
-
-all_words = [w.lower() for w in jesus_words_list_matthew] + [w.lower() for w in jesus_words_list_mark] + [w.lower() for w in jesus_words_list_luke] + [w.lower() for w in jesus_words_list_john]+ [w.lower() for w in jesus_words_list_acts]+ [w.lower() for w in jesus_words_list_1cor]+ [w.lower() for w in jesus_words_list_2cor]+ [w.lower() for w in jesus_words_list_rev]
-for j in all_words:
-    if j not in lower_matched:
-        print(j)
