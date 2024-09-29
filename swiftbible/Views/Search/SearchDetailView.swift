@@ -46,9 +46,9 @@ struct SearchDetailView: View {
                             VStack(alignment: .leading) {
                                 Text("\(result.bookName) \(result.chapterNumber):\(result.verseNumber)")
                                     .font(.headline)
-                                Text(result.verseText)
+                                ParagraphView(firstVerseNumber: result.verseNumber, paragraph: result.verseText)
                                     .font(.subheadline)
-                                    .lineLimit(2)
+                                    .lineLimit(5)
                             }
                         }
                     }
