@@ -17,8 +17,12 @@ struct SearchResult: Identifiable {
 }
 
 struct SearchDetailView: View {
-    @Binding var selectedTab: Tabs
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("fontSize") private var fontSize: Int = 20
+
     @Environment(AppViewModel.self) var appViewModel: AppViewModel
+
+    @Binding var selectedTab: Tabs
     @State private var searchText: String = ""
 
     var searchResults: [SearchResult] {
@@ -45,6 +49,7 @@ struct SearchDetailView: View {
                         }) {
                             VStack(alignment: .leading) {
                                 Text("\(result.bookName) \(result.chapterNumber):\(result.verseNumber)")
+                                    .font(Font.custom(fontName, size: CGFloat(fontSize)))
                                     .font(.headline)
                                 ParagraphView(firstVerseNumber: result.verseNumber, paragraph: result.verseText)
                                     .font(.subheadline)
