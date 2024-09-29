@@ -13,7 +13,7 @@ struct ChapterDetailView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
     @AppStorage("notedColor") private var notedColor: String = "00ff04"
-    @AppStorage("hideNavAndTabOnScroll") var hideNavAndTabOnScroll = true
+    @AppStorage("hideNavAndTabOnScroll") var hideNavAndTabOnScroll = false
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []

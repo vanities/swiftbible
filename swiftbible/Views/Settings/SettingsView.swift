@@ -11,7 +11,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
-    @AppStorage("hideNavAndTabOnScroll") var hideNavAndTabOnScroll = true
+    @AppStorage("hideNavAndTabOnScroll") var hideNavAndTabOnScroll = false
 
     @Binding var selectedTab: Tabs
 
