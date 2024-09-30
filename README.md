@@ -35,11 +35,14 @@ Use this link to join the TestFlight: <https://testflight.apple.com/join/MHYwBxp
 - Highlight and copy verses
 - Add notes to your favorite verses and able to quick access them
 - Share verses with friends and family via social media, email, or text messages
+- Search functionality to quickly find specific passages or keywords
+- Chapter and verse titles
+- Shows Jesus's Text in <font color="red">Red</font>
 
 ## Upcoming Features
 
-- Search functionality to quickly find specific passages or keywords
-- Chapter and verse titles
+- ESV Version
+- Android
 
 ## Requirements
 
