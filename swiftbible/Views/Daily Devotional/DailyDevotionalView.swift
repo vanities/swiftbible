@@ -45,6 +45,7 @@ struct DailyDevotionalView: View {
                 await fetchDailyDevotional()
             }
         }
+        .accessibilityIdentifier("DailyDevotionalView")
     }
 
     private func fetchDailyDevotional() async {

@@ -92,6 +92,7 @@ struct SettingsView: View {
             .navigationDestination(isPresented: $userViewModel.showSignInFlow) {
                 AuthenticateView()
             }
+            .accessibilityIdentifier("SettingsView")
         }
     }
 

@@ -18,12 +18,15 @@ struct ContentView: View {
             Tab("Bible", systemImage: "book.fill", value: .bible) {
                 BibleView()
             }
+
             Tab("Daily Devotional", systemImage: "sun.horizon.fill", value: .dailyDevotional) {
                 DailyDevotionalView()
             }
+
             Tab("Search", systemImage: "magnifyingglass", value: .search, role: .search) {
                 SearchDetailView(selectedTab: $selectedTab)
             }
+
             Tab("Settings", systemImage: "gearshape.fill", value: .settings) {
                 SettingsView(selectedTab: $selectedTab)
             }

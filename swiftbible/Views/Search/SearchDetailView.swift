@@ -64,6 +64,7 @@ struct SearchDetailView: View {
             .navigationTitle("Search")
         }
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .automatic))
+        .accessibilityIdentifier("SearchDetailView")
     }
 
     func performSearch() -> [SearchResult] {

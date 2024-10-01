@@ -77,6 +77,7 @@ struct BibleView: View {
                 }
             }
             .ignoresSafeArea(.all, edges: .horizontal)
+            .accessibilityIdentifier("BibleView")
         }
     }
 }
