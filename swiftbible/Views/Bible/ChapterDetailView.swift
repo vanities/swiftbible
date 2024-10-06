@@ -13,7 +13,7 @@ struct ChapterDetailView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
     @AppStorage("notedColor") private var notedColor: String = "00ff04"
-    @AppStorage("hideNavAndTabOnScroll") var hideNavAndTabOnScroll = false
+    @AppStorage("hideNavAndTab") var hideNavAndTab = false
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []
@@ -85,19 +85,13 @@ struct ChapterDetailView: View {
                 }
                 .scrollTargetLayout()
                 .padding()
-                .onScrollingChange(onScrollingDown: {
-                    if hideNavAndTabOnScroll {
+                .onAppear {
+                    if hideNavAndTab {
                         withAnimation(.easeIn) {
                             showNavAndTab = false
                         }
                     }
-                }, onScrollingUp: {
-                    if hideNavAndTabOnScroll {
-                        withAnimation(.easeIn) {
-                            showNavAndTab = true
-                        }
-                    }
-                })
+                }
                 .toolbar(showNavAndTab ? .visible : .hidden, for: .navigationBar)
                 .toolbar(showNavAndTab ? .visible : .hidden, for: .tabBar)
             }

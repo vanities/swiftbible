@@ -11,7 +11,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
-    @AppStorage("hideNavAndTabOnScroll") var hideNavAndTabOnScroll = false
+    @AppStorage("hideNavAndTab") var hideNavAndTab = false
 
     @Binding var selectedTab: Tabs
 
@@ -28,7 +28,7 @@ struct SettingsView: View {
                         Label("Color Options", systemImage: "paintpalette.fill")
                     }
                     Toggle("Show Jesus's Words in Red", isOn: $showJesusWordsInRed)
-                    Toggle("Hide Navigation and Tab Bar on Scroll", isOn: $hideNavAndTabOnScroll)
+                    Toggle("Hide Navigation and Tab Bar while reading", isOn: $hideNavAndTab)
                 }
 
                 Section(header: Text("App")) {
