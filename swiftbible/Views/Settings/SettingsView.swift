@@ -39,7 +39,7 @@ struct SettingsView: View {
                     NavigationLink(destination: SeeHighlightsView(selectedTab: $selectedTab)) {
                         Label("See Highlights", systemImage: "highlighter")
                     }
-                    Toggle("Show Apostrophe", isOn: $showApocrypha)
+                    Toggle("Show Apocrypha", isOn: $showApocrypha)
                 }
 
                 Section(header: Text("About")) {
