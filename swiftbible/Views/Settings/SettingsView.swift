@@ -12,6 +12,7 @@ struct SettingsView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
+    @AppStorage("showApocrypha") var showApocrypha = false
 
     @Binding var selectedTab: Tabs
 
@@ -38,6 +39,7 @@ struct SettingsView: View {
                     NavigationLink(destination: SeeHighlightsView(selectedTab: $selectedTab)) {
                         Label("See Highlights", systemImage: "highlighter")
                     }
+                    Toggle("Show Apostrophe", isOn: $showApocrypha)
                 }
 
                 Section(header: Text("About")) {

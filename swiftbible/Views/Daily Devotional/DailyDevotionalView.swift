@@ -52,15 +52,16 @@ struct DailyDevotionalView: View {
         isLoading = true
 
         do {
-            let devotional: [DailyDevotional] = try await SupabaseService.shared.client
+            let devotional: DailyDevotional = try await SupabaseService.shared.client
                 .from("Daily Devotional")
                 .select()
                 .order("id", ascending: false)
                 .limit(1)
+                .single()
                 .execute()
                 .value
 
-            messsage = devotional[0].message
+            messsage = devotional.message
             print("Successfully got Daily Devotional: \(devotional)")
         } catch {
             print("Error fetching daily devotional: \(error)")

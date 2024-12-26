@@ -52,6 +52,7 @@
 		954BC9F02C8501C900FFCFA6 /* ChapterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9EF2C8501C900FFCFA6 /* ChapterDetailView.swift */; };
 		954BC9F22C85112D00FFCFA6 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9F12C85112D00FFCFA6 /* SearchBar.swift */; };
 		954BC9F42C8513A900FFCFA6 /* Testament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9F32C8513A900FFCFA6 /* Testament.swift */; };
+		955281412D1B5D8A00341577 /* apocrypha.json in Resources */ = {isa = PBXBuildFile; fileRef = 955281402D1B5D8A00341577 /* apocrypha.json */; };
 		95978F1A2CA888E600C520EF /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F192CA888E600C520EF /* Tab.swift */; };
 		95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */; };
 /* End PBXBuildFile section */
@@ -108,6 +109,7 @@
 		954BC9F12C85112D00FFCFA6 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		954BC9F32C8513A900FFCFA6 /* Testament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testament.swift; sourceTree = "<group>"; };
 		954BC9F52C85456400FFCFA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		955281402D1B5D8A00341577 /* apocrypha.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apocrypha.json; sourceTree = "<group>"; };
 		95978F192CA888E600C520EF /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 		95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = swiftbibleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,6 +255,7 @@
 		954BC9E22C85001900FFCFA6 /* Text */ = {
 			isa = PBXGroup;
 			children = (
+				955281402D1B5D8A00341577 /* apocrypha.json */,
 				951009892C95364C0040B21A /* ChapterSummaries.swift */,
 				954BC9E32C85005900FFCFA6 /* bible.json */,
 				951009872C9525250040B21A /* summaries.swift */,
@@ -396,6 +399,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				954BC9DC2C84EDBF00FFCFA6 /* Preview Assets.xcassets in Resources */,
+				955281412D1B5D8A00341577 /* apocrypha.json in Resources */,
 				954BC9E42C85005900FFCFA6 /* bible.json in Resources */,
 				954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */,
 			);

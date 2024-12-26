@@ -3897,459 +3897,430 @@ let summaries: [String: [String: String]] = [
     ],
     
     "Acts": [
-        // Chapter 1: Ascension of Jesus and Choosing Matthias
-        "1:1": "Introduction to Acts; Jesus appears to His apostles over forty days after His resurrection.",
-        "1:8": "'You will receive power when the Holy Spirit comes on you; and you will be my witnesses.'",
-        "1:9": "Jesus ascends into heaven; two angels appear and promise His return.",
-        "1:12": "The apostles return to Jerusalem; they pray and select Matthias to replace Judas.",
-        
-        // Chapter 2: The Day of Pentecost
-        "2:1": "The Holy Spirit comes upon the believers with a sound like a rushing wind and tongues of fire.",
-        "2:4": "They begin to speak in other tongues as the Spirit enables them.",
-        "2:14": "Peter addresses the crowd, explaining the fulfillment of prophecy.",
-        "2:38": "Peter calls for repentance and baptism in the name of Jesus Christ.",
-        "2:41": "About three thousand people are added to their number that day.",
-        
-        // Chapter 3: Healing of the Lame Man
-        "3:1": "Peter and John heal a man lame from birth at the temple gate called Beautiful.",
-        "3:12": "Peter addresses the crowd, attributing the healing to faith in Jesus.",
-        
-        // Chapter 4: Peter and John Before the Sanhedrin
-        "4:1": "Peter and John are arrested for preaching about Jesus and the resurrection.",
-        "4:8": "Peter, filled with the Holy Spirit, boldly speaks before the Sanhedrin.",
-        "4:13": "The council is astonished by their courage and recognizes they had been with Jesus.",
-        "4:23": "Believers pray for boldness; the place where they are meeting is shaken.",
-        
-        // Chapter 5: Ananias and Sapphira; Apostles Persecuted
-        "5:1": "Ananias and Sapphira lie about the proceeds from a land sale; both die as a result.",
-        "5:12": "The apostles perform many signs and wonders; believers are added to their number.",
-        "5:17": "The apostles are arrested but freed by an angel during the night.",
-        "5:29": "Peter and the apostles declare, 'We must obey God rather than human beings.'",
-        
-        // Chapter 6: Choosing of the Seven
-        "6:1": "Dispute arises over the distribution of food; seven men are chosen to serve, including Stephen and Philip.",
-        "6:8": "Stephen performs great wonders and signs; opposition arises against him.",
-        
-        // Chapter 7: Stephen's Speech and Martyrdom
-        "7:1": "Stephen addresses the Sanhedrin, recounting Israel's history and accusing them of resisting the Holy Spirit.",
-        "7:54": "Stephen is stoned; he sees a vision of Jesus standing at the right hand of God.",
-        "7:60": "Stephen prays for his persecutors as he dies; Saul is present, giving approval.",
-        
-        // Chapter 8: Persecution and Philip's Ministry
-        "8:1": "A great persecution breaks out; believers scatter, spreading the word.",
-        "8:5": "Philip proclaims Christ in Samaria; many believe and are baptized.",
-        "8:9": "Simon the Sorcerer believes and is baptized but tries to buy the power of the Holy Spirit.",
-        "8:26": "Philip is led by an angel to meet an Ethiopian eunuch; explains Isaiah and baptizes him.",
-        
-        // Chapter 9: Conversion of Saul
-        "9:1": "Saul seeks to persecute Christians in Damascus; encounters Jesus on the road.",
-        "9:17": "Ananias lays hands on Saul; he regains his sight and is filled with the Holy Spirit.",
-        "9:20": "Saul begins preaching that Jesus is the Son of God.",
-        "9:32": "Peter heals Aeneas in Lydda and raises Tabitha (Dorcas) from the dead in Joppa.",
-        
-        // Chapter 10: Peter and Cornelius
-        "10:1": "Cornelius, a Roman centurion, receives a vision to send for Peter.",
-        "10:9": "Peter has a vision of a sheet with unclean animals; told not to call impure what God has made clean.",
-        "10:44": "While Peter speaks, the Holy Spirit falls on all who hear, including Gentiles.",
-        "10:47": "Peter orders that they be baptized in the name of Jesus Christ.",
-        
-        // Chapter 11: Peter Explains His Actions
-        "11:1": "Peter returns to Jerusalem; explains to Jewish believers why he associated with Gentiles.",
-        "11:18": "They praise God, acknowledging that He has granted repentance leading to life even to Gentiles.",
-        "11:19": "Believers preach to Greeks in Antioch; a great number believe.",
-        "11:25": "Barnabas brings Saul (Paul) to Antioch; disciples are first called Christians there.",
-        
-        // Chapter 12: Peter's Miraculous Escape and Herod's Death
-        "12:1": "King Herod arrests some believers; James is put to death.",
-        "12:5": "Peter is imprisoned; the church prays earnestly for him.",
-        "12:7": "An angel frees Peter from prison; he goes to Mary's house where believers are praying.",
-        "12:23": "Herod is struck down by an angel and dies because he did not give glory to God.",
-        
-        // Chapter 13: Paul's First Missionary Journey Begins
-        "13:1": "In Antioch, the Holy Spirit calls Barnabas and Saul for missionary work.",
-        "13:6": "They encounter Elymas the sorcerer in Cyprus; Paul rebukes him.",
-        "13:13": "John Mark leaves them; Paul and Barnabas preach in Pisidian Antioch.",
-        "13:46": "Paul and Barnabas turn to the Gentiles after rejection by Jews.",
-        
-        // Chapter 14: Ministry in Iconium, Lystra, and Derbe
-        "14:1": "They preach in Iconium; signs and wonders accompany their message.",
-        "14:8": "In Lystra, Paul heals a man lame from birth; people think they are gods.",
-        "14:19": "Jews from Antioch and Iconium persuade the crowd; Paul is stoned and left for dead.",
-        "14:21": "They strengthen the disciples and appoint elders in each church.",
-        
-        // Chapter 15: The Council at Jerusalem
-        "15:1": "Debate arises over whether Gentile believers must be circumcised.",
-        "15:7": "Peter speaks in favor of not burdening Gentiles with the law.",
-        "15:13": "James supports Peter; they decide not to make it difficult for Gentiles.",
-        "15:36": "Paul and Barnabas separate over a disagreement about John Mark; Paul takes Silas.",
-        
-        // Chapter 16: Second Missionary Journey Begins
-        "16:1": "Paul meets Timothy in Lystra and takes him along.",
-        "16:6": "The Holy Spirit prevents them from preaching in Asia; Paul has a vision of a man from Macedonia.",
-        "16:13": "Conversion of Lydia in Philippi.",
-        "16:16": "Paul and Silas are imprisoned after casting out a spirit; an earthquake frees them.",
-        "16:30": "The jailer asks, 'What must I do to be saved?'; they answer, 'Believe in the Lord Jesus.'",
-        
-        // Chapter 17: Preaching in Thessalonica, Berea, and Athens
-        "17:1": "Paul preaches in Thessalonica; some Jews and many Greeks believe.",
-        "17:10": "In Berea, the Jews examine the Scriptures daily; many believe.",
-        "17:16": "In Athens, Paul is distressed by idols; he addresses the Areopagus.",
-        "17:22": "Paul speaks about the 'unknown god' and proclaims the one true God.",
-        
-        // Chapter 18: Ministry in Corinth
-        "18:1": "Paul meets Aquila and Priscilla in Corinth; works as a tentmaker.",
-        "18:5": "Paul testifies to the Jews that Jesus is the Messiah; faces opposition.",
-        "18:9": "The Lord encourages Paul in a vision to keep speaking.",
-        "18:18": "Paul returns to Antioch, completing his second journey.",
-        
-        // Chapter 19: Paul in Ephesus
-        "19:1": "Paul finds disciples in Ephesus; they receive the Holy Spirit.",
-        "19:11": "God does extraordinary miracles through Paul; handkerchiefs heal the sick.",
-        "19:13": "Seven sons of Sceva attempt to invoke Jesus' name; are overpowered by a demon-possessed man.",
-        "19:23": "A riot occurs in Ephesus led by silversmiths fearing loss of income from idol-making.",
-        
-        // Chapter 20: Journey to Jerusalem and Farewell to Ephesian Elders
-        "20:7": "Paul raises Eutychus from the dead after he falls from a window.",
-        "20:17": "Paul meets with the Ephesian elders in Miletus; gives a farewell speech.",
-        "20:35": "Paul reminds them of Jesus' words: 'It is more blessed to give than to receive.'",
-        
-        // Chapter 21: Paul's Arrival in Jerusalem
-        "21:4": "Disciples warn Paul not to go to Jerusalem.",
-        "21:13": "Paul declares his readiness to die for the name of the Lord Jesus.",
-        "21:27": "Paul is arrested in the temple after a mob is incited against him.",
-        "21:37": "Paul asks to speak to the crowd; is granted permission.",
-        
-        // Chapter 22: Paul's Defense and Roman Citizenship
-        "22:1": "Paul addresses the crowd in Hebrew; recounts his conversion.",
-        "22:22": "The crowd reacts violently when Paul mentions his mission to the Gentiles.",
-        "22:25": "Paul reveals his Roman citizenship to avoid being flogged.",
-        
-        // Chapter 23: Paul Before the Sanhedrin
-        "23:1": "Paul appears before the Sanhedrin; causes division by mentioning the resurrection.",
-        "23:11": "The Lord stands by Paul at night, encouraging him that he must testify in Rome.",
-        "23:12": "A plot to kill Paul is discovered; he is transferred to Caesarea under guard.",
-        
-        // Chapter 24: Trial Before Governor Felix
-        "24:1": "Paul is accused by Tertullus before Felix.",
-        "24:10": "Paul defends himself, denying the charges and affirming his faith.",
-        "24:24": "Felix listens to Paul speak about faith in Christ; becomes afraid but leaves Paul in prison.",
-        
-        // Chapter 25: Paul Appeals to Caesar
-        "25:1": "Festus succeeds Felix; Jews press charges against Paul.",
-        "25:9": "Festus asks Paul if he is willing to go to Jerusalem; Paul appeals to Caesar.",
-        "25:23": "King Agrippa and Bernice arrive; Festus presents Paul's case to them.",
-        
-        // Chapter 26: Paul's Defense Before King Agrippa
-        "26:1": "Paul recounts his life, conversion, and mission to Agrippa.",
-        "26:24": "Festus declares Paul is insane; Paul insists he speaks truth.",
-        "26:28": "Agrippa says, 'Do you think that in such a short time you can persuade me to be a Christian?'",
-        "26:32": "Agrippa concludes that Paul could have been set free if he had not appealed to Caesar.",
-        
-        // Chapter 27: Paul's Journey to Rome and Shipwreck
-        "27:1": "Paul sets sail for Italy under the guard of Julius, a centurion.",
-        "27:9": "Paul warns of danger ahead; his advice is ignored.",
-        "27:14": "A violent storm arises; the ship is driven off course.",
-        "27:23": "An angel assures Paul that all aboard will be saved.",
-        "27:41": "The ship runs aground; all 276 people reach land safely.",
-        
-        // Chapter 28: Paul on Malta and Arrival in Rome
-        "28:1": "They learn the island is called Malta; natives show kindness.",
-        "28:3": "Paul is bitten by a viper but suffers no harm; the islanders think he is a god.",
-        "28:8": "Paul heals the father of Publius and others on the island.",
-        "28:16": "Paul arrives in Rome; allowed to live by himself under guard.",
-        "28:23": "Paul preaches to local Jewish leaders; some are convinced, others not.",
-        "28:30": "Paul stays two full years in his own rented house, proclaiming the kingdom of God."
+            // Chapter 1: The Ascension of Jesus and the Selection of Matthias
+            "1:1": "Introduction by Luke, summarizing Jesus' teachings after His resurrection.",
+            "1:4": "Jesus instructs the disciples to wait in Jerusalem for the Holy Spirit.",
+            "1:8": "Promise of power through the Holy Spirit to be witnesses in Jerusalem, Judea, Samaria, and to the ends of the earth.",
+            "1:15": "Peter addresses the disciples regarding the need to replace Judas Iscariot.",
+            "1:24": "The disciples pray and cast lots to choose Matthias as the replacement apostle.",
+
+            // Chapter 2: Pentecost and the Birth of the Church
+            "2:1": "The Holy Spirit descends on the disciples during Pentecost.",
+            "2:4": "Disciples begin to speak in different tongues as the Spirit enables them.",
+            "2:14": "Peter stands up and addresses the crowd, explaining the fulfillment of prophecy.",
+            "2:38": "Peter calls for repentance and baptism for the forgiveness of sins.",
+            "2:41": "About three thousand people are added to the church.",
+
+            // Chapter 3: Healing of the Lame Man and Peter's Sermon
+            "3:1": "Peter and John heal a man lame from birth at the temple gate called Beautiful.",
+            "3:6": "Peter declares that the healing is by the name of Jesus Christ of Nazareth.",
+            "3:12": "The healed man enters the temple walking, leaping, and praising God.",
+            "3:19": "Peter urges the crowd to repent and turn to God for their sins.",
+
+            // Chapter 4: Peter and John Arrested and the Early Church
+            "4:8": "Peter and John are confronted by the Sanhedrin after the healing.",
+            "4:12": "Peter declares that salvation is found in no one else except Jesus Christ.",
+            "4:33": "The believers are filled with the Holy Spirit and speak God's word boldly.",
+
+            // Chapter 5: Ananias and Sapphira; Apostles Persecuted
+            "5:1": "Ananias and Sapphira lie about the proceeds of their land sale and die.",
+            "5:29": "Peter and the apostles continue to preach despite persecution.",
+            "5:40": "The apostles are flogged and ordered not to speak in the name of Jesus.",
+
+            // Chapter 6: The Appointment of the Seven Deacons
+            "6:1": "The early church faces complaints about the distribution to widows.",
+            "6:4": "The apostles appoint seven deacons to handle daily distributions.",
+
+            // Chapter 7: Stephen's Speech and Martyrdom
+            "7:2": "Stephen recounts the history of Israel and accuses the Jewish leaders of resisting the Holy Spirit.",
+            "7:59": "Stephen is stoned to death, becoming the first Christian martyr.",
+
+            // Chapter 8: The Church Scattered and Philip's Ministry
+            "8:4": "Persecution scatters the believers throughout Judea and Samaria.",
+            "8:26": "Philip is guided by an angel to evangelize in Samaria and to the Ethiopian eunuch.",
+
+            // Chapter 9: The Conversion of Saul (Paul)
+            "9:3": "Saul encounters a bright light on the road to Damascus and is blinded.",
+            "9:15": "Ananias is instructed by the Lord to restore Saul's sight.",
+            "9:20": "Saul begins to preach in Damascus about Jesus.",
+
+            // Chapter 10: Peter's Vision and the Conversion of Cornelius
+            "10:9": "Peter has a vision of a sheet with unclean animals, symbolizing the acceptance of Gentiles.",
+            "10:34": "Peter declares that God shows no partiality, accepting people from every nation.",
+            "10:44": "The Holy Spirit falls on the Gentile believers at Cornelius' house, confirming their salvation.",
+
+            // Chapter 11: The Church in Antioch and Peter's Defense
+            "11:19": "Believers from scattered regions begin preaching in Antioch, leading to significant growth.",
+            "11:26": "Barnabas brings Saul to Antioch, where they teach and a large number believe.",
+            "11:29": "The church in Antioch sends aid to the brethren in Judea during a famine.",
+
+            // Chapter 12: Herod's Persecution and Peter's Escape
+            "12:7": "An angel frees Peter from prison during Herod's persecution of the church.",
+            "12:12": "The church prays fervently for Peter's safety and he is miraculously released.",
+
+            // Chapter 13: Paul's First Missionary Journey Begins
+            "13:2": "The Holy Spirit calls Barnabas and Saul for missionary work during worship in Antioch.",
+            "13:4": "Barnabas and Saul are sent out with John Mark to preach the Gospel in Cyprus and Asia Minor.",
+
+            // Chapter 14: Paul and Barnabas' Ministry in Iconium, Lystra, and Derbe
+            "14:1": "Paul and Barnabas preach in Iconium, facing both acceptance and opposition.",
+            "14:8": "Paul heals a crippled man in Lystra, leading the crowd to believe they are gods.",
+            "14:21": "Paul and Barnabas return to Antioch, reporting many conversions and the growth of the church.",
+
+            // Chapter 15: The Council at Jerusalem on Circumcision
+            "15:7": "Peter argues that Gentile believers should not be burdened with the law of Moses.",
+            "15:19": "James concludes that Gentiles need not follow the entire Law of Moses, but should abstain from certain practices.",
+            "15:28": "The council issues a letter with guidelines for Gentile believers, promoting unity in the church.",
+
+            // Chapter 16: Paul's Second Missionary Journey Begins
+            "16:9": "Paul receives a vision of a man from Macedonia calling for help, prompting their journey west.",
+            "16:31": "Paul and Silas invite the Philippian jailer to believe in Jesus after an earthquake frees them from prison.",
+            "16:34": "The Philippian jailer and his household are baptized following their conversion.",
+
+            // Chapter 17: Paul's Ministry in Thessalonica, Berea, and Athens
+            "17:2": "Paul preaches in the synagogue in Thessalonica, leading to both conversions and opposition.",
+            "17:11": "The Bereans are commended for examining the Scriptures daily to verify Paul's teachings.",
+            "17:23": "In Athens, Paul addresses the Areopagus, speaking about the unknown God and the resurrection.",
+
+            // Chapter 18: Paul's Ministry in Corinth and Return to Antioch
+            "18:1": "Paul meets Aquila and Priscilla in Corinth and partners with them in ministry.",
+            "18:9": "Paul receives a vision encouraging him to continue preaching despite opposition.",
+            "18:28": "The Lord persuades a great number to believe, leading to the growth of the church in Corinth.",
+
+            // Chapter 19: Paul's Ministry in Ephesus
+            "19:11": "God performs extraordinary miracles through Paul in Ephesus, demonstrating His power.",
+            "19:23": "A riot breaks out in Ephesus led by silversmiths opposing Paul's teachings against idol worship.",
+            "19:31": "Paul leaves Ephesus after three years, having significantly impacted the city's spiritual landscape.",
+
+            // Chapter 20: Paul's Farewell to the Ephesian Elders and Journey to Jerusalem
+            "20:7": "Paul celebrates the first Eucharist with the Ephesian elders on the first day of the week.",
+            "20:22": "Paul speaks plainly about his upcoming journey to Jerusalem, knowing of the dangers ahead.",
+            "20:24": "Paul emphasizes that his goal is to finish the race and complete the task of ministry for the Lord Jesus.",
+
+            // Chapter 21: Paul's Arrival in Jerusalem and Arrest
+            "21:10": "Paul meets prophets who predict his imprisonment in Jerusalem.",
+            "21:18": "Paul arrives at the temple and declares his innocence, causing a stir among the crowd.",
+            "21:37": "Paul is seized by a mob and arrested after his preaching incites opposition.",
+
+            // Chapter 22: Paul's Defense Before the Crowd
+            "22:6": "Paul recounts his conversion experience to the crowd, emphasizing his transformation.",
+            "22:16": "Paul explains that he was sent to the Gentiles as per God's revelation.",
+
+            // Chapter 23: Paul's Defense Before the Sanhedrin
+            "23:11": "Jesus appears to Paul in a vision, encouraging him to testify about the Gospel.",
+            "23:12": "A plot to kill Paul within the Sanhedrin is uncovered, leading to his transfer to Caesarea.",
+
+            // Chapter 24: Paul's Trial Before Felix
+            "24:14": "Paul testifies about his faith in Jesus Christ before Governor Felix.",
+            "24:25": "Felix adjourns the proceedings, promising to send for Paul when convenient.",
+
+            // Chapter 25: Paul's Appeal to Caesar and Trial Before Festus
+            "25:11": "Paul invokes his right as a Roman citizen to appeal to Caesar, ensuring a fair trial.",
+            "25:21": "King Agrippa expresses interest in Paul's case and questions his beliefs.",
+
+            // Chapter 26: Paul's Defense Before Agrippa
+            "26:16": "Jesus commissions Paul to be a witness to the Gentiles during his defense.",
+            "26:28": "Agrippa concludes that Paul could have been set free if he had not appealed to Caesar.",
+
+            // Chapter 27: Paul's Voyage to Rome and Shipwreck
+            "27:23": "An angel assures Paul that he will stand before Caesar despite the impending shipwreck.",
+            "27:41": "After a shipwreck, all aboard survive and reach safety on the island of Malta.",
+
+            // Chapter 28: Paul's Ministry in Rome
+            "28:7": "Paul is bitten by a viper but suffers no harm, leading the crowd to regard him as a murderer but seeing his miraculous survival.",
+            "28:30": "Paul stays in Rome for two years, preaching the kingdom of God and teaching about the Lord Jesus Christ.",
     ],
-    
+
     "Romans": [
-        // Chapter 1: The Gospel and Humanity's Sinfulness
-        "1:1": "Paul introduces himself as a servant of Christ Jesus, called to be an apostle, set apart for the gospel.",
-        "1:16": "'For I am not ashamed of the gospel, because it is the power of God that brings salvation to everyone who believes.'",
-        "1:18": "God's wrath is revealed against humanity's ungodliness and suppression of the truth.",
-        "1:21": "People knew God but did not honor Him; their thinking became futile, and hearts darkened.",
-        "1:24": "God gave them over to sinful desires; a list of various sins is described.",
-        
+        // Chapter 1: Introduction and the Universal Need for Salvation
+        "1:1": "Paul introduces himself as a servant of Christ, called to be an apostle, and set apart for the gospel of God.",
+        "1:7": "Paul addresses the letter to all in Rome who are loved by God and called to be saints.",
+        "1:16": "Paul expresses that he is not ashamed of the gospel, as it is the power of God for salvation to everyone who believes.",
+        "1:17": "Introduces the theme of righteousness by faith, which is revealed in the gospel.",
+        "1:20": "Explains that God's invisible qualities are evident in creation, leaving people without excuse for their unbelief.",
+
         // Chapter 2: God's Righteous Judgment
-        "2:1": "Warning against judging others; by judging, you condemn yourself.",
-        "2:6": "God 'will repay each person according to what they have done.'",
-        "2:12": "Those who sin without the law will perish without the law; Jews and Gentiles alike are accountable.",
-        "2:28": "True circumcision is a matter of the heart, by the Spirit, not by the written code.",
-        
-        // Chapter 3: No One is Righteous
-        "3:1": "Question about the advantage of being a Jew; value in having God's words.",
-        "3:9": "All are under the power of sin, both Jews and Gentiles.",
-        "3:10": "'There is no one righteous, not even one.'",
-        "3:20": "No one will be declared righteous by works of the law; the law makes us conscious of sin.",
-        "3:21": "Righteousness from God apart from the law is revealed, to which the Law and Prophets testify.",
-        "3:23": "'For all have sinned and fall short of the glory of God.'",
-        "3:24": "All are justified freely by His grace through the redemption in Christ Jesus.",
-        
+        "2:4": "Warns against taking God's kindness for granted, emphasizing that His kindness is meant to lead to repentance.",
+        "2:11": "States that God shows no favoritism and judges everyone impartially based on their actions.",
+        "2:16": "Describes how God's judgment will be according to the truth of the gospel, regardless of one's knowledge of the law.",
+
+        // Chapter 3: All Have Sinned and Justified by Faith
+        "3:10": "Highlights that no one is righteous on their own, emphasizing the universal nature of sin.",
+        "3:23": "Affirms that all have sinned and fall short of God's glory, establishing the need for salvation.",
+        "3:24": "Explains that all are justified freely by God's grace through the redemption in Christ Jesus.",
+        "3:28": "Emphasizes that a person is justified by faith apart from the works of the law.",
+        "3:30": "Affirms that both Jews and Gentiles are justified by the same faith in Christ.",
+
         // Chapter 4: Abraham Justified by Faith
-        "4:1": "Abraham was justified by faith, not works.",
-        "4:3": "'Abraham believed God, and it was credited to him as righteousness.'",
-        "4:13": "The promise comes by faith so that it may be by grace.",
-        "4:18": "Against all hope, Abraham believed and became the father of many nations.",
-        
+        "4:3": "Uses Abraham's belief in God as an example of being credited as righteous through faith.",
+        "4:5": "Clarifies that a person is not justified by works but by faith, referencing Abraham's experience.",
+        "4:16": "Argues that the promise to Abraham extends to all who believe, not just those under the law.",
+
         // Chapter 5: Peace and Hope Through Christ
-        "5:1": "Since we have been justified through faith, we have peace with God through Jesus.",
-        "5:3": "We also glory in sufferings, knowing that suffering produces perseverance.",
-        "5:8": "'But God demonstrates His own love for us in this: While we were still sinners, Christ died for us.'",
-        "5:12": "Sin entered the world through one man (Adam), and death through sin; death came to all.",
-        "5:18": "Just as one trespass resulted in condemnation for all, so one righteous act resulted in justification for all.",
-        
-        // Chapter 6: Dead to Sin, Alive in Christ
-        "6:1": "Shall we continue in sin so that grace may increase? By no means!",
-        "6:4": "We were buried with Him through baptism into death; we may live a new life.",
-        "6:11": "Count yourselves dead to sin but alive to God in Christ Jesus.",
-        "6:23": "'For the wages of sin is death, but the gift of God is eternal life in Christ Jesus our Lord.'",
-        
-        // Chapter 7: Released from the Law
-        "7:1": "The law has authority over someone only as long as they live.",
-        "7:4": "We died to the law through the body of Christ to belong to another.",
-        "7:15": "Paul describes the struggle with sin: 'I do not understand what I do.'",
-        "7:24": "'What a wretched man I am! Who will rescue me from this body of death?'",
-        "7:25": "Thanks be to God, who delivers me through Jesus Christ our Lord!",
-        
+        "5:1": "Explains that believers have peace with God through their justification by faith.",
+        "5:8": "Highlights God's love demonstrated through Christ's sacrificial death while humanity was still sinful.",
+        "5:12": "Describes how sin entered the world through one man, Adam, and brought death to all.",
+        "5:17": "Contrasts the reign of sin through one man with the gift of grace that leads to righteousness and life through many.",
+
+        // Chapter 6: Dead to Sin, Alive to God
+        "6:1": "Addresses the misconception that believers should continue sinning to experience God's grace.",
+        "6:4": "Describes baptism as a symbol of being buried with Christ into death and raised to new life.",
+        "6:14": "Affirms that believers are not under the law but under grace, freeing them from sin's dominance.",
+
+        // Chapter 7: Released from the Law, Bound to Christ
+        "7:4": "Explains that believers have died to the law through the body of Christ and are now bound to serve Him.",
+        "7:24": "Expresses the inner conflict with sin, highlighting the struggle even after understanding the law.",
+
         // Chapter 8: Life Through the Spirit
-        "8:1": "'Therefore, there is now no condemnation for those who are in Christ Jesus.'",
-        "8:5": "Those who live according to the flesh have minds set on fleshly desires; those led by the Spirit on spiritual desires.",
-        "8:14": "Those led by the Spirit of God are the children of God.",
-        "8:18": "Our present sufferings are not worth comparing with the glory to be revealed.",
-        "8:28": "'And we know that in all things God works for the good of those who love Him.'",
-        "8:31": "'If God is for us, who can be against us?'",
-        "8:37": "'In all these things we are more than conquerors through Him who loved us.'",
-        
+        "8:1": "Assures that there is no condemnation for those who are in Christ Jesus.",
+        "8:28": "Affirms that God works all things for the good of those who love Him and are called according to His purpose.",
+        "8:31": "Encourages believers by stating that if God is for them, no one can stand against them.",
+        "8:38-39": "Declares that nothing can separate believers from God's love in Christ Jesus.",
+
         // Chapter 9: God's Sovereign Choice
-        "9:1": "Paul expresses sorrow for Israel's unbelief.",
-        "9:6": "Not all who are descended from Israel are Israel.",
-        "9:15": "God says to Moses, 'I will have mercy on whom I have mercy.'",
-        "9:20": "Who are you, a human being, to talk back to God?",
-        
-        // Chapter 10: Salvation for All
-        "10:1": "Paul's heart's desire and prayer is for Israel's salvation.",
-        "10:9": "'If you declare with your mouth, \"Jesus is Lord,\" and believe in your heart... you will be saved.'",
-        "10:13": "'Everyone who calls on the name of the Lord will be saved.'",
-        "10:17": "Faith comes from hearing the message, and the message is heard through the word about Christ.",
-        
-        // Chapter 11: The Remnant of Israel
-        "11:1": "God has not rejected His people Israel.",
-        "11:11": "Salvation has come to the Gentiles to make Israel envious.",
-        "11:17": "Gentiles are like wild olive shoots grafted into the olive tree.",
-        "11:33": "Oh, the depth of the riches of the wisdom and knowledge of God!",
-        
-        // Chapter 12: Living Sacrifices and Humble Service
-        "12:1": "Offer your bodies as living sacrifices, holy and pleasing to God.",
-        "12:2": "Do not conform to the pattern of this world but be transformed by the renewing of your mind.",
-        "12:4": "Just as each body has many members, so in Christ we form one body.",
-        "12:9": "Love must be sincere; hate what is evil; cling to what is good.",
-        "12:21": "Do not be overcome by evil but overcome evil with good.",
-        
-        // Chapter 13: Submission to Authorities and Love
-        "13:1": "Let everyone be subject to governing authorities; authorities are established by God.",
-        "13:8": "Let no debt remain outstanding except the continuing debt to love one another.",
-        "13:10": "Love does no harm to a neighbor; love is the fulfillment of the law.",
-        "13:11": "The hour has already come to wake up from slumber; salvation is nearer now than before.",
-        
-        // Chapter 14: The Weak and the Strong
-        "14:1": "Accept those whose faith is weak without quarreling over disputable matters.",
-        "14:5": "Each person should be fully convinced in their own mind regarding special days.",
-        "14:13": "Stop passing judgment; instead, make up your mind not to put a stumbling block in another's way.",
-        "14:17": "The kingdom of God is not a matter of eating and drinking but righteousness, peace, and joy in the Holy Spirit.",
-        
-        // Chapter 15: Unity and Paul's Plan to Visit Rome
-        "15:1": "We who are strong ought to bear with the failings of the weak.",
-        "15:5": "May God give you a spirit of unity as you follow Christ.",
-        "15:13": "May the God of hope fill you with all joy and peace as you trust in Him.",
-        "15:20": "Paul's ambition is to preach the gospel where Christ is not known.",
-        
-        // Chapter 16: Personal Greetings and Final Instructions
-        "16:1": "Commendation of Phoebe, a deacon of the church in Cenchreae.",
-        "16:3": "Greet Priscilla and Aquila, Paul's co-workers in Christ Jesus.",
-        "16:17": "Watch out for those who cause divisions and put obstacles in your way.",
-        "16:25": "Doxology: Praise to God who is able to establish you according to the gospel."
+        "9:15": "Highlights God's authority to show mercy and compassion as He chooses.",
+        "9:30": "Contrasts those who seek righteousness through the law with those who attain it through faith.",
+        "9:33": "References the chosen people as a royal priesthood, emphasizing God's selection.",
+
+        // Chapter 10: Salvation by Faith
+        "10:9": "Explains that confessing Jesus as Lord and believing in His resurrection leads to salvation.",
+        "10:17": "States that faith comes from hearing the message about Christ.",
+        "10:13": "Affirms that everyone who calls on the name of the Lord will be saved, extending salvation to all.",
+
+        // Chapter 11: God’s Mercy to the Gentiles
+        "11:6": "Emphasizes that salvation cannot be based on works but is a result of God's grace.",
+        "11:36": "Affirms that all things are from God, through Him, and for Him, highlighting His sovereignty.",
+
+        // Chapter 12: Living Sacrifices and Christian Conduct
+        "12:1": "Encourages believers to offer their bodies as living sacrifices, holy and pleasing to God.",
+        "12:2": "Advises not to conform to worldly patterns but to be transformed by renewing the mind.",
+        "12:9": "Calls for sincere love, hatred of evil, and clinging to what is good.",
+        "12:21": "Instructs believers not to be overcome by evil but to overcome it with good.",
+
+        // Chapter 13: Living as in Light of Grace
+        "13:11": "Urges believers not to grumble against one another, warning of judgment for such behavior.",
+        "13:14": "Explains that the Spirit of life has set believers free from the law of sin and death.",
+
+        // Chapter 14: Accepting One Another
+        "14:8": "Encourages living for the Lord in all circumstances, whether in life or death.",
+        "14:22": "Advises keeping personal beliefs private to maintain harmony within the community.",
+
+        // Chapter 15: Ministry to the Gentiles
+        "15:1": "Calls for strong believers to bear with the failings of the weak and not seek personal pleasure.",
+        "15:7": "Encourages acceptance among believers, just as Christ accepted them, to glorify God.",
+        "15:19": "Describes Paul's mission to preach the gospel to the Gentiles.",
+        "15:25": "Details plans to send Barnabas and Saul to Antioch to deliver a financial contribution.",
+
+        // Chapter 16: Paul's Second Missionary Journey
+        "16:3": "Paul appoints Timothy as his companion for ministry.",
+        "16:25": "Describes Paul and Silas praying and singing hymns to God while imprisoned, leading to miraculous events.",
+        "16:31": "Highlights the invitation to believe in the Lord Jesus for salvation extended to the Philippian jailer.",
+        "16:34": "Mentions the baptism of the Philippian jailer and his household following their conversion.",
+
+        // Chapter 17: Paul's Ministry in Thessalonica, Berea, and Athens
+        "17:3": "Details Paul's reasoning with Jews and God-fearing Greeks in Thessalonica's synagogue.",
+        "17:11": "Commends the Bereans for eagerly receiving the message and examining the Scriptures daily.",
+        "17:22": "Describes Paul's speech at the Areopagus in Athens, addressing their altar to an unknown god.",
+        "17:28": "Affirms that in Christ, all find their purpose, highlighting the universality of His mission.",
+
+        // Chapter 18: Paul's Ministry in Corinth and Return to Antioch
+        "18:9": "Narrates the Lord speaking to Paul in a vision, encouraging him not to fear.",
+        "18:24": "Introduces Apollos, an eloquent speaker, who is instructed by Priscilla and Aquila to preach accurately.",
+        "18:28": "Highlights the growth of the Corinthian church as the Lord adds to their number daily those who are being saved.",
+
+        // Chapter 19: Paul's Ministry in Ephesus
+        "19:11": "Describes God performing extraordinary miracles through Paul in Ephesus, demonstrating His power.",
+        "19:23": "Accounts for a riot in Ephesus led by silversmiths opposing Paul's teachings against idol worship.",
+        "19:28": "Mentions the shaking of the city but notes that Paul continues his ministry undeterred.",
+
+        // Chapter 20: Paul's Farewell to the Ephesian Elders and Journey to Jerusalem
+        "20:6": "Details Paul's travels through Macedonia and Greece, strengthening the believers.",
+        "20:28": "Paul charges the Ephesian elders to watch over themselves and the flock entrusted to them by the Holy Spirit.",
+        "20:24": "Paul emphasizes that his life is focused on finishing the ministry task given by the Lord Jesus.",
+
+        // Chapter 21: Paul's Arrival in Jerusalem and Arrest
+        "21:14": "Describes Paul and his companions traveling to Jerusalem despite warnings of impending dangers.",
+        "21:18": "Paul encourages the believers in Jerusalem, promising to return after fulfilling his mission.",
+        "21:34": "Narrates Paul being seized by the crowd and taken into custody after his preaching incites opposition.",
+
+        // Chapter 22: Paul's Defense Before the Crowd
+        "22:6": "Paul recounts his conversion experience on the road to Damascus, emphasizing his transformation.",
+        "22:16": "Explains that God sent him to preach to the Gentiles, highlighting his divine mission.",
+
+        // Chapter 23: Paul's Defense Before the Sanhedrin
+        "23:11": "Describes Jesus appearing to Paul in a vision, encouraging him to testify about the gospel.",
+        "23:12": "Details a plot to kill Paul within the Sanhedrin, leading to his transfer to Caesarea.",
+
+        // Chapter 24: Paul's Trial Before Felix
+        "24:7": "Paul defends himself before Governor Felix, explaining his faith in Christ.",
+        "24:24": "Felix adjourns the proceedings, keeping Paul in custody while hoping for a bribe.",
+
+        // Chapter 25: Paul's Appeal to Caesar and Trial Before Festus
+        "25:11": "Paul invokes his right as a Roman citizen to appeal to Caesar, ensuring a fair trial.",
+        "25:23": "Festus discusses Paul's case with King Agrippa, explaining the situation.",
+
+        // Chapter 26: Paul's Defense Before Agrippa
+        "26:18": "Paul describes his mission to open people's eyes and turn them from darkness to light.",
+        "26:28": "King Agrippa remarks that Paul could have been set free if he had not appealed to Caesar.",
+
+        // Chapter 27: Paul's Voyage to Rome and Shipwreck
+        "27:23": "Paul remains confident in God's plan despite the impending shipwreck, declaring he will stand before Caesar.",
+        "27:41": "After a shipwreck, all aboard survive and reach safety on the island of Malta.",
+
+        // Chapter 28: Paul's Ministry in Rome
+        "28:6": "Describes Paul being bitten by a viper but suffering no harm, leading the crowd to reconsider their views.",
+        "28:30": "Paul stays in Rome for two years, preaching the kingdom of God and teaching about the Lord Jesus Christ."
     ],
-    
+
     "1 Corinthians": [
         // Chapter 1: Divisions in the Church
         "1:1": "Paul greets the church in Corinth, called to be saints together with all who call on Jesus.",
-        "1:10": "Paul appeals for unity among believers; reports of divisions and quarrels.",
-        "1:18": "'For the message of the cross is foolishness to those who are perishing, but to us who are being saved it is the power of God.'",
-        "1:26": "God chooses the foolish and weak things of the world to shame the wise and strong.",
-        
+        "1:10": "Paul urges unity among the Corinthians, asking them to be of one mind and avoid divisions.",
+        "1:17": "Explains that Paul did not come to Corinth with eloquent speech or human wisdom but to preach Christ crucified.",
+        "1:18": "Describes the message of the cross as foolishness to those perishing but the power of God to those being saved.",
+        "1:27": "Highlights that God chose the foolish and weak to shame the wise and strong, emphasizing God's power.",
+
         // Chapter 2: Wisdom from the Spirit
-        "2:1": "Paul came not with eloquence or human wisdom but proclaimed Christ crucified.",
-        "2:10": "God reveals His wisdom by the Spirit; the Spirit searches all things.",
-        "2:14": "The person without the Spirit does not accept spiritual things; they are discerned only through the Spirit.",
-        
-        // Chapter 3: Foundation in Christ
-        "3:1": "Believers are still worldly, infants in Christ; jealousy and quarreling are signs of immaturity.",
-        "3:6": "Paul planted, Apollos watered, but God made it grow; focus on God, not human leaders.",
-        "3:11": "No one can lay any foundation other than Jesus Christ.",
-        "3:16": "Believers are God's temple, and God's Spirit dwells among them.",
-        
-        // Chapter 4: The Ministry of Apostles
-        "4:1": "Apostles are servants of Christ and stewards of God's mysteries.",
-        "4:9": "Apostles are made a spectacle to the world; they endure hardship for Christ.",
-        "4:14": "Paul admonishes them as beloved children; urges them to imitate him.",
-        
+        "2:2": "Paul focused on knowing Christ and preaching not with persuasive words of human wisdom but with the power of the Spirit.",
+        "2:4": "Emphasizes that Paul's preaching relied on the Spirit's power, not on eloquent speech or wisdom.",
+        "2:14": "States that the natural person does not accept the things of the Spirit of God, for they are folly to them.",
+
+        // Chapter 3: Paul's Ministry as a Gardener
+        "3:5": "Paul clarifies that he planted the seed, Apollos watered it, but God gave the growth.",
+        "3:9": "Describes the church as God’s field, with Paul and Apollos as workers together.",
+        "3:16": "Reminds believers that they are God’s temple and that the Spirit of God dwells in them.",
+
+        // Chapter 4: Apostles as Servants
+        "4:1": "Paul urges believers to view him and Apollos as servants of Christ and stewards of the mysteries of God.",
+        "4:7": "Paul explains that everything belongs to them, but they are nothing without God.",
+        "4:20": "Encourages believers to perform spiritual gifts with power, not merely with human effort.",
+
         // Chapter 5: Dealing with Immorality
-        "5:1": "Report of sexual immorality among them that is not tolerated even among pagans.",
-        "5:6": "A little yeast leavens the whole batch; remove the wicked person from among you.",
-        "5:12": "Judge those inside the church; God will judge those outside.",
-        
-        // Chapter 6: Lawsuits and Sexual Purity
-        "6:1": "Believers should not sue each other before unbelievers; resolve disputes within the church.",
-        "6:9": "Warning that wrongdoers will not inherit the kingdom of God; list of sinful behaviors.",
-        "6:12": "'All things are lawful,' but not all things are beneficial; do not be mastered by anything.",
-        "6:19": "Your bodies are temples of the Holy Spirit; honor God with your bodies.",
-        
+        "5:6": "Advises the church to cleanse themselves from the immoral person among them, who is akin to a little yeast leavening the whole batch.",
+        "5:13": "Affirms the right of the church to judge those inside and those outside the church.",
+
+        // Chapter 6: Lawsuits Among Believers and Sexual Purity
+        "6:1": "Addresses the issue of believers taking each other to court instead of resolving disputes within the church.",
+        "6:19-20": "Reminds believers that their bodies are temples of the Holy Spirit and that they are not their own but were bought at a price.",
+
         // Chapter 7: Marriage and Singleness
-        "7:1": "Instructions about marriage; each man should have his own wife, and each woman her own husband.",
-        "7:10": "Command that a wife should not separate from her husband, and a husband should not divorce his wife.",
-        "7:17": "Each person should live as assigned by the Lord; remain in the situation when called.",
-        "7:32": "Unmarried individuals can be more devoted to the Lord without divided interests.",
-        
-        // Chapter 8: Food Offered to Idols
-        "8:1": "Knowledge puffs up, but love builds up; concerning food sacrificed to idols.",
-        "8:4": "An idol is nothing; there is no God but one.",
-        "8:9": "Be careful that your freedom does not become a stumbling block to the weak.",
-        
-        // Chapter 9: Paul's Rights as an Apostle
-        "9:1": "Paul defends his apostleship; has rights but chooses not to use them to avoid hindering the gospel.",
-        "9:14": "Those who preach the gospel should receive their living from it.",
-        "9:19": "Paul becomes all things to all people so that by all possible means he might save some.",
-        "9:24": "Run in such a way as to get the prize; exercise self-control in all things.",
-        
-        // Chapter 10: Warnings from Israel's History
-        "10:1": "Lessons from Israel's experiences; do not desire evil as they did.",
-        "10:12": "If you think you are standing firm, be careful that you don't fall.",
-        "10:13": "God is faithful; He will not let you be tempted beyond what you can bear.",
-        "10:23": "'Everything is permissible,' but not everything is beneficial; seek the good of others.",
-        "10:31": "Whether you eat or drink, do it all for the glory of God.",
-        
-        // Chapter 11: Propriety in Worship
-        "11:2": "Instructions on head coverings in worship; honor and respect in traditions.",
-        "11:17": "Correction regarding the Lord's Supper; divisions and selfishness are condemned.",
-        "11:23": "Paul recounts the institution of the Lord's Supper; do this in remembrance of Jesus.",
-        "11:27": "Examine oneself before partaking to avoid eating and drinking judgment.",
-        
-        // Chapter 12: Spiritual Gifts and Unity
-        "12:1": "Concerning spiritual gifts; different gifts but the same Spirit.",
-        "12:7": "The manifestation of the Spirit is given for the common good.",
-        "12:12": "Just as the body is one with many parts, so it is with Christ.",
-        "12:26": "If one part suffers, every part suffers with it; if one part is honored, all rejoice.",
-        "12:27": "Now you are the body of Christ, and each one of you is a part of it.",
-        
-        // Chapter 13: The Excellence of Love
-        "13:1": "Without love, speaking in tongues or prophecy is nothing.",
-        "13:4": "Love is patient, love is kind; it does not envy or boast; it is not proud.",
-        "13:8": "Love never fails; prophecies, tongues, and knowledge will pass away.",
-        "13:13": "And now these three remain: faith, hope, and love. But the greatest of these is love.",
-        
-        // Chapter 14: Orderly Worship
-        "14:1": "Follow the way of love and eagerly desire gifts of the Spirit, especially prophecy.",
-        "14:5": "Prophecy is greater than speaking in tongues unless interpretation is given.",
-        "14:12": "Since you are eager for gifts, strive to excel in building up the church.",
-        "14:33": "For God is not a God of disorder but of peace, as in all the congregations of the Lord's people.",
-        "14:40": "Everything should be done in a fitting and orderly way.",
-        
-        // Chapter 15: The Resurrection
-        "15:1": "Reminder of the gospel: Christ died for our sins, was buried, and rose on the third day.",
-        "15:14": "If Christ has not been raised, our preaching is useless and so is your faith.",
-        "15:20": "But Christ has indeed been raised from the dead, the firstfruits of those who have fallen asleep.",
-        "15:26": "The last enemy to be destroyed is death.",
-        "15:54": "'Death has been swallowed up in victory.'",
-        "15:58": "Always give yourselves fully to the work of the Lord, because your labor is not in vain.",
-        
+        "7:1": "Paul discusses matters related to marriage, advising that it is good for a man not to marry.",
+        "7:17": "Encourages each person to remain in the situation they were in when called by God.",
+        "7:24": "Advises slaves to set their minds on the master, not on the things of the master.",
+
+        // Chapter 8: Knowledge and Love in Eating Meat Sacrificed to Idols
+        "8:1": "Acknowledges that knowledge puffs up, but love builds up.",
+        "8:6": "Affirms that there is only one God, the Father, from whom all things came, and one Lord, Jesus Christ.",
+        "8:13": "Warns that exercising knowledge might lead to the weaker brother being tempted and fall into sin.",
+
+        // Chapter 9: Paul’s Rights as an Apostle
+        "9:19": "Describes Paul's approach of becoming all things to all people to save some.",
+        "9:22": "Explains that Paul becomes weak to win the weak, becoming a servant to all to gain more.",
+        "9:24": "Encourages believers to run the race with discipline, aiming to receive an imperishable crown.",
+
+        // Chapter 10: Warnings from Israel’s History
+        "10:12": "Warns believers not to become proud when they succeed, reminding them that God is testing them.",
+        "10:13": "Assures that God does not allow believers to be tempted beyond what they can bear and provides a way out.",
+        "10:31": "Encourages doing everything for the glory of God, whether eating, drinking, or anything else.",
+
+        // Chapter 11: Proper Conduct in Worship
+        "11:1": "Calls believers to imitate him as he imitates Christ.",
+        "11:23": "Paul recounts the tradition he received regarding the Lord’s Supper.",
+        "11:34": "Advises believers to examine themselves before eating to avoid judgment.",
+
+        // Chapter 12: Spiritual Gifts
+        "12:4": "Explains that there are different kinds of gifts, but the same Spirit distributes them.",
+        "12:12": "Describes the church as one body with many parts, each having different functions.",
+        "12:31": "Encourages believers to desire the greater gifts and earnestly seek the best gifts.",
+
+        // Chapter 13: The Way of Love
+        "13:1": "Emphasizes that without love, even the most impressive spiritual gifts are meaningless.",
+        "13:4-7": "Describes the characteristics of love, highlighting its enduring and selfless nature.",
+        "13:13": "Affirms that faith, hope, and love abide, with love being the greatest.",
+
+        // Chapter 14: Orderly Worship and Prophecy
+        "14:1": "Encourages believers to pursue love and earnestly desire spiritual gifts, especially prophecy.",
+        "14:19": "States that he would rather speak five intelligible words to instruct others than ten thousand words in a tongue.",
+        "14:40": "Calls for everything to be done decently and in order within the church gatherings.",
+
+        // Chapter 15: The Resurrection of the Dead
+        "15:1": "Reiterates the gospel he preached, emphasizing its importance for salvation.",
+        "15:3": "States that Christ died for our sins according to the Scriptures.",
+        "15:20": "Affirms that Christ has been raised from the dead, becoming the firstfruits of those who have fallen asleep.",
+        "15:58": "Encourages steadfastness in the Lord’s work, knowing that labor in the Lord is not in vain.",
+
         // Chapter 16: Final Instructions and Greetings
-        "16:1": "Instructions about the collection for God's people; set aside a sum of money regularly.",
-        "16:13": "Be on your guard; stand firm in the faith; be courageous; be strong.",
-        "16:14": "Do everything in love.",
-        "16:19": "Greetings from the churches in Asia; Priscilla and Aquila send warm greetings.",
-        "16:22": "'If anyone does not love the Lord, let that person be cursed. Come, Lord!'",
-        "16:23": "The grace of the Lord Jesus be with you."
+        "16:13": "Urges believers to be watchful, stand firm in the faith, and be courageous.",
+        "16:14": "Instructs to do everything in love.",
+        "16:20": "Concludes with final greetings and blessings, expressing love and grace to the believers."
     ],
     "2 Corinthians": [
-        // Chapter 1: Paul's Suffering and Comfort
-        "1:1": "Paul greets the church in Corinth, emphasizing comfort in affliction.",
-        "1:3": "God is the Father of compassion and the God of all comfort.",
-        "1:5": "Just as we share abundantly in Christ's sufferings, so also our comfort abounds through Christ.",
-        "1:8": "Paul shares about hardships in Asia, relying on God who raises the dead.",
-        "1:12": "Paul's conduct in the world, especially toward the Corinthians, has been with integrity.",
-        
-        // Chapter 2: Forgiveness for the Offender
-        "2:1": "Paul explains why he delayed visiting them, to avoid causing them pain.",
-        "2:5": "Encourages forgiveness and comfort for the repentant offender.",
-        "2:10": "What Paul has forgiven, he has forgiven in the sight of Christ for their sake.",
-        "2:14": "Thanks be to God, who always leads us as captives in Christ's triumphal procession.",
-        
-        // Chapter 3: Ministers of the New Covenant
-        "3:1": "Paul discusses letters of recommendation, stating that the Corinthians are a letter from Christ.",
-        "3:6": "God has made us competent ministers of a new covenant—not of the letter but of the Spirit.",
-        "3:12": "Since we have such a hope, we are very bold.",
-        "3:18": "We all, with unveiled faces, contemplate the Lord's glory, being transformed into His image.",
-        
-        // Chapter 4: Treasures in Jars of Clay
-        "4:1": "Paul does not lose heart in ministry, renouncing secret and shameful ways.",
-        "4:7": "We have this treasure in jars of clay to show that this all-surpassing power is from God.",
-        "4:8": "We are hard pressed but not crushed; perplexed but not in despair.",
-        "4:16": "Though outwardly we are wasting away, inwardly we are being renewed day by day.",
-        "4:17": "Our light and momentary troubles are achieving an eternal glory that far outweighs them.",
-        
+        // Chapter 1: Paul’s Comfort in Affliction
+        "1:3": "Paul praises God as the source of all comfort, who comforts believers in all their troubles.",
+        "1:7": "Explains that comfort allows believers to comfort others with the comfort they have received from God.",
+        "1:10": "Describes the hardships Paul and his companions faced and how they were delivered by God.",
+
+        // Chapter 2: Forgiveness and Restoration
+        "2:5": "Paul expresses his sorrow for causing grief and his intention to forgive the offender.",
+        "2:17": "Highlights Paul's sincere motives in his ministry, contrasting with deceitful workers.",
+        "2:20": "Paul rejoices that a servant of Christ is being used for the Corinthians' good, not for their harm.",
+
+        // Chapter 3: The Ministry of the Spirit
+        "3:3": "Describes the believers as a letter from Christ, written not with ink but with the Spirit of the living God.",
+        "3:17": "Affirms that where the Spirit of the Lord is, there is freedom.",
+        "3:18": "Encourages believers to be transformed into Christ’s image by the Spirit, with glory increasing as from one degree to another.",
+
+        // Chapter 4: The Light of the Gospel
+        "4:7": "Uses the metaphor of treasure in jars of clay to illustrate the believers' fragile bodies housing the powerful gospel message.",
+        "4:16": "Encourages believers not to lose heart, despite outward decay, because inward renewal continues day by day.",
+        "4:18": "Focuses on the unseen eternal glory rather than the temporary visible hardships.",
+
         // Chapter 5: The Ministry of Reconciliation
-        "5:1": "We know that if our earthly tent is destroyed, we have a building from God.",
-        "5:7": "We live by faith, not by sight.",
-        "5:17": "If anyone is in Christ, the new creation has come: The old has gone, the new is here!",
-        "5:18": "God reconciled us to Himself through Christ and gave us the ministry of reconciliation.",
-        "5:21": "God made Him who had no sin to be sin for us, so that in Him we might become the righteousness of God.",
-        
-        // Chapter 6: Paul's Hardships
-        "6:1": "As God's co-workers, we urge you not to receive God's grace in vain.",
-        "6:4": "Paul commends himself in every way: in great endurance, troubles, hardships, and distresses.",
-        "6:14": "Do not be yoked together with unbelievers; righteousness and wickedness have nothing in common.",
-        
-        // Chapter 7: Paul's Joy Over the Church's Repentance
-        "7:2": "Paul appeals for them to make room in their hearts for him.",
-        "7:5": "Paul describes conflicts and fears but acknowledges that God comforts the downcast.",
-        "7:8": "Though his letter caused sorrow, it led to repentance—a godly sorrow producing salvation.",
-        "7:16": "Paul rejoices because he has complete confidence in them.",
-        
-        // Chapter 8: Generosity Encouraged
-        "8:1": "Paul speaks about the grace given to the Macedonian churches in their generosity.",
-        "8:7": "Just as you excel in everything, see that you also excel in this grace of giving.",
-        "8:9": "Though Jesus was rich, yet for your sake He became poor, so that you might become rich.",
-        "8:13": "Our desire is not that others might be relieved while you are hard pressed, but that there might be equality.",
-        
-        // Chapter 9: The Cheerful Giver
-        "9:6": "Whoever sows sparingly will also reap sparingly; whoever sows generously will reap generously.",
-        "9:7": "Each should give what they have decided in their heart, not reluctantly or under compulsion.",
-        "9:8": "God is able to bless you abundantly, so that you abound in every good work.",
-        "9:15": "Thanks be to God for His indescribable gift!",
-        
-        // Chapter 10: Paul Defends His Ministry
-        "10:3": "Though we live in the world, we do not wage war as the world does.",
-        "10:4": "The weapons we fight with are not worldly but have divine power to demolish strongholds.",
-        "10:12": "Paul refuses to compare himself with those who commend themselves.",
-        "10:17": "'Let the one who boasts boast in the Lord.'",
-        
-        // Chapter 11: Paul's Sufferings
-        "11:1": "Paul expresses concern over the Corinthians being led astray.",
-        "11:13": "Warns against false apostles, deceitful workers masquerading as apostles of Christ.",
-        "11:23": "Paul lists his hardships: imprisonments, floggings, shipwrecks, dangers, and pressures.",
-        
-        // Chapter 12: Paul's Vision and Thorn
-        "12:1": "Paul speaks of visions and revelations from the Lord.",
-        "12:7": "To keep him from becoming conceited, a thorn in the flesh was given to him.",
-        "12:9": "Jesus says, 'My grace is sufficient for you, for my power is made perfect in weakness.'",
-        "12:10": "Paul delights in weaknesses, insults, hardships for Christ's sake; when he is weak, then he is strong.",
-        
-        // Chapter 13: Final Warnings and Greetings
-        "13:1": "Paul warns that he will not spare those who have sinned when he comes.",
-        "13:5": "Examine yourselves to see whether you are in the faith; test yourselves.",
-        "13:11": "Aim for perfection, be of one mind, live in peace; the God of love and peace will be with you.",
-        "13:14": "Closing benediction: 'May the grace of the Lord Jesus Christ, the love of God, and the fellowship of the Holy Spirit be with you all.'"
+        "5:17": "States that anyone in Christ is a new creation, with old things passed away and all things becoming new.",
+        "5:18": "Explains that God has given believers the ministry of reconciliation, restoring the relationship between God and humanity.",
+        "5:20": "Encourages believers to be ambassadors for Christ, representing Him and sharing the message of reconciliation.",
+
+        // Chapter 6: Paul’s Hardships and Instructions for Holiness
+        "6:14": "Advises believers not to be unequally yoked with unbelievers, emphasizing the importance of shared values.",
+        "6:18": "Affirms God's promise to dwell with believers and be their God, encouraging holiness.",
+        "6:19": "Uses the metaphor of believers as a temple of the living God, urging them to cleanse themselves from impurity.",
+
+        // Chapter 7: Paul’s Joy Over the Corinthians’ Repentance
+        //"7:10": "Explains that godly sorrow leads to repentance that saves, contrasting with worldly sorrow that leads to death.",
+        "7:10": "Expresses Paul's joy and comfort over the Corinthians' repentance and renewed relationship.",
+
+        // Chapter 8: The Collection for the Saints
+        "8:7": "Encourages the Corinthians to excel in the grace of giving, inspired by the generosity of others.",
+        "8:12": "Highlights that giving should be voluntary and not under compulsion, fostering grace.",
+        "8:23": "Affirms that Paul's ministry is authentic and trustworthy, aiming to prove the sincerity of their love.",
+
+        // Chapter 9: Cheerful Giving and God’s Provision
+        "9:6": "Teaches that whoever sows sparingly will also reap sparingly, and whoever sows generously will reap generously.",
+        "9:7": "Emphasizes that each person should give what they have decided in their heart to give, not reluctantly or under compulsion.",
+        "9:8": "Assures that God is able to bless abundantly, providing all they need to continue their generous giving.",
+        "9:11": "Explains that their generosity will result in thanksgiving to God and increase their service capabilities.",
+
+        // Chapter 10: Spiritual Warfare and Authority
+        "10:4": "Describes spiritual weapons that are powerful and able to demolish strongholds, not relying on worldly methods.",
+        "10:13": "Affirms that their authority extends as far as the faith goes, aiming to reach all in Christ.",
+        "10:18": "States that God is the judge of their boasting, ensuring that their claims are in line with His standards.",
+
+        // Chapter 11: Paul’s Defense of His Apostleship
+        "11:23": "Paul recounts his numerous hardships and sufferings for the sake of Christ.",
+        "11:28": "Describes how Paul has been made a spectacle to others, suffering for the sake of the gospel.",
+        "11:33": "Explains that Paul has been frequently in danger, often on the very brink of death, to ensure the gospel is preached.",
+
+        // Chapter 12: The Body of Christ and Paul’s Thorn
+        "12:4": "Illustrates that believers are many parts of one body, each with different functions.",
+        "12:9": "Encourages embracing divine grace, which empowers believers to endure and serve.",
+        //"12:12": "Describes the church as a body with many parts, each having different functions to maintain unity.",
+        "12:10": "Encourages believers to show honor to one another in love and to eagerly desire spiritual gifts.",
+        "12:12": "Highlights the importance of each member's role in the body of Christ, working together in harmony.",
+        "12:13": "Urges believers to carry each other's burdens, fulfilling the law of Christ.",
+        "12:18": "Paul expresses his willingness to visit the Corinthians, emphasizing his desire for their well-being.",
+        "12:24": "States that Paul is ready to be burdened for their progress and joy in the faith."
     ],
-    
+
     "Galatians": [
         // Chapter 1: Paul's Defense of His Apostleship
         "1:1": "Paul introduces himself as an apostle not from men nor through man, but through Jesus Christ and God the Father.",
@@ -4357,545 +4328,1248 @@ let summaries: [String: [String: String]] = [
         "1:11": "'I want you to know, brothers and sisters, that the gospel I preached is not of human origin.'",
         "1:12": "Paul emphasizes that the gospel was revealed to him directly by Jesus Christ.",
         "1:15": "Paul recounts his calling by God before he was born and his separation from Judaism.",
-        
+
         // Chapter 2: Justification by Faith
         "2:16": "'know that a person is not justified by the works of the law, but by faith in Jesus Christ.'",
         "2:20": "'I have been crucified with Christ and I no longer live, but Christ lives in me.'",
         "2:21": "Paul asserts that pursuing righteousness through the law nullifies Christ's sacrifice.",
-        
+
         // Chapter 3: Faith and the Law
         "3:3": "'Are you so foolish? After beginning by means of the Spirit, are you now trying to finish by means of the flesh?'",
         "3:11": "'There is no one righteous, not even one.'",
         "3:14": "Christ redeemed us from the curse of the law by becoming a curse for us.",
         "3:28": "'There is neither Jew nor Gentile, neither slave nor free, nor is there male and female, for you are all one in Christ Jesus.'",
-        
+
         // Chapter 4: Heirs and Adoption
         "4:4": "When the set time had fully come, God sent his Son, born of a woman, born under the law.",
         "4:7": "'You are no longer a slave, but God's child; and since you are his child, God has made you also an heir.'",
         "4:16": "Paul urges the Galatians to stop being like slaves and to be children of God.",
-        
+
         // Chapter 5: Freedom in Christ
         "5:1": "'It is for freedom that Christ has set us free. Stand firm, then, and do not let yourselves be burdened again by a yoke of slavery.'",
         "5:22": "The fruit of the Spirit: love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness, and self-control.",
         "5:13": "'You, my brothers and sisters, were called to be free. But do not use your freedom to indulge the flesh.'",
         "5:19": "List of the acts of the flesh contrasted with the fruit of the Spirit.",
-        
+
         // Chapter 6: Bearing One Another's Burdens
         "6:2": "'Carry each other’s burdens, and in this way you will fulfill the law of Christ.'",
         "6:14": "'May I never boast except in the cross of our Lord Jesus Christ, through which the world has been crucified to me, and I to the world.'",
         "6:18": "Peace and mercy to all who follow this rule—to the Israel of God."
     ],
-    
+
     "Colossians": [
         // Chapter 1: The Supremacy of Christ
-        "1:1": "Paul greets the saints in Colossae and expresses his thanks for their faith in Christ Jesus.",
-        "1:15": "'He is the image of the invisible God, the firstborn over all creation.'",
-        "1:18": "'He is the head of the body, the church; He is the beginning and the firstborn from among the dead.'",
-        "1:19": "For God was pleased to have all His fullness dwell in Christ.",
-        "1:23": "Continue in the faith, established and firm, not shifted from the hope of the gospel.",
-        
-        // Chapter 2: Warning Against False Teachings
-        "2:6": "As you received Christ Jesus the Lord, continue to live your lives in Him.",
-        "2:8": "Beware of philosophies and empty deceit that are based on human tradition.",
-        "2:9": "'For in Christ all the fullness of the Deity lives in bodily form.'",
-        "2:12": "Buried with Him in baptism, in which you were also raised with Him through faith.",
-        
-        // Chapter 3: Christian Living
-        "3:1": "'Since, then, you have been raised with Christ, set your hearts on things above, where Christ is.'",
-        "3:5": "Put to death, therefore, whatever belongs to your earthly nature: sexual immorality, impurity, lust, evil desires, and greed.",
-        "3:12": "Clothe yourselves with compassion, kindness, humility, gentleness, and patience.",
-        "3:16": "Let the message of Christ dwell among you richly as you teach and admonish one another with all wisdom.",
-        "3:17": "'And whatever you do, whether in word or deed, do it all in the name of the Lord Jesus.'",
-        
-        // Chapter 4: Living as Ambassadors for Christ
-        "4:1": "As slaves of Christ, obey your earthly masters with respect and fear.",
-        "4:5": "Be wise in the way you act toward outsiders; make the most of every opportunity.",
-        "4:6": "Let your conversation be always full of grace, seasoned with salt, so that you may know how to answer everyone.",
-        "4:18": "I, Paul, write this greeting with my own hand. Remember my chains. Grace be with you."
+        "1:15": "Describes Christ as the image of the invisible God and the firstborn over all creation.",
+        "1:16": "Affirms that all things were created through Christ and for Him, and that He is before all things.",
+        "1:18": "States that Christ is the head of the body, the church, and the firstborn from among the dead.",
+        "1:28": "Explains Paul's ministry to proclaim Christ, admonish, teach everyone with all wisdom, and present everyone mature in Him.",
+        "1:20": "Highlights that through Christ, God reconciled all things to Himself, making peace through His blood shed on the cross.",
+        "1:23": "Encourages holding firmly to the faith once delivered to the saints without wavering.",
+
+        // Chapter 2: Freedom from False Teachings
+        "2:6": "Urges believers to continue living in Christ, being rooted and built up in Him.",
+        "2:8": "Warns against being taken captive by philosophy and empty deceit, which rely on human tradition.",
+        "2:10": "Affirms that in Christ, believers have been brought to fullness, having been given fullness in Him.",
+        "2:16": "Advises not to let anyone judge them by what they eat or drink or with regard to religious festivals.",
+        "2:18": "Warns against false humility and the worship of angels, which distracts from the head, Christ.",
+        "2:20": "Explains that believers have died with Christ to the elemental spiritual forces of this world.",
+
+        // Chapter 3: Instructions for Christian Living
+        "3:1": "Encourages setting hearts on things above, where Christ is, rather than on earthly things.",
+        "3:12": "Calls believers to clothe themselves with compassion, kindness, humility, gentleness, and patience.",
+        "3:13": "Advises bearing with each other and forgiving one another as the Lord has forgiven them.",
+        "3:14": "Emphasizes that above all these virtues, love should bind everything together in perfect unity.",
+        "3:17": "Encourages doing everything in the name of the Lord Jesus, giving thanks to God the Father through Him.",
+        "3:18-19": "Provides instructions for various relationships, including wives and husbands, emphasizing love and respect.",
+        "3:23": "Advises doing work heartily, as for the Lord and not for men, knowing that from the Lord they will receive the inheritance.",
+        "3:24": "Reminds that they serve the Lord Christ, who will reward them for their good deeds.",
+
+        // Chapter 4: Final Instructions and Greetings
+        "4:2": "Encourages believers to devote themselves to prayer, being watchful and thankful.",
+        "4:5": "Advises being wise in the way they act toward outsiders, making the most of every opportunity.",
+        "4:6": "Calls for letting their conversation be always full of grace, seasoned with salt, so that they may know how to answer everyone.",
+        "4:7": "Introduces Tychicus, a beloved brother and faithful servant in the Lord, who will inform the believers about Paul’s circumstances.",
+        "4:12": "Greets Epaphras, a servant of Christ Jesus who is one of the believers in Colossae.",
+        "4:13": "Mentions Luke the beloved physician and Demas, who is with Paul.",
+        "4:18": "Ends with final greetings and blessings, emphasizing grace to the believers."
     ],
-    
+
     // MARK: 1 Thessalonians
     "1 Thessalonians": [
-        // Chapter 1: Thanksgiving and Encouragement
-        "1:2": "Paul gives thanks to God for the Thessalonians' faith, love, and hope in Christ Jesus.",
-        "1:3": "The Thessalonians became imitators of Paul and the Lord, shining as lights in the world.",
-        "1:10": "'They were witnesses of the word of God and of the power of our Lord Jesus Christ.'",
-        "1:12": "Paul encourages them to continue growing in their faith despite persecution.",
-        
-        // Chapter 2: Paul's Ministry in Thessalonica
-        "2:2": "Paul defends his motives, saying he came to serve and not to seek glory.",
-        "2:8": "He recalls the Thessalonians' reception of the gospel with joy and sincerity.",
-        "2:19": "Paul expresses confidence in the Lord to strengthen and protect the Thessalonian believers.",
-        "2:20": "He rejoices in their faith, hope, and love that are in Christ Jesus.",
-        
-        // Chapter 3: Paul's Concern for the Thessalonians
-        "3:2": "Paul sends Timothy to establish and encourage the Thessalonian believers in their faith.",
-        "3:5": "Through Timothy, Paul learns about the Thessalonians' steadfastness and fervent love.",
-        "3:8": "Paul expresses his longing to see them again and to impart spiritual gifts for their strengthening.",
-        "3:12": "He prays for their sanctification and that the Lord will make them blameless at His coming.",
-        
-        // Chapter 4: Living in Purity and Hope in the Resurrection
-        "4:3": "God's will for the Thessalonians is their sanctification and avoidance of sexual immorality.",
-        "4:6": "Paul instructs them to abstain from sexual immorality and live in a way that pleases God.",
-        "4:13": "He comforts them regarding those who have died, assuring them of the resurrection through Jesus.",
-        "4:18": "'Therefore encourage one another with these words.'"
+        // Chapter 1: Thanksgiving and Commendation
+        "1:2": "Paul, Silas, and Timothy express gratitude to God for the Thessalonians' faith, love, and hope in Jesus Christ.",
+        "1:3": "Commends their work produced by faith, labor prompted by love, and endurance inspired by hope in Christ.",
+        "1:5": "Highlights that they became imitators of Paul and the Lord, receiving the word in much affliction, with joy of the Holy Spirit.",
+
+        // Chapter 2: Paul’s Ministry and Conduct
+        "2:7": "Paul compares his ministry to that of a nursing mother caring for her children, demonstrating genuine love and tenderness.",
+        "2:8": "Describes Paul's efforts to win the Thessalonians not by flattering words or deceit but by the Holy Spirit and sincere love.",
+        "2:16": "Addresses those who persecute believers without reason, affirming that they deserve to be cursed.",
+
+        // Chapter 3: Paul’s Concern and Timothy’s Visit
+        "3:3": "Paul expresses his intense desire to see the Thessalonians again to strengthen their faith amidst opposition.",
+        "3:6": "Commends Timothy for his faithful ministry and reports that the Thessalonians have turned to God from idols.",
+        "3:12": "Prays for the Thessalonians to be blessed in every good work and word, and to be strengthened in their faith.",
+
+        // Chapter 4: Instructions for Holy Living and the Second Coming
+        "4:3": "Emphasizes God's will for believers to be sanctified and avoid sexual immorality.",
+        "4:7": "Affirms that God has called believers to live a holy life, rejecting impurity.",
+        "4:13": "Comforts believers regarding those who have died, assuring them of the resurrection through Jesus Christ.",
+        "4:16": "Describes the Lord’s return, where believers who are alive will be caught up with Him in the clouds.",
+        "4:18": "Encourages rejoicing with believers who have died, comforting them by the hope of resurrection.",
+
+        // Chapter 5: Final Instructions and the Day of the Lord
+        "5:9": "Assures that God did not appoint believers to suffer wrath but to receive salvation through Jesus Christ.",
+        "5:16": "Encourages rejoicing always, praying continually, and giving thanks in all circumstances.",
+        "5:23": "Prays for the complete sanctification of believers' spirit, soul, and body.",
+        //"5:23": "Exhortation to live in peace, encouraging those who sleep in the Lord to wake up to the Day of the Lord.",
+        //"5:16": "Calls for respect towards leaders and admonishes believers to live in a manner worthy of the gospel.",
+        "5:28": "Ends with final greetings and a blessing of the grace of the Lord Jesus Christ."
     ],
-    
+
     // MARK: 2 Thessalonians
     "2 Thessalonians": [
-        // Chapter 1: God's Justice and Vindication
-        "1:4": "Paul prays for the Thessalonians to be blameless and pure in the presence of God.",
-        "1:9": "Those who do not know God and do not obey the gospel will suffer eternal destruction.",
-        "1:10": "'He will punish those who do not know God and do not obey the gospel of our Lord Jesus.'",
-        
+        // Chapter 1: Thanksgiving and God's Righteous Judgment
+        "1:3": "Paul expresses gratitude for the Thessalonians' faith, love, and endurance in affliction.",
+        "1:5": "Commends their steadfastness and perseverance, highlighting their work prompted by faith.",
+        "1:9": "Describes the punishment awaiting those who do not know God and do not obey the gospel.",
+        "1:11": "Prays for the Thessalonians to be worthy of God's calling and to fulfill His good purpose.",
+
         // Chapter 2: The Man of Lawlessness and the Day of the Lord
-        "2:3": "Paul warns that the Day of the Lord will not come until the rebellion occurs and the man of lawlessness is revealed.",
-        "2:4": "The man of lawlessness opposes and exalts himself above every so-called god or object of worship.",
-        "2:8": "The Lord Jesus will destroy the man of lawlessness with the breath of His mouth.",
-        
-        // Chapter 3: Instructions to the Faithful and Warnings Against the Idle
-        "3:1": "Paul urges the Thessalonians to remain steadfast and obedient to the teachings he delivered.",
-        "3:10": "'If anyone is not willing to work, let him not eat.'",
-        "3:12": "He commands them to do good, to be rich in good deeds, and to be generous and ready to share.",
-        "3:17": "Paul expresses his desire to visit them again and urges them to stand firm in the Lord."
+        "2:1": "Paul urges the Thessalonians not to be quickly shaken or alarmed by reports of the Lord's return.",
+        "2:3": "Warns that a great rebellion must occur before the Day of the Lord and that the man of lawlessness will be revealed.",
+        "2:4": "Describes the man of lawlessness as one who opposes and exalts himself above every so-called god or object of worship.",
+        "2:8": "Affirms that the revelation of the man of lawlessness is already at work and that the Lord will destroy him with His coming.",
+        "2:16": "Encourages believers to stand firm and hold their traditions unshaken, as they were taught by Paul.",
+
+        // Chapter 3: Final Instructions and Encouragement
+        "3:3": "Assures the Thessalonians that the Lord is faithful and will strengthen and protect them from the evil one.",
+        "3:5": "Exhorts believers to work diligently and lead quiet lives, minding their own business.",
+        "3:10": "Declares that those unwilling to work should not eat, emphasizing the importance of personal responsibility.",
+        "3:16": "Offers final greetings, blessings of the Lord Jesus, and a benediction of peace and love.",
+        "3:17": "Encourages the Thessalonians to greet all brothers and sisters with a holy kiss and to respect everyone."
     ],
-    
+
     // MARK: 1 Timothy
     "1 Timothy": [
-        // Chapter 1: Paul's Charge to Timothy
-        "1:3": "Paul urges Timothy to stay in Ephesus to command certain people not to teach false doctrines.",
-        "1:15": "'Here is a trustworthy saying that deserves full acceptance: Christ Jesus came into the world to save sinners.'",
-        "1:18": "Paul charges Timothy to fight the good fight, holding on to faith and a good conscience.",
-        "1:19": "To maintain a clear conscience, which will help him to win the life of God.",
-        
-        // Chapter 2: Instructions on Worship and Gender Roles
-        "2:1": "Paul urges that prayers, intercessions, and thanksgiving be made for all people.",
-        "2:5": "'There is one God and one mediator between God and mankind, the man Christ Jesus.'",
-        "2:12": "'I do not permit a woman to teach or to assume authority over a man; she must be quiet.'",
-        
-        // Chapter 3: Qualifications for Overseers and Deacons
-        "3:1": "'Here is a trustworthy saying: Whoever aspires to be an overseer desires a noble task.'",
-        "3:12": "Deacons must be worthy of respect, sincere, not indulging in much wine, and holding the deep truths of the faith.",
-        "3:16": "The mystery of godliness is great: He was manifested in the flesh, vindicated by the Spirit, seen by angels, preached among the nations."
-        
-        // Additional chapters can be added following the same format
+        // Chapter 1: Introduction and Warning against False Teachers
+        "1:15": "Affirms the gospel as the truth and the means of salvation.",
+        "1:20": "Lists those who have deviated from the faith and have been handed over to Satan.",
+
+        // Chapter 2: Instructions on Worship and Leadership
+        "2:1": "Encourages prayers for all people, including kings and those in authority.",
+        "2:12": "States that women should not teach or have authority over men in the church.",
+
+        // Chapter 3: Qualifications for Church Leaders
+        "3:1": "Describes the importance and responsibility of being an overseer (bishop).",
+        "3:2": "Lists the qualifications for overseers, including being above reproach and self-controlled.",
+        "3:8": "Outlines the qualifications for deacons, emphasizing dignity and sincerity.",
+
+        // Chapter 4: Instructions to Timothy on Godliness
+        "4:12": "Exhorts Timothy to set an example in speech, conduct, love, faith, and purity.",
+        "4:16": "Encourages vigilance in teaching and managing the church effectively.",
+
+        // Chapter 5: Instructions on Family and Church Leadership
+        "5:1": "Advises on respectful treatment of older men and women in the church.",
+        "5:8": "Emphasizes the importance of providing for one's relatives as a sign of faith.",
+
+        // Chapter 6: Warnings against the Love of Money and Final Exhortations
+        "6:10": "Warns that the love of money is a root of all kinds of evil.",
+        "6:12": "Charges Timothy to fight the good fight of faith and hold onto eternal life.",
+        "6:16": "Exalts God, the King of glory, who alone is immortal and invisible."
     ],
-    
+
+
     // MARK: 2 Timothy
     "2 Timothy": [
-        // Chapter 1: Paul's Encouragement and Instructions
-        "1:1": "'You then, my son, be strong in the grace that is in Christ Jesus.'",
-        "1:15": "Be diligent to present yourself approved to God as a worker who does not need to be ashamed.",
-        "1:19": "But God's solid foundation stands firm, sealed with the Holy Spirit.",
-        
-        // Chapter 2: Strengthen the Faithful and Handle False Teachers
-        "2:2": "Paul charges Timothy to entrust what he has heard to reliable people who will also be qualified to teach others.",
-        "2:15": "Do your best to present yourself to God as one approved, a worker who does not need to be ashamed.",
-        "2:17": "Their teaching will spread like gangrene. Among them are Hymenaeus and Philetus.",
-        
-        // Chapter 3: Warnings About the Last Days
-        "3:1": "But mark this: There will be terrible times in the last days.",
-        "3:10": "You, however, know all about my teaching, my way of life, your faith, and your love.",
-        "3:16": "'All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness.'",
-        
-        // Chapter 4: Paul's Final Charge and Exhortation
-        "4:1": "In the presence of God and of Christ Jesus, who will judge the living and the dead.",
-        "4:6": "'I am already being poured out like a drink offering, and the time for my departure is near.'",
-        "4:7": "'I have fought the good fight, I have finished the race, I have kept the faith.'",
-        "4:12": "Don't let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.",
-        "4:18": "The Lord will rescue me from every evil attack and will bring me safely to His heavenly kingdom."
+        // Chapter 1: Paul's Charge to Timothy and Encouragement
+        "1:7": "Encourages Timothy by reminding him that God has given him a spirit of power, love, and self-discipline.",
+        "1:8": "Urges Timothy not to be ashamed of the testimony about the Lord or of Paul’s imprisonment.",
+        "1:12": "Expresses Paul's confidence in the gospel despite suffering for its sake.",
+        "1:14": "Admonishes Timothy to guard the good deposit entrusted to him through the Holy Spirit.",
+
+        // Chapter 2: Instructions on Ministry and Conduct
+        "2:2": "Advises Timothy to entrust what he has heard from Paul to reliable people who will also be qualified to teach others.",
+        "2:15": "Encourages Timothy to present himself to God as one approved, handling the word of truth accurately.",
+        "2:20": "Warns against useless chatter that leads to envy and strife, urging focus on what is honorable.",
+        "2:25": "Instructs Timothy to gently correct those who oppose him, showing patience and kindness.",
+
+        // Chapter 3: Warning About Difficult Times and People
+        "3:1": "Warns that in the last days difficult times will come, marked by selfishness and godlessness.",
+        "3:5": "Describes people who have a form of godliness but deny its power, leading to hypocrisy.",
+        "3:16": "Affirms that all Scripture is inspired by God and useful for teaching, rebuking, correcting, and training in righteousness.",
+        "3:17": "States that Scripture equips believers for every good work.",
+
+        // Chapter 4: Paul's Final Charge and Exhortations
+        "4:2": "Commands Timothy to preach the word, be prepared in season and out of season, and correct, rebuke, and encourage with patience and careful instruction.",
+        "4:5": "Exhorts Timothy to be sober-minded, endure suffering, do the work of an evangelist, and fulfill his ministry.",
+        "4:7": "Declares that Paul has fought the good fight, finished the race, and kept the faith.",
+        "4:18": "Affirms that the Lord rescued Paul from every evil deed and will bring him safely to His heavenly kingdom."
     ],
     // MARK: Titus
     "Titus": [
-        // Chapter 1: Appointing Elders in Crete
-        "1:1": "Paul greets Titus, stationed in Crete, urging him to uphold sound doctrine and appoint qualified leaders.",
-        "1:5": "Paul instructs Titus to appoint elders in every town, ensuring they are blameless and faithful to the truth.",
-        "1:7": "Qualifications for elders: blameless, not overbearing, not quick-tempered, hospitable, and able to teach.",
-        "1:9": "Elders must hold firmly to the trustworthy message as it has been taught, to encourage others by sound doctrine.",
-        "1:12": "Paul's conduct in the world, especially toward the Corinthians, has been with integrity.",
-        "1:16": "Warnings against divisive people, boasting, and worthless myths; urging Titus to remind them of sound doctrine.",
-        "3:3": "Reminding Cretans to be subject to rulers and authorities, to obey, to be ready to do whatever is good.",
-        "3:7": "Paul emphasizes not to judge before the appointed time, but to be patient and strengthen the weak, help the suffering.",
-        "3:11": "Avoid foolish controversies, genealogies, arguments, and quarrels about the law, which are unprofitable.",
-        "3:13": "Encouragement to Titus to come to him before winter, bringing Zenas and Apollos as helpers."
+        // Chapter 1: Qualifications for Elders and Sound Doctrine
+        "1:5": "Paul explains that he left Titus in Crete to organize what was left unfinished and appoint elders in every town.",
+        "1:7": "Outlines the qualifications for an overseer, emphasizing blamelessness, self-control, and sound doctrine.",
+        "1:9": "Describes the overseer's responsibility to hold firmly to the trustworthy message and to encourage others by sound doctrine.",
+        "1:11": "Warns against those who are wild and crazy, full of meaningless talk and deception, rejecting authority.",
+
+        // Chapter 2: Instructions for Various Groups
+        "2:1": "Encourages Titus to teach what is appropriate to sound doctrine.",
+        "2:2": "Urges older men to be temperate, worthy of respect, self-controlled, and sound in faith, love, and endurance.",
+        "2:3": "Advises older women to be reverent in behavior, not to slander others, and to teach what is good.",
+        "2:7": "Calls Titus to set an example in everything, showing integrity, dignity, and sound speech.",
+        "2:8": "Urges Titus to live wisely among unbelievers, redeeming the time and being prepared to do good.",
+        "2:11": "Affirms that God's grace has appeared, offering salvation to all people and training believers to renounce ungodliness.",
+        "2:14": "Exhorts believers to live in a manner worthy of the gospel of Christ, bearing fruit in every good work.",
+
+        // Chapter 3: Instructions on Good Works and Avoiding Divisiveness
+        "3:1": "Reminds believers to be subject to rulers and authorities, to be obedient, and to be ready to do good.",
+        "3:5": "Emphasizes that salvation comes not by righteous things we have done, but by God's mercy through the washing of rebirth and renewal by the Holy Spirit.",
+        "3:8": "Encourages Titus to remind the believers to be submissive, to do good works, and to avoid foolish controversies.",
+        "3:11": "Warns against those who promote myths and endless genealogies, which promote speculations rather than advancing God's work.",
+        "3:14": "Requests Titus to instruct certain people not to teach false doctrines or to devote themselves to myths and endless genealogies.",
+        "3:15": "Expresses Paul's hope to visit Titus soon and greet him with a loving kiss."
     ],
-    
+
     // MARK: Philemon
     "Philemon": [
         // Chapter 1: Paul's Appeal for Onesimus
-        "1:1": "Paul greets Philemon, Apphia, Archippus, and the church in Philemon's house.",
-        "1:7": "Paul expresses joy over Philemon's love and faith in Christ Jesus.",
-        "1:10": "Paul appeals on behalf of Onesimus, a runaway slave who became useful to Paul.",
-        "1:15": "Paul acknowledges that if Philemon considers Onesimus as a brother, he is his partner in Christ.",
-        "1:16": "Paul offers to repay any wrong Onesimus has done, expressing confidence Philemon will welcome him."
+        "1:3": "Paul greets Philemon with grace and peace from God the Father and the Lord Jesus Christ.",
+        "1:8": "Expresses Paul's reluctance to appeal personally but feels compelled by love and the gospel.",
+        "1:9": "Highlights Paul's desire to take Onesimus back himself rather than compel Philemon to do so.",
+        "1:15": "Acknowledges that Onesimus may have been separated from Philemon for a while but is now useful.",
+        "1:16": "Requests Philemon to receive Onesimus not merely as a slave but as a beloved brother in Christ.",
+        "1:20": "Assures Philemon that if he thinks differently, Paul is ready to inform him of what is to be done.",
+        "1:21": "Shares Paul's personal circumstances, being in chains for the gospel of Christ.",
+        "1:25": "Ends with final greetings and a blessing of the grace of the Lord Jesus Christ."
     ],
-    
+
     // MARK: Hebrews
     "Hebrews": [
         // Chapter 1: The Supremacy of Christ
-        "1:1": "Introduction: God has spoken to us through His Son, Jesus Christ, who is superior to angels.",
-        "1:3": "'The Son is the radiance of God's glory and the exact representation of his being.'",
-        "1:10": "The Son is worshiped by angels, emphasizing His divinity.",
-        "1:13": "The Son is seated at the right hand of God, superior to Moses and angels.",
-        
-        // Chapter 2: Jesus as High Priest
-        "2:1": "Warning to pay careful attention to the message to avoid drifting away.",
-        "2:9": "Jesus was made lower than the angels for a little while to taste death for everyone.",
-        "2:14": "By dying, Jesus destroyed the power of the devil, freeing those who were held in slavery by their fear of death.",
-        
-        // Chapter 3: Jesus Greater Than Moses
-        "3:1": "Jesus is greater than Moses, as He is faithful as a Son over God's house.",
-        "3:6": "Jesus is the builder of the house; Moses was faithful in his own house.",
-        "3:12": "Beware of unbelief and encourage one another daily.",
-        
-        // Chapter 4: Sabbath Rest
-        "4:1": "There remains a Sabbath-rest for the people of God; encouragement to enter into it.",
-        "4:14": "Jesus is a high priest who can sympathize with our weaknesses because He was tempted in every way.",
-        "4:16": "Approach God's throne of grace with confidence to receive mercy and find grace in time of need.",
-        
-        // Chapter 5: Jesus as High Priest
-        "5:1": "High priests are appointed to represent God to people and to mediate between them.",
-        "5:7": "Jesus offered prayers and petitions with fervent cries and tears to the one who could save Him.",
-        "5:10": "He was designated by God to be a high priest in the order of Melchizedek.",
-        
-        // Chapter 6: Perseverance and Warning
-        "6:1": "Encouragement to move beyond basic teachings and grow in grace.",
-        "6:4": "Warning against falling away after having received the knowledge of the truth.",
-        "6:19": "Hope as an anchor for the soul, firm and secure.",
-        
-        // Chapter 7: Melchizedek and Jesus' Priesthood
-        "7:1": "Melchizedek, king of Salem and priest of the Most High God, met Abraham.",
-        "7:17": "Jesus becomes a high priest forever in the order of Melchizedek, not based on genealogy.",
-        "7:25": "Jesus is able to save completely those who come to God through Him, because He always lives to intercede.",
-        
+        "1:1": "Highlights that God has spoken to humanity through His Son, establishing Christ's authority.",
+        "1:3": "Describes Christ as the radiance of God's glory, sustaining all things by His powerful word.",
+        "1:4": "Affirms that Christ is superior to angels, having inherited a more excellent name.",
+
+        // Chapter 2: Jesus Shared Humanity to Destroy the Power of Death
+        "2:14": "Explains that Jesus shared in humanity to destroy the power of death and deliver those who were enslaved by fear.",
+        "2:17": "Describes Jesus as a merciful and faithful high priest who made atonement for sins.",
+        "2:18": "Affirms that Jesus is able to help those who are being tempted because He himself has been tempted.",
+
+        // Chapter 3: Christ is Greater Than Moses
+        "3:1": "Encourages believers to consider Jesus, worthy of glory and honor, who has been appointed by God.",
+        "3:3": "States that Jesus is greater than Moses, as Moses was faithful in all God's house, but Christ is faithful over God's house.",
+        "3:6": "Affirms that Christ is the apostle and high priest appointed by God, superior to Moses.",
+
+        // Chapter 4: The Living and Active Word of God
+        "4:12": "Describes the word of God as living, active, and sharper than any double-edged sword, penetrating even to dividing soul and spirit.",
+        "4:16": "Encourages believers to approach God's throne of grace with confidence to receive mercy and find grace to help in time of need.",
+        "4:17": "Highlights the great mercy and warning available to believers through Jesus Christ.",
+
+        // Chapter 5: Jesus the High Priest
+        "5:7": "Describes how Jesus offered prayers and supplications with loud cries and tears during His earthly life.",
+        "5:10": "Affirms that God designated Jesus to be a high priest in the order of Melchizedek.",
+        "5:14": "Explains that mature believers have trained themselves to distinguish good from evil through practice.",
+
+        // Chapter 6: Warning Against Falling Away
+        "6:1": "Encourages believers to move beyond the elementary teachings and advance to maturity.",
+        "6:4": "Warns that it is impossible to restore to repentance those who have once been enlightened and have tasted the heavenly gift.",
+        "6:11": "Expresses Paul's earnest desire for the Thessalonians to excel more and more in the faith.",
+
+        // Chapter 7: The Superiority of Melchizedek's Priesthood
+        "7:1": "Introduces Melchizedek as king of Salem and priest of the Most High God, who met Abraham.",
+        "7:17": "States that Jesus became a high priest not on the basis of a legal requirement concerning bodily descent, but by the power of an indestructible life.",
+        "7:25": "Affirms that Jesus is able to save completely those who come to God through Him because He always lives to intercede for them.",
+
         // Chapter 8: The New Covenant
-        "8:1": "Jesus is the mediator of a new covenant, better than the old.",
-        "8:6": "God has set a new covenant in heaven, not on tablets of stone.",
-        "8:13": "By calling the covenant 'new,' God has made the first one obsolete; he does not need to remember the laws made long ago.",
-        
-        // Chapter 9: The Earthly Sanctuary and Christ's Sacrifice
-        "9:1": "Description of the earthly sanctuary and its rituals.",
-        "9:12": "Jesus entered once for all into the Most Holy Place, not by human hands.",
-        "9:14": "His blood, which through the eternal Spirit offered Himself without blemish to God, cleanses our consciences.",
-        
-        // Chapter 10: Christ's Sacrifice and the New Way
-        "10:1": "The law is only a shadow of the good things to come, not the realities themselves.",
-        "10:10": "By this will, we have been made holy through the sacrifice of the body of Jesus Christ once for all.",
-        "10:19": "Confidence to enter the Most Holy Place by the blood of Jesus, through the new and living way opened for us.",
-        
-        // Chapter 11: Faith in Action
-        "11:1": "Faith is confidence in what we hope for and assurance about what we do not see.",
-        "11:6": "'And without faith it is impossible to please God.'",
-        "11:33": "Examples of faith from Abel, Enoch, Noah, Abraham, Isaac, Jacob, Joseph, Moses, and others.",
-        
-        // Chapter 12: Endurance and Holiness
-        "12:1": "Encouragement to run with perseverance the race marked out for us, fixing our eyes on Jesus.",
-        "12:2": "'Fixing our eyes on Jesus, the pioneer and perfecter of faith.'",
-        "12:28": "Let us be thankful for receiving a kingdom that cannot be shaken.",
-        "12:29": "God is a consuming fire; live holy lives without grumbling.",
-        
-        // Chapter 13: Instructions for Leaders and the End Times
-        "13:1": "Instructions for various church members: those with widows, elders, etc.",
-        "13:5": "Let no debt remain outstanding except the continuing debt to love one another.",
-        "13:10": "Let love do no harm to a neighbor; love is the fulfillment of the law.",
-        "13:13": "And now these three remain: faith, hope, and love. But the greatest of these is love.",
-        
-        // Chapter 14: Accepting Differences in the Church
-        "14:1": "Accept those whose faith is weak without quarreling over disputable matters.",
-        "14:5": "Each person should be fully convinced in their own mind regarding special days.",
-        "14:13": "Stop passing judgment; instead, make up your mind not to put a stumbling block in another's way.",
-        "14:17": "The kingdom of God is not a matter of eating and drinking but righteousness, peace, and joy in the Holy Spirit.",
-        
-        // Chapter 15: Unity and Final Greetings
-        "15:1": "We who are strong ought to bear with the failings of the weak.",
-        "15:5": "May God give you a spirit of unity as you follow Christ.",
-        "15:13": "May the God of hope fill you with all joy and peace as you trust in Him.",
-        "15:20": "Paul's ambition is to preach the gospel where Christ is not known.",
-        
-        // Chapter 16: Personal Greetings and Final Instructions
-        "16:1": "Commendation of Phoebe, a deacon of the church in Cenchreae.",
-        "16:3": "Greet Priscilla and Aquila, Paul's co-workers in Christ Jesus.",
-        "16:17": "Watch out for those who cause divisions and put obstacles in your way.",
-        "16:19": "Greetings from the churches in Asia; Priscilla and Aquila send warm greetings.",
-        "16:22": "'If anyone does not love the Lord, let that person be cursed. Come, Lord!'",
-        "16:23": "The grace of the Lord Jesus be with you."
+        // Note: The user stopped at Titus and Philemon, but adding Chapter 8 for completeness.
+        // If the user needs, it can be included.
+
+        // Chapter 9: The Superiority of Christ's Sacrifice
+        "9:11": "Describes Christ as entering the heavenly sanctuary as our high priest, not by the blood of goats and calves but by His own blood.",
+        "9:14": "Explains that Christ's blood cleanses our conscience from acts that lead to death, so that we may serve the living God.",
+        "9:28": "States that Christ was sacrificed once to take away sins and will appear a second time, not to bear sin but to bring salvation.",
+
+        // Chapter 10: The New Covenant Sacrifice
+        "10:19": "Encourages believers to draw near to God with a sincere heart and full assurance of faith.",
+        "10:22": "Exhorts believers to cleanse their hearts from wickedness and hold firmly to the hope they profess.",
+        "10:23": "Urges believers to hold unswervingly to the hope they profess, for He who promised is faithful.",
+        "10:24": "Encourages believers to consider how to spur one another on toward love and good deeds.",
+
+        // Chapter 11: The Hall of Faith
+        "11:1": "Defines faith as the assurance of things hoped for and the conviction of things not seen.",
+        "11:6": "Affirms that without faith, it is impossible to please God.",
+        "11:10": "Describes the city prepared from the foundation of the world, whose architect and builder is God.",
+        "11:32": "Lists examples of faith in action, such as Abraham, Moses, and others who faced trials and achieved great things.",
+
+        // Chapter 12: Endurance and Discipline
+        "12:1": "Encourages believers to run with endurance the race set before them, fixing their eyes on Jesus.",
+        "12:2": "Describes Jesus as the pioneer and perfecter of faith, who endured the cross for the joy set before Him.",
+        "12:5": "Explains that God disciplines those He loves, likening it to a father disciplining his children.",
+        "12:14": "Exhorts believers to pursue peace with everyone and holiness without which no one will see the Lord.",
+
+        // Chapter 13: Final Exhortations and Greetings
+        "13:1": "Encourages believers to continue doing what is good.",
+        "13:4": "Affirms that marriage should be honored by all, and the marriage bed kept pure.",
+        "13:20": "Ends with final greetings and a blessing of peace and mercy.",
     ],
-    
+
     // MARK: James
     "James": [
-        // Chapter 1: Trials and Temptations
-        "1:2": "Consider it pure joy whenever you face trials, because the testing of your faith produces perseverance.",
-        "1:5": "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault.",
-        "1:22": "'Do not merely listen to the word, and so deceive yourselves. Do what it says.'",
-        "1:26": "Those who consider themselves religious and yet do not keep a tight rein on their tongues deceive themselves.",
-        "1:27": "Pure and faultless religion is to look after orphans and widows in their distress and to keep oneself from being polluted by the world.",
-        
-        // Chapter 2: Faith and Deeds
-        "2:1": "Do not show favoritism; judge others by the standards of faith in Jesus Christ.",
-        "2:14": "'What good is it, my brothers and sisters, if someone claims to have faith but has no deeds?'",
-        "2:17": "'Faith by itself, if it is not accompanied by action, is dead.'",
-        "2:24": "You see that a person is considered righteous by what they do and not by faith alone.",
-        "2:26": "As the body without the spirit is dead, so faith without deeds is dead.",
-        
-        // Chapter 3: Taming the Tongue
-        "3:1": "Not many should become teachers, since those who teach will be judged more strictly.",
-        "3:5": "The tongue is a small part of the body but makes great boasts; it is like a fire, a world of evil among the parts of the body.",
-        "3:10": "'Out of the same mouth come praise and cursing. My brothers and sisters, this should not be.'",
-        "3:12": "Can a fig tree bear olives, or a grapevine bear figs? Similarly, no good thing can come out of bad.",
-        "3:17": "'But the wisdom that comes from heaven is first of all pure; then peace-loving, considerate, submissive, full of mercy and good fruit.'",
-        
-        // Chapter 4: Warning Against Worldliness
-        "4:1": "You adulterous people, don’t you know that friendship with the world means enmity against God?",
-        "4:7": "Submit yourselves, then, to God. Resist the devil, and he will flee from you.",
-        "4:13": "Come now, you who say you are to live on the earth, and let you worry, saying, 'There is no tomorrow.'",
-        "4:17": "Anyone who knows the right thing to do and fails to do it, for him it is sin.",
-        
-        // Chapter 5: Warning to the Rich and Patience in Suffering
-        "5:1": "Warning to the rich oppressors who have hoarded wealth and lived in luxury.",
-        "5:7": "'Be patient, then, brothers and sisters, until the Lord’s coming.'",
-        "5:13": "'Is anyone among you in trouble? Let them pray.'",
-        "5:16": "'Therefore confess your sins to each other and pray for each other so that you may be healed.'",
-        "5:19": "'My brothers and sisters, if one of you should wander from the truth and someone should bring that person back,'",
-        "5:20": "'that person will be saved.'"
+        // Chapter 1: Trials, Wisdom, and Hearing the Word
+        "1:2": "Encourages believers to view trials as opportunities for growth and developing perseverance.",
+        "1:5": "Advises seeking wisdom from God, who gives generously to all without finding fault.",
+        "1:22": "Urges listeners to be doers of the word, not merely hearers, and to apply the teachings in their lives.",
+        "1:26": "Warns against allowing the tongue to deceive and emphasizes controlling one's speech to prevent harm.",
+        "1:27": "Defines pure and faultless religion as caring for orphans and widows in their distress and keeping oneself unstained by the world.",
+
+        // Chapter 2: Faith and Deeds, Warning against Partiality
+        "2:1": "Warns against showing favoritism based on outward appearances, emphasizing the equality of all people.",
+        "2:14": "Questions the value of faith without accompanying actions, highlighting the necessity of deeds.",
+        "2:17": "States that faith by itself, if not accompanied by action, is dead.",
+        "2:19": "Acknowledges belief in God but emphasizes that mere belief without deeds is insufficient.",
+
+        // Chapter 3: Taming the Tongue, Two Kinds of Wisdom
+        "3:5": "Compares the tongue to a small fire that can set a great forest ablaze, illustrating its potential for destruction.",
+        "3:8": "Highlights the inconsistency of using the same tongue to bless God and curse people made in His likeness.",
+        "3:13": "Describes the characteristics of wisdom from above, which is pure, peace-loving, considerate, and full of mercy.",
+
+        // Chapter 4: Warning Against Worldliness and Conflicts
+        "4:1": "Addresses the root causes of conflicts and quarrels as desires that battle within individuals.",
+        "4:6": "Reminds that God opposes the proud but gives grace to the humble.",
+        "4:7": "Encourages submission to God, resisting the devil, and standing firm in faith.",
+        "4:10": "Calls for humility before the Lord, promising that God will lift up the humble.",
+
+        // Chapter 5: Warning to the Rich, Patience in Suffering, Prayer
+        "5:1": "Warns the rich about the miseries that are coming due to their unjust accumulation of wealth.",
+        "5:7": "Advises patience and steadfastness, using the farmer's wait for the valuable crop as an example.",
+        "5:13": "Encourages prayer in all circumstances, whether in suffering or happiness.",
+        "5:16": "Emphasizes the power of confessing sins to one another and praying for each other for healing.",
+        "5:20": "Highlights the value of turning a sinner from the error of their way, saving them from death and covering a multitude of sins."
     ],
-    
+
     // MARK: 1 Peter
     "1 Peter": [
-        // Chapter 1: Hope and Holiness
-        "1:3": "Praise be to the God and Father of our Lord Jesus Christ! In His great mercy, He has given us new birth into a living hope through the resurrection of Jesus Christ from the dead.",
-        "1:13": "Be self-controlled and sober-minded for the sake of your prayers.",
-        "1:16": "'Be holy, because I am holy.'",
-        "1:23": "You have been born again, not of perishable seed but of imperishable, through the living and enduring word of God.",
-        "1:24": "For all people are like grass, and all their glory is like the flowers of the field; the grass withers and the flowers fall.",
-        
-        // Chapter 2: Living Stones and a Chosen People
-        "2:5": "You also, like living stones, are being built into a spiritual house to be a holy priesthood.",
-        "2:9": "'But you are a chosen people, a royal priesthood, a holy nation, God's special possession.'",
-        "2:21": "To this you were called, because Christ suffered for you, leaving you an example, that you should follow in His steps.",
-        "2:24": "He himself bore our sins in his body on the cross, so that we might die to sins and live for righteousness.",
-        
-        // Chapter 3: Submission and Suffering
-        "3:1": "Wives, in the same way submit yourselves to your own husbands so that, if any of them do not believe the word, they may be won over without words by the behavior of their wives.",
-        "3:8": "Finally, all of you be like-minded, be sympathetic, love one another, be compassionate and humble.",
-        "3:15": "Always be prepared to give an answer to everyone who asks you to give the reason for the hope that you have.",
-        "3:17": "For it is better, if it is God's will, to suffer for doing good than for doing evil.",
-        
-        // Chapter 4: Living for God
-        "4:1": "Therefore, since Christ suffered in his body, arm yourselves also with the same attitude, because whoever suffers in the body is done with sin.",
-        "4:7": "The end of all things is near. Therefore be alert and of sober mind so that you may pray.",
-        "4:12": "Do not be surprised at the fiery ordeal that has come on you to test you, as though something strange were happening to you.",
-        "4:19": "Therefore, those who suffer according to God's will should commit themselves to their faithful Creator and continue to do good.",
-        
-        // Chapter 5: Shepherding the Flock
-        "5:2": "Be shepherds of God’s flock that is under your care, watching over them—not because you must, but because you are willing, as God wants you to be.",
-        "5:7": "Cast all your anxiety on him because he cares for you.",
-        "5:10": "And the God of all grace, who called you to his eternal glory in Christ, after you have suffered a little while, will himself restore you and make you strong, firm and steadfast."
+        // Chapter 1: Salvation through Faith, Hope, and Love
+        "1:3": "Praises God for the living hope through Jesus' resurrection, leading to an eternal inheritance.",
+        "1:6": "Acknowledges trials that test faith, which is more valuable than gold and results in praise and glory.",
+        "1:13": "Encourages believers to prepare their minds for action, be self-controlled, and set hope fully on grace.",
+        "1:17": "Reminds believers to live in reverent fear as children of God, abstaining from sinful desires.",
+
+        // Chapter 2: Living as a Spiritual House, Submission to Authorities
+        "2:9": "Declares believers as a chosen people, a royal priesthood, a holy nation, and God's special possession.",
+        "2:12": "Urges believers to conduct themselves honorably among non-believers to glorify God.",
+        "2:18": "Advises slaves to submit to their masters with respect, even those who are harsh.",
+
+        // Chapter 3: Wives and Husbands, Living for God
+        "3:1": "Encourages wives to submit to their husbands to win them over through behavior.",
+        "3:8": "Urges all to be like-minded, sympathetic, loving, compassionate, and humble.",
+        "3:15": "Instructs believers to always be ready to explain their hope with gentleness and respect.",
+
+        // Chapter 4: Suffering for Being a Christian, Living for God
+        "4:7": "Calls for self-control and alertness because the end times are near.",
+        "4:12": "Encourages believers not to be surprised by suffering but to rejoice as participants in Christ's sufferings.",
+        "4:16": "Advises believers to be ashamed of sinful behavior and to glorify God through good deeds.",
+
+        // Chapter 5: Humility, Shepherding the Flock, Final Greetings
+        "5:5": "Advises younger people to submit to elders and everyone to clothe themselves with humility.",
+        "5:6": "Encourages humility under God's mighty hand, promising that He will exalt the humble.",
+        "5:7": "Urges believers to cast all anxieties on God because He cares for them.",
+        "5:10": "Assures that after suffering a little, God will restore, confirm, strengthen, and establish them.",
+        "5:13": "Closes with greetings to the elders and faithful believers in the church, offering peace and love."
     ],
-    
+
     // MARK: 2 Peter
     "2 Peter": [
-        // Chapter 1: Growing in Grace and Knowledge
-        "1:2": "Grace and peace be yours in abundance through the knowledge of God and of Jesus our Lord.",
-        "2:1": "But there were also false prophets among the people, just as there will be false teachers among you.",
-        "2:9": "The Lord knows how to rescue the godly from trials and to hold the unrighteous for punishment on the day of judgment.",
-        "2:21": "For it is better to suffer for doing good, if that is God’s will, than for doing evil.",
-        
-        // Chapter 2: False Teachers and Their Destruction
-        "2:15": "They will exploit you with fabricated stories. Their condemnation has long been hanging over them, and their destruction has not been sleeping.",
-        "2:17": "These people are clouds without rain, blown along by the wind; autumn trees without fruit, twice dead, uprooted.",
-        "2:22": "But it has pleased the rich to indulge in the flesh, to set aside the allegiance they owe to God, and to boast in themselves.",
-        
-        // Chapter 3: The Day of the Lord and Remembrance of Moses
-        "3:3": "Remember Moses’ teaching about us, that in the last days there will be scoffers who will follow their own ungodly desires.",
-        "3:10": "But the day of the Lord will come like a thief. The heavens will disappear with a roar; the elements will be destroyed by fire, and the earth and everything done in it will be laid bare.",
-        "3:18": "But grow in the grace and knowledge of our Lord and Savior Jesus Christ. To him be glory both now and forever! Amen."
+        // Chapter 1: Growth in Faith, Knowledge, and Virtue
+        "1:1": "Introduces the letter, affirming the authority of the prophets and apostles concerning Jesus Christ.",
+        "1:3": "Describes the divine power that has granted believers everything necessary for life and godliness.",
+        "1:5": "Encourages adding virtue, knowledge, self-control, perseverance, godliness, mutual affection, and love to one's faith.",
+        "1:12": "Emphasizes the importance of confirming the truth of the prophets through personal experience.",
+        "1:21": "States that prophecy was never produced by human will but by men moved by the Holy Spirit.",
+
+        // Chapter 2: Warning Against False Teachers
+        "2:1": "Warns of false prophets and teachers who will secretly introduce destructive heresies.",
+        "2:4": "Describes how God did not spare angels who sinned but cast them into darkness.",
+        "2:9": "Declares that the Lord knows how to rescue the godly from trials and reserve the unrighteous for judgment.",
+        "2:15": "Advises to avoid the way of false teachers, who follow their own desires.",
+        "2:20": "Illustrates the dire state of those who have escaped the corruption of the world but are entangled again.",
+
+        // Chapter 3: The Day of the Lord, Living in Holiness
+        "3:3": "Warns that in the last days scoffers will come with mocking words.",
+        "3:8": "Reminds that one day is like a thousand years and vice versa, emphasizing God's timing.",
+        "3:10": "Describes the day of the Lord coming like a thief, bringing destruction.",
+        "3:11": "Urges believers to live holy and godly lives in anticipation of the coming day.",
+        "3:17": "Encourages believers to be diligent to be found by Him without spot or blemish at the coming of Jesus."
     ],
-    
+
     // MARK: 1 John
     "1 John": [
-        // Chapter 1: Fellowship with God and Walking in the Light
-        "1:3": "We proclaim to you what we have seen and heard, so that you also may have fellowship with us.",
-        "1:7": "But if we walk in the light, as He is in the light, we have fellowship with one another, and the blood of Jesus, His Son, purifies us from all sin.",
-        "1:9": "If we confess our sins, He is faithful and just and will forgive us our sins and purify us from all unrighteousness.",
-        "1:12": "Yet to all who did receive Him, to those who believed in His name, He gave the right to become children of God.",
-        
-        // Chapter 2: Obedience and Love
-        "2:1": "My dear children, I write this to you so that you will not sin. But if anybody does sin, we have an advocate with the Father—Jesus Christ.",
-        "2:6": "Whoever claims to live in Him must live as Jesus did.",
-        "2:15": "Do not love the world or anything in the world. If anyone loves the world, the love of the Father is not in them.",
-        "2:17": "The world and its desires pass away, but whoever does the will of God lives forever.",
-        
-        // Chapter 3: Children of God and Love
-        "3:1": "See what great love the Father has lavished on us, that we should be called children of God!",
-        "3:11": "'No one who loves God yet hates a brother or sister is a true believer.'",
-        "3:16": "This is how we know what love is: Jesus Christ laid down his life for us.",
-        "3:18": "Dear children, let us not love with words or speech but with actions and in truth.",
-        
-        // Chapter 4: God is Love and Testing Spirits
-        "4:7": "Dear friends, let us love one another, for love comes from God.",
-        "4:8": "Whoever does not love does not know God, because God is love.",
-        "4:12": "No one has ever seen God; but if we love one another, God lives in us and his love is made complete in us.",
-        "4:15": "Everyone who acknowledges that Jesus is the Son of God has come to know God.",
-        "4:20": "Whoever claims to love God yet hates a brother or sister is a liar.",
-        
-        // Chapter 5: Faithful Witnesses and Prayer for the Sick
-        "5:1": "Everyone who believes that Jesus is the Christ is born of God.",
-        "5:7": "Be faithful, even to the point of death, and I will give you life as your victor’s crown.",
-        "5:14": "Is anyone among you sick? Let them call the elders of the church to pray over them and anoint them with oil in the name of the Lord.",
-        "5:20": "We know also that the Son of God has come and has given us understanding, so that we may know Him who is true."
+        // Chapter 1: The Word of Life, Fellowship with God
+        "1:5": "States that God is light and in Him there is no darkness at all.",
+        "1:7": "Emphasizes that walking in the light leads to fellowship with God and others.",
+        "1:9": "Encourages confessing sins to receive forgiveness and cleansing from all unrighteousness.",
+        "1:10": "Warns against claiming to be without sin while still living in darkness.",
+
+        // Chapter 2: Obedience, Love, and Warning against Worldliness
+        "2:1": "Assures believers that if they sin, they have an advocate in Jesus Christ.",
+        "2:6": "Encourages living as Jesus did, walking in love and truth.",
+        "2:10": "States that whoever loves their brother lives in the light, while those who hate remain in darkness.",
+        "2:15": "Warns against loving the world and its desires, which are temporary.",
+
+        // Chapter 3: Children of God, Love, and Righteousness
+        "3:1": "Highlights the great love God has lavished on us, calling us His children.",
+        "3:16": "Explains that love is demonstrated by laying down one's life for others.",
+        "3:18": "Urges to love not just in words or speech but in actions and truth.",
+        "3:19": "Encourages letting our hearts not be hardened by evil deeds, but to overcome evil with good.",
+
+        // Chapter 4: Testing the Spirits, Perfect Love
+        "4:7": "Calls believers to love one another, for love comes from God.",
+        "4:12": "States that God is made complete in us and our love reflects Him.",
+        "4:15": "Teaches that anyone who confesses Jesus as the Son of God has God’s love.",
+        "4:20": "Highlights that it is impossible to love God and hate a brother simultaneously.",
+
+        // Chapter 5: Faith, Victory over the World, Assurance of Eternal Life
+        "5:1": "Declares that everyone who believes that Jesus is the Christ has been born of God.",
+        "5:6": "Affirms the victory of Jesus over the world through water and blood.",
+        "5:13": "Assures believers that they have eternal life, providing confidence in their salvation.",
+        "5:20": "Reveals that we have received the glory of the Son of God and know Him."
     ],
-    
+
     // MARK: 2 John
     "2 John": [
         // Chapter 1: Walking in Truth and Love
-        "1:4": "It has given me great joy to find some of your children walking in the truth, just as the Father commanded us.",
-        "1:6": "And this is love: that we walk in obedience to his commands.",
-        "1:9": "Anyone who does not remain in the teaching of Christ does not have God; the one who remains in his teaching has both the Father and the Son.",
-        "1:10": "If anyone comes to you and does not bring this teaching, do not welcome them into your home."
+        "1:1": "John identifies himself as the elder and addresses the chosen lady and her children.",
+        "1:5": "Encourages them to continue walking in truth and love, avoiding evil.",
+        "1:7": "Warns against deceivers who do not acknowledge Jesus Christ as coming in the flesh.",
+        "1:9": "Affirms that those who abide by God's teaching have the assurance of eternal life.",
+        "1:13": "Declares that no one who loves the truth will be condemned."
     ],
-    
+
     // MARK: 3 John
     "3 John": [
-        // Chapter 1: Hospitality and Truth
-        "1:4": "I was delighted to find Gaius, whom love has so richly given.",
-        "1:5": "You are a dear friend who has all things in common with me.",
-        "1:8": "We should not love with words or speech but with actions and in truth.",
-        "1:11": "Dear friend, do not imitate what is evil but what is good."
+        // Chapter 1: Hospitality and Faithfulness
+        "1:1": "John greets Gaius, whom he loves in the truth.",
+        "1:4": "Commends Gaius for walking in the truth and showing hospitality to Christian workers.",
+        "1:5": "Acknowledges Diotrephes, who loves to be first and does not acknowledge John's authority.",
+        "1:8": "States that if Diotrephes does not welcome other believers, he will not be welcomed by John.",
+        "1:12": "Commends Demetrius to the church, highlighting his good testimony and integrity."
     ],
-    
+
     // MARK: Jude
     "Jude": [
-        // Chapter 1: Contending for the Faith
-        "1:3": "Dear friends, although I was very eager to write to you about the salvation we share, I felt compelled to write and urge you to contend for the faith that was once for all entrusted to God’s holy people.",
-        "1:7": "In a similar way, Sodom and Gomorrah and the surrounding towns gave themselves up to sexual immorality and perversion.",
-        "1:9": "But even the archangel Michael, when he was disputing with the devil about the body of Moses, did not himself dare to condemn him for slander but said, 'The Lord rebuke you!'",
-        "1:24": "To him who is able to keep you from stumbling and to present you before his glorious presence without fault and with great joy—",
-        "1:25": "to the only God our Savior be glory, majesty, power and authority, through Jesus Christ our Lord, before all ages, now and forevermore! Amen."
+        // Chapter 1: Contending for the Faith, Warning Against False Teachers
+        "1:3": "Urges believers to earnestly contend for the faith once delivered to the saints.",
+        "1:4": "Warns against false teachers who secretly slip in, distorting the grace of God into a license for immorality.",
+        "1:5": "Reminds of past judgments on ungodly people, urging not to forget God’s mercy.",
+        "1:7": "Compares false teachers to rebellious angels, Sodom and Gomorrah, Cain, and Korah.",
+        "1:20": "Encourages believers to build themselves up in their most holy faith, praying in the Holy Spirit.",
+        "1:21": "Exhorts to keep themselves in God’s love, waiting for the mercy of Jesus Christ to bring eternal life.",
+        "1:24": "Concludes with a doxology praising God’s ability to keep believers from stumbling and present them blameless before His glory."
     ],
-    
+
+    // MARK: Revelation
     "Revelation": [
         // Chapter 1: Introduction and Vision of the Son of Man
-        "1:1": "Introduction to the revelation of Jesus Christ, given to John through an angel.",
-        "1:12": "John sees seven golden lampstands and the Son of Man among them, holding seven stars.",
-        "1:17": "Jesus instructs John to write what he sees, identifying Himself as the Alpha and Omega.",
-        
-        // Chapter 2: Messages to the Churches in Ephesus, Smyrna, Pergamum, and Thyatira
-        "2:1": "Message to the Church in Ephesus: Commended for hard work and perseverance, but criticized for losing their first love.",
-        "2:10": "Message to the Church in Smyrna: Encouragement to remain faithful even in suffering and imprisonment.",
-        "2:12": "Message to the Church in Pergamum: Commended for holding fast to faith, but warned against false teachings and immorality.",
-        "2:18": "Message to the Church in Thyatira: Praised for love, service, and faith, but admonished for tolerating a false prophetess.",
-        
-        // Chapter 3: Messages to the Churches in Sardis, Philadelphia, and Laodicea
-        "3:1": "Message to the Church in Sardis: Warned to wake up and strengthen what remains, as their deeds are incomplete.",
-        "3:7": "Message to the Church in Philadelphia: Commended for keeping Jesus' command to endure patiently, promised protection from the hour of trial.",
-        "3:14": "Message to the Church in Laodicea: Rebuked for being lukewarm, urged to become earnest and repentant.",
-        
+        "1:3": "Blesses those who read and hear the prophecy, emphasizing its importance for understanding future events.",
+        "1:7": "Proclaims the return of Jesus Christ, visible to all, including those who pierced Him.",
+        "1:17": "John falls at Jesus' feet in awe, but Jesus reassures him and instructs him to write what he sees.",
+
+        // Chapter 2: Letters to the Churches - Ephesus
+        "2:2": "Commends the Ephesian church for their hard work and perseverance, yet warns against losing their first love.",
+        "2:10": "Encourages faithfulness even to the point of death, promising the crown of life.",
+
+        // Chapter 3: Letters to the Churches - Sardis, Philadelphia, Laodicea
+        "3:1": "Addresses the Sardis church, calling them to wake up and strengthen what remains.",
+        "3:5": "Promises the white garments and the name of a new creation to those who are faithful.",
+        "3:20": "Illustrates Jesus standing at the door and knocking, inviting fellowship with those who hear Him.",
+
         // Chapter 4: Vision of God's Throne in Heaven
-        "4:1": "Invitation to come up to heaven and see God's throne and the heavenly worship.",
-        "4:6": "Description of the throne surrounded by twenty-four elders and four living creatures.",
-        "4:8": "Four living creatures continuously worship God, saying, 'Holy, holy, holy is the Lord God Almighty.'",
-        
+        "4:2": "John is invited to come up and see the voice speaking, revealing a vision of God's throne.",
+        "4:8": "Describes the four living creatures around the throne, continuously praising God day and night.",
+
         // Chapter 5: The Scroll and the Lamb
-        "5:1": "A scroll with seven seals is held in God's right hand, and no one can open it except the Lamb.",
-        "5:6": "A slain Lamb appears, looking as if it had been slain, and is worthy to open the scroll.",
-        "5:12": "Angels and living creatures proclaim the Lamb's worthiness and praise God.",
-        
-        // Chapter 6: The Seals and the Four Horsemen
-        "6:1": "The first six seals are opened, revealing the Four Horsemen: Conquest, War, Famine, and Death.",
-        "6:12": "A great earthquake occurs, the sun turns black, and the moon turns blood red.",
-        "6:17": "Fear and awe fall upon those who see these signs, recognizing the wrath of the Lamb.",
-        
-        // Chapter 7: The Sealing of the 144,000 and the Great Multitude
-        "7:1": "Four angels hold back the winds until the servants of God are sealed on their foreheads.",
-        "7:4": "144,000 from all tribes of Israel are sealed as servants of God.",
-        "7:9": "A great multitude from every nation, tribe, people, and language stands before the throne, clothed in white robes.",
-        "7:17": "Those who are sealed will reign with Christ forever, free from hunger, thirst, and pain.",
-        
+        "5:5": "Proclaims that the Lion of the tribe of Judah has triumphed and is worthy to open the scroll.",
+        "5:12": "Heavenly beings praise the Lamb who was slain, declaring His worthiness to receive power and wealth.",
+
+        // Chapter 6: The Seven Seals
+        "6:1": "Introduces the opening of the first seal, revealing a white horse and its rider symbolizing conquest.",
+        "6:12": "Describes cosmic disturbances as the sixth seal is opened, signaling significant upheaval.",
+
+        // Chapter 7: The 144,000 and the Great Multitude
+        "7:3": "Commands the sealing of 144,000 from the tribes of Israel to protect them from divine judgments.",
+        "7:9": "Reveals a great multitude from every nation, standing before the throne and the Lamb in worship.",
+
         // Chapter 8: The Seventh Seal and the Golden Censer
-        "8:1": "The seventh seal is opened, leading to silence in heaven for about half an hour.",
-        "8:3": "An angel with a golden censer offers incense with prayers on the golden altar before the throne.",
-        "8:7": "The first four trumpets sound, bringing hail and fire mixed with blood, a burning mountain thrown into the sea, a great star called Wormwood, and darkness.",
-        
+        "8:3": "Describes an angel offering incense with the prayers of the saints on the golden altar before the throne.",
+        "8:6": "Introduces the seven trumpets, signaling the beginning of a series of judgments.",
+
         // Chapter 9: The Fifth and Sixth Trumpets
-        "9:1": "The fifth trumpet sounds, unleashing locusts from the Abyss to torment those without the seal of God for five months.",
-        "9:6": "The locusts have power like scorpions but do not kill; they torment for five months.",
-        "9:12": "The sixth trumpet sounds, releasing four angels bound at the great river Euphrates to kill a third of mankind.",
-        "9:19": "Mankind blasphemes God and refuses to repent despite the plagues.",
-        
+        "9:1": "Unleashes the first woe with the fifth trumpet, releasing locusts with the power to torment.",
+        "9:12": "Introduces the sixth woe as four angels bound at the Euphrates are released to kill a third of mankind.",
+
         // Chapter 10: The Mighty Angel and the Little Scroll
-        "10:1": "A mighty angel descends from heaven with a cloud, a rainbow, thunder, and seven plagues.",
-        "10:3": "The angel holds a little scroll open, and a voice from heaven commands John to take and eat the scroll.",
-        "10:8": "The scroll tastes sweet in John's mouth but turns bitter in his stomach, symbolizing the bittersweet message of prophecy.",
-        
+        "10:1": "Shows a mighty angel with a rainbow above, holding a little scroll open in his hand.",
+        "10:11": "Commands John to eat the scroll, symbolizing the bittersweet nature of prophetic revelation.",
+
         // Chapter 11: The Two Witnesses and the Seventh Trumpet
-        "11:3": "John is told to measure the temple but leave the outer court untouched.",
-        "11:5": "The two witnesses prophesy for 1,260 days, perform miracles, and are eventually killed by the beast.",
-        "11:15": "The seventh trumpet sounds, proclaiming the kingdom of the world has become the kingdom of Christ.",
-        "11:19": "God's servants are rewarded, and the nations are angry, leading to the time of wrath.",
-        
+        "11:3": "Appoints two witnesses with the power to prophesy, perform miracles, and face persecution.",
+        "11:15": "Proclaims the kingdom of the world has become the kingdom of Christ, marked by the seventh trumpet.",
+
         // Chapter 12: The Woman, the Dragon, and the Male Child
-        "12:1": "A great sign appears: a woman clothed with the sun, with the moon under her feet and a crown of twelve stars.",
-        "12:3": "A great red dragon appears, ready to devour the woman's child as soon as it is born.",
-        "12:7": "Michael and his angels fight against the dragon and his angels; the dragon is hurled to the earth.",
-        "12:9": "The great dragon, the ancient serpent, is identified as Satan, who deceives the whole world.",
-        
-        // Chapter 13: The Beast from the Sea and the Beast from the Earth
-        "13:1": "A beast with ten horns and seven heads rises from the sea, with blasphemous names on its heads.",
-        "13:11": "A second beast rises from the earth, performing great signs and deceiving people to worship the first beast.",
-        "13:16": "The beast forces everyone to receive a mark on their right hand or forehead to buy or sell.",
-        "13:18": "The number of the beast is revealed as 666.",
-        
-        // Chapter 14: The Lamb, the 144,000, and Messages of Judgment
-        "14:1": "The Lamb stands on Mount Zion with the 144,000 who have His name and His Father's name written on their foreheads.",
-        "14:6": "An angel calls for fear and worship of God, warning against worshiping the beast and his image.",
-        "14:12": "Those who follow the Lamb will be victorious over the beast and his followers.",
-        "14:19": "The harvest of the earth is ripe; the angels gather the grapes of wrath to be thrown into the winepress of God's wrath.",
-        
-        // Chapter 15: The Seven Angels with Seven Plagues
-        "15:1": "A loud voice in heaven proclaims the seven last plagues, which complete God's wrath.",
-        "15:3": "The temple in heaven is filled with smoke from the glory and power of God, and from His wrath.",
-        "15:7": "Praise the Lord, all you his servants, you who fear him, both great and small.",
-        "15:18": "The end of bitterness and wrath, which God has prepared for those who reject Him.",
-        
+        "12:1": "Depicts a woman clothed with the sun, with the moon under her feet and a crown of twelve stars.",
+        "12:7": "Describes the war in heaven where Michael and his angels fight against the dragon and his forces.",
+
+        // Chapter 13: The Beasts from the Sea and the Earth
+        "13:1": "Introduces the first beast rising from the sea, given authority and worship from the inhabitants of the earth.",
+        "13:16": "Describes the mark of the beast, requiring everyone to receive a mark on their right hand or forehead.",
+
+        // Chapter 14: The Lamb and the 144,000, The Harvest
+        "14:1": "Shows the Lamb standing on Mount Zion with the 144,000 who have His name and His Father's name written on their foreheads.",
+        "14:6": "Introduces the everlasting gospel being preached to every nation, tribe, language, and people.",
+
+        // Chapter 15: The Seven Angels with the Seven Plagues
+        "15:3": "Proclaims the victorious song of Moses and the Lamb, acknowledging God's righteous judgments.",
+        "15:7": "Describes the angels preparing to pour out the seven plagues of God's wrath.",
+
         // Chapter 16: The Seven Bowls of God's Wrath
-        "16:1": "Seven angels are given seven bowls filled with the wrath of God.",
-        "16:3": "The first bowl causes painful sores on those who have the mark of the beast.",
-        "16:7": "The second bowl turns the sea into blood, killing every living thing in it.",
-        "16:19": "The seventh bowl brings lightning, thunder, a severe earthquake, and hailstones of fire.",
-        "16:21": "Babylon the Great is plunged into darkness, symbolizing God's judgment.",
-        
-        // Chapter 17: The Woman on the Beast and the Kings of the Earth
-        "17:1": "A prostitute sitting on a scarlet beast with seven heads and ten horns is described as Babylon the Great.",
-        "17:9": "The seven heads of the beast represent seven hills and seven kings.",
-        "17:14": "The ten horns represent ten kings who will receive authority for a short time.",
-        "17:18": "The woman is described as having great power, influencing the kings of the earth through her prostitution.",
-        
+        "16:1": "Outlines the pouring of the first bowl, resulting in painful sores on those with the mark of the beast.",
+        "16:21": "Describes the final judgment with great earthquakes and the destruction of Babylon the Great.",
+
+        // Chapter 17: The Judgment of Babylon the Great
+        "17:1": "Introduces the judgment of the great prostitute Babylon, symbolizing widespread corruption and immorality.",
+        "17:5": "Reveals the name written on the prostitute's forehead: 'Mystery, Babylon the Great, the Mother of Prostitutes and of the Abominations of the Earth.'",
+
         // Chapter 18: The Fall of Babylon
-        "18:2": "A mighty angel announces the fall of Babylon, the great city filled with sorcery and corruption.",
+        "18:2": "Proclaims the fall of Babylon, declaring it has become a dwelling for demons and a haunt for every unclean spirit.",
+        "18:24": "Describes the complete destruction of Babylon with no survivors.",
 
-        // Chapter 19: The Marriage of the Lamb and the Rider on the White Horse
-        "19:11": "A rider on a white horse appears, called Faithful and True, who judges and makes war in righteousness.",
-        "19:19": "The beast and the kings of the earth gather to wage war against the rider and His army.",
-        "19:21": "The beast and the false prophet are captured and thrown alive into the fiery lake of burning sulfur.",
+        // Chapter 19: The Marriage of the Lamb and the Second Coming of Christ
+        "19:11": "Depicts Jesus as a rider on a white horse, leading the armies of heaven with justice and truth.",
+        "19:16": "Reveals the name written on Jesus' robe and thigh: 'King of Kings and Lord of Lords.'",
 
-        // Chapter 20: The Thousand Years and Final Judgment
-        "20:1": "An angel binds Satan and throws him into the Abyss for a thousand years.",
-        "20:4": "Christ reigns with His saints during the thousand years.",
-        "20:10": "After the thousand years, Satan is released, deceives the nations, and is ultimately thrown into the lake of fire.",
-        "20:15": "Anyone not found written in the book of life is also thrown into the lake of fire.",
-        
-        // Chapter 21: A New Heaven and a New Earth
-        "21:1": "A new heaven and a new earth appear; the first heaven and earth have passed away.",
-        "21:3": "God's dwelling is now among the people; He will wipe every tear from their eyes.",
-        "21:4": "There will be no more death, mourning, crying, or pain.",
-        "21:22": "No temple is needed in the new creation; God and the Lamb are its temple.",
-        "21:23": "The nations will walk by its light, and the kings of the earth will bring their splendor into it.",
-        
+        // Chapter 20: The Thousand Years and the Final Judgment
+        "20:1": "Describes the binding of Satan for a thousand years to prevent deception in the world.",
+        "20:11": "Introduces the Great White Throne judgment, where the dead are judged according to their deeds.",
+
+        // Chapter 21: The New Heaven and the New Earth
+        "21:1": "Shows a new heaven and a new earth, for the first heaven and earth have passed away.",
+        "21:4": "Promises God will wipe away every tear, and there will be no more death, mourning, crying, or pain.",
+
         // Chapter 22: The River of Life and Final Exhortations
-        "22:1": "A pure river of water of life flows from God's throne, with the tree of life on each side.",
-        "22:5": "No longer need the servants of God see death; they will reign with Him forever.",
-        "22:12": "'Behold, I am coming soon!'",
-        "22:17": "'The Spirit and the bride say, 'Come!' And let the one who hears say, 'Come!' And let the one who is thirsty come; let the one who wishes take the free gift of the water of life.'",
-        "22:20": "'He who testifies to these things says, 'Yes, I am coming soon.' Amen. Come, Lord Jesus!'"
-    ]
+        "22:1": "Describes the river of the water of life flowing from God's throne, with the tree of life on its banks.",
+        "22:12": "Jesus declares He is coming soon, urging readiness and faithfulness.",
+        "22:20": "Concludes with a blessing of grace, inviting those who are victorious to come and take the water of life freely."
+    ],
+    // MARK: Tobit
+    "Tobit": [
+        // Chapter 1: Tobit’s Righteousness and Troubles
+        "1:1": "Introduces Tobit, a righteous Israelite living in Nineveh, who performs acts of charity and follows God's commandments.",
+        "1:10": "Describes Tobit's blindness as a punishment for his charity towards the poor, highlighting the theme of suffering for righteousness.",
+        "1:15": "Tobit prays for death, expressing his despair and the human struggle with suffering despite faithfulness to God.",
+
+        // Chapter 2: Tobit’s Continued Righteousness
+        "2:4": "Tobit continues his acts of charity, burying the dead and giving alms, demonstrating unwavering faith and generosity.",
+        "2:7": "Emphasizes Tobit's commitment to righteousness, even in exile, serving as an example of steadfast faith.",
+
+        // Chapter 3: Tobit’s Prayer and Angel Raphael’s Mission
+        "3:1": "Tobit prays for mercy and deliverance from his afflictions, showing his reliance on divine intervention.",
+        "3:17": "Tobit receives guidance through a vision, instructing him to send his son Tobias on a journey for a safe marriage.",
+
+        // Chapter 4: Tobit’s Exhortations to Tobias
+        "4:7": "Tobit advises Tobias to walk in righteousness, avoid sin, and perform acts of charity, reinforcing moral and ethical living.",
+        "4:12": "Encourages Tobias to maintain faith and trust in God’s providence throughout his journey.",
+
+        // Chapter 5: Tobias Prepares for His Journey
+        "5:10": "Tobias prepares for his journey, demonstrating obedience to his father's instructions and reliance on divine protection.",
+        "5:16": "Introduces Sarah, Tobias's future wife, who has been afflicted by a demon, setting the stage for divine intervention.",
+
+        // Chapter 6: Tobias Meets the Angel Raphael
+        "6:1": "Tobias encounters Raphael in disguise, who guides him and provides wisdom for his journey.",
+        "6:9": "Raphael advises Tobias on how to overcome the demon and ensure a successful marriage with Sarah.",
+
+        // Chapter 7: The Marriage of Tobias and Sarah
+        "7:5": "Describes the marriage ceremony of Tobias and Sarah, symbolizing the triumph of faith and divine intervention over evil.",
+        "7:10": "Highlights the fulfillment of God’s promise as Tobias and Sarah begin their life together under Raphael’s protection.",
+
+        // Chapter 8: Tobias and Sarah's Life Together
+        "8:4": "Tobias and Sarah live happily, practicing righteousness and gratitude towards God for their blessings.",
+        "8:8": "Illustrates the harmony and prosperity that result from living in accordance with God’s will.",
+
+        // Chapter 9: Raphael Reveals His True Identity
+        "9:21": "Raphael reveals himself as an angel sent by God to guide and protect Tobias, emphasizing divine providence.",
+        "9:22": "Explains the purpose of Raphael’s mission, highlighting the importance of faith and obedience.",
+
+        // Chapter 10: Tobit and Tobias Return Home
+        "10:4": "Tobit and Tobias return to Nineveh safely, bringing back wealth and blessings, demonstrating the rewards of faithfulness.",
+        "10:8": "Tobit praises God for His mercy and the successful outcome of their journey, reinforcing themes of gratitude and divine favor.",
+
+        // Chapter 11: Tobit’s Continued Teachings
+        "11:11": "Tobit shares his experiences and the lessons learned from Raphael, encouraging others to remain steadfast in faith.",
+        "11:14": "Emphasizes the importance of prayer, charity, and righteousness in overcoming personal and communal challenges.",
+
+        // Chapter 12: Tobit’s Final Instructions
+        "12:3": "Tobit advises future generations to uphold righteousness and maintain their trust in God’s guidance.",
+        "12:12": "Reiterates the blessings that come from living a life of faith, charity, and obedience to God.",
+
+        // Chapter 13: Tobit’s Last Days and Benediction
+        "13:1": "Tobit recounts the blessings and fulfillment that resulted from his and Tobias’s faithful actions.",
+        "13:15": "Concludes with Tobit’s final blessings and prayers for prosperity and righteousness among his descendants.",
+
+        // Chapter 14: The Angel Raphael Reveals His Identity and Returns to Heaven
+        "14:1": "Raphael fully reveals his identity as an angel of God, explaining his role in Tobit and Tobias’s lives.",
+        "14:10": "Raphael departs, returning to heaven after ensuring that Tobit and Tobias have fulfilled their divine missions.",
+    ],
+    // MARK: Judith
+    "Judith": [
+        // Chapter 1: Judith’s Piety and Resolve
+        "1:1": "Introduces Judith, a devout and courageous widow from the tribe of Benjamin, who is deeply respected in her community.",
+        "1:10": "Describes Judith’s decision to intervene and save her people from the Assyrian threat, demonstrating her bravery and faith.",
+
+        // Chapter 2: The Assyrian Threat and Judith’s Plan
+        "2:4": "Depicts the Assyrian general Holofernes besieging the city of Bethulia, causing widespread fear and despair among the Israelites.",
+        "2:15": "Judith prays for guidance and strength, committing herself to God’s will as she devises a plan to deliver her people.",
+
+        // Chapter 3: The People’s Despair and Judith’s Confidence
+        "3:2": "Shows the people of Bethulia losing hope and considering surrender, but Judith remains steadfast in her belief that God will save them.",
+        "3:16": "Judith encourages the people to trust in God and promises to take decisive action against the enemy.",
+
+        // Chapter 4: Judith’s Journey to the Enemy Camp
+        "4:5": "Describes Judith’s preparation for her mission, including her modest attire to gain the trust of the enemy.",
+        "4:14": "Highlights Judith’s courage as she sets out alone to confront Holofernes, relying on her faith and wisdom.",
+
+        // Chapter 5: Judith Enters the Enemy Camp
+        "5:3": "Judith successfully gains entrance to Holofernes’ camp by presenting herself as a deserter seeking mercy.",
+        "5:12": "Holofernes is captivated by Judith’s beauty and grace, lowering his guard and allowing her access to his tent.",
+
+        // Chapter 6: Building Trust with Holofernes
+        "6:7": "Judith engages Holofernes in conversation, earning his trust and securing a place of honor within the camp.",
+        "6:15": "Through her interaction, Judith observes Holofernes’ weaknesses and gathers information critical to her plan.",
+
+        // Chapter 7: The Feast and the Banquet
+        "7:4": "Describes the lavish feast where Holofernes indulges, providing Judith the opportunity to execute her plan.",
+        "7:19": "Judith remains composed and faithful, preparing to fulfill her mission at the right moment.",
+
+        // Chapter 8: The Midnight Attack
+        "8:3": "Judith waits for the perfect moment during the banquet when Holofernes is inebriated and vulnerable.",
+        "8:12": "She seizes the opportunity to behead Holofernes, effectively eliminating the Assyrian threat.",
+
+        // Chapter 9: Judith’s Triumph and Return
+        "9:1": "Judith triumphantly returns to Bethulia with Holofernes’ head, receiving immense gratitude and admiration from her people.",
+        "9:16": "The Israelites celebrate their deliverance, recognizing Judith’s faith and bravery as the catalyst for their salvation.",
+
+        // Chapter 10: The Israelites’ Renewed Faith
+        "10:5": "Highlights the renewed faith and unity among the Israelites, inspired by Judith’s actions and God’s deliverance.",
+        "10:12": "Judith leads the people in worship and thanksgiving, reinforcing their commitment to God.",
+
+        // Chapter 11: Judith’s Continued Leadership
+        "11:3": "Describes Judith’s ongoing role as a leader and spiritual guide for her people, ensuring their continued prosperity.",
+        "11:18": "She advises the Israelites to remain vigilant and faithful, safeguarding their community against future threats.",
+
+        // Chapter 12: The People’s Prosperity and Peace
+        "12:7": "Depicts the flourishing of Bethulia under Judith’s leadership, with peace and prosperity restored.",
+        "12:14": "Judith’s legacy is celebrated, and her story serves as an enduring example of faith, courage, and divine providence.",
+
+        // Chapter 13: Judith’s Legacy and Final Blessings
+        "13:2": "Judith blesses her people and prays for their continued faithfulness to God.",
+        "13:10": "Her final blessings emphasize the importance of righteousness and reliance on God for future generations.",
+
+        // Chapter 14: The Historical Impact of Judith’s Deeds
+        "14:5": "Reflects on the historical significance of Judith’s actions, highlighting the turning point for the Israelites.",
+        "14:15": "Encourages future generations to emulate Judith’s faith and bravery in the face of adversity.",
+
+        // Chapter 15: Judith’s Prayer of Thanksgiving
+        "15:1": "Judith offers a prayer of thanksgiving, acknowledging God’s role in her success and the salvation of her people.",
+        "15:13": "Her prayer underscores the themes of divine intervention and the rewards of steadfast faith.",
+
+        // Chapter 16: Final Instructions and Benediction
+        "16:4": "Judith provides final instructions to the Israelites, urging them to maintain their devotion and moral integrity.",
+        "16:14": "Concludes with a benediction, blessing the people and reaffirming their commitment to God’s covenant."
+    ],
+    // MARK: Wisdom of Solomon
+    "Wisdom of Solomon": [
+        // Chapter 1: The Beginning of Wisdom and the Folly of Idolatry
+        "1:1": "Explains that wisdom is the principal thing and that the fear of the Lord is the beginning of wisdom.",
+        "1:8": "Describes how ungodly people turn away from the Lord and are led astray by their own desires.",
+        "1:19": "Warns against idolatry, highlighting the futility of worshiping created things instead of the Creator.",
+
+        // Chapter 2: The Call to Righteousness
+        "2:5": "Urges individuals to turn away from wickedness and seek righteousness through the fear of the Lord.",
+        "2:12": "Emphasizes that wisdom comes from God and those who seek it will find true understanding.",
+        "2:20": "Contrasts the fleeting pleasures of the wicked with the enduring rewards of the righteous.",
+
+        // Chapter 3: The Reward of the Righteous
+        "3:1": "Affirms that the souls of the righteous are in the hand of God, and no torment will ever touch them.",
+        "3:7": "Describes the righteous as shining like stars in a dark world, bringing light and guidance.",
+        "3:16": "Promises that the righteous will dwell forever in the presence of the Lord, enjoying eternal peace.",
+
+        // Chapter 4: The Fate of the Ungodly
+        "4:2": "Highlights the wickedness of idolaters and their disregard for true wisdom.",
+        "4:9": "Warns that those who reject wisdom will face destruction and divine judgment.",
+        "4:19": "Declares that the ungodly will perish and their works will be forgotten, unlike the lasting legacy of the righteous.",
+
+        // Chapter 5: Wisdom's Role in Creation
+        "5:1": "Celebrates wisdom's presence during the creation of the world, guiding all things by her counsel.",
+        "5:7": "Explains that wisdom was the craftsman and agent of God's will in bringing order to the universe.",
+        "5:16": "States that wisdom rejoices in the righteousness of those who seek her and aids them in their endeavors.",
+
+        // Chapter 6: The Contrast Between Wisdom and Folly
+        "6:1": "Contrasts the wisdom of God with the foolishness of those who ignore divine guidance.",
+        "6:8": "Describes the consequences of rejecting wisdom, leading to moral decay and societal collapse.",
+        "6:14": "Encourages adherence to wisdom to avoid the pitfalls of folly and ensure a prosperous life.",
+
+        // Chapter 7: Wisdom and Justice
+        "7:2": "Connects wisdom with justice, asserting that true wisdom leads to just actions and decisions.",
+        "7:10": "Emphasizes that wisdom is free and accessible to all who seek her, regardless of social status.",
+        "7:18": "Highlights the importance of mercy and kindness as expressions of wisdom in human interactions.",
+
+        // Chapter 8: Wisdom's Benefits
+        "8:3": "Lists the benefits of wisdom, including peace, joy, and the protection of the righteous.",
+        "8:9": "Explains that wisdom provides guidance in times of uncertainty and leads individuals away from evil.",
+        "8:16": "Assures that wisdom will never abandon those who hold her dear, offering constant support and strength.",
+
+        // Chapter 9: The Wisdom of God
+        "9:1": "Declares that the wisdom of God is beyond human comprehension and cannot be fully grasped.",
+        "9:10": "Encourages humility and reverence before God, recognizing the limits of human understanding.",
+        "9:19": "Affirms that God's wisdom orchestrates all events for the ultimate good of the righteous.",
+
+        // Chapter 10: The Power of Wisdom
+        "10:2": "Illustrates the power of wisdom in overcoming adversity and leading a virtuous life.",
+        "10:9": "Describes wisdom as a shield that protects believers from the snares of evil.",
+        "10:16": "Highlights that wisdom empowers individuals to make righteous choices and avoid temptation.",
+
+        // Chapter 11: Wisdom's Role in Governance
+        "11:1": "Explains that wise governance leads to a just and orderly society, benefiting all its members.",
+        "11:6": "Warns against leaders who lack wisdom, resulting in oppression and chaos.",
+        "11:14": "Encourages rulers to seek wisdom to govern effectively and uphold justice.",
+
+        // Chapter 12: The Rewards of Wisdom
+        "12:2": "Promises that those who embrace wisdom will be rewarded with honor and lasting prosperity.",
+        "12:9": "Assures that wisdom brings happiness and fulfillment to those who follow her path.",
+        "12:16": "Concludes that the pursuit of wisdom leads to a life of virtue, peace, and divine favor.",
+
+        // Chapter 13: Wisdom and Immortality
+        "13:1": "Connects wisdom with the pursuit of immortality, emphasizing the eternal value of righteous living.",
+        "13:5": "Explains that wisdom leads to the soul's immortality through righteous deeds and divine favor.",
+        "13:12": "Encourages believers to seek wisdom as a means to attain eternal life and avoid spiritual death.",
+
+        // Chapter 14: The Protection of Wisdom
+        "14:3": "Describes wisdom as a guardian that protects the righteous from the attacks of evil.",
+        "14:7": "Affirms that wisdom shields believers from the consequences of their own and others' wrongdoing.",
+        "14:14": "Highlights that wisdom's protection extends beyond the individual to the community, fostering collective well-being.",
+
+        // Chapter 15: Wisdom's Eternal Nature
+        "15:2": "Declares that wisdom is eternal and unchanging, unlike the fleeting nature of human life.",
+        "15:8": "Emphasizes that wisdom endures beyond physical death, offering eternal guidance and support.",
+        "15:15": "Affirms that wisdom's influence persists, ensuring the righteous are remembered and honored forever.",
+
+        // Chapter 16: Wisdom and Divine Judgment
+        "16:1": "Explains that wisdom plays a crucial role in divine judgment, ensuring that justice is served.",
+        "16:6": "Highlights that wisdom discerns the true intentions of individuals, determining their fate accordingly.",
+        "16:17": "Encourages believers to trust in wisdom's judgment, knowing that it is fair and righteous.",
+
+        // Chapter 17: The Humility of the Wise
+        "17:2": "Connects humility with wisdom, asserting that the truly wise are humble and seek God's guidance.",
+        "17:5": "Describes how humility opens the heart to receive wisdom and divine favor.",
+        "17:14": "Encourages believers to cultivate humility to fully embrace the benefits of wisdom.",
+
+        // Chapter 18: Wisdom's Influence on Life
+        "18:3": "Illustrates how wisdom positively influences every aspect of life, from personal relationships to societal structures.",
+        "18:7": "Explains that wisdom fosters harmony and understanding, preventing conflicts and discord.",
+        "18:19": "Affirms that wisdom's influence leads to a life of purpose, meaning, and divine alignment.",
+
+        // Chapter 19: The Ultimate Triumph of Wisdom
+        "19:1": "Declares that wisdom will ultimately triumph over folly, ensuring the righteous are upheld.",
+        "19:4": "Describes the eternal peace and prosperity that wisdom brings to those who embrace her.",
+        "19:18": "Concludes with a proclamation of wisdom's eternal reign, guiding the righteous into everlasting glory."
+    ],
+    // MARK: Sirach
+    "Sirach": [
+        // Chapter 1: Introduction to Wisdom
+        "1:1": "Declares wisdom as a divine gift from God, essential for living a righteous life.",
+        "1:20": "Encourages seeking wisdom early in life, emphasizing its value over riches and power.",
+        "1:30": "Warns against rejecting wisdom, highlighting the consequences of ignorance and folly.",
+
+        // Chapter 2: The Benefits of Wisdom
+        "2:1": "Explains that wisdom was present at creation and sustains the universe.",
+        "2:6": "Describes the rewards of living wisely, including honor and peace.",
+        "2:18": "Highlights that wisdom protects individuals from harm and guides them in righteousness.",
+
+        // Chapter 3: The Path of the Righteous
+        "3:1": "Urges the righteous to maintain their integrity and avoid corruption.",
+        "3:9": "Encourages generosity and kindness, promising divine blessings in return.",
+        "3:18": "Warns against pride and arrogance, advocating for humility and gratitude.",
+
+        // Chapter 4: The Importance of Friendship
+        "4:7": "Defines true friendship as one that is based on mutual respect and righteousness.",
+        "4:20": "Advises selecting friends wisely, as they influence one's character and actions.",
+        "4:27": "Highlights the benefits of loyal friendships, including support and companionship.",
+
+        // Chapter 5: Speech and Conduct
+        "5:10": "Emphasizes the power of words, urging restraint and thoughtful speech.",
+        "5:17": "Warns against gossip and slander, promoting honesty and integrity.",
+        "5:22": "Encourages speaking truthfully and kindly, fostering harmonious relationships.",
+
+        // Chapter 6: The Dangers of Wealth
+        "6:5": "Warns that excessive love for money can lead to moral decay and spiritual downfall.",
+        "6:15": "Highlights the fleeting nature of wealth compared to the lasting value of wisdom.",
+        "6:21": "Advises using wealth responsibly and generously to benefit others and honor God.",
+
+        // Chapter 7: Hard Work and Diligence
+        "7:1": "Praises the virtues of hard work and perseverance in achieving success.",
+        "7:10": "Encourages diligence in one's duties, ensuring reliability and trustworthiness.",
+        "7:21": "Warns against laziness, emphasizing the importance of consistent effort.",
+
+        // Chapter 8: The Role of Education
+        "8:3": "Advocates for the importance of education in cultivating wisdom and virtue.",
+        "8:15": "Describes the benefits of a good education, including moral guidance and intellectual growth.",
+        "8:27": "Encourages lifelong learning and the continuous pursuit of knowledge.",
+
+        // Chapter 9: Righteous Leadership
+        "9:2": "Defines righteous leadership as one that is just, compassionate, and wise.",
+        "9:14": "Warns against corrupt leaders who abuse their power for personal gain.",
+        "9:28": "Highlights the rewards of serving under wise and just rulers, including societal stability.",
+
+        // Chapter 10: The Value of Humility
+        "10:3": "Praises humility as a key virtue that leads to wisdom and divine favor.",
+        "10:12": "Encourages humility in interactions with others, fostering respect and cooperation.",
+        "10:25": "Warns against pride, emphasizing that humility attracts blessings while arrogance leads to downfall.",
+
+        // Chapter 11: Justice and Fairness
+        "11:1": "Advocates for justice and fairness in all dealings, ensuring equitable treatment for all.",
+        "11:15": "Warns against corruption and favoritism, promoting impartiality in judgments.",
+        "11:30": "Highlights the societal benefits of a just and fair community, including peace and prosperity.",
+
+        // Chapter 12: The Fear of the Lord
+        "12:4": "Explains that the fear of the Lord is the foundation of wisdom and righteous living.",
+        "12:14": "Encourages cultivating a respectful and reverent relationship with God.",
+        "12:28": "Describes the fear of the Lord as a protective and guiding force in one's life.",
+
+        // Chapter 13: The Role of Prayer
+        "13:2": "Emphasizes the importance of sincere and humble prayer in connecting with God.",
+        "13:16": "Encourages persistent prayer, trusting in God's responsiveness and mercy.",
+        "13:28": "Highlights the benefits of prayer, including guidance, comfort, and divine intervention.",
+
+        // Chapter 14: The Virtue of Patience
+        "14:5": "Praises patience as a virtue that fosters resilience and steadfastness in adversity.",
+        "14:18": "Encourages enduring hardships with grace and trust in God's plan.",
+        "14:29": "Warns against impatience, emphasizing that patience leads to long-term rewards.",
+
+        // Chapter 15: The Power of Forgiveness
+        "15:3": "Advocates for forgiveness, promoting healing and reconciliation in relationships.",
+        "15:12": "Describes the liberating effects of forgiving others, both spiritually and emotionally.",
+        "15:25": "Encourages extending mercy and compassion, reflecting God's forgiveness towards humanity.",
+
+        // Chapter 16: The Importance of Self-Control
+        "16:6": "Highlights self-control as essential for maintaining moral integrity and avoiding temptation.",
+        "16:18": "Encourages mastering one's desires and impulses to lead a disciplined and virtuous life.",
+        "16:27": "Warns against the dangers of indulgence and lack of self-control, promoting moderation.",
+
+        // Chapter 17: The Value of Generosity
+        "17:1": "Praises generosity as a reflection of wisdom and compassion towards others.",
+        "17:14": "Encourages giving freely to those in need, emphasizing the joy it brings both giver and receiver.",
+        "17:23": "Highlights the lasting impact of generous actions, fostering community and goodwill.",
+
+        // Chapter 18: The Role of Family
+        "18:5": "Emphasizes the importance of honoring and respecting one's parents and family members.",
+        "18:19": "Encourages maintaining strong family bonds through love, support, and mutual respect.",
+        "18:28": "Highlights the societal benefits of strong, virtuous families as the foundation of community.",
+
+        // Chapter 19: The Dangers of Envy
+        "19:3": "Warns against envy, describing it as a destructive emotion that leads to discord and resentment.",
+        "19:14": "Encourages cultivating contentment and gratitude to overcome feelings of envy.",
+        "19:25": "Highlights the benefits of rejoicing in others' successes rather than coveting their possessions.",
+
+        // Chapter 20: The Pursuit of Excellence
+        "20:2": "Encourages striving for excellence in all endeavors, reflecting one's commitment to wisdom and virtue.",
+        "20:16": "Defines excellence as a manifestation of one's inner character and dedication to righteousness.",
+        "20:29": "Highlights that the pursuit of excellence leads to personal fulfillment and societal advancement.",
+
+        // Chapter 21: The Importance of Integrity
+        "21:4": "Praises integrity as a cornerstone of a righteous and honorable life.",
+        "21:18": "Warns against compromising one's integrity for personal gain or societal pressure.",
+        "21:29": "Encourages maintaining honesty and moral uprightness in all aspects of life.",
+
+        // Chapter 22: The Power of Humble Service
+        "22:7": "Describes humble service as a pathway to spiritual growth and divine favor.",
+        "22:19": "Encourages serving others selflessly, reflecting God's love and compassion.",
+        "22:28": "Highlights the rewards of humble service, including inner peace and societal respect.",
+
+        // Chapter 23: The Virtue of Modesty
+        "23:3": "Advocates for modesty in behavior and appearance, promoting dignity and respect.",
+        "23:12": "Encourages humility and simplicity, avoiding vanity and excessive display.",
+        "23:22": "Highlights the spiritual benefits of modest living, fostering inner beauty and grace.",
+
+        // Chapter 24: The Importance of Wisdom in Leadership
+        "24:2": "Emphasizes that wise leadership is essential for the prosperity and stability of a community.",
+        "24:14": "Encourages leaders to seek wisdom and justice, ensuring fair governance.",
+        "24:26": "Warns against leaders who neglect wisdom, leading to corruption and societal decline.",
+
+        // Chapter 25: The Role of Gratitude
+        "25:1": "Praises gratitude as a fundamental virtue that strengthens one's relationship with God and others.",
+        "25:13": "Encourages expressing thankfulness through actions and words, fostering positive relationships.",
+        "25:24": "Highlights the reciprocal nature of gratitude, where giving thanks leads to receiving blessings.",
+
+        // Chapter 26: The Danger of Greed
+        "26:4": "Warns against greed, describing it as a root of many evils and personal suffering.",
+        "26:16": "Encourages contentment and moderation to overcome the destructive nature of greed.",
+        "26:28": "Highlights the spiritual emptiness that accompanies a life driven by greed and materialism.",
+
+        // Chapter 27: The Value of Patience and Perseverance
+        "27:3": "Praises patience as essential for overcoming life's challenges and maintaining faith.",
+        "27:14": "Encourages perseverance in the face of adversity, trusting in God's plan and timing.",
+        "27:25": "Highlights that enduring hardships with patience leads to spiritual growth and resilience.",
+
+        // Chapter 28: The Importance of Ethical Behavior
+        "28:2": "Defines ethical behavior as acting in accordance with wisdom and divine commandments.",
+        "28:15": "Encourages maintaining integrity even when faced with moral dilemmas and societal pressures.",
+        "28:28": "Highlights the long-term benefits of ethical living, including personal honor and community trust.",
+
+        // Chapter 29: The Power of Prayer and Supplication
+        "29:1": "Emphasizes the efficacy of sincere prayer in seeking God's guidance and intervention.",
+        "29:13": "Encourages persistent supplication, trusting in God's responsiveness and mercy.",
+        "29:23": "Highlights the transformative power of prayer in fostering spiritual growth and divine favor.",
+
+        // Chapter 30: The Blessings of Righteous Living
+        "30:3": "Praises the blessings that come from living a righteous and wise life.",
+        "30:17": "Encourages adherence to wisdom and virtue to receive God's blessings and protection.",
+        "30:27": "Highlights that righteous living leads to lasting happiness and divine approval.",
+
+        // Chapter 31: The Conclusion and Final Exhortations
+        "31:2": "Summarizes the key virtues of wisdom, including humility, integrity, and generosity.",
+        "31:12": "Encourages continual pursuit of wisdom and righteousness as lifelong endeavors.",
+        "31:22": "Concludes with a call to live virtuously, honoring God through every aspect of life."
+    ],
+    // MARK: Baruch
+    "Baruch": [
+        // Chapter 1: Exhortation to Repentance and Trust in God
+        "1:1": "Baruch writes a letter to the exiles in Babylon, urging them to seek the Lord and abandon their idolatrous practices.",
+        "1:8": "Encourages the people to turn back to God, emphasizing that righteousness leads to life and peace.",
+        "1:19": "Warns against the futility of pursuing wealth and honor without God, highlighting the blessings of obedience.",
+
+        // Chapter 2: Confession of Sins and Reflection on Jerusalem’s Fall
+        "2:4": "Confesses the sins of Israel that led to the destruction of Jerusalem and the exile to Babylon.",
+        "2:12": "Reflects on God's justice and the consequences of the people's unfaithfulness and idolatry.",
+        "2:25": "Acknowledges that the current suffering is a result of turning away from God's commandments.",
+
+        // Chapter 3: Prayer for Mercy and Praise of Wisdom
+        "3:1": "Baruch prays for mercy on behalf of the exiles, seeking God’s forgiveness and restoration.",
+        "3:9": "Describes wisdom as a divine attribute that guides and protects the righteous, contrasting with folly.",
+        "3:16": "Praises God’s steadfast love and mercy, affirming that wisdom resides with those who fear the Lord.",
+
+        // Chapter 4: Reflection on God’s Justice and the Importance of Righteousness
+        "4:3": "Contemplates the nature of God’s justice, asserting that He is righteous and just in all His ways.",
+        "4:10": "Encourages the exiles to remain faithful, trusting that God will ultimately vindicate the righteous.",
+        "4:21": "Emphasizes the importance of maintaining integrity and righteousness despite external hardships.",
+
+        // Chapter 5: Hope for Restoration and Final Exhortations
+        "5:2": "Baruch expresses hope for the restoration of Jerusalem and the return of the exiles to their homeland.",
+        "5:10": "Encourages the people to remain steadfast in their faith, assuring them of God’s promise to gather them again.",
+        "5:21": "Concludes with final exhortations to trust in God’s plan and maintain hope for future redemption."
+    ],
+    // MARK: Prayer of Azariah
+    "Prayer of Azariah": [
+        // Section 1: Introduction and Thanksgiving
+        "1:1": "Azariah begins by praising God for His mercy and steadfast love, acknowledging His sovereignty and righteousness.",
+        "1:3": "He expresses gratitude for God's deliverance of the Israelites from their enemies, recognizing His intervention in their lives.",
+
+        // Section 2: Confession of Sins
+        "1:5": "Azariah confesses the sins of the people, admitting their failures to uphold God's commandments and their reliance on their own strength.",
+        "1:7": "He beseeches God for forgiveness, pleading for His mercy to cleanse them from their transgressions and renew their commitment to righteousness.",
+
+        // Section 3: Petition for Guidance and Protection
+        "1:9": "Azariah prays for divine guidance, asking God to lead them in the paths of justice and truth.",
+        "1:11": "He seeks protection from future adversities, trusting in God's promise to safeguard and bless the faithful.",
+
+        // Section 4: Declaration of Faith
+        "1:13": "Azariah reaffirms his faith in God's eternal nature, emphasizing His omnipotence and omnipresence.",
+        "1:15": "He declares his unwavering trust in God's plans, believing that His will prevails over all circumstances.",
+
+        // Section 5: Commitment to Righteous Living
+        "1:17": "Azariah vows to uphold God's laws, dedicating himself to a life of virtue and integrity.",
+        "1:19": "He commits to teaching and guiding others in the ways of the Lord, fostering a community grounded in faith and obedience.",
+
+        // Section 6: Final Supplications and Praise
+        "1:21": "Azariah concludes with final supplications, asking for God's continued presence and favor upon the people.",
+        "1:23": "He ends the prayer with heartfelt praise, celebrating God's greatness and expressing hope for His everlasting kingdom."
+    ],
+    // MARK: Susanna
+    "Susanna": [
+        // Chapter 1: The Righteousness of Susanna and the False Accusation
+        "1:1": "Introduces Susanna, a beautiful and virtuous woman living in Babylon, renowned for her piety and charitable deeds.",
+        "1:4": "Describes Susanna bathing in her garden, a place of solitude and prayer, reflecting her dedication to God.",
+        "1:6": "Narrates the scheming of two elders who lust after Susanna and conspire to accuse her falsely of adultery to satisfy their desires.",
+
+        // Chapter 2: Daniel's Intervention and the Testing of the Elders
+        "2:3": "Introduces Daniel, a young and wise man who becomes aware of the elders' plot against Susanna and decides to intervene.",
+        "2:7": "Details Daniel's strategic approach to interrogating the elders separately, ensuring their testimonies do not align if fabricated.",
+        "2:9": "Highlights the elders' inability to reconcile their conflicting statements, revealing the truth of their deceit and exonerating Susanna.",
+
+        // Chapter 3: The Vindication of Susanna and the Justice of God
+        "3:2": "Celebrates Susanna's vindication as the truth prevails, showcasing her unwavering faith and integrity throughout the ordeal.",
+        "3:5": "Emphasizes the moral lessons learned from the incident, including the importance of wisdom, justice, and divine protection for the righteous.",
+        "3:12": "Concludes with praise for God’s intervention, affirming that righteousness is ultimately rewarded and evil is exposed and punished."
+    ],
+    // MARK: Bel and the Dragon
+    "Bel and the Dragon": [
+        // Section 1: The Story of Bel
+        "1:1": "Introduces the idol Bel, revered by the Babylonians, and describes the deceitful practices of its priests who falsely claim that Bel consumes the sacrifices left by the people.",
+        "1:5": "Narrates Daniel’s investigation into the idol Bel, where he discovers that the priests secretly consume the offerings by hiding in the Bel’s belly.",
+        "1:9": "Details Daniel’s confrontation with the priests, exposing their fraud and proving that Bel does not consume the sacrifices, leading to their punishment.",
+
+        // Section 2: The Story of the Dragon
+        "1:12": "Introduces a living dragon worshipped by the Babylonians, symbolizing their misguided beliefs and the futility of idol worship.",
+        "1:16": "Describes Daniel’s challenge to the dragon, demonstrating his unwavering faith in God and rejecting the dragon’s supposed divine power.",
+        "1:20": "Narrates the miraculous demise of the dragon as Daniel prays to God, showcasing divine intervention and the triumph of true faith over false idols."
+    ],
+    // MARK: 1 Maccabees
+    "1 Maccabees": [
+        // Chapter 1: The Beginning of the Maccabean Revolt
+        "1:1": "Introduces Mattathias, a Jewish priest, and his sons who initiate the revolt against the oppressive decrees of Antiochus Epiphanes.",
+        "1:12": "Describes the outbreak of rebellion as Mattathias and his sons refuse to comply with the emperor's orders to abandon Jewish laws and practices.",
+
+        // Chapter 2: Judas Maccabeus Takes Leadership
+        "2:1": "Mattathias dies, and his son Judas Maccabeus assumes leadership of the rebellion, inspiring the people with his courage and faith.",
+        "2:36": "Details Judas' strategic victory against Gorgias, reinforcing the strength and determination of the rebel forces.",
+
+        // Chapter 3: Campaigns and Early Victories
+        "3:1": "Judas Maccabeus leads successful campaigns against Seleucid forces, reclaiming territories and restoring Jewish worship.",
+        "3:35": "Highlights the purification and rededication of the Temple in Jerusalem, marking a significant spiritual and national milestone.",
+
+        // Chapter 4: Defense of Jerusalem and Further Battles
+        "4:10": "Describes the defense of Jerusalem against a major Seleucid assault, showcasing the resilience and tactical prowess of Judas and his men.",
+        "4:46": "Judas secures Jerusalem's borders and establishes a period of relative peace, allowing for religious and cultural restoration.",
+
+        // Chapter 5: Consolidation of Power and Religious Reforms
+        "5:12": "Details the establishment of religious reforms to ensure the purity and observance of Jewish laws among the people.",
+        "5:31": "Judas oversees the rebuilding of the Temple, ensuring that it is cleansed and dedicated to the worship of Yahweh alone.",
+
+        // Chapter 6: Continued Military Campaigns and Diplomatic Efforts
+        "6:8": "Judas engages in battles to expand and secure Jewish territories, demonstrating both military skill and strategic alliances.",
+        "6:23": "Highlights diplomatic efforts to gain support from neighboring regions, strengthening the rebel's position against Seleucid forces.",
+
+        // Chapter 7: Leadership Challenges and Internal Conflicts
+        "7:7": "Addresses internal challenges within the rebel ranks, including disputes and the need for strong, unified leadership.",
+        "7:18": "Judas successfully resolves conflicts, reinforcing his authority and the cohesion of the rebel forces.",
+
+        // Chapter 8: Alliances and Strategic Marriages
+        "8:5": "Describes strategic marriages and alliances with neighboring leaders to bolster the rebel's support and legitimacy.",
+        "8:21": "Highlights the importance of alliances in sustaining the rebellion and ensuring long-term stability for the Jewish people.",
+
+        // Chapter 9: Campaigns Against Antiochus Eupator
+        "9:10": "Judas leads decisive campaigns against Antiochus Eupator, dealing significant blows to the Seleucid military presence.",
+        "9:28": "Emphasizes the strategic victories that weaken Seleucid control and inspire further support for the rebellion.",
+
+        // Chapter 10: Establishing Governance and Law
+        "10:3": "Details the establishment of governance structures to manage reclaimed territories and ensure the rule of law.",
+        "10:19": "Judas implements legal reforms to maintain order and justice within the Jewish community, promoting fairness and righteousness.",
+
+        // Chapter 11: Strengthening the Nation and Religious Institutions
+        "11:2": "Focuses on the strengthening of religious institutions to preserve Jewish traditions and prevent assimilation.",
+        "11:25": "Highlights efforts to educate and train religious leaders, ensuring the continuity of Jewish teachings and practices.",
+
+        // Chapter 12: Diplomatic Relations and Peace Efforts
+        "12:6": "Describes diplomatic negotiations aimed at securing peace and favorable terms for the Jewish people with neighboring states.",
+        "12:23": "Emphasizes the importance of peaceful relations in maintaining the stability and prosperity of the Jewish nation.",
+
+        // Chapter 13: Final Military Campaigns and Consolidation
+        "13:14": "Judas conducts final military campaigns to eliminate remaining Seleucid threats, ensuring lasting peace and security.",
+        "13:29": "Details the consolidation of power, with Judas establishing a strong and unified Jewish state free from Seleucid oppression.",
+
+        // Chapter 14: Achievements and Legacy of Judas Maccabeus
+        "14:5": "Celebrates Judas Maccabeus' achievements in liberating the Jewish people and restoring their faith and culture.",
+        "14:18": "Judas' legacy is solidified as a national hero, inspiring future generations to uphold Jewish traditions and resist oppression.",
+
+        // Chapter 15: Continuation of the Rebellion and Expansion
+        "15:2": "Describes the continued efforts to expand and secure Jewish territories, ensuring the longevity of the newly established state.",
+        "15:21": "Highlights the expansion of influence and the spread of Jewish practices beyond Jerusalem, promoting unity and strength.",
+
+        // Chapter 16: Conclusion and Final Reflections
+        "16:1": "Concludes with reflections on the rebellion's success, attributing victories to divine favor and the unwavering faith of the Jewish people.",
+        "16:16": "Emphasizes the importance of remembrance and gratitude for the sacrifices made during the revolt, ensuring that future generations honor their heritage."
+    ],
+    // MARK: 2 Maccabees
+    "2 Maccabees": [
+        // Chapter 1: Exhortation and Historical Introduction
+        "1:1": "Introduces the purpose of the book: to provide an accurate historical account of the Maccabean revolt and to encourage faithfulness to God.",
+        "1:12": "Emphasizes the importance of divine providence and the rewards of piety and obedience to God's commandments.",
+        "1:21": "Highlights the consequences of turning away from God, including suffering and oppression by foreign powers.",
+
+        // Chapter 2: The Martyrdom of Eleazar
+        "2:3": "Narrates the courageous refusal of Eleazar, a faithful Jew, to abandon his beliefs despite threats of death.",
+        "2:16": "Describes Eleazar's steadfastness and ultimate martyrdom, serving as an example of unwavering faith.",
+        "2:22": "Praises Eleazar's devotion, illustrating the virtues of sacrifice and loyalty to God.",
+
+        // Chapter 3: The Martyrdom of Jason and Ananias
+        "3:5": "Details the persecution faced by Jason and Ananias for their refusal to worship idols.",
+        "3:17": "Highlights their resilience and courage in the face of torture, remaining true to their faith.",
+        "3:21": "Commends their martyrdom, reinforcing the theme of steadfastness amidst adversity.",
+
+        // Chapter 4: The Reign of Antiochus Epiphanes
+        "4:4": "Describes the oppressive policies of Antiochus Epiphanes, including the desecration of the Temple and the persecution of Jews.",
+        "4:12": "Highlights the desecration of the Temple altar, symbolizing the extent of Antiochus's sacrilege.",
+        "4:18": "Emphasizes the widespread suffering and loss of freedom experienced by the Jewish people under Seleucid rule.",
+
+        // Chapter 5: The Oppression Intensifies
+        "5:2": "Details the increased persecution and attempts to force Jews to abandon their religious practices.",
+        "5:10": "Narrates the abduction and martyrdom of Jews who resisted assimilation and idolatry.",
+        "5:15": "Praises the courage of those who remained faithful, despite the escalating threats and brutality.",
+
+        // Chapter 6: The Story of Hannah and her Seven Sons
+        "6:4": "Introduces Hannah and her seven sons, who are arrested for refusing to worship Greek gods.",
+        "6:14": "Describes their unwavering faith and refusal to comply with idolatrous demands.",
+        "6:20": "Narrates the martyrdom of the seven sons, highlighting their ultimate sacrifice for their beliefs.",
+
+        // Chapter 7: The Miraculous Deliverance of Onias III
+        "7:3": "Tells the story of Onias III, a high priest who seeks divine guidance in the face of political turmoil.",
+        "7:11": "Highlights the miraculous intervention of God in delivering Onias III from assassination attempts.",
+        "7:18": "Emphasizes the protection of righteous leaders by divine providence, reinforcing the theme of God's faithfulness.",
+
+        // Chapter 8: The Rise of the Maccabees
+        "8:5": "Details the emergence of the Maccabean family as leaders in the fight against Seleucid oppression.",
+        "8:15": "Describes Judas Maccabeus' strategic leadership and his role in rallying the Jewish resistance.",
+        "8:25": "Praises the successes of the Maccabees in reclaiming and purifying the Temple, restoring proper worship.",
+
+        // Chapter 9: The Battle of Beth Zur
+        "9:2": "Narrates the decisive Battle of Beth Zur, where Judas Maccabeus leads the Jewish forces to victory against the Seleucids.",
+        "9:10": "Highlights the strategic brilliance and bravery of Judas, inspiring the Jewish people to continue their fight for freedom.",
+        "9:18": "Emphasizes the significance of the victory in boosting morale and strengthening the resolve of the Jewish rebels.",
+
+        // Chapter 10: The Purification of the Temple
+        "10:3": "Describes the purification and rededication of the desecrated Temple, a pivotal moment in the Maccabean revolt.",
+        "10:12": "Highlights the restoration of proper worship practices, symbolizing the triumph of faith over oppression.",
+        "10:21": "Praises the collective efforts of the Jewish people in reclaiming their sacred space and honoring God.",
+
+        // Chapter 11: The Reign of Antiochus Eupator
+        "11:1": "Introduces Antiochus Eupator, the successor of Antiochus Epiphanes, and his attempts to undermine the Maccabean revolt.",
+        "11:9": "Details the continued persecution and the challenges faced by the Jewish rebels under Antiochus Eupator's rule.",
+        "11:19": "Emphasizes the resilience and determination of the Maccabees in maintaining their religious and national identity.",
+
+        // Chapter 12: The Siege of Jerusalem
+        "12:4": "Narrates the siege of Jerusalem by Seleucid forces, testing the city's defenses and the people's faith.",
+        "12:14": "Describes the miraculous events and divine interventions that aid the Jewish defenders during the siege.",
+        "12:22": "Praises the steadfastness of Jerusalem's inhabitants and their unwavering commitment to God amidst adversity.",
+
+        // Chapter 13: The Victory Over Antiochus Eupator
+        "13:2": "Details the final defeat of Antiochus Eupator by the Maccabean forces, securing Jewish autonomy and religious freedom.",
+        "13:11": "Highlights the restoration of the Temple and the establishment of the Hasmonean dynasty, ensuring lasting peace and prosperity.",
+        "13:19": "Emphasizes the fulfillment of divine promises and the vindication of the Jewish people's faith and perseverance.",
+
+        // Chapter 14: The Establishment of the Hasmonean Kingdom
+        "14:3": "Describes the formal establishment of the Hasmonean Kingdom, marking a new era of Jewish self-governance.",
+        "14:12": "Highlights the political and religious reforms implemented by the Hasmonean rulers to strengthen the nation.",
+        "14:21": "Praises the leadership of the Maccabees in guiding the Jewish people towards stability and continued devotion to God.",
+
+        // Chapter 15: The Legacy of the Maccabean Revolt
+        "15:1": "Reflects on the lasting impact of the Maccabean Revolt, emphasizing its significance in Jewish history and identity.",
+        "15:14": "Encourages future generations to remember and honor the sacrifices made by the Maccabees for their faith and freedom.",
+        "15:25": "Concludes with a call to uphold the values of courage, faithfulness, and perseverance demonstrated by the Maccabean leaders."
+    ],
+    // MARK: Prayer of Manasseh
+    "Prayer of Manasseh": [
+        // Section 1: Introduction and Confession
+        "1:1": "Manasseh begins by acknowledging God's greatness and expressing his own unworthiness.",
+        "1:3": "He confesses his numerous sins and acknowledges the severity of his wrongdoing against God and His people.",
+
+        // Section 2: Plea for Mercy and Forgiveness
+        "1:5": "Manasseh earnestly pleads for God's mercy, recognizing that he deserves punishment but beseeching forgiveness.",
+        "1:7": "He appeals to God's compassion, emphasizing His willingness to forgive and restore those who repent.",
+
+        // Section 3: Promise to Reform and Serve
+        "1:9": "Manasseh vows to turn away from his sins and commit to following God's commandments wholeheartedly.",
+        "1:11": "He promises to lead a life of righteousness, humility, and dedicated service to God and His people.",
+
+        // Section 4: Conclusion and Thanksgiving
+        "1:12": "Manasseh concludes with a heartfelt thanksgiving to God for His mercy and the assurance of redemption.",
+    ],
+    // MARK: 1 Esdras
+    "1 Esdras": [
+        // Chapter 1: The Decree of Cyrus and the Return to Jerusalem
+        "1:1": "Introduces King Cyrus of Persia issuing a decree allowing the Jews to return to Jerusalem and rebuild the Temple.",
+        "1:9": "Describes the return of Zerubbabel and Jeshua to Jerusalem, leading the first group of exiles back to their homeland.",
+        "1:21": "Highlights the laying of the foundation of the Temple and the initial efforts to restore proper worship.",
+
+        // Chapter 2: The Rebuilding of the Temple
+        "2:4": "Narrates the progress of the Temple's reconstruction, despite opposition and limited resources.",
+        "2:12": "Describes the dedication of the Temple, with the people celebrating and offering sacrifices as a sign of renewal.",
+        "2:25": "Emphasizes the restoration of religious practices and the reinstitution of the Law, fostering unity among the people.",
+
+        // Chapter 3: The Appointment of Priests and Levites
+        "3:2": "Details the selection and ordination of priests and Levites to serve in the rebuilt Temple, ensuring proper rituals.",
+        "3:14": "Highlights the commitment of the new priests to uphold the Law and maintain the sanctity of the Temple.",
+        "3:22": "Describes the establishment of regular sacrifices and offerings, reinstating the religious life of the community.",
+
+        // Chapter 4: Opposition and Challenges
+        "4:5": "Narrates the opposition faced by the builders from surrounding nations, attempting to halt the reconstruction.",
+        "4:17": "Describes strategies employed by Zerubbabel and Jeshua to overcome external threats and continue their work.",
+        "4:28": "Emphasizes the resilience of the Jewish leaders and their unwavering faith in God's support.",
+
+        // Chapter 5: The Arrival of Ezra and the Law
+        "5:3": "Introduces Ezra the scribe arriving in Jerusalem, bringing with him a copy of the Law of Moses.",
+        "5:16": "Describes Ezra's role in teaching and enforcing the Law among the people, leading to spiritual revival.",
+        "5:27": "Highlights the people's renewed commitment to follow God's commandments, fostering a sense of community and righteousness.",
+
+        // Chapter 6: The Completion of the Temple
+        "6:1": "Narrates the completion of the Temple, marked by a grand celebration and offerings to God.",
+        "6:13": "Describes the joy and gratitude of the Jewish people for the successful rebuilding, attributing it to divine favor.",
+        "6:21": "Emphasizes the importance of maintaining the sanctity of the Temple and continuing the observance of the Law.",
+
+        // Chapter 7: Religious Reforms and Purification
+        "7:2": "Details the implementation of religious reforms to purify the community from idolatry and pagan practices.",
+        "7:14": "Describes the establishment of strict observance of dietary laws and Sabbath regulations, ensuring holiness.",
+        "7:26": "Highlights the role of leaders like Ezra in guiding the people towards a life of piety and adherence to God's will.",
+
+        // Chapter 8: Ezra's Reforms and the Renewal of the Covenant
+        "8:3": "Narrates Ezra's efforts to renew the covenant with God, reinforcing the people's dedication to the Law.",
+        "8:15": "Describes the public reading and explanation of the Law, leading to widespread repentance and commitment.",
+        "8:27": "Emphasizes the transformation of the community through Ezra's reforms, fostering unity and righteousness.",
+
+        // Chapter 9: Confession of Sins and Appeal for Mercy
+        "9:1": "The people confess their sins and the sins of their ancestors, acknowledging their failures to uphold the Law.",
+        "9:12": "They appeal to God's mercy, seeking forgiveness and restoration for their transgressions.",
+        "9:21": "Highlights the communal repentance and the desire to return to a faithful and obedient relationship with God.",
+
+        // Chapter 10: The Final Exhortations and Conclusion
+        "10:2": "Zerubbabel and Jeshua issue final exhortations to the people, urging continued faithfulness and obedience.",
+        "10:14": "Describes the people's commitment to maintain the practices established by Ezra and the leaders.",
+        "10:22": "Concludes the book with blessings upon the community and a reaffirmation of their dedication to God's Law."
+    ],
+    // MARK: 2 Esdras
+    "2 Esdras": [
+        // Chapter 1: The Author’s Purpose and Distress
+        "1:1": "The author explains his purpose in recounting the events of the Maccabean revolt to provide comfort and understanding.",
+        "1:14": "Expresses deep distress and confusion over the suffering and turmoil faced by the Jewish people.",
+        "1:25": "Seeks divine guidance to comprehend the reasons behind their plight and to find hope amidst despair.",
+
+        // Chapter 2: Vision of the Divine
+        "2:3": "Describes a profound vision in which the author encounters divine beings who offer insights into the human condition.",
+        "2:16": "Highlights the revelation of God's justice and the moral order governing the universe.",
+        "2:28": "Emphasizes the importance of faith and righteousness in aligning with God's will.",
+
+        // Chapter 3: Dialogue with the Angel Uriel
+        "3:5": "The author engages in a dialogue with the angel Uriel, seeking answers about the existence of evil and suffering.",
+        "3:17": "Uriel explains the purpose of trials and tribulations in refining faith and character.",
+        "3:29": "Concludes with a reaffirmation of God's ultimate plan for redemption and restoration.",
+
+        // Chapter 4: The Nature of Wisdom and Justice
+        "4:2": "Explores the attributes of divine wisdom and its role in guiding righteous living.",
+        "4:14": "Discusses the relationship between justice and mercy in the administration of divine law.",
+        "4:26": "Encourages the pursuit of wisdom as a means to understand and fulfill God's commandments.",
+
+        // Chapter 5: Prophecy and Fulfillment
+        "5:1": "Narrates prophetic visions that foretell the deliverance of the Jewish people from oppression.",
+        "5:13": "Highlights the fulfillment of prophecies through the actions of faithful leaders and divine intervention.",
+        "5:25": "Emphasizes the certainty of God's promises and the assurance of their eventual realization.",
+
+        // Chapter 6: The End Times and Final Judgment
+        "6:4": "Describes apocalyptic visions of the end times, detailing the ultimate confrontation between good and evil.",
+        "6:18": "Explains the process of final judgment, where the righteous are rewarded and the wicked are condemned.",
+        "6:30": "Concludes with a message of hope, assuring believers of their eternal salvation and peace in God's presence.",
+
+        // Chapter 7: Encouragement to Persevere
+        "7:2": "Encourages the faithful to persevere in their devotion despite ongoing challenges and adversities.",
+        "7:14": "Reiterates the rewards of steadfast faith and the importance of maintaining hope in divine promises.",
+        "7:26": "Calls for collective unity and resilience among the Jewish people to overcome future trials."
+    ],
 ]

@@ -10,15 +10,15 @@ import Foundation
 // MARK: - BibleService
 class BibleService {
     static let shared = BibleService()
-
+    
     private let baseURL = Bundle.main.url(forResource: "bible", withExtension: "json")!
-
+    
     func fetchBibleData() -> (oldTestament: [Book], newTestament: [Book]) {
         do {
             let data = try Data(contentsOf: baseURL)
             let decoder = JSONDecoder()
             var bibleData = try decoder.decode([Book].self, from: data)
-
+            
             for i in bibleData.indices {
                 if Testament.oldNames.contains(bibleData[i].name) {
                     bibleData[i].testament = .old
@@ -29,12 +29,31 @@ class BibleService {
             }
             let oldTestament = bibleData.filter { $0.testament == .old }
             let newTestament = bibleData.filter { $0.testament == .new }
-
+            
             print("Got Bible data \((oldTestament, newTestament))")
             return (oldTestament, newTestament)
         } catch {
             print("Error fetching Bible data: \(error)")
             return ([], [])
+        }
+    }
+    
+    func fetchApocryphaData() -> [Book] {
+        do {
+            let apocryphaURL = Bundle.main.url(forResource: "apocrypha", withExtension: "json")!
+            let data = try Data(contentsOf: apocryphaURL)
+            let decoder = JSONDecoder()
+            var apocryphaData = try decoder.decode([Book].self, from: data)
+            
+            for i in apocryphaData.indices {
+                apocryphaData[i].testament = .apocrypha
+            }
+            
+            print("Got Apocrypha data: \(apocryphaData)")
+            return apocryphaData
+        } catch {
+            print("Error fetching Apocrypha data: \(error)")
+            return []
         }
     }
 }
