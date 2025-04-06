@@ -32,7 +32,8 @@ Deno.serve(async (req) => {
   const devotional = await generateDevotional(prompt);
   console.log("Generated Devotional:\n", devotional);
 
-  saveDevotional(devotional, req);
+  const { formatted, isoDate } = getFormattedDate();
+  saveDevotional(devotional, isoDate, req);
 
   return new Response(devotional, {
     headers: { "Content-Type": "text/plain" },
@@ -56,13 +57,16 @@ async function fetchRandomVerse() {
   }
 }
 
-function getFormattedDate() {
-  const today = new Date();
-  return today.toLocaleDateString("en-US", {
+function getFormattedDate(): { formatted: string; isoDate: string } {
+  const now = new Date();
+  const formatted = now.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
+
+  const isoDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
+  return { formatted, isoDate };
 }
 
 function createPrompt(verseData: any, formattedDate: string): string {
@@ -148,7 +152,11 @@ async function generateDevotional(prompt: string): Promise<string> {
   }
 }
 
-async function saveDevotional(message: string, req: any): Promise<void> {
+async function saveDevotional(
+  message: string,
+  forDate: string,
+  req: any
+): Promise<void> {
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_ANON_KEY") ?? "",
@@ -156,7 +164,9 @@ async function saveDevotional(message: string, req: any): Promise<void> {
       global: { headers: { Authorization: req.headers.get("Authorization")! } },
     }
   );
-  const { error } = await supabase.from("Daily Devotional").insert({ message });
+  const { error } = await supabase
+    .from("Daily Devotional")
+    .upsert({ message, for_date: forDate }, { onConflict: "for_date" });
   if (error) throw error;
 }
 
