@@ -33,8 +33,8 @@ struct DailyDevotionalView: View {
             DatePicker("Select a date", selection: $selectedDate, displayedComponents: .date)
                 .datePickerStyle(.compact)
                 .padding()
-                .onChange(of: selectedDate) { newDate in
-                    Task { await fetchDailyDevotional(for: newDate) }
+                .onChange(of: selectedDate) {
+                    Task { await fetchDailyDevotional(for: selectedDate) }
                 }
 
             if isLoading {
