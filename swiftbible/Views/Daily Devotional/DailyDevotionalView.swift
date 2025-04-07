@@ -17,32 +17,33 @@ struct DailyDevotional: Decodable {
 struct DailyDevotionalView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
     @Environment(UserViewModel.self) private var userViewModel
-
+    
     @State private var message: String = ""
     @State private var isLoading: Bool = false
     @State private var hasDevotional: Bool = false
     @State private var selectedDate: Date = Date()
     @State var calendarId: UUID = UUID()
-
+    
     // Animations
     @State private var pulse = false
     @State private var showNoDevotional = false
     @State private var sparkleTwinkle = false
-
+    
     var body: some View {
         VStack(spacing: 0) {
             DatePicker("Select a date", selection: $selectedDate, displayedComponents: .date)
                 .datePickerStyle(.compact)
                 .padding()
+                .id(calendarId)
                 .onChange(of: selectedDate) {
                     Task { await fetchDailyDevotional(for: selectedDate) }
-                   calendarId = UUID()
+                    calendarId = UUID()
                 }
-
+            
             if isLoading {
                 VStack(spacing: 12) {
                     Spacer()
-
+                    
                     Image(systemName: "book.fill")
                         .resizable()
                         .scaledToFit()
@@ -52,11 +53,11 @@ struct DailyDevotionalView: View {
                         .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: pulse)
                         .onAppear { pulse = true }
                         .onDisappear() { pulse = false }
-
-                    Text("Fetching today's message...")
+                    
+                    Text(fetchingMessageText(for: selectedDate))
                         .font(.headline)
                         .transition(.opacity)
-
+                    
                     Spacer()
                 }
                 .padding(.top, 40)
@@ -76,7 +77,7 @@ struct DailyDevotionalView: View {
             } else {
                 VStack(spacing: 12) {
                     Spacer()
-
+                    
                     Image(systemName: "sparkles")
                         .resizable()
                         .scaledToFit()
@@ -94,19 +95,19 @@ struct DailyDevotionalView: View {
                             sparkleTwinkle = false
                             showNoDevotional = false
                         }
-
+                    
                     Text("No devotional found for this day.")
                         .font(.headline)
                         .opacity(showNoDevotional ? 1 : 0)
                         .animation(.easeIn.delay(0.2), value: showNoDevotional)
-
+                    
                     Text(selectedDate > Date()
-                          ? "Come back on \(formattedDate(selectedDate))!"
-                          : "We may have missed this one.")
-                        .foregroundColor(.secondary)
-                        .opacity(showNoDevotional ? 1 : 0)
-                        .animation(.easeIn.delay(0.3), value: showNoDevotional)
-
+                         ? "Come back on \(formattedDate(selectedDate))!"
+                         : "We may have missed this one.")
+                    .foregroundColor(.secondary)
+                    .opacity(showNoDevotional ? 1 : 0)
+                    .animation(.easeIn.delay(0.3), value: showNoDevotional)
+                    
                     Spacer()
                 }
                 .padding(.top, 40)
@@ -124,17 +125,17 @@ struct DailyDevotionalView: View {
         }
         .accessibilityIdentifier("DailyDevotionalView")
     }
-
+    
     private func fetchDailyDevotional(for date: Date) async {
         isLoading = true
         hasDevotional = false
         showNoDevotional = false
         message = ""
-
+        
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: date)
-
+        
         do {
             let devotional: DailyDevotional = try await SupabaseService.shared.client
                 .from("Daily Devotional")
@@ -143,20 +144,49 @@ struct DailyDevotionalView: View {
                 .single()
                 .execute()
                 .value
-
+            
             message = devotional.message
             hasDevotional = true
         } catch {
             print("No devotional found for \(dateString): \(error)")
         }
-
+        
         isLoading = false
     }
-
+    
     private func formattedDate(_ date: Date) -> String {
         let df = DateFormatter()
         df.dateStyle = .long
         return df.string(from: date)
+    }
+    
+    private func fetchingMessageText(for date: Date) -> String {
+        let calendar = Calendar.current
+        
+        if calendar.isDateInToday(date) {
+            return "Fetching today's message..."
+        } else if calendar.isDateInYesterday(date) {
+            return "Fetching yesterday's message..."
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM d"
+            let day = calendar.component(.day, from: date)
+            let suffix = daySuffix(day)
+            return "Fetching \(formatter.string(from: date))\(suffix)'s message..."
+        }
+    }
+    
+    private func daySuffix(_ day: Int) -> String {
+        switch day {
+        case 11, 12, 13: return "th"
+        default:
+            switch day % 10 {
+            case 1: return "st"
+            case 2: return "nd"
+            case 3: return "rd"
+            default: return "th"
+            }
+        }
     }
 }
 
