@@ -22,6 +22,7 @@ struct DailyDevotionalView: View {
     @State private var isLoading: Bool = false
     @State private var hasDevotional: Bool = false
     @State private var selectedDate: Date = Date()
+    @State var calendarId: UUID = UUID()
 
     // Animations
     @State private var pulse = false
@@ -35,6 +36,7 @@ struct DailyDevotionalView: View {
                 .padding()
                 .onChange(of: selectedDate) {
                     Task { await fetchDailyDevotional(for: selectedDate) }
+                   calendarId = UUID()
                 }
 
             if isLoading {
