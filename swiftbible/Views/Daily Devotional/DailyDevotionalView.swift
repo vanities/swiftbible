@@ -23,7 +23,8 @@ struct DailyDevotionalView: View {
     @State private var hasDevotional: Bool = false
     @State private var selectedDate: Date = Date()
     @State var calendarId: UUID = UUID()
-    
+    @State private var showToast = false
+
     // Animations
     @State private var pulse = false
     @State private var showNoDevotional = false
@@ -73,6 +74,22 @@ struct DailyDevotionalView: View {
                                     FontSize(.em(1))
                                 }
                         }
+                        .contextMenu {
+                            Button(action: {
+                                UIPasteboard.general.string = message
+                                withAnimation {
+                                    showToast = true
+                                }
+                                // Auto-dismiss after 2 seconds
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    withAnimation {
+                                        showToast = false
+                                    }
+                                }
+                            }) {
+                                Label("Copy Devotional", systemImage: "doc.on.doc")
+                            }
+                        }
                 }
             } else {
                 VStack(spacing: 12) {
@@ -116,6 +133,21 @@ struct DailyDevotionalView: View {
                 }
             }
         }
+        .overlay(
+            Group {
+                if showToast {
+                    Text("Copied to clipboard")
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(12)
+                        .shadow(radius: 10)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .padding(.top, 40)
+                }
+            },
+            alignment: .top
+        )
         .font(Font.system(size: CGFloat(fontSize)))
         .onAppear {
             Task { await fetchDailyDevotional(for: selectedDate) }
