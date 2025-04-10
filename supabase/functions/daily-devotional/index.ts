@@ -20,19 +20,19 @@ Deno.serve(async (req) => {
   );
 
   // Step 2: Format today's date
-  const formattedDate = getFormattedDate();
-  console.log(`Date: ${formattedDate}`);
+  const { formatted, isoDate } = getFormattedDate();
+  console.log(`Date: ${formatted}`);
 
   // Step 3: Create the prompt
-  const prompt = createPrompt(verseData, formattedDate);
+  const prompt = createPrompt(verseData, formatted);
   // Uncomment the line below to see the prompt
   // console.log('Prompt:', prompt);
+  //
 
   // Step 4: Generate the devotional
   const devotional = await generateDevotional(prompt);
   console.log("Generated Devotional:\n", devotional);
 
-  const { formatted, isoDate } = getFormattedDate();
   saveDevotional(devotional, isoDate, req);
 
   return new Response(devotional, {
