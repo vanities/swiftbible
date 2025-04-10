@@ -53,6 +53,8 @@
 		954BC9F22C85112D00FFCFA6 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9F12C85112D00FFCFA6 /* SearchBar.swift */; };
 		954BC9F42C8513A900FFCFA6 /* Testament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9F32C8513A900FFCFA6 /* Testament.swift */; };
 		955281412D1B5D8A00341577 /* apocrypha.json in Resources */ = {isa = PBXBuildFile; fileRef = 955281402D1B5D8A00341577 /* apocrypha.json */; };
+		956026C62DA85464006A9CFC /* MarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956026C52DA85464006A9CFC /* MarkdownParser.swift */; };
+		956026C92DA85508006A9CFC /* Ink in Frameworks */ = {isa = PBXBuildFile; productRef = 956026C82DA85508006A9CFC /* Ink */; };
 		95978F1A2CA888E600C520EF /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F192CA888E600C520EF /* Tab.swift */; };
 		95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */; };
 /* End PBXBuildFile section */
@@ -110,6 +112,7 @@
 		954BC9F32C8513A900FFCFA6 /* Testament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Testament.swift; sourceTree = "<group>"; };
 		954BC9F52C85456400FFCFA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		955281402D1B5D8A00341577 /* apocrypha.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apocrypha.json; sourceTree = "<group>"; };
+		956026C52DA85464006A9CFC /* MarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownParser.swift; sourceTree = "<group>"; };
 		95978F192CA888E600C520EF /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 		95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = swiftbibleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -129,6 +132,7 @@
 				95186D072C893C8100C0949D /* Functions in Frameworks */,
 				9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */,
 				95186D052C893C8100C0949D /* Auth in Frameworks */,
+				956026C92DA85508006A9CFC /* Ink in Frameworks */,
 				95186D0D2C893C8100C0949D /* Storage in Frameworks */,
 				95186D0B2C893C8100C0949D /* Realtime in Frameworks */,
 			);
@@ -284,6 +288,7 @@
 				9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */,
 				954BC9E92C8500F900FFCFA6 /* BibleService.swift */,
 				952F39E22C8F4874009A412D /* ParagraphParser.swift */,
+				956026C52DA85464006A9CFC /* MarkdownParser.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -382,6 +387,7 @@
 			packageReferences = (
 				95186D112C893F2F00C0949D /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				952F39D82C8BBD3C009A412D /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				956026C72DA85508006A9CFC /* XCRemoteSwiftPackageReference "Ink" */,
 			);
 			productRefGroup = 954BC9D12C84EDBE00FFCFA6 /* Products */;
 			projectDirPath = "";
@@ -447,6 +453,7 @@
 				951009882C9525250040B21A /* summaries.swift in Sources */,
 				951009862C9520600040B21A /* UINavigationController.swift in Sources */,
 				9510098C2C9537350040B21A /* NavigationTitle.swift in Sources */,
+				956026C62DA85464006A9CFC /* MarkdownParser.swift in Sources */,
 				951009822C9289630040B21A /* AppViewModel.swift in Sources */,
 				952F39CF2C8BA7F3009A412D /* ContentView.swift in Sources */,
 				954BC9ED2C85012200FFCFA6 /* BookDetailView.swift in Sources */,
@@ -775,6 +782,14 @@
 				minimumVersion = 2.4.0;
 			};
 		};
+		956026C72DA85508006A9CFC /* XCRemoteSwiftPackageReference "Ink" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JohnSundell/Ink.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -812,6 +827,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 95186D112C893F2F00C0949D /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		956026C82DA85508006A9CFC /* Ink */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 956026C72DA85508006A9CFC /* XCRemoteSwiftPackageReference "Ink" */;
+			productName = Ink;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

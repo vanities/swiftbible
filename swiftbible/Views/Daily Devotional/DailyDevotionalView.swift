@@ -76,7 +76,7 @@ struct DailyDevotionalView: View {
                         }
                         .contextMenu {
                             Button(action: {
-                                UIPasteboard.general.string = message
+                                UIPasteboard.general.string = markdownToPlainText(message)
                                 withAnimation {
                                     showToast = true
                                 }
