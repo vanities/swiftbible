@@ -2,7 +2,7 @@
 //  swiftbibleUITests.swift
 //  swiftbibleUITests
 //
-//  Created by Adam Mischke on 9/30/24.
+//  Created on 9/30/24.
 //
 
 import XCTest

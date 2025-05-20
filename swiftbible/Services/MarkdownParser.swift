@@ -2,7 +2,7 @@
 //  Markdown.swift
 //  swiftbible
 //
-//  Created by Adam Mischke on 4/10/25.
+//  Created on 4/10/25.
 //
 
 import Foundation

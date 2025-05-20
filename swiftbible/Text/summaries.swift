@@ -2,7 +2,7 @@
 //  summaries.swift
 //  swiftbible
 //
-//  Created by Adam Mischke on 9/13/24.
+//  Created on 9/13/24.
 //
 
 import Foundation

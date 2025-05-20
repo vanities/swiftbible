@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  swiftbible
 //
-//  Created by Adam Mischke on 9/1/24.
+//  Created on 9/1/24.
 //
 
 import SwiftUI

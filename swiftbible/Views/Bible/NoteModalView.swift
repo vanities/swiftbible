@@ -2,7 +2,7 @@
 //  NoteModalView.swift
 //  swiftbible
 //
-//  Created by Adam Mischke on 9/11/24.
+//  Created on 9/11/24.
 //
 
 import SwiftUI

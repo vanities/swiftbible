@@ -2,7 +2,7 @@
 //  SearchDetailView.swift
 //  swiftbible
 //
-//  Created by Adam Mischke on 9/28/24.
+//  Created on 9/28/24.
 //
 
 
