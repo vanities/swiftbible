@@ -11,6 +11,9 @@ import SwiftData
 
 struct SeeSavedNotesView: View {
     @Environment(AppViewModel.self) private var appViewModel
+
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("fontSize") private var fontSize: Int = 20
     
     @Query private var notes: [Note] = []
 
@@ -34,18 +37,16 @@ struct SeeSavedNotesView: View {
                         }) {
                             VStack(alignment: .leading) {
                                 Text(note.text)
-                                    .font(.headline)
                                 
                                 
                                 Text("\(note.version.uppercased()) \(note.book) \(note.chapter):\(note.startingVerse)")
-                                    .font(.headline)
-                                    .font(.subheadline)
                                     .foregroundColor(.gray)
                                 
                                 Text("Created: \(note.created.formatted(date: .long, time: .omitted))")
-                                    .font(.caption)
                                     .foregroundColor(.gray)
                             }
+                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
+
                         }
                     }
                 }

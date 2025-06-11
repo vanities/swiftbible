@@ -16,6 +16,7 @@ struct DailyDevotional: Decodable {
 
 struct DailyDevotionalView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
     @Environment(UserViewModel.self) private var userViewModel
     
     @State private var message: String = ""
@@ -56,7 +57,6 @@ struct DailyDevotionalView: View {
                         .onDisappear() { pulse = false }
                     
                     Text(fetchingMessageText(for: selectedDate))
-                        .font(.headline)
                         .transition(.opacity)
                     
                     Spacer()
@@ -114,7 +114,6 @@ struct DailyDevotionalView: View {
                         }
                     
                     Text("No devotional found for this day.")
-                        .font(.headline)
                         .opacity(showNoDevotional ? 1 : 0)
                         .animation(.easeIn.delay(0.2), value: showNoDevotional)
                     
@@ -148,7 +147,7 @@ struct DailyDevotionalView: View {
             },
             alignment: .top
         )
-        .font(Font.system(size: CGFloat(fontSize)))
+        .font(Font.custom(fontName, size: CGFloat(fontSize)))
         .onAppear {
             Task { await fetchDailyDevotional(for: selectedDate) }
         }

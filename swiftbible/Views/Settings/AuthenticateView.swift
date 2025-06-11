@@ -15,6 +15,9 @@ struct AuthenticateView: View {
     @State private var showDeleteConfirmation = false
     @State private var isDeleting = false
 
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("fontSize") private var fontSize: Int = 20
+
     @Environment(UserViewModel.self) private var userViewModel
     @AppStorage("supabaseAccessToken") private var supabaseAccessToken: String?
     @AppStorage("supabaseRefreshToken") private var supabaseRefreshToken: String?
@@ -25,7 +28,7 @@ struct AuthenticateView: View {
                 if let user = userViewModel.user {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Signed in as: \(user.email ?? "")")
-                            .font(.headline)
+                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
 
                         Button("Sign Out") {
                             Task {
