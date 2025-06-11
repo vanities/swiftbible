@@ -12,6 +12,9 @@ import SwiftData
 struct SeeHighlightsView: View {
     @Environment(AppViewModel.self) private var appViewModel
 
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("fontSize") private var fontSize: Int = 20
+
     @Query private var highlightedVerses: [HighlightedVerse] = []
 
     @Binding var selectedTab: Tabs
@@ -34,12 +37,10 @@ struct SeeHighlightsView: View {
                         }) {
                             VStack(alignment: .leading) {
                                 Text("\(highlightedVerse.version.uppercased()) \(highlightedVerse.book) \(highlightedVerse.chapter):\(highlightedVerse.startingVerse)")
-                                    .font(.headline)
-
                                 Text("Created: \(highlightedVerse.created.formatted(date: .long, time: .omitted))")
-                                    .font(.caption)
                                     .foregroundColor(.gray)
                             }
+                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
                         }
                     }
                 }

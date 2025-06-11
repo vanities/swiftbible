@@ -49,12 +49,11 @@ struct SearchDetailView: View {
                         }) {
                             VStack(alignment: .leading) {
                                 Text("\(result.bookName) \(result.chapterNumber):\(result.verseNumber)")
-                                    .font(Font.custom(fontName, size: CGFloat(fontSize)))
-                                    .font(.headline)
+                                    .bold()
                                 ParagraphView(firstVerseNumber: result.verseNumber, paragraph: result.verseText)
-                                    .font(.subheadline)
                                     .lineLimit(5)
                             }
+                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
                         }
                     }
                     .buttonStyle(.plain)

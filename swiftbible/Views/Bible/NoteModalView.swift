@@ -15,13 +15,15 @@ struct NoteModalView: View {
     var onCancel: () -> Void
     var onDelete: (Note) -> Void
 
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("fontSize") private var fontSize: Int = 20
+
     var body: some View {
         NavigationView {
             VStack {
                 Form {
                     Section(header: Text("Note Details")) {
                         Text("\(note.version.uppercased()) \(note.book) \(note.chapter):\(note.startingVerse)")
-                            .font(.headline)
                     }
 
                     Section(header: Text("Note")) {
@@ -48,6 +50,7 @@ struct NoteModalView: View {
                     .foregroundColor(.red)
                 }
             }
+            .font(Font.custom(fontName, size: CGFloat(fontSize)))
             .navigationBarTitle("Edit Note", displayMode: .inline)
             .navigationBarItems(trailing: EmptyView())
         }

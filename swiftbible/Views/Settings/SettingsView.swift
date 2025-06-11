@@ -14,6 +14,9 @@ struct SettingsView: View {
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showApocrypha") var showApocrypha = false
 
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("fontSize") private var fontSize: Int = 20
+
     @Binding var selectedTab: Tabs
 
     var body: some View {
@@ -83,8 +86,8 @@ struct SettingsView: View {
                     HStack {
                         Spacer()
                         Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
-                            .font(.footnote)
                             .foregroundColor(.gray)
+                            .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
                         Spacer()
                     }
                 }
