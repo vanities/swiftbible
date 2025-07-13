@@ -130,6 +130,6 @@ def convert_txt_to_json(input_file, output_file):
 if __name__ == "__main__":
     input_txt_file = "apocrypha.txt"  # Replace with your input file path
     output_json_file = (
-        "swiftbible/Text/apocrypha.json"  # Replace with your desired output file path
+        "../swiftbible/Text/apocrypha.json"  # Replace with your desired output file path
     )
     convert_txt_to_json(input_txt_file, output_json_file)

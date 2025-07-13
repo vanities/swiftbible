@@ -38,6 +38,7 @@ Use this link to join the TestFlight: <https://testflight.apple.com/join/MHYwBxp
 - Search functionality to quickly find specific passages or keywords
 - Chapter and verse titles
 - Shows Jesus's Text in <font color="red">Red</font>
+- Long press a verse to fetch additional context and definitions
 
 ## Upcoming Features
 
