@@ -7,7 +7,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const BIBLE_API_URL = "https://bible-api.com/?random=verse&translation=kjv";
-const LAMBDA_LABS_URL = "https://api.lambdalabs.com/v1/chat/completions";
+const OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses";
 
 Deno.serve(async (req) => {
   if (Deno.env.get("SUPABASE_URL") == req.headers.get("SuperSecret")) {
@@ -81,7 +81,7 @@ Date: ${formattedDate}
 Devotional Guidelines:
 
 1. Title as a Heading: Use # for the title at the very top.
-   
+
 2. Subtitle (Date, Passage Reference, and Context Summary): Follow with a **bolded summary** line immediately below the title to provide quick context.
 
 Example Markdown Structure
@@ -118,36 +118,46 @@ Example Markdown Structure
 
 async function generateDevotional(prompt: string): Promise<string> {
   try {
-    const response = await fetch(LAMBDA_LABS_URL, {
+    const apiKey = Deno.env.get("OPENAI_API_KEY");
+    if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
+
+    const response = await fetch(OPENAI_RESPONSES_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${Deno.env.get("LAMBDA_API_KEY")}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "hermes-3-llama-3.1-405b-fp8", // You can change this to the model you prefer
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.8,
-        max_tokens: 1000,
+        model: "gpt-5-mini",
+        input: prompt,
+        max_output_tokens: 1000,
       }),
     });
+
     if (!response.ok) {
-      const errorData = await response.json();
+      let errorText: string | undefined;
+      try {
+        const errorData = await response.json();
+        errorText = JSON.stringify(errorData);
+      } catch (_) {
+        errorText = await response.text();
+      }
       throw new Error(
-        `OpenAI API request failed with status ${
-          response.status
-        }: ${JSON.stringify(errorData)}`
+        `OpenAI Responses API failed with status ${response.status}: ${errorText}`
       );
     }
 
     const data = await response.json();
-    const devotional = data.choices[0].message.content.trim();
-    return devotional;
-  } catch (error) {
-    console.error(
-      "Error generating devotional:",
-      error.response ? error.response.data : error.message
-    );
+    // Prefer the convenience field if available
+    const maybeOutputText: string | undefined = data.output_text;
+    if (maybeOutputText && typeof maybeOutputText === "string") {
+      return maybeOutputText.trim();
+    }
+    // Fallback: drill into content array
+    const fallback = data.output?.[0]?.content?.[0]?.text ?? "";
+    return String(fallback).trim();
+  } catch (error: any) {
+    console.error("Error generating devotional:", error?.message ?? error);
     throw error;
   }
 }
