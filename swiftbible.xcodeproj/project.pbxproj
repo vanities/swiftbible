@@ -57,6 +57,7 @@
 		956026C92DA85508006A9CFC /* Ink in Frameworks */ = {isa = PBXBuildFile; productRef = 956026C82DA85508006A9CFC /* Ink */; };
 		95978F1A2CA888E600C520EF /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F192CA888E600C520EF /* Tab.swift */; };
 		95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */; };
+		959BA4E92E751E0900B7C7AB /* enoch.json in Resources */ = {isa = PBXBuildFile; fileRef = 959BA4E82E751E0900B7C7AB /* enoch.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +116,7 @@
 		956026C52DA85464006A9CFC /* MarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownParser.swift; sourceTree = "<group>"; };
 		95978F192CA888E600C520EF /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
+		959BA4E82E751E0900B7C7AB /* enoch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enoch.json; sourceTree = "<group>"; };
 		95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = swiftbibleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -259,6 +261,7 @@
 		954BC9E22C85001900FFCFA6 /* Text */ = {
 			isa = PBXGroup;
 			children = (
+				959BA4E82E751E0900B7C7AB /* enoch.json */,
 				955281402D1B5D8A00341577 /* apocrypha.json */,
 				951009892C95364C0040B21A /* ChapterSummaries.swift */,
 				954BC9E32C85005900FFCFA6 /* bible.json */,
@@ -404,6 +407,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				959BA4E92E751E0900B7C7AB /* enoch.json in Resources */,
 				954BC9DC2C84EDBF00FFCFA6 /* Preview Assets.xcassets in Resources */,
 				955281412D1B5D8A00341577 /* apocrypha.json in Resources */,
 				954BC9E42C85005900FFCFA6 /* bible.json in Resources */,

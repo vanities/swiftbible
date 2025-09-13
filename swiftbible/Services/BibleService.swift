@@ -44,15 +44,34 @@ class BibleService {
             let data = try Data(contentsOf: apocryphaURL)
             let decoder = JSONDecoder()
             var apocryphaData = try decoder.decode([Book].self, from: data)
-            
+
             for i in apocryphaData.indices {
                 apocryphaData[i].testament = .apocrypha
             }
-            
+
             print("Got Apocrypha data: \(apocryphaData)")
             return apocryphaData
         } catch {
             print("Error fetching Apocrypha data: \(error)")
+            return []
+        }
+    }
+
+    func fetchEnochData() -> [Book] {
+        do {
+            let enochURL = Bundle.main.url(forResource: "enoch", withExtension: "json")!
+            let data = try Data(contentsOf: enochURL)
+            let decoder = JSONDecoder()
+            var enochData = try decoder.decode([Book].self, from: data)
+
+            for i in enochData.indices {
+                enochData[i].testament = .enoch
+            }
+
+            print("Got Enoch data: \(enochData)")
+            return enochData
+        } catch {
+            print("Error fetching Enoch data: \(error)")
             return []
         }
     }

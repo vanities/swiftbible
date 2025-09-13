@@ -1,0 +1,43 @@
+2025-07-13 14:25:16 | INFO | verse_info | ▶️  Starting verse-info generation (2025-07-13T19:25:16)
+2025-07-13 14:25:42 | INFO | verse_info | ▶️  Starting verse-info generation (2025-07-13T19:25:42)
+2025-07-13 14:25:51 | INFO | httpx | HTTP Request: POST https://api.lambdalabs.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:25:51 | INFO | httpx | HTTP Request: POST https://yvanxjoayoiocwzfpkfm.supabase.co/rest/v1/verse_info "HTTP/2 401 Unauthorized"
+2025-07-13 14:25:51 | ERROR | verse_info | ❌  Genesis 1:1 failed
+Traceback (most recent call last):
+  File "/Users/vanities/git/fun/swiftbible/python_parser/generate_verse_info.py", line 147, in main
+    upsert_commentary(book, chap, verse, info)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/vanities/git/fun/swiftbible/python_parser/generate_verse_info.py", line 105, in upsert_commentary
+    ).execute()
+      ~~~~~~~^^
+  File "/Users/vanities/git/fun/swiftbible/python_parser/.venv/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 78, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'new row violates row-level security policy for table "verse_info"', 'code': '42501', 'hint': None, 'details': None}
+2025-07-13 14:27:06 | INFO | verse_info | ▶️  Starting verse-info generation (2025-07-13T19:27:06)
+2025-07-13 14:27:15 | INFO | httpx | HTTP Request: POST https://api.lambdalabs.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:27:15 | INFO | httpx | HTTP Request: POST https://yvanxjoayoiocwzfpkfm.supabase.co/rest/v1/verse_info "HTTP/2 201 Created"
+2025-07-13 14:27:15 | INFO | verse_info | Genesis 1:1 – 1. Summary: This verse marks the beginning of the Bible and introduces the central character, God, as the creator of the…
+2025-07-13 14:27:30 | INFO | httpx | HTTP Request: POST https://api.lambdalabs.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:27:30 | INFO | httpx | HTTP Request: POST https://yvanxjoayoiocwzfpkfm.supabase.co/rest/v1/verse_info "HTTP/2 201 Created"
+2025-07-13 14:27:30 | INFO | verse_info | Genesis 1:2 – 1. Summary of words and themes: This verse describes the initial state of the earth before God's creative acts. The main…
+2025-07-13 14:51:06 | INFO | verse_info | ▶️  Starting verse-info generation (2025-07-13T19:51:06)
+2025-07-13 14:51:22 | INFO | httpx | HTTP Request: POST https://api.lambdalabs.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:51:22 | INFO | httpx | HTTP Request: POST https://yvanxjoayoiocwzfpkfm.supabase.co/rest/v1/verse_info "HTTP/2 409 Conflict"
+2025-07-13 14:51:22 | ERROR | verse_info | ❌  Genesis 1:1 failed
+Traceback (most recent call last):
+  File "/Users/vanities/git/fun/swiftbible/python_parser/generate_verse_info.py", line 154, in main
+    upsert_commentary(book, chap, verse, info)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/vanities/git/fun/swiftbible/python_parser/generate_verse_info.py", line 112, in upsert_commentary
+    ).execute()
+      ~~~~~~~^^
+  File "/Users/vanities/git/fun/swiftbible/python_parser/.venv/lib/python3.13/site-packages/postgrest/_sync/request_builder.py", line 78, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'duplicate key value violates unique constraint "verse_info_one_per_verse"', 'code': '23505', 'hint': None, 'details': 'Key (version, book, chapter, starting_verse)=(kjv, Genesis, 1, 1) already exists.'}
+2025-07-13 14:52:08 | INFO | verse_info | ▶️  Starting verse-info generation (2025-07-13T19:52:08)
+2025-07-13 14:52:19 | INFO | httpx | HTTP Request: POST https://api.lambdalabs.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:52:19 | INFO | httpx | HTTP Request: POST https://yvanxjoayoiocwzfpkfm.supabase.co/rest/v1/verse_info "HTTP/2 201 Created"
+2025-07-13 14:52:20 | INFO | verse_info | Genesis 1:1 – "In the beginning God created the heaven and the earth." These opening words of Scripture are deceptively simple, yet th…
+2025-07-13 14:52:35 | INFO | httpx | HTTP Request: POST https://api.lambdalabs.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-07-13 14:52:35 | INFO | httpx | HTTP Request: POST https://yvanxjoayoiocwzfpkfm.supabase.co/rest/v1/verse_info "HTTP/2 201 Created"
+2025-07-13 14:52:35 | INFO | verse_info | Genesis 1:2 – As we delve into the rich tapestry of Genesis 1:2, we encounter a verse that is both poetic and profound, setting the st…
