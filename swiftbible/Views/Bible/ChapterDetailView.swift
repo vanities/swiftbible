@@ -106,9 +106,8 @@ struct ChapterDetailView: View {
             }
         }
         .scrollPosition(id: $scrollPosition, anchor: .top)
-        .navigationTitle(
-            Text("\(book.name) \(chapter.number)")
-        )
+        .navigationTitle("\(book.name) \(chapter.number)")
+        .navigationBarTitleDisplayMode(.inline)
         .confirmationDialog(
             "Selected Verse \(book.name) \(chapter.number):\(selectedParagraph?.startingVerse ?? 0)",
             isPresented: $showActionSheet,

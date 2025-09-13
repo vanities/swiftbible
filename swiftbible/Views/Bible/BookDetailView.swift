@@ -18,9 +18,8 @@ struct BookDetailView: View {
                 }
             }
         }
-        .navigationTitle(
-            Text(book.name)
-        )
+        .navigationTitle(book.name)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
