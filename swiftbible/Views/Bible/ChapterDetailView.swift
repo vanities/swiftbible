@@ -42,6 +42,25 @@ struct ChapterDetailView: View {
     @State private var alreadyNoted: Note?
     @State private var scrollPosition: Int?
 
+    // Navigation state
+    @State private var navigateToNextChapter = false
+    @State private var navigateToPreviousChapter = false
+
+    // Computed references to the next and previous chapters within the book
+    private var currentChapterIndex: Int? {
+        book.chapters.firstIndex { $0.number == chapter.number }
+    }
+
+    private var nextChapter: Chapter? {
+        guard let index = currentChapterIndex, index + 1 < book.chapters.count else { return nil }
+        return book.chapters[index + 1]
+    }
+
+    private var previousChapter: Chapter? {
+        guard let index = currentChapterIndex, index > 0 else { return nil }
+        return book.chapters[index - 1]
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -104,6 +123,22 @@ struct ChapterDetailView: View {
                 .toolbar(showNavAndTab ? .visible : .hidden, for: .navigationBar)
                 .toolbar(showNavAndTab ? .visible : .hidden, for: .tabBar)
             }
+        }
+        .overlay {
+            // Hidden navigation links for programmatic chapter navigation
+            Group {
+                if let prev = previousChapter {
+                    NavigationLink(isActive: $navigateToPreviousChapter) {
+                        ChapterDetailView(book: book, chapter: prev)
+                    } label: { EmptyView() }
+                }
+                if let next = nextChapter {
+                    NavigationLink(isActive: $navigateToNextChapter) {
+                        ChapterDetailView(book: book, chapter: next)
+                    } label: { EmptyView() }
+                }
+            }
+            .hidden()
         }
         .scrollPosition(id: $scrollPosition, anchor: .top)
         .navigationTitle("\(book.name) \(chapter.number)")
@@ -169,6 +204,40 @@ struct ChapterDetailView: View {
         .sheet(isPresented: $showNoteModal) {
             NoteModalViewView()
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                if previousChapter != nil {
+                    Button {
+                        navigateToPreviousChapter = true
+                    } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                }
+                Spacer()
+                if nextChapter != nil {
+                    Button {
+                        navigateToNextChapter = true
+                    } label: {
+                        Image(systemName: "chevron.right")
+                    }
+                }
+            }
+        }
+        .toolbar(showNavAndTab ? .visible : .hidden, for: .bottomBar)
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    if value.translation.width < -50 {
+                        if nextChapter != nil {
+                            navigateToNextChapter = true
+                        }
+                    } else if value.translation.width > 50 {
+                        if previousChapter != nil {
+                            navigateToPreviousChapter = true
+                        }
+                    }
+                }
+        )
         .onAppear {
             guard let book = appViewModel.selectedVerse?.book,
                   book == self.book,
