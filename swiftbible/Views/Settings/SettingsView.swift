@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-
 struct SettingsView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showApocrypha") var showApocrypha = false
+    @AppStorage("showChapterPager") var showChapterPager = false
 
     @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
@@ -33,6 +33,7 @@ struct SettingsView: View {
                     }
                     Toggle("Show Jesus's Words in Red", isOn: $showJesusWordsInRed)
                     Toggle("Hide Navigation and Tab Bar while reading", isOn: $hideNavAndTab)
+                    Toggle("Show Chapter Pager (bottom arrows)", isOn: $showChapterPager)
                 }
 
                 Section(header: Text("App")) {
@@ -106,8 +107,7 @@ struct SettingsView: View {
         subject: String = ""
     ) {
         if let url = URL(string: "mailto:\(emailTo)?subject=\(subject.fixToBrowserString())"),
-           UIApplication.shared.canOpenURL(url)
-        {
+           UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
@@ -117,4 +117,3 @@ struct SettingsView: View {
     SettingsView(selectedTab: .constant(.bible))
         .environment(UserViewModel())
 }
-
