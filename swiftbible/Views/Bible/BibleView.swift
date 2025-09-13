@@ -60,32 +60,61 @@ struct BibleView: View {
 
                 // Bible Books List
                 List {
-                    // Old Testament Section
+                    // Old Testament Section with grouped headers
                     Section(header: Text("Old Testament")) {
-                        ForEach(filteredOldTestament, id: \.name) { book in
-                            NavigationLink(destination: BookDetailView(book: book)) {
-                                NavigationTitle(name: book.name, description: book.description)
-                            }
-                        }
+                        // Torah (Instruction)
+                        let torah = ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy"]
+                        let former = ["Joshua", "Judges", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings"]
+                        let latter = ["Isaiah", "Jeremiah", "Ezekiel"]
+                        let minor = ["Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi"]
+                        let poetic = ["Psalms", "Proverbs", "Job"]
+                        let megillot = ["Song of Solomon", "Ruth", "Lamentations", "Ecclesiastes", "Esther"]
+                        let historical = ["Daniel", "Ezra", "Nehemiah", "1 Chronicles", "2 Chronicles"]
+
+                        groupSection("Torah (Instruction)", books: torah, within: filteredOldTestament)
+
+                        groupSection("Nevi'im (Prophets) — Former", books: former, within: filteredOldTestament)
+                        groupSection("Nevi'im (Prophets) — Latter", books: latter, within: filteredOldTestament)
+                        groupSection("Nevi'im (Prophets) — Minor", books: minor, within: filteredOldTestament)
+
+                        groupSection("Ketuvim (Writings) — Poetic", books: poetic, within: filteredOldTestament)
+                        groupSection("Ketuvim (Writings) — Five Megillot", books: megillot, within: filteredOldTestament)
+                        groupSection("Ketuvim (Writings) — Historical", books: historical, within: filteredOldTestament)
                     }
 
-                    // New Testament Section
+                    // New Testament Section with grouped headers
                     Section(header: Text("New Testament")) {
-                        ForEach(filteredNewTestament, id: \.name) { book in
-                            NavigationLink(destination: BookDetailView(book: book)) {
-                                NavigationTitle(name: book.name, description: book.description)
-                            }
-                        }
+                        let gospels = ["Matthew", "Mark", "Luke", "John"]
+                        let history = ["Acts"]
+                        let pauline = [
+                            "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians",
+                            "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon"
+                        ]
+                        let general = ["Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude"]
+                        let apocalypse = ["Revelation"]
+
+                        groupSection("Gospels", books: gospels, within: filteredNewTestament)
+                        groupSection("History", books: history, within: filteredNewTestament)
+                        groupSection("Pauline Epistles", books: pauline, within: filteredNewTestament)
+                        groupSection("General Epistles", books: general, within: filteredNewTestament)
+                        groupSection("Apocalypse", books: apocalypse, within: filteredNewTestament)
                     }
 
                     // Apocrypha Section (Conditional)
                     if showApocrypha && !filteredApocrypha.isEmpty {
                         Section(header: Text("Apocrypha")) {
-                            ForEach(filteredApocrypha, id: \.name) { book in
-                                NavigationLink(destination: BookDetailView(book: book)) {
-                                    NavigationTitle(name: book.name, description: book.description)
-                                }
-                            }
+                            let deuterocanonical = [
+                                "Tobit", "Judith", "Additions to Esther", "1 Maccabees", "2 Maccabees",
+                                "Wisdom of Solomon", "Ecclesiasticus", "Baruch", "Letter of Jeremiah",
+                                // Daniel additions often split into these entries
+                                "Prayer of Azariah", "Susanna", "Bel and the Dragon"
+                            ]
+                            let orthodoxOnly = [
+                                "1 Esdras", "2 Esdras", "Prayer of Manasseh", "Psalm 151", "3 Maccabees", "4 Maccabees"
+                            ]
+
+                            groupSection("Deuterocanonical", books: deuterocanonical, within: filteredApocrypha)
+                            groupSection("Orthodox only", books: orthodoxOnly, within: filteredApocrypha)
                         }
                     }
 
@@ -101,13 +130,13 @@ struct BibleView: View {
                     }
                 }
                 .listStyle(InsetGroupedListStyle())
-            }
-            .onAppear {
-                fetchBibleData()
-                fetchApocryphaData()
-                fetchEnochData()
-                requestReview()
-            }
+        }
+        .onAppear {
+            fetchBibleData()
+            fetchApocryphaData()
+            fetchEnochData()
+            requestReview()
+        }
             .onChange(of: showApocrypha) { newValue in
                 if newValue && bibleData.apocrypha.isEmpty {
                     fetchApocryphaData()
@@ -133,6 +162,45 @@ struct BibleView: View {
             }
             .ignoresSafeArea(.all, edges: .horizontal)
             .accessibilityIdentifier("BibleView")
+        }
+    }
+
+    // MARK: - Helpers for grouped sections
+    private func booksInOrder(names: [String], available: [Book]) -> [Book] {
+        names.compactMap { name in available.first { $0.name == name } }
+    }
+
+    @ViewBuilder
+    private func groupHeader(_ title: String) -> some View {
+        // Show header only if any following items for that group are present will render;
+        // The header itself is lightweight, so we always display; empty groups will have no rows.
+        Text(title)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+    }
+
+    @ViewBuilder
+    private func groupedBooks(_ names: [String], within available: [Book]) -> some View {
+        let items = booksInOrder(names: names, available: available)
+        if !items.isEmpty {
+            ForEach(items, id: \.name) { book in
+                NavigationLink(destination: BookDetailView(book: book)) {
+                    NavigationTitle(name: book.name, description: book.description)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func groupSection(_ title: String, books names: [String], within available: [Book]) -> some View {
+        let items = booksInOrder(names: names, available: available)
+        if !items.isEmpty {
+            groupHeader(title)
+            ForEach(items, id: \.name) { book in
+                NavigationLink(destination: BookDetailView(book: book)) {
+                    NavigationTitle(name: book.name, description: book.description)
+                }
+            }
         }
     }
 
