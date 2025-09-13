@@ -1,0 +1,41 @@
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+
+opt_in_rules:
+  - empty_count
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - private_outlet
+  - redundant_nil_coalescing
+
+included:
+  - swiftbible
+
+excluded:
+  - Carthage
+  - Pods
+  - swiftbible.xcodeproj
+  - swiftbibleUITests
+
+line_length: 120
+
+identifier_name:
+  min_length: 1
+  max_length: 60
+
+type_name:
+  min_length: 1
+  max_length: 60
+
+file_length:
+  warning: 500
+  error: 1200
+
+function_body_length:
+  warning: 60
+  error: 100
+
+cyclomatic_complexity:
+  warning: 10
+  error: 20

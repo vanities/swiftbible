@@ -1,122 +1,186 @@
-"""
-generate_verse_info.py
------------------------------------
-End-to-end generator & loader for Bible commentary.
-
-• Loads swiftbible/Text/bible.json
-• Creates an LLM prompt per verse
-• Uses Mirascope-OpenAI (LambdaLabs backend)
-• Upserts to Supabase ‘Verse Info’
-"""
-
+# generate_verse_info.py  —  Mirascope v1 + full logging
+import csv
 import json
+import logging
 import os
+import sys
+from datetime import datetime
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Iterator
 
 from dotenv import load_dotenv
+from openai import OpenAI
 from supabase import create_client
 from tqdm import tqdm
 
-# --- LLM -------------------------------------------------------
+from mirascope import Messages, llm
 
-from mirascope.openai import OpenAIChatPrompt
+# ─────────────────────────  CONFIG  ──────────────────────────
+BIBLE_JSON = Path("../swiftbible/Text/bible.json")
+LOG_PATH = Path("verse_info.log")
+CSV_OK = Path("verse_info.csv")
+CSV_FAIL = Path("verse_info_failed.csv")
+VERSION = "kjv"
+LAMBDA_MODEL = "llama-3.3-70b-instruct-fp8"  # "hermes-3-llama-3.1-405b-fp8"
+
+# ────────────────────────  LOGGING  ──────────────────────────
+load_dotenv()  # .env → os.environ
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+
+root = logging.getLogger()
+root.setLevel(LOG_LEVEL)
+
+# pretty console output
+try:
+    from rich.logging import RichHandler
+
+    console = RichHandler(rich_tracebacks=True, markup=True, log_time_format="[%X]")
+    console.setLevel(LOG_LEVEL)
+    root.addHandler(console)
+except ImportError:  # fall back if rich missing
+    console = logging.StreamHandler(sys.stdout)
+    console.setLevel(LOG_LEVEL)
+    root.addHandler(console)
+
+# rotating file log
+file_handler = RotatingFileHandler(LOG_PATH, maxBytes=10_000_000, backupCount=5)
+file_handler.setLevel("DEBUG")
+file_fmt = logging.Formatter(
+    "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+file_handler.setFormatter(file_fmt)
+root.addHandler(file_handler)
+
+log = logging.getLogger("verse_info")
+
+# ───────────────  LLM SETUP (Mirascope v1)  ────────────────
+lambda_client = OpenAI(
+    base_url="https://api.lambdalabs.com/v1",
+    api_key=os.getenv("LAMBDA_API_KEY"),
+)
 
 
-class CommentaryPrompt(OpenAIChatPrompt):
-    """Bible commentary prompt template."""
-
-    template = (
-        "You are a Bible commentary generator.\n"
-        "1. Summarize the words and themes.\n"
-        "2. Define uncommon words.\n"
-        "3. Reference Greek or Hebrew words depending on testament.\n\n"
-        '{book} {chapter}:{verse} - "{text}"'
+@llm.call(
+    provider="openai",
+    model=LAMBDA_MODEL,
+    client=lambda_client,
+    call_params={"temperature": 0.7, "max_tokens": 800},
+)
+def generate_commentary(
+    book: str, chapter: int, verse: int, text: str
+) -> Messages.Type:
+    sys_msg = (
+        "You are a biblical scholar and commentator writing for curious readers. "
+        "Your goal is to offer thoughtful, literary, and theological commentary on a Bible verse. "
+        "Your tone should be accessible and reflective—not academic or bullet-pointed."
     )
 
-
-def generate_commentary(book: str, chapter: int, verse: int, text: str) -> str:
-    """Call the LLM via Mirascope → Lambda Labs."""
-    prompt = CommentaryPrompt(
-        book=book, chapter=chapter, verse=verse, text=text.strip()
+    user_msg = (
+        f"Reflect on the following verse and provide an insightful commentary:\n"
+        f'{book} {chapter}:{verse} – "{text.strip()}"\n\n'
+        f"Consider these elements in your reflection:\n"
+        f"- The literary and theological themes in the verse.\n"
+        f"- Any Hebrew or Greek words that deepen understanding, integrated naturally into the prose.\n"
+        f"- Clarify uncommon or poetic phrases without using a glossary or numbered list.\n"
+        f"Avoid rigid structure or section headings. Write fluidly, as if explaining to a thoughtful reader over coffee."
     )
-    # For Lambda we must pass model name explicitly
-    response = prompt.run(
-        model="hermes-3-llama-3.1-405b-fp8",
-        temperature=0.7,
-        max_tokens=800,
-    )
-    return response.content.strip()
+
+    return [Messages.System(sys_msg), Messages.User(user_msg)]
 
 
-# --- Supabase --------------------------------------------------
-
-load_dotenv()  # brings in .env
-
+# ────────────────────  SUPABASE  ────────────────────────────
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
-
-if not SUPABASE_URL or not SUPABASE_ANON_KEY:
-    raise EnvironmentError("Missing SUPABASE_URL or SUPABASE_ANON_KEY")
+if not (SUPABASE_URL and SUPABASE_ANON_KEY):
+    log.critical("Missing SUPABASE_URL or SUPABASE_ANON_KEY in environment")
+    sys.exit(1)
 
 supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 
-def upsert_commentary(
-    version: str,
-    book: str,
-    chapter: int,
-    starting_verse: int,
-    info: str,
-) -> None:
-    """Insert or update a single commentary row."""
-    payload = {
-        "version": version,
-        "book": book,
-        "chapter": chapter,
-        "starting_verse": starting_verse,
-        "info": info,
-    }
-    supabase.table("Verse Info").upsert(payload).execute()
+def upsert_commentary(book: str, chapter: int, verse: int, info: str) -> None:
+    supabase.table("verse_info").upsert(
+        {
+            "version": VERSION,
+            "book": book,
+            "chapter": chapter,
+            "starting_verse": verse,
+            "info": info,
+        }
+    ).execute()
 
 
-# --- Bible JSON helpers ---------------------------------------
+# ───────────────  CSV WRITERS (append-only)  ────────────────
+def csv_writer(path: Path, header: list[str]):
+    exists = path.exists()
+    f = path.open("a", newline="", encoding="utf-8")
+    w = csv.writer(f)
+    if not exists:
+        w.writerow(header)
+    return w
 
-BIBLE_JSON = Path("swiftbible/Text/bible.json")
+
+ok_writer = csv_writer(CSV_OK, ["timestamp", "book", "chapter", "verse", "info"])
+fail_writer = csv_writer(CSV_FAIL, ["timestamp", "book", "chapter", "verse", "error"])
 
 
+# ────────────────────  BIBLE ITERATOR  ──────────────────────
 def iter_verses() -> Iterator[tuple[str, int, int, str]]:
-    """Yield (book, chapter, starting_verse, text) from JSON."""
     with BIBLE_JSON.open(encoding="utf-8") as f:
         bible = json.load(f)
-
-    for book in bible:  # book = {"name": "...", "chapters": [...]}
-        book_name = book["name"]
-        for chapter in book["chapters"]:
-            chap_num = chapter["number"]
-            for paragraph in chapter["paragraphs"]:
-                yield (
-                    book_name,
-                    chap_num,
-                    paragraph["startingVerse"],
-                    paragraph["text"],
-                )
+    for bk in bible:
+        for chap in bk["chapters"]:
+            for para in chap["paragraphs"]:
+                yield bk["name"], chap["number"], para["startingVerse"], para["text"]
 
 
-# --- Driver ----------------------------------------------------
-
-
+# ────────────────────────  DRIVER  ──────────────────────────
 def main() -> None:
-    VERSION = "kjv"
-    for book, chap, verse, text in tqdm(list(iter_verses()), desc="Processing verses"):
-        try:
-            commentary = generate_commentary(book, chap, verse, text)
-            upsert_commentary(VERSION, book, chap, verse, commentary)
-        except Exception as exc:
-            # Log and continue; you may want better retry/backoff here
-            print(f"⚠️  {book} {chap}:{verse} failed → {exc}")
+    start = datetime.utcnow()
+    log.info(
+        "▶️  Starting verse-info generation (%s)", start.isoformat(timespec="seconds")
+    )
 
-    print("✅ All done!")
+    verses = list(iter_verses())
+    for book, chap, verse, text in tqdm(verses, desc="Processing"):
+        ref = f"{book} {chap}:{verse}"
+        try:
+            resp = generate_commentary(book, chap, verse, text)
+            info = resp.content.strip()
+
+            # DB
+            upsert_commentary(book, chap, verse, info)
+
+            # CSV OK
+            ok_writer.writerow(
+                [
+                    datetime.utcnow().isoformat(timespec="seconds"),
+                    book,
+                    chap,
+                    verse,
+                    info,
+                ]
+            )
+
+            # Short preview
+            preview = info.replace("\n", " ")[:120] + ("…" if len(info) > 120 else "")
+            log.info("%s – %s", ref, preview)
+
+        except Exception as exc:
+            log.exception("❌  %s failed", ref)
+            fail_writer.writerow(
+                [
+                    datetime.utcnow().isoformat(timespec="seconds"),
+                    book,
+                    chap,
+                    verse,
+                    str(exc),
+                ]
+            )
+
+    log.info("✅ Done. Elapsed %.1f s", (datetime.utcnow() - start).total_seconds())
 
 
 if __name__ == "__main__":

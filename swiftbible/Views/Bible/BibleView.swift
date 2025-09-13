@@ -13,7 +13,7 @@ struct BibleView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(\.requestReview) var requestReview
 
-    @State private var bibleData: (oldTestament: [Book], newTestament: [Book], apocrypha: [Book]) = ([], [], [])
+    @State private var bibleData: (oldTestament: [Book], newTestament: [Book], apocrypha: [Book], enoch: [Book]) = ([], [], [], [])
     @State private var searchText = ""
     @AppStorage("showApocrypha") var showApocrypha = false
 
@@ -38,6 +38,14 @@ struct BibleView: View {
             return bibleData.apocrypha
         } else {
             return bibleData.apocrypha.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+
+    var filteredEnoch: [Book] {
+        if searchText.isEmpty {
+            return bibleData.enoch
+        } else {
+            return bibleData.enoch.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         }
     }
 
@@ -80,21 +88,38 @@ struct BibleView: View {
                             }
                         }
                     }
+
+                    // Book of Enoch Section (Conditional - same as Apocrypha)
+                    if showApocrypha && !filteredEnoch.isEmpty {
+                        Section(header: Text("Book of Enoch")) {
+                            ForEach(filteredEnoch, id: \.name) { book in
+                                NavigationLink(destination: BookDetailView(book: book)) {
+                                    NavigationTitle(name: book.name, description: book.description)
+                                }
+                            }
+                        }
+                    }
                 }
                 .listStyle(InsetGroupedListStyle())
             }
             .onAppear {
                 fetchBibleData()
                 fetchApocryphaData()
+                fetchEnochData()
                 requestReview()
             }
             .onChange(of: showApocrypha) { newValue in
                 if newValue && bibleData.apocrypha.isEmpty {
                     fetchApocryphaData()
-                } else if !newValue {
-                    // Optionally, clear Apocrypha data when hidden
-                    // bibleData.apocrypha = []
                 }
+                if newValue && bibleData.enoch.isEmpty {
+                    fetchEnochData()
+                }
+                // Optionally, clear data when hidden
+                // if !newValue {
+                //     bibleData.apocrypha = []
+                //     bibleData.enoch = []
+                // }
             }
             .navigationTitle("Bible")
             .navigationDestination(isPresented: $appViewModel.showSelectedVerse) {
@@ -131,6 +156,21 @@ struct BibleView: View {
             }
         } else {
             appViewModel.allBibleData = fetchedApocrypha
+        }
+    }
+
+    // Fetch Enoch Data
+    private func fetchEnochData() {
+        let fetchedEnoch = BibleService.shared.fetchEnochData()
+        bibleData.enoch = fetchedEnoch
+        if let allBibleData = appViewModel.allBibleData {
+            if allBibleData.isEmpty {
+                appViewModel.allBibleData = fetchedEnoch
+            } else {
+                appViewModel.allBibleData?.append(contentsOf: fetchedEnoch)
+            }
+        } else {
+            appViewModel.allBibleData = fetchedEnoch
         }
     }
 }

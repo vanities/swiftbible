@@ -6,8 +6,9 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "dotenv>=0.9.9",
-    "mirascope>=1.25.4",
+    "mirascope[openai]>=1.25.4",
     "regex>=2024.11.6",
+    "rich>=14.0.0",
     "supabase>=2.16.0",
     "tqdm>=4.67.1",
 ]

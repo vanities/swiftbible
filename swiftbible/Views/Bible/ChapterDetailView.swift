@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct VerseInfoResponse: Decodable {
     let version: String
@@ -39,7 +40,6 @@ struct ChapterDetailView: View {
     @State private var showVerseInfoModal = false
     @State private var alreadyHighlighted: HighlightedVerse?
     @State private var alreadyNoted: Note?
-    @State private var selectedVerseInfo: VerseInfo?
     @State private var scrollPosition: Int?
 
     var body: some View {
@@ -145,11 +145,6 @@ struct ChapterDetailView: View {
                     Text("\(alreadyHighlighted != nil ? "Unhighlight" : "Highlight")")
                 }
                 Button {
-                    Task { await fetchVerseInfo() }
-                } label: {
-                    Text("More Info")
-                }
-                Button {
                     showNoteModal = true
                 } label: {
                     Text("\(alreadyNoted != nil ? "View" : "Add") Note")
@@ -174,11 +169,6 @@ struct ChapterDetailView: View {
         )
         .sheet(isPresented: $showNoteModal) {
             NoteModalViewView()
-        }
-        .sheet(isPresented: $showVerseInfoModal) {
-            if let selectedVerseInfo {
-                VerseInfoModalView(verseInfo: selectedVerseInfo)
-            }
         }
         .onAppear {
             guard let book = appViewModel.selectedVerse?.book,
@@ -251,34 +241,6 @@ struct ChapterDetailView: View {
             }
 
         )
-    }
-
-    func fetchVerseInfo() async {
-        guard let selectedParagraph else { return }
-
-        do {
-            let data: VerseInfoResponse = try await SupabaseService.shared.client
-                .from("Verse Info")
-                .select()
-                .eq("version", value: book.version.rawValue)
-                .eq("book", value: book.name)
-                .eq("chapter", value: chapter.number)
-                .eq("starting_verse", value: selectedParagraph.startingVerse)
-                .single()
-                .execute()
-                .value
-
-            selectedVerseInfo = VerseInfo(
-                version: data.version,
-                book: data.book,
-                chapter: data.chapter,
-                startingVerse: data.starting_verse,
-                text: data.info
-            )
-            showVerseInfoModal = true
-        } catch {
-            print("Error fetching verse info: \(error)")
-        }
     }
 }
 

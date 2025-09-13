@@ -5572,4 +5572,150 @@ let summaries: [String: [String: String]] = [
         "7:14": "Reiterates the rewards of steadfast faith and the importance of maintaining hope in divine promises.",
         "7:26": "Calls for collective unity and resilience among the Jewish people to overcome future trials."
     ],
+
+    // MARK: The Book of the Watchers
+    "The Book of the Watchers": [
+        // Chapter 1-5: Parable of Enoch on the Future Lot
+        "1:1": "Enoch, a righteous man whose eyes were opened by God, blesses the elect and righteous for a remote generation to come.",
+        "1:4": "The eternal God will tread upon Mount Sinai and appear in strength from the heaven of heavens.",
+        "1:9": "He comes with ten thousands of His holy ones to execute judgment upon all and destroy the ungodly.",
+
+        // Chapter 6-11: The Fall of the Angels
+        "6:1": "The Watchers, led by Sêmîazâz, descend on Mount Hermon and take human wives to beget children.",
+        "6:7": "Two hundred angels swear an oath together and bind themselves by mutual imprecations to carry out their plan.",
+        "7:1": "The unions produce giants (Nephilim) whose height was three hundred cubits, who consume all human acquisitions.",
+        "8:1": "Azâzêl teaches men to make weapons and the art of war, while other angels teach forbidden knowledge.",
+        "9:1": "Michael, Uriel, Raphael, and Gabriel appeal to God to judge the inhabitants of the world and the fallen angels.",
+        "10:1": "God commands the imprisonment of Azâzêl and the binding of the fallen angels for seventy generations.",
+
+        // Chapter 12-16: Enoch's Intercession
+        "12:1": "Enoch is called to intercede for Azazel and the fallen angels, announcing their first and final doom.",
+        "14:8": "Enoch is taken up in visions to the throne of the Most High, seeing the crystal palace and God's glory.",
+        "15:2": "God declares that the spirits of the giants will become evil spirits upon the earth, afflicting mankind.",
+
+        // Chapter 17-36: Enoch's Journeys
+        "17:1": "Enoch is taken on journeys through the earth and Sheol, seeing the places of punishment and blessing.",
+        "18:13": "He sees the prison of the stars and angels who transgressed God's commandments.",
+        "20:1": "The names and functions of the seven archangels are revealed: Uriel, Raphael, Raguel, Michael, Saraqael, Gabriel, and Remiel.",
+        "21:1": "Enoch visits the preliminary and final places of punishment for the fallen angels.",
+        "22:1": "He sees Sheol with its divisions for the righteous and wicked dead, awaiting final judgment.",
+        "24:3": "The Tree of Life is shown, whose fruit will be given to the elect for eternal life.",
+        "27:1": "The accursed valley is revealed where the final judgment will take place.",
+        "36:1": "Enoch completes his journey to the four corners of the earth, seeing all the portals of heaven."
+    ],
+
+    // MARK: The Book of Parables
+    "The Book of Parables": [
+        // Chapter 37: Introduction to the Parables
+        "37:1": "Enoch begins the second vision, the vision of wisdom, lifting up his voice to speak words of the Holy One.",
+        "37:5": "Three Parables are imparted to Enoch according to the good pleasure of the Lord of Spirits.",
+
+        // Chapter 38-44: The First Parable
+        "38:1": "The first parable concerns the coming judgment of the wicked and the congregation of the righteous.",
+        "39:1": "The abode of the righteous and the Elect One is revealed, with praises of the blessed.",
+        "40:1": "The four archangels are presented: Michael, Raphael, Gabriel, and Phanuel.",
+        "42:1": "Wisdom finds no dwelling place on earth and returns to heaven, while unrighteousness flows like water.",
+        "46:1": "The Ancient of Days and the Son of Man appear, whose face was full of graciousness like a holy angel.",
+        "46:3": "This Son of Man will raise up kings from their seats and break the teeth of sinners.",
+
+        // Chapter 45-57: The Second Parable
+        "45:3": "The Elect One sits on the throne of glory to judge the works of the holy ones in heaven.",
+        "48:2": "The Son of Man is the fount of righteousness, the stay of the righteous, and light of the Gentiles.",
+        "51:1": "The resurrection of the dead and separation of the righteous and wicked by the Judge is described.",
+        "52:1": "The six metal mountains represent different periods of earthly dominion before the Elect One's reign.",
+        "54:1": "The valley of judgment and the angels of punishment are revealed to execute final justice.",
+
+        // Chapter 58-69: The Third Parable
+        "58:1": "The blessedness of the saints who will inherit the new earth is proclaimed.",
+        "60:1": "Behemoth and Leviathan, the great sea and land monsters, are described in their appointed places.",
+        "61:8": "Angels measure Paradise while the Elect One judges the righteous and praises God.",
+        "62:1": "The mighty kings will see the Elect One sitting on the throne of glory in their final judgment.",
+        "69:26": "The secret oath by which the forces of nature are bound is revealed to Enoch."
+    ],
+
+    // MARK: The Astronomical Book
+    "The Astronomical Book": [
+        // Chapter 72: The Sun
+        "72:1": "The book of the courses of the heavenly luminaries begins, revealed to Enoch by the angel Uriel.",
+        "72:4": "The sun travels through six portals in the east and six in the west, determining seasons and years.",
+        "72:32": "The solar year consists of 364 days, maintaining perfect order in its appointed times.",
+
+        // Chapter 73: The Moon and its Phases
+        "73:1": "The moon's course and phases are described, with its waxing and waning in precise cycles.",
+        "73:8": "The moon borrows its light from the sun and travels through the same portals.",
+
+        // Chapter 74: The Lunar Year
+        "74:1": "The lunar year of 354 days is compared to the solar year, showing the discrepancy.",
+        "74:17": "The calendar ensures that festivals occur on the correct days according to divine ordinance.",
+
+        // Chapter 76-77: The Winds and Geography
+        "76:1": "The twelve winds and their portals are described, bringing different weather patterns.",
+        "77:1": "The four quarters of the world are mapped with seven mountains, rivers, and islands.",
+
+        // Chapter 78-80: Cosmic Order and Disorder
+        "78:1": "The sun and moon maintain their appointed courses without transgression.",
+        "80:2": "In the days of sinners, the cosmic order will be perverted due to human wickedness.",
+        "80:8": "The luminaries will change their courses, leading to confusion and calamity on earth.",
+
+        // Chapter 81-82: Enoch's Commission
+        "81:1": "Enoch sees the heavenly tablets containing all the deeds of mankind throughout generations.",
+        "82:1": "Enoch is charged to teach his son Methuselah about the cosmic order and calendar.",
+        "82:7": "The four intercalary days are established to maintain the perfect 364-day year."
+    ],
+
+    // MARK: The Book of Dream Visions
+    "The Book of Dream Visions": [
+        // Chapter 83-84: First Dream Vision
+        "83:1": "Enoch tells his son Methuselah about visions he has seen before taking a wife.",
+        "83:3": "He sees the earth tilting and being destroyed, causing him great distress and prayer.",
+        "84:1": "God responds to Enoch's prayer, revealing that judgment will come upon the earth for its corruption.",
+
+        // Chapter 85-90: Second Dream Vision - Animal Apocalypse
+        "85:1": "The history of the world is revealed through symbolic animals, beginning with Adam as a white bull.",
+        "86:1": "The fall of the Watchers is depicted as stars falling from heaven and corrupting the earth.",
+        "87:1": "The seven archangels come to execute judgment upon the fallen angels and their offspring.",
+        "89:1": "Noah's flood cleanses the earth, with Noah represented as a white bull who survives the deluge.",
+        "89:10": "The post-flood world sees the emergence of different nations represented by various animals.",
+        "89:28": "The Exodus and wilderness period are depicted with sheep being led by a ram (Moses).",
+        "89:41": "The judges and kings of Israel are shown as rams and sheep leading the flock.",
+        "89:51": "The divided kingdom and eventual destruction of Jerusalem by foreign beasts is portrayed.",
+        "89:72": "The Babylonian exile and return under Cyrus are represented by foreign shepherds.",
+        "90:6": "The Maccabean revolt is depicted as a great horn growing among the sheep to fight the oppressors.",
+        "90:20": "The final judgment sees all the beasts and birds gathered for destruction.",
+        "90:28": "The new Jerusalem descends, and all nations are converted, with the Messiah appearing as a white bull."
+    ],
+
+    // MARK: The Epistle of Enoch
+    "The Epistle of Enoch": [
+        // Chapter 91: Enoch's Admonition
+        "91:1": "Enoch calls his children to gather and listen to his words of admonition for the last days.",
+        "91:11": "The Apocalypse of Weeks begins, dividing history into ten periods or 'weeks'.",
+        "91:15": "In the eighth week, the righteous will acquire houses through their righteousness.",
+
+        // Chapter 92-93: The Ten Weeks
+        "92:1": "Enoch writes his book of admonition for his children and all who will live in the last days.",
+        "93:3": "The first seven weeks cover from Adam to the building of the Temple and its destruction.",
+        "93:9": "In the seventh week, an apostate generation will arise, and many evil deeds will be done.",
+        "93:11": "After the seventh week, the eighth week of righteousness will come with judgment.",
+
+        // Chapter 94-105: Woes and Encouragements
+        "94:1": "Woes are pronounced upon sinners who build their houses with sin and oppression.",
+        "95:3": "Enoch grieves over the sinners but encourages the righteous to persevere.",
+        "96:1": "The righteous are given grounds for hope while the wicked face divine judgment.",
+        "100:7": "The sinners will destroy each other, but the righteous will be safe in divine protection.",
+        "102:4": "The different destinies of the righteous and sinners in the afterlife are contrasted.",
+        "104:2": "The righteous are assured they will shine as lights of heaven and have great joy.",
+        "105:1": "God and the Messiah will dwell with mankind in the new creation.",
+
+        // Chapter 106-107: Birth of Noah
+        "106:2": "Noah is born with supernatural appearance, causing fear and wonder in his father Lamech.",
+        "106:13": "Enoch explains that Noah will be preserved through the coming flood to repopulate the earth.",
+        "107:1": "The continuing cycle of transgression and righteousness throughout human generations is revealed.",
+
+        // Chapter 108: Conclusion
+        "108:1": "Enoch writes a final book for those who keep the law in the last days.",
+        "108:7": "The place of punishment for sinners and blasphemers is described as a chaotic wilderness of fire.",
+        "108:11": "The spirits of the righteous who suffered for God will be transformed and given honor.",
+        "108:15": "The final separation between the righteous and wicked is accomplished for eternity."
+    ],
 ]
