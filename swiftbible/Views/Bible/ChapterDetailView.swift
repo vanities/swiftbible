@@ -22,7 +22,6 @@ struct ChapterDetailView: View {
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
     @AppStorage("notedColor") private var notedColor: String = "00ff04"
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
-    @AppStorage("showChapterPager") private var showChapterPager: Bool = false
     @AppStorage("enableSwipeNavigation") private var enableSwipeNavigation: Bool = false
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
@@ -199,38 +198,7 @@ struct ChapterDetailView: View {
         .sheet(isPresented: $showNoteModal) {
             NoteModalViewView()
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
-                if previousChapter != nil {
-                    Button {
-                        if let prev = previousChapter {
-                            transitionForward = false
-                            withAnimation(.easeInOut(duration: 0.25)) {
-                                currentChapter = prev
-                                scrollPosition = nil
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "chevron.left")
-                    }
-                }
-                Spacer()
-                if nextChapter != nil {
-                    Button {
-                        if let next = nextChapter {
-                            transitionForward = true
-                            withAnimation(.easeInOut(duration: 0.25)) {
-                                currentChapter = next
-                                scrollPosition = nil
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "chevron.right")
-                    }
-                }
-            }
-        }
-        .toolbar((showNavAndTab && showChapterPager) ? .visible : .hidden, for: .bottomBar)
+        // Removed bottom pager toolbar buttons
         .simultaneousGesture(
             enableSwipeNavigation
                 ? AnyGesture(
