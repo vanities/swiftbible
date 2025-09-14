@@ -23,6 +23,7 @@ struct ChapterDetailView: View {
     @AppStorage("notedColor") private var notedColor: String = "00ff04"
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showChapterPager") private var showChapterPager: Bool = false
+    @AppStorage("enableSwipeNavigation") private var enableSwipeNavigation: Bool = false
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []
@@ -231,31 +232,38 @@ struct ChapterDetailView: View {
         }
         .toolbar((showNavAndTab && showChapterPager) ? .visible : .hidden, for: .bottomBar)
         .simultaneousGesture(
-            DragGesture()
-                .onEnded { value in
-                    // If gesture begins near the left edge, treat it as a back-swipe attempt
-                    // and do not trigger chapter navigation, even if it ends moving left.
-                    let isEdgeBackAttempt = value.startLocation.x < 30
-                    if isEdgeBackAttempt { return }
+            enableSwipeNavigation
+                ? AnyGesture(
+                    DragGesture()
+                        .onEnded { value in
+                            // If gesture begins near the left edge, treat it as a back-swipe attempt
+                            // and do not trigger chapter navigation, even if it ends moving left.
+                            let isEdgeBackAttempt = value.startLocation.x < 30
+                            if isEdgeBackAttempt { return }
 
-                    if value.translation.width < -50 {
-                        if let next = nextChapter {
-                            transitionForward = true
-                            withAnimation(.easeInOut(duration: 0.25)) {
-                                currentChapter = next
-                                scrollPosition = nil
+                            if value.translation.width < -50 {
+                                if let next = nextChapter {
+                                    transitionForward = true
+                                    withAnimation(.easeInOut(duration: 0.25)) {
+                                        currentChapter = next
+                                        scrollPosition = nil
+                                    }
+                                }
+                            } else if value.translation.width > 50 {
+                                if let prev = previousChapter {
+                                    transitionForward = false
+                                    withAnimation(.easeInOut(duration: 0.25)) {
+                                        currentChapter = prev
+                                        scrollPosition = nil
+                                    }
+                                }
                             }
                         }
-                    } else if value.translation.width > 50 {
-                        if let prev = previousChapter {
-                            transitionForward = false
-                            withAnimation(.easeInOut(duration: 0.25)) {
-                                currentChapter = prev
-                                scrollPosition = nil
-                            }
-                        }
-                    }
-                }
+                )
+                : AnyGesture(
+                    // A never-recognized drag gesture acts as a no-op and won't steal back-swipe
+                    DragGesture(minimumDistance: .greatestFiniteMagnitude)
+                )
         )
         .onAppear {
             guard let book = appViewModel.selectedVerse?.book,

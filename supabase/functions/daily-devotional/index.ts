@@ -7,7 +7,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const BIBLE_API_URL = "https://bible-api.com/?random=verse&translation=kjv";
-const OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses";
+const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 
 Deno.serve(async (req) => {
   if (Deno.env.get("SUPABASE_URL") == req.headers.get("SuperSecret")) {
@@ -120,17 +120,26 @@ async function generateDevotional(prompt: string): Promise<string> {
   try {
     const apiKey = Deno.env.get("OPENAI_API_KEY");
     if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
+    const model = Deno.env.get("OPENAI_MODEL") ?? "gpt-4o-mini"; // reliable chat model
 
-    const response = await fetch(OPENAI_RESPONSES_URL, {
+    const response = await fetch(OPENAI_CHAT_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-5-mini",
-        input: prompt,
-        max_output_tokens: 1000,
+        model,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a Christian devotional writing assistant. Return well-structured Markdown only, no extra commentary.",
+          },
+          { role: "user", content: prompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 900,
       }),
     });
 
@@ -143,19 +152,21 @@ async function generateDevotional(prompt: string): Promise<string> {
         errorText = await response.text();
       }
       throw new Error(
-        `OpenAI Responses API failed with status ${response.status}: ${errorText}`
+        `OpenAI Chat Completions failed with status ${response.status}: ${errorText}`
       );
     }
 
     const data = await response.json();
-    // Prefer the convenience field if available
-    const maybeOutputText: string | undefined = data.output_text;
-    if (maybeOutputText && typeof maybeOutputText === "string") {
-      return maybeOutputText.trim();
+    const content = data?.choices?.[0]?.message?.content;
+    if (typeof content === "string" && content.trim().length > 0) {
+      return content.trim();
     }
-    // Fallback: drill into content array
-    const fallback = data.output?.[0]?.content?.[0]?.text ?? "";
-    return String(fallback).trim();
+    // Try tool-less delta accumulation fallback
+    const alt = data?.choices?.[0]?.text;
+    if (typeof alt === "string" && alt.trim().length > 0) {
+      return alt.trim();
+    }
+    throw new Error("Empty model output from Chat Completions API");
   } catch (error: any) {
     console.error("Error generating devotional:", error?.message ?? error);
     throw error;

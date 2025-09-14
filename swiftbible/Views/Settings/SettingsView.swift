@@ -12,6 +12,7 @@ struct SettingsView: View {
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showApocrypha") var showApocrypha = false
+    @AppStorage("enableSwipeNavigation") var enableSwipeNavigation = false
     @AppStorage("showChapterPager") var showChapterPager = false
 
     @AppStorage("fontName") private var fontName: String = "Helvetica"
@@ -34,6 +35,7 @@ struct SettingsView: View {
                     Toggle("Show Jesus's Words in Red", isOn: $showJesusWordsInRed)
                     Toggle("Hide Navigation and Tab Bar while reading", isOn: $hideNavAndTab)
                     Toggle("Show Chapter Pager (bottom arrows)", isOn: $showChapterPager)
+                    Toggle("Enable swipe to change chapters", isOn: $enableSwipeNavigation)
                 }
 
                 Section(header: Text("App")) {
