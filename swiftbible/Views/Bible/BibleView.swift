@@ -135,7 +135,9 @@ struct BibleView: View {
             fetchBibleData()
             fetchApocryphaData()
             fetchEnochData()
+            #if !DEBUG
             requestReview()
+            #endif
         }
             .onChange(of: showApocrypha) { newValue in
                 if newValue && bibleData.apocrypha.isEmpty {

@@ -12,7 +12,6 @@ struct SettingsView: View {
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showApocrypha") var showApocrypha = false
-    @AppStorage("enableSwipeNavigation") var enableSwipeNavigation = false
 
     @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
@@ -33,7 +32,7 @@ struct SettingsView: View {
                     }
                     Toggle("Show Jesus's Words in Red", isOn: $showJesusWordsInRed)
                     Toggle("Hide Navigation and Tab Bar while reading", isOn: $hideNavAndTab)
-                    Toggle("Enable swipe to change chapters", isOn: $enableSwipeNavigation)
+                    // Swipe to change chapters has been removed in favor of pull up/down
                 }
 
                 Section(header: Text("App")) {

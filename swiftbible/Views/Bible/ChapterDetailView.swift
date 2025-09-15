@@ -7,6 +7,8 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
+import MJRefresh
 
 struct VerseInfoResponse: Decodable {
     let version: String
@@ -22,7 +24,7 @@ struct ChapterDetailView: View {
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
     @AppStorage("notedColor") private var notedColor: String = "00ff04"
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
-    @AppStorage("enableSwipeNavigation") private var enableSwipeNavigation: Bool = false
+    // Swipe navigation removed in favor of pull up/down
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []
@@ -62,6 +64,118 @@ struct ChapterDetailView: View {
     private var previousChapter: Chapter? {
         guard let index = currentChapterIndex, index > 0 else { return nil }
         return book.chapters[index - 1]
+    }
+
+    // Attach MJRefresh header/footer to the underlying UIScrollView
+    private func configureRefresh(on scrollView: UIScrollView) {
+        scrollView.alwaysBounceVertical = true
+        #if DEBUG
+        print("[MJRefresh] Configuring refresh. contentSize=\(scrollView.contentSize) bounds=\(scrollView.bounds.size)")
+        #endif
+
+        if previousChapter != nil {
+            if scrollView.mj_header == nil {
+                let header = MJRefreshNormalHeader { [weak scrollView] in
+                    defer { scrollView?.mj_header?.endRefreshing() }
+                    guard let prev = previousChapter else { return }
+                    transitionForward = false
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        currentChapter = prev
+                        scrollPosition = nil
+                    }
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    #if DEBUG
+                    print("[MJRefresh] Triggered previous chapter to \(currentChapter.number)")
+                    #endif
+                }
+                if let h = header as? MJRefreshNormalHeader {
+                    h.lastUpdatedTimeLabel?.isHidden = true
+                    h.setTitle("Pull for previous chapter", for: .idle)
+                    h.setTitle("Release to go back", for: .pulling)
+                    h.setTitle("Loading…", for: .refreshing)
+                }
+                scrollView.mj_header = header
+            } else {
+                #if DEBUG
+                print("[MJRefresh] Header already attached")
+                #endif
+            }
+        } else {
+            scrollView.mj_header = nil
+            #if DEBUG
+            print("[MJRefresh] No previous chapter; header removed")
+            #endif
+        }
+
+        if nextChapter != nil {
+            if scrollView.mj_footer == nil {
+                let footer = MJRefreshBackNormalFooter { [weak scrollView] in
+                    defer { scrollView?.mj_footer?.endRefreshing() }
+                    guard let next = nextChapter else { return }
+                    transitionForward = true
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        currentChapter = next
+                        scrollPosition = nil
+                    }
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    #if DEBUG
+                    print("[MJRefresh] Triggered next chapter to \(currentChapter.number)")
+                    #endif
+                }
+                if let f = footer as? MJRefreshBackNormalFooter {
+                    f.setTitle("Pull for next chapter", for: .idle)
+                    f.setTitle("Release to continue", for: .pulling)
+                    f.setTitle("Loading…", for: .refreshing)
+                }
+                scrollView.mj_footer = footer
+            } else {
+                #if DEBUG
+                print("[MJRefresh] Footer already attached")
+                #endif
+            }
+        } else {
+            scrollView.mj_footer = nil
+            #if DEBUG
+            print("[MJRefresh] No next chapter; footer removed")
+            #endif
+        }
+    }
+
+    // Helper to resolve the UIScrollView used by SwiftUI ScrollView
+    private struct ScrollViewResolver: UIViewRepresentable {
+        let onResolve: (UIScrollView) -> Void
+        func makeUIView(context: Context) -> UIView { UIView() }
+        func updateUIView(_ uiView: UIView, context: Context) {
+            DispatchQueue.main.async {
+                if let scroll = findScrollView(from: uiView) {
+                    #if DEBUG
+                    print("[MJRefresh] Resolver found UIScrollView contentSize=\(scroll.contentSize) bounds=\(scroll.bounds.size)")
+                    #endif
+                    onResolve(scroll)
+                } else {
+                    #if DEBUG
+                    print("[MJRefresh] Resolver could not find UIScrollView yet")
+                    #endif
+                }
+            }
+        }
+        private func findScrollView(from view: UIView?) -> UIScrollView? {
+            // Walk up to a common ancestor, then search down for UIScrollView
+            var ancestor = view
+            while let current = ancestor {
+                if let scroll = current as? UIScrollView { return scroll }
+                if let found = searchDescendants(forScrollIn: current) { return found }
+                ancestor = current.superview
+            }
+            return nil
+        }
+        private func searchDescendants(forScrollIn view: UIView) -> UIScrollView? {
+            for sub in view.subviews {
+                if let s = sub as? UIScrollView { return s }
+                if let found = searchDescendants(forScrollIn: sub) { return found }
+            }
+            return nil
+        }
     }
 
     var body: some View {
@@ -132,6 +246,9 @@ struct ChapterDetailView: View {
                 .toolbar(showNavAndTab ? .visible : .hidden, for: .navigationBar)
                 .toolbar(showNavAndTab ? .visible : .hidden, for: .tabBar)
             }
+            .background(ScrollViewResolver { scroll in
+                configureRefresh(on: scroll)
+            })
         }
         // Removed overlay NavigationLinks; navigation happens in-place
         .scrollPosition(id: $scrollPosition, anchor: .top)
@@ -198,47 +315,16 @@ struct ChapterDetailView: View {
         .sheet(isPresented: $showNoteModal) {
             NoteModalViewView()
         }
-        // Removed bottom pager toolbar buttons
-        .simultaneousGesture(
-            enableSwipeNavigation
-                ? AnyGesture(
-                    DragGesture()
-                        .onEnded { value in
-                            // If gesture begins near the left edge, treat it as a back-swipe attempt
-                            // and do not trigger chapter navigation, even if it ends moving left.
-                            let isEdgeBackAttempt = value.startLocation.x < 30
-                            if isEdgeBackAttempt { return }
-
-                            if value.translation.width < -50 {
-                                if let next = nextChapter {
-                                    transitionForward = true
-                                    withAnimation(.easeInOut(duration: 0.25)) {
-                                        currentChapter = next
-                                        scrollPosition = nil
-                                    }
-                                }
-                            } else if value.translation.width > 50 {
-                                if let prev = previousChapter {
-                                    transitionForward = false
-                                    withAnimation(.easeInOut(duration: 0.25)) {
-                                        currentChapter = prev
-                                        scrollPosition = nil
-                                    }
-                                }
-                            }
-                        }
-                )
-                : AnyGesture(
-                    // A never-recognized drag gesture acts as a no-op and won't steal back-swipe
-                    DragGesture(minimumDistance: .greatestFiniteMagnitude)
-                )
-        )
+        // Removed left/right swipe gesture navigation in favor of pull-to-refresh style
         .onAppear {
             guard let book = appViewModel.selectedVerse?.book,
                   book == self.book,
                   let chapter = appViewModel.selectedVerse?.chapter,
                   chapter.number == self.currentChapter.number,
                   let verse = appViewModel.selectedVerse?.verse else { return }
+            #if DEBUG
+            print("[MJRefresh] onAppear selected verse jump to \(verse)")
+            #endif
             scrollPosition = verse
         }
         .onChange(of: currentChapter.number) { _ in
@@ -246,8 +332,15 @@ struct ChapterDetailView: View {
             selectedParagraph = nil
             alreadyHighlighted = nil
             alreadyNoted = nil
-            // Keep scrollPosition nil to start at top
-            scrollPosition = nil
+            // Jump to the top of the new chapter
+            if let first = currentChapter.paragraphs.first?.startingVerse {
+                DispatchQueue.main.async { scrollPosition = first }
+            } else {
+                scrollPosition = nil
+            }
+            #if DEBUG
+            print("[MJRefresh] onChange chapter now \(currentChapter.number)")
+            #endif
         }
     }
 
