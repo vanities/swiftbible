@@ -55,6 +55,10 @@
 		955281412D1B5D8A00341577 /* apocrypha.json in Resources */ = {isa = PBXBuildFile; fileRef = 955281402D1B5D8A00341577 /* apocrypha.json */; };
 		956026C62DA85464006A9CFC /* MarkdownParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956026C52DA85464006A9CFC /* MarkdownParser.swift */; };
 		956026C92DA85508006A9CFC /* Ink in Frameworks */ = {isa = PBXBuildFile; productRef = 956026C82DA85508006A9CFC /* Ink */; };
+		9571A63D2E7854AC0092C7E2 /* ChapterParagraphRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9571A63C2E7854AC0092C7E2 /* ChapterParagraphRow.swift */; };
+		9571A63F2E78555C0092C7E2 /* ChapterScrollContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9571A63E2E78555C0092C7E2 /* ChapterScrollContent.swift */; };
+		9571A6412E78572E0092C7E2 /* PreferenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9571A6402E78572E0092C7E2 /* PreferenceKeys.swift */; };
+		9571A6442E78588F0092C7E2 /* MJRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 9571A6432E78588F0092C7E2 /* MJRefresh */; };
 		95978F1A2CA888E600C520EF /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F192CA888E600C520EF /* Tab.swift */; };
 		95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */; };
 		959BA4E92E751E0900B7C7AB /* enoch.json in Resources */ = {isa = PBXBuildFile; fileRef = 959BA4E82E751E0900B7C7AB /* enoch.json */; };
@@ -114,6 +118,9 @@
 		954BC9F52C85456400FFCFA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		955281402D1B5D8A00341577 /* apocrypha.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = apocrypha.json; sourceTree = "<group>"; };
 		956026C52DA85464006A9CFC /* MarkdownParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownParser.swift; sourceTree = "<group>"; };
+		9571A63C2E7854AC0092C7E2 /* ChapterParagraphRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChapterParagraphRow.swift; sourceTree = "<group>"; };
+		9571A63E2E78555C0092C7E2 /* ChapterScrollContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChapterScrollContent.swift; sourceTree = "<group>"; };
+		9571A6402E78572E0092C7E2 /* PreferenceKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceKeys.swift; sourceTree = "<group>"; };
 		95978F192CA888E600C520EF /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDetailView.swift; sourceTree = "<group>"; };
 		959BA4E82E751E0900B7C7AB /* enoch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enoch.json; sourceTree = "<group>"; };
@@ -133,6 +140,7 @@
 				952F39DA2C8BBD3C009A412D /* MarkdownUI in Frameworks */,
 				95186D072C893C8100C0949D /* Functions in Frameworks */,
 				9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */,
+				9571A6442E78588F0092C7E2 /* MJRefresh in Frameworks */,
 				95186D052C893C8100C0949D /* Auth in Frameworks */,
 				956026C92DA85508006A9CFC /* Ink in Frameworks */,
 				95186D0D2C893C8100C0949D /* Storage in Frameworks */,
@@ -153,6 +161,7 @@
 		952F39D02C8BAB64009A412D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				9571A6402E78572E0092C7E2 /* PreferenceKeys.swift */,
 				952F39E42C8F48B8009A412D /* Collection.swift */,
 				952F39F42C9115F8009A412D /* Color.swift */,
 				9510097B2C92766A0040B21A /* String.swift */,
@@ -178,6 +187,8 @@
 		952F39E02C8E383B009A412D /* Bible */ = {
 			isa = PBXGroup;
 			children = (
+				9571A63E2E78555C0092C7E2 /* ChapterScrollContent.swift */,
+				9571A63C2E7854AC0092C7E2 /* ChapterParagraphRow.swift */,
 				954BC9D52C84EDBE00FFCFA6 /* BibleView.swift */,
 				954BC9EC2C85012200FFCFA6 /* BookDetailView.swift */,
 				954BC9EF2C8501C900FFCFA6 /* ChapterDetailView.swift */,
@@ -391,6 +402,7 @@
 				95186D112C893F2F00C0949D /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				952F39D82C8BBD3C009A412D /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				956026C72DA85508006A9CFC /* XCRemoteSwiftPackageReference "Ink" */,
+				9571A6422E78588F0092C7E2 /* XCRemoteSwiftPackageReference "MJRefresh" */,
 			);
 			productRefGroup = 954BC9D12C84EDBE00FFCFA6 /* Products */;
 			projectDirPath = "";
@@ -435,7 +447,9 @@
 				952F39F32C9114A4009A412D /* ColorOptionsView.swift in Sources */,
 				9510097C2C92766A0040B21A /* String.swift in Sources */,
 				954BC9F22C85112D00FFCFA6 /* SearchBar.swift in Sources */,
+				9571A63F2E78555C0092C7E2 /* ChapterScrollContent.swift in Sources */,
 				9510097E2C92815B0040B21A /* SeeSavedNotesView.swift in Sources */,
+				9571A63D2E7854AC0092C7E2 /* ChapterParagraphRow.swift in Sources */,
 				954BC9EA2C8500F900FFCFA6 /* BibleService.swift in Sources */,
 				952F39CD2C8B58A0009A412D /* ParagraphView.swift in Sources */,
 				954BC9F02C8501C900FFCFA6 /* ChapterDetailView.swift in Sources */,
@@ -465,6 +479,7 @@
 				952F39F72C920666009A412D /* Note.swift in Sources */,
 				952F39E32C8F4874009A412D /* ParagraphParser.swift in Sources */,
 				952F39DD2C8E36A7009A412D /* AuthenticateView.swift in Sources */,
+				9571A6412E78572E0092C7E2 /* PreferenceKeys.swift in Sources */,
 				954BC9F42C8513A900FFCFA6 /* Testament.swift in Sources */,
 				952F39E52C8F48B8009A412D /* Collection.swift in Sources */,
 			);
@@ -794,6 +809,14 @@
 				minimumVersion = 0.6.0;
 			};
 		};
+		9571A6422E78588F0092C7E2 /* XCRemoteSwiftPackageReference "MJRefresh" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CoderMJLee/MJRefresh";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.7.9;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -836,6 +859,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 956026C72DA85508006A9CFC /* XCRemoteSwiftPackageReference "Ink" */;
 			productName = Ink;
+		};
+		9571A6432E78588F0092C7E2 /* MJRefresh */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9571A6422E78588F0092C7E2 /* XCRemoteSwiftPackageReference "MJRefresh" */;
+			productName = MJRefresh;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

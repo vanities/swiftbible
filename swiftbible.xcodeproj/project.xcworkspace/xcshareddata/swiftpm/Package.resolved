@@ -1,5 +1,5 @@
 {
-  "originHash" : "5201e293585b6dea73bc2992c5fde08161f129a70ef11049b41ba0f9215a339d",
+  "originHash" : "7163b0e43e02f3872a87d8e6564f91e46207b4f047b3305839988cf8332099e8",
   "pins" : [
     {
       "identity" : "ink",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "bcc9f219900a62c4210e6db726035d7f03ae757b",
         "version" : "0.6.0"
+      }
+    },
+    {
+      "identity" : "mjrefresh",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CoderMJLee/MJRefresh",
+      "state" : {
+        "revision" : "535d39c86e592d73f8b8e75f9bf1eda62ca4a4ce",
+        "version" : "3.7.9"
       }
     },
     {

@@ -88,7 +88,7 @@ Example Markdown Structure
 
 # October 5 - 2 Kings 2:3: A Season of Transition and Readiness
 
-**October 5, Passage: 2 Kings 2:3 - Elijah's departure and Elisha’s readiness to assume responsibility**
+**Elijah's departure and Elisha's readiness to assume responsibility**
 
 > "And the sons of the prophets that were at Bethel came forth to Elisha, and said unto him, Knowest thou that the LORD will take away thy master from thy head to day? And he said, Yea, I know it; hold ye your peace."
 > **2 Kings 2:3**
