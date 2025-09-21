@@ -7,6 +7,26 @@ This project feeds generated scriptures into the Swift client living one level u
 - The Swift client relies on that JSON at runtime. Regenerate it with `python3 parse_book_of_enoch.py`. Because the output path is outside this workspace, the CLI usually prompts for elevated sandbox permissions—expect to rerun with `with_escalated_permissions`.
 - Swift’s `ParagraphParser` searches paragraph strings for markers shaped like `chapter:verse[suffix]` and then promotes them into superscript labels at render time.
 
+## Other Parsers
+- `parse_kjv.py`
+  - Reads `kjv.txt` and walks the canonical book headings in order. Each line shaped `CHAPTER:VERSE text...` starts a new paragraph block, while subsequent lines are appended until the next verse marker.
+  - Injects Jesus quotations by loading `jesus.json` and wrapping matched phrases in `<JESUS>…</JESUS>` using a case-insensitive regex (the script depends on the third-party `regex` module).
+  - Outputs to `../swiftbible/Text/bible.json`. Expect console spam such as `book The Gospel According to Saint Matthew Matthew` while it processes.
+- `parse_apocrypha.py`
+  - Consumes `apocrypha.txt`, expecting each line as `ABBR CHAPTER:VERSE text` where `ABBR` is defined in `ABBREVIATIONS`.
+  - Builds the same chapter/paragraph schema, ensures book ordering via `BOOK_ORDER`, and writes to `../swiftbible/Text/apocrypha.json`.
+  - Any unknown abbreviation or malformed line is logged to stdout with its line number—handy when the source text drifts.
+- Shared data contract
+  - Every parser feeds a list of books, each with `name`, `description`, and a `chapters` array of `{ number, paragraphs }`.
+  - Paragraphs must expose `startingVerse` and the raw `text` string that still contains inline tokens for later Swift-side parsing.
+
+## Supplementary Generators
+- `generate_verse_info.py`
+  - Reads `bible.json`, iterates every paragraph, and calls a remote model (default `llama-3.3-70b-instruct-fp8` via Lambda Labs) to craft commentary.
+  - Requires `.env` with `LAMBDA_API_KEY`, `SUPABASE_URL`, and `SUPABASE_ANON_KEY`. Without them the script exits early.
+  - Streams progress with `tqdm`, logs to both console and `verse_info.log`, writes successes to `verse_info.csv`, failures to `verse_info_failed.csv`, and upserts each result into Supabase table `verse_info`.
+  - Tight loop: editing the JSON schema here means also keeping the Supabase upsert payload in sync.
+
 ## Inline Verse Markers
 - Keep inline references formatted as `CHAPTER:VERSE` (e.g. `39:10`). **Do not swap them to superscripts inside the JSON.** The Swift code handles presentation and assumes the colon syntax.
 - The parser now allows a verse suffix (`a`, `b`, etc.) inside inline markers: `5:6a`, `5:7c`, etc. Presence of any suffix loosens the sequencing guard so mid-verse fragments are still picked up.
