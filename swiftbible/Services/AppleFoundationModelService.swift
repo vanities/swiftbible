@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if canImport(FoundationModels)
 import FoundationModels
+#endif
 
 enum AppleFoundationModelServiceError: LocalizedError {
     case modelUnavailable(reason: String)
@@ -19,33 +21,100 @@ enum AppleFoundationModelServiceError: LocalizedError {
     }
 }
 
-@Generable
-private struct VerseExplanationGeneration {
-    @Guide(description: "A warm, pastoral explanation of the requested Bible passage.")
-    var explanation: String
-}
-
 @MainActor
 final class AppleFoundationModelService {
     static let shared = AppleFoundationModelService()
 
-    private let session: LanguageModelSession
-    private let model: SystemLanguageModel
+    fileprivate static let instructions = "You are a trusted pastoral Bible commentary assistant. Offer historically grounded, theologically orthodox insights that respect the passage's canonical context. Write warmly but avoid personal greetings or letters."
 
-    private init(
-        model: SystemLanguageModel = .default,
-        instructions: String = "You are a trusted pastoral Bible commentary assistant who provides historically grounded, Christ-centered explanations of Scripture."
-    ) {
+    enum AvailabilityStatus: Equatable {
+        case unsupportedOS
+        case available
+        case unavailable(reason: String)
+
+        var advisoryMessage: String {
+            switch self {
+            case .unsupportedOS:
+                return "Apple Intelligence requires iOS 26, macOS 26, macCatalyst 26, or visionOS 2."
+            case .available:
+                return ""
+            case .unavailable(let reason):
+                return "Apple Intelligence is currently unavailable: \(reason)."
+            }
+        }
+
+        var isReadyForGeneration: Bool {
+            if case .available = self { return true }
+            return false
+        }
+    }
+
+    private init() {}
+
+    var isResponding: Bool {
+        if #available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *) {
+            return AppleFoundationModelServiceImplementation.shared.isResponding
+        }
+        return false
+    }
+
+    var availabilityStatus: AvailabilityStatus {
+        if #available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *) {
+            return AppleFoundationModelServiceImplementation.shared.availabilityStatus
+        }
+        return .unsupportedOS
+    }
+
+    func streamExplanation(for request: VerseExplanationRequest) -> AsyncThrowingStream<String, Error> {
+        if #available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *) {
+            return AppleFoundationModelServiceImplementation.shared.streamExplanation(for: request)
+        }
+
+        return AsyncThrowingStream { continuation in
+            continuation.finish(
+                throwing: AppleFoundationModelServiceError.modelUnavailable(
+                    reason: "Requires iOS 26, macOS 26, macCatalyst 26, or visionOS 2."
+                )
+            )
+        }
+    }
+}
+
+#if canImport(FoundationModels)
+@available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *)
+@MainActor
+private final class AppleFoundationModelServiceImplementation {
+    static let shared = AppleFoundationModelServiceImplementation()
+
+    private let model: SystemLanguageModel
+    private let session: LanguageModelSession
+    private let generationOptions: GenerationOptions
+
+    private init(model: SystemLanguageModel = .default) {
         self.model = model
         self.session = LanguageModelSession(
             model: model,
-            instructions: instructions
+            instructions: AppleFoundationModelService.instructions
+        )
+        self.generationOptions = GenerationOptions(
+            sampling: nil,
+            temperature: 0.8,
+            maximumResponseTokens: 700
         )
     }
 
-    var availability: SystemLanguageModel.Availability { model.availability }
-
     var isResponding: Bool { session.isResponding }
+
+    var availabilityStatus: AppleFoundationModelService.AvailabilityStatus {
+        switch model.availability {
+        case .available:
+            return .available
+        case .unavailable(let reason):
+            return .unavailable(reason: String(describing: reason))
+        @unknown default:
+            return .unavailable(reason: "Unknown reason")
+        }
+    }
 
     func streamExplanation(for request: VerseExplanationRequest) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream { continuation in
@@ -59,13 +128,15 @@ final class AppleFoundationModelService {
                 do {
                     let stream = session.streamResponse(
                         to: request.userPrompt,
-                        generating: VerseExplanationGeneration.self
+                        generating: VerseExplanationGeneration.self,
+                        options: generationOptions
                     )
 
                     var lastExplanation = ""
 
+                    // partial is the snapshot: properties are optional as the response streams.
                     for try await partial in stream {
-                        guard let explanation = partial.explanation else { continue }
+                        guard let explanation = partial.content.explanation else { continue }
                         let delta: String
                         if explanation.hasPrefix(lastExplanation) {
                             delta = String(explanation.dropFirst(lastExplanation.count))
@@ -89,3 +160,11 @@ final class AppleFoundationModelService {
         }
     }
 }
+
+@available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *)
+@Generable
+private struct VerseExplanationGeneration {
+    @Guide(description: "A warm, historically grounded VERY DETAILED multi-paragraph commentary that blends context, theological insight, and gentle application.")
+    var explanation: String
+}
+#endif

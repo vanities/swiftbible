@@ -93,6 +93,7 @@ struct ChapterDetailView: View {
                 }
                 if let h = header as? MJRefreshNormalHeader {
                     h.lastUpdatedTimeLabel?.isHidden = true
+                    h.stateLabel?.isHidden = true
                     h.setTitle("Pull for previous chapter", for: .idle)
                     h.setTitle("Release to go back", for: .pulling)
                     h.setTitle("Loading…", for: .refreshing)
@@ -298,13 +299,13 @@ struct ChapterDetailView: View {
                     Text("\(alreadyNoted != nil ? "View" : "Add") Note")
                 }
                 Button {
-                    guard let selectedParagraph else { return }
+                    guard selectedParagraph != nil else { return }
                     explanationRequest = VerseExplanationRequest(
                         bookName: book.name,
                         chapter: currentChapter.number,
-                        startingVerse: selectedParagraph.startingVerse,
+                        startingVerse: selectedParagraph!.startingVerse,
                         translation: book.version.rawValue,
-                        paragraphText: selectedParagraph.text
+                        paragraphText: selectedParagraph!.text
                     )
                     selectedParagraph = nil
                     alreadyHighlighted = nil

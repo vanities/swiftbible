@@ -18,28 +18,35 @@ struct VerseExplanationSheet: View {
     @State private var isStreaming: Bool = true
     @State private var errorMessage: String?
     @State private var streamTask: Task<Void, Never>?
+    @State private var availabilityStatus: AppleFoundationModelService.AvailabilityStatus
 
     init(request: VerseExplanationRequest, service: AppleFoundationModelService = .shared) {
         self.request = request
         self.service = service
+        _availabilityStatus = State(initialValue: service.availabilityStatus)
     }
 
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(request.reference)
-                        .font(.headline)
-                    Text(request.translation.uppercased())
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(
-                            Capsule(style: .continuous)
-                                .fill(Color.secondary.opacity(0.12))
-                        )
+                    HStack(spacing: 8) {
+                        Text(request.reference)
+                            .font(.headline)
+                        if request.shouldDisplayTranslationBadge {
+                            Text(request.translation.uppercased())
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(
+                                    Capsule(style: .continuous)
+                                        .fill(Color.secondary.opacity(0.12))
+                                )
+                        }
+                        Spacer(minLength: 0)
+                    }
                     ParagraphView(
                         firstVerseNumber: request.startingVerse,
                         paragraph: request.paragraphText
@@ -60,6 +67,7 @@ struct VerseExplanationSheet: View {
                                 startStreaming(forceRestart: true)
                             }
                             .buttonStyle(.borderedProminent)
+                            .disabled(!availabilityStatus.isReadyForGeneration)
                         }
                     } else {
                         ScrollView {
@@ -68,8 +76,18 @@ struct VerseExplanationSheet: View {
                                     Text("Waiting for Apple Intelligence…")
                                         .foregroundStyle(.secondary)
                                 } else {
-                                    Text(explanation)
-                                        .multilineTextAlignment(.leading)
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        HStack {
+                                            Spacer()
+                                            AIGeneratedBadge(message: "This explanation was generated on device with Apple Intelligence.")
+                                                .padding(.trailing, 4)
+                                        }
+
+                                        Text(explanation)
+                                            .multilineTextAlignment(.leading)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                    .padding(.top, 4)
                                 }
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -114,6 +132,17 @@ struct VerseExplanationSheet: View {
         streamTask?.cancel()
         explanation = ""
         errorMessage = nil
+
+        let status = service.availabilityStatus
+        availabilityStatus = status
+
+        guard status.isReadyForGeneration else {
+            isStreaming = false
+            streamTask = nil
+            errorMessage = status.advisoryMessage
+            return
+        }
+
         isStreaming = true
 
         streamTask = Task { @MainActor in
