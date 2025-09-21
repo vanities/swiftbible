@@ -34,6 +34,7 @@ final class HighlightedVerse: Identifiable {
 struct Verse: Identifiable {
     let id = UUID()
     let number: Int?
+    let suffix: String?
     let segments: [TextSegment]
 }
 
@@ -41,4 +42,3 @@ enum TextSegment {
     case regular(String)
     case jesus(String)
 }
-
