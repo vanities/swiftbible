@@ -48,9 +48,18 @@ def parse_enoch_text(input_file):
     current_chapter = None
     current_verse_num = 1
     current_verse_text = ""
+    expected_inline_verse = None
+
+    # Matches inline verse numbers like " 2", " 4,5" or " 9, 10"
+    inline_verse_pattern = re.compile(
+        r" (?P<numbers>\d+(?:[,-]\s*\d+)*)"
+        r"(?=\s+[\"'A-Za-z])"
+    )
 
     def save_current_verse():
         """Helper to save the current verse"""
+        nonlocal expected_inline_verse
+
         if current_chapter is not None and current_verse_text.strip():
             if current_chapter not in chapters:
                 chapters[current_chapter] = []
@@ -61,17 +70,44 @@ def parse_enoch_text(input_file):
             # Convert inline verse numbers to proper format (like your parser does)
             # Pattern: " 2 " becomes " 1:2 " where 1 is current chapter
             def replace_inline_verse(match):
-                verse_num = match.group(1)
-                following_text = match.group(2)
-                return f" {current_chapter}:{verse_num} {following_text}"
+                nonlocal expected_inline_verse
 
-            # Replace patterns like " 2 living" with " 1:2 living"
-            text = re.sub(r' (\d+) ([a-z])', replace_inline_verse, text)
+                numbers_str = match.group("numbers")
+                if expected_inline_verse is None:
+                    return match.group(0)
+
+                # Normalize whitespace and split on comma or hyphen
+                parts = [
+                    part.strip()
+                    for part in re.split(r"[,-]", numbers_str)
+                    if part.strip()
+                ]
+
+                try:
+                    numbers = [int(part) for part in parts]
+                except ValueError:
+                    return match.group(0)
+
+                if not numbers:
+                    return match.group(0)
+
+                # Ensure the inline numbers follow the expected sequence
+                if numbers[0] != expected_inline_verse:
+                    return match.group(0)
+
+                expected_inline_verse = numbers[-1] + 1
+
+                normalized_numbers = re.sub(r"\s+", "", numbers_str)
+                return f" {current_chapter}:{normalized_numbers}"
+
+            text = inline_verse_pattern.sub(replace_inline_verse, text)
 
             chapters[current_chapter].append({
                 "verse": current_verse_num,
                 "text": text
             })
+
+            expected_inline_verse = None
 
     with open(input_file, "r", encoding="utf-8") as f:
         for line_number, line in enumerate(f, 1):
@@ -91,6 +127,7 @@ def parse_enoch_text(input_file):
                 current_chapter = int(chapter_match.group(1))
                 current_verse_num = 1
                 current_verse_text = ""
+                expected_inline_verse = None
                 continue
 
             # Check for verse number at start of line
@@ -102,6 +139,7 @@ def parse_enoch_text(input_file):
                 # Start new verse
                 current_verse_num = int(verse_match.group(1))
                 current_verse_text = verse_match.group(2)
+                expected_inline_verse = current_verse_num + 1
             else:
                 # Continue current verse text
                 if current_verse_text:
