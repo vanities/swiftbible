@@ -7,11 +7,10 @@
 
 import Foundation
 
-
 class ParagraphParser {
     static func parse(_ paragraph: String) -> [Verse] {
-        // Regex to identify verse numbers in the format "1:2", "1:3", etc.
-        let versePattern = #"\b(\d+:\d+)\b"#
+        // Regex to identify verse numbers like "1:2" or "1:2a"
+        let versePattern = #"\b(\d+:\d+[a-z]?)\b"#
         let verseRegex = try! NSRegularExpression(pattern: versePattern, options: [])
 
         // Regex to identify <JESUS> and </JESUS> tags
@@ -32,16 +31,25 @@ class ParagraphParser {
             let precedingText = String(paragraph[startIndex..<range.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
             if !precedingText.isEmpty {
                 let segments = parseSegments(text: precedingText, regex: jesusRegex)
-                result.append(Verse(number: nil, segments: segments))
+                result.append(Verse(number: nil, suffix: nil, segments: segments))
             }
 
-            // Extract verse number as Int (e.g., "1:2" -> 2)
+            // Extract verse number and optional suffix (e.g., "1:2a" -> number 2, suffix "a")
             let components = verseNumber.split(separator: ":")
-            var verseNum: Int? = nil
-            if components.count == 2, let num = Int(components[1]) {
-                verseNum = num
+            var verseNum: Int?
+            var suffix: String?
+            if components.count == 2 {
+                let verseComponent = components[1]
+                let digits = verseComponent.prefix { $0.isNumber }
+                let remainder = verseComponent.suffix(from: digits.endIndex)
+                if let num = Int(digits) {
+                    verseNum = num
+                }
+                if !remainder.isEmpty {
+                    suffix = String(remainder)
+                }
             }
-            result.append(Verse(number: verseNum, segments: []))
+            result.append(Verse(number: verseNum, suffix: suffix, segments: []))
 
             // Update startIndex to the end of the matched verse number
             startIndex = range.upperBound
@@ -51,7 +59,7 @@ class ParagraphParser {
         let remainingText = String(paragraph[startIndex...]).trimmingCharacters(in: .whitespacesAndNewlines)
         if !remainingText.isEmpty {
             let segments = parseSegments(text: remainingText, regex: jesusRegex)
-            result.append(Verse(number: nil, segments: segments))
+            result.append(Verse(number: nil, suffix: nil, segments: segments))
         }
 
         return result

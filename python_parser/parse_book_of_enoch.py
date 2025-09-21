@@ -41,7 +41,7 @@ SUPERSCRIPT_MAP = {
     "z": "ᶻ",
 }
 
-FOOTNOTE_SUFFIX_PATTERN = re.compile(r"\b(\d+)([a-z])\b", re.IGNORECASE)
+FOOTNOTE_SUFFIX_PATTERN = re.compile(r"(?<!:)(\d+)([a-z])\b", re.IGNORECASE)
 
 
 def _to_superscript(text: str) -> str:
@@ -114,10 +114,10 @@ def parse_enoch_text(input_file):
     current_verse_text = ""
     expected_inline_verse = None
 
-    # Matches inline verse numbers like " 2", " 4,5" or " 9, 10"
+    # Matches inline verse numbers like " 2", " 4,5" or " 9, 10" (optionally with letter suffixes)
     inline_verse_pattern = re.compile(
-        r" (?P<numbers>\d+(?:[,-]\s*\d+)*)"
-        r"(?=\s+[\"'A-Za-z])"
+        r" (?P<numbers>\d+[a-z]?(?:[,-]\s*\d+[a-z]?)*?)"
+        r"(?P<following>\s+(?=[\"'A-Za-z]))"
     )
 
     def save_current_verse():
@@ -131,38 +131,44 @@ def parse_enoch_text(input_file):
             # Clean up the text but preserve inline verse references
             text = current_verse_text.strip()
 
-            # Convert inline verse numbers to proper format (like your parser does)
-            # Pattern: " 2 " becomes " 1:2 " where 1 is current chapter
+            # Convert inline verse numbers to the chapter:verse notation our Swift parser expects
             def replace_inline_verse(match):
                 nonlocal expected_inline_verse
 
                 numbers_str = match.group("numbers")
-                if expected_inline_verse is None:
-                    return match.group(0)
+                following = match.group("following")
 
-                # Normalize whitespace and split on comma or hyphen
+                # Normalize whitespace and split on comma or hyphen while capturing optional suffixes
                 parts = [
                     part.strip()
                     for part in re.split(r"[,-]", numbers_str)
                     if part.strip()
                 ]
 
-                try:
-                    numbers = [int(part) for part in parts]
-                except ValueError:
+                base_numbers = []
+                has_suffix = bool(re.search(r"[a-z]", parts[0], re.IGNORECASE))
+                for part in parts:
+                    base_match = re.match(r"(\d+)", part)
+                    if not base_match:
+                        return match.group(0)
+                    base_numbers.append(int(base_match.group(1)))
+
+                if not base_numbers:
                     return match.group(0)
 
-                if not numbers:
+                # Guard against backwards references or unrelated numbers while allowing skipped verses
+                minimal_expected = current_verse_num + 1
+                effective_expected = expected_inline_verse or minimal_expected
+                if base_numbers[0] < minimal_expected:
                     return match.group(0)
 
-                # Ensure the inline numbers follow the expected sequence
-                if numbers[0] != expected_inline_verse:
+                if not has_suffix and base_numbers[0] < effective_expected:
                     return match.group(0)
 
-                expected_inline_verse = numbers[-1] + 1
+                expected_inline_verse = base_numbers[-1] + 1
 
                 normalized_numbers = re.sub(r"\s+", "", numbers_str)
-                return f" {current_chapter}:{normalized_numbers}"
+                return f" {current_chapter}:{normalized_numbers}{following}"
 
             text = inline_verse_pattern.sub(replace_inline_verse, text)
 

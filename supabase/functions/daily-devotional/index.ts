@@ -82,7 +82,7 @@ Devotional Guidelines:
 
 1. Title as a Heading: Use # for the title at the very top.
 
-2. Subtitle (Date, Passage Reference, and Context Summary): Follow with a **bolded summary** line immediately below the title to provide quick context.
+2. Subtitle (Context Summary Only): Provide a **bolded summary** line immediately below the title that captures the main theme without repeating the date or passage reference.
 
 Example Markdown Structure
 
