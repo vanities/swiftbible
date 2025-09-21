@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct ParagraphView: View {
     @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
@@ -31,11 +30,23 @@ struct ParagraphView: View {
 
             // Append verse number if available
             if let number = verse.number {
-                verseText = verseText
-                    + Text(" \(number) ")
+                var numberText = Text(" \(number)")
+                    .foregroundColor(.gray)
+                    .font(.footnote)
+                    .baselineOffset(6.0)
+                if let suffix = verse.suffix {
+                    numberText = numberText
+                        + Text(suffix)
+                            .foregroundColor(.gray)
+                            .font(.footnote)
+                            .baselineOffset(6.0)
+                }
+                numberText = numberText
+                    + Text(" ")
                         .foregroundColor(.gray)
                         .font(.footnote)
                         .baselineOffset(6.0)
+                verseText = verseText + numberText
             }
 
             // Append verse segments
@@ -57,7 +68,6 @@ struct ParagraphView: View {
         })
     }
 }
-
 
 #Preview {
     ParagraphView(
