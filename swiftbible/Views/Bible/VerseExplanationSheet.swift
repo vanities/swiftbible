@@ -190,7 +190,7 @@ private extension VerseExplanationSheet {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
-                ForEach(Array(sections.bodySections.enumerated()), id: \.offset) { _, section in
+                ForEach(Array(zip(sections.bodySections.indices, sections.bodySections)), id: \.0) { _, section in
                     VStack(alignment: .leading, spacing: 6) {
                         if let title = section.title {
                             Text(title)

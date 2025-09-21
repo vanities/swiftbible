@@ -19,7 +19,7 @@ struct ContentView: View {
                 BibleView()
             }
 
-            Tab("Daily Devotional", systemImage: "sun.horizon.fill", value: .dailyDevotional) {
+            Tab("Devotional", systemImage: "sun.horizon.fill", value: .dailyDevotional) {
                 DailyDevotionalView()
             }
 
