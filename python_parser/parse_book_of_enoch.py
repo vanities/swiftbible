@@ -1,5 +1,69 @@
 import json
 import re
+from typing import Match
+
+SUPERSCRIPT_MAP = {
+    "0": "⁰",
+    "1": "¹",
+    "2": "²",
+    "3": "³",
+    "4": "⁴",
+    "5": "⁵",
+    "6": "⁶",
+    "7": "⁷",
+    "8": "⁸",
+    "9": "⁹",
+    "a": "ᵃ",
+    "b": "ᵇ",
+    "c": "ᶜ",
+    "d": "ᵈ",
+    "e": "ᵉ",
+    "f": "ᶠ",
+    "g": "ᵍ",
+    "h": "ʰ",
+    "i": "ᶦ",
+    "j": "ʲ",
+    "k": "ᵏ",
+    "l": "ˡ",
+    "m": "ᵐ",
+    "n": "ⁿ",
+    "o": "ᵒ",
+    "p": "ᵖ",
+    "q": "ᵠ",
+    "r": "ʳ",
+    "s": "ˢ",
+    "t": "ᵗ",
+    "u": "ᵘ",
+    "v": "ᵛ",
+    "w": "ʷ",
+    "x": "ˣ",
+    "y": "ʸ",
+    "z": "ᶻ",
+}
+
+FOOTNOTE_SUFFIX_PATTERN = re.compile(r"\b(\d+)([a-z])\b", re.IGNORECASE)
+
+
+def _to_superscript(text: str) -> str:
+    """Convert supported characters in ``text`` to their superscript equivalents."""
+
+    converted = []
+    for char in text:
+        converted_char = SUPERSCRIPT_MAP.get(char)
+        if converted_char is None:
+            converted_char = SUPERSCRIPT_MAP.get(char.lower(), char)
+        converted.append(converted_char)
+    return "".join(converted)
+
+
+def apply_superscript_suffixes(text: str) -> str:
+    """Convert verse suffixes like ``6a`` to superscript form (e.g. ``⁶ᵃ``)."""
+
+    def replace(match: Match[str]) -> str:
+        digits, suffix = match.groups()
+        return _to_superscript(f"{digits}{suffix}")
+
+    return FOOTNOTE_SUFFIX_PATTERN.sub(replace, text)
 
 # Define the 5 sections of the Book of Enoch
 ENOCH_SECTIONS = [
@@ -101,6 +165,9 @@ def parse_enoch_text(input_file):
                 return f" {current_chapter}:{normalized_numbers}"
 
             text = inline_verse_pattern.sub(replace_inline_verse, text)
+
+            # Convert verse suffixes like "6a" to superscript form for readability
+            text = apply_superscript_suffixes(text)
 
             chapters[current_chapter].append({
                 "verse": current_verse_num,
