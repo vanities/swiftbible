@@ -34,10 +34,12 @@ struct ChapterDetailView: View {
     @Environment(\.modelContext) private var context
 
     let book: Book
+    let chapter: Chapter
     @State private var currentChapter: Chapter
 
     init(book: Book, chapter: Chapter) {
         self.book = book
+        self.chapter = chapter
         _currentChapter = State(initialValue: chapter)
     }
 
@@ -317,15 +319,20 @@ struct ChapterDetailView: View {
         }
         // Removed left/right swipe gesture navigation in favor of pull-to-refresh style
         .onAppear {
-            guard let book = appViewModel.selectedVerse?.book,
-                  book == self.book,
-                  let chapter = appViewModel.selectedVerse?.chapter,
-                  chapter.number == self.currentChapter.number,
-                  let verse = appViewModel.selectedVerse?.verse else { return }
-            #if DEBUG
-            print("[MJRefresh] onAppear selected verse jump to \(verse)")
-            #endif
-            scrollPosition = verse
+            updateScrollPositionForContext()
+        }
+        .onChange(of: chapter) { newChapter in
+            if currentChapter.number != newChapter.number {
+                currentChapter = newChapter
+            }
+            updateScrollPositionForContext()
+        }
+        .onChange(of: book) { _ in
+            selectedParagraph = nil
+            alreadyHighlighted = nil
+            alreadyNoted = nil
+            currentChapter = chapter
+            updateScrollPositionForContext()
         }
         .onChange(of: currentChapter.number) { _ in
             // Clear transient state when chapter changes
@@ -333,14 +340,13 @@ struct ChapterDetailView: View {
             alreadyHighlighted = nil
             alreadyNoted = nil
             // Jump to the top of the new chapter
-            if let first = currentChapter.paragraphs.first?.startingVerse {
-                DispatchQueue.main.async { scrollPosition = first }
-            } else {
-                scrollPosition = nil
-            }
+            updateScrollPositionForContext()
             #if DEBUG
             print("[MJRefresh] onChange chapter now \(currentChapter.number)")
             #endif
+        }
+        .onChange(of: appViewModel.selectedVerse?.verse) { _ in
+            updateScrollPositionForContext()
         }
     }
 
@@ -405,6 +411,31 @@ struct ChapterDetailView: View {
             }
 
         )
+    }
+
+    private func updateScrollPositionForContext() {
+        guard let selected = appViewModel.selectedVerse else {
+            scrollToTop()
+            return
+        }
+
+        if selected.book == book && selected.chapter.number == currentChapter.number {
+            DispatchQueue.main.async {
+                scrollPosition = selected.verse
+            }
+        } else {
+            scrollToTop()
+        }
+    }
+
+    private func scrollToTop() {
+        if let first = currentChapter.paragraphs.first?.startingVerse {
+            DispatchQueue.main.async {
+                scrollPosition = first
+            }
+        } else {
+            scrollPosition = nil
+        }
     }
 }
 
