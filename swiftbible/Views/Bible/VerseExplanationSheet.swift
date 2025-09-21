@@ -76,17 +76,10 @@ struct VerseExplanationSheet: View {
                                     Text("Waiting for Apple Intelligence…")
                                         .foregroundStyle(.secondary)
                                 } else {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        HStack {
-                                            Spacer()
-                                            AIGeneratedBadge(message: "This explanation was generated on device with Apple Intelligence.")
-                                                .padding(.trailing, 4)
-                                        }
-
-                                        Text(explanation)
-                                            .multilineTextAlignment(.leading)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                    }
+                                    CommentarySectionsView(
+                                        sections: explanationSections(from: explanation),
+                                        badgeMessage: "This explanation was generated on device with Apple Intelligence."
+                                    )
                                     .padding(.top, 4)
                                 }
                             }
@@ -175,4 +168,82 @@ struct VerseExplanationSheet: View {
             paragraphText: "3:16 For God so loved the world, that he gave his only Son, that whoever believes in him should not perish but have eternal life."
         )
     )
+}
+
+private extension VerseExplanationSheet {
+    struct CommentarySectionsView: View {
+        let sections: ExplanationSections
+        let badgeMessage: String
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Spacer()
+                    AIGeneratedBadge(message: badgeMessage)
+                        .padding(.trailing, 4)
+                }
+
+                if let summary = sections.summary {
+                    Text(summary)
+                        .font(.body)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+
+                ForEach(Array(sections.bodySections.enumerated()), id: \.offset) { _, section in
+                    VStack(alignment: .leading, spacing: 6) {
+                        if let title = section.title {
+                            Text(title)
+                                .font(.headline)
+                        }
+                        Text(section.body)
+                            .multilineTextAlignment(.leading)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 4)
+                }
+            }
+        }
+    }
+
+    struct ExplanationBodySection {
+        let title: String?
+        let body: String
+    }
+
+    struct ExplanationSections {
+        let summary: String?
+        let bodySections: [ExplanationBodySection]
+    }
+
+    func explanationSections(from text: String) -> ExplanationSections {
+        let chunks = text.split(separator: "\n\n", omittingEmptySubsequences: true)
+        guard !chunks.isEmpty else { return ExplanationSections(summary: nil, bodySections: []) }
+
+        var summary: String?
+        var sections: [ExplanationBodySection] = []
+
+        for (index, chunk) in chunks.enumerated() {
+            let sectionString = String(chunk)
+            if index == 0 && !sectionString.contains("\n") {
+                summary = sectionString
+                continue
+            }
+
+            if let newlineIndex = sectionString.firstIndex(of: "\n") {
+                let title = String(sectionString[..<newlineIndex])
+                let bodyStart = sectionString.index(after: newlineIndex)
+                let body = String(sectionString[bodyStart...])
+                sections.append(ExplanationBodySection(title: title, body: body))
+            } else {
+                if summary == nil {
+                    summary = sectionString
+                } else {
+                    sections.append(ExplanationBodySection(title: nil, body: sectionString))
+                }
+            }
+        }
+
+        return ExplanationSections(summary: summary, bodySections: sections)
+    }
 }

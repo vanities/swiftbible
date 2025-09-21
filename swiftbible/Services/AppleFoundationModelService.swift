@@ -98,8 +98,8 @@ private final class AppleFoundationModelServiceImplementation {
         )
         self.generationOptions = GenerationOptions(
             sampling: nil,
-            temperature: 0.8,
-            maximumResponseTokens: 700
+            temperature: 0.7,
+            maximumResponseTokens: 900
         )
     }
 
@@ -128,7 +128,7 @@ private final class AppleFoundationModelServiceImplementation {
                 do {
                     let stream = session.streamResponse(
                         to: request.userPrompt,
-                        generating: VerseExplanationGeneration.self,
+                        generating: VerseCommentary.self,
                         options: generationOptions
                     )
 
@@ -136,7 +136,14 @@ private final class AppleFoundationModelServiceImplementation {
 
                     // partial is the snapshot: properties are optional as the response streams.
                     for try await partial in stream {
-                        guard let explanation = partial.content.explanation else { continue }
+                        let commentary = partial.content
+                        #if DEBUG
+                        print("[AppleFoundationModelService] commentary snapshot: \(commentary)")
+                        #endif
+                        let explanation = Self.render(commentary: commentary)
+                        #if DEBUG
+                        print("[AppleFoundationModelService] snapshot explanation: \(String(reflecting: explanation))")
+                        #endif
                         let delta: String
                         if explanation.hasPrefix(lastExplanation) {
                             delta = String(explanation.dropFirst(lastExplanation.count))
@@ -162,9 +169,61 @@ private final class AppleFoundationModelServiceImplementation {
 }
 
 @available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *)
+private extension AppleFoundationModelServiceImplementation {
+    static func render(commentary: VerseCommentary.PartiallyGenerated) -> String {
+        var sections: [String] = []
+
+        if let summary = trimmedNonEmpty(commentary.summary) {
+            sections.append(summary)
+        }
+
+        func appendSection(title: String, value: String?) {
+            guard let trimmed = trimmedNonEmpty(value) else { return }
+            sections.append("\(title)\n\(trimmed)")
+        }
+
+        appendSection(title: "Context", value: commentary.context)
+        appendSection(title: "Theology", value: commentary.theology)
+        appendSection(title: "Application", value: commentary.application)
+        appendSection(title: "Literary Notes", value: commentary.literary)
+        appendSection(title: "Historical & Authorship Notes", value: commentary.history)
+
+        return sections.joined(separator: "\n\n")
+    }
+}
+#endif
+
+#if canImport(FoundationModels)
+@available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *)
+@inline(__always)
+func trimmedNonEmpty(_ value: String?) -> String? {
+    guard let value = value?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else {
+        return nil
+    }
+    return value
+}
+#endif
+
+#if canImport(FoundationModels)
+@available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *)
 @Generable
-private struct VerseExplanationGeneration {
-    @Guide(description: "A warm, historically grounded VERY DETAILED multi-paragraph commentary that blends context, theological insight, and gentle application.")
-    var explanation: String
+private struct VerseCommentary {
+    @Guide(description: "1-2 sentences that cite the passage in parentheses (for example '(John 3:16)') and summarize the central idea in warm, pastoral language.")
+    var summary: String
+
+    @Guide(description: "Historical or literary context that situates the passage (audience, geography, covenant era, literary setting).")
+    var context: String
+
+    @Guide(description: "Orthodox theological reflection that flows from the passage and references its canonical placement (Old / New Testament, Apocrypha, Book of Enoch).")
+    var theology: String
+
+    @Guide(description: "Pastoral application that gently invites today’s reader to respond—prayer, practice, encouragement, or repentance.")
+    var application: String
+
+    @Guide(description: "Original-language or literary insights (Hebrew, Greek, structure, motifs, key terms) that illuminate the passage.")
+    var literary: String
+
+    @Guide(description: "Historical timeline and authorship notes (who wrote it, approximate date, canonical status, audience, major events).")
+    var history: String
 }
 #endif

@@ -42,30 +42,31 @@ struct VerseExplanationRequest: Identifiable, Equatable {
 
         Guidance:
         - Begin with a sentence that cites the passage in parentheses (for example, "John 3:16") and captures its central idea.
-        - Continue with a few paragraphs (at least three) that weave together historical or literary background, theological insight, and a gentle invitation toward present-day application.
-        - Separate each paragraph with a blank line so they appear as distinct blocks of text.
-        - Write warmly, clearly, and concisely—avoid epistolary greetings or direct address like "dear friend".
-        - Keep everything theologically orthodox and acknowledge the \(sourceDescriptor) setting when it shapes interpretation.
+        - After that opening sentence, write **exactly three paragraphs** and nothing less. Each paragraph must start on a new line and be separated from the next by a blank line.
+        - After finishing the first paragraph, continue immediately to the second and third; the response is incomplete (and should not stop) until all three paragraphs are written.
+        - If you ever output fewer than three paragraphs, continue generating text until this requirement is satisfied.
+        - Paragraph 1: Offer historical or literary context for the passage, citing relevant background.
+        - Paragraph 2: Explore the theological meaning drawn from the passage, noting how the \(sourceDescriptor) setting shapes interpretation.
+        - Paragraph 3: Provide a gentle, pastoral application that invites the reader to respond today.
+        - Write warmly, clearly, and concisely—avoid epistolary greetings or direct forms of address like "dear friend".
 
-        Follow the style demonstrated below (note the level of detail and the blank line spacing):
+        Follow the style demonstrated below (each property corresponds to the structured fields you must populate):
 
         Example (New Testament):
-        (John 3:16) This verse reveals the heart of God's redemptive love, showing that eternal life is secured through believing in the Son.
-
-        Early Christian tradition places the Gospel's composition in the late first century among communities around Ephesus who wrestled with synagogue expulsion and imperial suspicion. John situates Jesus' midnight conversation with Nicodemus immediately after references to the bronze serpent (Numbers 21) to show how the Son will be "lifted up" for healing. By naming "the world," he signals that God's covenant mercy now embraces Jew and Gentile without severing Israel's story.
-
-        Theologically, the verse insists that love initiates salvation: the Father gives, the Son offers Himself, and those who believe receive life that begins now and stretches into eternity. It keeps divine justice and mercy together by tying the world's rescue to the Son's sacrificial self-offering. The verse therefore guards against both transactional religion and effortless universalism, locating salvation in trusting the crucified and risen Christ.
-
-        For modern readers, John 3:16 reshapes how we view ourselves and our neighbors. When shame whispers that we are unwanted, the Father's giving refutes it; when evangelism feels intimidating, the verse supplies a simple, beautiful announcement. Let this promise guide times of prayer, prompt generous hospitality, and embolden you to speak of Christ's love in daily conversations.
+        summary: (John 3:16) This verse reveals the heart of God's redemptive love, showing that eternal life is secured through believing in the Son.
+        context: Early Christian tradition places the Gospel's composition in the late first century among communities around Ephesus who wrestled with synagogue expulsion and imperial suspicion. John situates Jesus' midnight conversation with Nicodemus alongside the bronze serpent episode (Numbers 21) to show continuity in God's saving plan.
+        theology: The verse insists that love initiates salvation—the Father gives, the Son is lifted up, and those who believe receive life that begins now and stretches into eternity. It holds together divine justice and mercy while guarding against transactional religion or effortless universalism.
+        application: When shame whispers that we are unwanted, the Father's giving refutes it. Let this promise guide prayer, generous hospitality, and courageous witness as you announce Christ's love to neighbors.
+        literary: John uses "agapaō" to emphasize active, covenant love and repeats "world" to signal the widening embrace of God's mercy. The "lifted up" language mirrors the Septuagint phrasing of Numbers 21.
+        history: Authored by the apostle John (c. AD 90) for a Jewish and Gentile audience in Asia Minor, the passage sits firmly in the New Testament canon and addresses communities under religious and imperial pressure.
 
         Example (Old Testament):
-        (Psalm 23:4) David testifies that even in the darkest valleys, the Lord's nearness steadies His people with comfort and courage.
-
-        Within Israel's worship life, Psalm 23 equipped pilgrims traversing Judea's wadis—narrow ravines where predators and thieves lurked—with words of confidence. Shepherds in that terrain carried a sturdy rod to drive off threats and a curved staff to lift sheep from crevices; David appropriates those tools to portray Yahweh's active guardianship. The psalm notably shifts from third person ("He") to second person ("You") right in the valley, highlighting God's intimate presence.
-
-        Theologically, Psalm 23:4 maintains that suffering doesn't void covenant promises but becomes the arena where the Shepherd's companionship is proven. Prophets and apostles would echo this pattern, culminating in Jesus who called Himself the Good Shepherd and willingly entered death's valley for His flock (John 10). The verse therefore anchors hope in the character of God rather than in the absence of danger.
-
-        Today, believers can let this imagery shape concrete practices during their own valleys—praying the psalm aloud in hospital rooms, inviting trusted friends to carry burdens, or incorporating Sabbath rest as a sign of trust. Naming fears before the Shepherd and recalling His past faithfulness grows courage. His rod and staff still steady those who walk through shadows, reminding us that the path may be dark but never deserted.
+        summary: (Psalm 23:4) David testifies that even in the darkest valleys, the Lord's nearness steadies His people with comfort and courage.
+        context: As part of Israel's worship life, Psalm 23 armed pilgrims traversing Judea's ravines with words of trust. Shepherds carried a rod for defense and a staff for guidance—imagery David repurposes to portray Yahweh's active guardianship.
+        theology: Suffering does not nullify covenant promises; it becomes the arena where the Shepherd's companionship is proven. Prophets and apostles echo this pattern, culminating in Jesus the Good Shepherd who enters the valley of death for His flock.
+        application: Pray this psalm aloud in hospital rooms, entrust your anxieties to the Shepherd, and lean on community when shadows fall. His rod and staff still steady those who walk through darkness.
+        literary: The psalm shifts from third person ("He") to second person ("You") at the valley, heightening intimacy. The Hebrew "tsalmavet" ("deep darkness") captures both literal gloom and metaphorical threat.
+        history: Traditionally attributed to King David (c. 1000 BC) within the Hebrew Psalter, Psalm 23 belongs to the Old Testament canon and addressed Israelites seeking assurance of Yahweh's presence amid danger.
 
         Passage Text:
         \(cleanedVerseText)
