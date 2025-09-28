@@ -15,16 +15,38 @@ class SupabaseService {
     static let shared = SupabaseService()
 
     private let supabaseURL: URL = {
-        guard let supabaseURL = Bundle.main.infoDictionary?["SUPABASE_URL"] as? String,
-              let url = URL(string: supabaseURL) else {
-            fatalError("Missing SUPABASE_URL environment variable.")
+        let info = Bundle.main.infoDictionary
+
+        #if DEBUG
+        if let debugURLString = info?["SUPABASE_URL_DEBUG"] as? String,
+           !debugURLString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+           !debugURLString.lowercased().hasPrefix("replace"),
+           let debugURL = URL(string: debugURLString) {
+            return debugURL
+        }
+        #endif
+
+        guard let urlString = info?["SUPABASE_URL"] as? String,
+              let url = URL(string: urlString) else {
+            fatalError("Missing SUPABASE_URL configuration.")
         }
         return url
     }()
 
     private let supabaseKey: String = {
-        guard let key = Bundle.main.infoDictionary?["SUPABASE_KEY"] as? String else {
-            fatalError("Missing SUPABASE_KEY environment variable.")
+        let info = Bundle.main.infoDictionary
+
+        #if DEBUG
+        if let debugKey = info?["SUPABASE_KEY_DEBUG"] as? String {
+            let trimmed = debugKey.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty && !trimmed.lowercased().hasPrefix("replace") {
+                return trimmed
+            }
+        }
+        #endif
+
+        guard let key = info?["SUPABASE_KEY"] as? String else {
+            fatalError("Missing SUPABASE_KEY configuration.")
         }
         return key
     }()
@@ -99,8 +121,7 @@ class SupabaseService {
             } else {
                 print("No refresh expiration time yet")
             }
-        }
-        catch {
+        } catch {
             print("Could not refresh session: \(error)")
         }
     }
@@ -110,13 +131,11 @@ class SupabaseService {
             let user = try await self.auth.user()
             print("Successfully got user")
             return user
-        }
-        catch {
+        } catch {
             print("Could not get user: \(error)")
         }
         return nil
     }
-
 
     func signOut() async throws {
         do {
@@ -134,5 +153,102 @@ class SupabaseService {
         supabaseAccessToken = access
         supabaseRefreshToken = refresh
         supabaseAccessTokenExpiration = expiration
+    }
+}
+
+struct SupabaseFunctionError: LocalizedError {
+    let statusCode: Int
+    let message: String?
+
+    var errorDescription: String? {
+        if let message, !message.isEmpty {
+            return message
+        }
+        return "Supabase function failed with status code \(statusCode)."
+    }
+}
+
+extension SupabaseService {
+    func invokeFunction<Response: Decodable, Payload: Encodable>(
+        _ name: String,
+        payload: Payload,
+        responseType: Response.Type = Response.self,
+        method: String = "POST"
+    ) async throws -> Response {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let body = try encoder.encode(payload)
+
+        let data = try await invokeFunction(
+            name,
+            httpBody: body,
+            responseType: responseType,
+            method: method
+        )
+        return data
+    }
+
+    func invokeFunction<Response: Decodable>(
+        _ name: String,
+        responseType: Response.Type = Response.self
+    ) async throws -> Response {
+        try await invokeFunction(name, httpBody: nil, responseType: responseType, method: "GET")
+    }
+
+    private func invokeFunction<Response: Decodable>(
+        _ name: String,
+        httpBody: Data?,
+        responseType: Response.Type,
+        method: String
+    ) async throws -> Response {
+        let functionURL = supabaseURL.appendingPathComponent("functions/v1/\(name)")
+        var request = URLRequest(url: functionURL)
+        request.httpMethod = method
+        request.timeoutInterval = 30
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue(supabaseKey, forHTTPHeaderField: "apikey")
+        if let token = supabaseAccessToken, !token.isEmpty {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        request.httpBody = httpBody
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw SupabaseFunctionError(statusCode: -1, message: "Invalid server response.")
+        }
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            let message = parseErrorMessage(from: data)
+            throw SupabaseFunctionError(statusCode: httpResponse.statusCode, message: message)
+        }
+
+        if data.isEmpty {
+            throw SupabaseFunctionError(statusCode: httpResponse.statusCode, message: "Empty response body.")
+        }
+
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        do {
+            return try decoder.decode(Response.self, from: data)
+        } catch {
+            throw SupabaseFunctionError(statusCode: httpResponse.statusCode, message: "Unable to decode response: \(error.localizedDescription)")
+        }
+    }
+
+    private func parseErrorMessage(from data: Data) -> String? {
+        guard !data.isEmpty else { return nil }
+        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+            if let message = json["message"] as? String {
+                return message
+            }
+            if let error = json["error"] as? String {
+                return error
+            }
+            if let description = json["description"] as? String {
+                return description
+            }
+        }
+        return String(data: data, encoding: .utf8)
     }
 }

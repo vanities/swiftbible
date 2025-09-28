@@ -37,7 +37,6 @@
 		952F39F72C920666009A412D /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F62C920666009A412D /* Note.swift */; };
 		952F39F92C920778009A412D /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F82C920778009A412D /* Version.swift */; };
 		952F39FB2C9209FF009A412D /* NoteModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39FA2C9209FF009A412D /* NoteModalView.swift */; };
-		95F7B1342EA1B6F700A47D84 /* AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */; };
 		9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9537E25D2C893FBD00FD56B9 /* Supabase */; };
 		9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */; };
 		9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E2632C89502400FD56B9 /* VerificationView.swift */; };
@@ -61,9 +60,21 @@
 		95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */; };
 		959BA4E92E751E0900B7C7AB /* enoch.json in Resources */ = {isa = PBXBuildFile; fileRef = 959BA4E82E751E0900B7C7AB /* enoch.json */; };
 		95A7019D2E785EE10095EDDB /* RefreshableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A7019C2E785EE10095EDDB /* RefreshableScrollView.swift */; };
+		95CC651E2E830DA70065E7AD /* DonationPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC651D2E830DA70065E7AD /* DonationPromptView.swift */; };
+		95CC65202E830DD70065E7AD /* DonationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC651F2E830DD70065E7AD /* DonationPreferences.swift */; };
+		95CC66062E899D460065E7AD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC66052E899D460065E7AD /* SceneDelegate.swift */; };
+		95CC66082E899D560065E7AD /* URLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC66072E899D560065E7AD /* URLHandler.swift */; };
+		95CC660C2E89A0A20065E7AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC660B2E89A0A20065E7AD /* AppDelegate.swift */; };
+		95CC66152E89C6AA0065E7AD /* DonationHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC66142E89C6AA0065E7AD /* DonationHistoryView.swift */; };
+		95CC66312E89AD780065E7AD /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 95CC66302E89AD780065E7AD /* ConfettiSwiftUI */; };
+		95CC666F2E89B79B0065E7AD /* SafariViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC666E2E89B79B0065E7AD /* SafariViews.swift */; };
+		95CC66722E89B8BE0065E7AD /* DonationCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC66712E89B8BE0065E7AD /* DonationCelebrationView.swift */; };
 		95D6F64E2E808D1200042F87 /* AppleFoundationModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F64D2E808D1200042F87 /* AppleFoundationModelService.swift */; };
 		95D6F6502E808D8300042F87 /* VerseExplanationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */; };
 		95D6F6522E808D9E00042F87 /* VerseExplanationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */; };
+		95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5D8A12E92D10000A1B2C3 /* DonationService.swift */; };
+		95F5D8A42E92D10000A1B2C3 /* DonationAmountEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5D8A32E92D10000A1B2C3 /* DonationAmountEditor.swift */; };
+		95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,10 +136,20 @@
 		959BA4E82E751E0900B7C7AB /* enoch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enoch.json; sourceTree = "<group>"; };
 		95A7019C2E785EE10095EDDB /* RefreshableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshableScrollView.swift; sourceTree = "<group>"; };
 		95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = swiftbibleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		95CC651D2E830DA70065E7AD /* DonationPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationPromptView.swift; sourceTree = "<group>"; };
+		95CC651F2E830DD70065E7AD /* DonationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationPreferences.swift; sourceTree = "<group>"; };
+		95CC66052E899D460065E7AD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		95CC66072E899D560065E7AD /* URLHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLHandler.swift; sourceTree = "<group>"; };
+		95CC660B2E89A0A20065E7AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		95CC66142E89C6AA0065E7AD /* DonationHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationHistoryView.swift; sourceTree = "<group>"; };
+		95CC666E2E89B79B0065E7AD /* SafariViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariViews.swift; sourceTree = "<group>"; };
+		95CC66712E89B8BE0065E7AD /* DonationCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationCelebrationView.swift; sourceTree = "<group>"; };
 		95D6F64D2E808D1200042F87 /* AppleFoundationModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleFoundationModelService.swift; sourceTree = "<group>"; };
 		95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationSheet.swift; sourceTree = "<group>"; };
 		95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationRequest.swift; sourceTree = "<group>"; };
-		95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
+		95F5D8A12E92D10000A1B2C3 /* DonationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationService.swift; sourceTree = "<group>"; };
+		95F5D8A32E92D10000A1B2C3 /* DonationAmountEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DonationAmountEditor.swift; path = ../Donation/DonationAmountEditor.swift; sourceTree = "<group>"; };
+		95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -140,6 +161,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95CC66312E89AD780065E7AD /* ConfettiSwiftUI in Frameworks */,
 				95186D092C893C8100C0949D /* PostgREST in Frameworks */,
 				952F39DA2C8BBD3C009A412D /* MarkdownUI in Frameworks */,
 				95186D072C893C8100C0949D /* Functions in Frameworks */,
@@ -183,6 +205,7 @@
 				9537E2632C89502400FD56B9 /* VerificationView.swift */,
 				952F39DE2C8E36E5009A412D /* FontOptionsView.swift */,
 				952F39F22C9114A4009A412D /* ColorOptionsView.swift */,
+				95CC66142E89C6AA0065E7AD /* DonationHistoryView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -248,6 +271,7 @@
 		954BC9D22C84EDBE00FFCFA6 /* swiftbible */ = {
 			isa = PBXGroup;
 			children = (
+				95CC660B2E89A0A20065E7AD /* AppDelegate.swift */,
 				954BC9EB2C85011800FFCFA6 /* Views */,
 				9537E2652C8A9E0800FD56B9 /* ViewModels */,
 				954BC9E52C8500C200FFCFA6 /* Models */,
@@ -286,6 +310,7 @@
 		954BC9E52C8500C200FFCFA6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				95CC651F2E830DD70065E7AD /* DonationPreferences.swift */,
 				95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */,
 				95978F192CA888E600C520EF /* Tab.swift */,
 				952F39EE2C907159009A412D /* Chapter.swift */,
@@ -302,7 +327,10 @@
 		954BC9E82C8500EE00FFCFA6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				95CC66072E899D560065E7AD /* URLHandler.swift */,
+				95CC66052E899D460065E7AD /* SceneDelegate.swift */,
 				95D6F64D2E808D1200042F87 /* AppleFoundationModelService.swift */,
+				95F5D8A12E92D10000A1B2C3 /* DonationService.swift */,
 				9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */,
 				954BC9E92C8500F900FFCFA6 /* BibleService.swift */,
 				952F39E22C8F4874009A412D /* ParagraphParser.swift */,
@@ -314,8 +342,10 @@
 		954BC9EB2C85011800FFCFA6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				95CC66702E89B89B0065E7AD /* Donations */,
+				95CC666E2E89B79B0065E7AD /* SafariViews.swift */,
 				95A7019C2E785EE10095EDDB /* RefreshableScrollView.swift */,
-				95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */,
+				95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */,
 				952F39CE2C8BA7F3009A412D /* ContentView.swift */,
 				952F39E02C8E383B009A412D /* Bible */,
 				952F39E12C8E3852009A412D /* Daily Devotional */,
@@ -331,6 +361,16 @@
 				95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		95CC66702E89B89B0065E7AD /* Donations */ = {
+			isa = PBXGroup;
+			children = (
+				95CC66712E89B8BE0065E7AD /* DonationCelebrationView.swift */,
+				95CC651D2E830DA70065E7AD /* DonationPromptView.swift */,
+				95F5D8A32E92D10000A1B2C3 /* DonationAmountEditor.swift */,
+			);
+			path = Donations;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -409,6 +449,7 @@
 				952F39D82C8BBD3C009A412D /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				956026C72DA85508006A9CFC /* XCRemoteSwiftPackageReference "Ink" */,
 				9571A6422E78588F0092C7E2 /* XCRemoteSwiftPackageReference "MJRefresh" */,
+				95CC662F2E89AD780065E7AD /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 			);
 			productRefGroup = 954BC9D12C84EDBE00FFCFA6 /* Products */;
 			projectDirPath = "";
@@ -447,8 +488,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95F5D8A42E92D10000A1B2C3 /* DonationAmountEditor.swift in Sources */,
+				95CC66152E89C6AA0065E7AD /* DonationHistoryView.swift in Sources */,
 				952F39FB2C9209FF009A412D /* NoteModalView.swift in Sources */,
 				95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */,
+				95CC66722E89B8BE0065E7AD /* DonationCelebrationView.swift in Sources */,
 				952F39EB2C90710B009A412D /* Paragraph.swift in Sources */,
 				952F39F32C9114A4009A412D /* ColorOptionsView.swift in Sources */,
 				9510097C2C92766A0040B21A /* String.swift in Sources */,
@@ -462,17 +506,24 @@
 				9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */,
 				954BC9D62C84EDBE00FFCFA6 /* BibleView.swift in Sources */,
 				95D6F64E2E808D1200042F87 /* AppleFoundationModelService.swift in Sources */,
-				95F7B1342EA1B6F700A47D84 /* AIGeneratedBadge.swift in Sources */,
+				95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */,
 				954BC9D42C84EDBE00FFCFA6 /* swiftbibleApp.swift in Sources */,
+				95CC660C2E89A0A20065E7AD /* AppDelegate.swift in Sources */,
 				95186D102C893E7500C0949D /* SettingsView.swift in Sources */,
 				952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */,
 				952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */,
+				95CC66082E899D560065E7AD /* URLHandler.swift in Sources */,
+				95CC65202E830DD70065E7AD /* DonationPreferences.swift in Sources */,
 				954BC9E72C8500D800FFCFA6 /* Book.swift in Sources */,
+				95CC66062E899D460065E7AD /* SceneDelegate.swift in Sources */,
 				952F39E72C8F61E0009A412D /* Verse.swift in Sources */,
 				9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */,
+				95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */,
 				952F39F92C920778009A412D /* Version.swift in Sources */,
+				95CC651E2E830DA70065E7AD /* DonationPromptView.swift in Sources */,
 				952F39F52C9115F8009A412D /* Color.swift in Sources */,
 				9510098A2C95364C0040B21A /* ChapterSummaries.swift in Sources */,
+				95CC666F2E89B79B0065E7AD /* SafariViews.swift in Sources */,
 				952F39EF2C907159009A412D /* Chapter.swift in Sources */,
 				9537E2672C8A9E1E00FD56B9 /* UserViewModel.swift in Sources */,
 				95978F1A2CA888E600C520EF /* Tab.swift in Sources */,
@@ -827,6 +878,14 @@
 				minimumVersion = 3.7.9;
 			};
 		};
+		95CC662F2E89AD780065E7AD /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -874,6 +933,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9571A6422E78588F0092C7E2 /* XCRemoteSwiftPackageReference "MJRefresh" */;
 			productName = MJRefresh;
+		};
+		95CC66302E89AD780065E7AD /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95CC662F2E89AD780065E7AD /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
