@@ -80,9 +80,9 @@ Date: ${formattedDate}
 
 Devotional Guidelines:
 
-1. Title as a Heading: Use # for the title at the very top.
+1. Title as a Heading: Use # for the title at the very top. Include the date and passage reference in this title.
 
-2. Subtitle (Context Summary Only): Provide a **bolded summary** line immediately below the title that captures the main theme without repeating the date or passage reference.
+2. Subtitle (Context Summary Only): Provide a **bolded thematic summary** line immediately below the title that captures the main theme. DO NOT include the date or passage reference in this subtitle - only the theological/spiritual theme.
 
 Example Markdown Structure
 

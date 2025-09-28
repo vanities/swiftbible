@@ -1,0 +1,48 @@
+name: Deploy Supabase Edge Functions
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "supabase/functions/**"
+      - ".github/workflows/deploy-supabase-functions.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # Deploy create-donation-session WITH JWT verification (called from authenticated frontend)
+      - name: Deploy create-donation-session function
+        run: supabase functions deploy create-donation-session --project-ref "$PROJECT_ID"
+
+      # Deploy donation-status WITH JWT verification (called from authenticated frontend)
+      - name: Deploy donation-status function
+        run: supabase functions deploy donation-status --project-ref "$PROJECT_ID"
+
+      # Deploy donation-history WITH JWT verification (called from authenticated frontend)
+      - name: Deploy donation-history function
+        run: supabase functions deploy donation-history --project-ref "$PROJECT_ID"
+
+      # Deploy stripe-donation-webhook WITHOUT JWT verification (called by Stripe webhooks)
+      - name: Deploy stripe-donation-webhook function
+        run: supabase functions deploy stripe-donation-webhook --project-ref "$PROJECT_ID" --no-verify-jwt
+
+      # Deploy user-self-deletion WITH JWT verification (called from authenticated frontend)
+      - name: Deploy user-self-deletion function
+        run: supabase functions deploy user-self-deletion --project-ref "$PROJECT_ID"
+
+      # Deploy daily-devotional WITH JWT verification (called by cron job with service role)
+      - name: Deploy daily-devotional function
+        run: supabase functions deploy daily-devotional --project-ref "$PROJECT_ID"
