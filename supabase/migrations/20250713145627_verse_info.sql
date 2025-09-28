@@ -18,14 +18,16 @@ create table if not exists public.verse_info (
 alter table public.verse_info enable row level security;
 
 -- 3️⃣  Policies
--- Anyone (anon, authenticated, service_role) can read.
-create policy if not exists "Anyone can read verse_info"
+-- Drop existing policies if they exist and recreate them
+drop policy if exists "Anyone can read verse_info" on public.verse_info;
+create policy "Anyone can read verse_info"
   on public.verse_info
   for select
   using (true);
 
 -- Only signed-in users (authenticated) may insert.
-create policy if not exists "Authenticated can insert verse_info"
+drop policy if exists "Authenticated can insert verse_info" on public.verse_info;
+create policy "Authenticated can insert verse_info"
   on public.verse_info
   for insert
   to authenticated
