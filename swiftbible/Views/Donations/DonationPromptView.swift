@@ -36,10 +36,12 @@ struct DonationPromptView: View {
             }
 
             VStack(spacing: 12) {
-                Text("Support swiftbible")
+                Text(hasCompletedDonation ? "Support swiftbible Again!" : "Support swiftbible")
                     .font(.title2.weight(.semibold))
 
-                Text("Your donation helps pay for server costs and the Apple developer fee. Thanks for helping keep swiftbible online.")
+                Text(hasCompletedDonation
+                    ? "Welcome back! Your continued support helps keep swiftbible running and available for everyone. Thank you for being amazing! 🙏"
+                    : "Your donation helps pay for server costs and the Apple developer fee. Thanks for helping keep swiftbible online.")
                     .font(.body)
                     .multilineTextAlignment(.center)
             }
@@ -127,7 +129,10 @@ struct DonationPromptView: View {
                         isPresented = false
                     }
                 } label: {
-                    Label("Donate \(formattedAmount(for: selectedAmount))", systemImage: "heart.fill")
+                    Label(hasCompletedDonation
+                        ? "Donate \(formattedAmount(for: selectedAmount)) Again! 🎉"
+                        : "Donate \(formattedAmount(for: selectedAmount))",
+                        systemImage: "heart.fill")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
@@ -146,8 +151,11 @@ struct DonationPromptView: View {
                 }
             }
 
-            Toggle(isOn: $donationPromptOptOut) {
-                Text("Don't show this donation reminder again")
+            Toggle(isOn: Binding(
+                get: { !donationPromptOptOut },
+                set: { donationPromptOptOut = !$0 }
+            )) {
+                Text("Show donation reminder pop up")
                     .font(.footnote)
             }
             .onChange(of: donationPromptOptOut) { _, newValue in
@@ -159,12 +167,6 @@ struct DonationPromptView: View {
                         animateSadFace = false
                     }
                 }
-            }
-
-            if hasCompletedDonation {
-                Text("Thank you so much for supporting swiftbible!")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
             }
         }
         .padding(24)

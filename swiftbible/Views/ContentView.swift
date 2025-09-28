@@ -33,6 +33,7 @@ struct ContentView: View {
     @State private var isCreatingDonationSession = false
     @State private var safariCheckout: SafariCheckoutItem?
     @State private var confettiTrigger = 0
+    @State private var isAppLaunching = true
 
     @AppStorage("lastCelebratedDonationSessionID") private var lastCelebratedDonationSessionID: String = ""
 
@@ -89,6 +90,11 @@ struct ContentView: View {
                 userViewModel.user = await SupabaseService.shared.getUser()
                 await refreshDonationStatusFromServer()
                 evaluateDonationPrompt()
+
+                // Mark app as no longer launching after initial load
+                await MainActor.run {
+                    isAppLaunching = false
+                }
             }
         }
         .onChange(of: scenePhase) { _, newPhase in
@@ -314,9 +320,15 @@ struct ContentView: View {
                 print("🎯 First donation or no previous session - should celebrate: \(shouldCelebrate)")
             }
 
-            if shouldCelebrate {
+            if shouldCelebrate && !isAppLaunching {
                 print("🎉 TRIGGERING CONFETTI! Trigger: \(confettiTrigger) -> \(confettiTrigger + 1)")
                 confettiTrigger += 1
+            } else if shouldCelebrate && isAppLaunching {
+                print("🎯 Would celebrate but app is launching - skipping confetti")
+                // Still update the last celebrated session to prevent future triggers
+                if !latestSession.isEmpty {
+                    lastCelebratedDonationSessionID = latestSession
+                }
             } else {
                 print("🎯 Not celebrating - confetti conditions not met")
             }

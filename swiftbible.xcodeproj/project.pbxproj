@@ -73,7 +73,6 @@
 		95D6F6502E808D8300042F87 /* VerseExplanationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */; };
 		95D6F6522E808D9E00042F87 /* VerseExplanationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */; };
 		95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5D8A12E92D10000A1B2C3 /* DonationService.swift */; };
-		95F5D8A42E92D10000A1B2C3 /* DonationAmountEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5D8A32E92D10000A1B2C3 /* DonationAmountEditor.swift */; };
 		95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */; };
 /* End PBXBuildFile section */
 
@@ -148,7 +147,6 @@
 		95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationSheet.swift; sourceTree = "<group>"; };
 		95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationRequest.swift; sourceTree = "<group>"; };
 		95F5D8A12E92D10000A1B2C3 /* DonationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationService.swift; sourceTree = "<group>"; };
-		95F5D8A32E92D10000A1B2C3 /* DonationAmountEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DonationAmountEditor.swift; path = ../Donation/DonationAmountEditor.swift; sourceTree = "<group>"; };
 		95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -368,7 +366,6 @@
 			children = (
 				95CC66712E89B8BE0065E7AD /* DonationCelebrationView.swift */,
 				95CC651D2E830DA70065E7AD /* DonationPromptView.swift */,
-				95F5D8A32E92D10000A1B2C3 /* DonationAmountEditor.swift */,
 			);
 			path = Donations;
 			sourceTree = "<group>";
@@ -488,7 +485,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95F5D8A42E92D10000A1B2C3 /* DonationAmountEditor.swift in Sources */,
 				95CC66152E89C6AA0065E7AD /* DonationHistoryView.swift in Sources */,
 				952F39FB2C9209FF009A412D /* NoteModalView.swift in Sources */,
 				95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */,
