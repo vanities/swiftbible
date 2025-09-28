@@ -32,9 +32,9 @@ jobs:
 
       - name: Push database migrations
         run: |
-          supabase db push --project-ref "$PROJECT_ID"
+          supabase db push --password "$SUPABASE_DB_PASSWORD"
 
       - name: Verify migration status
         run: |
           echo "Checking migration status..."
-          supabase migration list --project-ref "$PROJECT_ID"
+          supabase migration list
