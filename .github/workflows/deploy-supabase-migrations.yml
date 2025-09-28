@@ -1,0 +1,40 @@
+name: Deploy Supabase Database Migrations
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "supabase/migrations/**"
+      - ".github/workflows/deploy-supabase-migrations.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy-migrations:
+    runs-on: ubuntu-latest
+
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Link Supabase project
+        run: |
+          supabase link --project-ref "$PROJECT_ID"
+
+      - name: Push database migrations
+        run: |
+          supabase db push --project-ref "$PROJECT_ID"
+
+      - name: Verify migration status
+        run: |
+          echo "Checking migration status..."
+          supabase migration list --project-ref "$PROJECT_ID"
