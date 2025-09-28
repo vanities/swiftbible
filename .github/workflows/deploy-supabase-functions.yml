@@ -23,17 +23,17 @@ jobs:
         with:
           version: latest
 
-      # Deploy create-donation-session WITH JWT verification (called from authenticated frontend)
+      # Deploy create-donation-session WITHOUT JWT verification (anonymous donations only)
       - name: Deploy create-donation-session function
-        run: supabase functions deploy create-donation-session --project-ref "$PROJECT_ID"
+        run: supabase functions deploy create-donation-session --project-ref "$PROJECT_ID" --no-verify-jwt
 
-      # Deploy donation-status WITH JWT verification (called from authenticated frontend)
+      # Deploy donation-status WITHOUT JWT verification (anonymous donations only)
       - name: Deploy donation-status function
-        run: supabase functions deploy donation-status --project-ref "$PROJECT_ID"
+        run: supabase functions deploy donation-status --project-ref "$PROJECT_ID" --no-verify-jwt
 
-      # Deploy donation-history WITH JWT verification (called from authenticated frontend)
+      # Deploy donation-history WITHOUT JWT verification (anonymous donations only)
       - name: Deploy donation-history function
-        run: supabase functions deploy donation-history --project-ref "$PROJECT_ID"
+        run: supabase functions deploy donation-history --project-ref "$PROJECT_ID" --no-verify-jwt
 
       # Deploy stripe-donation-webhook WITHOUT JWT verification (called by Stripe webhooks)
       - name: Deploy stripe-donation-webhook function
