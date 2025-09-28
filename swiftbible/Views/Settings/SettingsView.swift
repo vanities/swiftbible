@@ -77,13 +77,13 @@ struct SettingsView: View {
                     Button {
                         showDonationSheet = true
                     } label: {
-                        if hasCompletedDonation {
+                        if appViewModel.totalPaidCents > 0 {
                             HStack {
                                 AnimatedDonorHeart()
                                     .frame(width: 24, height: 24)
                                 Text("Donate")
                                 Spacer()
-                                Text("Thank you! 💖")
+                                Text("Thank you!")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }

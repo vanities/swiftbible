@@ -6,6 +6,7 @@ struct DonationPromptView: View {
     var currencyCode: String
     var onDonate: (Decimal) -> Void
 
+    @Environment(AppViewModel.self) private var appViewModel
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
 
@@ -36,10 +37,10 @@ struct DonationPromptView: View {
             }
 
             VStack(spacing: 12) {
-                Text(hasCompletedDonation ? "Support swiftbible Again!" : "Support swiftbible")
+                Text(appViewModel.totalPaidCents > 0 ? "Support swiftbible Again!" : "Support swiftbible")
                     .font(.title2.weight(.semibold))
 
-                Text(hasCompletedDonation
+                Text(appViewModel.totalPaidCents > 0
                     ? "Welcome back! Your continued support helps keep swiftbible running and available for everyone. Thank you for being amazing! 🙏"
                     : "Your donation helps pay for server costs and the Apple developer fee. Thanks for helping keep swiftbible online.")
                     .font(.body)
@@ -129,7 +130,7 @@ struct DonationPromptView: View {
                         isPresented = false
                     }
                 } label: {
-                    Label(hasCompletedDonation
+                    Label(appViewModel.totalPaidCents > 0
                         ? "Donate \(formattedAmount(for: selectedAmount)) Again! 🎉"
                         : "Donate \(formattedAmount(for: selectedAmount))",
                         systemImage: "heart.fill")
