@@ -8,6 +8,13 @@
 import SwiftUI
 import UIKit
 
+private struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
 struct VerseExplanationSheet: View {
     let request: VerseExplanationRequest
     private let service: AppleFoundationModelService
@@ -19,6 +26,7 @@ struct VerseExplanationSheet: View {
     @State private var errorMessage: String?
     @State private var streamTask: Task<Void, Never>?
     @State private var availabilityStatus: AppleFoundationModelService.AvailabilityStatus
+    @State private var scrollOffset: CGFloat = 0
 
     init(request: VerseExplanationRequest, service: AppleFoundationModelService = .shared) {
         self.request = request
@@ -28,49 +36,69 @@ struct VerseExplanationSheet: View {
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 16) {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 8) {
-                        Text(request.reference)
-                            .font(.headline)
-                        if request.shouldDisplayTranslationBadge {
-                            Text(request.translation.uppercased())
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.secondary)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 4)
-                                .background(
-                                    Capsule(style: .continuous)
-                                        .fill(Color.secondary.opacity(0.12))
-                                )
-                        }
-                        Spacer(minLength: 0)
-                    }
-                    ParagraphView(
-                        firstVerseNumber: request.startingVerse,
-                        paragraph: request.paragraphText
-                    )
-                    .padding(12)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-                }
-
-                Divider()
-
-                Group {
-                    if let errorMessage {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Label(errorMessage, systemImage: "exclamationmark.triangle")
-                                .foregroundStyle(.red)
-                                .labelStyle(.titleAndIcon)
-                            Button("Try Again") {
-                                startStreaming(forceRestart: true)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    // Collapsing header section
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 8) {
+                            Text(request.reference)
+                                .font(.headline)
+                            if request.shouldDisplayTranslationBadge {
+                                Text(request.translation.uppercased())
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.secondary)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(
+                                        Capsule(style: .continuous)
+                                            .fill(Color.secondary.opacity(0.12))
+                                    )
                             }
-                            .buttonStyle(.borderedProminent)
-                            .disabled(!availabilityStatus.isReadyForGeneration)
+                            Spacer(minLength: 0)
                         }
-                    } else {
-                        ScrollView {
+
+                        if headerScale > 0.3 {
+                            ParagraphView(
+                                firstVerseNumber: request.startingVerse,
+                                paragraph: request.paragraphText
+                            )
+                            .scaleEffect(headerScale, anchor: .top)
+                            .opacity(headerOpacity)
+                            .padding(12 * headerScale)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12 * headerScale))
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.top)
+                    .padding(.bottom, 8)
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear.preference(
+                                key: ScrollOffsetPreferenceKey.self,
+                                value: geometry.frame(in: .named("scroll")).minY
+                            )
+                        }
+                    )
+
+                    Divider()
+                        .padding(.horizontal)
+
+                    // Content section
+                    Group {
+                        if let errorMessage {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Label(errorMessage, systemImage: "exclamationmark.triangle")
+                                    .foregroundStyle(.red)
+                                    .labelStyle(.titleAndIcon)
+                                Button("Try Again") {
+                                    startStreaming(forceRestart: true)
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .disabled(!availabilityStatus.isReadyForGeneration)
+                            }
+                            .padding()
+                        } else {
                             VStack(alignment: .leading, spacing: 12) {
                                 if explanation.isEmpty {
                                     Text("Waiting for Apple Intelligence…")
@@ -84,21 +112,25 @@ struct VerseExplanationSheet: View {
                                 }
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
                         }
                     }
-                }
 
-                if isStreaming && errorMessage == nil {
-                    HStack(spacing: 8) {
-                        ProgressView()
-                        Text("Streaming explanation…")
-                            .foregroundStyle(.secondary)
+                    if isStreaming && errorMessage == nil {
+                        HStack(spacing: 8) {
+                            ProgressView()
+                            Text("Streaming explanation…")
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
                 }
-
-                Spacer(minLength: 0)
             }
-            .padding()
+            .coordinateSpace(name: "scroll")
+            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                scrollOffset = value
+            }
             .navigationTitle("Explain")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -116,8 +148,23 @@ struct VerseExplanationSheet: View {
                 }
             }
             .onAppear { startStreaming() }
-            .onDisappear { streamTask?.cancel() }
+            .onDisappear {
+                streamTask?.cancel()
+                service.resetSession()
+            }
         }
+    }
+
+    private var headerScale: CGFloat {
+        let threshold: CGFloat = 100
+        let scale = max(0.3, min(1.0, 1.0 - (abs(scrollOffset) / threshold)))
+        return scale
+    }
+
+    private var headerOpacity: Double {
+        let threshold: CGFloat = 100
+        let opacity = max(0.0, min(1.0, 1.0 - (abs(scrollOffset) / threshold)))
+        return opacity
     }
 
     private func startStreaming(forceRestart: Bool = false) {

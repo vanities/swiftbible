@@ -78,6 +78,12 @@ final class AppleFoundationModelService {
             )
         }
     }
+
+    func resetSession() {
+        if #available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *) {
+            AppleFoundationModelServiceImplementation.shared.resetSession()
+        }
+    }
 }
 
 #if canImport(FoundationModels)
@@ -87,7 +93,7 @@ private final class AppleFoundationModelServiceImplementation {
     static let shared = AppleFoundationModelServiceImplementation()
 
     private let model: SystemLanguageModel
-    private let session: LanguageModelSession
+    private var session: LanguageModelSession
     private let generationOptions: GenerationOptions
 
     private init(model: SystemLanguageModel = .default) {
@@ -114,6 +120,13 @@ private final class AppleFoundationModelServiceImplementation {
         @unknown default:
             return .unavailable(reason: "Unknown reason")
         }
+    }
+
+    func resetSession() {
+        session = LanguageModelSession(
+            model: model,
+            instructions: AppleFoundationModelService.instructions
+        )
     }
 
     func streamExplanation(for request: VerseExplanationRequest) -> AsyncThrowingStream<String, Error> {
