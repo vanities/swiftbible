@@ -120,7 +120,7 @@ async function generateDevotional(prompt: string): Promise<string> {
   try {
     const apiKey = Deno.env.get("OPENAI_API_KEY");
     if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
-    const model = Deno.env.get("OPENAI_MODEL") ?? "gpt-4o-mini"; // reliable chat model
+    const model = "gpt-5-mini"; // reliable chat model
 
     const response = await fetch(OPENAI_CHAT_URL, {
       method: "POST",
