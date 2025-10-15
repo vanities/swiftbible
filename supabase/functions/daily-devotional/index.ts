@@ -138,7 +138,7 @@ async function generateDevotional(prompt: string): Promise<string> {
           },
           { role: "user", content: prompt },
         ],
-        max_completion_tokens: 900,
+        max_completion_tokens: 4000,
       }),
     });
 
@@ -156,6 +156,7 @@ async function generateDevotional(prompt: string): Promise<string> {
     }
 
     const data = await response.json();
+    console.log("OpenAI API Response:", JSON.stringify(data, null, 2));
     const content = data?.choices?.[0]?.message?.content;
     if (typeof content === "string" && content.trim().length > 0) {
       return content.trim();
@@ -165,6 +166,7 @@ async function generateDevotional(prompt: string): Promise<string> {
     if (typeof alt === "string" && alt.trim().length > 0) {
       return alt.trim();
     }
+    console.log("Content was:", content, "Alt was:", alt);
     throw new Error("Empty model output from Chat Completions API");
   } catch (error: any) {
     console.error("Error generating devotional:", error?.message ?? error);
