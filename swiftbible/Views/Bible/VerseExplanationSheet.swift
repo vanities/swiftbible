@@ -27,6 +27,7 @@ struct VerseExplanationSheet: View {
     @State private var streamTask: Task<Void, Never>?
     @State private var availabilityStatus: AppleFoundationModelService.AvailabilityStatus
     @State private var scrollOffset: CGFloat = 0
+    @State private var showToast = false
 
     init(request: VerseExplanationRequest, service: AppleFoundationModelService = .shared) {
         self.request = request
@@ -141,6 +142,16 @@ struct VerseExplanationSheet: View {
                     if !explanation.isEmpty {
                         Button {
                             UIPasteboard.general.string = explanation
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            withAnimation {
+                                showToast = true
+                            }
+                            // Auto-dismiss after 2 seconds
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    showToast = false
+                                }
+                            }
                         } label: {
                             Label("Copy", systemImage: "doc.on.doc")
                         }
@@ -152,6 +163,31 @@ struct VerseExplanationSheet: View {
                 streamTask?.cancel()
                 service.resetSession()
             }
+            .overlay(
+                Group {
+                    if showToast {
+                        if #available(iOS 26.0, *) {
+                            Text("Copied to clipboard")
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 10)
+                                .glassEffect()
+                                .shadow(radius: 10)
+                                .transition(.move(edge: .top).combined(with: .opacity))
+                                .padding(.top, 60)
+                        } else {
+                            Text("Copied to clipboard")
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 10)
+                                .background(.ultraThinMaterial)
+                                .cornerRadius(12)
+                                .shadow(radius: 10)
+                                .transition(.move(edge: .top).combined(with: .opacity))
+                                .padding(.top, 60)
+                        }
+                    }
+                },
+                alignment: .top
+            )
         }
     }
 
