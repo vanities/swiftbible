@@ -106,7 +106,7 @@ struct VerseExplanationSheet: View {
                                 } else {
                                     CommentarySectionsView(
                                         sections: explanationSections(from: explanation),
-                                        badgeMessage: "This explanation was generated on device with Apple Intelligence."
+                                        badgeMessage: "This explanation was generated on device with Apple Intelligence. Large language models can make mistakes, produce inaccurate information, or generate content that may not align with biblical teaching. Always verify important information and consult trusted sources."
                                     )
                                     .padding(.top, 4)
                                 }

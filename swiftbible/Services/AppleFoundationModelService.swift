@@ -105,7 +105,7 @@ private final class AppleFoundationModelServiceImplementation {
         self.generationOptions = GenerationOptions(
             sampling: nil,
             temperature: 0.7,
-            maximumResponseTokens: 900
+            maximumResponseTokens: 1800
         )
     }
 

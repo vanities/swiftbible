@@ -97,6 +97,8 @@ struct ChapterDetailView: View {
                     h.setTitle("Pull for previous chapter", for: .idle)
                     h.setTitle("Release to go back", for: .pulling)
                     h.setTitle("Loading…", for: .refreshing)
+                    // Increase drag threshold - higher value requires more drag (default is ~0)
+                    h.ignoredScrollViewContentInsetTop = 30
                 }
                 scrollView.mj_header = header
             } else {
@@ -130,6 +132,8 @@ struct ChapterDetailView: View {
                     f.setTitle("Pull for next chapter", for: .idle)
                     f.setTitle("Release to continue", for: .pulling)
                     f.setTitle("Loading…", for: .refreshing)
+                    // Increase drag threshold - higher value requires more drag (default is ~0)
+                    f.ignoredScrollViewContentInsetBottom = 30
                 }
                 scrollView.mj_footer = footer
             } else {
