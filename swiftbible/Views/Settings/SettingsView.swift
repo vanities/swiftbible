@@ -22,6 +22,9 @@ struct SettingsView: View {
     @Binding var selectedTab: Tabs
     @State private var donationCurrency: String = "USD"
     @State private var showDonationSheet = false
+    @State private var cacheSize: String = "0 KB"
+    @State private var showClearCacheAlert = false
+    @State private var showCacheToast = false
 
     var body: some View {
         @Bindable var userViewModel = userViewModel
@@ -49,6 +52,21 @@ struct SettingsView: View {
                         Label("See Highlights", systemImage: "highlighter")
                     }
                     Toggle("Show Apocrypha", isOn: $showApocrypha)
+                }
+
+                Section(header: Text("Storage")) {
+                    HStack {
+                        Label("Cache Size", systemImage: "internaldrive")
+                        Spacer()
+                        Text(cacheSize)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Button(role: .destructive) {
+                        showClearCacheAlert = true
+                    } label: {
+                        Label("Clear All Cache", systemImage: "trash")
+                    }
                 }
 
                 Section(header: Text("Support")) {
@@ -179,10 +197,36 @@ struct SettingsView: View {
             .presentationDetents([.height(900), .large])
             .presentationDragIndicator(.visible)
         }
+        .alert("Clear All Cache?", isPresented: $showClearCacheAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("Clear", role: .destructive) {
+                clearCache()
+            }
+        } message: {
+            Text("This will clear all cached devotionals and free up \(cacheSize) of storage. You can always re-download devotionals when you view them.")
+        }
+        .overlay(
+            Group {
+                if showCacheToast {
+                    VStack {
+                        Spacer()
+                        Text("Cache cleared successfully")
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 10)
+                            .background(.ultraThinMaterial)
+                            .cornerRadius(12)
+                            .shadow(radius: 10)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                            .padding(.bottom, 60)
+                    }
+                }
+            }
+        )
         .onAppear {
             if let localeCurrency = Locale.current.currency?.identifier {
                 donationCurrency = localeCurrency.uppercased()
             }
+            updateCacheSize()
         }
     }
 
@@ -203,6 +247,27 @@ struct SettingsView: View {
         if let url = URL(string: "mailto:\(emailTo)?subject=\(subject.fixToBrowserString())"),
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+
+    private func updateCacheSize() {
+        cacheSize = CacheService.shared.getCacheSizeFormatted()
+    }
+
+    private func clearCache() {
+        CacheService.shared.clearAllCache()
+        updateCacheSize()
+
+        // Show toast notification
+        withAnimation {
+            showCacheToast = true
+        }
+
+        // Auto-dismiss after 2 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            withAnimation {
+                showCacheToast = false
+            }
         }
     }
 }

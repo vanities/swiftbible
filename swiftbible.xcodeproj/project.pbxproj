@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F85AD2685634C81DDD2F461 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F3B1712A28409C5CA1370A /* CacheService.swift */; };
 		9510097C2C92766A0040B21A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097B2C92766A0040B21A /* String.swift */; };
 		9510097E2C92815B0040B21A /* SeeSavedNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097D2C92815B0040B21A /* SeeSavedNotesView.swift */; };
 		951009802C92824A0040B21A /* SeeHighlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097F2C92824A0040B21A /* SeeHighlightsView.swift */; };
@@ -73,7 +74,8 @@
 		95D6F6502E808D8300042F87 /* VerseExplanationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */; };
 		95D6F6522E808D9E00042F87 /* VerseExplanationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */; };
 		95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5D8A12E92D10000A1B2C3 /* DonationService.swift */; };
-		95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */; };
+		95F7B1342EA1B6F700A47D84 /* AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */; };
+		F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		15F3B1712A28409C5CA1370A /* CacheService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		9510097B2C92766A0040B21A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		9510097D2C92815B0040B21A /* SeeSavedNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeSavedNotesView.swift; sourceTree = "<group>"; };
 		9510097F2C92824A0040B21A /* SeeHighlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeHighlightsView.swift; sourceTree = "<group>"; };
@@ -147,11 +150,22 @@
 		95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationSheet.swift; sourceTree = "<group>"; };
 		95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationRequest.swift; sourceTree = "<group>"; };
 		95F5D8A12E92D10000A1B2C3 /* DonationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationService.swift; sourceTree = "<group>"; };
-		95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
+		95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
+		9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DailyDevotional.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		95AB8B902CAB768000533AA5 /* swiftbibleUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = swiftbibleUITests; sourceTree = "<group>"; };
+		95AB8B902CAB768000533AA5 /* swiftbibleUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = swiftbibleUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +332,7 @@
 				952F39EA2C90710B009A412D /* Paragraph.swift */,
 				952F39F62C920666009A412D /* Note.swift */,
 				952F39F82C920778009A412D /* Version.swift */,
+				9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -333,6 +348,7 @@
 				954BC9E92C8500F900FFCFA6 /* BibleService.swift */,
 				952F39E22C8F4874009A412D /* ParagraphParser.swift */,
 				956026C52DA85464006A9CFC /* MarkdownParser.swift */,
+				15F3B1712A28409C5CA1370A /* CacheService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -343,7 +359,7 @@
 				95CC66702E89B89B0065E7AD /* Donations */,
 				95CC666E2E89B79B0065E7AD /* SafariViews.swift */,
 				95A7019C2E785EE10095EDDB /* RefreshableScrollView.swift */,
-				95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */,
+				95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */,
 				952F39CE2C8BA7F3009A412D /* ContentView.swift */,
 				952F39E02C8E383B009A412D /* Bible */,
 				952F39E12C8E3852009A412D /* Daily Devotional */,
@@ -407,8 +423,6 @@
 				95AB8B902CAB768000533AA5 /* swiftbibleUITests */,
 			);
 			name = swiftbibleUITests;
-			packageProductDependencies = (
-			);
 			productName = swiftbibleUITests;
 			productReference = 95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -502,7 +516,7 @@
 				9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */,
 				954BC9D62C84EDBE00FFCFA6 /* BibleView.swift in Sources */,
 				95D6F64E2E808D1200042F87 /* AppleFoundationModelService.swift in Sources */,
-				95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */,
+				95F7B1342EA1B6F700A47D84 /* AIGeneratedBadge.swift in Sources */,
 				954BC9D42C84EDBE00FFCFA6 /* swiftbibleApp.swift in Sources */,
 				95CC660C2E89A0A20065E7AD /* AppDelegate.swift in Sources */,
 				95186D102C893E7500C0949D /* SettingsView.swift in Sources */,
@@ -537,6 +551,8 @@
 				952F39DD2C8E36A7009A412D /* AuthenticateView.swift in Sources */,
 				954BC9F42C8513A900FFCFA6 /* Testament.swift in Sources */,
 				952F39E52C8F48B8009A412D /* Collection.swift in Sources */,
+				7F85AD2685634C81DDD2F461 /* CacheService.swift in Sources */,
+				F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

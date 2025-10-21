@@ -8,12 +8,6 @@
 import SwiftUI
 import MarkdownUI
 
-struct DailyDevotional: Decodable {
-    let id: Int
-    let message: String
-    let for_date: String
-}
-
 struct DailyDevotionalView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage("fontName") private var fontName: String = "Helvetica"
@@ -158,6 +152,8 @@ struct DailyDevotionalView: View {
         )
         .font(Font.custom(fontName, size: CGFloat(fontSize)))
         .onAppear {
+            // Clean expired cache on view appearance
+            CacheService.shared.cleanExpiredCache()
             Task { await fetchDailyDevotional(for: selectedDate) }
         }
         .onDisappear {
@@ -176,6 +172,15 @@ struct DailyDevotionalView: View {
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: date)
 
+        // Check cache first
+        if let cachedDevotional = CacheService.shared.loadDevotional(for: date) {
+            message = cachedDevotional.message
+            hasDevotional = true
+            isLoading = false
+            return
+        }
+
+        // Cache miss - fetch from Supabase
         do {
             let devotional: DailyDevotional = try await SupabaseService.shared.client
                 .from("Daily Devotional")
@@ -187,6 +192,9 @@ struct DailyDevotionalView: View {
 
             message = devotional.message
             hasDevotional = true
+
+            // Save to cache
+            CacheService.shared.saveDevotional(devotional, for: date)
         } catch {
             print("No devotional found for \(dateString): \(error)")
         }
