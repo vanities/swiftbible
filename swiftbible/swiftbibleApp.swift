@@ -15,6 +15,6 @@ struct swiftbibleApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [HighlightedVerse.self, Note.self], isUndoEnabled: true)
+        .modelContainer(for: [HighlightedVerse.self, Note.self, SavedDevotional.self], isUndoEnabled: true)
     }
 }
