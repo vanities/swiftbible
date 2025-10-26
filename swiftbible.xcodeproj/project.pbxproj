@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-				535C8482C0384BF3829FD497 /* BookmarkPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBAFC9D9F8443A5A401AC37 /* BookmarkPreferences.swift */; };
+		535C8482C0384BF3829FD497 /* BookmarkPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBAFC9D9F8443A5A401AC37 /* BookmarkPreferences.swift */; };
 		7F85AD2685634C81DDD2F461 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F3B1712A28409C5CA1370A /* CacheService.swift */; };
 		9510097C2C92766A0040B21A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097B2C92766A0040B21A /* String.swift */; };
 		9510097E2C92815B0040B21A /* SeeSavedNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097D2C92815B0040B21A /* SeeSavedNotesView.swift */; };
@@ -37,11 +37,9 @@
 		952F39F32C9114A4009A412D /* ColorOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F22C9114A4009A412D /* ColorOptionsView.swift */; };
 		952F39F52C9115F8009A412D /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F42C9115F8009A412D /* Color.swift */; };
 		952F39F72C920666009A412D /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F62C920666009A412D /* Note.swift */; };
-                952F39F92C920778009A412D /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F82C920778009A412D /* Version.swift */; };
-                952F39FB2C9209FF009A412D /* NoteModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39FA2C9209FF009A412D /* NoteModalView.swift */; };
-                95F8A0022F1A2B3400ABCDEF /* SavedDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */; };
-                95F8A0042F1A2B3400ABCDEF /* SavedDevotionalsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */; };
-                9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9537E25D2C893FBD00FD56B9 /* Supabase */; };
+		952F39F92C920778009A412D /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39F82C920778009A412D /* Version.swift */; };
+		952F39FB2C9209FF009A412D /* NoteModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39FA2C9209FF009A412D /* NoteModalView.swift */; };
+		9537E25E2C893FBD00FD56B9 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9537E25D2C893FBD00FD56B9 /* Supabase */; };
 		9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */; };
 		9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E2632C89502400FD56B9 /* VerificationView.swift */; };
 		9537E2672C8A9E1E00FD56B9 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9537E2662C8A9E1E00FD56B9 /* UserViewModel.swift */; };
@@ -77,7 +75,9 @@
 		95D6F6502E808D8300042F87 /* VerseExplanationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */; };
 		95D6F6522E808D9E00042F87 /* VerseExplanationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */; };
 		95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5D8A12E92D10000A1B2C3 /* DonationService.swift */; };
-		95F7B1342EA1B6F700A47D84 /* AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */; };
+		95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */; };
+		95F8A0022F1A2B3400ABCDEF /* SavedDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */; };
+		95F8A0042F1A2B3400ABCDEF /* SavedDevotionalsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */; };
 		F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */; };
 /* End PBXBuildFile section */
 
@@ -92,7 +92,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-				0DBAFC9D9F8443A5A401AC37 /* BookmarkPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPreferences.swift; sourceTree = "<group>"; };
+		0DBAFC9D9F8443A5A401AC37 /* BookmarkPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPreferences.swift; sourceTree = "<group>"; };
 		15F3B1712A28409C5CA1370A /* CacheService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		9510097B2C92766A0040B21A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		9510097D2C92815B0040B21A /* SeeSavedNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeSavedNotesView.swift; sourceTree = "<group>"; };
@@ -117,10 +117,8 @@
 		952F39F42C9115F8009A412D /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		952F39F62C920666009A412D /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		952F39F82C920778009A412D /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
-                952F39FA2C9209FF009A412D /* NoteModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModalView.swift; sourceTree = "<group>"; };
-                95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotional.swift; sourceTree = "<group>"; };
-                95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotionalsListView.swift; sourceTree = "<group>"; };
-                9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
+		952F39FA2C9209FF009A412D /* NoteModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModalView.swift; sourceTree = "<group>"; };
+		9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
 		9537E2632C89502400FD56B9 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		9537E2662C8A9E1E00FD56B9 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		954BC9D02C84EDBE00FFCFA6 /* swiftbible.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = swiftbible.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,22 +154,14 @@
 		95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationSheet.swift; sourceTree = "<group>"; };
 		95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationRequest.swift; sourceTree = "<group>"; };
 		95F5D8A12E92D10000A1B2C3 /* DonationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationService.swift; sourceTree = "<group>"; };
-		95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
+		95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
+		95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotional.swift; sourceTree = "<group>"; };
+		95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotionalsListView.swift; sourceTree = "<group>"; };
 		9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DailyDevotional.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		95AB8B902CAB768000533AA5 /* swiftbibleUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = swiftbibleUITests;
-			sourceTree = "<group>";
-		};
+		95AB8B902CAB768000533AA5 /* swiftbibleUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = swiftbibleUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,15 +233,15 @@
 			path = Bible;
 			sourceTree = "<group>";
 		};
-                952F39E12C8E3852009A412D /* Daily Devotional */ = {
-                        isa = PBXGroup;
-                        children = (
-                                952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */,
-                                95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */,
-                        );
-                        path = "Daily Devotional";
-                        sourceTree = "<group>";
-                };
+		952F39E12C8E3852009A412D /* Daily Devotional */ = {
+			isa = PBXGroup;
+			children = (
+				952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */,
+				95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */,
+			);
+			path = "Daily Devotional";
+			sourceTree = "<group>";
+		};
 		9537E25C2C893FBD00FD56B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -338,10 +328,10 @@
 				954BC9F32C8513A900FFCFA6 /* Testament.swift */,
 				952F39E62C8F61E0009A412D /* Verse.swift */,
 				952F39EA2C90710B009A412D /* Paragraph.swift */,
-                                952F39F62C920666009A412D /* Note.swift */,
-                                952F39F82C920778009A412D /* Version.swift */,
-                                95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */,
-                                9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */,
+				952F39F62C920666009A412D /* Note.swift */,
+				952F39F82C920778009A412D /* Version.swift */,
+				95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */,
+				9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -368,7 +358,7 @@
 				95CC66702E89B89B0065E7AD /* Donations */,
 				95CC666E2E89B79B0065E7AD /* SafariViews.swift */,
 				95A7019C2E785EE10095EDDB /* RefreshableScrollView.swift */,
-				95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */,
+				95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */,
 				952F39CE2C8BA7F3009A412D /* ContentView.swift */,
 				952F39E02C8E383B009A412D /* Bible */,
 				952F39E12C8E3852009A412D /* Daily Devotional */,
@@ -525,13 +515,13 @@
 				9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */,
 				954BC9D62C84EDBE00FFCFA6 /* BibleView.swift in Sources */,
 				95D6F64E2E808D1200042F87 /* AppleFoundationModelService.swift in Sources */,
-				95F7B1342EA1B6F700A47D84 /* AIGeneratedBadge.swift in Sources */,
+				95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */,
 				954BC9D42C84EDBE00FFCFA6 /* swiftbibleApp.swift in Sources */,
 				95CC660C2E89A0A20065E7AD /* AppDelegate.swift in Sources */,
-                                95186D102C893E7500C0949D /* SettingsView.swift in Sources */,
-                                952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */,
-                                95F8A0042F1A2B3400ABCDEF /* SavedDevotionalsListView.swift in Sources */,
-                                952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */,
+				95186D102C893E7500C0949D /* SettingsView.swift in Sources */,
+				952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */,
+				95F8A0042F1A2B3400ABCDEF /* SavedDevotionalsListView.swift in Sources */,
+				952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */,
 				95CC66082E899D560065E7AD /* URLHandler.swift in Sources */,
 				95CC65202E830DD70065E7AD /* DonationPreferences.swift in Sources */,
 				535C8482C0384BF3829FD497 /* BookmarkPreferences.swift in Sources */,
@@ -561,10 +551,10 @@
 				952F39E32C8F4874009A412D /* ParagraphParser.swift in Sources */,
 				952F39DD2C8E36A7009A412D /* AuthenticateView.swift in Sources */,
 				954BC9F42C8513A900FFCFA6 /* Testament.swift in Sources */,
-                                952F39E52C8F48B8009A412D /* Collection.swift in Sources */,
-                                7F85AD2685634C81DDD2F461 /* CacheService.swift in Sources */,
-                                95F8A0022F1A2B3400ABCDEF /* SavedDevotional.swift in Sources */,
-                                F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */,
+				952F39E52C8F48B8009A412D /* Collection.swift in Sources */,
+				7F85AD2685634C81DDD2F461 /* CacheService.swift in Sources */,
+				95F8A0022F1A2B3400ABCDEF /* SavedDevotional.swift in Sources */,
+				F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -731,7 +721,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.14;
+				MARKETING_VERSION = 1.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -776,7 +766,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.14;
+				MARKETING_VERSION = 1.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
