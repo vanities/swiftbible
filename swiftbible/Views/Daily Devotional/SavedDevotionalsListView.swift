@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import MarkdownUI
 
 struct SavedDevotionalsListView: View {
     @Environment(\.modelContext) private var context
@@ -37,14 +38,20 @@ struct SavedDevotionalsListView: View {
                 .listRowBackground(Color.clear)
             } else {
                 ForEach(savedDevotionals) { devotional in
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(dateFormatter.string(from: devotional.date))
-                            .font(.headline)
-                        Text(devotional.message)
-                            .font(.body)
-                            .foregroundStyle(.primary)
+                    NavigationLink {
+                        SavedDevotionalDetailView(devotional: devotional)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(dateFormatter.string(from: devotional.date))
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                            Text(devotional.message.preview(maxLength: 150))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(3)
+                        }
+                        .padding(.vertical, 4)
                     }
-                    .padding(.vertical, 8)
                     .contextMenu {
                         Button(role: .destructive) {
                             delete(devotional)
@@ -73,7 +80,79 @@ struct SavedDevotionalsListView: View {
     }
 }
 
+struct SavedDevotionalDetailView: View {
+    let devotional: SavedDevotional
+    @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
+
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter
+    }()
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text(dateFormatter.string(from: devotional.date))
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Markdown(devotional.message)
+                    .markdownTextStyle(\.text) {
+                        FontSize(17)
+                    }
+            }
+            .padding()
+        }
+        .navigationTitle("Devotional")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button(role: .destructive) {
+                        delete()
+                    } label: {
+                        Label("Remove", systemImage: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+    }
+
+    private func delete() {
+        dismiss()
+        context.delete(devotional)
+        try? context.save()
+    }
+}
+
+private extension String {
+    func preview(maxLength: Int) -> String {
+        // Remove markdown formatting for preview
+        let cleanText = self
+            .replacingOccurrences(of: "**", with: "")
+            .replacingOccurrences(of: "*", with: "")
+            .replacingOccurrences(of: "#", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if cleanText.count <= maxLength {
+            return cleanText
+        }
+
+        let truncated = cleanText.prefix(maxLength)
+        if let lastSpace = truncated.lastIndex(of: " ") {
+            return String(truncated[..<lastSpace]) + "..."
+        }
+        return String(truncated) + "..."
+    }
+}
+
 #Preview {
-    SavedDevotionalsListView()
-        .modelContainer(for: SavedDevotional.self, inMemory: true)
+    NavigationStack {
+        SavedDevotionalsListView()
+            .modelContainer(for: SavedDevotional.self, inMemory: true)
+    }
 }
