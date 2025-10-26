@@ -95,11 +95,31 @@ class AppViewModel {
         return formatter.string(from: NSDecimalNumber(value: cents).dividing(by: NSDecimalNumber(value: 100))) ?? "$0"
     }
 
+    func ensureBibleDataLoadedIfNeeded() {
+        guard allBibleData == nil || allBibleData?.isEmpty == true else { return }
+
+        let bible = BibleService.shared.fetchBibleData()
+        var combinedBooks = bible.oldTestament + bible.newTestament
+
+        let apocrypha = BibleService.shared.fetchApocryphaData()
+        let enoch = BibleService.shared.fetchEnochData()
+        if !apocrypha.isEmpty { combinedBooks.append(contentsOf: apocrypha) }
+        if !enoch.isEmpty { combinedBooks.append(contentsOf: enoch) }
+
+        allBibleData = combinedBooks
+    }
+
     func navigateToVerse(bookName: String, chapterNumber: Int, verseNumber: Int) {
+        ensureBibleDataLoadedIfNeeded()
+
         guard let books = allBibleData,
               let book = books.first(where: { $0.name == bookName }),
               let chapter = book.chapters.first(where: { $0.number == chapterNumber })
         else { return }
+        if showSelectedVerse {
+            showSelectedVerse = false
+        }
+
         selectedVerse = SelectedVerse(
             book: book,
             chapter: chapter,

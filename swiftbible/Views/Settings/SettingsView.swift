@@ -18,6 +18,9 @@ struct SettingsView: View {
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
     @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
+    @AppStorage(BookmarkPreferences.bookKey) private var bookmarkedBookName: String = ""
+    @AppStorage(BookmarkPreferences.chapterKey) private var bookmarkedChapterNumber: Int = 0
+    @AppStorage(BookmarkPreferences.verseKey) private var bookmarkedVerseNumber: Int = 0
 
     @Binding var selectedTab: Tabs
     @State private var donationCurrency: String = "USD"
@@ -54,6 +57,28 @@ struct SettingsView: View {
                     NavigationLink(destination: SavedDevotionalsListView()) {
                         Label("Saved Devotionals", systemImage: "heart.circle")
                     }
+                    Button {
+                        let bookName = bookmarkedBookName
+                        let chapterNumber = bookmarkedChapterNumber
+                        let verseNumber = bookmarkedVerseNumber
+                        selectedTab = .bible
+                        DispatchQueue.main.async {
+                            appViewModel.navigateToVerse(
+                                bookName: bookName,
+                                chapterNumber: chapterNumber,
+                                verseNumber: verseNumber
+                            )
+                        }
+                    } label: {
+                        HStack {
+                            Label("Go to Bookmark", systemImage: "bookmark.fill")
+                            Spacer()
+                            Text(bookmarkSummary)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .disabled(!hasBookmark)
                     Toggle("Show Apocrypha", isOn: $showApocrypha)
                 }
 
@@ -241,6 +266,15 @@ struct SettingsView: View {
         formatter.currencyCode = donationCurrency
         let amount = NSDecimalNumber(decimal: DonationPreferences.defaultDonationDollars)
         return formatter.string(from: amount) ?? "$5"
+    }
+
+    private var hasBookmark: Bool {
+        !bookmarkedBookName.isEmpty && bookmarkedChapterNumber > 0 && bookmarkedVerseNumber > 0
+    }
+
+    private var bookmarkSummary: String {
+        guard hasBookmark else { return "Not set" }
+        return "\(bookmarkedBookName) \(bookmarkedChapterNumber):\(bookmarkedVerseNumber)"
     }
 
     func openMail(

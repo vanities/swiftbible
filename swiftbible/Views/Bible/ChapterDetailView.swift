@@ -24,6 +24,9 @@ struct ChapterDetailView: View {
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
     @AppStorage("notedColor") private var notedColor: String = "00ff04"
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
+    @AppStorage(BookmarkPreferences.bookKey) private var bookmarkedBookName: String = ""
+    @AppStorage(BookmarkPreferences.chapterKey) private var bookmarkedChapterNumber: Int = 0
+    @AppStorage(BookmarkPreferences.verseKey) private var bookmarkedVerseNumber: Int = 0
     // Swipe navigation removed in favor of pull up/down
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
@@ -206,12 +209,22 @@ struct ChapterDetailView: View {
                             $0.startingVerse == paragraph.startingVerse &&
                             $0.chapter == currentChapter.number
                         }
+                        let isBookmarked =
+                            bookmarkedBookName == book.name &&
+                            bookmarkedChapterNumber == currentChapter.number &&
+                            bookmarkedVerseNumber == paragraph.startingVerse
 
                         HStack(alignment: .top) {
                             VStack(alignment: .center) {
                                 Text("\(paragraph.startingVerse)")
                                     .font(.footnote)
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(isBookmarked ? .accentColor : .gray)
+                                if isBookmarked {
+                                    Image(systemName: "bookmark.fill")
+                                        .font(.footnote)
+                                        .foregroundStyle(.accent)
+                                        .accessibilityLabel("Bookmarked verse")
+                                }
                                 if notes.contains(where: {
                                     $0.version == book.version.rawValue &&
                                     $0.book == book.name &&
@@ -230,6 +243,12 @@ struct ChapterDetailView: View {
                             .background { isHighlighted ? Color(hex: highlightedColor) : .clear }
                             .foregroundStyle(isHighlighted ? Color(hex: highlightedColor).accessibleFontColor : Color.primary)
                             .underline(selectedParagraph == paragraph)
+                            .overlay {
+                                if isBookmarked {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.accentColor.opacity(0.6), lineWidth: 1)
+                                }
+                            }
                             .onLongPressGesture {
                                 handleLongPress(paragraph: paragraph)
                             }
@@ -272,6 +291,18 @@ struct ChapterDetailView: View {
                     alreadyHighlighted = nil
                 } label: {
                     Text("Copy")
+                }
+                Button {
+                    guard let selectedParagraph else { return }
+                    bookmarkedBookName = book.name
+                    bookmarkedChapterNumber = currentChapter.number
+                    bookmarkedVerseNumber = selectedParagraph.startingVerse
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    self.selectedParagraph = nil
+                    alreadyHighlighted = nil
+                    alreadyNoted = nil
+                } label: {
+                    Text("Move bookmark here")
                 }
                 Button {
                     guard selectedParagraph != nil else { return }

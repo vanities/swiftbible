@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+				535C8482C0384BF3829FD497 /* BookmarkPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBAFC9D9F8443A5A401AC37 /* BookmarkPreferences.swift */; };
 		7F85AD2685634C81DDD2F461 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F3B1712A28409C5CA1370A /* CacheService.swift */; };
 		9510097C2C92766A0040B21A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097B2C92766A0040B21A /* String.swift */; };
 		9510097E2C92815B0040B21A /* SeeSavedNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097D2C92815B0040B21A /* SeeSavedNotesView.swift */; };
@@ -91,6 +92,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+				0DBAFC9D9F8443A5A401AC37 /* BookmarkPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPreferences.swift; sourceTree = "<group>"; };
 		15F3B1712A28409C5CA1370A /* CacheService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		9510097B2C92766A0040B21A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		9510097D2C92815B0040B21A /* SeeSavedNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeSavedNotesView.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 			isa = PBXGroup;
 			children = (
 				95CC651F2E830DD70065E7AD /* DonationPreferences.swift */,
+				0DBAFC9D9F8443A5A401AC37 /* BookmarkPreferences.swift */,
 				95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */,
 				95978F192CA888E600C520EF /* Tab.swift */,
 				952F39EE2C907159009A412D /* Chapter.swift */,
@@ -531,6 +534,7 @@
                                 952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */,
 				95CC66082E899D560065E7AD /* URLHandler.swift in Sources */,
 				95CC65202E830DD70065E7AD /* DonationPreferences.swift in Sources */,
+				535C8482C0384BF3829FD497 /* BookmarkPreferences.swift in Sources */,
 				954BC9E72C8500D800FFCFA6 /* Book.swift in Sources */,
 				95CC66062E899D460065E7AD /* SceneDelegate.swift in Sources */,
 				952F39E72C8F61E0009A412D /* Verse.swift in Sources */,
