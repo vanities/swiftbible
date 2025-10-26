@@ -51,6 +51,9 @@ struct SettingsView: View {
                     NavigationLink(destination: SeeHighlightsView(selectedTab: $selectedTab)) {
                         Label("See Highlights", systemImage: "highlighter")
                     }
+                    NavigationLink(destination: SavedDevotionalsListView()) {
+                        Label("Saved Devotionals", systemImage: "heart.circle")
+                    }
                     Toggle("Show Apocrypha", isOn: $showApocrypha)
                 }
 
