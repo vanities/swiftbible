@@ -139,7 +139,7 @@ struct BibleView: View {
             requestReview()
             #endif
         }
-            .onChange(of: showApocrypha) { newValue in
+            .onChange(of: showApocrypha) { _, newValue in
                 if newValue && bibleData.apocrypha.isEmpty {
                     fetchApocryphaData()
                 }

@@ -10,9 +10,9 @@ import SwiftData
 
 @Model
 final class SavedDevotional: Identifiable {
-    var date: Date
-    var message: String
-    var created: Date
+    var date: Date = Date()
+    var message: String = ""
+    var created: Date = Date()
 
     init(date: Date, message: String, created: Date = Date()) {
         self.date = date

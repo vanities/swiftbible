@@ -94,15 +94,13 @@ struct ChapterDetailView: View {
                     print("[MJRefresh] Triggered previous chapter to \(currentChapter.number)")
                     #endif
                 }
-                if let h = header as? MJRefreshNormalHeader {
-                    h.lastUpdatedTimeLabel?.isHidden = true
-                    h.stateLabel?.isHidden = true
-                    h.setTitle("Pull for previous chapter", for: .idle)
-                    h.setTitle("Release to go back", for: .pulling)
-                    h.setTitle("Loading…", for: .refreshing)
-                    // Increase drag threshold - higher value requires more drag (default is ~0)
-                    h.ignoredScrollViewContentInsetTop = 30
-                }
+                header.lastUpdatedTimeLabel?.isHidden = true
+                header.stateLabel?.isHidden = true
+                header.setTitle("Pull for previous chapter", for: .idle)
+                header.setTitle("Release to go back", for: .pulling)
+                header.setTitle("Loading…", for: .refreshing)
+                // Increase drag threshold - higher value requires more drag (default is ~0)
+                header.ignoredScrollViewContentInsetTop = 30
                 scrollView.mj_header = header
             } else {
                 #if DEBUG
@@ -131,13 +129,11 @@ struct ChapterDetailView: View {
                     print("[MJRefresh] Triggered next chapter to \(currentChapter.number)")
                     #endif
                 }
-                if let f = footer as? MJRefreshBackNormalFooter {
-                    f.setTitle("Pull for next chapter", for: .idle)
-                    f.setTitle("Release to continue", for: .pulling)
-                    f.setTitle("Loading…", for: .refreshing)
-                    // Increase drag threshold - higher value requires more drag (default is ~0)
-                    f.ignoredScrollViewContentInsetBottom = 30
-                }
+                footer.setTitle("Pull for next chapter", for: .idle)
+                footer.setTitle("Release to continue", for: .pulling)
+                footer.setTitle("Loading…", for: .refreshing)
+                // Increase drag threshold - higher value requires more drag (default is ~0)
+                footer.ignoredScrollViewContentInsetBottom = 30
                 scrollView.mj_footer = footer
             } else {
                 #if DEBUG
@@ -197,62 +193,7 @@ struct ChapterDetailView: View {
                         currentChapter.paragraphs,
                         id: \.startingVerse
                     ) { paragraph in
-                        if let summary = summaries[book.name]?["\(currentChapter.number):\(paragraph.startingVerse)"] {
-                            Text(summary)
-                                .bold()
-                                .padding(.top)
-                                .font(Font.custom(fontName, size: CGFloat(fontSize+1)))
-                        }
-                        let isHighlighted = highlightedVerses.contains {
-                            $0.version == book.version.rawValue &&
-                            $0.book == book.name &&
-                            $0.startingVerse == paragraph.startingVerse &&
-                            $0.chapter == currentChapter.number
-                        }
-                        let isBookmarked =
-                            bookmarkedBookName == book.name &&
-                            bookmarkedChapterNumber == currentChapter.number &&
-                            bookmarkedVerseNumber == paragraph.startingVerse
-
-                        HStack(alignment: .top) {
-                            VStack(alignment: .center) {
-                                Text("\(paragraph.startingVerse)")
-                                    .font(.footnote)
-                                    .foregroundColor(isBookmarked ? .accentColor : .gray)
-                                if isBookmarked {
-                                    Image(systemName: "bookmark.fill")
-                                        .font(.footnote)
-                                        .foregroundStyle(.accent)
-                                        .accessibilityLabel("Bookmarked verse")
-                                }
-                                if notes.contains(where: {
-                                    $0.version == book.version.rawValue &&
-                                    $0.book == book.name &&
-                                    $0.chapter == currentChapter.number &&
-                                    $0.startingVerse == paragraph.startingVerse
-                                }) {
-                                    Capsule()
-                                        .fill(Color(hex: notedColor))
-                                        .frame(width: 5)
-                                }
-                            }
-                            ParagraphView(
-                                firstVerseNumber: paragraph.startingVerse,
-                                paragraph: paragraph.text
-                            )
-                            .background { isHighlighted ? Color(hex: highlightedColor) : .clear }
-                            .foregroundStyle(isHighlighted ? Color(hex: highlightedColor).accessibleFontColor : Color.primary)
-                            .underline(selectedParagraph == paragraph)
-                            .overlay {
-                                if isBookmarked {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color.accentColor.opacity(0.6), lineWidth: 1)
-                                }
-                            }
-                            .onLongPressGesture {
-                                handleLongPress(paragraph: paragraph)
-                            }
-                        }
+                        paragraphRow(for: paragraph)
                     }
                 }
                 .id(currentChapter.number)
@@ -302,7 +243,7 @@ struct ChapterDetailView: View {
                     alreadyHighlighted = nil
                     alreadyNoted = nil
                 } label: {
-                    Text("Move bookmark here")
+                    Text("Bookmark")
                 }
                 Button {
                     guard selectedParagraph != nil else { return }
@@ -376,20 +317,20 @@ struct ChapterDetailView: View {
         .onAppear {
             updateScrollPositionForContext()
         }
-        .onChange(of: chapter) { newChapter in
+        .onChange(of: chapter) { _, newChapter in
             if currentChapter.number != newChapter.number {
                 currentChapter = newChapter
             }
             updateScrollPositionForContext()
         }
-        .onChange(of: book) { _ in
+        .onChange(of: book) {
             selectedParagraph = nil
             alreadyHighlighted = nil
             alreadyNoted = nil
             currentChapter = chapter
             updateScrollPositionForContext()
         }
-        .onChange(of: currentChapter.number) { _ in
+        .onChange(of: currentChapter.number) {
             // Clear transient state when chapter changes
             selectedParagraph = nil
             alreadyHighlighted = nil
@@ -400,8 +341,105 @@ struct ChapterDetailView: View {
             print("[MJRefresh] onChange chapter now \(currentChapter.number)")
             #endif
         }
-        .onChange(of: appViewModel.selectedVerse?.verse) { _ in
+        .onChange(of: appViewModel.selectedVerse?.verse) {
             updateScrollPositionForContext()
+        }
+    }
+
+    // MARK: - Helper View Methods
+
+    @ViewBuilder
+    private func paragraphRow(for paragraph: Paragraph) -> some View {
+        let isHighlighted = checkIfHighlighted(paragraph: paragraph)
+        let isBookmarked = checkIfBookmarked(paragraph: paragraph)
+        let hasNote = checkIfNoted(paragraph: paragraph)
+
+        Group {
+            if let summary = summaries[book.name]?["\(currentChapter.number):\(paragraph.startingVerse)"] {
+                Text(summary)
+                    .bold()
+                    .padding(.top)
+                    .font(Font.custom(fontName, size: CGFloat(fontSize + 1)))
+            }
+
+            HStack(alignment: .top) {
+                verseNumberColumn(
+                    paragraph: paragraph,
+                    isBookmarked: isBookmarked,
+                    hasNote: hasNote
+                )
+
+                paragraphContent(
+                    paragraph: paragraph,
+                    isHighlighted: isHighlighted,
+                    isBookmarked: isBookmarked
+                )
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func verseNumberColumn(paragraph: Paragraph, isBookmarked: Bool, hasNote: Bool) -> some View {
+        VStack(alignment: .center) {
+            Text("\(paragraph.startingVerse)")
+                .font(.footnote)
+                .foregroundColor(isBookmarked ? .accentColor : .gray)
+
+            if isBookmarked {
+                Image(systemName: "bookmark.fill")
+                    .font(.footnote)
+                    .foregroundColor(.accentColor)
+                    .accessibilityLabel("Bookmarked verse")
+            }
+
+            if hasNote {
+                Capsule()
+                    .fill(Color(hex: notedColor))
+                    .frame(width: 5)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func paragraphContent(paragraph: Paragraph, isHighlighted: Bool, isBookmarked: Bool) -> some View {
+        let backgroundColor: Color = isHighlighted ? Color(hex: highlightedColor) : .clear
+        let foregroundColor: Color = isHighlighted ? Color(hex: highlightedColor).accessibleFontColor : Color.primary
+
+        ParagraphView(
+            firstVerseNumber: paragraph.startingVerse,
+            paragraph: paragraph.text
+        )
+        .background { backgroundColor }
+        .foregroundStyle(foregroundColor)
+        .underline(selectedParagraph == paragraph)
+        .onLongPressGesture {
+            handleLongPress(paragraph: paragraph)
+        }
+    }
+
+    // MARK: - Helper Methods
+
+    private func checkIfHighlighted(paragraph: Paragraph) -> Bool {
+        highlightedVerses.contains {
+            $0.version == book.version.rawValue &&
+            $0.book == book.name &&
+            $0.startingVerse == paragraph.startingVerse &&
+            $0.chapter == currentChapter.number
+        }
+    }
+
+    private func checkIfBookmarked(paragraph: Paragraph) -> Bool {
+        bookmarkedBookName == book.name &&
+        bookmarkedChapterNumber == currentChapter.number &&
+        bookmarkedVerseNumber == paragraph.startingVerse
+    }
+
+    private func checkIfNoted(paragraph: Paragraph) -> Bool {
+        notes.contains {
+            $0.version == book.version.rawValue &&
+            $0.book == book.name &&
+            $0.chapter == currentChapter.number &&
+            $0.startingVerse == paragraph.startingVerse
         }
     }
 

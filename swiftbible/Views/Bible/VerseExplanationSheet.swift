@@ -17,7 +17,6 @@ private struct ScrollOffsetPreferenceKey: PreferenceKey {
 
 struct VerseExplanationSheet: View {
     let request: VerseExplanationRequest
-    private let service: AppleFoundationModelService
 
     @Environment(\.dismiss) private var dismiss
 
@@ -25,15 +24,9 @@ struct VerseExplanationSheet: View {
     @State private var isStreaming: Bool = true
     @State private var errorMessage: String?
     @State private var streamTask: Task<Void, Never>?
-    @State private var availabilityStatus: AppleFoundationModelService.AvailabilityStatus
+    @State private var availabilityStatus: AppleFoundationModelService.AvailabilityStatus = .unsupportedOS
     @State private var scrollOffset: CGFloat = 0
     @State private var showToast = false
-
-    init(request: VerseExplanationRequest, service: AppleFoundationModelService = .shared) {
-        self.request = request
-        self.service = service
-        _availabilityStatus = State(initialValue: service.availabilityStatus)
-    }
 
     var body: some View {
         NavigationStack {
@@ -161,7 +154,9 @@ struct VerseExplanationSheet: View {
             .onAppear { startStreaming() }
             .onDisappear {
                 streamTask?.cancel()
-                service.resetSession()
+                Task { @MainActor in
+                    AppleFoundationModelService.shared.resetSession()
+                }
             }
             .overlay(
                 Group {
@@ -209,33 +204,35 @@ struct VerseExplanationSheet: View {
         explanation = ""
         errorMessage = nil
 
-        let status = service.availabilityStatus
-        availabilityStatus = status
+        Task { @MainActor in
+            let status = AppleFoundationModelService.shared.availabilityStatus
+            availabilityStatus = status
 
-        guard status.isReadyForGeneration else {
-            isStreaming = false
-            streamTask = nil
-            errorMessage = status.advisoryMessage
-            return
-        }
+            guard status.isReadyForGeneration else {
+                    isStreaming = false
+                    streamTask = nil
+                    errorMessage = status.advisoryMessage
+                    return
+            }
 
-        isStreaming = true
+            isStreaming = true
 
-        streamTask = Task { @MainActor in
-            do {
-                let stream = await service.streamExplanation(for: request)
-                for try await chunk in stream {
-                    explanation.append(chunk)
+            streamTask = Task { @MainActor in
+                do {
+                    let stream = AppleFoundationModelService.shared.streamExplanation(for: request)
+                    for try await chunk in stream {
+                        explanation.append(chunk)
+                    }
+                    isStreaming = false
+                    streamTask = nil
+                } catch is CancellationError {
+                    streamTask = nil
+                    isStreaming = false
+                } catch {
+                    errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+                    isStreaming = false
+                    streamTask = nil
                 }
-                isStreaming = false
-                streamTask = nil
-            } catch is CancellationError {
-                streamTask = nil
-                isStreaming = false
-            } catch {
-                errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
-                isStreaming = false
-                streamTask = nil
             }
         }
     }
