@@ -29,12 +29,10 @@ enum Testament: Codable {
         "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians",
         "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy",
         "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter",
-        "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation",
+        "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"
     ]
 
     static let apocryphaNames = [
-        "1 Esdras",
-        "2 Esdras",
         "Tobit",
         "Judith",
         "Additions to Esther",
@@ -45,9 +43,14 @@ enum Testament: Codable {
         "Prayer of Azariah",
         "Susanna",
         "Bel and the Dragon",
-        "Prayer of Manasseh",
         "1 Maccabees",
         "2 Maccabees",
+        "1 Esdras",
+        "2 Esdras",
+        "Prayer of Manasseh",
+        "Psalm 151",
+        "3 Maccabees",
+        "4 Maccabees"
     ]
 
     static let enochNames = [
@@ -55,6 +58,6 @@ enum Testament: Codable {
         "The Book of Parables",
         "The Astronomical Book",
         "The Book of Dream Visions",
-        "The Epistle of Enoch",
+        "The Epistle of Enoch"
     ]
 }

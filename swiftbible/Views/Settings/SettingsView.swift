@@ -13,6 +13,7 @@ struct SettingsView: View {
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showApocrypha") var showApocrypha = false
+    @AppStorage("showThematicGrouping") var showThematicGrouping = false
 
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
@@ -80,6 +81,7 @@ struct SettingsView: View {
                     }
                     .disabled(!hasBookmark)
                     Toggle("Show Apocrypha", isOn: $showApocrypha)
+                    Toggle("Group Books by Theme", isOn: $showThematicGrouping)
                 }
 
                 Section(header: Text("Storage")) {
@@ -222,6 +224,7 @@ struct SettingsView: View {
                     source: "settings"
                 )
             }
+            .environment(appViewModel)
             .presentationDetents([.height(900), .large])
             .presentationDragIndicator(.visible)
         }
@@ -374,4 +377,5 @@ private struct AnimatedDonorHeart: View {
 #Preview {
     SettingsView(selectedTab: .constant(.bible))
         .environment(UserViewModel())
+        .environment(AppViewModel())
 }

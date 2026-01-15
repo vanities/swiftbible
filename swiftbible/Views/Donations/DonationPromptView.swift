@@ -202,6 +202,7 @@ struct DonationPromptView: View {
     ) { amount in
         print("Donate: \(amount)")
     }
+    .environment(AppViewModel())
     .background(Color.gray.opacity(0.2))
 }
 

@@ -16,6 +16,7 @@ struct BibleView: View {
     @State private var bibleData: (oldTestament: [Book], newTestament: [Book], apocrypha: [Book], enoch: [Book]) = ([], [], [], [])
     @State private var searchText = ""
     @AppStorage("showApocrypha") var showApocrypha = false
+    @AppStorage("showThematicGrouping") var showThematicGrouping = false
 
     var filteredOldTestament: [Book] {
         if searchText.isEmpty {
@@ -60,61 +61,70 @@ struct BibleView: View {
 
                 // Bible Books List
                 List {
-                    // Old Testament Section with grouped headers
+                    // Old Testament Section
                     Section(header: Text("Old Testament")) {
-                        // Torah (Instruction)
-                        let torah = ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy"]
-                        let former = ["Joshua", "Judges", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings"]
-                        let latter = ["Isaiah", "Jeremiah", "Ezekiel"]
-                        let minor = ["Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi"]
-                        let poetic = ["Psalms", "Proverbs", "Job"]
-                        let megillot = ["Song of Solomon", "Ruth", "Lamentations", "Ecclesiastes", "Esther"]
-                        let historical = ["Daniel", "Ezra", "Nehemiah", "1 Chronicles", "2 Chronicles"]
+                        if showThematicGrouping {
+                            // Torah (Instruction)
+                            let torah = ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy"]
+                            let former = ["Joshua", "Judges", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings"]
+                            let latter = ["Isaiah", "Jeremiah", "Ezekiel"]
+                            let minor = ["Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi"]
+                            let poetic = ["Psalms", "Proverbs", "Job"]
+                            let megillot = ["Song of Solomon", "Ruth", "Lamentations", "Ecclesiastes", "Esther"]
+                            let historical = ["Daniel", "Ezra", "Nehemiah", "1 Chronicles", "2 Chronicles"]
 
-                        groupSection("Torah (Instruction)", books: torah, within: filteredOldTestament)
-
-                        groupSection("Nevi'im (Prophets) — Former", books: former, within: filteredOldTestament)
-                        groupSection("Nevi'im (Prophets) — Latter", books: latter, within: filteredOldTestament)
-                        groupSection("Nevi'im (Prophets) — Minor", books: minor, within: filteredOldTestament)
-
-                        groupSection("Ketuvim (Writings) — Poetic", books: poetic, within: filteredOldTestament)
-                        groupSection("Ketuvim (Writings) — Five Megillot", books: megillot, within: filteredOldTestament)
-                        groupSection("Ketuvim (Writings) — Historical", books: historical, within: filteredOldTestament)
+                            groupSection("Torah (Instruction)", books: torah, within: filteredOldTestament)
+                            groupSection("Nevi'im (Prophets) — Former", books: former, within: filteredOldTestament)
+                            groupSection("Nevi'im (Prophets) — Latter", books: latter, within: filteredOldTestament)
+                            groupSection("Nevi'im (Prophets) — Minor", books: minor, within: filteredOldTestament)
+                            groupSection("Ketuvim (Writings) — Poetic", books: poetic, within: filteredOldTestament)
+                            groupSection("Ketuvim (Writings) — Five Megillot", books: megillot, within: filteredOldTestament)
+                            groupSection("Ketuvim (Writings) — Historical", books: historical, within: filteredOldTestament)
+                        } else {
+                            flatBookList(filteredOldTestament, canonicalOrder: Testament.oldNames)
+                        }
                     }
 
-                    // New Testament Section with grouped headers
+                    // New Testament Section
                     Section(header: Text("New Testament")) {
-                        let gospels = ["Matthew", "Mark", "Luke", "John"]
-                        let history = ["Acts"]
-                        let pauline = [
-                            "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians",
-                            "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon"
-                        ]
-                        let general = ["Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude"]
-                        let apocalypse = ["Revelation"]
+                        if showThematicGrouping {
+                            let gospels = ["Matthew", "Mark", "Luke", "John"]
+                            let history = ["Acts"]
+                            let pauline = [
+                                "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians",
+                                "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon"
+                            ]
+                            let general = ["Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude"]
+                            let apocalypse = ["Revelation"]
 
-                        groupSection("Gospels", books: gospels, within: filteredNewTestament)
-                        groupSection("History", books: history, within: filteredNewTestament)
-                        groupSection("Pauline Epistles", books: pauline, within: filteredNewTestament)
-                        groupSection("General Epistles", books: general, within: filteredNewTestament)
-                        groupSection("Apocalypse", books: apocalypse, within: filteredNewTestament)
+                            groupSection("Gospels", books: gospels, within: filteredNewTestament)
+                            groupSection("History", books: history, within: filteredNewTestament)
+                            groupSection("Pauline Epistles", books: pauline, within: filteredNewTestament)
+                            groupSection("General Epistles", books: general, within: filteredNewTestament)
+                            groupSection("Apocalypse", books: apocalypse, within: filteredNewTestament)
+                        } else {
+                            flatBookList(filteredNewTestament, canonicalOrder: Testament.newNames)
+                        }
                     }
 
                     // Apocrypha Section (Conditional)
                     if showApocrypha && !filteredApocrypha.isEmpty {
                         Section(header: Text("Apocrypha")) {
-                            let deuterocanonical = [
-                                "Tobit", "Judith", "Additions to Esther", "1 Maccabees", "2 Maccabees",
-                                "Wisdom of Solomon", "Ecclesiasticus", "Baruch", "Letter of Jeremiah",
-                                // Daniel additions often split into these entries
-                                "Prayer of Azariah", "Susanna", "Bel and the Dragon"
-                            ]
-                            let orthodoxOnly = [
-                                "1 Esdras", "2 Esdras", "Prayer of Manasseh", "Psalm 151", "3 Maccabees", "4 Maccabees"
-                            ]
+                            if showThematicGrouping {
+                                let deuterocanonical = [
+                                    "Tobit", "Judith", "Additions to Esther", "1 Maccabees", "2 Maccabees",
+                                    "Wisdom of Solomon", "Ecclesiasticus", "Baruch", "Letter of Jeremiah",
+                                    "Prayer of Azariah", "Susanna", "Bel and the Dragon"
+                                ]
+                                let orthodoxOnly = [
+                                    "1 Esdras", "2 Esdras", "Prayer of Manasseh", "Psalm 151", "3 Maccabees", "4 Maccabees"
+                                ]
 
-                            groupSection("Deuterocanonical", books: deuterocanonical, within: filteredApocrypha)
-                            groupSection("Orthodox only", books: orthodoxOnly, within: filteredApocrypha)
+                                groupSection("Deuterocanonical", books: deuterocanonical, within: filteredApocrypha)
+                                groupSection("Orthodox only", books: orthodoxOnly, within: filteredApocrypha)
+                            } else {
+                                flatBookList(filteredApocrypha, canonicalOrder: Testament.apocryphaNames)
+                            }
                         }
                     }
 
@@ -202,6 +212,16 @@ struct BibleView: View {
                 NavigationLink(destination: BookDetailView(book: book)) {
                     NavigationTitle(name: book.name, description: book.description)
                 }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func flatBookList(_ books: [Book], canonicalOrder: [String]) -> some View {
+        let orderedBooks = booksInOrder(names: canonicalOrder, available: books)
+        ForEach(orderedBooks, id: \.name) { book in
+            NavigationLink(destination: BookDetailView(book: book)) {
+                NavigationTitle(name: book.name, description: book.description)
             }
         }
     }

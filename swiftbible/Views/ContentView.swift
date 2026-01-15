@@ -118,6 +118,7 @@ struct ContentView: View {
                     source: "prompt"
                 )
             }
+            .environment(appViewModel)
             .presentationDetents([.height(900), .large])
             .presentationDragIndicator(.visible)
         }
