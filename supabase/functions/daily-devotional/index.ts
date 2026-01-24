@@ -6,7 +6,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
-const BIBLE_API_URL = "https://bible-api.com/?random=verse&translation=kjv";
+const BIBLE_API_URL = "https://bible-api.com/data/kjv/random";
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 
 Deno.serve(async (req) => {
