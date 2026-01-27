@@ -41,21 +41,33 @@ Deno.serve(async (req) => {
   });
 });
 
-async function fetchRandomVerse() {
-  try {
-    const response = await fetch(BIBLE_API_URL);
+async function fetchRandomVerse(maxRetries = 3) {
+  let lastError: Error | null = null;
 
-    if (!response.ok) {
-      throw new Error(
-        `Bible API request failed with status ${response.status}`
-      );
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(BIBLE_API_URL);
+
+      if (!response.ok) {
+        throw new Error(
+          `Bible API request failed with status ${response.status}`
+        );
+      }
+
+      return await response.json();
+    } catch (error: any) {
+      lastError = error;
+      console.error(`Attempt ${attempt}/${maxRetries} failed:`, error.message);
+
+      if (attempt < maxRetries) {
+        const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+        console.log(`Retrying in ${delay / 1000}s...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
     }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error fetching verse:", error.message);
-    throw error;
   }
+
+  throw lastError ?? new Error("Failed to fetch verse after retries");
 }
 
 function getFormattedDate(): { formatted: string; isoDate: string } {
