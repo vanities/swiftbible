@@ -15,8 +15,9 @@ Deno.serve(async (req) => {
   }
 
   const verseData = await fetchRandomVerse();
+  const verse = verseData.random_verse;
   console.log(
-    `Selected Verse: ${verseData.reference} - ${verseData.text.trim()}`
+    `Selected Verse: ${verse.book} ${verse.chapter}:${verse.verse} - ${verse.text.trim()}`
   );
 
   // Step 2: Format today's date
@@ -24,7 +25,7 @@ Deno.serve(async (req) => {
   console.log(`Date: ${formatted}`);
 
   // Step 3: Create the prompt
-  const prompt = createPrompt(verseData, formatted);
+  const prompt = createPrompt(verse, formatted);
   // Uncomment the line below to see the prompt
   // console.log('Prompt:', prompt);
   //
@@ -69,12 +70,11 @@ function getFormattedDate(): { formatted: string; isoDate: string } {
   return { formatted, isoDate };
 }
 
-function createPrompt(verseData: any, formattedDate: string): string {
-  const verse = verseData.verses[0];
+function createPrompt(verse: any, formattedDate: string): string {
   return `
 Create a daily devotional for a Bible app based on the following Bible verse from the King James Version (KJV):
 
-${verse.book_name} ${verse.chapter}:${verse.verse} - "${verse.text.trim()}"
+${verse.book} ${verse.chapter}:${verse.verse} - "${verse.text.trim()}"
 
 Date: ${formattedDate}
 
@@ -96,7 +96,7 @@ Example Markdown Structure
 2. Verse Block Formatting:
    - Place the verse text directly beneath the title and summary in a Markdown blockquote (using >) for emphasis, like this:
      > "${verse.text.trim()}"
-     > **${verse.book_name} ${verse.chapter}:${verse.verse}**
+     > **${verse.book} ${verse.chapter}:${verse.verse}**
 
 3. Devotional Content Formatting:
    - Contextual Background: Begin the devotional with a natural flow, integrating the verse's background, add explicit section headers with ##.
