@@ -6,7 +6,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
-const BIBLE_API_URL = "https://bible-api.com/data/kjv/random";
+const BIBLE_API_URL = "https://biblebytopic.com/api/getrandompopularverse-kjv";
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 
 Deno.serve(async (req) => {
@@ -14,8 +14,7 @@ Deno.serve(async (req) => {
     return { statusCode: 403, body: "External calls are not allowed" };
   }
 
-  const verseData = await fetchRandomVerse();
-  const verse = verseData.random_verse;
+  const verse = await fetchRandomVerse();
   console.log(
     `Selected Verse: ${verse.book} ${verse.chapter}:${verse.verse} - ${verse.text.trim()}`
   );
@@ -54,7 +53,15 @@ async function fetchRandomVerse(maxRetries = 3) {
         );
       }
 
-      return await response.json();
+      const data = await response.json();
+      const verseData = data.text[0];
+
+      return {
+        book: verseData.bookname,
+        chapter: verseData.chapter,
+        verse: verseData.startingverse,
+        text: verseData["text-kjv"] || verseData.text,
+      };
     } catch (error: any) {
       lastError = error;
       console.error(`Attempt ${attempt}/${maxRetries} failed:`, error.message);
