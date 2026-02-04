@@ -10,13 +10,18 @@ SwiftBible is an iOS application written in Swift that provides access to biblic
 ```
 swiftbible/
 ├── Models/
-│   └── Testament.swift           # Enums for text categories (old, new, apocrypha, enoch)
+│   ├── Testament.swift           # Enums for text categories (old, new, apocrypha, enoch)
+│   └── Version.swift             # Enum for Bible translations (kjv, asv, web)
 ├── Services/
-│   └── BibleService.swift        # Data fetching services for all text collections
+│   └── BibleService.swift        # Data fetching services with caching per version
+├── ViewModels/
+│   └── AppViewModel.swift        # Global state including selectedVersion
 ├── Views/Bible/
 │   └── BibleView.swift          # Main UI for browsing texts
 ├── Text/
-│   ├── bible.json               # Old/New Testament data
+│   ├── bible.json               # KJV Old/New Testament data
+│   ├── asv.json                 # ASV Old/New Testament data
+│   ├── web.json                 # WEB Old/New Testament data
 │   ├── apocrypha.json           # Deuterocanonical books
 │   ├── enoch.json               # Book of Enoch (5 sections)
 │   ├── summaries.swift          # Detailed verse summaries
@@ -26,13 +31,45 @@ swiftbible/
 ### Python Parsers (`/python_parser/`)
 ```
 python_parser/
-├── parse_kjv.py                 # KJV Bible parser
+├── parse_kjv.py                 # KJV Bible parser (from kjv.txt)
+├── parse_asv.py                 # ASV parser (from Zefania XML)
+├── parse_web.py                 # WEB parser (from USFX XML)
 ├── parse_apocrypha.py           # Apocrypha parser
-├── parse_book_of_enoch.py       # Book of Enoch parser (NEW)
+├── parse_book_of_enoch.py       # Book of Enoch parser
 ├── book_of_enoch.txt            # Raw Enoch text
 ├── book_of_enoch_info.txt       # Scholarly information about Enoch
 └── generate_verse_info.py       # Verse metadata generator
 ```
+
+## Bible Translations
+
+The app supports multiple Bible translations, all public domain:
+
+### Supported Versions
+| Version | Full Name | Year | Characteristics |
+|---------|-----------|------|-----------------|
+| KJV | King James Version | 1611 | Classic, formal language |
+| ASV | American Standard Version | 1901 | Highly literal, scholarly |
+| WEB | World English Bible | 2000 | Modern English, based on ASV |
+
+### Version Implementation
+```swift
+enum Version: String, Codable, CaseIterable {
+    case kjv
+    case asv
+    case web
+
+    var displayName: String { ... }
+    var shortName: String { ... }
+    var filename: String { ... }  // Maps to JSON file
+}
+```
+
+### Version Switching
+- User selects version in Settings
+- `AppViewModel.selectedVersion` stores the current version
+- Views use computed properties that derive data from `BibleService.fetchBook(version:)`
+- Changes propagate automatically via SwiftUI's @Observable tracking
 
 ## Data Architecture
 

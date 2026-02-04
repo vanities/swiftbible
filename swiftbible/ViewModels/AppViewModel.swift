@@ -116,13 +116,26 @@ class AppViewModel {
         allBibleData = combinedBooks
     }
 
-    func navigateToVerse(bookName: String, chapterNumber: Int, verseNumber: Int) {
-        ensureBibleDataLoadedIfNeeded()
+    func navigateToVerse(bookName: String, chapterNumber: Int, verseNumber: Int, version: Version? = nil) {
+        // Switch to the specified version if provided
+        if let version = version, selectedVersion != version {
+            selectedVersion = version
+        }
 
-        guard let books = allBibleData,
-              let book = books.first(where: { $0.name == bookName }),
+        // Load data for the current version
+        let bible = BibleService.shared.fetchBibleData(version: selectedVersion)
+        var books = bible.oldTestament + bible.newTestament
+
+        // Also check apocrypha and enoch for the book
+        let apocrypha = BibleService.shared.fetchApocryphaData()
+        let enoch = BibleService.shared.fetchEnochData()
+        books.append(contentsOf: apocrypha)
+        books.append(contentsOf: enoch)
+
+        guard let book = books.first(where: { $0.name == bookName }),
               let chapter = book.chapters.first(where: { $0.number == chapterNumber })
         else { return }
+
         if showSelectedVerse {
             showSelectedVerse = false
         }

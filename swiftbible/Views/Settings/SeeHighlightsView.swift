@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 
-
 struct SeeHighlightsView: View {
     @Environment(AppViewModel.self) private var appViewModel
 
@@ -32,7 +31,8 @@ struct SeeHighlightsView: View {
                             appViewModel.navigateToVerse(
                                 bookName: highlightedVerse.book,
                                 chapterNumber: highlightedVerse.chapter,
-                                verseNumber: highlightedVerse.startingVerse
+                                verseNumber: highlightedVerse.startingVerse,
+                                version: Version(rawValue: highlightedVerse.version)
                             )
                         }) {
                             VStack(alignment: .leading) {
@@ -49,7 +49,6 @@ struct SeeHighlightsView: View {
         .navigationBarTitle("Highlighted Verses")
     }
 }
-
 
 #Preview {
     SeeHighlightsView(selectedTab: .constant(.bible))
