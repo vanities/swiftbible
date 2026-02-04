@@ -22,6 +22,7 @@ import Foundation
 enum Version: String, Codable, CaseIterable {
     case kjv
     case asv
+    case web
 
     var displayName: String {
         switch self {
@@ -29,6 +30,8 @@ enum Version: String, Codable, CaseIterable {
             return "King James Version (KJV)"
         case .asv:
             return "American Standard Version (ASV)"
+        case .web:
+            return "World English Bible (WEB)"
         }
     }
 
@@ -38,6 +41,8 @@ enum Version: String, Codable, CaseIterable {
             return "KJV"
         case .asv:
             return "ASV"
+        case .web:
+            return "WEB"
         }
     }
 
@@ -47,6 +52,8 @@ enum Version: String, Codable, CaseIterable {
             return "bible"
         case .asv:
             return "asv"
+        case .web:
+            return "web"
         }
     }
 }
