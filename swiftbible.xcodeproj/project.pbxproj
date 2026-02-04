@@ -63,6 +63,7 @@
 		959BA4E92E751E0900B7C7AB /* enoch.json in Resources */ = {isa = PBXBuildFile; fileRef = 959BA4E82E751E0900B7C7AB /* enoch.json */; };
 		95F3A0022F032003000A1B2C /* asv.json in Resources */ = {isa = PBXBuildFile; fileRef = 95F3A0012F032003000A1B2C /* asv.json */; };
 		95F3A0042F032004000A1B2C /* web.json in Resources */ = {isa = PBXBuildFile; fileRef = 95F3A0032F032004000A1B2C /* web.json */; };
+		95F3A0062F040001000A1B2C /* TranslationInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F3A0052F040001000A1B2C /* TranslationInfoView.swift */; };
 		95A7019D2E785EE10095EDDB /* RefreshableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A7019C2E785EE10095EDDB /* RefreshableScrollView.swift */; };
 		95CC651E2E830DA70065E7AD /* DonationPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC651D2E830DA70065E7AD /* DonationPromptView.swift */; };
 		95CC65202E830DD70065E7AD /* DonationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC651F2E830DD70065E7AD /* DonationPreferences.swift */; };
@@ -144,6 +145,7 @@
 		959BA4E82E751E0900B7C7AB /* enoch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enoch.json; sourceTree = "<group>"; };
 		95F3A0012F032003000A1B2C /* asv.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = asv.json; sourceTree = "<group>"; };
 		95F3A0032F032004000A1B2C /* web.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = web.json; sourceTree = "<group>"; };
+		95F3A0052F040001000A1B2C /* TranslationInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationInfoView.swift; sourceTree = "<group>"; };
 		95A7019C2E785EE10095EDDB /* RefreshableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshableScrollView.swift; sourceTree = "<group>"; };
 		95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = swiftbibleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		95CC651D2E830DA70065E7AD /* DonationPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationPromptView.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				952F39DE2C8E36E5009A412D /* FontOptionsView.swift */,
 				952F39F22C9114A4009A412D /* ColorOptionsView.swift */,
 				95CC66142E89C6AA0065E7AD /* DonationHistoryView.swift */,
+				95F3A0052F040001000A1B2C /* TranslationInfoView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -555,6 +558,7 @@
 				952F39CF2C8BA7F3009A412D /* ContentView.swift in Sources */,
 				954BC9ED2C85012200FFCFA6 /* BookDetailView.swift in Sources */,
 				951009802C92824A0040B21A /* SeeHighlightsView.swift in Sources */,
+				95F3A0062F040001000A1B2C /* TranslationInfoView.swift in Sources */,
 				952F39F72C920666009A412D /* Note.swift in Sources */,
 				952F39E32C8F4874009A412D /* ParagraphParser.swift in Sources */,
 				952F39DD2C8E36A7009A412D /* AuthenticateView.swift in Sources */,

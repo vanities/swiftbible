@@ -87,6 +87,9 @@ struct SettingsView: View {
                             Text(version.displayName).tag(version)
                         }
                     }
+                    NavigationLink(destination: TranslationInfoView()) {
+                        Label("About Translations", systemImage: "info.circle")
+                    }
                 }
 
                 Section(header: Text("Storage")) {
