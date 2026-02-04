@@ -19,15 +19,34 @@ import Foundation
  Biblia Sacra Vulgata (VULGATE)
  */
 
-enum Version: String, Codable {
+enum Version: String, Codable, CaseIterable {
     case kjv
-    case niv
-    case nkjv
-    case ntl
-    case esv
-    case ntl1995
-    case ntl2009
-    case ntl2011
-    case ntl2016
-    case ntl2017
+    case asv
+
+    var displayName: String {
+        switch self {
+        case .kjv:
+            return "King James Version (KJV)"
+        case .asv:
+            return "American Standard Version (ASV)"
+        }
+    }
+
+    var shortName: String {
+        switch self {
+        case .kjv:
+            return "KJV"
+        case .asv:
+            return "ASV"
+        }
+    }
+
+    var filename: String {
+        switch self {
+        case .kjv:
+            return "bible"
+        case .asv:
+            return "asv"
+        }
+    }
 }

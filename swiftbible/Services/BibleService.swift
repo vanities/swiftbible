@@ -11,30 +11,53 @@ import Foundation
 class BibleService {
     static let shared = BibleService()
 
-    private let baseURL = Bundle.main.url(forResource: "bible", withExtension: "json")!
+    // Cache parsed Bible data by version to avoid re-parsing JSON
+    private var cache: [Version: [Book]] = [:]
 
-    func fetchBibleData() -> (oldTestament: [Book], newTestament: [Book]) {
+    private func loadBibleData(version: Version) -> [Book] {
+        // Return cached data if available
+        if let cached = cache[version] {
+            return cached
+        }
+
+        guard let url = Bundle.main.url(forResource: version.filename, withExtension: "json") else {
+            print("Error: Could not find \(version.filename).json")
+            return []
+        }
+
         do {
-            let data = try Data(contentsOf: baseURL)
+            let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             var bibleData = try decoder.decode([Book].self, from: data)
 
             for i in bibleData.indices {
+                bibleData[i].version = version
                 if Testament.oldNames.contains(bibleData[i].name) {
                     bibleData[i].testament = .old
                 } else if Testament.newNames.contains(bibleData[i].name) {
                     bibleData[i].testament = .new
                 }
             }
-            let oldTestament = bibleData.filter { $0.testament == .old }
-            let newTestament = bibleData.filter { $0.testament == .new }
 
-            // print("Got Bible data \((oldTestament, newTestament))")
-            return (oldTestament, newTestament)
+            // Cache the result
+            cache[version] = bibleData
+            return bibleData
         } catch {
             print("Error fetching Bible data: \(error)")
-            return ([], [])
+            return []
         }
+    }
+
+    func fetchBibleData(version: Version = .kjv) -> (oldTestament: [Book], newTestament: [Book]) {
+        let bibleData = loadBibleData(version: version)
+        let oldTestament = bibleData.filter { $0.testament == .old }
+        let newTestament = bibleData.filter { $0.testament == .new }
+        return (oldTestament, newTestament)
+    }
+
+    func fetchBook(named bookName: String, version: Version = .kjv) -> Book? {
+        let bibleData = loadBibleData(version: version)
+        return bibleData.first { $0.name == bookName }
     }
 
     func fetchApocryphaData() -> [Book] {

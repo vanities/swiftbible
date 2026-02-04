@@ -162,7 +162,10 @@ struct BibleView: View {
                 //     bibleData.enoch = []
                 // }
             }
-            .navigationTitle("Bible")
+            .onChange(of: appViewModel.selectedVersion) { _, _ in
+                fetchBibleData()
+            }
+            .navigationTitle("Bible (\(appViewModel.selectedVersion.shortName))")
             .navigationDestination(isPresented: $appViewModel.showSelectedVerse) {
                 if let book = appViewModel.selectedVerse?.book,
                    let chapter = appViewModel.selectedVerse?.chapter {
@@ -228,7 +231,7 @@ struct BibleView: View {
 
     // Fetch Bible Data (Old and New Testament)
     private func fetchBibleData() {
-        let fetchedData = BibleService.shared.fetchBibleData()
+        let fetchedData = BibleService.shared.fetchBibleData(version: appViewModel.selectedVersion)
         bibleData.oldTestament = fetchedData.oldTestament
         bibleData.newTestament = fetchedData.newTestament
         appViewModel.allBibleData = bibleData.oldTestament + bibleData.newTestament

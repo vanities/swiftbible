@@ -64,6 +64,13 @@ class AppViewModel {
     var showSelectedVerse: Bool = false
     var selectedVerse: SelectedVerse?
     var allBibleData: [Book]?
+
+    // Selected Bible version - synced with UserDefaults for persistence
+    var selectedVersion: Version {
+        didSet {
+            UserDefaults.standard.set(selectedVersion.rawValue, forKey: "selectedVersion")
+        }
+    }
     var navigationPath = NavigationPath()
     var donationFlowRequest: DonationRequest?
     var latestDonation: DonationSummary?
@@ -135,5 +142,11 @@ class AppViewModel {
     func testConfetti() {
         print("🎊 TEST: Triggering confetti from debug button")
         shouldTriggerConfetti = true
+    }
+
+    init() {
+        // Load saved version from UserDefaults
+        let savedVersion = UserDefaults.standard.string(forKey: "selectedVersion") ?? Version.kjv.rawValue
+        self.selectedVersion = Version(rawValue: savedVersion) ?? .kjv
     }
 }

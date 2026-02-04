@@ -36,14 +36,26 @@ struct ChapterDetailView: View {
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
 
-    let book: Book
-    let chapter: Chapter
-    @State private var currentChapter: Chapter
+    // Store only identifying info - the actual data is derived from current version
+    let bookName: String
+    let initialChapterNumber: Int
+    @State private var currentChapterNumber: Int
 
     init(book: Book, chapter: Chapter) {
-        self.book = book
-        self.chapter = chapter
-        _currentChapter = State(initialValue: chapter)
+        self.bookName = book.name
+        self.initialChapterNumber = chapter.number
+        _currentChapterNumber = State(initialValue: chapter.number)
+    }
+
+    // Computed properties that always reflect the current version
+    private var currentBook: Book {
+        BibleService.shared.fetchBook(named: bookName, version: appViewModel.selectedVersion)
+            ?? Book(name: bookName, description: "", chapters: [])
+    }
+
+    private var currentChapter: Chapter {
+        currentBook.chapters.first { $0.number == currentChapterNumber }
+            ?? Chapter(number: currentChapterNumber, paragraphs: [])
     }
 
     @State private var showNavAndTab = true
@@ -59,17 +71,17 @@ struct ChapterDetailView: View {
 
     // Computed references to the next and previous chapters within the book
     private var currentChapterIndex: Int? {
-        book.chapters.firstIndex { $0.number == currentChapter.number }
+        currentBook.chapters.firstIndex { $0.number == currentChapterNumber }
     }
 
     private var nextChapter: Chapter? {
-        guard let index = currentChapterIndex, index + 1 < book.chapters.count else { return nil }
-        return book.chapters[index + 1]
+        guard let index = currentChapterIndex, index + 1 < currentBook.chapters.count else { return nil }
+        return currentBook.chapters[index + 1]
     }
 
     private var previousChapter: Chapter? {
         guard let index = currentChapterIndex, index > 0 else { return nil }
-        return book.chapters[index - 1]
+        return currentBook.chapters[index - 1]
     }
 
     // Attach MJRefresh header/footer to the underlying UIScrollView
@@ -86,12 +98,12 @@ struct ChapterDetailView: View {
                     guard let prev = previousChapter else { return }
                     transitionForward = false
                     withAnimation(.easeInOut(duration: 0.25)) {
-                        currentChapter = prev
+                        currentChapterNumber = prev.number
                         scrollPosition = nil
                     }
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     #if DEBUG
-                    print("[MJRefresh] Triggered previous chapter to \(currentChapter.number)")
+                    print("[MJRefresh] Triggered previous chapter to \(prev.number)")
                     #endif
                 }
                 header.lastUpdatedTimeLabel?.isHidden = true
@@ -121,12 +133,12 @@ struct ChapterDetailView: View {
                     guard let next = nextChapter else { return }
                     transitionForward = true
                     withAnimation(.easeInOut(duration: 0.25)) {
-                        currentChapter = next
+                        currentChapterNumber = next.number
                         scrollPosition = nil
                     }
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     #if DEBUG
-                    print("[MJRefresh] Triggered next chapter to \(currentChapter.number)")
+                    print("[MJRefresh] Triggered next chapter to \(next.number)")
                     #endif
                 }
                 footer.setTitle("Pull for next chapter", for: .idle)
@@ -196,12 +208,12 @@ struct ChapterDetailView: View {
                         paragraphRow(for: paragraph)
                     }
                 }
-                .id(currentChapter.number)
+                .id(currentChapterNumber)
                 .transition(.asymmetric(
                     insertion: .move(edge: transitionForward ? .trailing : .leading),
                     removal: .move(edge: transitionForward ? .leading : .trailing)
                 ))
-                .animation(.easeInOut(duration: 0.25), value: currentChapter.number)
+                .animation(.easeInOut(duration: 0.25), value: currentChapterNumber)
                 .scrollTargetLayout()
                 .padding()
                 .onAppear {
@@ -220,10 +232,20 @@ struct ChapterDetailView: View {
         }
         // Removed overlay NavigationLinks; navigation happens in-place
         .scrollPosition(id: $scrollPosition, anchor: .top)
-        .navigationTitle("\(book.name) \(currentChapter.number)")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                #if DEBUG
+                Text("\(currentBook.name) \(currentChapter.number) (\(currentBook.version.shortName))")
+                    .font(.headline)
+                #else
+                Text("\(currentBook.name) \(currentChapter.number)")
+                    .font(.headline)
+                #endif
+            }
+        }
         .confirmationDialog(
-            "Selected Verse \(book.name) \(currentChapter.number):\(selectedParagraph?.startingVerse ?? 0)",
+            "Selected Verse \(currentBook.name) \(currentChapter.number):\(selectedParagraph?.startingVerse ?? 0)",
             isPresented: $showActionSheet,
             actions: {
                 Button {
@@ -235,7 +257,7 @@ struct ChapterDetailView: View {
                 }
                 Button {
                     guard let selectedParagraph else { return }
-                    bookmarkedBookName = book.name
+                    bookmarkedBookName = currentBook.name
                     bookmarkedChapterNumber = currentChapter.number
                     bookmarkedVerseNumber = selectedParagraph.startingVerse
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -248,8 +270,8 @@ struct ChapterDetailView: View {
                 Button {
                     guard selectedParagraph != nil else { return }
                     let highlightedVerse = HighlightedVerse(
-                        version: book.version.rawValue,
-                        book: book.name,
+                        version: currentBook.version.rawValue,
+                        book: currentBook.name,
                         chapter: currentChapter.number,
                         startingVerse: selectedParagraph!.startingVerse
                     )
@@ -277,10 +299,10 @@ struct ChapterDetailView: View {
                 Button {
                     guard selectedParagraph != nil else { return }
                     explanationRequest = VerseExplanationRequest(
-                        bookName: book.name,
+                        bookName: currentBook.name,
                         chapter: currentChapter.number,
                         startingVerse: selectedParagraph!.startingVerse,
-                        translation: book.version.rawValue,
+                        translation: currentBook.version.rawValue,
                         paragraphText: selectedParagraph!.text
                     )
                     selectedParagraph = nil
@@ -317,29 +339,13 @@ struct ChapterDetailView: View {
         .onAppear {
             updateScrollPositionForContext()
         }
-        .onChange(of: chapter) { _, newChapter in
-            if currentChapter.number != newChapter.number {
-                currentChapter = newChapter
-            }
-            updateScrollPositionForContext()
-        }
-        .onChange(of: book) {
-            selectedParagraph = nil
-            alreadyHighlighted = nil
-            alreadyNoted = nil
-            currentChapter = chapter
-            updateScrollPositionForContext()
-        }
-        .onChange(of: currentChapter.number) {
+        .onChange(of: currentChapterNumber) {
             // Clear transient state when chapter changes
             selectedParagraph = nil
             alreadyHighlighted = nil
             alreadyNoted = nil
             // Jump to the top of the new chapter
             updateScrollPositionForContext()
-            #if DEBUG
-            print("[MJRefresh] onChange chapter now \(currentChapter.number)")
-            #endif
         }
         .onChange(of: appViewModel.selectedVerse?.verse) {
             updateScrollPositionForContext()
@@ -355,7 +361,7 @@ struct ChapterDetailView: View {
         let hasNote = checkIfNoted(paragraph: paragraph)
 
         Group {
-            if let summary = summaries[book.name]?["\(currentChapter.number):\(paragraph.startingVerse)"] {
+            if let summary = summaries[currentBook.name]?["\(currentChapter.number):\(paragraph.startingVerse)"] {
                 Text(summary)
                     .bold()
                     .padding(.top)
@@ -421,23 +427,23 @@ struct ChapterDetailView: View {
 
     private func checkIfHighlighted(paragraph: Paragraph) -> Bool {
         highlightedVerses.contains {
-            $0.version == book.version.rawValue &&
-            $0.book == book.name &&
+            $0.version == currentBook.version.rawValue &&
+            $0.book == currentBook.name &&
             $0.startingVerse == paragraph.startingVerse &&
             $0.chapter == currentChapter.number
         }
     }
 
     private func checkIfBookmarked(paragraph: Paragraph) -> Bool {
-        bookmarkedBookName == book.name &&
+        bookmarkedBookName == currentBook.name &&
         bookmarkedChapterNumber == currentChapter.number &&
         bookmarkedVerseNumber == paragraph.startingVerse
     }
 
     private func checkIfNoted(paragraph: Paragraph) -> Bool {
         notes.contains {
-            $0.version == book.version.rawValue &&
-            $0.book == book.name &&
+            $0.version == currentBook.version.rawValue &&
+            $0.book == currentBook.name &&
             $0.chapter == currentChapter.number &&
             $0.startingVerse == paragraph.startingVerse
         }
@@ -446,14 +452,14 @@ struct ChapterDetailView: View {
     func handleLongPress(paragraph: Paragraph) {
         selectedParagraph = paragraph
         alreadyHighlighted = highlightedVerses.first(where: {
-            $0.version == book.version.rawValue &&
-            $0.book == book.name &&
+            $0.version == currentBook.version.rawValue &&
+            $0.book == currentBook.name &&
             $0.chapter == currentChapter.number &&
             $0.startingVerse == selectedParagraph!.startingVerse
         })
         alreadyNoted = notes.first(where: {
-            $0.version == book.version.rawValue &&
-            $0.book == book.name &&
+            $0.version == currentBook.version.rawValue &&
+            $0.book == currentBook.name &&
             $0.chapter == currentChapter.number &&
             $0.startingVerse == selectedParagraph!.startingVerse
         })
@@ -462,14 +468,14 @@ struct ChapterDetailView: View {
 
     func getStringFromSelectedParagraph() -> String {
         guard selectedParagraph != nil else { return "" }
-        return "\(book.version.rawValue.uppercased()) Version \(book.name) Chapter \(currentChapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
+        return "\(currentBook.version.rawValue.uppercased()) Version \(currentBook.name) Chapter \(currentChapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
     }
 
     func NoteModalViewView() -> some View {
         return NoteModalView(
             note: alreadyNoted != nil ? alreadyNoted! : Note(
-                version: book.version.rawValue,
-                book: book.name,
+                version: currentBook.version.rawValue,
+                book: currentBook.name,
                 chapter: currentChapter.number,
                 startingVerse: selectedParagraph!.startingVerse,
                 text: "",
@@ -512,7 +518,7 @@ struct ChapterDetailView: View {
             return
         }
 
-        if selected.book == book && selected.chapter.number == currentChapter.number {
+        if selected.book == currentBook && selected.chapter.number == currentChapter.number {
             DispatchQueue.main.async {
                 scrollPosition = selected.verse
             }

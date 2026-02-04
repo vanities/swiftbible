@@ -8,17 +8,30 @@
 import SwiftUI
 
 struct BookDetailView: View {
-    let book: Book
+    @Environment(AppViewModel.self) private var appViewModel
+
+    // Store only the book name - actual data derived from current version
+    let bookName: String
+
+    init(book: Book) {
+        self.bookName = book.name
+    }
+
+    // Computed property that always reflects the current version
+    private var currentBook: Book {
+        BibleService.shared.fetchBook(named: bookName, version: appViewModel.selectedVersion)
+            ?? Book(name: bookName, description: "", chapters: [])
+    }
 
     var body: some View {
         VStack(spacing: 0) {
-            List(book.chapters, id: \.self) { chapter in
-                NavigationLink(destination: ChapterDetailView(book: book, chapter: chapter)) {
-                    NavigationTitle(name: "Chapter \(chapter.number)", description: chapterSummaries[book.name]?[String(chapter.number)])
+            List(currentBook.chapters, id: \.self) { chapter in
+                NavigationLink(destination: ChapterDetailView(book: currentBook, chapter: chapter)) {
+                    NavigationTitle(name: "Chapter \(chapter.number)", description: chapterSummaries[currentBook.name]?[String(chapter.number)])
                 }
             }
         }
-        .navigationTitle(book.name)
+        .navigationTitle(currentBook.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

@@ -82,6 +82,11 @@ struct SettingsView: View {
                     .disabled(!hasBookmark)
                     Toggle("Show Apocrypha", isOn: $showApocrypha)
                     Toggle("Group Books by Theme", isOn: $showThematicGrouping)
+                    Picker("Bible Version", selection: $appViewModel.selectedVersion) {
+                        ForEach(Version.allCases, id: \.rawValue) { version in
+                            Text(version.displayName).tag(version)
+                        }
+                    }
                 }
 
                 Section(header: Text("Storage")) {
