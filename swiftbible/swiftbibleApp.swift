@@ -13,7 +13,7 @@ struct swiftbibleApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashView()
         }
         .modelContainer(for: [HighlightedVerse.self, Note.self, SavedDevotional.self], isUndoEnabled: true)
     }
