@@ -189,6 +189,8 @@ struct TranslationInfoView: View {
                                         .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
                                     Text(feature)
                                         .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                 }
                             }
                         }
