@@ -10,6 +10,30 @@ import SwiftData
 import UIKit
 import MJRefresh
 
+private final class HapticNormalHeader: MJRefreshNormalHeader {
+    private let feedback = UIImpactFeedbackGenerator(style: .medium)
+
+    override var state: MJRefreshState {
+        didSet {
+            if oldValue != .pulling && state == .pulling {
+                feedback.impactOccurred()
+            }
+        }
+    }
+}
+
+private final class HapticBackFooter: MJRefreshBackNormalFooter {
+    private let feedback = UIImpactFeedbackGenerator(style: .medium)
+
+    override var state: MJRefreshState {
+        didSet {
+            if oldValue != .pulling && state == .pulling {
+                feedback.impactOccurred()
+            }
+        }
+    }
+}
+
 struct VerseInfoResponse: Decodable {
     let version: String
     let book: String
@@ -93,7 +117,7 @@ struct ChapterDetailView: View {
 
         if previousChapter != nil {
             if scrollView.mj_header == nil {
-                let header = MJRefreshNormalHeader { [weak scrollView] in
+                let header = HapticNormalHeader { [weak scrollView] in
                     defer { scrollView?.mj_header?.endRefreshing() }
                     guard let prev = previousChapter else { return }
                     transitionForward = false
@@ -101,18 +125,18 @@ struct ChapterDetailView: View {
                         currentChapterNumber = prev.number
                         scrollPosition = nil
                     }
-                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     #if DEBUG
                     print("[MJRefresh] Triggered previous chapter to \(prev.number)")
                     #endif
                 }
                 header.lastUpdatedTimeLabel?.isHidden = true
                 header.stateLabel?.isHidden = true
+                header.arrowView?.isHidden = true
                 header.setTitle("Pull for previous chapter", for: .idle)
                 header.setTitle("Release to go back", for: .pulling)
                 header.setTitle("Loading…", for: .refreshing)
-                // Increase drag threshold - higher value requires more drag (default is ~0)
-                header.ignoredScrollViewContentInsetTop = 30
+                // Increase drag threshold - higher value requires more drag
+                header.ignoredScrollViewContentInsetTop = 45
                 scrollView.mj_header = header
             } else {
                 #if DEBUG
@@ -128,7 +152,7 @@ struct ChapterDetailView: View {
 
         if nextChapter != nil {
             if scrollView.mj_footer == nil {
-                let footer = MJRefreshBackNormalFooter { [weak scrollView] in
+                let footer = HapticBackFooter { [weak scrollView] in
                     defer { scrollView?.mj_footer?.endRefreshing() }
                     guard let next = nextChapter else { return }
                     transitionForward = true
@@ -136,16 +160,16 @@ struct ChapterDetailView: View {
                         currentChapterNumber = next.number
                         scrollPosition = nil
                     }
-                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     #if DEBUG
                     print("[MJRefresh] Triggered next chapter to \(next.number)")
                     #endif
                 }
+                footer.arrowView?.isHidden = true
                 footer.setTitle("Pull for next chapter", for: .idle)
                 footer.setTitle("Release to continue", for: .pulling)
                 footer.setTitle("Loading…", for: .refreshing)
-                // Increase drag threshold - higher value requires more drag (default is ~0)
-                footer.ignoredScrollViewContentInsetBottom = 30
+                // Increase drag threshold - higher value requires more drag
+                footer.ignoredScrollViewContentInsetBottom = 45
                 scrollView.mj_footer = footer
             } else {
                 #if DEBUG
