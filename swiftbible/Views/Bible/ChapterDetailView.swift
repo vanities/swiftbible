@@ -13,6 +13,18 @@ import MJRefresh
 private final class HapticNormalHeader: MJRefreshNormalHeader {
     private let feedback = UIImpactFeedbackGenerator(style: .medium)
 
+    override func prepare() {
+        super.prepare()
+        arrowView?.isHidden = true
+        arrowView?.alpha = 0
+    }
+
+    override func placeSubviews() {
+        super.placeSubviews()
+        arrowView?.isHidden = true
+        arrowView?.alpha = 0
+    }
+
     override var state: MJRefreshState {
         didSet {
             if oldValue != .pulling && state == .pulling {
@@ -24,6 +36,18 @@ private final class HapticNormalHeader: MJRefreshNormalHeader {
 
 private final class HapticBackFooter: MJRefreshBackNormalFooter {
     private let feedback = UIImpactFeedbackGenerator(style: .medium)
+
+    override func prepare() {
+        super.prepare()
+        arrowView?.isHidden = true
+        arrowView?.alpha = 0
+    }
+
+    override func placeSubviews() {
+        super.placeSubviews()
+        arrowView?.isHidden = true
+        arrowView?.alpha = 0
+    }
 
     override var state: MJRefreshState {
         didSet {
@@ -132,7 +156,7 @@ struct ChapterDetailView: View {
                 header.lastUpdatedTimeLabel?.isHidden = true
                 header.stateLabel?.isHidden = true
                 header.arrowView?.isHidden = true
-                header.setTitle("Pull for previous chapter", for: .idle)
+                header.setTitle("", for: .idle)
                 header.setTitle("Release to go back", for: .pulling)
                 header.setTitle("Loading…", for: .refreshing)
                 // Increase drag threshold - higher value requires more drag
@@ -165,7 +189,7 @@ struct ChapterDetailView: View {
                     #endif
                 }
                 footer.arrowView?.isHidden = true
-                footer.setTitle("Pull for next chapter", for: .idle)
+                footer.setTitle("", for: .idle)
                 footer.setTitle("Release to continue", for: .pulling)
                 footer.setTitle("Loading…", for: .refreshing)
                 // Increase drag threshold - higher value requires more drag
