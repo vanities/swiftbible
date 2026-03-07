@@ -382,18 +382,57 @@ struct DailyDevotionalView: View {
         "Jude", "Revelation"
     ].sorted { $0.count > $1.count }
 
-    private func addVerseLinks(to text: String) -> String {
-        var result = text
+    private func findVerseURL(in text: String) -> String? {
         for bookName in Self.bookNames {
             let escaped = NSRegularExpression.escapedPattern(for: bookName)
-            // Match verse refs, optionally with a dash range like 3:16-17
+            let pattern = escaped + #"\s+(\d+):(\d+)"#
+            guard let regex = try? NSRegularExpression(pattern: pattern) else { continue }
+            let range = NSRange(text.startIndex..., in: text)
+            if let match = regex.firstMatch(in: text, range: range),
+               let chapterRange = Range(match.range(at: 1), in: text),
+               let verseRange = Range(match.range(at: 2), in: text),
+               let chapter = Int(text[chapterRange]),
+               let verse = Int(text[verseRange]) {
+                let normalizedName = bookName == "Psalm" ? "Psalms" : bookName
+                let encodedBook = normalizedName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? normalizedName
+                return "swiftbible://verse?book=\(encodedBook)&chapter=\(chapter)&verse=\(verse)"
+            }
+        }
+        return nil
+    }
+
+    private func addVerseLinks(to text: String) -> String {
+        guard let verseURL = findVerseURL(in: text) else { return text }
+
+        return text.components(separatedBy: "\n").map { line in
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+
+            // Don't link headings
+            if trimmed.hasPrefix("#") { return line }
+
+            // Make blockquote content tappable
+            if trimmed.hasPrefix(">") {
+                let content = String(trimmed.dropFirst()).trimmingCharacters(in: .whitespaces)
+                guard !content.isEmpty else { return line }
+                let safe = content.replacingOccurrences(of: "]", with: "\\]")
+                return "> [\(safe)](\(verseURL))"
+            }
+
+            // Link verse references in regular text
+            return linkVerseRefsInLine(line)
+        }.joined(separator: "\n")
+    }
+
+    private func linkVerseRefsInLine(_ line: String) -> String {
+        var result = line
+        for bookName in Self.bookNames {
+            let escaped = NSRegularExpression.escapedPattern(for: bookName)
             let pattern = #"(?<!\[)"# + escaped + #"\s+(\d+):(\d+)(?:-\d+)?(?!\])"#
-            guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { continue }
+            guard let regex = try? NSRegularExpression(pattern: pattern) else { continue }
+            let matches = regex.matches(in: result, range: NSRange(result.startIndex..., in: result))
+            guard !matches.isEmpty else { continue }
 
             let mutableResult = NSMutableString(string: result)
-            let matches = regex.matches(in: result, options: [], range: NSRange(result.startIndex..., in: result))
-
-            // Replace in reverse order to preserve ranges
             for match in matches.reversed() {
                 guard let fullRange = Range(match.range, in: result),
                       let chapterRange = Range(match.range(at: 1), in: result),
@@ -405,10 +444,8 @@ struct DailyDevotionalView: View {
                 let normalizedName = bookName == "Psalm" ? "Psalms" : bookName
                 let encodedBook = normalizedName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? normalizedName
                 let link = "[\(displayText)](swiftbible://verse?book=\(encodedBook)&chapter=\(chapter)&verse=\(verse))"
-
                 mutableResult.replaceCharacters(in: match.range, with: link)
             }
-
             result = mutableResult as String
         }
         return result

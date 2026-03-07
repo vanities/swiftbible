@@ -55,8 +55,7 @@ final class AnalyticsService {
     private init() {}
 
     func configure() {
-        let config = PostHogConfig(apiKey: AppConfig.posthogAPIKey)
-        config.host = "https://us.i.posthog.com"
+        let config = PostHogConfig(apiKey: AppConfig.posthogAPIKey, host: "https://us.i.posthog.com")
         config.captureApplicationLifecycleEvents = true
         config.captureScreenViews = true
         PostHogSDK.shared.setup(config)

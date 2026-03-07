@@ -447,7 +447,7 @@ struct ChapterDetailView: View {
                 "book": currentBook.name,
                 "chapter": currentChapterNumber,
                 "version": appViewModel.selectedVersion.rawValue,
-                "testament": currentBook.testament?.rawValue ?? "unknown"
+                "testament": "\(currentBook.testament ?? .old)"
             ])
         }
         .onChange(of: currentChapterNumber) {

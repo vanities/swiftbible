@@ -36,7 +36,7 @@ struct BookDetailView: View {
         .onAppear {
             AnalyticsService.shared.capture(.bookOpened, properties: [
                 "book": currentBook.name,
-                "testament": currentBook.testament?.rawValue ?? "unknown",
+                "testament": "\(currentBook.testament ?? .old)",
                 "version": appViewModel.selectedVersion.rawValue,
                 "chapters": currentBook.chapters.count
             ])
