@@ -12,19 +12,8 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" image="LaunchImage" id="YbR-fN-ISS">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                            </imageView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="YbR-fN-ISS" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="aOv-Rl-1KF"/>
-                            <constraint firstItem="YbR-fN-ISS" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="bHw-Na-2dR"/>
-                            <constraint firstAttribute="trailing" secondItem="YbR-fN-ISS" secondAttribute="trailing" id="cJx-Ob-3eS"/>
-                            <constraint firstAttribute="bottom" secondItem="YbR-fN-ISS" secondAttribute="bottom" id="dKy-Pc-4fT"/>
-                        </constraints>
+                        <color key="backgroundColor" red="0.0" green="0.75" blue="0.85" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -32,7 +21,4 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="LaunchImage" width="393" height="852"/>
-    </resources>
 </document>

@@ -117,6 +117,10 @@ struct ChapterDetailView: View {
     @State private var transitionForward: Bool = true
     @State private var explanationRequest: VerseExplanationRequest?
 
+    private var supportsVersionSwitching: Bool {
+        Testament.oldNames.contains(bookName) || Testament.newNames.contains(bookName)
+    }
+
     // Computed references to the next and previous chapters within the book
     private var currentChapterIndex: Int? {
         currentBook.chapters.firstIndex { $0.number == currentChapterNumber }
@@ -283,13 +287,31 @@ struct ChapterDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                #if DEBUG
-                Text("\(currentBook.name) \(currentChapter.number) (\(currentBook.version.shortName))")
-                    .font(.headline)
-                #else
                 Text("\(currentBook.name) \(currentChapter.number)")
                     .font(.headline)
-                #endif
+            }
+            if supportsVersionSwitching {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        ForEach(Version.allCases, id: \.self) { version in
+                            Button {
+                                appViewModel.selectedVersion = version
+                            } label: {
+                                if version == appViewModel.selectedVersion {
+                                    Label(version.shortName, systemImage: "checkmark")
+                                } else {
+                                    Text(version.shortName)
+                                }
+                            }
+                        }
+                    } label: {
+                        Text(appViewModel.selectedVersion.shortName)
+                            .font(.subheadline.bold())
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(.ultraThinMaterial, in: Capsule())
+                    }
+                }
             }
         }
         .confirmationDialog(
@@ -297,6 +319,11 @@ struct ChapterDetailView: View {
             isPresented: $showActionSheet,
             actions: {
                 Button {
+                    AnalyticsService.shared.capture(.verseCopied, properties: [
+                        "book": currentBook.name,
+                        "chapter": currentChapter.number,
+                        "verse": selectedParagraph?.startingVerse ?? 0
+                    ])
                     UIPasteboard.general.string = getStringFromSelectedParagraph()
                     selectedParagraph = nil
                     alreadyHighlighted = nil
@@ -305,6 +332,11 @@ struct ChapterDetailView: View {
                 }
                 Button {
                     guard let selectedParagraph else { return }
+                    AnalyticsService.shared.capture(.verseBookmarked, properties: [
+                        "book": currentBook.name,
+                        "chapter": currentChapter.number,
+                        "verse": selectedParagraph.startingVerse
+                    ])
                     bookmarkedBookName = currentBook.name
                     bookmarkedChapterNumber = currentChapter.number
                     bookmarkedVerseNumber = selectedParagraph.startingVerse
@@ -317,6 +349,14 @@ struct ChapterDetailView: View {
                 }
                 Button {
                     guard selectedParagraph != nil else { return }
+                    AnalyticsService.shared.capture(
+                        alreadyHighlighted != nil ? .verseUnhighlighted : .verseHighlighted,
+                        properties: [
+                            "book": currentBook.name,
+                            "chapter": currentChapter.number,
+                            "verse": selectedParagraph!.startingVerse
+                        ]
+                    )
                     let highlightedVerse = HighlightedVerse(
                         version: currentBook.version.rawValue,
                         book: currentBook.name,
@@ -340,12 +380,24 @@ struct ChapterDetailView: View {
                     Text("\(alreadyHighlighted != nil ? "Unhighlight" : "Highlight")")
                 }
                 Button {
+                    AnalyticsService.shared.capture(.verseNoteOpened, properties: [
+                        "book": currentBook.name,
+                        "chapter": currentChapter.number,
+                        "verse": selectedParagraph?.startingVerse ?? 0,
+                        "has_existing_note": alreadyNoted != nil
+                    ])
                     showNoteModal = true
                 } label: {
                     Text("\(alreadyNoted != nil ? "View" : "Add") Note")
                 }
                 Button {
                     guard selectedParagraph != nil else { return }
+                    AnalyticsService.shared.capture(.verseExplained, properties: [
+                        "book": currentBook.name,
+                        "chapter": currentChapter.number,
+                        "verse": selectedParagraph!.startingVerse,
+                        "version": currentBook.version.rawValue
+                    ])
                     explanationRequest = VerseExplanationRequest(
                         bookName: currentBook.name,
                         chapter: currentChapter.number,
@@ -360,6 +412,11 @@ struct ChapterDetailView: View {
                     Text("Explain")
                 }
                 Button {
+                    AnalyticsService.shared.capture(.verseShared, properties: [
+                        "book": currentBook.name,
+                        "chapter": currentChapter.number,
+                        "verse": selectedParagraph?.startingVerse ?? 0
+                    ])
                     let shareText = getStringFromSelectedParagraph()
                     let activityViewController = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
                     if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
@@ -386,6 +443,12 @@ struct ChapterDetailView: View {
         // Removed left/right swipe gesture navigation in favor of pull-to-refresh style
         .onAppear {
             updateScrollPositionForContext()
+            AnalyticsService.shared.capture(.chapterViewed, properties: [
+                "book": currentBook.name,
+                "chapter": currentChapterNumber,
+                "version": appViewModel.selectedVersion.rawValue,
+                "testament": currentBook.testament?.rawValue ?? "unknown"
+            ])
         }
         .onChange(of: currentChapterNumber) {
             // Clear transient state when chapter changes
@@ -394,6 +457,12 @@ struct ChapterDetailView: View {
             alreadyNoted = nil
             // Jump to the top of the new chapter
             updateScrollPositionForContext()
+            AnalyticsService.shared.capture(.chapterNavigated, properties: [
+                "book": currentBook.name,
+                "chapter": currentChapterNumber,
+                "direction": transitionForward ? "next" : "previous",
+                "version": appViewModel.selectedVersion.rawValue
+            ])
         }
         .onChange(of: appViewModel.selectedVerse?.verse) {
             updateScrollPositionForContext()
@@ -512,6 +581,12 @@ struct ChapterDetailView: View {
             $0.startingVerse == selectedParagraph!.startingVerse
         })
         showActionSheet = true
+        AnalyticsService.shared.capture(.verseActionMenu, properties: [
+            "book": currentBook.name,
+            "chapter": currentChapter.number,
+            "verse": paragraph.startingVerse,
+            "version": currentBook.version.rawValue
+        ])
     }
 
     func getStringFromSelectedParagraph() -> String {

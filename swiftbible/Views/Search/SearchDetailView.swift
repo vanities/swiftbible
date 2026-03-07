@@ -5,7 +5,6 @@
 //  Created on 9/28/24.
 //
 
-
 import SwiftUI
 
 struct SearchResult: Identifiable {
@@ -63,6 +62,12 @@ struct SearchDetailView: View {
             .navigationTitle("Search")
         }
         .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .automatic))
+        .onSubmit(of: .search) {
+            AnalyticsService.shared.capture(.searchPerformed, properties: [
+                "query": searchText,
+                "result_count": searchResults.count
+            ])
+        }
         .accessibilityIdentifier("SearchDetailView")
     }
 
@@ -90,6 +95,12 @@ struct SearchDetailView: View {
     }
 
     func selectVerse(_ result: SearchResult) {
+        AnalyticsService.shared.capture(.searchResultTapped, properties: [
+            "book": result.bookName,
+            "chapter": result.chapterNumber,
+            "verse": result.verseNumber,
+            "query": searchText
+        ])
         selectedTab = .bible
         appViewModel.navigateToVerse(
             bookName: result.bookName,

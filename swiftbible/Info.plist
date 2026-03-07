@@ -25,6 +25,8 @@
 	<string>https://yvanxjoayoiocwzfpkfm.supabase.co</string>
 	<key>SUPABASE_URL_DEBUG</key>
 	<string>http://127.0.0.1:54321</string>
+	<key>POSTHOG_API_KEY</key>
+	<string>phc_uEVovs3NPJlISlGb6ObWAU6OlnFvBMVMIUHeSngM5KU</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

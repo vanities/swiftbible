@@ -14,42 +14,8 @@ class SupabaseService {
     @AppStorage("supabaseAccessTokenExpiration") private var supabaseAccessTokenExpiration: TimeInterval?
     static let shared = SupabaseService()
 
-    private let supabaseURL: URL = {
-        let info = Bundle.main.infoDictionary
-
-        #if DEBUG
-        if let debugURLString = info?["SUPABASE_URL_DEBUG"] as? String,
-           !debugURLString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-           !debugURLString.lowercased().hasPrefix("replace"),
-           let debugURL = URL(string: debugURLString) {
-            return debugURL
-        }
-        #endif
-
-        guard let urlString = info?["SUPABASE_URL"] as? String,
-              let url = URL(string: urlString) else {
-            fatalError("Missing SUPABASE_URL configuration.")
-        }
-        return url
-    }()
-
-    private let supabaseKey: String = {
-        let info = Bundle.main.infoDictionary
-
-        #if DEBUG
-        if let debugKey = info?["SUPABASE_KEY_DEBUG"] as? String {
-            let trimmed = debugKey.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !trimmed.isEmpty && !trimmed.lowercased().hasPrefix("replace") {
-                return trimmed
-            }
-        }
-        #endif
-
-        guard let key = info?["SUPABASE_KEY"] as? String else {
-            fatalError("Missing SUPABASE_KEY configuration.")
-        }
-        return key
-    }()
+    private let supabaseURL: URL = AppConfig.supabaseURL
+    private let supabaseKey: String = AppConfig.supabaseKey
 
     private(set) lazy var client: SupabaseClient = {
         return SupabaseClient(supabaseURL: supabaseURL, supabaseKey: supabaseKey)

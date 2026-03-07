@@ -13,7 +13,10 @@ struct DailyDevotionalView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage("fontName") private var fontName: String = "Helvetica"
     @Environment(UserViewModel.self) private var userViewModel
+    @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
+
+    @Binding var selectedTab: Tabs
 
     @State private var message: String = ""
     @State private var isLoading: Bool = false
@@ -95,7 +98,7 @@ struct DailyDevotionalView: View {
             } else if hasDevotional {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
-                        Markdown(message)
+                        Markdown(addVerseLinks(to: message))
                             .markdownBlockStyle(\.heading1) { configuration in
                                 configuration.label
                                     .markdownMargin(top: .em(1), bottom: .em(1))
@@ -104,10 +107,30 @@ struct DailyDevotionalView: View {
                                         FontSize(.em(1))
                                     }
                             }
+                            .environment(\.openURL, OpenURLAction { url in
+                                guard url.scheme == "swiftbible",
+                                      url.host == "verse",
+                                      let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                                      let book = components.queryItems?.first(where: { $0.name == "book" })?.value,
+                                      let chapterStr = components.queryItems?.first(where: { $0.name == "chapter" })?.value,
+                                      let verseStr = components.queryItems?.first(where: { $0.name == "verse" })?.value,
+                                      let chapter = Int(chapterStr),
+                                      let verse = Int(verseStr)
+                                else { return .systemAction }
+
+                                selectedTab = .bible
+                                appViewModel.navigateToVerse(
+                                    bookName: book,
+                                    chapterNumber: chapter,
+                                    verseNumber: verse
+                                )
+                                return .handled
+                            })
                     }
                     .padding()
                     .contextMenu {
                         Button(action: {
+                            AnalyticsService.shared.capture(.devotionalCopied)
                             UIPasteboard.general.string = markdownToPlainText(message)
                             withAnimation {
                                 showToast = true
@@ -208,6 +231,10 @@ struct DailyDevotionalView: View {
         if let cachedDevotional = CacheService.shared.loadDevotional(for: date) {
             message = cachedDevotional.message
             hasDevotional = true
+            AnalyticsService.shared.capture(.devotionalViewed, properties: [
+                "date": dateString,
+                "source": "cache"
+            ])
             updateSavedState(for: date)
             isLoading = false
             return
@@ -225,6 +252,11 @@ struct DailyDevotionalView: View {
 
             message = devotional.message
             hasDevotional = true
+
+            AnalyticsService.shared.capture(.devotionalViewed, properties: [
+                "date": dateString,
+                "source": "network"
+            ])
 
             // Save to cache
             CacheService.shared.saveDevotional(devotional, for: date)
@@ -286,6 +318,7 @@ struct DailyDevotionalView: View {
         if let savedDevotional {
             context.delete(savedDevotional)
             try? context.save()
+            AnalyticsService.shared.capture(.devotionalUnsaved)
             withAnimation(.spring(response: 0.4, dampingFraction: 0.5, blendDuration: 0.2)) {
                 heartBounce = true
                 isFavorite = false
@@ -294,6 +327,7 @@ struct DailyDevotionalView: View {
             let devotional = SavedDevotional(date: selectedDate, message: message)
             context.insert(devotional)
             try? context.save()
+            AnalyticsService.shared.capture(.devotionalSaved)
             withAnimation(.spring(response: 0.4, dampingFraction: 0.5, blendDuration: 0.2)) {
                 heartBounce = true
                 isFavorite = true
@@ -330,9 +364,59 @@ struct DailyDevotionalView: View {
             isFavorite = false
         }
     }
+
+    private static let bookNames: [String] = [
+        "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
+        "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
+        "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles",
+        "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Psalm", "Proverbs",
+        "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah",
+        "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos",
+        "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah",
+        "Haggai", "Zechariah", "Malachi",
+        "Matthew", "Mark", "Luke", "John", "Acts", "Romans",
+        "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians",
+        "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
+        "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews",
+        "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John",
+        "Jude", "Revelation"
+    ].sorted { $0.count > $1.count }
+
+    private func addVerseLinks(to text: String) -> String {
+        var result = text
+        for bookName in Self.bookNames {
+            let escaped = NSRegularExpression.escapedPattern(for: bookName)
+            // Match verse refs, optionally with a dash range like 3:16-17
+            let pattern = #"(?<!\[)"# + escaped + #"\s+(\d+):(\d+)(?:-\d+)?(?!\])"#
+            guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { continue }
+
+            let mutableResult = NSMutableString(string: result)
+            let matches = regex.matches(in: result, options: [], range: NSRange(result.startIndex..., in: result))
+
+            // Replace in reverse order to preserve ranges
+            for match in matches.reversed() {
+                guard let fullRange = Range(match.range, in: result),
+                      let chapterRange = Range(match.range(at: 1), in: result),
+                      let verseRange = Range(match.range(at: 2), in: result),
+                      let chapter = Int(result[chapterRange]),
+                      let verse = Int(result[verseRange]) else { continue }
+
+                let displayText = String(result[fullRange])
+                let normalizedName = bookName == "Psalm" ? "Psalms" : bookName
+                let encodedBook = normalizedName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? normalizedName
+                let link = "[\(displayText)](swiftbible://verse?book=\(encodedBook)&chapter=\(chapter)&verse=\(verse))"
+
+                mutableResult.replaceCharacters(in: match.range, with: link)
+            }
+
+            result = mutableResult as String
+        }
+        return result
+    }
 }
 
 #Preview {
-    DailyDevotionalView()
+    DailyDevotionalView(selectedTab: .constant(.dailyDevotional))
         .environment(UserViewModel())
+        .environment(AppViewModel())
 }

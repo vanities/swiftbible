@@ -1,0 +1,72 @@
+//
+//  AnalyticsService.swift
+//  swiftbible
+//
+
+import Foundation
+import PostHog
+
+enum AnalyticsEvent: String {
+    // Navigation
+    case tabSwitched = "tab_switched"
+    case bookOpened = "book_opened"
+    case chapterViewed = "chapter_viewed"
+    case chapterNavigated = "chapter_navigated"
+
+    // Verse interactions
+    case verseActionMenu = "verse_action_menu"
+    case verseCopied = "verse_copied"
+    case verseBookmarked = "verse_bookmarked"
+    case verseHighlighted = "verse_highlighted"
+    case verseUnhighlighted = "verse_unhighlighted"
+    case verseNoteOpened = "verse_note_opened"
+    case verseExplained = "verse_explained"
+    case verseShared = "verse_shared"
+
+    // Search
+    case searchPerformed = "search_performed"
+    case searchResultTapped = "search_result_tapped"
+
+    // Devotional
+    case devotionalViewed = "devotional_viewed"
+    case devotionalSaved = "devotional_saved"
+    case devotionalUnsaved = "devotional_unsaved"
+    case devotionalCopied = "devotional_copied"
+
+    // Settings
+    case versionChanged = "version_changed"
+    case apocryphaToggled = "apocrypha_toggled"
+    case thematicGroupingToggled = "thematic_grouping_toggled"
+    case jesusWordsToggled = "jesus_words_toggled"
+    case fontChanged = "font_changed"
+    case fontSizeChanged = "font_size_changed"
+
+    // Donation funnel
+    case donationPromptShown = "donation_prompt_shown"
+    case donationStarted = "donation_started"
+    case donationCompleted = "donation_completed"
+    case donationPromptDismissed = "donation_prompt_dismissed"
+    case donationPromptOptedOut = "donation_prompt_opted_out"
+}
+
+final class AnalyticsService {
+    static let shared = AnalyticsService()
+
+    private init() {}
+
+    func configure() {
+        let config = PostHogConfig(apiKey: AppConfig.posthogAPIKey)
+        config.host = "https://us.i.posthog.com"
+        config.captureApplicationLifecycleEvents = true
+        config.captureScreenViews = true
+        PostHogSDK.shared.setup(config)
+    }
+
+    func capture(_ event: AnalyticsEvent, properties: [String: Any]? = nil) {
+        PostHogSDK.shared.capture(event.rawValue, properties: properties)
+    }
+
+    func screen(_ name: String, properties: [String: Any]? = nil) {
+        PostHogSDK.shared.screen(name, properties: properties)
+    }
+}

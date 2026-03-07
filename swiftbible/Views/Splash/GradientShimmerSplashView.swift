@@ -10,13 +10,14 @@ struct GradientShimmerSplashView: View {
 
     @State private var gradientOffset: CGFloat = -1.0
     @State private var shimmerOffset: CGFloat = -200
-    @State private var iconScale: CGFloat = 1.0
-    @State private var iconOpacity: Double = 1.0
-    @State private var titleOpacity: Double = 1.0
-    @State private var titleOffset: CGFloat = 0
+    @State private var contentScale: CGFloat = 0.0
+    @State private var contentOpacity: Double = 0.0
     @State private var pulseScale: CGFloat = 1.0
     @State private var finalOpacity: Double = 1.0
     @State private var backgroundOpacity: Double = 1.0
+    @State private var showGradient: Bool = false
+
+    private let solidColor = Color(red: 0.0, green: 0.75, blue: 0.85)
 
     private let gradientColors: [Color] = [
         Color(red: 0.75, green: 0.85, blue: 0.0),
@@ -26,36 +27,38 @@ struct GradientShimmerSplashView: View {
 
     var body: some View {
         ZStack {
-            // Animated gradient background
-            LinearGradient(
-                colors: gradientColors + gradientColors,
-                startPoint: UnitPoint(x: gradientOffset, y: gradientOffset),
-                endPoint: UnitPoint(x: gradientOffset + 1, y: gradientOffset + 1)
-            )
-            .ignoresSafeArea()
-            .opacity(backgroundOpacity)
+            // Background: starts as solid cyan (matching launch screen), transitions to gradient
+            solidColor
+                .ignoresSafeArea()
+                .opacity(backgroundOpacity)
+
+            if showGradient {
+                LinearGradient(
+                    colors: gradientColors + gradientColors,
+                    startPoint: UnitPoint(x: gradientOffset, y: gradientOffset),
+                    endPoint: UnitPoint(x: gradientOffset + 1, y: gradientOffset + 1)
+                )
+                .ignoresSafeArea()
+                .opacity(backgroundOpacity)
+                .transition(.opacity)
+            }
 
             VStack(spacing: 20) {
                 // Bible icon with shimmer
                 ZStack {
                     bibleIcon
-                        .opacity(iconOpacity)
-                        .scaleEffect(iconScale)
 
                     // Shimmer highlight
                     shimmerOverlay
                         .mask(bibleIcon)
-                        .opacity(iconOpacity)
-                        .scaleEffect(iconScale)
                 }
 
                 Text("SwiftBible")
                     .font(.system(size: 32, weight: .bold, design: .serif))
                     .foregroundStyle(.white)
-                    .opacity(titleOpacity)
-                    .offset(y: titleOffset)
             }
-            .scaleEffect(pulseScale)
+            .scaleEffect(contentScale * pulseScale)
+            .opacity(contentOpacity)
             .opacity(finalOpacity)
         }
         .ignoresSafeArea()
@@ -130,26 +133,37 @@ struct GradientShimmerSplashView: View {
     }
 
     private func animate() {
-        // Spring pulse (icon+text breathe outward then settle)
-        withAnimation(.spring(response: 0.5, dampingFraction: 0.6).delay(0.1)) {
-            pulseScale = 1.08
+        // Pop in the icon and title from the plain blue background
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.65)) {
+            contentScale = 1.0
+            contentOpacity = 1.0
         }
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.75).delay(0.4)) {
-            pulseScale = 1.0
+
+        // Transition background to gradient
+        withAnimation(.easeInOut(duration: 0.6).delay(0.3)) {
+            showGradient = true
         }
 
         // Background gradient flows
-        withAnimation(.easeInOut(duration: 2.0).delay(0.1)) {
+        withAnimation(.easeInOut(duration: 2.0).delay(0.3)) {
             gradientOffset = 1.0
         }
 
+        // Subtle pulse after pop-in
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.6).delay(0.5)) {
+            pulseScale = 1.06
+        }
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.75).delay(0.8)) {
+            pulseScale = 1.0
+        }
+
         // First shimmer pass
-        withAnimation(.easeInOut(duration: 0.7).delay(0.5)) {
+        withAnimation(.easeInOut(duration: 0.7).delay(0.7)) {
             shimmerOffset = 200
         }
 
         // Reset and second shimmer
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
             shimmerOffset = -200
             withAnimation(.easeInOut(duration: 0.6)) {
                 shimmerOffset = 200
@@ -157,12 +171,12 @@ struct GradientShimmerSplashView: View {
         }
 
         // Fade out
-        withAnimation(.easeIn(duration: 0.4).delay(1.8)) {
+        withAnimation(.easeIn(duration: 0.4).delay(2.0)) {
             finalOpacity = 0
             backgroundOpacity = 0
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
             onFinished()
         }
     }

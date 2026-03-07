@@ -46,7 +46,7 @@ struct ContentView: View {
             }
 
             Tab("Devotional", systemImage: "sun.horizon.fill", value: .dailyDevotional) {
-                DailyDevotionalView()
+                DailyDevotionalView(selectedTab: $selectedTab)
             }
 
             Tab("Search", systemImage: "magnifyingglass", value: .search, role: .search) {
@@ -58,6 +58,11 @@ struct ContentView: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
+        .onChange(of: selectedTab) { _, newTab in
+            AnalyticsService.shared.capture(.tabSwitched, properties: [
+                "tab": String(describing: newTab)
+            ])
+        }
         .onReceive(NotificationCenter.default.publisher(for: .donationStatusShouldRefresh)) { notification in
             safariCheckout = nil
             let sessionId = notification.userInfo?["session_id"] as? String
@@ -105,6 +110,13 @@ struct ContentView: View {
                 showDonationPrompt = false
             } else {
                 evaluateDonationPrompt()
+            }
+        }
+        .onChange(of: showDonationPrompt) { _, shown in
+            if shown {
+                AnalyticsService.shared.capture(.donationPromptShown)
+            } else {
+                AnalyticsService.shared.capture(.donationPromptDismissed)
             }
         }
         .sheet(isPresented: $showDonationPrompt) {
@@ -182,6 +194,12 @@ struct ContentView: View {
         donationFlowActive = true
         waitingForDonationReturn = false
         isCreatingDonationSession = true
+
+        AnalyticsService.shared.capture(.donationStarted, properties: [
+            "amount": "\(sanitizedAmount)",
+            "currency": sanitizedCurrency,
+            "source": source
+        ])
 
         Task {
             do {
@@ -324,6 +342,11 @@ struct ContentView: View {
             if shouldCelebrate && !isAppLaunching {
                 print("🎉 TRIGGERING CONFETTI! Trigger: \(confettiTrigger) -> \(confettiTrigger + 1)")
                 confettiTrigger += 1
+                AnalyticsService.shared.capture(.donationCompleted, properties: [
+                    "session_id": latestSession,
+                    "amount_cents": latestDonation?.amountCents ?? 0,
+                    "currency": latestDonation?.currency ?? "unknown"
+                ])
             } else if shouldCelebrate && isAppLaunching {
                 print("🎯 Would celebrate but app is launching - skipping confetti")
                 // Still update the last celebrated session to prevent future triggers

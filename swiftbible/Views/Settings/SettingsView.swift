@@ -44,6 +44,9 @@ struct SettingsView: View {
                         Label("Color Options", systemImage: "paintpalette.fill")
                     }
                     Toggle("Show Jesus's Words in Red", isOn: $showJesusWordsInRed)
+                        .onChange(of: showJesusWordsInRed) { _, newValue in
+                            AnalyticsService.shared.capture(.jesusWordsToggled, properties: ["enabled": newValue])
+                        }
                     Toggle("Hide Navigation and Tab Bar while reading", isOn: $hideNavAndTab)
                     // Swipe to change chapters has been removed in favor of pull up/down
                 }
@@ -81,11 +84,22 @@ struct SettingsView: View {
                     }
                     .disabled(!hasBookmark)
                     Toggle("Show Apocrypha", isOn: $showApocrypha)
+                        .onChange(of: showApocrypha) { _, newValue in
+                            AnalyticsService.shared.capture(.apocryphaToggled, properties: ["enabled": newValue])
+                        }
                     Toggle("Group Books by Theme", isOn: $showThematicGrouping)
+                        .onChange(of: showThematicGrouping) { _, newValue in
+                            AnalyticsService.shared.capture(.thematicGroupingToggled, properties: ["enabled": newValue])
+                        }
                     Picker("Bible Version", selection: $appViewModel.selectedVersion) {
                         ForEach(Version.allCases, id: \.rawValue) { version in
                             Text(version.displayName).tag(version)
                         }
+                    }
+                    .onChange(of: appViewModel.selectedVersion) { _, newVersion in
+                        AnalyticsService.shared.capture(.versionChanged, properties: [
+                            "version": newVersion.rawValue
+                        ])
                     }
                     NavigationLink(destination: TranslationInfoView()) {
                         Label("About Translations", systemImage: "info.circle")
@@ -151,7 +165,12 @@ struct SettingsView: View {
 
                     Toggle(isOn: Binding(
                         get: { !donationPromptOptOut },
-                        set: { donationPromptOptOut = !$0 }
+                        set: {
+                            donationPromptOptOut = !$0
+                            if donationPromptOptOut {
+                                AnalyticsService.shared.capture(.donationPromptOptedOut)
+                            }
+                        }
                     )) {
                         Text("Show donation reminder pop up")
                     }

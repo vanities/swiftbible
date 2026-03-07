@@ -33,6 +33,14 @@ struct BookDetailView: View {
         }
         .navigationTitle(currentBook.name)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            AnalyticsService.shared.capture(.bookOpened, properties: [
+                "book": currentBook.name,
+                "testament": currentBook.testament?.rawValue ?? "unknown",
+                "version": appViewModel.selectedVersion.rawValue,
+                "chapters": currentBook.chapters.count
+            ])
+        }
     }
 }
 
