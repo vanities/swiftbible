@@ -55,9 +55,17 @@ final class AnalyticsService {
     private init() {}
 
     func configure() {
-        let config = PostHogConfig(apiKey: AppConfig.posthogAPIKey, host: "https://us.i.posthog.com")
+        let apiKey = AppConfig.posthogAPIKey
+        guard !apiKey.isEmpty else {
+            print("[PostHog] Skipping setup — no API key configured")
+            return
+        }
+        let config = PostHogConfig(apiKey: apiKey, host: "https://us.i.posthog.com")
         config.captureApplicationLifecycleEvents = true
         config.captureScreenViews = true
+        #if DEBUG
+        config.debug = true
+        #endif
         PostHogSDK.shared.setup(config)
     }
 

@@ -1,5 +1,5 @@
 {
-  "originHash" : "3ec3430d7387a11834603b848b3d2c5973c9c1dce7d885ac7f585073e7de8e47",
+  "originHash" : "eca1c0bd14aceeea77c0c92925ec939b2b5640fdbc3c5bd69137e6c201abd2d5",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -38,6 +38,24 @@
       }
     },
     {
+      "identity" : "plcrashreporter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/microsoft/plcrashreporter.git",
+      "state" : {
+        "revision" : "0254f941c646b1ed17b243654723d0f071e990d0",
+        "version" : "1.12.2"
+      }
+    },
+    {
+      "identity" : "posthog-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PostHog/posthog-ios.git",
+      "state" : {
+        "revision" : "759a19e1e824bc80dde9cd4ff9a8204a4f50752e",
+        "version" : "3.45.1"
+      }
+    },
+    {
       "identity" : "supabase-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/supabase-community/supabase-swift.git",
@@ -51,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
       "state" : {
-        "revision" : "ae33e5941bb88d88538d0a6b19ca0b01e6c76dcf",
-        "version" : "1.3.1"
+        "revision" : "810496cf121e525d660cd0ea89a758740476b85f",
+        "version" : "1.5.1"
       }
     },
     {

@@ -414,7 +414,9 @@ struct DailyDevotionalView: View {
             if trimmed.hasPrefix(">") {
                 let content = String(trimmed.dropFirst()).trimmingCharacters(in: .whitespaces)
                 guard !content.isEmpty else { return line }
-                let safe = content.replacingOccurrences(of: "]", with: "\\]")
+                let safe = content
+                    .replacingOccurrences(of: "[", with: "\\[")
+                    .replacingOccurrences(of: "]", with: "\\]")
                 return "> [\(safe)](\(verseURL))"
             }
 
