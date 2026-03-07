@@ -67,3 +67,4 @@ python_parser/.env
 python_parser/*.xml
 supabase/.env
 *.md
+.claude/settings.local.json
