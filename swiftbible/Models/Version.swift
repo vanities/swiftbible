@@ -23,6 +23,7 @@ enum Version: String, Codable, CaseIterable {
     case kjv
     case asv
     case web
+    case original
 
     var displayName: String {
         switch self {
@@ -32,6 +33,8 @@ enum Version: String, Codable, CaseIterable {
             return "American Standard Version (ASV)"
         case .web:
             return "World English Bible (WEB)"
+        case .original:
+            return "Original (Hebrew OT / Greek NT)"
         }
     }
 
@@ -43,6 +46,8 @@ enum Version: String, Codable, CaseIterable {
             return "ASV"
         case .web:
             return "WEB"
+        case .original:
+            return "Original"
         }
     }
 
@@ -54,6 +59,12 @@ enum Version: String, Codable, CaseIterable {
             return "asv"
         case .web:
             return "web"
+        case .original:
+            return "hebrew" // Special: BibleService loads both hebrew.json and greek.json
         }
+    }
+
+    var isRTL: Bool {
+        self == .original
     }
 }

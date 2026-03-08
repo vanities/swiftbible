@@ -97,6 +97,8 @@
 		BB0000042F4D0001000TXTPK /* didache.json in Resources */ = {isa = PBXBuildFile; fileRef = BB00000A2F4D0001000TXTPK /* didache.json */; };
 		BB0000052F4D0001000TXTPK /* 1clement.json in Resources */ = {isa = PBXBuildFile; fileRef = BB00000B2F4D0001000TXTPK /* 1clement.json */; };
 		BB0000062F4D0001000TXTPK /* TextSourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */; };
+		CC0000012F5D0001000ORGTX /* hebrew.json in Resources */ = {isa = PBXBuildFile; fileRef = CC0000032F5D0001000ORGTX /* hebrew.json */; };
+		CC0000022F5D0001000ORGTX /* greek.json in Resources */ = {isa = PBXBuildFile; fileRef = CC0000042F5D0001000ORGTX /* greek.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -193,6 +195,8 @@
 		BB00000A2F4D0001000TXTPK /* didache.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = didache.json; sourceTree = "<group>"; };
 		BB00000B2F4D0001000TXTPK /* 1clement.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 1clement.json; sourceTree = "<group>"; };
 		BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSourcesView.swift; sourceTree = "<group>"; };
+		CC0000032F5D0001000ORGTX /* hebrew.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = hebrew.json; sourceTree = "<group>"; };
+		CC0000042F5D0001000ORGTX /* greek.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = greek.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -356,6 +360,8 @@
 				BB0000092F4D0001000TXTPK /* 2enoch.json */,
 				BB00000A2F4D0001000TXTPK /* didache.json */,
 				BB00000B2F4D0001000TXTPK /* 1clement.json */,
+				CC0000032F5D0001000ORGTX /* hebrew.json */,
+				CC0000042F5D0001000ORGTX /* greek.json */,
 				951009892C95364C0040B21A /* ChapterSummaries.swift */,
 				954BC9E32C85005900FFCFA6 /* bible.json */,
 				951009872C9525250040B21A /* summaries.swift */,
@@ -549,6 +555,8 @@
 				BB0000032F4D0001000TXTPK /* 2enoch.json in Resources */,
 				BB0000042F4D0001000TXTPK /* didache.json in Resources */,
 				BB0000052F4D0001000TXTPK /* 1clement.json in Resources */,
+				CC0000012F5D0001000ORGTX /* hebrew.json in Resources */,
+				CC0000022F5D0001000ORGTX /* greek.json in Resources */,
 				954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */,
 				AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */,
 			);

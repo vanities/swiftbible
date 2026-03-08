@@ -27,6 +27,11 @@ class BibleService {
             return cached
         }
 
+        // Original version loads Hebrew OT + Greek NT from separate files
+        if version == .original {
+            return loadOriginalData()
+        }
+
         guard let url = Bundle.main.url(forResource: version.filename, withExtension: "json") else {
             print("Error: Could not find \(version.filename).json")
             return []
@@ -53,6 +58,44 @@ class BibleService {
             print("Error fetching Bible data: \(error)")
             return []
         }
+    }
+
+    private func loadOriginalData() -> [Book] {
+        var bibleData: [Book] = []
+        let decoder = JSONDecoder()
+
+        // Load Hebrew OT
+        if let hebrewURL = Bundle.main.url(forResource: "hebrew", withExtension: "json") {
+            do {
+                let data = try Data(contentsOf: hebrewURL)
+                var hebrewBooks = try decoder.decode([Book].self, from: data)
+                for i in hebrewBooks.indices {
+                    hebrewBooks[i].version = .original
+                    hebrewBooks[i].testament = .old
+                }
+                bibleData.append(contentsOf: hebrewBooks)
+            } catch {
+                print("Error fetching Hebrew data: \(error)")
+            }
+        }
+
+        // Load Greek NT
+        if let greekURL = Bundle.main.url(forResource: "greek", withExtension: "json") {
+            do {
+                let data = try Data(contentsOf: greekURL)
+                var greekBooks = try decoder.decode([Book].self, from: data)
+                for i in greekBooks.indices {
+                    greekBooks[i].version = .original
+                    greekBooks[i].testament = .new
+                }
+                bibleData.append(contentsOf: greekBooks)
+            } catch {
+                print("Error fetching Greek data: \(error)")
+            }
+        }
+
+        cache[.original] = bibleData
+        return bibleData
     }
 
     func fetchBibleData(version: Version = .kjv) -> (oldTestament: [Book], newTestament: [Book]) {
