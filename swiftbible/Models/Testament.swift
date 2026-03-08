@@ -12,6 +12,11 @@ enum Testament: Codable {
     case new
     case apocrypha
     case enoch
+    case jubilees
+    case testaments
+    case secondEnoch
+    case didache
+    case firstClement
 
     static let oldNames = [
            "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
@@ -59,5 +64,36 @@ enum Testament: Codable {
         "The Astronomical Book",
         "The Book of Dream Visions",
         "The Epistle of Enoch"
+    ]
+
+    static let jubileesNames = [
+        "Book of Jubilees"
+    ]
+
+    static let testamentsNames = [
+        "Testament of Reuben",
+        "Testament of Simeon",
+        "Testament of Levi",
+        "Testament of Judah",
+        "Testament of Issachar",
+        "Testament of Zebulun",
+        "Testament of Dan",
+        "Testament of Naphtali",
+        "Testament of Gad",
+        "Testament of Asher",
+        "Testament of Joseph",
+        "Testament of Benjamin"
+    ]
+
+    static let secondEnochNames = [
+        "2 Enoch (Secrets of Enoch)"
+    ]
+
+    static let didacheNames = [
+        "Didache"
+    ]
+
+    static let firstClementNames = [
+        "1 Clement"
     ]
 }

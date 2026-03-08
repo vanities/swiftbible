@@ -15,6 +15,11 @@ class BibleService {
     private var cache: [Version: [Book]] = [:]
     private var apocryphaCache: [Book]?
     private var enochCache: [Book]?
+    private var jubileesCache: [Book]?
+    private var testamentsCache: [Book]?
+    private var secondEnochCache: [Book]?
+    private var didacheCache: [Book]?
+    private var firstClementCache: [Book]?
 
     private func loadBibleData(version: Version) -> [Book] {
         // Return cached data if available
@@ -69,7 +74,27 @@ class BibleService {
             return apocryphaBook
         }
 
-        return fetchEnochData().first(where: { $0.name == bookName })
+        if let enochBook = fetchEnochData().first(where: { $0.name == bookName }) {
+            return enochBook
+        }
+
+        if let jubileesBook = fetchJubileesData().first(where: { $0.name == bookName }) {
+            return jubileesBook
+        }
+
+        if let testamentsBook = fetchTestamentsData().first(where: { $0.name == bookName }) {
+            return testamentsBook
+        }
+
+        if let secondEnochBook = fetchSecondEnochData().first(where: { $0.name == bookName }) {
+            return secondEnochBook
+        }
+
+        if let didacheBook = fetchDidacheData().first(where: { $0.name == bookName }) {
+            return didacheBook
+        }
+
+        return fetchFirstClementData().first(where: { $0.name == bookName })
     }
 
     func fetchApocryphaData() -> [Book] {
@@ -114,6 +139,121 @@ class BibleService {
             return enochData
         } catch {
             print("Error fetching Enoch data: \(error)")
+            return []
+        }
+    }
+
+    func fetchJubileesData() -> [Book] {
+        if let jubileesCache {
+            return jubileesCache
+        }
+
+        do {
+            let url = Bundle.main.url(forResource: "jubilees", withExtension: "json")!
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            var jubileesData = try decoder.decode([Book].self, from: data)
+
+            for i in jubileesData.indices {
+                jubileesData[i].testament = .jubilees
+            }
+
+            jubileesCache = jubileesData
+            return jubileesData
+        } catch {
+            print("Error fetching Jubilees data: \(error)")
+            return []
+        }
+    }
+
+    func fetchTestamentsData() -> [Book] {
+        if let testamentsCache {
+            return testamentsCache
+        }
+
+        do {
+            let url = Bundle.main.url(forResource: "testaments12", withExtension: "json")!
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            var testamentsData = try decoder.decode([Book].self, from: data)
+
+            for i in testamentsData.indices {
+                testamentsData[i].testament = .testaments
+            }
+
+            testamentsCache = testamentsData
+            return testamentsData
+        } catch {
+            print("Error fetching Testaments data: \(error)")
+            return []
+        }
+    }
+
+    func fetchSecondEnochData() -> [Book] {
+        if let secondEnochCache {
+            return secondEnochCache
+        }
+
+        do {
+            let url = Bundle.main.url(forResource: "2enoch", withExtension: "json")!
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            var secondEnochData = try decoder.decode([Book].self, from: data)
+
+            for i in secondEnochData.indices {
+                secondEnochData[i].testament = .secondEnoch
+            }
+
+            secondEnochCache = secondEnochData
+            return secondEnochData
+        } catch {
+            print("Error fetching 2 Enoch data: \(error)")
+            return []
+        }
+    }
+
+    func fetchDidacheData() -> [Book] {
+        if let didacheCache {
+            return didacheCache
+        }
+
+        do {
+            let url = Bundle.main.url(forResource: "didache", withExtension: "json")!
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            var didacheData = try decoder.decode([Book].self, from: data)
+
+            for i in didacheData.indices {
+                didacheData[i].testament = .didache
+            }
+
+            didacheCache = didacheData
+            return didacheData
+        } catch {
+            print("Error fetching Didache data: \(error)")
+            return []
+        }
+    }
+
+    func fetchFirstClementData() -> [Book] {
+        if let firstClementCache {
+            return firstClementCache
+        }
+
+        do {
+            let url = Bundle.main.url(forResource: "1clement", withExtension: "json")!
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            var firstClementData = try decoder.decode([Book].self, from: data)
+
+            for i in firstClementData.indices {
+                firstClementData[i].testament = .firstClement
+            }
+
+            firstClementCache = firstClementData
+            return firstClementData
+        } catch {
+            print("Error fetching 1 Clement data: \(error)")
             return []
         }
     }

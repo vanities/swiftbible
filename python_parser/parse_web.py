@@ -269,6 +269,19 @@ def parse_usfx_xml(input_file):
                             pos = end_x + 4
                         else:
                             pos += 1
+                    elif book_content[pos:].startswith('<wj>'):
+                        # Words of Jesus opening tag - preserve as <JESUS>
+                        verse_text.append('<JESUS>')
+                        pos += 4  # len('<wj>')
+                    elif book_content[pos:].startswith('<wj '):
+                        # Words of Jesus opening tag with attributes
+                        verse_text.append('<JESUS>')
+                        end_tag = book_content.find('>', pos)
+                        pos = end_tag + 1 if end_tag != -1 else pos + 1
+                    elif book_content[pos:].startswith('</wj>'):
+                        # Words of Jesus closing tag
+                        verse_text.append('</JESUS>')
+                        pos += 5  # len('</wj>')
                     elif book_content[pos] == '<':
                         # Other tag - skip the tag but keep looking for content
                         end_tag = book_content.find('>', pos)

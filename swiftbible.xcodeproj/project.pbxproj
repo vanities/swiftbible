@@ -91,6 +91,12 @@
 		AA0000062F140001000ANALYT /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000072F140001000ANALYT /* AnalyticsService.swift */; };
 		AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA00000E2F130001000LNCHSB /* LaunchScreen.storyboard */; };
 		F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */; };
+		BB0000012F4D0001000TXTPK /* jubilees.json in Resources */ = {isa = PBXBuildFile; fileRef = BB0000072F4D0001000TXTPK /* jubilees.json */; };
+		BB0000022F4D0001000TXTPK /* testaments12.json in Resources */ = {isa = PBXBuildFile; fileRef = BB0000082F4D0001000TXTPK /* testaments12.json */; };
+		BB0000032F4D0001000TXTPK /* 2enoch.json in Resources */ = {isa = PBXBuildFile; fileRef = BB0000092F4D0001000TXTPK /* 2enoch.json */; };
+		BB0000042F4D0001000TXTPK /* didache.json in Resources */ = {isa = PBXBuildFile; fileRef = BB00000A2F4D0001000TXTPK /* didache.json */; };
+		BB0000052F4D0001000TXTPK /* 1clement.json in Resources */ = {isa = PBXBuildFile; fileRef = BB00000B2F4D0001000TXTPK /* 1clement.json */; };
+		BB0000062F4D0001000TXTPK /* TextSourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,6 +187,12 @@
 		AA0000092F130001000SPLASH /* GradientShimmerSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientShimmerSplashView.swift; sourceTree = "<group>"; };
 		AA00000A2F130001000SPLASH /* ParticleCrossSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleCrossSplashView.swift; sourceTree = "<group>"; };
 		AA00000E2F130001000LNCHSB /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BB0000072F4D0001000TXTPK /* jubilees.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = jubilees.json; sourceTree = "<group>"; };
+		BB0000082F4D0001000TXTPK /* testaments12.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = testaments12.json; sourceTree = "<group>"; };
+		BB0000092F4D0001000TXTPK /* 2enoch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 2enoch.json; sourceTree = "<group>"; };
+		BB00000A2F4D0001000TXTPK /* didache.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = didache.json; sourceTree = "<group>"; };
+		BB00000B2F4D0001000TXTPK /* 1clement.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 1clement.json; sourceTree = "<group>"; };
+		BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSourcesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -239,6 +251,7 @@
 				952F39F22C9114A4009A412D /* ColorOptionsView.swift */,
 				95CC66142E89C6AA0065E7AD /* DonationHistoryView.swift */,
 				95F3A0052F040001000A1B2C /* TranslationInfoView.swift */,
+				BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -338,6 +351,11 @@
 				95F3A0012F032003000A1B2C /* asv.json */,
 				959BA4E82E751E0900B7C7AB /* enoch.json */,
 				955281402D1B5D8A00341577 /* apocrypha.json */,
+				BB0000072F4D0001000TXTPK /* jubilees.json */,
+				BB0000082F4D0001000TXTPK /* testaments12.json */,
+				BB0000092F4D0001000TXTPK /* 2enoch.json */,
+				BB00000A2F4D0001000TXTPK /* didache.json */,
+				BB00000B2F4D0001000TXTPK /* 1clement.json */,
 				951009892C95364C0040B21A /* ChapterSummaries.swift */,
 				954BC9E32C85005900FFCFA6 /* bible.json */,
 				951009872C9525250040B21A /* summaries.swift */,
@@ -526,6 +544,11 @@
 				954BC9DC2C84EDBF00FFCFA6 /* Preview Assets.xcassets in Resources */,
 				955281412D1B5D8A00341577 /* apocrypha.json in Resources */,
 				954BC9E42C85005900FFCFA6 /* bible.json in Resources */,
+				BB0000012F4D0001000TXTPK /* jubilees.json in Resources */,
+				BB0000022F4D0001000TXTPK /* testaments12.json in Resources */,
+				BB0000032F4D0001000TXTPK /* 2enoch.json in Resources */,
+				BB0000042F4D0001000TXTPK /* didache.json in Resources */,
+				BB0000052F4D0001000TXTPK /* 1clement.json in Resources */,
 				954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */,
 				AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */,
 			);
@@ -610,6 +633,7 @@
 				AA0000052F130001000SPLASH /* ParticleCrossSplashView.swift in Sources */,
 				2862174888A3276568560CE5 /* Config.swift in Sources */,
 				AA0000062F140001000ANALYT /* AnalyticsService.swift in Sources */,
+				BB0000062F4D0001000TXTPK /* TextSourcesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

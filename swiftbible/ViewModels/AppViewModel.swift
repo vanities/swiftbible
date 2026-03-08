@@ -110,8 +110,18 @@ class AppViewModel {
 
         let apocrypha = BibleService.shared.fetchApocryphaData()
         let enoch = BibleService.shared.fetchEnochData()
+        let jubilees = BibleService.shared.fetchJubileesData()
+        let testaments = BibleService.shared.fetchTestamentsData()
+        let secondEnoch = BibleService.shared.fetchSecondEnochData()
+        let didache = BibleService.shared.fetchDidacheData()
+        let firstClement = BibleService.shared.fetchFirstClementData()
         if !apocrypha.isEmpty { combinedBooks.append(contentsOf: apocrypha) }
         if !enoch.isEmpty { combinedBooks.append(contentsOf: enoch) }
+        if !jubilees.isEmpty { combinedBooks.append(contentsOf: jubilees) }
+        if !testaments.isEmpty { combinedBooks.append(contentsOf: testaments) }
+        if !secondEnoch.isEmpty { combinedBooks.append(contentsOf: secondEnoch) }
+        if !didache.isEmpty { combinedBooks.append(contentsOf: didache) }
+        if !firstClement.isEmpty { combinedBooks.append(contentsOf: firstClement) }
 
         allBibleData = combinedBooks
     }
@@ -126,11 +136,21 @@ class AppViewModel {
         let bible = BibleService.shared.fetchBibleData(version: selectedVersion)
         var books = bible.oldTestament + bible.newTestament
 
-        // Also check apocrypha and enoch for the book
+        // Also check extra-canonical texts for the book
         let apocrypha = BibleService.shared.fetchApocryphaData()
         let enoch = BibleService.shared.fetchEnochData()
+        let jubilees = BibleService.shared.fetchJubileesData()
+        let testaments = BibleService.shared.fetchTestamentsData()
+        let secondEnoch = BibleService.shared.fetchSecondEnochData()
+        let didache = BibleService.shared.fetchDidacheData()
+        let firstClement = BibleService.shared.fetchFirstClementData()
         books.append(contentsOf: apocrypha)
         books.append(contentsOf: enoch)
+        books.append(contentsOf: jubilees)
+        books.append(contentsOf: testaments)
+        books.append(contentsOf: secondEnoch)
+        books.append(contentsOf: didache)
+        books.append(contentsOf: firstClement)
 
         guard let book = books.first(where: { $0.name == bookName }),
               let chapter = book.chapters.first(where: { $0.number == chapterNumber })

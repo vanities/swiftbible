@@ -83,7 +83,22 @@ struct VerseExplanationRequest: Identifiable, Equatable {
             return "Apocrypha (deuterocanonical writings)"
         }
         if Testament.enochNames.contains(normalizedName) {
-            return "Book of Enoch"
+            return "Book of Enoch (pseudepigraphic)"
+        }
+        if Testament.jubileesNames.contains(normalizedName) {
+            return "Book of Jubilees (pseudepigraphic)"
+        }
+        if Testament.testamentsNames.contains(normalizedName) {
+            return "Testaments of the Twelve Patriarchs (pseudepigraphic)"
+        }
+        if Testament.secondEnochNames.contains(normalizedName) {
+            return "2 Enoch / Secrets of Enoch (pseudepigraphic)"
+        }
+        if Testament.didacheNames.contains(normalizedName) {
+            return "Didache (early Christian writing)"
+        }
+        if Testament.firstClementNames.contains(normalizedName) {
+            return "1 Clement (early Christian writing)"
         }
         if Testament.oldNames.contains(normalizedName) {
             return "Old Testament"
@@ -94,8 +109,19 @@ struct VerseExplanationRequest: Identifiable, Equatable {
         return "Bible"
     }
 
+    private static let nonTranslationNames: Set<String> = {
+        var names = Set<String>()
+        names.formUnion(Testament.apocryphaNames)
+        names.formUnion(Testament.enochNames)
+        names.formUnion(Testament.jubileesNames)
+        names.formUnion(Testament.testamentsNames)
+        names.formUnion(Testament.secondEnochNames)
+        names.formUnion(Testament.didacheNames)
+        names.formUnion(Testament.firstClementNames)
+        return names
+    }()
+
     var shouldDisplayTranslationBadge: Bool {
-        let normalizedName = normalizedBookName
-        return !Testament.apocryphaNames.contains(normalizedName) && !Testament.enochNames.contains(normalizedName)
+        !Self.nonTranslationNames.contains(normalizedBookName)
     }
 }

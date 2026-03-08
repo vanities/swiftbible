@@ -13,10 +13,15 @@ struct BibleView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(\.requestReview) var requestReview
 
-    @State private var bibleData: (oldTestament: [Book], newTestament: [Book], apocrypha: [Book], enoch: [Book]) = ([], [], [], [])
+    @State private var bibleData: (oldTestament: [Book], newTestament: [Book], apocrypha: [Book], enoch: [Book], jubilees: [Book], testaments: [Book], secondEnoch: [Book], didache: [Book], firstClement: [Book]) = ([], [], [], [], [], [], [], [], [])
     @State private var searchText = ""
     @AppStorage("showApocrypha") var showApocrypha = false
     @AppStorage("showJewishPseudepigraphaEnoch") var showJewishPseudepigraphaEnoch = false
+    @AppStorage("showJubilees") var showJubilees = false
+    @AppStorage("showTestaments") var showTestaments = false
+    @AppStorage("showSecondEnoch") var showSecondEnoch = false
+    @AppStorage("showDidache") var showDidache = false
+    @AppStorage("showFirstClement") var showFirstClement = false
     @AppStorage("showThematicGrouping") var showThematicGrouping = false
 
     var filteredOldTestament: [Book] {
@@ -48,6 +53,46 @@ struct BibleView: View {
             return bibleData.enoch
         } else {
             return bibleData.enoch.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+
+    var filteredJubilees: [Book] {
+        if searchText.isEmpty {
+            return bibleData.jubilees
+        } else {
+            return bibleData.jubilees.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+
+    var filteredTestaments: [Book] {
+        if searchText.isEmpty {
+            return bibleData.testaments
+        } else {
+            return bibleData.testaments.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+
+    var filteredSecondEnoch: [Book] {
+        if searchText.isEmpty {
+            return bibleData.secondEnoch
+        } else {
+            return bibleData.secondEnoch.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+
+    var filteredDidache: [Book] {
+        if searchText.isEmpty {
+            return bibleData.didache
+        } else {
+            return bibleData.didache.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+
+    var filteredFirstClement: [Book] {
+        if searchText.isEmpty {
+            return bibleData.firstClement
+        } else {
+            return bibleData.firstClement.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         }
     }
 
@@ -139,6 +184,60 @@ struct BibleView: View {
                             }
                         }
                     }
+
+                    // Book of Jubilees Section
+                    if showJubilees && !filteredJubilees.isEmpty {
+                        Section(header: Text("Book of Jubilees")) {
+                            ForEach(filteredJubilees, id: \.name) { book in
+                                NavigationLink(destination: BookDetailView(book: book)) {
+                                    NavigationTitle(name: book.name, description: book.description)
+                                }
+                            }
+                        }
+                    }
+
+                    // Testaments of the Twelve Patriarchs Section
+                    if showTestaments && !filteredTestaments.isEmpty {
+                        Section(header: Text("Testaments of the Twelve Patriarchs")) {
+                            ForEach(filteredTestaments, id: \.name) { book in
+                                NavigationLink(destination: BookDetailView(book: book)) {
+                                    NavigationTitle(name: book.name, description: book.description)
+                                }
+                            }
+                        }
+                    }
+
+                    // 2 Enoch Section
+                    if showSecondEnoch && !filteredSecondEnoch.isEmpty {
+                        Section(header: Text("2 Enoch (Secrets of Enoch)")) {
+                            ForEach(filteredSecondEnoch, id: \.name) { book in
+                                NavigationLink(destination: BookDetailView(book: book)) {
+                                    NavigationTitle(name: book.name, description: book.description)
+                                }
+                            }
+                        }
+                    }
+
+                    // Early Christian Writings
+                    if showDidache && !filteredDidache.isEmpty {
+                        Section(header: Text("Early Christian Writings (Didache)")) {
+                            ForEach(filteredDidache, id: \.name) { book in
+                                NavigationLink(destination: BookDetailView(book: book)) {
+                                    NavigationTitle(name: book.name, description: book.description)
+                                }
+                            }
+                        }
+                    }
+
+                    if showFirstClement && !filteredFirstClement.isEmpty {
+                        Section(header: Text("Early Christian Writings (1 Clement)")) {
+                            ForEach(filteredFirstClement, id: \.name) { book in
+                                NavigationLink(destination: BookDetailView(book: book)) {
+                                    NavigationTitle(name: book.name, description: book.description)
+                                }
+                            }
+                        }
+                    }
                 }
                 .listStyle(InsetGroupedListStyle())
         }
@@ -146,6 +245,11 @@ struct BibleView: View {
             fetchBibleData()
             fetchApocryphaData()
             fetchEnochData()
+            fetchJubileesData()
+            fetchTestamentsData()
+            fetchSecondEnochData()
+            fetchDidacheData()
+            fetchFirstClementData()
             #if !DEBUG
             requestReview()
             #endif
@@ -158,6 +262,31 @@ struct BibleView: View {
             .onChange(of: showJewishPseudepigraphaEnoch) { _, newValue in
                 if newValue && bibleData.enoch.isEmpty {
                     fetchEnochData()
+                }
+            }
+            .onChange(of: showJubilees) { _, newValue in
+                if newValue && bibleData.jubilees.isEmpty {
+                    fetchJubileesData()
+                }
+            }
+            .onChange(of: showTestaments) { _, newValue in
+                if newValue && bibleData.testaments.isEmpty {
+                    fetchTestamentsData()
+                }
+            }
+            .onChange(of: showSecondEnoch) { _, newValue in
+                if newValue && bibleData.secondEnoch.isEmpty {
+                    fetchSecondEnochData()
+                }
+            }
+            .onChange(of: showDidache) { _, newValue in
+                if newValue && bibleData.didache.isEmpty {
+                    fetchDidacheData()
+                }
+            }
+            .onChange(of: showFirstClement) { _, newValue in
+                if newValue && bibleData.firstClement.isEmpty {
+                    fetchFirstClementData()
                 }
             }
             .onChange(of: appViewModel.selectedVersion) { _, _ in
@@ -239,29 +368,60 @@ struct BibleView: View {
     private func fetchApocryphaData() {
         let fetchedApocrypha = BibleService.shared.fetchApocryphaData()
         bibleData.apocrypha = fetchedApocrypha
-        if let allBibleData = appViewModel.allBibleData {
-            if allBibleData.isEmpty {
-                appViewModel.allBibleData = fetchedApocrypha
-            } else {
-                appViewModel.allBibleData?.append(contentsOf: fetchedApocrypha)
-            }
-        } else {
-            appViewModel.allBibleData = fetchedApocrypha
-        }
+        appendToAllBibleData(fetchedApocrypha)
     }
 
     // Fetch Enoch Data
     private func fetchEnochData() {
         let fetchedEnoch = BibleService.shared.fetchEnochData()
         bibleData.enoch = fetchedEnoch
+        appendToAllBibleData(fetchedEnoch)
+    }
+
+    // Fetch Jubilees Data
+    private func fetchJubileesData() {
+        let fetched = BibleService.shared.fetchJubileesData()
+        bibleData.jubilees = fetched
+        appendToAllBibleData(fetched)
+    }
+
+    // Fetch Testaments Data
+    private func fetchTestamentsData() {
+        let fetched = BibleService.shared.fetchTestamentsData()
+        bibleData.testaments = fetched
+        appendToAllBibleData(fetched)
+    }
+
+    // Fetch 2 Enoch Data
+    private func fetchSecondEnochData() {
+        let fetched = BibleService.shared.fetchSecondEnochData()
+        bibleData.secondEnoch = fetched
+        appendToAllBibleData(fetched)
+    }
+
+    // Fetch Didache Data
+    private func fetchDidacheData() {
+        let fetched = BibleService.shared.fetchDidacheData()
+        bibleData.didache = fetched
+        appendToAllBibleData(fetched)
+    }
+
+    // Fetch 1 Clement Data
+    private func fetchFirstClementData() {
+        let fetched = BibleService.shared.fetchFirstClementData()
+        bibleData.firstClement = fetched
+        appendToAllBibleData(fetched)
+    }
+
+    private func appendToAllBibleData(_ books: [Book]) {
         if let allBibleData = appViewModel.allBibleData {
             if allBibleData.isEmpty {
-                appViewModel.allBibleData = fetchedEnoch
+                appViewModel.allBibleData = books
             } else {
-                appViewModel.allBibleData?.append(contentsOf: fetchedEnoch)
+                appViewModel.allBibleData?.append(contentsOf: books)
             }
         } else {
-            appViewModel.allBibleData = fetchedEnoch
+            appViewModel.allBibleData = books
         }
     }
 }

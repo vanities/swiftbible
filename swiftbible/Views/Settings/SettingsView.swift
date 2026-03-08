@@ -14,6 +14,11 @@ struct SettingsView: View {
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showApocrypha") var showApocrypha = false
     @AppStorage("showJewishPseudepigraphaEnoch") var showJewishPseudepigraphaEnoch = false
+    @AppStorage("showJubilees") var showJubilees = false
+    @AppStorage("showTestaments") var showTestaments = false
+    @AppStorage("showSecondEnoch") var showSecondEnoch = false
+    @AppStorage("showDidache") var showDidache = false
+    @AppStorage("showFirstClement") var showFirstClement = false
     @AppStorage("showThematicGrouping") var showThematicGrouping = false
 
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
@@ -92,6 +97,26 @@ struct SettingsView: View {
                         .onChange(of: showJewishPseudepigraphaEnoch) { _, newValue in
                             AnalyticsService.shared.capture(.enochToggled, properties: ["enabled": newValue])
                         }
+                    Toggle("Book of Jubilees", isOn: $showJubilees)
+                        .onChange(of: showJubilees) { _, newValue in
+                            AnalyticsService.shared.capture(.jubileesToggled, properties: ["enabled": newValue])
+                        }
+                    Toggle("Testaments of the Twelve Patriarchs", isOn: $showTestaments)
+                        .onChange(of: showTestaments) { _, newValue in
+                            AnalyticsService.shared.capture(.testamentsToggled, properties: ["enabled": newValue])
+                        }
+                    Toggle("2 Enoch (Secrets of Enoch)", isOn: $showSecondEnoch)
+                        .onChange(of: showSecondEnoch) { _, newValue in
+                            AnalyticsService.shared.capture(.secondEnochToggled, properties: ["enabled": newValue])
+                        }
+                    Toggle("Didache (Teaching of the Twelve Apostles)", isOn: $showDidache)
+                        .onChange(of: showDidache) { _, newValue in
+                            AnalyticsService.shared.capture(.didacheToggled, properties: ["enabled": newValue])
+                        }
+                    Toggle("1 Clement (Epistle of Clement)", isOn: $showFirstClement)
+                        .onChange(of: showFirstClement) { _, newValue in
+                            AnalyticsService.shared.capture(.firstClementToggled, properties: ["enabled": newValue])
+                        }
                     Toggle("Group Books by Theme", isOn: $showThematicGrouping)
                         .onChange(of: showThematicGrouping) { _, newValue in
                             AnalyticsService.shared.capture(.thematicGroupingToggled, properties: ["enabled": newValue])
@@ -108,6 +133,9 @@ struct SettingsView: View {
                     }
                     NavigationLink(destination: TranslationInfoView()) {
                         Label("About Translations", systemImage: "info.circle")
+                    }
+                    NavigationLink(destination: TextSourcesView()) {
+                        Label("Text Sources", systemImage: "book.closed")
                     }
                 }
 

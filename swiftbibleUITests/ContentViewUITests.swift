@@ -17,7 +17,8 @@ final class ContentViewUITests: XCTestCase {
         app = XCUIApplication()
         app.launchArguments += [
             "-donationPromptOptOut", "YES",
-            "-showApocrypha", "YES"
+            "-showApocrypha", "YES",
+            "-showJewishPseudepigraphaEnoch", "YES"
         ]
         app.launch()
     }
@@ -51,7 +52,8 @@ final class ContentViewUITests: XCTestCase {
             version: "KJV",
             bookName: "The Book of the Watchers",
             chapterNumber: 1,
-            expectedTextFragment: "The words of the blessing of Enoch"
+            expectedTextFragment: "The words of the blessing of Enoch",
+            supportsVersionSwitching: false
         )
 
         navigateBackToBibleRoot()
@@ -60,7 +62,8 @@ final class ContentViewUITests: XCTestCase {
             version: "KJV",
             bookName: "Tobit",
             chapterNumber: 1,
-            expectedTextFragment: "The book of the words of Tobit"
+            expectedTextFragment: "The book of the words of Tobit",
+            supportsVersionSwitching: false
         )
     }
 
@@ -69,7 +72,7 @@ final class ContentViewUITests: XCTestCase {
         XCTAssertTrue(devotionalTab.waitForExistence(timeout: 10), "Devotional tab should exist")
         devotionalTab.tap()
 
-        let devotionalView = app.otherElements["DailyDevotionalView"]
+        let devotionalView = app.descendants(matching: .any)["DailyDevotionalView"].firstMatch
         XCTAssertTrue(devotionalView.waitForExistence(timeout: 10), "Daily devotional view should exist")
 
         let emptyState = app.staticTexts["No devotional found for this day."]
@@ -85,12 +88,15 @@ final class ContentViewUITests: XCTestCase {
         version: String,
         bookName: String,
         chapterNumber: Int,
-        expectedTextFragment: String
+        expectedTextFragment: String,
+        supportsVersionSwitching: Bool = true
     ) {
         openBibleTabIfNeeded()
         searchAndOpenBook(named: bookName)
         openChapter(number: chapterNumber)
-        switchTranslationIfNeeded(to: version)
+        if supportsVersionSwitching {
+            switchTranslationIfNeeded(to: version)
+        }
 
         let verseText = app.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", expectedTextFragment)).firstMatch
         XCTAssertTrue(
