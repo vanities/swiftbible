@@ -36,6 +36,7 @@ enum AnalyticsEvent: String {
     // Settings
     case versionChanged = "version_changed"
     case apocryphaToggled = "apocrypha_toggled"
+    case enochToggled = "enoch_toggled"
     case thematicGroupingToggled = "thematic_grouping_toggled"
     case jesusWordsToggled = "jesus_words_toggled"
     case fontChanged = "font_changed"

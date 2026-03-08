@@ -13,6 +13,7 @@ struct SettingsView: View {
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showApocrypha") var showApocrypha = false
+    @AppStorage("showJewishPseudepigraphaEnoch") var showJewishPseudepigraphaEnoch = false
     @AppStorage("showThematicGrouping") var showThematicGrouping = false
 
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
@@ -83,9 +84,13 @@ struct SettingsView: View {
                         }
                     }
                     .disabled(!hasBookmark)
-                    Toggle("Show Apocrypha", isOn: $showApocrypha)
+                    Toggle("Show Deuterocanonical Apocrypha", isOn: $showApocrypha)
                         .onChange(of: showApocrypha) { _, newValue in
                             AnalyticsService.shared.capture(.apocryphaToggled, properties: ["enabled": newValue])
+                        }
+                    Toggle("Jewish Pseudepigrapha (Book of Enoch)", isOn: $showJewishPseudepigraphaEnoch)
+                        .onChange(of: showJewishPseudepigraphaEnoch) { _, newValue in
+                            AnalyticsService.shared.capture(.enochToggled, properties: ["enabled": newValue])
                         }
                     Toggle("Group Books by Theme", isOn: $showThematicGrouping)
                         .onChange(of: showThematicGrouping) { _, newValue in

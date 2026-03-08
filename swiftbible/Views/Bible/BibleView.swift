@@ -16,6 +16,7 @@ struct BibleView: View {
     @State private var bibleData: (oldTestament: [Book], newTestament: [Book], apocrypha: [Book], enoch: [Book]) = ([], [], [], [])
     @State private var searchText = ""
     @AppStorage("showApocrypha") var showApocrypha = false
+    @AppStorage("showJewishPseudepigraphaEnoch") var showJewishPseudepigraphaEnoch = false
     @AppStorage("showThematicGrouping") var showThematicGrouping = false
 
     var filteredOldTestament: [Book] {
@@ -129,8 +130,8 @@ struct BibleView: View {
                     }
 
                     // Book of Enoch Section (Conditional - same as Apocrypha)
-                    if showApocrypha && !filteredEnoch.isEmpty {
-                        Section(header: Text("Book of Enoch")) {
+                    if showJewishPseudepigraphaEnoch && !filteredEnoch.isEmpty {
+                        Section(header: Text("Jewish Pseudepigrapha (Book of Enoch)")) {
                             ForEach(filteredEnoch, id: \.name) { book in
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
@@ -153,14 +154,11 @@ struct BibleView: View {
                 if newValue && bibleData.apocrypha.isEmpty {
                     fetchApocryphaData()
                 }
+            }
+            .onChange(of: showJewishPseudepigraphaEnoch) { _, newValue in
                 if newValue && bibleData.enoch.isEmpty {
                     fetchEnochData()
                 }
-                // Optionally, clear data when hidden
-                // if !newValue {
-                //     bibleData.apocrypha = []
-                //     bibleData.enoch = []
-                // }
             }
             .onChange(of: appViewModel.selectedVersion) { _, _ in
                 fetchBibleData()
