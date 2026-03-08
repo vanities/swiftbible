@@ -89,7 +89,24 @@ struct SettingsView: View {
                         }
                     }
                     .disabled(!hasBookmark)
-                    Toggle("Show Deuterocanonical Apocrypha", isOn: $showApocrypha)
+                    Toggle("Group Books by Theme", isOn: $showThematicGrouping)
+                        .onChange(of: showThematicGrouping) { _, newValue in
+                            AnalyticsService.shared.capture(.thematicGroupingToggled, properties: ["enabled": newValue])
+                        }
+                }
+
+                Section(header: Text("Translations & Texts")) {
+                    Picker("Bible Version", selection: $appViewModel.selectedVersion) {
+                        ForEach(Version.allCases, id: \.rawValue) { version in
+                            Text(version.displayName).tag(version)
+                        }
+                    }
+                    .onChange(of: appViewModel.selectedVersion) { _, newVersion in
+                        AnalyticsService.shared.capture(.versionChanged, properties: [
+                            "version": newVersion.rawValue
+                        ])
+                    }
+                    Toggle("Deuterocanonical Apocrypha", isOn: $showApocrypha)
                         .onChange(of: showApocrypha) { _, newValue in
                             AnalyticsService.shared.capture(.apocryphaToggled, properties: ["enabled": newValue])
                         }
@@ -117,20 +134,6 @@ struct SettingsView: View {
                         .onChange(of: showFirstClement) { _, newValue in
                             AnalyticsService.shared.capture(.firstClementToggled, properties: ["enabled": newValue])
                         }
-                    Toggle("Group Books by Theme", isOn: $showThematicGrouping)
-                        .onChange(of: showThematicGrouping) { _, newValue in
-                            AnalyticsService.shared.capture(.thematicGroupingToggled, properties: ["enabled": newValue])
-                        }
-                    Picker("Bible Version", selection: $appViewModel.selectedVersion) {
-                        ForEach(Version.allCases, id: \.rawValue) { version in
-                            Text(version.displayName).tag(version)
-                        }
-                    }
-                    .onChange(of: appViewModel.selectedVersion) { _, newVersion in
-                        AnalyticsService.shared.capture(.versionChanged, properties: [
-                            "version": newVersion.rawValue
-                        ])
-                    }
                     NavigationLink(destination: TranslationInfoView()) {
                         Label("About Translations", systemImage: "info.circle")
                     }
