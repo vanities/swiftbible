@@ -13,6 +13,8 @@ class BibleService {
 
     // Cache parsed Bible data by version to avoid re-parsing JSON
     private var cache: [Version: [Book]] = [:]
+    private var apocryphaCache: [Book]?
+    private var enochCache: [Book]?
 
     private func loadBibleData(version: Version) -> [Book] {
         // Return cached data if available
@@ -71,6 +73,10 @@ class BibleService {
     }
 
     func fetchApocryphaData() -> [Book] {
+        if let apocryphaCache {
+            return apocryphaCache
+        }
+
         do {
             let apocryphaURL = Bundle.main.url(forResource: "apocrypha", withExtension: "json")!
             let data = try Data(contentsOf: apocryphaURL)
@@ -81,7 +87,7 @@ class BibleService {
                 apocryphaData[i].testament = .apocrypha
             }
 
-            // print("Got Apocrypha data: \(apocryphaData)")
+            apocryphaCache = apocryphaData
             return apocryphaData
         } catch {
             print("Error fetching Apocrypha data: \(error)")
@@ -90,6 +96,10 @@ class BibleService {
     }
 
     func fetchEnochData() -> [Book] {
+        if let enochCache {
+            return enochCache
+        }
+
         do {
             let enochURL = Bundle.main.url(forResource: "enoch", withExtension: "json")!
             let data = try Data(contentsOf: enochURL)
@@ -100,7 +110,7 @@ class BibleService {
                 enochData[i].testament = .enoch
             }
 
-            // print("Got Enoch data: \(enochData)")
+            enochCache = enochData
             return enochData
         } catch {
             print("Error fetching Enoch data: \(error)")
