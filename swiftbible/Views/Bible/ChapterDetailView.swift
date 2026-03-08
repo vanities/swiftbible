@@ -12,11 +12,14 @@ import MJRefresh
 
 private final class HapticNormalHeader: MJRefreshNormalHeader {
     private let feedback = UIImpactFeedbackGenerator(style: .medium)
+    var armed = false
+    private var armTimer: Timer?
 
     override func prepare() {
         super.prepare()
         arrowView?.isHidden = true
         arrowView?.alpha = 0
+        armed = false
     }
 
     override func placeSubviews() {
@@ -27,20 +30,44 @@ private final class HapticNormalHeader: MJRefreshNormalHeader {
 
     override var state: MJRefreshState {
         didSet {
-            if oldValue != .pulling && state == .pulling {
+            if !armed && state == .pulling {
+                // Not armed yet — cancel the pull
+                endRefreshing()
+                return
+            }
+            if oldValue != .pulling && state == .pulling && armed {
                 feedback.impactOccurred()
             }
         }
+    }
+
+    /// Call when the scroll view is at rest at the top
+    func beginArming() {
+        guard !armed else { return }
+        armTimer?.invalidate()
+        armTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            self?.armed = true
+        }
+    }
+
+    /// Call when the scroll view moves away from the top
+    func disarm() {
+        armTimer?.invalidate()
+        armTimer = nil
+        armed = false
     }
 }
 
 private final class HapticBackFooter: MJRefreshBackNormalFooter {
     private let feedback = UIImpactFeedbackGenerator(style: .medium)
+    var armed = false
+    private var armTimer: Timer?
 
     override func prepare() {
         super.prepare()
         arrowView?.isHidden = true
         arrowView?.alpha = 0
+        armed = false
     }
 
     override func placeSubviews() {
@@ -51,10 +78,31 @@ private final class HapticBackFooter: MJRefreshBackNormalFooter {
 
     override var state: MJRefreshState {
         didSet {
-            if oldValue != .pulling && state == .pulling {
+            if !armed && state == .pulling {
+                // Not armed yet — cancel the pull
+                endRefreshing()
+                return
+            }
+            if oldValue != .pulling && state == .pulling && armed {
                 feedback.impactOccurred()
             }
         }
+    }
+
+    /// Call when the scroll view is at rest at the bottom
+    func beginArming() {
+        guard !armed else { return }
+        armTimer?.invalidate()
+        armTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            self?.armed = true
+        }
+    }
+
+    /// Call when the scroll view moves away from the bottom
+    func disarm() {
+        armTimer?.invalidate()
+        armTimer = nil
+        armed = false
     }
 }
 
@@ -143,6 +191,10 @@ struct ChapterDetailView: View {
         print("[MJRefresh] Configuring refresh. contentSize=\(scrollView.contentSize) bounds=\(scrollView.bounds.size)")
         #endif
 
+        // Reset armed state so a chapter change doesn't carry over
+        (scrollView.mj_header as? HapticNormalHeader)?.disarm()
+        (scrollView.mj_footer as? HapticBackFooter)?.disarm()
+
         if previousChapter != nil {
             if scrollView.mj_header == nil {
                 let header = HapticNormalHeader { [weak scrollView] in
@@ -158,13 +210,12 @@ struct ChapterDetailView: View {
                     #endif
                 }
                 header.lastUpdatedTimeLabel?.isHidden = true
-                header.stateLabel?.isHidden = true
                 header.arrowView?.isHidden = true
                 header.setTitle("", for: .idle)
-                header.setTitle("Release to go back", for: .pulling)
+                header.setTitle("↑ Previous chapter", for: .pulling)
                 header.setTitle("Loading…", for: .refreshing)
-                // Increase drag threshold - higher value requires more drag
-                header.ignoredScrollViewContentInsetTop = 45
+                // Higher value = requires more deliberate drag to trigger
+                header.ignoredScrollViewContentInsetTop = 80
                 scrollView.mj_header = header
             } else {
                 #if DEBUG
@@ -194,10 +245,10 @@ struct ChapterDetailView: View {
                 }
                 footer.arrowView?.isHidden = true
                 footer.setTitle("", for: .idle)
-                footer.setTitle("Release to continue", for: .pulling)
+                footer.setTitle("↓ Next chapter", for: .pulling)
                 footer.setTitle("Loading…", for: .refreshing)
-                // Increase drag threshold - higher value requires more drag
-                footer.ignoredScrollViewContentInsetBottom = 45
+                // Higher value = requires more deliberate drag to trigger
+                footer.ignoredScrollViewContentInsetBottom = 80
                 scrollView.mj_footer = footer
             } else {
                 #if DEBUG
@@ -223,6 +274,18 @@ struct ChapterDetailView: View {
                     print("[MJRefresh] Resolver found UIScrollView contentSize=\(scroll.contentSize) bounds=\(scroll.bounds.size)")
                     #endif
                     onResolve(scroll)
+                    // Attach dead-zone delegate if not already set
+                    let delegate: DeadZoneScrollDelegate
+                    if let existing = scroll.delegate as? DeadZoneScrollDelegate {
+                        delegate = existing
+                    } else {
+                        delegate = DeadZoneScrollDelegate()
+                        // Keep a strong reference via associated object
+                        objc_setAssociatedObject(scroll, &DeadZoneScrollDelegate.associatedKey, delegate, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                        scroll.delegate = delegate
+                    }
+                    // Arm immediately if content doesn't need scrolling
+                    delegate.armIfContentFits(scroll)
                 } else {
                     #if DEBUG
                     print("[MJRefresh] Resolver could not find UIScrollView yet")
@@ -246,6 +309,56 @@ struct ChapterDetailView: View {
                 if let found = searchDescendants(forScrollIn: sub) { return found }
             }
             return nil
+        }
+    }
+
+    /// Monitors scroll position to arm/disarm the dead-zone on header and footer.
+    /// The refresh controls only become active after the user has been at rest
+    /// at the top/bottom edge for 0.5 seconds.
+    /// If content fits on screen (no scrolling needed), arms immediately.
+    private class DeadZoneScrollDelegate: NSObject, UIScrollViewDelegate {
+        static var associatedKey: UInt8 = 0
+        private let edgeThreshold: CGFloat = 10
+
+        func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            updateArmState(for: scrollView)
+        }
+
+        /// Called after layout to handle non-scrollable content
+        func armIfContentFits(_ scrollView: UIScrollView) {
+            let contentHeight = scrollView.contentSize.height
+            let frameHeight = scrollView.bounds.height
+
+            guard contentHeight > 0 && contentHeight <= frameHeight else { return }
+
+            // Content fits on screen — no scroll momentum possible, arm immediately
+            (scrollView.mj_header as? HapticNormalHeader)?.armed = true
+            (scrollView.mj_footer as? HapticBackFooter)?.armed = true
+        }
+
+        private func updateArmState(for scrollView: UIScrollView) {
+            let offsetY = scrollView.contentOffset.y
+            let contentHeight = scrollView.contentSize.height
+            let frameHeight = scrollView.bounds.height
+
+            // Top edge check
+            if let header = scrollView.mj_header as? HapticNormalHeader {
+                if offsetY <= edgeThreshold {
+                    header.beginArming()
+                } else {
+                    header.disarm()
+                }
+            }
+
+            // Bottom edge check
+            if let footer = scrollView.mj_footer as? HapticBackFooter {
+                let distanceFromBottom = contentHeight - (offsetY + frameHeight)
+                if distanceFromBottom <= edgeThreshold {
+                    footer.beginArming()
+                } else {
+                    footer.disarm()
+                }
+            }
         }
     }
 
@@ -534,6 +647,10 @@ struct ChapterDetailView: View {
         )
         .background { backgroundColor }
         .foregroundStyle(foregroundColor)
+        .multilineTextAlignment(
+            appViewModel.selectedVersion == .original && currentBook.testament == .old
+                ? .trailing : .leading
+        )
         .underline(selectedParagraph == paragraph)
         .onLongPressGesture {
             handleLongPress(paragraph: paragraph)
