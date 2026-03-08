@@ -57,7 +57,17 @@ class BibleService {
 
     func fetchBook(named bookName: String, version: Version = .kjv) -> Book? {
         let bibleData = loadBibleData(version: version)
-        return bibleData.first { $0.name == bookName }
+        if let canonicalBook = bibleData.first(where: { $0.name == bookName }) {
+            return canonicalBook
+        }
+
+        // Apocrypha and Enoch are independent from selected translation files,
+        // so always fall back to their dedicated sources.
+        if let apocryphaBook = fetchApocryphaData().first(where: { $0.name == bookName }) {
+            return apocryphaBook
+        }
+
+        return fetchEnochData().first(where: { $0.name == bookName })
     }
 
     func fetchApocryphaData() -> [Book] {
