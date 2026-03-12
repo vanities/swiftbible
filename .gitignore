@@ -68,3 +68,5 @@ python_parser/*.xml
 supabase/.env
 *.md
 .claude/settings.local.json
+
+appstore/__pycache__/
