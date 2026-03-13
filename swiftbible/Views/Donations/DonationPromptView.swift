@@ -16,7 +16,8 @@ struct DonationPromptView: View {
     @State private var isCustomAmountSelected = false
     @FocusState private var isCustomAmountFocused: Bool
 
-    private let presetAmounts: [Decimal] = [1, 5, 10, 25]
+    private let presetAmounts: [Decimal] = [3, 5, 10, 25]
+    private let recommendedAmount: Decimal = 5
 
     private func formattedAmount(for amount: Decimal) -> String {
         DonationPromptView.currencyFormatter.currencyCode = currencyCode
@@ -41,8 +42,8 @@ struct DonationPromptView: View {
                     .font(.title2.weight(.semibold))
 
                 Text(appViewModel.totalPaidCents > 0
-                    ? "Welcome back! Your continued support helps keep swiftbible running and available for everyone. Thank you for being amazing! 🙏"
-                    : "Your donation helps pay for server costs and the Apple developer fee. Thanks for helping keep swiftbible online.")
+                    ? "Thanks to supporters like you, swiftbible stays free for everyone. Your continued generosity makes a real difference. 🙏"
+                    : "swiftbible is free for everyone — and your generosity keeps it that way. Every gift directly supports the servers and tools that bring Scripture to readers worldwide.")
                     .font(.body)
                     .multilineTextAlignment(.center)
             }
@@ -54,7 +55,7 @@ struct DonationPromptView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 // Preset amounts grid
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 14) {
                     ForEach(presetAmounts, id: \.self) { amount in
                         Button {
                             selectedAmount = amount
@@ -77,6 +78,17 @@ struct DonationPromptView: View {
                                         : .primary
                                 )
                                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                .overlay(alignment: .top) {
+                                    if amount == recommendedAmount {
+                                        Text("Popular")
+                                            .font(.caption2.weight(.bold))
+                                            .foregroundStyle(.white)
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 2)
+                                            .background(Color.orange, in: Capsule())
+                                            .offset(y: -10)
+                                    }
+                                }
                         }
                     }
                 }
@@ -115,6 +127,11 @@ struct DonationPromptView: View {
                     isCustomAmountFocused = true
                     isCustomAmountSelected = true
                 }
+
+                Text("Every gift keeps swiftbible free for readers worldwide")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
 
             VStack(spacing: 12) {
@@ -131,8 +148,8 @@ struct DonationPromptView: View {
                     }
                 } label: {
                     Label(appViewModel.totalPaidCents > 0
-                        ? "Donate \(formattedAmount(for: selectedAmount)) Again! 🎉"
-                        : "Donate \(formattedAmount(for: selectedAmount))",
+                        ? "Give \(formattedAmount(for: selectedAmount)) Again! 🎉"
+                        : "Give \(formattedAmount(for: selectedAmount))",
                         systemImage: "heart.fill")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
