@@ -1,16 +1,22 @@
 import SwiftUI
-import UIKit
 
-struct DonationPromptView: View {
+/// Variant B: Loss Aversion + Urgency
+///
+/// Behavioural principles applied:
+/// - **Loss Aversion** (Kahneman & Tversky, 1979): Losses loom larger than equivalent gains.
+///   Copy frames inaction as losing free access rather than gaining supporter status.
+/// - **Status Quo Bias** (Samuelson & Zeckhauser, 1988): People prefer the current state.
+///   "Don't let free access disappear" frames donation as preserving what they already have.
+/// - **Scarcity Framing** (Cialdini, 2001): Perceived scarcity increases perceived value.
+///   "At risk" language creates urgency without fabricating deadlines.
+struct DonationPromptLossView: View {
     @Binding var isPresented: Bool
     var currencyCode: String
     var onDonate: (Decimal) -> Void
 
     @Environment(AppViewModel.self) private var appViewModel
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
-    @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
 
-    @State private var animateSadFace = false
     @State private var selectedAmount = DonationPreferences.defaultDonationDollars
     @State private var customAmount = ""
     @State private var isCustomAmountSelected = false
@@ -20,41 +26,35 @@ struct DonationPromptView: View {
     private let recommendedAmount: Decimal = 5
 
     private func formattedAmount(for amount: Decimal) -> String {
-        DonationPromptView.currencyFormatter.currencyCode = currencyCode
-        let nsAmount = NSDecimalNumber(decimal: amount)
-        return DonationPromptView.currencyFormatter.string(from: nsAmount) ?? "$\(amount)"
+        Self.currencyFormatter.currencyCode = currencyCode
+        return Self.currencyFormatter.string(from: NSDecimalNumber(decimal: amount)) ?? "$\(amount)"
     }
 
     var body: some View {
         VStack(spacing: 24) {
-            if animateSadFace {
-                SadFaceAnimationView(isActive: animateSadFace)
-                    .frame(height: 110)
-            } else {
-                Image(systemName: "hands.sparkles.fill")
-                    .font(.system(size: 56, weight: .regular, design: .default))
-                    .foregroundStyle(.yellow)
-                    .rotationEffect(.degrees(-6))
-            }
+            // Hero — warning/shield icon to trigger protective instinct
+            Image(systemName: "exclamationmark.shield.fill")
+                .font(.system(size: 56))
+                .foregroundStyle(.orange)
 
             VStack(spacing: 12) {
-                Text(appViewModel.totalPaidCents > 0 ? "Support swiftbible Again!" : "Support swiftbible")
+                Text(appViewModel.totalPaidCents > 0
+                    ? "swiftbible Still Needs You"
+                    : "swiftbible Needs Your Help")
                     .font(.title2.weight(.semibold))
 
                 Text(appViewModel.totalPaidCents > 0
-                    ? "Thanks to supporters like you, swiftbible stays free for everyone. Your continued generosity makes a real difference. 🙏"
-                    : "swiftbible is free for everyone — and your generosity keeps it that way. Every gift directly supports the servers and tools that bring Scripture to readers worldwide.")
+                    ? "Your past support made a difference. But servers run every day, and without continued help, free access to Scripture is at risk."
+                    : "Without reader support, swiftbible's servers and future updates are at risk. Don't let free access to Scripture disappear.")
                     .font(.body)
                     .multilineTextAlignment(.center)
             }
 
-            // Amount Selection
             VStack(spacing: 12) {
-                Text("Choose an amount")
+                Text("Choose an amount to protect access")
                     .font(.subheadline.weight(.medium))
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                // Preset amounts grid
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                     ForEach(presetAmounts, id: \.self) { amount in
                         Button {
@@ -67,7 +67,7 @@ struct DonationPromptView: View {
                                 Text(formattedAmount(for: amount))
                                     .font(.headline)
                                 if amount == recommendedAmount {
-                                    Text("Most chosen")
+                                    Text("Keeps the lights on")
                                         .font(.caption2.weight(.semibold))
                                 }
                             }
@@ -75,7 +75,7 @@ struct DonationPromptView: View {
                             .padding(.vertical, 12)
                             .background(
                                 !isCustomAmountSelected && selectedAmount == amount
-                                    ? Color.accentColor
+                                    ? Color.orange
                                     : Color.gray.opacity(0.15)
                             )
                             .foregroundColor(
@@ -88,12 +88,10 @@ struct DonationPromptView: View {
                     }
                 }
 
-                // Custom amount field
                 HStack {
                     Text(currencySymbol)
                         .font(.headline)
                         .foregroundStyle(.secondary)
-
                     TextField("Other amount", text: $customAmount)
                         .font(.headline)
                         .keyboardType(.decimalPad)
@@ -101,7 +99,6 @@ struct DonationPromptView: View {
                         .onChange(of: customAmount) { _, newValue in
                             if !newValue.isEmpty {
                                 isCustomAmountSelected = true
-                                // Clean and validate input
                                 let cleaned = newValue.replacingOccurrences(of: ",", with: ".")
                                 if let decimal = Decimal(string: cleaned), decimal > 0 {
                                     selectedAmount = decimal
@@ -114,7 +111,7 @@ struct DonationPromptView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .stroke(
-                            isCustomAmountSelected ? Color.accentColor : Color.gray.opacity(0.3),
+                            isCustomAmountSelected ? Color.orange : Color.gray.opacity(0.3),
                             lineWidth: isCustomAmountSelected ? 2 : 1
                         )
                 )
@@ -123,7 +120,7 @@ struct DonationPromptView: View {
                     isCustomAmountSelected = true
                 }
 
-                Text("Every gift keeps swiftbible free for readers worldwide")
+                Text("Once it's gone, it's gone — help today")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -131,25 +128,18 @@ struct DonationPromptView: View {
 
             VStack(spacing: 12) {
                 Button {
-                    let finalAmount = isCustomAmountSelected && !customAmount.isEmpty
-                        ? selectedAmount
-                        : selectedAmount
-
-                    // Validate amount
-                    if finalAmount >= DonationPreferences.minimumDonationDollars &&
-                       finalAmount <= DonationPreferences.maximumDonationDollars {
-                        onDonate(finalAmount)
+                    if selectedAmount >= DonationPreferences.minimumDonationDollars &&
+                       selectedAmount <= DonationPreferences.maximumDonationDollars {
+                        onDonate(selectedAmount)
                         isPresented = false
                     }
                 } label: {
-                    Label(appViewModel.totalPaidCents > 0
-                        ? "Give \(formattedAmount(for: selectedAmount)) Again! 🎉"
-                        : "Give \(formattedAmount(for: selectedAmount))",
-                        systemImage: "heart.fill")
+                    Label("Protect Free Access — \(formattedAmount(for: selectedAmount))",
+                          systemImage: "shield.fill")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(Color.accentColor)
+                        .background(Color.orange)
                         .foregroundColor(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
@@ -170,16 +160,6 @@ struct DonationPromptView: View {
             )) {
                 Text("Show donation reminder pop up")
                     .font(.footnote)
-            }
-            .onChange(of: donationPromptOptOut) { _, newValue in
-                if newValue {
-                    withAnimation {
-                        animateSadFace = true
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        animateSadFace = false
-                    }
-                }
             }
         }
         .padding(24)
@@ -205,102 +185,4 @@ struct DonationPromptView: View {
         formatter.minimumFractionDigits = 2
         return formatter
     }()
-}
-
-#Preview {
-    DonationPromptView(
-        isPresented: .constant(true),
-        currencyCode: "USD"
-    ) { amount in
-        print("Donate: \(amount)")
-    }
-    .environment(AppViewModel())
-    .background(Color.gray.opacity(0.2))
-}
-
-private struct SadFaceAnimationView: View {
-    var isActive: Bool
-
-    @State private var tearOffset: CGFloat = -6
-    @State private var tearOpacity: Double = 0
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(Color.cyan.opacity(0.15))
-                .frame(width: 110, height: 110)
-
-            Circle()
-                .strokeBorder(Color.cyan.opacity(0.5), lineWidth: 2)
-                .background(
-                    Circle().fill(Color.cyan.opacity(0.12))
-                )
-                .frame(width: 96, height: 96)
-
-            HStack(spacing: 28) {
-                Circle().frame(width: 10, height: 10)
-                Circle().frame(width: 10, height: 10)
-            }
-            .foregroundColor(.cyan)
-            .offset(y: -10)
-
-            SadMouthShape()
-                .stroke(Color.cyan, lineWidth: 3)
-                .frame(width: 60, height: 24)
-                .offset(y: 18)
-
-            Circle()
-                .fill(Color.cyan)
-                .frame(width: 8, height: 12)
-                .offset(x: 22, y: tearOffset)
-                .opacity(tearOpacity)
-        }
-        .frame(width: 120, height: 120)
-        .onAppear {
-            if isActive {
-                playAnimation()
-            }
-        }
-        .onChange(of: isActive) { _, newValue in
-            if newValue {
-                playAnimation()
-            } else {
-                resetAnimation()
-            }
-        }
-    }
-
-    private func playAnimation() {
-        resetAnimation()
-        withAnimation(.easeIn(duration: 0.25)) {
-            tearOpacity = 1
-        }
-        withAnimation(.easeIn(duration: 0.7)) {
-            tearOffset = 32
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-            withAnimation(.easeOut(duration: 0.2)) {
-                tearOpacity = 0
-            }
-        }
-    }
-
-    private func resetAnimation() {
-        tearOffset = -6
-        tearOpacity = 0
-    }
-}
-
-private struct SadMouthShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let width = rect.width
-        let height = rect.height
-        path.move(to: CGPoint(x: 0, y: height))
-        path.addQuadCurve(
-            to: CGPoint(x: width, y: height),
-            control: CGPoint(x: width / 2, y: 0)
-        )
-        return path
-    }
 }

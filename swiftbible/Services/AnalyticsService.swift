@@ -82,4 +82,8 @@ final class AnalyticsService {
     func screen(_ name: String, properties: [String: Any]? = nil) {
         PostHogSDK.shared.screen(name, properties: properties)
     }
+
+    func getFeatureFlag(_ key: String) -> String? {
+        PostHogSDK.shared.getFeatureFlag(key) as? String
+    }
 }

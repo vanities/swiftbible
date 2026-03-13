@@ -34,6 +34,7 @@ struct ContentView: View {
     @State private var safariCheckout: SafariCheckoutItem?
     @State private var confettiTrigger = 0
     @State private var isAppLaunching = true
+    @State private var donationVariant: DonationPromptVariant = .control
 
     @AppStorage("lastCelebratedDonationSessionID") private var lastCelebratedDonationSessionID: String = ""
 
@@ -114,15 +115,20 @@ struct ContentView: View {
         }
         .onChange(of: showDonationPrompt) { _, shown in
             if shown {
-                AnalyticsService.shared.capture(.donationPromptShown)
+                AnalyticsService.shared.capture(.donationPromptShown, properties: [
+                    "variant": donationVariant.rawValue
+                ])
             } else {
-                AnalyticsService.shared.capture(.donationPromptDismissed)
+                AnalyticsService.shared.capture(.donationPromptDismissed, properties: [
+                    "variant": donationVariant.rawValue
+                ])
             }
         }
         .sheet(isPresented: $showDonationPrompt) {
-            DonationPromptView(
+            DonationPromptContainer(
                 isPresented: $showDonationPrompt,
-                currencyCode: donationCurrency
+                currencyCode: donationCurrency,
+                variant: donationVariant
             ) { amount in
                 startDonationFlow(
                     amount: amount,
@@ -177,6 +183,7 @@ struct ContentView: View {
 
     private func evaluateDonationPrompt() {
         guard !donationPromptOptOut else { return }
+        donationVariant = DonationPromptVariant.fromPostHog()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             showDonationPrompt = true
         }
@@ -198,7 +205,8 @@ struct ContentView: View {
         AnalyticsService.shared.capture(.donationStarted, properties: [
             "amount": "\(sanitizedAmount)",
             "currency": sanitizedCurrency,
-            "source": source
+            "source": source,
+            "variant": donationVariant.rawValue
         ])
 
         Task {

@@ -32,6 +32,7 @@ struct SettingsView: View {
     @Binding var selectedTab: Tabs
     @State private var donationCurrency: String = "USD"
     @State private var showDonationSheet = false
+    @State private var donationVariant: DonationPromptVariant = .control
     @State private var cacheSize: String = "0 KB"
     @State private var showClearCacheAlert = false
     @State private var showCacheToast = false
@@ -181,6 +182,7 @@ struct SettingsView: View {
                     }
 
                     Button {
+                        donationVariant = DonationPromptVariant.fromPostHog()
                         showDonationSheet = true
                     } label: {
                         if appViewModel.totalPaidCents > 0 {
@@ -218,6 +220,15 @@ struct SettingsView: View {
                         appViewModel.testConfetti()
                     } label: {
                         Label("Test Confetti 🎉", systemImage: "sparkles")
+                    }
+
+                    ForEach(DonationPromptVariant.allCases, id: \.rawValue) { variant in
+                        Button {
+                            donationVariant = variant
+                            showDonationSheet = true
+                        } label: {
+                            Label("Donation: \(variant.rawValue)", systemImage: "rectangle.portrait.and.arrow.right")
+                        }
                     }
                 }
                 #endif
@@ -277,9 +288,10 @@ struct SettingsView: View {
             .accessibilityIdentifier("SettingsView")
         }
         .sheet(isPresented: $showDonationSheet) {
-            DonationPromptView(
+            DonationPromptContainer(
                 isPresented: $showDonationSheet,
-                currencyCode: donationCurrency
+                currencyCode: donationCurrency,
+                variant: donationVariant
             ) { amount in
                 appViewModel.requestDonationFlow(
                     amount: amount,
