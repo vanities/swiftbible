@@ -7,6 +7,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const BIBLE_API_URL = "https://biblebytopic.com/api/getrandompopularverse-kjv";
+const BIBLE_API_FALLBACK_URL = "https://bible-api.com/data/kjv/random";
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 
 Deno.serve(async (req) => {
@@ -45,7 +46,9 @@ async function fetchRandomVerse(maxRetries = 3) {
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const response = await fetch(BIBLE_API_URL);
+      const response = await fetch(BIBLE_API_URL, {
+        signal: AbortSignal.timeout(15000),
+      });
 
       if (!response.ok) {
         throw new Error(
@@ -74,7 +77,28 @@ async function fetchRandomVerse(maxRetries = 3) {
     }
   }
 
-  throw lastError ?? new Error("Failed to fetch verse after retries");
+  // Fallback to bible-api.com
+  console.log("Primary API failed, trying fallback: bible-api.com");
+  try {
+    const response = await fetch(BIBLE_API_FALLBACK_URL, {
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!response.ok) {
+      throw new Error(`Fallback API failed with status ${response.status}`);
+    }
+    const data = await response.json();
+    const v = data.random_verse;
+    return {
+      book: v.book,
+      chapter: v.chapter,
+      verse: v.verse,
+      text: v.text,
+    };
+  } catch (fallbackError: any) {
+    console.error("Fallback API also failed:", fallbackError.message);
+  }
+
+  throw lastError ?? new Error("Failed to fetch verse from all sources");
 }
 
 function getFormattedDate(): { formatted: string; isoDate: string } {
@@ -159,6 +183,7 @@ async function generateDevotional(prompt: string): Promise<string> {
         ],
         max_completion_tokens: 4000,
       }),
+      signal: AbortSignal.timeout(120000),
     });
 
     if (!response.ok) {

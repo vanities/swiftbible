@@ -226,6 +226,15 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 
 ## Commands and Workflows
 
+### Makefile
+The project has a `Makefile` with common commands. Run `make help` to see all targets. Key targets:
+- `make dev` - Start full local dev environment (Supabase + Edge Functions + ngrok)
+- `make down` - Stop all services
+- `make functions-deploy` - Deploy all Edge Functions to remote Supabase
+- `make test_daily_devotional` - Trigger the daily devotional Edge Function (requires `SWIFTBIBLE_KEY` and `SWIFTBIBLE_SUPERSECRET_KEY` env vars)
+- `make test_slowness` - Profile Swift compile times
+- `make fresh` - Reset local Supabase database
+
 ### Running Parsers
 ```bash
 cd python_parser
