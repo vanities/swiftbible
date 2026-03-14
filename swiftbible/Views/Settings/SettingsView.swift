@@ -23,6 +23,9 @@ struct SettingsView: View {
 
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
+    @AppStorage("devotionalReminderEnabled") private var reminderEnabled = false
+    @AppStorage("devotionalReminderHour") private var reminderHour: Int = 21
+    @AppStorage("devotionalReminderMinute") private var reminderMinute: Int = 0
     @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage(BookmarkPreferences.bookKey) private var bookmarkedBookName: String = ""
@@ -56,6 +59,20 @@ struct SettingsView: View {
                         }
                     Toggle("Hide Navigation and Tab Bar while reading", isOn: $hideNavAndTab)
                     // Swipe to change chapters has been removed in favor of pull up/down
+                }
+
+                Section(header: Text("Notifications")) {
+                    NavigationLink {
+                        NotificationSettingsView()
+                    } label: {
+                        HStack {
+                            Label("Devotional Reminder", systemImage: "bell.fill")
+                            Spacer()
+                            Text(reminderSummary)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
 
                 Section(header: Text("App")) {
@@ -344,6 +361,19 @@ struct SettingsView: View {
         formatter.currencyCode = donationCurrency
         let amount = NSDecimalNumber(decimal: DonationPreferences.defaultDonationDollars)
         return formatter.string(from: amount) ?? "$5"
+    }
+
+    private var reminderSummary: String {
+        guard reminderEnabled else { return "Off" }
+        var components = DateComponents()
+        components.hour = reminderHour
+        components.minute = reminderMinute
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        if let date = Calendar.current.date(from: components) {
+            return formatter.string(from: date)
+        }
+        return "On"
     }
 
     private var hasBookmark: Bool {

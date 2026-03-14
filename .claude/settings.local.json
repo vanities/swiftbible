@@ -1,10 +1,11 @@
 {
-  "disabledMcpjsonServers": [
-    "supabase"
-  ],
   "permissions": {
     "allow": [
       "WebSearch"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "posthog",
+    "supabase"
+  ]
 }

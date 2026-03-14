@@ -64,6 +64,9 @@ struct ContentView: View {
                 "tab": String(describing: newTab)
             ])
         }
+        .onReceive(NotificationCenter.default.publisher(for: .devotionalReminderTapped)) { _ in
+            selectedTab = .dailyDevotional
+        }
         .onReceive(NotificationCenter.default.publisher(for: .donationStatusShouldRefresh)) { notification in
             safariCheckout = nil
             let sessionId = notification.userInfo?["session_id"] as? String

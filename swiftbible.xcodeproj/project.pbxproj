@@ -93,6 +93,8 @@
 		AA0000042F130001000SPLASH /* GradientShimmerSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000092F130001000SPLASH /* GradientShimmerSplashView.swift */; };
 		AA0000052F130001000SPLASH /* ParticleCrossSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000A2F130001000SPLASH /* ParticleCrossSplashView.swift */; };
 		AA0000062F140001000ANALYT /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000072F140001000ANALYT /* AnalyticsService.swift */; };
+		CC0000012F640001000NOTIF /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000022F640001000NOTIF /* NotificationService.swift */; };
+		CC0000032F640001000NOTIF /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000042F640001000NOTIF /* NotificationSettingsView.swift */; };
 		AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA00000E2F130001000LNCHSB /* LaunchScreen.storyboard */; };
 		BB0000012F4D0001000TXTPK /* jubilees.json in Resources */ = {isa = PBXBuildFile; fileRef = BB0000072F4D0001000TXTPK /* jubilees.json */; };
 		BB0000022F4D0001000TXTPK /* testaments12.json in Resources */ = {isa = PBXBuildFile; fileRef = BB0000082F4D0001000TXTPK /* testaments12.json */; };
@@ -194,6 +196,8 @@
 		AA0000062F130001000SPLASH /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		AA0000072F130001000SPLASH /* BookOpeningSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookOpeningSplashView.swift; sourceTree = "<group>"; };
 		AA0000072F140001000ANALYT /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		CC0000022F640001000NOTIF /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		CC0000042F640001000NOTIF /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 		AA0000082F130001000SPLASH /* GlowScaleSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlowScaleSplashView.swift; sourceTree = "<group>"; };
 		AA0000092F130001000SPLASH /* GradientShimmerSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientShimmerSplashView.swift; sourceTree = "<group>"; };
 		AA00000A2F130001000SPLASH /* ParticleCrossSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleCrossSplashView.swift; sourceTree = "<group>"; };
@@ -276,6 +280,7 @@
 				95CC66142E89C6AA0065E7AD /* DonationHistoryView.swift */,
 				95F3A0052F040001000A1B2C /* TranslationInfoView.swift */,
 				BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */,
+				CC0000042F640001000NOTIF /* NotificationSettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -423,6 +428,7 @@
 				956026C52DA85464006A9CFC /* MarkdownParser.swift */,
 				15F3B1712A28409C5CA1370A /* CacheService.swift */,
 				AA0000072F140001000ANALYT /* AnalyticsService.swift */,
+				CC0000022F640001000NOTIF /* NotificationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -666,6 +672,8 @@
 				AA0000052F130001000SPLASH /* ParticleCrossSplashView.swift in Sources */,
 				2862174888A3276568560CE5 /* Config.swift in Sources */,
 				AA0000062F140001000ANALYT /* AnalyticsService.swift in Sources */,
+				CC0000012F640001000NOTIF /* NotificationService.swift in Sources */,
+				CC0000032F640001000NOTIF /* NotificationSettingsView.swift in Sources */,
 				BB0000062F4D0001000TXTPK /* TextSourcesView.swift in Sources */,
 				69E843EED8F1DD0E9ED2EB61 /* DonationPromptVariant.swift in Sources */,
 				F922B9355548B1ECA572B372 /* DonationPromptLossView.swift in Sources */,

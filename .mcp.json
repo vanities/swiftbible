@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "posthog": {
+      "type": "http",
+      "url": "https://mcp.posthog.com/mcp",
+      "headers": {
+        "Authorization": "Bearer phx_Iwrxj0PFtnr6Y9N1MepF5qIa9yeW3VoxnjBh2ICTICSztt3"
+      }
+    },
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=yvanxjoayoiocwzfpkfm"
+    }
+  }
+}

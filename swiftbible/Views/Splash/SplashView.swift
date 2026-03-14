@@ -14,7 +14,7 @@ enum SplashStyle: String, CaseIterable {
 
 struct SplashView: View {
     // Change this to preview different styles
-    var style: SplashStyle = .gradientShimmer
+    var style: SplashStyle = .bookOpening
 
     @State private var showSplash = true
 

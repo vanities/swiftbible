@@ -44,6 +44,7 @@ enum AnalyticsEvent: String {
     case firstClementToggled = "first_clement_toggled"
     case thematicGroupingToggled = "thematic_grouping_toggled"
     case jesusWordsToggled = "jesus_words_toggled"
+    case devotionalReminderToggled = "devotional_reminder_toggled"
     case fontChanged = "font_changed"
     case fontSizeChanged = "font_size_changed"
 
