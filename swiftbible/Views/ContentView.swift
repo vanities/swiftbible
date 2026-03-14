@@ -389,11 +389,31 @@ struct ContentView: View {
         showDonationErrorAlert = true
     }
 
-    /// Re-schedule the next 7 days of devotional reminder notifications
-    /// so they pick up cached devotionals and stay date-aware.
+    /// Prefetch today's devotional and reschedule the notification with fresh content.
     private func refreshDevotionalReminders() async {
         let enabled = UserDefaults.standard.bool(forKey: "devotionalReminderEnabled")
         guard enabled else { return }
+
+        // Prefetch today's devotional so the notification has real content
+        let today = Date()
+        if CacheService.shared.loadDevotional(for: today) == nil {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            let dateString = formatter.string(from: today)
+
+            do {
+                let devotional: DailyDevotional = try await SupabaseService.shared.client
+                    .from("Daily Devotional")
+                    .select()
+                    .eq("for_date", value: dateString)
+                    .single()
+                    .execute()
+                    .value
+                CacheService.shared.saveDevotional(devotional, for: today)
+            } catch {
+                // No devotional for today yet — notification will use generic message
+            }
+        }
 
         let hour = UserDefaults.standard.integer(forKey: "devotionalReminderHour")
         let minute = UserDefaults.standard.integer(forKey: "devotionalReminderMinute")

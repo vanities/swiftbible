@@ -194,7 +194,11 @@ struct NotificationSettingsView: View {
                 Button {
                     sendTestNotification()
                 } label: {
-                    Label("Send Test Notification (5 sec)", systemImage: "bell.badge")
+                    HStack {
+                        Label("Send Test Notification Now", systemImage: "bell.badge")
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
                 }
             }
             #endif
@@ -244,12 +248,8 @@ struct NotificationSettingsView: View {
                 return
             }
 
-            let content = UNMutableNotificationContent()
-            content.title = "Daily Devotional"
-            content.body = "Your daily devotional is ready. Take a moment to reflect today."
-            content.sound = .default
-
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+            let content = NotificationService.shared.buildContent(for: Date())
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
             let request = UNNotificationRequest(
                 identifier: "test-devotional-reminder",
                 content: content,

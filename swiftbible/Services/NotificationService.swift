@@ -40,17 +40,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
 
         cancelDailyReminder()
 
-        let content = UNMutableNotificationContent()
-        content.sound = .default
-
-        if let devotional = CacheService.shared.loadDevotional(for: Date()),
-           let teaser = extractTeaser(from: devotional.message) {
-            content.title = "Daily Devotional"
-            content.body = teaser
-        } else {
-            content.title = "Daily Devotional"
-            content.body = "Your daily devotional is ready. Take a moment to reflect."
-        }
+        let content = buildContent(for: Date())
 
         let calendar = Calendar.current
         var dateComponents = DateComponents()
@@ -78,6 +68,22 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     }
 
     // MARK: - Content
+
+    func buildContent(for date: Date) -> UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.sound = .default
+
+        if let devotional = CacheService.shared.loadDevotional(for: date),
+           let teaser = extractTeaser(from: devotional.message) {
+            content.title = "Daily Devotional"
+            content.body = teaser
+        } else {
+            content.title = "Daily Devotional"
+            content.body = "Your daily devotional is ready. Take a moment to reflect."
+        }
+
+        return content
+    }
 
     /// Extract the first meaningful line from devotional markdown, stripped of formatting.
     private func extractTeaser(from message: String) -> String? {
