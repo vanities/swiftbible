@@ -185,7 +185,7 @@ struct BookOpeningSplashView: View {
                             endPoint: .bottom
                         )
                     )
-                    .frame(width: 6, height: 40)
+                    .frame(width: 6, height: 26)
 
                 Rectangle()
                     .fill(warmGold)
@@ -199,7 +199,7 @@ struct BookOpeningSplashView: View {
                             endPoint: .bottom
                         )
                     )
-                    .frame(width: 6, height: 26)
+                    .frame(width: 6, height: 40)
             }
             .offset(y: -6)
             .shadow(color: warmGold.opacity(0.4), radius: 6)
