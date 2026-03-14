@@ -29,6 +29,8 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         }
     }
 
+    /// Schedule a daily repeating notification at the given time.
+    /// Pulls today's cached devotional for a richer message if available.
     func scheduleDailyReminder(at time: Date) async {
         let granted = await requestAuthorization()
         guard granted else {
@@ -36,13 +38,19 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
             return
         }
 
-        // Cancel existing before scheduling new
         cancelDailyReminder()
 
         let content = UNMutableNotificationContent()
-        content.title = "Daily Devotional"
-        content.body = "Your daily devotional is ready. Take a moment to reflect today."
         content.sound = .default
+
+        if let devotional = CacheService.shared.loadDevotional(for: Date()),
+           let teaser = extractTeaser(from: devotional.message) {
+            content.title = "Daily Devotional"
+            content.body = teaser
+        } else {
+            content.title = "Daily Devotional"
+            content.body = "Your daily devotional is ready. Take a moment to reflect."
+        }
 
         let calendar = Calendar.current
         var dateComponents = DateComponents()
@@ -69,7 +77,33 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
             .removePendingNotificationRequests(withIdentifiers: [notificationIdentifier])
     }
 
-    // Show notification even when app is in foreground
+    // MARK: - Content
+
+    /// Extract the first meaningful line from devotional markdown, stripped of formatting.
+    private func extractTeaser(from message: String) -> String? {
+        let cleaned = message
+            .replacingOccurrences(of: #"\*\*(.+?)\*\*"#, with: "$1", options: .regularExpression)
+            .replacingOccurrences(of: #"\*(.+?)\*"#, with: "$1", options: .regularExpression)
+            .replacingOccurrences(of: #"\[(.+?)\]\(.+?\)"#, with: "$1", options: .regularExpression)
+            .replacingOccurrences(of: "#", with: "")
+
+        let lines = cleaned.components(separatedBy: .newlines)
+        for line in lines {
+            let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.count > 20 {
+                if trimmed.count > 150 {
+                    let index = trimmed.index(trimmed.startIndex, offsetBy: 147)
+                    return String(trimmed[..<index]) + "..."
+                }
+                return trimmed
+            }
+        }
+
+        return nil
+    }
+
+    // MARK: - UNUserNotificationCenterDelegate
+
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
@@ -77,7 +111,6 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         return [.banner, .sound]
     }
 
-    // Handle notification tap - post notification to navigate to devotional tab
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse

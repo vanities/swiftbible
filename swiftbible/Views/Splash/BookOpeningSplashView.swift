@@ -8,9 +8,6 @@ import SwiftUI
 struct BookOpeningSplashView: View {
     var onFinished: () -> Void
 
-    // Background
-    @State private var bgDarken: Double = 0
-
     // Book entrance
     @State private var bookOpacity: Double = 0
     @State private var bookScale: CGFloat = 0.88
@@ -40,7 +37,6 @@ struct BookOpeningSplashView: View {
 
     // MARK: - Colors
 
-    private let launchCyan = Color(red: 0.0, green: 0.75, blue: 0.85)
     private let deepNavy = Color(red: 0.05, green: 0.07, blue: 0.15)
     private let warmGold = Color(red: 0.85, green: 0.68, blue: 0.32)
     private let lightGold = Color(red: 1.0, green: 0.93, blue: 0.72)
@@ -55,14 +51,10 @@ struct BookOpeningSplashView: View {
 
     var body: some View {
         ZStack {
-            // Background: seamless from launch screen cyan → deep navy
-            launchCyan
-                .ignoresSafeArea()
-                .opacity(bgOpacity)
-
+            // Background: matches launch screen
             deepNavy
                 .ignoresSafeArea()
-                .opacity(bgDarken * bgOpacity)
+                .opacity(bgOpacity)
 
             // Ambient golden glow behind book
             RadialGradient(
@@ -79,9 +71,11 @@ struct BookOpeningSplashView: View {
             .opacity(glowIntensity * bgOpacity)
 
             // Main content
-            VStack(spacing: 22) {
+            VStack(spacing: 0) {
                 bookAssembly
+                    .padding(.bottom, 20)
                 titleSection
+                    .padding(.top, 30)
             }
             .scaleEffect(exitScale)
             .opacity(exitOpacity)
@@ -116,7 +110,7 @@ struct BookOpeningSplashView: View {
                     perspective: 0.35
                 )
         }
-        .frame(width: bookW * 1.8, height: bookH + 20)
+        .frame(width: bookW * 1.8, height: bookH + 40)
         .scaleEffect(bookScale)
         .opacity(bookOpacity)
     }
@@ -314,11 +308,11 @@ struct BookOpeningSplashView: View {
                         ],
                         center: .center,
                         startRadius: 5,
-                        endRadius: 80
+                        endRadius: 70
                     )
                 )
-                .frame(width: 120, height: 160)
-                .offset(x: 20)
+                .frame(width: 120, height: 130)
+                .offset(x: 20, y: -15)
 
             // Upward light spill
             Ellipse()
@@ -330,14 +324,14 @@ struct BookOpeningSplashView: View {
                         ],
                         center: .bottom,
                         startRadius: 10,
-                        endRadius: 120
+                        endRadius: 100
                     )
                 )
-                .frame(width: 100, height: 140)
-                .offset(x: 10, y: -30)
+                .frame(width: 100, height: 120)
+                .offset(x: 10, y: -40)
         }
         .opacity(glowIntensity)
-        .blur(radius: 15)
+        .blur(radius: 12)
     }
 
     // MARK: - Title Section
@@ -346,13 +340,8 @@ struct BookOpeningSplashView: View {
         VStack(spacing: 8) {
             Text("SwiftBible")
                 .font(.system(size: 34, weight: .bold, design: .serif))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [.white, lightGold],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
+                .foregroundStyle(.white)
+                .shadow(color: .black.opacity(0.6), radius: 4, x: 0, y: 2)
 
             Text("In the beginning was the Word")
                 .font(.system(size: 14, weight: .regular, design: .serif))
@@ -367,10 +356,7 @@ struct BookOpeningSplashView: View {
     // MARK: - Animation
 
     private func animate() {
-        // Phase 1: Background darkens + book enters
-        withAnimation(.easeInOut(duration: 0.7)) {
-            bgDarken = 1.0
-        }
+        // Phase 1: Book enters
         withAnimation(.easeOut(duration: 0.5).delay(0.1)) {
             bookOpacity = 1.0
             bookScale = 1.0

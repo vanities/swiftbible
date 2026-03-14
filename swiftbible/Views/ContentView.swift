@@ -99,6 +99,7 @@ struct ContentView: View {
                 userViewModel.user = await SupabaseService.shared.getUser()
                 await refreshDonationStatusFromServer()
                 evaluateDonationPrompt()
+                await refreshDevotionalReminders()
 
                 // Mark app as no longer launching after initial load
                 await MainActor.run {
@@ -108,6 +109,9 @@ struct ContentView: View {
         }
         .onChange(of: scenePhase) { _, newPhase in
             handleScenePhaseChange(newPhase)
+            if newPhase == .active {
+                Task { await refreshDevotionalReminders() }
+            }
         }
         .onChange(of: donationPromptOptOut) { _, newValue in
             if newValue {
@@ -187,7 +191,7 @@ struct ContentView: View {
     private func evaluateDonationPrompt() {
         guard !donationPromptOptOut else { return }
         donationVariant = DonationPromptVariant.fromPostHog()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
             showDonationPrompt = true
         }
     }
@@ -383,6 +387,23 @@ struct ContentView: View {
             donationErrorMessage = error.localizedDescription
         }
         showDonationErrorAlert = true
+    }
+
+    /// Re-schedule the next 7 days of devotional reminder notifications
+    /// so they pick up cached devotionals and stay date-aware.
+    private func refreshDevotionalReminders() async {
+        let enabled = UserDefaults.standard.bool(forKey: "devotionalReminderEnabled")
+        guard enabled else { return }
+
+        let hour = UserDefaults.standard.integer(forKey: "devotionalReminderHour")
+        let minute = UserDefaults.standard.integer(forKey: "devotionalReminderMinute")
+
+        var components = DateComponents()
+        components.hour = hour
+        components.minute = minute
+        guard let time = Calendar.current.date(from: components) else { return }
+
+        await NotificationService.shared.scheduleDailyReminder(at: time)
     }
 
 }
