@@ -224,13 +224,16 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 - **Navigation benefits**: Users can study specific aspects (astronomy, dreams, etc.)
 - **Historical context**: Preserves understanding of textual development
 
+## Deployment
+
+**NEVER manually deploy Edge Functions or push migrations.** Merging to `master` triggers CI/CD which automatically deploys Edge Functions and runs Supabase migrations. Do not run `supabase functions deploy`, `supabase db push`, or any manual deployment commands.
+
 ## Commands and Workflows
 
 ### Makefile
 The project has a `Makefile` with common commands. Run `make help` to see all targets. Key targets:
 - `make dev` - Start full local dev environment (Supabase + Edge Functions + ngrok)
 - `make down` - Stop all services
-- `make functions-deploy` - Deploy all Edge Functions to remote Supabase
 - `make test_daily_devotional` - Trigger the daily devotional Edge Function (requires `SWIFTBIBLE_KEY` and `SWIFTBIBLE_SUPERSECRET_KEY` env vars)
 - `make test_slowness` - Profile Swift compile times
 - `make fresh` - Reset local Supabase database

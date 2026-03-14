@@ -32,9 +32,9 @@ interface Holiday {
 
 // ─── Load local KJV Bible data ──────────────────────────────────────
 
-const bibleData: Book[] = JSON.parse(
-  await Deno.readTextFile(new URL("./bible.json", import.meta.url))
-);
+// deno-lint-ignore no-explicit-any
+import bibleJson from "./bible.json" with { type: "json" };
+const bibleData: Book[] = bibleJson as any;
 
 const OT_BOOKS = bibleData.slice(0, 39);
 const NT_BOOKS = bibleData.slice(39);
