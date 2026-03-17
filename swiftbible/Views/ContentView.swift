@@ -20,6 +20,7 @@ struct ContentView: View {
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
     @AppStorage(DonationPreferences.anonIdentifierKey) private var donationAnonIdentifier: String = ""
+    @AppStorage("customAccentColor") private var customAccentHex: String = ""
 
     @Environment(\.scenePhase) private var scenePhase
 
@@ -58,6 +59,7 @@ struct ContentView: View {
                 SettingsView(selectedTab: $selectedTab)
             }
         }
+        .tint(customAccentHex.isEmpty ? nil : Color(hex: customAccentHex))
         .tabViewStyle(.sidebarAdaptable)
         .onChange(of: selectedTab) { _, newTab in
             AnalyticsService.shared.capture(.tabSwitched, properties: [
@@ -97,6 +99,7 @@ struct ContentView: View {
             Task {
                 await SupabaseService.shared.refreshToken()
                 userViewModel.user = await SupabaseService.shared.getUser()
+                await userViewModel.fetchAdminStatus()
                 await refreshDonationStatusFromServer()
                 evaluateDonationPrompt()
                 await refreshDevotionalReminders()

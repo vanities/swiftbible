@@ -39,6 +39,8 @@ struct SettingsView: View {
     @State private var cacheSize: String = "0 KB"
     @State private var showClearCacheAlert = false
     @State private var showCacheToast = false
+    @State private var versionTapCount = 0
+    @State private var showCopiedToast = false
 
     var body: some View {
         @Bindable var userViewModel = userViewModel
@@ -248,24 +250,24 @@ struct SettingsView: View {
                     }
                 }
 
-                #if DEBUG
-                Section(header: Text("Debug")) {
-                    Button {
-                        appViewModel.testConfetti()
-                    } label: {
-                        Label("Test Confetti 🎉", systemImage: "sparkles")
-                    }
-
-                    ForEach(DonationPromptVariant.allCases, id: \.rawValue) { variant in
+                if showDebugSection {
+                    Section(header: Text("Debug")) {
                         Button {
-                            donationVariant = variant
-                            showDonationSheet = true
+                            appViewModel.testConfetti()
                         } label: {
-                            Label("Donation: \(variant.rawValue)", systemImage: "rectangle.portrait.and.arrow.right")
+                            Label("Test Confetti 🎉", systemImage: "sparkles")
+                        }
+
+                        ForEach(DonationPromptVariant.allCases, id: \.rawValue) { variant in
+                            Button {
+                                donationVariant = variant
+                                showDonationSheet = true
+                            } label: {
+                                Label("Donation: \(variant.rawValue)", systemImage: "rectangle.portrait.and.arrow.right")
+                            }
                         }
                     }
                 }
-                #endif
 
                 Section(header: Text("About")) {
                     Button(action: {
@@ -312,6 +314,24 @@ struct SettingsView: View {
                             .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
                         Spacer()
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        versionTapCount += 1
+                        if versionTapCount >= 5 {
+                            versionTapCount = 0
+                            if let userId = userViewModel.user?.id {
+                                UIPasteboard.general.string = userId.uuidString
+                                withAnimation {
+                                    showCopiedToast = true
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    withAnimation {
+                                        showCopiedToast = false
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
             }
@@ -347,10 +367,10 @@ struct SettingsView: View {
         }
         .overlay(
             Group {
-                if showCacheToast {
+                if showCacheToast || showCopiedToast {
                     VStack {
                         Spacer()
-                        Text("Cache cleared successfully")
+                        Text(showCopiedToast ? "User ID copied to clipboard" : "Cache cleared successfully")
                             .padding(.horizontal, 16)
                             .padding(.vertical, 10)
                             .background(.ultraThinMaterial)
@@ -368,6 +388,14 @@ struct SettingsView: View {
             }
             updateCacheSize()
         }
+    }
+
+    private var showDebugSection: Bool {
+        #if DEBUG
+        return true
+        #else
+        return userViewModel.isAdmin
+        #endif
     }
 
     private var formattedDefaultDonationAmount: String {
