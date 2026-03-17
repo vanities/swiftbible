@@ -122,8 +122,12 @@ struct ContentView: View {
                 userViewModel.user = await SupabaseService.shared.getUser()
                 await userViewModel.fetchAdminStatus()
 
+                // Always check Supabase for existing Stripe donations
+                // so previous Stripe donors are still recognized
+                await refreshDonationStatusFromServer()
+
                 if DonationPreferences.useStripePayments {
-                    await refreshDonationStatusFromServer()
+                    // Stripe mode: server status already refreshed above
                 } else {
                     await StoreKitDonationService.shared.loadProducts()
                     transactionListenerTask = StoreKitDonationService.shared.listenForTransactions()
