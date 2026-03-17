@@ -922,6 +922,8 @@ ULTIMATE_STRIP = {
     ],
     "intro_headline": "SwiftBible",
     "intro_subtitle": "Open Source Bible App",
+    "bridge_headline": "Open Source & Free Forever",
+    "bridge_subtitle": "No ads. No tracking. Just scripture.",
     "outro_headline": "Download Free",
     "outro_subtitle": "Available on the App Store",
     # Background: deep navy → warm amber (brand palette flow)
@@ -1013,6 +1015,20 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
         canvas, hero_raw, hero_cx, hero_device_y,
         hero_scale, corner_r, canvas_w, hero_shot.get("angle", 0),
     )
+
+    # 4b. Trust bridge text — frame 1 (between hero and first panoramic device)
+    #     Power of Free (#113) + Transparency Effect (#85)
+    bridge_cx = int(canvas_w * 1.5)  # center of frame 1
+    bridge_hl_h = draw_gradient_text_at(
+        canvas, cfg.get("bridge_headline", ""), bridge_cx, text_y,
+        headline_font, (255, 255, 255), TINT_TEAL,
+    )
+    if cfg.get("bridge_subtitle"):
+        draw_text_at(
+            canvas, cfg["bridge_subtitle"], bridge_cx,
+            text_y + bridge_hl_h + text_gap,
+            subtitle_font, SUBTITLE_COLOR,
+        )
 
     # 5. Remaining devices — on cut lines (panoramic)
     for j, shot in enumerate(shots[1:]):
