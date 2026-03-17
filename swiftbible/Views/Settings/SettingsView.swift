@@ -334,15 +334,19 @@ struct SettingsView: View {
                         versionTapCount += 1
                         if versionTapCount >= 5 {
                             versionTapCount = 0
+                            let idString: String
                             if let userId = userViewModel.user?.id {
-                                UIPasteboard.general.string = userId.uuidString
+                                idString = userId.uuidString
+                            } else {
+                                idString = UserDefaults.standard.string(forKey: "donationAnonymousIdentifier") ?? "no-id"
+                            }
+                            UIPasteboard.general.string = idString
+                            withAnimation {
+                                showCopiedToast = true
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 withAnimation {
-                                    showCopiedToast = true
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                    withAnimation {
-                                        showCopiedToast = false
-                                    }
+                                    showCopiedToast = false
                                 }
                             }
                         }
@@ -385,7 +389,7 @@ struct SettingsView: View {
                 if showCacheToast || showCopiedToast {
                     VStack {
                         Spacer()
-                        Text(showCopiedToast ? "User ID copied to clipboard" : "Cache cleared successfully")
+                        Text(showCopiedToast ? "ID copied to clipboard" : "Cache cleared successfully")
                             .padding(.horizontal, 16)
                             .padding(.vertical, 10)
                             .background(.ultraThinMaterial)
