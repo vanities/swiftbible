@@ -73,6 +73,7 @@
 		95CC66082E899D560065E7AD /* URLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC66072E899D560065E7AD /* URLHandler.swift */; };
 		95CC660C2E89A0A20065E7AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC660B2E89A0A20065E7AD /* AppDelegate.swift */; };
 		95CC66152E89C6AA0065E7AD /* DonationHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC66142E89C6AA0065E7AD /* DonationHistoryView.swift */; };
+		25C3CA0774A14A2D92771DD2 /* DonorPerksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3E4DFF77174F609B079B15 /* DonorPerksView.swift */; };
 		95CC66312E89AD780065E7AD /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 95CC66302E89AD780065E7AD /* ConfettiSwiftUI */; };
 		95CC666F2E89B79B0065E7AD /* SafariViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC666E2E89B79B0065E7AD /* SafariViews.swift */; };
 		95CC66722E89B8BE0065E7AD /* DonationCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC66712E89B8BE0065E7AD /* DonationCelebrationView.swift */; };
@@ -180,6 +181,7 @@
 		95CC66072E899D560065E7AD /* URLHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLHandler.swift; sourceTree = "<group>"; };
 		95CC660B2E89A0A20065E7AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		95CC66142E89C6AA0065E7AD /* DonationHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationHistoryView.swift; sourceTree = "<group>"; };
+		EC3E4DFF77174F609B079B15 /* DonorPerksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonorPerksView.swift; sourceTree = "<group>"; };
 		95CC666E2E89B79B0065E7AD /* SafariViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariViews.swift; sourceTree = "<group>"; };
 		95CC66712E89B8BE0065E7AD /* DonationCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationCelebrationView.swift; sourceTree = "<group>"; };
 		95D6F64D2E808D1200042F87 /* AppleFoundationModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleFoundationModelService.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				952F39DE2C8E36E5009A412D /* FontOptionsView.swift */,
 				952F39F22C9114A4009A412D /* ColorOptionsView.swift */,
 				95CC66142E89C6AA0065E7AD /* DonationHistoryView.swift */,
+				EC3E4DFF77174F609B079B15 /* DonorPerksView.swift */,
 				95F3A0052F040001000A1B2C /* TranslationInfoView.swift */,
 				BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */,
 				CC0000042F640001000NOTIF /* NotificationSettingsView.swift */,
@@ -608,6 +611,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				95CC66152E89C6AA0065E7AD /* DonationHistoryView.swift in Sources */,
+				25C3CA0774A14A2D92771DD2 /* DonorPerksView.swift in Sources */,
 				952F39FB2C9209FF009A412D /* NoteModalView.swift in Sources */,
 				95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */,
 				95CC66722E89B8BE0065E7AD /* DonationCelebrationView.swift in Sources */,

@@ -36,6 +36,7 @@ struct SettingsView: View {
     @State private var donationCurrency: String = "USD"
     @State private var showDonationSheet = false
     @State private var donationVariant: DonationPromptVariant = .control
+    @AppStorage("customAccentColor") private var customAccentHex: String = ""
     @State private var cacheSize: String = "0 KB"
     @State private var showClearCacheAlert = false
     @State private var showCacheToast = false
@@ -248,6 +249,20 @@ struct SettingsView: View {
                     )) {
                         Text("Show donation reminder pop up")
                     }
+
+                    if canAccessDonorPerks {
+                        NavigationLink(destination: DonorPerksView()) {
+                            HStack {
+                                Label("Donor Perks", systemImage: "sparkles")
+                                Spacer()
+                                if !customAccentHex.isEmpty {
+                                    Circle()
+                                        .fill(Color(hex: customAccentHex))
+                                        .frame(width: 14, height: 14)
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if showDebugSection {
@@ -388,6 +403,14 @@ struct SettingsView: View {
             }
             updateCacheSize()
         }
+    }
+
+    private var canAccessDonorPerks: Bool {
+        #if DEBUG
+        return true
+        #else
+        return appViewModel.totalPaidCents > 0 || userViewModel.isAdmin
+        #endif
     }
 
     private var showDebugSection: Bool {
