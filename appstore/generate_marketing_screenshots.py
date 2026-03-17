@@ -226,7 +226,7 @@ PANORAMIC_STRIP = {
     ],
     "intro_headline": "SwiftBible",
     "intro_subtitle": "Open Source Bible App",
-    "outro_headline": "Download Free",
+    "outro_headline": "Get Started",
     "outro_subtitle": "Available on the App Store",
     # Horizontal color flow: deep navy (left) → warm amber (right)
     "grad_tl": (13, 18, 45),
@@ -922,9 +922,9 @@ ULTIMATE_STRIP = {
     ],
     "intro_headline": "SwiftBible",
     "intro_subtitle": "Open Source Bible App",
-    "bridge_headline": "Open Source & Free Forever",
+    "bridge_headline": "Open Source & Ad-Free",
     "bridge_subtitle": "No ads. No tracking. Just scripture.",
-    "outro_headline": "Download Free",
+    "outro_headline": "Get Started",
     "outro_subtitle": "Available on the App Store",
     # Background: deep navy → warm amber (brand palette flow)
     "grad_tl": (13, 18, 45),
