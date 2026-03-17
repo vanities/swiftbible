@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import StoreKit
 import UIKit
 import SafariServices
 import Combine
@@ -23,7 +24,9 @@ struct ContentView: View {
     @AppStorage("customAccentColor") private var customAccentHex: String = ""
 
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.modelContext) private var modelContext
 
+    @State private var transactionListenerTask: Task<Void, Error>?
     @State private var showDonationPrompt = false
     @State private var showDonationCelebration = false
     @State private var donationFlowActive = false
@@ -70,9 +73,27 @@ struct ContentView: View {
             selectedTab = .dailyDevotional
         }
         .onReceive(NotificationCenter.default.publisher(for: .donationStatusShouldRefresh)) { notification in
+            guard DonationPreferences.useStripePayments else { return }
             safariCheckout = nil
             let sessionId = notification.userInfo?["session_id"] as? String
             Task { await refreshDonationStatusFromServer(sessionID: sessionId) }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .storeKitDonationCompleted)) { notification in
+            guard !DonationPreferences.useStripePayments else { return }
+            guard let txID = notification.userInfo?["transactionID"] as? String,
+                  let productID = notification.userInfo?["productID"] as? String,
+                  let amountCents = notification.userInfo?["amountCents"] as? Int,
+                  let purchaseDate = notification.userInfo?["purchaseDate"] as? Date else { return }
+            let record = LocalDonationRecord(
+                transactionID: txID, productID: productID,
+                amountCents: amountCents, currency: "USD",
+                purchaseDate: purchaseDate
+            )
+            modelContext.insert(record)
+            try? modelContext.save()
+            appViewModel.totalPaidCents += amountCents
+            hasCompletedDonation = true
+            if !isAppLaunching { confettiTrigger += 1 }
         }
         .onChange(of: appViewModel.donationFlowRequest) { _, request in
             guard let request else { return }
@@ -100,7 +121,15 @@ struct ContentView: View {
                 await SupabaseService.shared.refreshToken()
                 userViewModel.user = await SupabaseService.shared.getUser()
                 await userViewModel.fetchAdminStatus()
-                await refreshDonationStatusFromServer()
+
+                if DonationPreferences.useStripePayments {
+                    await refreshDonationStatusFromServer()
+                } else {
+                    await StoreKitDonationService.shared.loadProducts()
+                    transactionListenerTask = StoreKitDonationService.shared.listenForTransactions()
+                    await MainActor.run { loadLocalDonationHistory() }
+                }
+
                 evaluateDonationPrompt()
                 await refreshDevotionalReminders()
 
@@ -200,6 +229,80 @@ struct ContentView: View {
     }
 
     private func startDonationFlow(amount: Decimal, currency: String, source: String) {
+        if DonationPreferences.useStripePayments {
+            startStripeDonationFlow(amount: amount, currency: currency, source: source)
+        } else {
+            startStoreKitDonationFlow(amount: amount, source: source)
+        }
+    }
+
+    // MARK: - StoreKit IAP Donation Flow
+
+    private func startStoreKitDonationFlow(amount: Decimal, source: String) {
+        showDonationPrompt = false
+
+        AnalyticsService.shared.capture(.donationStarted, properties: [
+            "amount": "\(amount)",
+            "source": source,
+            "variant": donationVariant.rawValue,
+            "payment_method": "storekit"
+        ])
+
+        Task {
+            do {
+                let transaction = try await StoreKitDonationService.shared.purchase(amount: amount)
+                await MainActor.run {
+                    recordStoreKitDonation(transaction)
+                    confettiTrigger += 1
+                    hasCompletedDonation = true
+                    donationPromptOptOut = true
+
+                    AnalyticsService.shared.capture(.donationCompleted, properties: [
+                        "amount_cents": StoreKitDonationService.shared.amountCents(for: transaction.productID),
+                        "product_id": transaction.productID,
+                        "payment_method": "storekit"
+                    ])
+                }
+            } catch let error as StoreKitDonationError where error == .userCancelled {
+                // User cancelled — do nothing
+            } catch {
+                await MainActor.run {
+                    presentDonationError(error)
+                }
+            }
+        }
+    }
+
+    @MainActor
+    private func recordStoreKitDonation(_ transaction: StoreKit.Transaction) {
+        let amountCents = StoreKitDonationService.shared.amountCents(for: transaction.productID)
+        let record = LocalDonationRecord(
+            transactionID: String(transaction.id),
+            productID: transaction.productID,
+            amountCents: amountCents,
+            currency: transaction.currencyCode ?? "USD",
+            purchaseDate: transaction.purchaseDate
+        )
+        modelContext.insert(record)
+        try? modelContext.save()
+
+        // Update AppViewModel
+        appViewModel.totalPaidCents += amountCents
+    }
+
+    @MainActor
+    private func loadLocalDonationHistory() {
+        let descriptor = FetchDescriptor<LocalDonationRecord>(
+            sortBy: [SortDescriptor(\.purchaseDate, order: .reverse)]
+        )
+        if let records = try? modelContext.fetch(descriptor) {
+            appViewModel.totalPaidCents = records.reduce(0) { $0 + $1.amountCents }
+        }
+    }
+
+    // MARK: - Stripe Donation Flow (preserved for future use)
+
+    private func startStripeDonationFlow(amount: Decimal, currency: String, source: String) {
         guard !isCreatingDonationSession else { return }
 
         let sanitizedAmount = amount

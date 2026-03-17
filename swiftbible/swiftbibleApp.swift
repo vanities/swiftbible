@@ -15,6 +15,6 @@ struct swiftbibleApp: App {
         WindowGroup {
             SplashView()
         }
-        .modelContainer(for: [HighlightedVerse.self, Note.self, SavedDevotional.self], isUndoEnabled: true)
+        .modelContainer(for: [HighlightedVerse.self, Note.self, SavedDevotional.self, LocalDonationRecord.self], isUndoEnabled: true)
     }
 }

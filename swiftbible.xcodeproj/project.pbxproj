@@ -84,6 +84,8 @@
 		95F3A0042F032004000A1B2C /* web.json in Resources */ = {isa = PBXBuildFile; fileRef = 95F3A0032F032004000A1B2C /* web.json */; };
 		95F3A0062F040001000A1B2C /* TranslationInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F3A0052F040001000A1B2C /* TranslationInfoView.swift */; };
 		95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5D8A12E92D10000A1B2C3 /* DonationService.swift */; };
+		2C31E1F14F2C48118A2E2425 /* StoreKitDonationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B23373D685438F8E699542 /* StoreKitDonationService.swift */; };
+		87D22F5BA6144031BF880588 /* LocalDonationRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1D76DD1ECC49199554D9DB /* LocalDonationRecord.swift */; };
 		95F7B1342EA1B6F700A47D84 /* AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */; };
 		95F8A0022F1A2B3400ABCDEF /* SavedDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */; };
 		95F8A0042F1A2B3400ABCDEF /* SavedDevotionalsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */; };
@@ -191,6 +193,8 @@
 		95F3A0032F032004000A1B2C /* web.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = web.json; sourceTree = "<group>"; };
 		95F3A0052F040001000A1B2C /* TranslationInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationInfoView.swift; sourceTree = "<group>"; };
 		95F5D8A12E92D10000A1B2C3 /* DonationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationService.swift; sourceTree = "<group>"; };
+		B2B23373D685438F8E699542 /* StoreKitDonationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitDonationService.swift; sourceTree = "<group>"; };
+		3A1D76DD1ECC49199554D9DB /* LocalDonationRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDonationRecord.swift; sourceTree = "<group>"; };
 		95F7B1332EA1B6F700A47D84 /* AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
 		95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotional.swift; sourceTree = "<group>"; };
 		95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotionalsListView.swift; sourceTree = "<group>"; };
@@ -401,6 +405,7 @@
 			isa = PBXGroup;
 			children = (
 				95CC651F2E830DD70065E7AD /* DonationPreferences.swift */,
+				3A1D76DD1ECC49199554D9DB /* LocalDonationRecord.swift */,
 				0DBAFC9D9F8443A5A401AC37 /* BookmarkPreferences.swift */,
 				95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */,
 				95978F192CA888E600C520EF /* Tab.swift */,
@@ -425,6 +430,7 @@
 				95CC66052E899D460065E7AD /* SceneDelegate.swift */,
 				95D6F64D2E808D1200042F87 /* AppleFoundationModelService.swift */,
 				95F5D8A12E92D10000A1B2C3 /* DonationService.swift */,
+				B2B23373D685438F8E699542 /* StoreKitDonationService.swift */,
 				9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */,
 				954BC9E92C8500F900FFCFA6 /* BibleService.swift */,
 				952F39E22C8F4874009A412D /* ParagraphParser.swift */,
@@ -643,6 +649,8 @@
 				952F39E72C8F61E0009A412D /* Verse.swift in Sources */,
 				9537E2602C89405C00FD56B9 /* SupabaseClient.swift in Sources */,
 				95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */,
+				2C31E1F14F2C48118A2E2425 /* StoreKitDonationService.swift in Sources */,
+				87D22F5BA6144031BF880588 /* LocalDonationRecord.swift in Sources */,
 				952F39F92C920778009A412D /* Version.swift in Sources */,
 				95CC651E2E830DA70065E7AD /* DonationPromptView.swift in Sources */,
 				952F39F52C9115F8009A412D /* Color.swift in Sources */,
