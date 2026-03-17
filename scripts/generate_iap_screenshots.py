@@ -142,7 +142,7 @@ for product_id, price, display_name, description in TIERS:
 
     # Save
     tier = product_id.split(".")[-1]
-    out = f"iap_screenshot_donation_{tier}.png"
+    out = f"../appstore/iap/iap_screenshot_donation_{tier}.png"
     img.save(out, "PNG")
     print(f"  -> {out}")
 
