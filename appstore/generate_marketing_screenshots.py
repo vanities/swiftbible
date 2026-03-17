@@ -895,9 +895,10 @@ ULTIMATE_STRIP = {
          "headline": "Long Press. Discover More.",
          "subtitle": "Bookmark, highlight, take notes, share",
          "angle": 0, "scale": 0.65},
-        # 5. Right tilt — light mode, no headline. Visual contrast speaks.
+        # 5. Right tilt — light mode, headline on next frame with dark pair.
         {"filename": "05_translations",
-         "headline": "", "subtitle": "",
+         "headline": "Read Anytime",
+         "subtitle": "Beautiful in every light",
          "angle": 4, "scale": 0.62},
         # 6. Left tilt — dark mode mirror. Aesthetic-Usability (#122).
         {"filename": "05_translations_dark",
@@ -914,10 +915,9 @@ ULTIMATE_STRIP = {
          "headline": "Make It Yours",
          "subtitle": "Fonts, colors, and hidden texts to unlock",
          "angle": -5, "scale": 0.65},
-        # 9. Right tilt — bookend. Recency (#59): end strong.
+        # 9. Right tilt — visual bookend (no headline, outro CTA follows).
         {"filename": "01_bible_books_dark",
-         "headline": "Read Anytime",
-         "subtitle": "Beautiful in every light",
+         "headline": "", "subtitle": "",
          "angle": 3, "scale": 0.68},
     ],
     "intro_headline": "SwiftBible",
@@ -1044,15 +1044,8 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
             else:
                 hl_grad_bot = TINT_NEUTRAL
 
-            remaining_count = len(shots) - 1  # total devices after hero
-            is_last_two = (j >= remaining_count - 2)  # last 2 devices
-
-            if is_last_two:
-                # Shift into the LEFT frame to avoid colliding with outro
-                headline_cx = cut_x - canvas_w // 2
-            else:
-                # Shift into the RIGHT frame
-                headline_cx = cut_x + canvas_w // 2
+            # Center headline in the RIGHT frame (the frame after the cut)
+            headline_cx = cut_x + canvas_w // 2
 
             hl_h = draw_gradient_text_at(
                 canvas, shot["headline"], headline_cx, text_y,
@@ -1065,8 +1058,8 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
                     subtitle_font, SUBTITLE_COLOR_STRIP,
                 )
 
-    # 6. Outro text
-    outro_cx = int((num_frames - 0.35) * canvas_w)
+    # 6. Outro text — centered in the last frame
+    outro_cx = int((num_frames - 0.5) * canvas_w)
     outro_hl_h = draw_gradient_text_at(
         canvas, cfg["outro_headline"], outro_cx, text_y,
         intro_font, (255, 255, 255), TINT_WARM,
