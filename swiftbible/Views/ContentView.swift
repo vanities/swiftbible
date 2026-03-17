@@ -118,7 +118,7 @@ struct ContentView: View {
             }
 
             Task {
-                await SupabaseService.shared.refreshToken()
+                await SupabaseService.shared.ensureSession()
                 userViewModel.user = await SupabaseService.shared.getUser()
                 await userViewModel.fetchAdminStatus()
 
