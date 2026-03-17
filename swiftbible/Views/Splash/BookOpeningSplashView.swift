@@ -37,12 +37,12 @@ struct BookOpeningSplashView: View {
 
     // MARK: - Colors
 
-    private let deepNavy = Color(red: 0.05, green: 0.07, blue: 0.15)
-    private let warmGold = Color(red: 0.85, green: 0.68, blue: 0.32)
-    private let lightGold = Color(red: 1.0, green: 0.93, blue: 0.72)
-    private let coverDark = Color(red: 0.18, green: 0.12, blue: 0.08)
-    private let coverLight = Color(red: 0.28, green: 0.20, blue: 0.13)
-    private let ribbonRed = Color(red: 0.55, green: 0.12, blue: 0.12)
+    private let deepNavy = Color.brandDeepNavy
+    private let warmGold = Color.brandGold
+    private let lightGold = Color.brandLightGold
+    private let coverDark = Color.brandCoverDark
+    private let coverLight = Color.brandCoverLight
+    private let ribbonRed = Color.brandRibbonRed
 
     private let bookW: CGFloat = 140
     private let bookH: CGFloat = 185

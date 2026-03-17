@@ -23,6 +23,35 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# --- Brand Palette (matches swiftbible/Extensions/Color.swift) ---
+# Icon gradient (peridot)
+PERIDOT = (191, 217, 0)       # brandPeridot  0.75, 0.85, 0.0
+GREEN = (51, 204, 102)        # brandGreen    0.2, 0.8, 0.4
+CYAN = (0, 191, 217)          # brandCyan     0.0, 0.75, 0.85
+ACCENT = (0, 180, 160)        # brandAccent   0.0, 0.71, 0.63
+# Backgrounds
+DEEP_NAVY = (13, 18, 38)      # brandDeepNavy 0.05, 0.07, 0.15
+# Warm tones
+GOLD = (217, 173, 82)         # brandGold     0.85, 0.68, 0.32
+LIGHT_GOLD = (255, 237, 184)  # brandLightGold
+AMBER = (212, 161, 79)        # brandAmber    0.83, 0.63, 0.31
+# Book cover
+COVER_DARK = (46, 31, 20)     # brandCoverDark
+RIBBON_RED = (140, 31, 31)    # brandRibbonRed
+# Semantic
+JESUS_RED = (204, 51, 51)     # jesusWordsRed
+
+# Headline gradient tints (white → brand-tinted)
+TINT_TEAL = (180, 240, 230)       # derived from ACCENT
+TINT_TEAL_HERO = (180, 240, 220)  # warmer teal for hero headlines
+TINT_BLUE = (180, 230, 255)       # derived from CYAN
+TINT_RED = (255, 200, 200)        # derived from RIBBON_RED
+TINT_GOLD = (255, 230, 160)       # derived from GOLD
+TINT_WARM = (255, 220, 170)       # derived from AMBER
+TINT_NEUTRAL = (220, 220, 240)    # neutral light
+SUBTITLE_COLOR = (180, 180, 200, 230)
+SUBTITLE_COLOR_STRIP = (180, 180, 200, 200)
+
 # --- Device Specs ---
 
 DEVICES = {
@@ -49,74 +78,74 @@ DEVICES = {
 SCREENSHOTS = [
     {
         "filename": "01_bible_books",
-        "headline": "Read the Word of God",
-        "subtitle": "Multiple translations at your fingertips",
+        "headline": "The Word at Your Fingertips",        # Gain Framing (#53)
+        "subtitle": "Three translations, one beautiful app",
         "style": "straight",
-        "grad_top": (25, 12, 55),
-        "grad_bot": (55, 20, 85),
-        "orbs": [(0.2, 0.3, 0.5, (120, 50, 200), 50), (0.8, 0.7, 0.4, (80, 30, 160), 35)],
-        "headline_grad": ((255, 255, 255), (220, 200, 255)),
+        "grad_top": (13, 18, 45),       # deep navy tint
+        "grad_bot": (20, 30, 65),
+        "orbs": [(0.2, 0.3, 0.5, ACCENT, 50), (0.8, 0.7, 0.4, CYAN, 35)],
+        "headline_grad": ((255, 255, 255), TINT_TEAL),
     },
     {
         "filename": "02_chapters",
-        "headline": "Navigate with Ease",
-        "subtitle": "Chapter summaries guide your study",
+        "headline": "Every Chapter, Summarized",           # Competence Signalling (#95)
+        "subtitle": "Know what you're reading before you start",
         "style": "tilt_right",
-        "grad_top": (10, 20, 50),
-        "grad_bot": (20, 40, 80),
-        "orbs": [(0.7, 0.25, 0.45, (40, 80, 200), 45), (0.15, 0.6, 0.35, (30, 60, 170), 30)],
-        "headline_grad": ((255, 255, 255), (180, 210, 255)),
+        "grad_top": (8, 22, 48),        # deep blue (navy family)
+        "grad_bot": (14, 38, 72),
+        "orbs": [(0.7, 0.25, 0.45, CYAN, 45), (0.15, 0.6, 0.35, GREEN, 30)],
+        "headline_grad": ((255, 255, 255), TINT_BLUE),
     },
     {
         "filename": "03_verses",
-        "headline": "Every Verse, Beautifully",
-        "subtitle": "With Jesus's words in red",
+        "headline": "Jesus's Words in Red",                # Von Restorff (#1)
+        "subtitle": "The tradition, beautifully preserved",
         "style": "tilt_left",
-        "grad_top": (50, 10, 18),
-        "grad_bot": (80, 22, 35),
-        "orbs": [(0.3, 0.35, 0.5, (180, 40, 60), 45), (0.85, 0.65, 0.3, (140, 25, 45), 30)],
-        "headline_grad": ((255, 255, 255), (255, 200, 200)),
+        "grad_top": (45, 12, 18),       # deep warm red (ribbon red family)
+        "grad_bot": (72, 20, 30),
+        "orbs": [(0.3, 0.35, 0.5, RIBBON_RED, 45), (0.85, 0.65, 0.3, JESUS_RED, 30)],
+        "headline_grad": ((255, 255, 255), TINT_RED),
     },
     {
         "filename": "04_verse_options",
-        "headline": "Study Tools Built In",
-        "subtitle": "Long press any verse",
+        "headline": "Long Press. Discover More.",          # Curiosity Gap (#103)
+        "subtitle": "Bookmark, highlight, take notes, share",
         "style": "straight",
-        "grad_top": (10, 35, 38),
-        "grad_bot": (18, 60, 62),
-        "orbs": [(0.5, 0.3, 0.5, (30, 160, 150), 45), (0.1, 0.7, 0.35, (20, 120, 115), 30)],
-        "headline_grad": ((255, 255, 255), (180, 255, 245)),
+        "grad_top": (8, 32, 35),        # deep teal (accent family)
+        "grad_bot": (14, 55, 58),
+        "orbs": [(0.5, 0.3, 0.5, ACCENT, 45), (0.1, 0.7, 0.35, GREEN, 30)],
+        "headline_grad": ((255, 255, 255), TINT_TEAL),
         "badges": ["Copy", "Bookmark", "Highlight", "Explain", "Share"],
     },
     {
         "filename": "05_translations",
-        "headline": "Light & Dark Mode",
-        "subtitle": "4 translations with your preferred style",
-        "style": "split",  # light/dark split
-        "grad_top": (40, 32, 10),
-        "grad_bot": (65, 50, 18),
-        "orbs": [(0.5, 0.3, 0.55, (180, 140, 40), 45), (0.15, 0.7, 0.3, (140, 110, 20), 25)],
-        "headline_grad": ((255, 255, 255), (255, 230, 160)),
+        "headline": "Beautiful in Any Light",              # Aesthetic-Usability (#122)
+        "subtitle": "Four translations with your preferred style",
+        "style": "split",
+        "grad_top": (38, 30, 10),       # warm amber/gold (brand warm family)
+        "grad_bot": (60, 48, 16),
+        "orbs": [(0.5, 0.3, 0.55, GOLD, 45), (0.15, 0.7, 0.3, AMBER, 25)],
+        "headline_grad": ((255, 255, 255), TINT_GOLD),
     },
     {
         "filename": "06_devotional",
-        "headline": "Daily Devotionals",
-        "subtitle": "Start each day with scripture",
+        "headline": "Start Each Day in Scripture",         # Tiny Habits (#114)
+        "subtitle": "A new devotional, every morning",
         "style": "tilt_right",
-        "grad_top": (48, 28, 10),
-        "grad_bot": (72, 42, 14),
-        "orbs": [(0.6, 0.3, 0.45, (200, 130, 40), 45), (0.2, 0.65, 0.35, (160, 100, 30), 30)],
-        "headline_grad": ((255, 255, 255), (255, 220, 170)),
+        "grad_top": (42, 26, 10),       # warm brown (cover dark family)
+        "grad_bot": (65, 40, 14),
+        "orbs": [(0.6, 0.3, 0.45, GOLD, 45), (0.2, 0.65, 0.35, AMBER, 30)],
+        "headline_grad": ((255, 255, 255), TINT_WARM),
     },
     {
         "filename": "07_settings",
-        "headline": "Customize Everything",
-        "subtitle": "Fonts, colors, and hidden texts to explore",
+        "headline": "Make It Yours",                       # Autonomy Bias (#108)
+        "subtitle": "Fonts, colors, and hidden texts to unlock",
         "style": "straight",
-        "grad_top": (22, 22, 28),
-        "grad_bot": (42, 42, 52),
-        "orbs": [(0.3, 0.35, 0.4, (80, 80, 120), 35), (0.75, 0.6, 0.3, (60, 60, 100), 25)],
-        "headline_grad": ((255, 255, 255), (200, 200, 220)),
+        "grad_top": (16, 18, 30),       # dark navy (deep navy family)
+        "grad_bot": (28, 32, 48),
+        "orbs": [(0.3, 0.35, 0.4, ACCENT, 35), (0.75, 0.6, 0.3, CYAN, 25)],
+        "headline_grad": ((255, 255, 255), TINT_TEAL),
     },
 ]
 
@@ -126,48 +155,48 @@ PANORAMIC_PAIRS = [
     {
         "left_filename": "02_chapters",
         "right_filename": "03_verses",
-        "left_headline": "Navigate with Ease",
-        "left_subtitle": "Chapter summaries guide your study",
-        "right_headline": "Every Verse, Beautifully",
-        "right_subtitle": "With Jesus's words in red",
+        "left_headline": "Every Chapter, Summarized",      # Competence Signalling (#95)
+        "left_subtitle": "Know what you're reading before you start",
+        "right_headline": "Jesus's Words in Red",           # Von Restorff (#1)
+        "right_subtitle": "The tradition, beautifully preserved",
         "left_angle": 5,
         "right_angle": -5,
-        "grad_tl": (10, 20, 55),
-        "grad_tr": (55, 10, 22),
-        "grad_bl": (20, 35, 80),
-        "grad_br": (80, 22, 38),
+        "grad_tl": (8, 22, 48),
+        "grad_tr": (45, 12, 18),
+        "grad_bl": (14, 38, 72),
+        "grad_br": (72, 20, 30),
         "orbs": [
-            (0.15, 0.3, 0.22, (40, 80, 200), 50),
-            (0.5, 0.45, 0.28, (120, 40, 160), 55),
-            (0.85, 0.35, 0.22, (180, 40, 60), 50),
-            (0.35, 0.7, 0.18, (60, 60, 180), 30),
-            (0.65, 0.65, 0.18, (160, 30, 80), 30),
+            (0.15, 0.3, 0.22, CYAN, 50),
+            (0.5, 0.45, 0.28, ACCENT, 55),
+            (0.85, 0.35, 0.22, RIBBON_RED, 50),
+            (0.35, 0.7, 0.18, GREEN, 30),
+            (0.65, 0.65, 0.18, JESUS_RED, 30),
         ],
-        "left_headline_grad": ((255, 255, 255), (180, 210, 255)),
-        "right_headline_grad": ((255, 255, 255), (255, 200, 200)),
+        "left_headline_grad": ((255, 255, 255), TINT_BLUE),
+        "right_headline_grad": ((255, 255, 255), TINT_RED),
     },
     {
         "left_filename": "06_devotional",
         "right_filename": "07_settings",
-        "left_headline": "Daily Devotionals",
-        "left_subtitle": "Start each day with scripture",
-        "right_headline": "Customize Everything",
-        "right_subtitle": "Fonts, colors, and hidden texts",
+        "left_headline": "Start Each Day in Scripture",    # Tiny Habits (#114)
+        "left_subtitle": "A new devotional, every morning",
+        "right_headline": "Make It Yours",                  # Autonomy Bias (#108)
+        "right_subtitle": "Fonts, colors, and hidden texts to unlock",
         "left_angle": 5,
         "right_angle": -5,
-        "grad_tl": (48, 28, 10),
-        "grad_tr": (22, 22, 32),
-        "grad_bl": (72, 42, 14),
-        "grad_br": (42, 42, 55),
+        "grad_tl": (42, 26, 10),
+        "grad_tr": (16, 18, 30),
+        "grad_bl": (65, 40, 14),
+        "grad_br": (28, 32, 48),
         "orbs": [
-            (0.2, 0.3, 0.22, (200, 130, 40), 50),
-            (0.5, 0.4, 0.25, (130, 90, 50), 45),
-            (0.8, 0.35, 0.22, (80, 80, 120), 40),
-            (0.35, 0.65, 0.16, (160, 100, 30), 28),
-            (0.7, 0.7, 0.16, (60, 60, 100), 25),
+            (0.2, 0.3, 0.22, GOLD, 50),
+            (0.5, 0.4, 0.25, AMBER, 45),
+            (0.8, 0.35, 0.22, ACCENT, 40),
+            (0.35, 0.65, 0.16, AMBER, 28),
+            (0.7, 0.7, 0.16, CYAN, 25),
         ],
-        "left_headline_grad": ((255, 255, 255), (255, 220, 170)),
-        "right_headline_grad": ((255, 255, 255), (200, 200, 220)),
+        "left_headline_grad": ((255, 255, 255), TINT_WARM),
+        "right_headline_grad": ((255, 255, 255), TINT_TEAL),
     },
 ]
 
@@ -177,22 +206,22 @@ PANORAMIC_PAIRS = [
 
 PANORAMIC_STRIP = {
     "screenshots": [
-        {"filename": "01_bible_books", "headline": "The Word of God",
-         "subtitle": "Multiple translations at your fingertips"},
-        {"filename": "02_chapters", "headline": "Navigate with Ease",
-         "subtitle": "Chapter summaries guide your study"},
-        {"filename": "03_verses", "headline": "Every Verse, Beautifully",
-         "subtitle": "With Jesus's words in red"},
-        {"filename": "04_verse_options", "headline": "Study Tools Built In",
-         "subtitle": "Long press any verse"},
-        {"filename": "05_translations", "headline": "Light & Dark Mode",
+        {"filename": "01_bible_books", "headline": "The Word at Your Fingertips",
+         "subtitle": "Three translations, one beautiful app"},
+        {"filename": "02_chapters", "headline": "Every Chapter, Summarized",
+         "subtitle": "Know what you're reading before you start"},
+        {"filename": "03_verses", "headline": "Jesus's Words in Red",
+         "subtitle": "The tradition, beautifully preserved"},
+        {"filename": "04_verse_options", "headline": "Long Press. Discover More.",
+         "subtitle": "Bookmark, highlight, take notes, share"},
+        {"filename": "05_translations", "headline": "Beautiful in Any Light",
          "subtitle": "Read comfortably, any time"},
         # Dark mode device — no headline; visual contrast speaks for itself
         {"filename": "05_translations_dark", "headline": "", "subtitle": ""},
-        {"filename": "06_devotional", "headline": "Daily Devotionals",
-         "subtitle": "Start each day with scripture"},
-        {"filename": "07_settings", "headline": "Customize Everything",
-         "subtitle": "Fonts, colors, and hidden texts"},
+        {"filename": "06_devotional", "headline": "Start Each Day in Scripture",
+         "subtitle": "A new devotional, every morning"},
+        {"filename": "07_settings", "headline": "Make It Yours",
+         "subtitle": "Fonts, colors, and hidden texts to unlock"},
         {"filename": "01_bible_books_dark", "headline": "Read Anytime",
          "subtitle": "Beautiful in every light"},
     ],
@@ -200,22 +229,22 @@ PANORAMIC_STRIP = {
     "intro_subtitle": "Open Source Bible App",
     "outro_headline": "Download Free",
     "outro_subtitle": "Available on the App Store",
-    # Horizontal color flow: purple (left) → amber (right)
-    "grad_tl": (25, 12, 55),
-    "grad_tr": (48, 28, 10),
-    "grad_bl": (45, 18, 75),
-    "grad_br": (65, 38, 12),
+    # Horizontal color flow: deep navy (left) → warm amber (right)
+    "grad_tl": (13, 18, 45),
+    "grad_tr": (42, 26, 10),
+    "grad_bl": (20, 30, 65),
+    "grad_br": (60, 38, 12),
     "orbs": [
-        (0.05, 0.30, 0.06, (120, 50, 200), 55),
-        (0.15, 0.55, 0.05, (40, 80, 200), 40),
-        (0.25, 0.35, 0.06, (180, 40, 60), 45),
-        (0.35, 0.50, 0.07, (120, 40, 160), 50),
-        (0.45, 0.40, 0.06, (30, 160, 150), 45),
-        (0.55, 0.55, 0.06, (80, 60, 180), 42),
-        (0.65, 0.35, 0.06, (200, 130, 40), 40),
-        (0.75, 0.50, 0.07, (160, 40, 100), 45),
-        (0.85, 0.40, 0.06, (200, 160, 50), 38),
-        (0.95, 0.35, 0.06, (80, 80, 120), 35),
+        (0.05, 0.30, 0.06, CYAN, 55),
+        (0.15, 0.55, 0.05, GREEN, 40),
+        (0.25, 0.35, 0.06, RIBBON_RED, 45),
+        (0.35, 0.50, 0.07, ACCENT, 50),
+        (0.45, 0.40, 0.06, ACCENT, 45),
+        (0.55, 0.55, 0.06, GREEN, 42),
+        (0.65, 0.35, 0.06, GOLD, 40),
+        (0.75, 0.50, 0.07, AMBER, 45),
+        (0.85, 0.40, 0.06, GOLD, 38),
+        (0.95, 0.35, 0.06, ACCENT, 35),
     ],
 }
 
@@ -570,7 +599,7 @@ def generate_screenshot(device_name, device_config, raw_dir, shot_config, output
     # Subtitle
     subtitle_y = text_top + headline_h + text_gap
     subtitle_h = draw_text_centered(
-        canvas, shot_config["subtitle"], subtitle_y, subtitle_font, (180, 180, 200, 230), canvas_w
+        canvas, shot_config["subtitle"], subtitle_y, subtitle_font, SUBTITLE_COLOR, canvas_w
     )
 
     text_bottom = subtitle_y + subtitle_h
@@ -676,7 +705,7 @@ def generate_panoramic_pair(device_name, device_config, raw_dir, pair_config, ou
     left_sub_y = text_top + left_hl_h + text_gap
     left_sub_h = draw_text_at(
         canvas, pair_config["left_subtitle"],
-        left_center, left_sub_y, subtitle_font, (180, 180, 200, 230),
+        left_center, left_sub_y, subtitle_font, SUBTITLE_COLOR,
     )
     left_text_bottom = left_sub_y + left_sub_h
 
@@ -690,7 +719,7 @@ def generate_panoramic_pair(device_name, device_config, raw_dir, pair_config, ou
     right_sub_y = text_top + right_hl_h + text_gap
     right_sub_h = draw_text_at(
         canvas, pair_config["right_subtitle"],
-        right_center, right_sub_y, subtitle_font, (180, 180, 200, 230),
+        right_center, right_sub_y, subtitle_font, SUBTITLE_COLOR,
     )
     right_text_bottom = right_sub_y + right_sub_h
 
@@ -774,12 +803,12 @@ def generate_panoramic_strip(device_name, device_config, raw_dir, out_dir):
     intro_cx = int(canvas_w * 0.35)
     intro_hl_h = draw_gradient_text_at(
         canvas, cfg["intro_headline"], intro_cx, text_y,
-        intro_font, (255, 255, 255), (220, 200, 255),
+        intro_font, (255, 255, 255), TINT_TEAL,
     )
     draw_text_at(
         canvas, cfg["intro_subtitle"], intro_cx,
         text_y + intro_hl_h + text_gap,
-        subtitle_font, (180, 180, 200, 230),
+        subtitle_font, SUBTITLE_COLOR,
     )
 
     # 5. Place devices on cut lines with headlines above
@@ -804,25 +833,25 @@ def generate_panoramic_strip(device_name, device_config, raw_dir, out_dir):
         if shot["headline"]:
             hl_h = draw_gradient_text_at(
                 canvas, shot["headline"], cut_x, text_y,
-                headline_font, (255, 255, 255), (220, 220, 240),
+                headline_font, (255, 255, 255), TINT_NEUTRAL,
             )
             if shot["subtitle"]:
                 draw_text_at(
                     canvas, shot["subtitle"], cut_x,
                     text_y + hl_h + text_gap,
-                    subtitle_font, (180, 180, 200, 200),
+                    subtitle_font, SUBTITLE_COLOR_STRIP,
                 )
 
     # 6. Outro text — shifted RIGHT within last frame to avoid last device bleed
     outro_cx = int((num_frames - 0.35) * canvas_w)
     outro_hl_h = draw_gradient_text_at(
         canvas, cfg["outro_headline"], outro_cx, text_y,
-        intro_font, (255, 255, 255), (255, 230, 180),
+        intro_font, (255, 255, 255), TINT_WARM,
     )
     draw_text_at(
         canvas, cfg["outro_subtitle"], outro_cx,
         text_y + outro_hl_h + text_gap,
-        subtitle_font, (180, 180, 200, 230),
+        subtitle_font, SUBTITLE_COLOR,
     )
 
     # 7. Slice into individual frames
@@ -831,6 +860,217 @@ def generate_panoramic_strip(device_name, device_config, raw_dir, out_dir):
         frame = canvas.crop((i * canvas_w, 0, (i + 1) * canvas_w, canvas_h))
         frame = frame.convert("RGB")
         out_path = os.path.join(out_dir, f"strip_{i + 1:02d}.png")
+        frame.save(out_path, "PNG", optimize=True)
+        print(f"  -> {out_path}")
+
+
+# --- Ultimate Strip ---
+# Per-device angle/scale for dynamic visual rhythm.
+# Heroes (scale 0.75, angle 0) anchor the eye; tilts vary to break monotony.
+# Headlines rewritten with Gatena Cookbook principles:
+#   - Gain Framing (#53): benefits over features
+#   - Curiosity Gap (#103): invite exploration
+#   - Tiny Habits (#114): anchor routine
+#   - Autonomy Bias (#108): ownership language
+#   - Primacy (#58) & Peak-End (#117): heroes at start and climax
+
+ULTIMATE_STRIP = {
+    "screenshots": [
+        # 1. HERO — straight, large. Primacy Effect (#58): strongest first.
+        {"filename": "01_bible_books",
+         "headline": "The Word at Your Fingertips",
+         "subtitle": "Three translations, one beautiful app",
+         "angle": 0, "scale": 0.75},
+        # 2. Tilt right, standard. Competence Signalling (#95): specific benefit.
+        {"filename": "02_chapters",
+         "headline": "Every Chapter, Summarized",
+         "subtitle": "Know what you're reading before you start",
+         "angle": 5, "scale": 0.65},
+        # 3. Tilt left. Von Restorff (#1): the distinctive red-letter feature.
+        {"filename": "03_verses",
+         "headline": "Jesus's Words in Red",
+         "subtitle": "The tradition, beautifully preserved",
+         "angle": -3, "scale": 0.68},
+        # 4. Straight — anchors "tools" message. Curiosity Gap (#103).
+        {"filename": "04_verse_options",
+         "headline": "Long Press. Discover More.",
+         "subtitle": "Bookmark, highlight, take notes, share",
+         "angle": 0, "scale": 0.65},
+        # 5. Right tilt — light mode, no headline. Visual contrast speaks.
+        {"filename": "05_translations",
+         "headline": "", "subtitle": "",
+         "angle": 4, "scale": 0.62},
+        # 6. Left tilt — dark mode mirror. Aesthetic-Usability (#122).
+        {"filename": "05_translations_dark",
+         "headline": "Beautiful in Any Light",
+         "subtitle": "Read comfortably, day or night",
+         "angle": -4, "scale": 0.62},
+        # 7. HERO — straight, large. Peak moment (#117): the devotional climax.
+        {"filename": "06_devotional",
+         "headline": "Start Each Day in Scripture",
+         "subtitle": "A new devotional, every morning",
+         "angle": 0, "scale": 0.75},
+        # 8. Left tilt — pattern break. Autonomy Bias (#108).
+        {"filename": "07_settings",
+         "headline": "Make It Yours",
+         "subtitle": "Fonts, colors, and hidden texts to unlock",
+         "angle": -5, "scale": 0.65},
+        # 9. Right tilt — bookend. Recency (#59): end strong.
+        {"filename": "01_bible_books_dark",
+         "headline": "Read Anytime",
+         "subtitle": "Beautiful in every light",
+         "angle": 3, "scale": 0.68},
+    ],
+    "intro_headline": "SwiftBible",
+    "intro_subtitle": "Open Source Bible App",
+    "outro_headline": "Download Free",
+    "outro_subtitle": "Available on the App Store",
+    # Background: deep navy → warm amber (brand palette flow)
+    "grad_tl": (13, 18, 45),
+    "grad_tr": (42, 26, 10),
+    "grad_bl": (20, 30, 65),
+    "grad_br": (60, 38, 12),
+    "orbs": [
+        (0.05, 0.30, 0.06, CYAN, 55),
+        (0.15, 0.55, 0.05, GREEN, 40),
+        (0.25, 0.35, 0.06, RIBBON_RED, 45),
+        (0.35, 0.50, 0.07, ACCENT, 50),
+        (0.45, 0.40, 0.06, ACCENT, 45),
+        (0.55, 0.55, 0.06, GREEN, 42),
+        (0.65, 0.35, 0.06, GOLD, 40),
+        (0.75, 0.50, 0.07, AMBER, 45),
+        (0.85, 0.40, 0.06, GOLD, 38),
+        (0.95, 0.35, 0.06, ACCENT, 35),
+    ],
+}
+
+
+def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
+    """Generate the ultimate panoramic strip with per-device angles, scales, and hero moments.
+
+    Unlike the standard strip (alternating 3/-3), this uses intentionally varied
+    angles and two hero devices at larger scale for visual rhythm.
+    """
+    canvas_w, canvas_h = device_config["canvas"]
+    corner_r = device_config["corner_radius"]
+    is_ipad = "ipad" in device_name
+    cfg = ULTIMATE_STRIP
+
+    # Filter to screenshots that exist for this device
+    shots = []
+    for s in cfg["screenshots"]:
+        if os.path.exists(os.path.join(raw_dir, f"{s['filename']}.png")):
+            shots.append(s)
+
+    if len(shots) < 2:
+        print(f"  SKIP ultimate strip (need at least 2 screenshots)")
+        return
+
+    num_devices = len(shots)
+    num_frames = num_devices + 1
+    total_w = num_frames * canvas_w
+
+    # 1. Background
+    canvas = create_bilinear_gradient(
+        total_w, canvas_h,
+        cfg["grad_tl"], cfg["grad_tr"],
+        cfg["grad_bl"], cfg["grad_br"],
+    )
+    canvas = canvas.convert("RGBA")
+
+    # 2. Ambient orbs
+    canvas = add_ambient_orbs(canvas, cfg["orbs"], total_w, canvas_h)
+
+    # 3. Fonts
+    headline_size = 100 if is_ipad else 88
+    subtitle_size = 50 if is_ipad else 42
+    intro_size = 130 if is_ipad else 110
+    headline_font = load_font(headline_size, bold=True)
+    subtitle_font = load_font(subtitle_size, bold=False)
+    intro_font = load_font(intro_size, bold=True)
+
+    text_y = int(canvas_h * 0.07)
+    text_gap = int(canvas_h * 0.014)
+
+    # 4. Frame 0 — standalone hero (not panoramic)
+    #    Intro text + first device centered in frame, no cut-line bleed
+    hero_cx = canvas_w // 2
+    intro_hl_h = draw_gradient_text_at(
+        canvas, cfg["intro_headline"], hero_cx, text_y,
+        intro_font, (255, 255, 255), TINT_TEAL,
+    )
+    intro_sub_y = text_y + intro_hl_h + text_gap
+    draw_text_at(
+        canvas, cfg["intro_subtitle"], hero_cx,
+        intro_sub_y, subtitle_font, SUBTITLE_COLOR,
+    )
+
+    # Place hero device centered in frame 0
+    hero_shot = shots[0]
+    hero_raw = Image.open(os.path.join(raw_dir, f"{hero_shot['filename']}.png")).convert("RGBA")
+    hero_scale = hero_shot.get("scale", 0.75)
+    hero_device_y = int(canvas_h * 0.20)
+    place_device_at(
+        canvas, hero_raw, hero_cx, hero_device_y,
+        hero_scale, corner_r, canvas_w, hero_shot.get("angle", 0),
+    )
+
+    # 5. Remaining devices — on cut lines (panoramic)
+    for j, shot in enumerate(shots[1:]):
+        cut_x = (j + 2) * canvas_w  # skip frame 0, start cuts at frame 1/2 boundary
+
+        raw = Image.open(os.path.join(raw_dir, f"{shot['filename']}.png")).convert("RGBA")
+
+        angle = shot.get("angle", 0)
+        scale = shot.get("scale", 0.68)
+
+        # Heroes sit slightly higher for prominence
+        if scale >= 0.75:
+            device_y = int(canvas_h * 0.22)
+        else:
+            device_y = int(canvas_h * 0.25)
+
+        place_device_at(
+            canvas, raw, cut_x, device_y,
+            scale, corner_r, canvas_w, angle,
+        )
+
+        # Headline + subtitle
+        if shot["headline"]:
+            if scale >= 0.75:
+                hl_grad_bot = TINT_TEAL_HERO
+            else:
+                hl_grad_bot = TINT_NEUTRAL
+
+            hl_h = draw_gradient_text_at(
+                canvas, shot["headline"], cut_x, text_y,
+                headline_font, (255, 255, 255), hl_grad_bot,
+            )
+            if shot["subtitle"]:
+                draw_text_at(
+                    canvas, shot["subtitle"], cut_x,
+                    text_y + hl_h + text_gap,
+                    subtitle_font, SUBTITLE_COLOR_STRIP,
+                )
+
+    # 6. Outro text
+    outro_cx = int((num_frames - 0.35) * canvas_w)
+    outro_hl_h = draw_gradient_text_at(
+        canvas, cfg["outro_headline"], outro_cx, text_y,
+        intro_font, (255, 255, 255), TINT_WARM,
+    )
+    draw_text_at(
+        canvas, cfg["outro_subtitle"], outro_cx,
+        text_y + outro_hl_h + text_gap,
+        subtitle_font, SUBTITLE_COLOR,
+    )
+
+    # 7. Slice into individual frames
+    os.makedirs(out_dir, exist_ok=True)
+    for i in range(num_frames):
+        frame = canvas.crop((i * canvas_w, 0, (i + 1) * canvas_w, canvas_h))
+        frame = frame.convert("RGB")
+        out_path = os.path.join(out_dir, f"ultimate_{i + 1:02d}.png")
         frame.save(out_path, "PNG", optimize=True)
         print(f"  -> {out_path}")
 
@@ -876,9 +1116,19 @@ def main():
 
         generate_panoramic_strip(device_name, device_config, raw_dir, strip_dir)
 
+    # --- Ultimate Strip (mixed angles, heroes, Gatena-optimized copy) ---
+    for device_name, device_config in DEVICES.items():
+        raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
+        ultimate_dir = os.path.join(SCRIPT_DIR, "marketing", "ultimate", device_name)
+
+        print(f"\n=== {device_name} (ultimate) ===")
+
+        generate_ultimate_strip(device_name, device_config, raw_dir, ultimate_dir)
+
     print("\nDone! Marketing screenshots saved to marketing/")
     print("Panoramic pairs saved to marketing/panoramic/")
     print("Panoramic strip saved to marketing/strip/")
+    print("Ultimate strip saved to marketing/ultimate/")
 
 
 if __name__ == "__main__":

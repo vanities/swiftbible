@@ -20,11 +20,7 @@ struct GlowScaleSplashView: View {
     @State private var finalOpacity: Double = 1.0
     @State private var backgroundOpacity: Double = 1.0
 
-    private let gradientColors: [Color] = [
-        Color(red: 0.75, green: 0.85, blue: 0.0),
-        Color(red: 0.2, green: 0.8, blue: 0.4),
-        Color(red: 0.0, green: 0.75, blue: 0.85)
-    ]
+    private let gradientColors: [Color] = Color.brandGradientColors
 
     var body: some View {
         ZStack {

@@ -46,7 +46,7 @@ struct SettingsView: View {
 
         NavigationStack {
             List {
-                Section(header: Text("Appearance")) {
+                Section(header: Text("Reading")) {
                     NavigationLink(destination: FontOptionsView()) {
                         Label("Font Options", systemImage: "textformat.size")
                     }
@@ -58,29 +58,14 @@ struct SettingsView: View {
                             AnalyticsService.shared.capture(.jesusWordsToggled, properties: ["enabled": newValue])
                         }
                     Toggle("Hide Navigation and Tab Bar while reading", isOn: $hideNavAndTab)
-                    // Swipe to change chapters has been removed in favor of pull up/down
                 }
 
-                Section(header: Text("Notifications")) {
-                    NavigationLink {
-                        NotificationSettingsView()
-                    } label: {
-                        HStack {
-                            Label("Devotional Reminder", systemImage: "bell.fill")
-                            Spacer()
-                            Text(reminderSummary)
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-
-                Section(header: Text("App")) {
+                Section(header: Text("Your Content")) {
                     NavigationLink(destination: SeeSavedNotesView(selectedTab: $selectedTab)) {
-                        Label("See Saved Notes", systemImage: "note.text")
+                        Label("Saved Notes", systemImage: "note.text")
                     }
                     NavigationLink(destination: SeeHighlightsView(selectedTab: $selectedTab)) {
-                        Label("See Highlights", systemImage: "highlighter")
+                        Label("Highlights", systemImage: "highlighter")
                     }
                     NavigationLink(destination: SavedDevotionalsListView()) {
                         Label("Saved Devotionals", systemImage: "heart.circle")
@@ -107,13 +92,23 @@ struct SettingsView: View {
                         }
                     }
                     .disabled(!hasBookmark)
-                    Toggle("Group Books by Theme", isOn: $showThematicGrouping)
-                        .onChange(of: showThematicGrouping) { _, newValue in
-                            AnalyticsService.shared.capture(.thematicGroupingToggled, properties: ["enabled": newValue])
-                        }
                 }
 
-                Section(header: Text("Translations & Texts")) {
+                Section(header: Text("Notifications")) {
+                    NavigationLink {
+                        NotificationSettingsView()
+                    } label: {
+                        HStack {
+                            Label("Devotional Reminder", systemImage: "bell.fill")
+                            Spacer()
+                            Text(reminderSummary)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+
+                Section(header: Text("Bible Translation")) {
                     Picker("Bible Version", selection: $appViewModel.selectedVersion) {
                         ForEach(Version.allCases, id: \.rawValue) { version in
                             Text(version.displayName).tag(version)
@@ -124,13 +119,36 @@ struct SettingsView: View {
                             "version": newVersion.rawValue
                         ])
                     }
-                    Toggle("Deuterocanonical Apocrypha", isOn: $showApocrypha)
+                    Toggle("Group Books by Theme", isOn: $showThematicGrouping)
+                        .onChange(of: showThematicGrouping) { _, newValue in
+                            AnalyticsService.shared.capture(.thematicGroupingToggled, properties: ["enabled": newValue])
+                        }
+                    NavigationLink(destination: TranslationInfoView()) {
+                        Label("About Translations", systemImage: "info.circle")
+                    }
+                }
+
+                Section(
+                    header: Text("Deuterocanonical"),
+                    footer: Text("Books included in some Christian canons but not in the Hebrew Bible.")
+                ) {
+                    Toggle("Apocrypha", isOn: $showApocrypha)
                         .onChange(of: showApocrypha) { _, newValue in
                             AnalyticsService.shared.capture(.apocryphaToggled, properties: ["enabled": newValue])
                         }
-                    Toggle("Jewish Pseudepigrapha (Book of Enoch)", isOn: $showJewishPseudepigraphaEnoch)
+                }
+
+                Section(
+                    header: Text("Jewish Pseudepigrapha"),
+                    footer: Text("Ancient Jewish texts attributed to biblical figures, preserved outside the biblical canon.")
+                ) {
+                    Toggle("Book of Enoch", isOn: $showJewishPseudepigraphaEnoch)
                         .onChange(of: showJewishPseudepigraphaEnoch) { _, newValue in
                             AnalyticsService.shared.capture(.enochToggled, properties: ["enabled": newValue])
+                        }
+                    Toggle("2 Enoch (Secrets of Enoch)", isOn: $showSecondEnoch)
+                        .onChange(of: showSecondEnoch) { _, newValue in
+                            AnalyticsService.shared.capture(.secondEnochToggled, properties: ["enabled": newValue])
                         }
                     Toggle("Book of Jubilees", isOn: $showJubilees)
                         .onChange(of: showJubilees) { _, newValue in
@@ -140,21 +158,20 @@ struct SettingsView: View {
                         .onChange(of: showTestaments) { _, newValue in
                             AnalyticsService.shared.capture(.testamentsToggled, properties: ["enabled": newValue])
                         }
-                    Toggle("2 Enoch (Secrets of Enoch)", isOn: $showSecondEnoch)
-                        .onChange(of: showSecondEnoch) { _, newValue in
-                            AnalyticsService.shared.capture(.secondEnochToggled, properties: ["enabled": newValue])
-                        }
-                    Toggle("Didache (Teaching of the Twelve Apostles)", isOn: $showDidache)
+                }
+
+                Section(
+                    header: Text("Early Christian Writings"),
+                    footer: Text("Writings from the apostolic and early church period, valued for historical and theological insight.")
+                ) {
+                    Toggle("Didache", isOn: $showDidache)
                         .onChange(of: showDidache) { _, newValue in
                             AnalyticsService.shared.capture(.didacheToggled, properties: ["enabled": newValue])
                         }
-                    Toggle("1 Clement (Epistle of Clement)", isOn: $showFirstClement)
+                    Toggle("1 Clement", isOn: $showFirstClement)
                         .onChange(of: showFirstClement) { _, newValue in
                             AnalyticsService.shared.capture(.firstClementToggled, properties: ["enabled": newValue])
                         }
-                    NavigationLink(destination: TranslationInfoView()) {
-                        Label("About Translations", systemImage: "info.circle")
-                    }
                     NavigationLink(destination: TextSourcesView()) {
                         Label("Text Sources", systemImage: "book.closed")
                     }

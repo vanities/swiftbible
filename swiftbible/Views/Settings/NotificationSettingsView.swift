@@ -24,7 +24,7 @@ struct NotificationSettingsView: View {
                         Circle()
                             .fill(
                                 LinearGradient(
-                                    colors: [.orange.opacity(0.2), .yellow.opacity(0.1)],
+                                    colors: [Color.brandAmber.opacity(0.2), Color.brandGold.opacity(0.1)],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
@@ -35,7 +35,7 @@ struct NotificationSettingsView: View {
                             .font(.system(size: 34))
                             .foregroundStyle(
                                 LinearGradient(
-                                    colors: [.orange, .yellow],
+                                    colors: [.brandAmber, .brandGold],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
@@ -170,7 +170,7 @@ struct NotificationSettingsView: View {
                     // Personal note styled as a warm quote callout
                     HStack(alignment: .top, spacing: 12) {
                         RoundedRectangle(cornerRadius: 2)
-                            .fill(.orange.opacity(0.6))
+                            .fill(Color.brandAmber.opacity(0.6))
                             .frame(width: 3)
 
                         VStack(alignment: .leading, spacing: 6) {

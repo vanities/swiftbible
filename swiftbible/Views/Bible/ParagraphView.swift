@@ -60,7 +60,7 @@ struct ParagraphView: View {
                     verseText = verseText
                         + Text(text)
                             .font(Font.custom(fontName, size: CGFloat(fontSize)))
-                            .foregroundColor(showJesusWordsInRed ? .red : .primary)
+                            .foregroundColor(showJesusWordsInRed ? .jesusWordsRed : .primary)
                 }
             }
 

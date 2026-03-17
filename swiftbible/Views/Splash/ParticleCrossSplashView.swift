@@ -29,11 +29,7 @@ struct ParticleCrossSplashView: View {
     @State private var finalOpacity: Double = 1.0
     @State private var backgroundOpacity: Double = 1.0
 
-    private let gradientColors: [Color] = [
-        Color(red: 0.75, green: 0.85, blue: 0.0),
-        Color(red: 0.2, green: 0.8, blue: 0.4),
-        Color(red: 0.0, green: 0.75, blue: 0.85)
-    ]
+    private let gradientColors: [Color] = Color.brandGradientColors
 
     var body: some View {
         ZStack {
@@ -146,9 +142,9 @@ struct ParticleCrossSplashView: View {
         let crossPoints = generateCrossTargetPoints()
         let colors: [Color] = [
             .white,
-            Color(red: 0.9, green: 0.95, blue: 0.5),
-            Color(red: 0.5, green: 0.95, blue: 0.7),
-            Color(red: 0.4, green: 0.9, blue: 0.95)
+            Color.brandPeridot.opacity(0.9),
+            Color.brandGreen.opacity(0.9),
+            Color.brandCyan.opacity(0.9)
         ]
 
         particles = crossPoints.map { point in

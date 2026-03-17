@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
@@ -49,4 +48,45 @@ extension Color {
         let lightness = [lightRed, lightGreen, lightBlue].reduce(0) { $1 ? $0 + 1 : $0 }
         return lightness >= 2
     }
+
+    // MARK: - Brand Palette (Peridot)
+
+    /// Yellow-green peridot — top-left of icon gradient
+    static let brandPeridot = Color(red: 0.75, green: 0.85, blue: 0.0)
+
+    /// Green midpoint of icon gradient
+    static let brandGreen = Color(red: 0.2, green: 0.8, blue: 0.4)
+
+    /// Cyan/teal — bottom-right of icon gradient
+    static let brandCyan = Color(red: 0.0, green: 0.75, blue: 0.85)
+
+    /// The full icon gradient colors array
+    static let brandGradientColors: [Color] = [brandPeridot, brandGreen, brandCyan]
+
+    /// Primary accent teal — midpoint of icon gradient, used for interactive elements
+    static let brandAccent = Color(red: 0.0, green: 0.71, blue: 0.63) // #00B4A0
+
+    /// Deep navy — launch screen and splash background
+    static let brandDeepNavy = Color(red: 0.05, green: 0.07, blue: 0.15)
+
+    /// Warm gold — book cover embossing, splash glow
+    static let brandGold = Color(red: 0.85, green: 0.68, blue: 0.32)
+
+    /// Light gold — page glow, verse text accent
+    static let brandLightGold = Color(red: 1.0, green: 0.93, blue: 0.72)
+
+    /// Warm amber — devotional section warmth, callout accents
+    static let brandAmber = Color(red: 0.83, green: 0.63, blue: 0.31) // #D4A050
+
+    /// Dark leather cover
+    static let brandCoverDark = Color(red: 0.18, green: 0.12, blue: 0.08)
+
+    /// Light leather cover
+    static let brandCoverLight = Color(red: 0.28, green: 0.20, blue: 0.13)
+
+    /// Ribbon red bookmark
+    static let brandRibbonRed = Color(red: 0.55, green: 0.12, blue: 0.12)
+
+    /// Jesus's words in red
+    static let jesusWordsRed = Color(red: 0.8, green: 0.2, blue: 0.2) // #CC3333
 }
