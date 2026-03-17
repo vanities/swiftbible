@@ -11,12 +11,12 @@ import Foundation
 
 @Model
 class LocalDonationRecord {
-    var transactionID: String
-    var productID: String
-    var amountCents: Int
-    var currency: String
-    var purchaseDate: Date
-    var status: String
+    var transactionID: String = ""
+    var productID: String = ""
+    var amountCents: Int = 0
+    var currency: String = "USD"
+    var purchaseDate: Date = Date()
+    var status: String = "completed"
 
     init(transactionID: String, productID: String, amountCents: Int, currency: String, purchaseDate: Date, status: String = "completed") {
         self.transactionID = transactionID
