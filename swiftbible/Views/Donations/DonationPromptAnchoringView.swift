@@ -20,9 +20,10 @@ struct DonationPromptAnchoringView: View {
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
 
     @State private var selectedAmount: Decimal = 10
-    @State private var customAmount = ""
-    @State private var isCustomAmountSelected = false
-    @FocusState private var isCustomAmountFocused: Bool
+    // OLD FLOW (Stripe): custom amount field
+    // @State private var customAmount = ""
+    // @State private var isCustomAmountSelected = false
+    // @FocusState private var isCustomAmountFocused: Bool
 
     // Higher anchor amounts than control ($3/$5/$10/$25)
     private let presetAmounts: [Decimal] = [5, 10, 25, 50]
@@ -59,9 +60,6 @@ struct DonationPromptAnchoringView: View {
                     ForEach(presetAmounts, id: \.self) { amount in
                         Button {
                             selectedAmount = amount
-                            isCustomAmountSelected = false
-                            customAmount = ""
-                            isCustomAmountFocused = false
                         } label: {
                             VStack(spacing: 4) {
                                 Text(formattedAmount(for: amount))
@@ -76,21 +74,21 @@ struct DonationPromptAnchoringView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, amount == recommendedAmount ? 18 : 14)
                             .background(
-                                !isCustomAmountSelected && selectedAmount == amount
+                                selectedAmount == amount
                                     ? Color.purple
                                     : amount == recommendedAmount
                                         ? Color.purple.opacity(0.12)
                                         : Color.gray.opacity(0.1)
                             )
                             .foregroundColor(
-                                !isCustomAmountSelected && selectedAmount == amount
+                                selectedAmount == amount
                                     ? .white
                                     : .primary
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                                     .stroke(
-                                        amount == recommendedAmount && (isCustomAmountSelected || selectedAmount != amount)
+                                        amount == recommendedAmount && selectedAmount != amount
                                             ? Color.purple.opacity(0.4)
                                             : Color.clear,
                                         lineWidth: 1.5
@@ -101,37 +99,38 @@ struct DonationPromptAnchoringView: View {
                     }
                 }
 
-                HStack {
-                    Text(currencySymbol)
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-                    TextField("Other amount", text: $customAmount)
-                        .font(.headline)
-                        .keyboardType(.decimalPad)
-                        .focused($isCustomAmountFocused)
-                        .onChange(of: customAmount) { _, newValue in
-                            if !newValue.isEmpty {
-                                isCustomAmountSelected = true
-                                let cleaned = newValue.replacingOccurrences(of: ",", with: ".")
-                                if let decimal = Decimal(string: cleaned), decimal > 0 {
-                                    selectedAmount = decimal
-                                }
-                            }
-                        }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 14)
-                .background(
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .stroke(
-                            isCustomAmountSelected ? Color.purple : Color.gray.opacity(0.3),
-                            lineWidth: isCustomAmountSelected ? 2 : 1
-                        )
-                )
-                .onTapGesture {
-                    isCustomAmountFocused = true
-                    isCustomAmountSelected = true
-                }
+                // OLD FLOW (Stripe): custom amount field — StoreKit requires fixed prices
+                // HStack {
+                //     Text(currencySymbol)
+                //         .font(.headline)
+                //         .foregroundStyle(.secondary)
+                //     TextField("Other amount", text: $customAmount)
+                //         .font(.headline)
+                //         .keyboardType(.decimalPad)
+                //         .focused($isCustomAmountFocused)
+                //         .onChange(of: customAmount) { _, newValue in
+                //             if !newValue.isEmpty {
+                //                 isCustomAmountSelected = true
+                //                 let cleaned = newValue.replacingOccurrences(of: ",", with: ".")
+                //                 if let decimal = Decimal(string: cleaned), decimal > 0 {
+                //                     selectedAmount = decimal
+                //                 }
+                //             }
+                //         }
+                // }
+                // .padding(.horizontal, 16)
+                // .padding(.vertical, 14)
+                // .background(
+                //     RoundedRectangle(cornerRadius: 10, style: .continuous)
+                //         .stroke(
+                //             isCustomAmountSelected ? Color.purple : Color.gray.opacity(0.3),
+                //             lineWidth: isCustomAmountSelected ? 2 : 1
+                //         )
+                // )
+                // .onTapGesture {
+                //     isCustomAmountFocused = true
+                //     isCustomAmountSelected = true
+                // }
 
                 Text("Every contribution sustains free access to Scripture")
                     .font(.caption)
@@ -141,11 +140,14 @@ struct DonationPromptAnchoringView: View {
 
             VStack(spacing: 12) {
                 Button {
-                    if selectedAmount >= DonationPreferences.minimumDonationDollars &&
-                       selectedAmount <= DonationPreferences.maximumDonationDollars {
-                        onDonate(selectedAmount)
-                        isPresented = false
-                    }
+                    // OLD FLOW (Stripe): validated custom amounts against min/max
+                    // if selectedAmount >= DonationPreferences.minimumDonationDollars &&
+                    //    selectedAmount <= DonationPreferences.maximumDonationDollars {
+                    //     onDonate(selectedAmount)
+                    //     isPresented = false
+                    // }
+                    onDonate(selectedAmount)
+                    isPresented = false
                 } label: {
                     Label("Contribute \(formattedAmount(for: selectedAmount))",
                           systemImage: "star.fill")
@@ -184,12 +186,13 @@ struct DonationPromptAnchoringView: View {
         .padding(.horizontal, 24)
     }
 
-    private var currencySymbol: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = currencyCode
-        return formatter.currencySymbol ?? "$"
-    }
+    // OLD FLOW (Stripe): currency symbol for custom amount field
+    // private var currencySymbol: String {
+    //     let formatter = NumberFormatter()
+    //     formatter.numberStyle = .currency
+    //     formatter.currencyCode = currencyCode
+    //     return formatter.currencySymbol ?? "$"
+    // }
 
     private static let currencyFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
