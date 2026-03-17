@@ -23,31 +23,30 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# --- Brand Palette (matches swiftbible/Extensions/Color.swift) ---
+# --- Brand Palette (source of truth: scripts/generate_palette.py) ---
 # Icon gradient (peridot)
-PERIDOT = (191, 217, 0)       # brandPeridot  0.75, 0.85, 0.0
-GREEN = (51, 204, 102)        # brandGreen    0.2, 0.8, 0.4
-CYAN = (0, 191, 217)          # brandCyan     0.0, 0.75, 0.85
-ACCENT = (0, 180, 160)        # brandAccent   0.0, 0.71, 0.63
-# Backgrounds
-DEEP_NAVY = (13, 18, 38)      # brandDeepNavy 0.05, 0.07, 0.15
-# Warm tones
-GOLD = (217, 173, 82)         # brandGold     0.85, 0.68, 0.32
-LIGHT_GOLD = (255, 237, 184)  # brandLightGold
-AMBER = (212, 161, 79)        # brandAmber    0.83, 0.63, 0.31
-# Book cover
+PERIDOT = (191, 217, 0)       # brandPeridot
+GREEN = (51, 204, 102)        # brandGreen
+CYAN = (0, 191, 217)          # brandCyan
+# Accent (teal)
+ACCENT = (0, 180, 160)        # brandAccent
+# Warm (gold)
+GOLD = (217, 173, 82)         # brandGold
+GOLD_LIGHT = (255, 237, 184)  # brandGoldLight
+# Red
+RED = (204, 51, 51)           # brandRed
+RED_DARK = (140, 31, 31)      # brandRedDark
+# Surface
+DEEP_NAVY = (13, 18, 38)      # brandDeepNavy
 COVER_DARK = (46, 31, 20)     # brandCoverDark
-RIBBON_RED = (140, 31, 31)    # brandRibbonRed
-# Semantic
-JESUS_RED = (204, 51, 51)     # jesusWordsRed
 
 # Headline gradient tints (white → brand-tinted)
 TINT_TEAL = (180, 240, 230)       # derived from ACCENT
 TINT_TEAL_HERO = (180, 240, 220)  # warmer teal for hero headlines
 TINT_BLUE = (180, 230, 255)       # derived from CYAN
-TINT_RED = (255, 200, 200)        # derived from RIBBON_RED
+TINT_RED = (255, 200, 200)        # derived from RED
 TINT_GOLD = (255, 230, 160)       # derived from GOLD
-TINT_WARM = (255, 220, 170)       # derived from AMBER
+TINT_WARM = (255, 220, 170)       # derived from GOLD (warm variant)
 TINT_NEUTRAL = (220, 220, 240)    # neutral light
 SUBTITLE_COLOR = (180, 180, 200, 230)
 SUBTITLE_COLOR_STRIP = (180, 180, 200, 200)
@@ -103,7 +102,7 @@ SCREENSHOTS = [
         "style": "tilt_left",
         "grad_top": (45, 12, 18),       # deep warm red (ribbon red family)
         "grad_bot": (72, 20, 30),
-        "orbs": [(0.3, 0.35, 0.5, RIBBON_RED, 45), (0.85, 0.65, 0.3, JESUS_RED, 30)],
+        "orbs": [(0.3, 0.35, 0.5, RED_DARK, 45), (0.85, 0.65, 0.3, RED, 30)],
         "headline_grad": ((255, 255, 255), TINT_RED),
     },
     {
@@ -124,7 +123,7 @@ SCREENSHOTS = [
         "style": "split",
         "grad_top": (38, 30, 10),       # warm amber/gold (brand warm family)
         "grad_bot": (60, 48, 16),
-        "orbs": [(0.5, 0.3, 0.55, GOLD, 45), (0.15, 0.7, 0.3, AMBER, 25)],
+        "orbs": [(0.5, 0.3, 0.55, GOLD, 45), (0.15, 0.7, 0.3, GOLD, 25)],
         "headline_grad": ((255, 255, 255), TINT_GOLD),
     },
     {
@@ -134,7 +133,7 @@ SCREENSHOTS = [
         "style": "tilt_right",
         "grad_top": (42, 26, 10),       # warm brown (cover dark family)
         "grad_bot": (65, 40, 14),
-        "orbs": [(0.6, 0.3, 0.45, GOLD, 45), (0.2, 0.65, 0.35, AMBER, 30)],
+        "orbs": [(0.6, 0.3, 0.45, GOLD, 45), (0.2, 0.65, 0.35, GOLD, 30)],
         "headline_grad": ((255, 255, 255), TINT_WARM),
     },
     {
@@ -168,9 +167,9 @@ PANORAMIC_PAIRS = [
         "orbs": [
             (0.15, 0.3, 0.22, CYAN, 50),
             (0.5, 0.45, 0.28, ACCENT, 55),
-            (0.85, 0.35, 0.22, RIBBON_RED, 50),
+            (0.85, 0.35, 0.22, RED_DARK, 50),
             (0.35, 0.7, 0.18, GREEN, 30),
-            (0.65, 0.65, 0.18, JESUS_RED, 30),
+            (0.65, 0.65, 0.18, RED, 30),
         ],
         "left_headline_grad": ((255, 255, 255), TINT_BLUE),
         "right_headline_grad": ((255, 255, 255), TINT_RED),
@@ -190,9 +189,9 @@ PANORAMIC_PAIRS = [
         "grad_br": (28, 32, 48),
         "orbs": [
             (0.2, 0.3, 0.22, GOLD, 50),
-            (0.5, 0.4, 0.25, AMBER, 45),
+            (0.5, 0.4, 0.25, GOLD, 45),
             (0.8, 0.35, 0.22, ACCENT, 40),
-            (0.35, 0.65, 0.16, AMBER, 28),
+            (0.35, 0.65, 0.16, GOLD, 28),
             (0.7, 0.7, 0.16, CYAN, 25),
         ],
         "left_headline_grad": ((255, 255, 255), TINT_WARM),
@@ -237,12 +236,12 @@ PANORAMIC_STRIP = {
     "orbs": [
         (0.05, 0.30, 0.06, CYAN, 55),
         (0.15, 0.55, 0.05, GREEN, 40),
-        (0.25, 0.35, 0.06, RIBBON_RED, 45),
+        (0.25, 0.35, 0.06, RED_DARK, 45),
         (0.35, 0.50, 0.07, ACCENT, 50),
         (0.45, 0.40, 0.06, ACCENT, 45),
         (0.55, 0.55, 0.06, GREEN, 42),
         (0.65, 0.35, 0.06, GOLD, 40),
-        (0.75, 0.50, 0.07, AMBER, 45),
+        (0.75, 0.50, 0.07, GOLD, 45),
         (0.85, 0.40, 0.06, GOLD, 38),
         (0.95, 0.35, 0.06, ACCENT, 35),
     ],
@@ -933,12 +932,12 @@ ULTIMATE_STRIP = {
     "orbs": [
         (0.05, 0.30, 0.06, CYAN, 55),
         (0.15, 0.55, 0.05, GREEN, 40),
-        (0.25, 0.35, 0.06, RIBBON_RED, 45),
+        (0.25, 0.35, 0.06, RED_DARK, 45),
         (0.35, 0.50, 0.07, ACCENT, 50),
         (0.45, 0.40, 0.06, ACCENT, 45),
         (0.55, 0.55, 0.06, GREEN, 42),
         (0.65, 0.35, 0.06, GOLD, 40),
-        (0.75, 0.50, 0.07, AMBER, 45),
+        (0.75, 0.50, 0.07, GOLD, 45),
         (0.85, 0.40, 0.06, GOLD, 38),
         (0.95, 0.35, 0.06, ACCENT, 35),
     ],

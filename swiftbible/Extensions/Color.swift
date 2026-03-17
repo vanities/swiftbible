@@ -69,14 +69,11 @@ extension Color {
     /// Deep navy — launch screen and splash background
     static let brandDeepNavy = Color(red: 0.05, green: 0.07, blue: 0.15)
 
-    /// Warm gold — book cover embossing, splash glow
+    /// Warm gold — book cover embossing, splash glow, devotional warmth
     static let brandGold = Color(red: 0.85, green: 0.68, blue: 0.32)
 
-    /// Light gold — page glow, verse text accent
-    static let brandLightGold = Color(red: 1.0, green: 0.93, blue: 0.72)
-
-    /// Warm amber — devotional section warmth, callout accents
-    static let brandAmber = Color(red: 0.83, green: 0.63, blue: 0.31) // #D4A050
+    /// Light gold tint — page glow, verse text accent
+    static let brandGoldLight = Color(red: 1.0, green: 0.93, blue: 0.72)
 
     /// Dark leather cover
     static let brandCoverDark = Color(red: 0.18, green: 0.12, blue: 0.08)
@@ -84,9 +81,9 @@ extension Color {
     /// Light leather cover
     static let brandCoverLight = Color(red: 0.28, green: 0.20, blue: 0.13)
 
-    /// Ribbon red bookmark
-    static let brandRibbonRed = Color(red: 0.55, green: 0.12, blue: 0.12)
+    /// Brand red — Jesus's words, ribbon bookmark, emphasis
+    static let brandRed = Color(red: 0.8, green: 0.2, blue: 0.2) // #CC3333
 
-    /// Jesus's words in red
-    static let jesusWordsRed = Color(red: 0.8, green: 0.2, blue: 0.2) // #CC3333
+    /// Dark red — ribbon bookmark, pressed states
+    static let brandRedDark = Color(red: 0.55, green: 0.12, blue: 0.12)
 }

@@ -224,6 +224,30 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 - **Navigation benefits**: Users can study specific aspects (astronomy, dreams, etc.)
 - **Historical context**: Preserves understanding of textual development
 
+## Brand Palette
+
+**Source of truth:** `scripts/generate_palette.py` → outputs `scripts/brand-palette.png`
+
+The palette derives from the app icon's peridot (August birthstone) gradient. All colors use `brand{Color}{Variant}` naming in `swiftbible/Extensions/Color.swift`.
+
+| Group | Name | Hex | Usage |
+|-------|------|-----|-------|
+| **Icon Gradient** | `brandPeridot` | `#BFD900` | Top-left of icon gradient |
+| | `brandGreen` | `#33CC66` | Midpoint of icon gradient |
+| | `brandCyan` | `#00BFD9` | Bottom-right of icon gradient |
+| **Accent** | `brandAccent` | `#00B4A0` | Primary — toggles, links, active tab |
+| | `brandAccentLight` | `#00C8B4` | Dark mode variant (brighter) |
+| | `brandAccentDark` | `#007A6D` | Pressed states |
+| **Warm** | `brandGold` | `#D9AD52` | Cover embossing, splash glow, warmth |
+| | `brandGoldLight` | `#FFEDBA` | Page glow, verse text accent |
+| **Red** | `brandRed` | `#CC3333` | Jesus's words, emphasis, alerts |
+| | `brandRedDark` | `#8C1F1F` | Ribbon bookmark, pressed states |
+| **Surface** | `brandDeepNavy` | `#0D1226` | Launch screen, splash background |
+| | `brandCoverDark` | `#2E1F14` | Dark leather cover |
+| | `brandCoverLight` | `#473321` | Light leather cover |
+
+When adding colors, update `generate_palette.py` first, regenerate the PNG, then update `Color.swift` and `generate_marketing_screenshots.py` to match.
+
 ## Deployment
 
 **NEVER manually deploy Edge Functions or push migrations.** Merging to `master` triggers CI/CD which automatically deploys Edge Functions and runs Supabase migrations. Do not run `supabase functions deploy`, `supabase db push`, or any manual deployment commands.

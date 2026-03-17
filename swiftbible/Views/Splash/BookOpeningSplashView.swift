@@ -39,10 +39,10 @@ struct BookOpeningSplashView: View {
 
     private let deepNavy = Color.brandDeepNavy
     private let warmGold = Color.brandGold
-    private let lightGold = Color.brandLightGold
+    private let lightGold = Color.brandGoldLight
     private let coverDark = Color.brandCoverDark
     private let coverLight = Color.brandCoverLight
-    private let ribbonRed = Color.brandRibbonRed
+    private let ribbonRed = Color.brandRedDark
 
     private let bookW: CGFloat = 140
     private let bookH: CGFloat = 185
