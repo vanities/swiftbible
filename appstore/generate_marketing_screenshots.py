@@ -1034,20 +1034,33 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
             scale, corner_r, canvas_w, angle,
         )
 
-        # Headline + subtitle
+        # Headline + subtitle — offset into an adjacent frame so text isn't
+        # split across two frames at the cut line.
+        # Last device: shift LEFT (right frame is the outro).
+        # All others: shift RIGHT (into the next frame).
         if shot["headline"]:
             if scale >= 0.75:
                 hl_grad_bot = TINT_TEAL_HERO
             else:
                 hl_grad_bot = TINT_NEUTRAL
 
+            remaining_count = len(shots) - 1  # total devices after hero
+            is_last_two = (j >= remaining_count - 2)  # last 2 devices
+
+            if is_last_two:
+                # Shift into the LEFT frame to avoid colliding with outro
+                headline_cx = cut_x - canvas_w // 2
+            else:
+                # Shift into the RIGHT frame
+                headline_cx = cut_x + canvas_w // 2
+
             hl_h = draw_gradient_text_at(
-                canvas, shot["headline"], cut_x, text_y,
+                canvas, shot["headline"], headline_cx, text_y,
                 headline_font, (255, 255, 255), hl_grad_bot,
             )
             if shot["subtitle"]:
                 draw_text_at(
-                    canvas, shot["subtitle"], cut_x,
+                    canvas, shot["subtitle"], headline_cx,
                     text_y + hl_h + text_gap,
                     subtitle_font, SUBTITLE_COLOR_STRIP,
                 )
