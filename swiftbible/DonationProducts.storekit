@@ -1,0 +1,140 @@
+{
+  "identifier" : "DonationProducts",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "donation_3",
+      "localizations" : [
+        {
+          "description" : "Support SwiftBible with a small donation",
+          "displayName" : "Donation - $3",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.swiftbible.donation.3",
+      "referenceName" : "Donation $3",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "donation_5",
+      "localizations" : [
+        {
+          "description" : "Support SwiftBible with a donation",
+          "displayName" : "Donation - $5",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.swiftbible.donation.5",
+      "referenceName" : "Donation $5",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "donation_10",
+      "localizations" : [
+        {
+          "description" : "Support SwiftBible with a generous donation",
+          "displayName" : "Donation - $10",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.swiftbible.donation.10",
+      "referenceName" : "Donation $10",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "24.99",
+      "familyShareable" : false,
+      "internalID" : "donation_25",
+      "localizations" : [
+        {
+          "description" : "Support SwiftBible with a champion donation",
+          "displayName" : "Donation - $25",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.swiftbible.donation.25",
+      "referenceName" : "Donation $25",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "49.99",
+      "familyShareable" : false,
+      "internalID" : "donation_50",
+      "localizations" : [
+        {
+          "description" : "Support SwiftBible with an extraordinary donation",
+          "displayName" : "Donation - $50",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.swiftbible.donation.50",
+      "referenceName" : "Donation $50",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6670373108",
+    "_developerTeamID" : "",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : "",
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
