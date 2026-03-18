@@ -80,11 +80,19 @@ enum AppIconOption: String, CaseIterable, Identifiable, Hashable {
         }
     }
 
-    /// Preview image name — bundled as a resource
+    /// Preview image asset name (in xcassets)
     var previewAsset: String {
         switch self {
-        case .automatic: "Icon-Light-1024x1024"
-        default: "Icon-\(rawValue.capitalized)1024x1024"
+        case .automatic: "Icon-Light-Preview"
+        default: "Icon-\(rawValue.capitalized)-Preview"
+        }
+    }
+
+    /// Dark preview image asset name
+    var previewAssetDark: String {
+        switch self {
+        case .automatic: "Icon-Dark-Preview"
+        default: "Icon-\(rawValue.capitalized)-Preview"  // Same image, iOS handles dark
         }
     }
 }

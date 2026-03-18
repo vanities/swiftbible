@@ -74,16 +74,6 @@ struct AppIconPickerView: View {
         let name = option.iconName
         print("[AppIcon] Setting icon to: \(name ?? "nil (default)")")
 
-        // Check if files exist in bundle
-        if let name {
-            let bundle = Bundle.main
-            for suffix in ["@2x", "@3x", "60x60@2x", "60x60@3x"] {
-                let filename = "\(name)\(suffix)"
-                let found = bundle.path(forResource: filename, ofType: "png") != nil
-                print("[AppIcon]   \(filename).png → \(found ? "FOUND" : "MISSING")")
-            }
-        }
-
         selectedIconRaw = option.rawValue
         UIApplication.shared.setAlternateIconName(name) { error in
             if let error {

@@ -119,6 +119,39 @@ class DonationService {
         }
     }
 
+    func recordStoreKitDonation(
+        transactionId: String,
+        productId: String,
+        amountCents: Int,
+        currency: String,
+        purchaseDate: Date,
+        anonymousId: String
+    ) async throws {
+        let sanitizedAnonymousId = anonymousId.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard sanitizedAnonymousId.count >= 6 else {
+            throw DonationServiceError.missingAnonymousIdentifier
+        }
+
+        let payload = RecordStoreKitPayload(
+            transactionId: transactionId,
+            productId: productId,
+            amountCents: amountCents,
+            currency: currency.lowercased(),
+            purchaseDate: ISO8601DateFormatter().string(from: purchaseDate),
+            anonymousId: sanitizedAnonymousId
+        )
+
+        do {
+            let _: RecordStoreKitResponse = try await SupabaseService.shared.invokeFunction(
+                "record-storekit-donation",
+                payload: payload,
+                responseType: RecordStoreKitResponse.self
+            )
+        } catch let error as SupabaseFunctionError {
+            throw DonationServiceError.requestFailed(statusCode: error.statusCode, message: error.message)
+        }
+    }
+
     func fetchDonationHistory(anonymousId: String) async throws -> DonationHistoryResponse {
         let sanitizedAnonymousId = anonymousId.trimmingCharacters(in: .whitespacesAndNewlines)
         guard sanitizedAnonymousId.count >= 6 else {
@@ -159,6 +192,19 @@ private extension DonationService {
 
     struct DonationHistoryPayload: Encodable {
         let anonymousId: String
+    }
+
+    struct RecordStoreKitPayload: Encodable {
+        let transactionId: String
+        let productId: String
+        let amountCents: Int
+        let currency: String
+        let purchaseDate: String
+        let anonymousId: String
+    }
+
+    struct RecordStoreKitResponse: Decodable {
+        let success: Bool
     }
 }
 

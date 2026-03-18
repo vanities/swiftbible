@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Generate cool/dynamic app icon variants for SwiftBible."""
 
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageOps, ImageEnhance, ImageChops
 import os
 import math
 import random
 
+from icon_utils import save_complete_icon
+
 ICON_ASSETS = os.path.join(os.path.dirname(__file__), "..", "icon_assets")
-ALT_ICONS = os.path.join(os.path.dirname(__file__), "..", "swiftbible", "AltIcons")
 LIGHT_SRC = os.path.join(ICON_ASSETS, "Icon-Light-1024×1024.png")
 
 
@@ -35,7 +36,6 @@ def create_gradient(size, colors, direction="diagonal"):
             else:
                 t = (x + y) / (2 * size)
 
-            # Multi-stop interpolation
             n = len(colors) - 1
             idx = min(int(t * n), n - 1)
             local_t = (t * n) - idx
@@ -61,12 +61,6 @@ def create_noise_overlay(size, intensity=30, seed=42):
     return img
 
 
-def blend_multiply(base, overlay):
-    """Multiply blend two images."""
-    from PIL import ImageChops
-    return ImageChops.multiply(base, overlay)
-
-
 def extract_bible_mask(light_icon):
     """Extract the bible silhouette as a mask from the light icon."""
     gray = light_icon.convert("L")
@@ -86,29 +80,6 @@ def composite_icon(background, bible_mask, bible_color, size=1024):
     return result
 
 
-def save_icon_sizes(img, base_name):
-    """Save icon at required sizes."""
-    rgb = img.convert("RGB")
-
-    sizes = {
-        f"{base_name}60x60@2x.png": 120,
-        f"{base_name}60x60@3x.png": 180,
-    }
-    for filename, px in sizes.items():
-        path = os.path.join(ALT_ICONS, filename)
-        rgb.resize((px, px), Image.LANCZOS).save(path)
-        print(f"  {filename} ({px}px)")
-
-    # Preview
-    preview_name = base_name.replace("AppIcon-", "Icon-").rstrip("-")
-    preview_path = os.path.join(ALT_ICONS, f"{preview_name}1024x1024.png")
-    rgb.save(preview_path)
-    print(f"  Preview: {preview_name}1024x1024.png")
-
-    ref_path = os.path.join(ICON_ASSETS, f"{preview_name}1024×1024.png")
-    rgb.save(ref_path)
-
-
 THEMES = {
     "Sunset": {
         "desc": "Warm horizon — orange through pink to purple",
@@ -126,31 +97,35 @@ THEMES = {
         "desc": "Smoldering coals — dark with warm glow",
         "bg_colors": [(20, 8, 5), (60, 15, 5), (180, 60, 10), (60, 15, 5), (20, 8, 5)],
         "bg_direction": "radial",
-        "bible_color": (10, 3, 0),
+        "bible_color": (255, 245, 235),
+        "invert_mask": True,
+        "noise": True,
     },
     "Frost": {
-        "desc": "Icy arctic — white to pale blue",
-        "bg_colors": [(240, 248, 255), (200, 225, 245), (150, 200, 235), (200, 225, 245), (240, 248, 255)],
+        "desc": "Icy arctic — pale blue to deep blue",
+        "bg_colors": [(180, 210, 240), (120, 170, 220), (70, 130, 200), (120, 170, 220), (180, 210, 240)],
         "bg_direction": "radial",
-        "bible_color": (40, 60, 80),
+        "bible_color": (245, 250, 255),
     },
     "Neon": {
         "desc": "Electric — hot pink to cyan on black",
         "bg_colors": [(10, 5, 20), (255, 0, 150), (0, 255, 200), (10, 5, 20)],
         "bg_direction": "diagonal",
-        "bible_color": (5, 0, 10),
+        "bible_color": (255, 255, 255),
     },
     "Copper": {
         "desc": "Burnished metal — warm metallic sheen",
         "bg_colors": [(140, 80, 45), (200, 130, 70), (230, 170, 100), (200, 130, 70), (140, 80, 45)],
         "bg_direction": "radial",
-        "bible_color": (50, 25, 10),
+        "bible_color": (255, 240, 220),
+        "noise": True,
     },
     "Storm": {
         "desc": "Thundercloud — dark grays with electric blue",
         "bg_colors": [(30, 30, 40), (50, 55, 70), (40, 80, 140), (50, 55, 70), (30, 30, 40)],
         "bg_direction": "radial",
-        "bible_color": (15, 15, 20),
+        "bible_color": (220, 225, 240),
+        "noise": True,
     },
     "Blossom": {
         "desc": "Spring cherry blossom — soft pinks and whites",
@@ -162,8 +137,6 @@ THEMES = {
 
 
 def main():
-    os.makedirs(ALT_ICONS, exist_ok=True)
-
     print("Loading source icon...")
     light = Image.open(LIGHT_SRC).convert("RGB")
     bible_mask = extract_bible_mask(light)
@@ -172,16 +145,17 @@ def main():
         print(f"\n{name} — {theme['desc']}")
         bg = create_gradient(1024, theme["bg_colors"], theme["bg_direction"])
 
-        # Add subtle noise texture to some themes for depth
-        if name in ("Copper", "Storm", "Ember"):
+        if theme.get("noise"):
             noise = create_noise_overlay(1024, intensity=8, seed=hash(name) % 10000)
-            bg = blend_multiply(bg, noise)
-            # Re-brighten after multiply
-            from PIL import ImageEnhance
+            bg = ImageChops.multiply(bg, noise)
             bg = ImageEnhance.Brightness(bg).enhance(1.8)
 
-        icon = composite_icon(bg, bible_mask, theme["bible_color"])
-        save_icon_sizes(icon, f"AppIcon-{name}-")
+        mask = bible_mask
+        if theme.get("invert_mask"):
+            mask = ImageOps.invert(mask)
+
+        icon = composite_icon(bg, mask, theme["bible_color"])
+        save_complete_icon(icon, f"AppIcon-{name}", bible_mask=bible_mask)
 
     print("\nDone!")
 

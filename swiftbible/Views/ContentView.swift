@@ -94,6 +94,20 @@ struct ContentView: View {
             appViewModel.totalPaidCents += amountCents
             hasCompletedDonation = true
             if !isAppLaunching { confettiTrigger += 1 }
+
+            // Sync to Supabase so donation history is complete
+            let anonId = donationAnonIdentifier
+            Task {
+                try? await DonationService.shared.recordStoreKitDonation(
+                    transactionId: txID,
+                    productId: productID,
+                    amountCents: amountCents,
+                    currency: "USD",
+                    purchaseDate: purchaseDate,
+                    anonymousId: anonId
+                )
+                await refreshDonationStatusFromServer()
+            }
         }
         .onChange(of: appViewModel.donationFlowRequest) { _, request in
             guard let request else { return }
@@ -280,11 +294,13 @@ struct ContentView: View {
     @MainActor
     private func recordStoreKitDonation(_ transaction: StoreKit.Transaction) {
         let amountCents = StoreKitDonationService.shared.amountCents(for: transaction.productID)
+        let txID = String(transaction.id)
+        let currency = transaction.currency?.identifier ?? "USD"
         let record = LocalDonationRecord(
-            transactionID: String(transaction.id),
+            transactionID: txID,
             productID: transaction.productID,
             amountCents: amountCents,
-            currency: transaction.currency?.identifier ?? "USD",
+            currency: currency,
             purchaseDate: transaction.purchaseDate
         )
         modelContext.insert(record)
@@ -292,6 +308,22 @@ struct ContentView: View {
 
         // Update AppViewModel
         appViewModel.totalPaidCents += amountCents
+
+        // Sync to Supabase
+        let anonId = donationAnonIdentifier
+        let purchaseDate = transaction.purchaseDate
+        let productID = transaction.productID
+        Task {
+            try? await DonationService.shared.recordStoreKitDonation(
+                transactionId: txID,
+                productId: productID,
+                amountCents: amountCents,
+                currency: currency,
+                purchaseDate: purchaseDate,
+                anonymousId: anonId
+            )
+            await refreshDonationStatusFromServer()
+        }
     }
 
     @MainActor
@@ -300,7 +332,8 @@ struct ContentView: View {
             sortBy: [SortDescriptor(\.purchaseDate, order: .reverse)]
         )
         if let records = try? modelContext.fetch(descriptor) {
-            appViewModel.totalPaidCents = records.reduce(0) { $0 + $1.amountCents }
+            let localTotal = records.reduce(0) { $0 + $1.amountCents }
+            appViewModel.totalPaidCents += localTotal
         }
     }
 
