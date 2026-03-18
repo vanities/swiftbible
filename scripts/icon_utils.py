@@ -9,7 +9,6 @@ import os
 from PIL import Image
 
 XCASSETS = os.path.join(os.path.dirname(__file__), "..", "swiftbible", "Assets.xcassets")
-ALT_ICONS = os.path.join(os.path.dirname(__file__), "..", "swiftbible", "AltIcons")
 ICON_ASSETS = os.path.join(os.path.dirname(__file__), "..", "icon_assets")
 
 # Every size needed, matching the primary AppIcon structure (Any appearance only)
@@ -151,19 +150,16 @@ def save_complete_icon(img, icon_name, bible_mask=None, save_previews=True):
         dark = rgb
         tinted = rgb
 
-    # === AltIcons (preview images only) ===
-    os.makedirs(ALT_ICONS, exist_ok=True)
-
+    # === Preview image sets in xcassets ===
     if save_previews:
         preview_name = icon_name.replace("AppIcon-", "Icon-")
-        # Light preview
-        preview_path = os.path.join(ALT_ICONS, f"{preview_name}1024x1024.png")
-        rgb.save(preview_path)
-        # Dark preview
-        dark.save(os.path.join(ALT_ICONS, f"{preview_name}-Dark1024x1024.png"), "PNG")
-        # Tinted preview
-        tinted.save(os.path.join(ALT_ICONS, f"{preview_name}-Tinted1024x1024.png"), "PNG")
-        print(f"  Previews: {preview_name} (light + dark + tinted)")
+        preview_dir = os.path.join(XCASSETS, f"{preview_name}-Preview.imageset")
+        os.makedirs(preview_dir, exist_ok=True)
+        rgb.save(os.path.join(preview_dir, "icon.png"))
+        with open(os.path.join(preview_dir, "Contents.json"), "w") as f:
+            json.dump({"images": [{"filename": "icon.png", "idiom": "universal"}], "info": {"author": "xcode", "version": 1}}, f, indent=2)
+            f.write("\n")
+        print(f"  Preview: {preview_name}-Preview (xcassets)")
         # icon_assets reference
         ref_path = os.path.join(ICON_ASSETS, f"{preview_name}1024\u00d71024.png")
         rgb.save(ref_path)
