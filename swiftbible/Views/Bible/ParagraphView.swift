@@ -14,10 +14,12 @@ struct ParagraphView: View {
 
     let firstVerseNumber: Int
     let verses: [Verse]
+    let themeSecondaryColor: Color?
 
-    init(firstVerseNumber: Int, paragraph: String) {
+    init(firstVerseNumber: Int, paragraph: String, themeSecondaryColor: Color? = nil) {
         self.firstVerseNumber = firstVerseNumber
         self.verses = ParagraphParser.parse(paragraph)
+        self.themeSecondaryColor = themeSecondaryColor
     }
 
     var body: some View {
@@ -31,19 +33,19 @@ struct ParagraphView: View {
             // Append verse number if available
             if let number = verse.number {
                 var numberText = Text(" \(number)")
-                    .foregroundColor(.gray)
+                    .foregroundColor(themeSecondaryColor ?? .gray)
                     .font(.footnote)
                     .baselineOffset(6.0)
                 if let suffix = verse.suffix {
                     numberText = numberText
                         + Text(suffix)
-                            .foregroundColor(.gray)
+                            .foregroundColor(themeSecondaryColor ?? .gray)
                             .font(.footnote)
                             .baselineOffset(6.0)
                 }
                 numberText = numberText
                     + Text(" ")
-                        .foregroundColor(.gray)
+                        .foregroundColor(themeSecondaryColor ?? .gray)
                         .font(.footnote)
                         .baselineOffset(6.0)
                 verseText = verseText + numberText

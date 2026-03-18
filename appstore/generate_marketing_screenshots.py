@@ -1034,6 +1034,11 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
     for j, shot in enumerate(shots[1:]):
         cut_x = (j + 2) * canvas_w  # skip frame 0, start cuts at frame 1/2 boundary
 
+        # Shift first panoramic device left so it fills the bridge frame
+        # instead of leaving empty space on the left of frame 1
+        if j == 0:
+            cut_x -= int(canvas_w * 0.20)
+
         raw = Image.open(os.path.join(raw_dir, f"{shot['filename']}.png")).convert("RGBA")
 
         angle = shot.get("angle", 0)
@@ -1060,8 +1065,9 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
             else:
                 hl_grad_bot = TINT_NEUTRAL
 
-            # Center headline in the RIGHT frame (the frame after the cut)
-            headline_cx = cut_x + canvas_w // 2
+            # Center headline in the RIGHT frame (frame j+2), independent of
+            # any device offset so text stays fully inside its frame
+            headline_cx = (j + 2) * canvas_w + canvas_w // 2
 
             hl_h = draw_gradient_text_at(
                 canvas, shot["headline"], headline_cx, text_y,

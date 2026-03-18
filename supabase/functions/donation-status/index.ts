@@ -100,7 +100,9 @@ function denoServe() {
     if (sessionId) {
       query = query.eq("stripe_session_id", sessionId);
     } else if (userId) {
-      query = query.eq("user_id", userId);
+      // Check both user_id and anonymous_id so legacy Stripe donations
+      // (created before anonymous auth) are still found
+      query = query.or(`user_id.eq.${userId},anonymous_id.eq.${anonymousId}`);
     } else {
       query = query.eq("anonymous_id", anonymousId);
     }

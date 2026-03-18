@@ -123,12 +123,18 @@ struct ChapterDetailView: View {
     @AppStorage(BookmarkPreferences.bookKey) private var bookmarkedBookName: String = ""
     @AppStorage(BookmarkPreferences.chapterKey) private var bookmarkedChapterNumber: Int = 0
     @AppStorage(BookmarkPreferences.verseKey) private var bookmarkedVerseNumber: Int = 0
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
     // Swipe navigation removed in favor of pull up/down
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []
 
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
 
@@ -395,6 +401,7 @@ struct ChapterDetailView: View {
                 configureRefresh(on: scroll)
             })
         }
+        .background(readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color.clear)
         // Removed overlay NavigationLinks; navigation happens in-place
         .scrollPosition(id: $scrollPosition, anchor: .top)
         .navigationBarTitleDisplayMode(.inline)
@@ -556,12 +563,21 @@ struct ChapterDetailView: View {
         // Removed left/right swipe gesture navigation in favor of pull-to-refresh style
         .onAppear {
             updateScrollPositionForContext()
+            ReadingStatsService.shared.setModelContext(context)
+            ReadingStatsService.shared.startReading(
+                bookName: bookName,
+                chapterNumber: currentChapterNumber,
+                version: appViewModel.selectedVersion.rawValue
+            )
             AnalyticsService.shared.capture(.chapterViewed, properties: [
                 "book": currentBook.name,
                 "chapter": currentChapterNumber,
                 "version": appViewModel.selectedVersion.rawValue,
                 "testament": "\(currentBook.testament ?? .old)"
             ])
+        }
+        .onDisappear {
+            ReadingStatsService.shared.stopReading()
         }
         .onChange(of: currentChapterNumber) {
             // Clear transient state when chapter changes
@@ -570,6 +586,12 @@ struct ChapterDetailView: View {
             alreadyNoted = nil
             // Jump to the top of the new chapter
             updateScrollPositionForContext()
+            // Track new chapter reading session
+            ReadingStatsService.shared.startReading(
+                bookName: bookName,
+                chapterNumber: currentChapterNumber,
+                version: appViewModel.selectedVersion.rawValue
+            )
             AnalyticsService.shared.capture(.chapterNavigated, properties: [
                 "book": currentBook.name,
                 "chapter": currentChapterNumber,
@@ -619,7 +641,7 @@ struct ChapterDetailView: View {
         VStack(alignment: .center) {
             Text("\(paragraph.startingVerse)")
                 .font(.footnote)
-                .foregroundColor(isBookmarked ? .accentColor : .gray)
+                .foregroundColor(isBookmarked ? .accentColor : (readingTheme.isCustom ? readingTheme.secondaryTextColor(for: colorScheme) : .gray))
 
             if isBookmarked {
                 Image(systemName: "bookmark.fill")
@@ -639,11 +661,13 @@ struct ChapterDetailView: View {
     @ViewBuilder
     private func paragraphContent(paragraph: Paragraph, isHighlighted: Bool, isBookmarked: Bool) -> some View {
         let backgroundColor: Color = isHighlighted ? Color(hex: highlightedColor) : .clear
-        let foregroundColor: Color = isHighlighted ? Color(hex: highlightedColor).accessibleFontColor : Color.primary
+        let defaultTextColor: Color = readingTheme.isCustom ? readingTheme.textColor(for: colorScheme) : .primary
+        let foregroundColor: Color = isHighlighted ? Color(hex: highlightedColor).accessibleFontColor : defaultTextColor
 
         ParagraphView(
             firstVerseNumber: paragraph.startingVerse,
-            paragraph: paragraph.text
+            paragraph: paragraph.text,
+            themeSecondaryColor: readingTheme.isCustom ? readingTheme.secondaryTextColor(for: colorScheme) : nil
         )
         .background { backgroundColor }
         .foregroundStyle(foregroundColor)

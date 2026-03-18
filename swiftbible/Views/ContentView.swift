@@ -284,7 +284,7 @@ struct ContentView: View {
             transactionID: String(transaction.id),
             productID: transaction.productID,
             amountCents: amountCents,
-            currency: transaction.currencyCode ?? "USD",
+            currency: transaction.currency?.identifier ?? "USD",
             purchaseDate: transaction.purchaseDate
         )
         modelContext.insert(record)
@@ -383,8 +383,41 @@ struct ContentView: View {
     }
 
     private func ensureDonationAnonIdentifier() {
+        let keychainKey = "donation_anonymous_identifier"
+        let iCloud = NSUbiquitousKeyValueStore.default
+
         if donationAnonIdentifier.isEmpty {
-            donationAnonIdentifier = UUID().uuidString
+            // Try recovering from Keychain (survives reinstall)
+            if let keychainId = KeychainService.get(keychainKey), !keychainId.isEmpty {
+                donationAnonIdentifier = keychainId
+                print("🔑 Recovered donation anonymous ID from Keychain: \(keychainId)")
+                return
+            }
+
+            // Try recovering from iCloud (cross-device sync)
+            iCloud.synchronize()
+            if let iCloudId = iCloud.string(forKey: keychainKey), !iCloudId.isEmpty {
+                donationAnonIdentifier = iCloudId
+                KeychainService.set(iCloudId, forKey: keychainKey)
+                print("☁️ Recovered donation anonymous ID from iCloud: \(iCloudId)")
+                return
+            }
+
+            // Generate new ID as last resort
+            let newId = UUID().uuidString
+            donationAnonIdentifier = newId
+            KeychainService.set(newId, forKey: keychainKey)
+            iCloud.set(newId, forKey: keychainKey)
+            iCloud.synchronize()
+            print("🆕 Generated new donation anonymous ID: \(newId)")
+        } else {
+            // Ensure existing ID is persisted to Keychain + iCloud
+            if KeychainService.get(keychainKey) == nil {
+                KeychainService.set(donationAnonIdentifier, forKey: keychainKey)
+                iCloud.set(donationAnonIdentifier, forKey: keychainKey)
+                iCloud.synchronize()
+                print("💾 Migrated donation anonymous ID to Keychain + iCloud")
+            }
         }
     }
 

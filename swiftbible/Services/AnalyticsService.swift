@@ -54,6 +54,11 @@ enum AnalyticsEvent: String {
     case donationCompleted = "donation_completed"
     case donationPromptDismissed = "donation_prompt_dismissed"
     case donationPromptOptedOut = "donation_prompt_opted_out"
+
+    // Donor perks
+    case readingThemeChanged = "reading_theme_changed"
+    case appIconChanged = "app_icon_changed"
+    case readingStatsViewed = "reading_stats_viewed"
 }
 
 final class AnalyticsService {
