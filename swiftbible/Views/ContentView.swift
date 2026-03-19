@@ -328,12 +328,17 @@ struct ContentView: View {
 
     @MainActor
     private func loadLocalDonationHistory() {
+        // Local SwiftData records are now synced to Supabase, so the server
+        // total from refreshDonationStatusFromServer() already includes them.
+        // Only use local records as a fallback if the server returned nothing.
+        guard appViewModel.totalPaidCents == 0 else { return }
+
         let descriptor = FetchDescriptor<LocalDonationRecord>(
             sortBy: [SortDescriptor(\.purchaseDate, order: .reverse)]
         )
         if let records = try? modelContext.fetch(descriptor) {
             let localTotal = records.reduce(0) { $0 + $1.amountCents }
-            appViewModel.totalPaidCents += localTotal
+            appViewModel.totalPaidCents = localTotal
         }
     }
 
