@@ -38,7 +38,7 @@ struct ContentView: View {
     @State private var safariCheckout: SafariCheckoutItem?
     @State private var confettiTrigger = 0
     @State private var isAppLaunching = true
-    @State private var donationVariant: DonationPromptVariant = .control
+    private var donationVariant: DonationPromptVariant { appViewModel.donationVariant }
 
     @AppStorage("lastCelebratedDonationSessionID") private var lastCelebratedDonationSessionID: String = ""
 
@@ -240,7 +240,7 @@ struct ContentView: View {
 
     private func evaluateDonationPrompt() {
         guard !donationPromptOptOut else { return }
-        donationVariant = DonationPromptVariant.fromPostHog()
+        appViewModel.donationVariant = DonationPromptVariant.fromPostHog()
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
             showDonationPrompt = true
         }

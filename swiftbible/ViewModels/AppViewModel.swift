@@ -73,6 +73,7 @@ class AppViewModel {
     }
     var navigationPath = NavigationPath()
     var donationFlowRequest: DonationRequest?
+    var donationVariant: DonationPromptVariant = .control
     var latestDonation: DonationSummary?
     var donationHistory: [DonationRecord] = []
     var totalPaidCents: Int = 0

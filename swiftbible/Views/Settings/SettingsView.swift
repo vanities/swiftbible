@@ -35,7 +35,6 @@ struct SettingsView: View {
     @Binding var selectedTab: Tabs
     @State private var donationCurrency: String = "USD"
     @State private var showDonationSheet = false
-    @State private var donationVariant: DonationPromptVariant = .control
     @AppStorage("customAccentColor") private var customAccentHex: String = ""
     @State private var cacheSize: String = "0 KB"
     @State private var showClearCacheAlert = false
@@ -219,7 +218,6 @@ struct SettingsView: View {
                     }
 
                     Button {
-                        donationVariant = DonationPromptVariant.fromPostHog()
                         showDonationSheet = true
                     } label: {
                         if appViewModel.totalPaidCents > 0 {
@@ -275,7 +273,7 @@ struct SettingsView: View {
 
                         ForEach(DonationPromptVariant.allCases, id: \.rawValue) { variant in
                             Button {
-                                donationVariant = variant
+                                appViewModel.donationVariant = variant
                                 showDonationSheet = true
                             } label: {
                                 Label("Donation: \(variant.rawValue)", systemImage: "rectangle.portrait.and.arrow.right")
@@ -364,7 +362,7 @@ struct SettingsView: View {
             DonationPromptContainer(
                 isPresented: $showDonationSheet,
                 currencyCode: donationCurrency,
-                variant: donationVariant
+                variant: appViewModel.donationVariant
             ) { amount in
                 appViewModel.requestDonationFlow(
                     amount: amount,
