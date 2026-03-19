@@ -252,6 +252,8 @@ When adding colors, update `generate_palette.py` first, regenerate the PNG, then
 
 **NEVER manually deploy Edge Functions or push migrations.** Merging to `master` triggers CI/CD which automatically deploys Edge Functions and runs Supabase migrations. Do not run `supabase functions deploy`, `supabase db push`, or any manual deployment commands.
 
+**IMPORTANT: When adding a new Edge Function, you MUST also add it to `.github/workflows/deploy-supabase-functions.yml`.** The CI/CD workflow deploys each function individually — if it's not in the workflow file, it won't be deployed to production.
+
 ## Commands and Workflows
 
 ### Makefile

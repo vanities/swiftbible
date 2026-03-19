@@ -39,6 +39,10 @@ jobs:
       - name: Deploy stripe-donation-webhook function
         run: supabase functions deploy stripe-donation-webhook --project-ref "$PROJECT_ID" --no-verify-jwt
 
+      # Deploy record-storekit-donation WITHOUT JWT verification (called from app after StoreKit purchase)
+      - name: Deploy record-storekit-donation function
+        run: supabase functions deploy record-storekit-donation --project-ref "$PROJECT_ID" --no-verify-jwt
+
       # Deploy user-self-deletion WITH JWT verification (called from authenticated frontend)
       - name: Deploy user-self-deletion function
         run: supabase functions deploy user-self-deletion --project-ref "$PROJECT_ID"
