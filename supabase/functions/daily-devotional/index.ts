@@ -477,15 +477,10 @@ async function generateDevotional(prompt: string): Promise<string> {
 
 // ─── Database operations ────────────────────────────────────────────
 
-function createSupabaseClient(req: Request) {
+function createSupabaseClient() {
   return createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-    {
-      global: {
-        headers: { Authorization: req.headers.get("Authorization")! },
-      },
-    }
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
   );
 }
 
@@ -532,7 +527,7 @@ Deno.serve(async (req) => {
     return { statusCode: 403, body: "External calls are not allowed" };
   }
 
-  const supabase = createSupabaseClient(req);
+  const supabase = createSupabaseClient();
   const today = new Date();
   const { formatted, isoDate } = getFormattedDate();
 
