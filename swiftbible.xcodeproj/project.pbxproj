@@ -71,6 +71,7 @@
 		95978F1D2CA88B7F00C520EF /* SearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95978F1C2CA88B7F00C520EF /* SearchDetailView.swift */; };
 		959BA4E92E751E0900B7C7AB /* enoch.json in Resources */ = {isa = PBXBuildFile; fileRef = 959BA4E82E751E0900B7C7AB /* enoch.json */; };
 		95A7019D2E785EE10095EDDB /* RefreshableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A7019C2E785EE10095EDDB /* RefreshableScrollView.swift */; };
+		95AE12032F7AB300001A2B03 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 95AE12022F7AB300001A2B02 /* Sentry */; };
 		95CC651E2E830DA70065E7AD /* DonationPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC651D2E830DA70065E7AD /* DonationPromptView.swift */; };
 		95CC65202E830DD70065E7AD /* DonationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC651F2E830DD70065E7AD /* DonationPreferences.swift */; };
 		95CC66062E899D460065E7AD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC66052E899D460065E7AD /* SceneDelegate.swift */; };
@@ -100,6 +101,7 @@
 		AA0000042F130001000SPLASH /* GradientShimmerSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000092F130001000SPLASH /* GradientShimmerSplashView.swift */; };
 		AA0000052F130001000SPLASH /* ParticleCrossSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000A2F130001000SPLASH /* ParticleCrossSplashView.swift */; };
 		AA0000062F140001000ANALYT /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000072F140001000ANALYT /* AnalyticsService.swift */; };
+		95AE12042F7AB300001A2B04 /* SentryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AE12052F7AB300001A2B05 /* SentryService.swift */; };
 		AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA00000E2F130001000LNCHSB /* LaunchScreen.storyboard */; };
 		ACF0FA995E1B31913CE9B775 /* ReadingStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D2814EC3F3451C2EB42D8E /* ReadingStatsView.swift */; };
 		BB0000012F4D0001000TXTPK /* jubilees.json in Resources */ = {isa = PBXBuildFile; fileRef = BB0000072F4D0001000TXTPK /* jubilees.json */; };
@@ -187,6 +189,7 @@
 		959BA4E82E751E0900B7C7AB /* enoch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enoch.json; sourceTree = "<group>"; };
 		95A7019C2E785EE10095EDDB /* RefreshableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshableScrollView.swift; sourceTree = "<group>"; };
 		95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = swiftbibleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		95AE12052F7AB300001A2B05 /* SentryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryService.swift; sourceTree = "<group>"; };
 		95CC651D2E830DA70065E7AD /* DonationPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationPromptView.swift; sourceTree = "<group>"; };
 		95CC651F2E830DD70065E7AD /* DonationPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationPreferences.swift; sourceTree = "<group>"; };
 		95CC66052E899D460065E7AD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -242,6 +245,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95AE12032F7AB300001A2B03 /* Sentry in Frameworks */,
 				95CC66312E89AD780065E7AD /* ConfettiSwiftUI in Frameworks */,
 				95186D092C893C8100C0949D /* PostgREST in Frameworks */,
 				952F39DA2C8BBD3C009A412D /* MarkdownUI in Frameworks */,
@@ -447,6 +451,7 @@
 				956026C52DA85464006A9CFC /* MarkdownParser.swift */,
 				15F3B1712A28409C5CA1370A /* CacheService.swift */,
 				AA0000072F140001000ANALYT /* AnalyticsService.swift */,
+				95AE12052F7AB300001A2B05 /* SentryService.swift */,
 				CC0000022F640001000NOTIF /* NotificationService.swift */,
 				571690361A4254AFFF8A758B /* ReadingStatsService.swift */,
 			);
@@ -579,6 +584,7 @@
 				9571A6422E78588F0092C7E2 /* XCRemoteSwiftPackageReference "MJRefresh" */,
 				95CC662F2E89AD780065E7AD /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 				955798362F5CD269001625A7 /* XCRemoteSwiftPackageReference "posthog-ios" */,
+				95AE12012F7AB300001A2B01 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			productRefGroup = 954BC9D12C84EDBE00FFCFA6 /* Products */;
 			projectDirPath = "";
@@ -610,23 +616,6 @@
 				CC0000022F5D0001000ORGTX /* greek.json in Resources */,
 				954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */,
 				AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */,
-				1F6206E8EBC33A91432104D0 /* Icon-Aurora1024x1024.png in Resources */,
-				2DFDDD78FB5AC202176C2DE6 /* Icon-Blossom1024x1024.png in Resources */,
-				032F320A6F6596FA78D268C0 /* Icon-Classic1024x1024.png in Resources */,
-				8CBE5CBF071AC138CA8FD9D9 /* Icon-Copper1024x1024.png in Resources */,
-				B1DFA768095DCF9C13A35A92 /* Icon-Ember1024x1024.png in Resources */,
-				1D2E3A659577D45C6ED3C0D7 /* Icon-Frost1024x1024.png in Resources */,
-				6EDBACB6DC79B06D6F93B0F0 /* Icon-Ivory1024x1024.png in Resources */,
-				BE2130D79B6687FE63DEECA0 /* Icon-Lavender1024x1024.png in Resources */,
-				6DFCD73CC9536A37DA7C977F /* Icon-Light-1024x1024.png in Resources */,
-				DDC0951ED170B1C79C133ED6 /* Icon-Midnight1024x1024.png in Resources */,
-				45F709D42F8E467BD7113E6E /* Icon-Neon1024x1024.png in Resources */,
-				8AEA56ECA16E95ED23A0BF6E /* Icon-Ocean1024x1024.png in Resources */,
-				14D4EE901AD012D0FCF292C1 /* Icon-Rose1024x1024.png in Resources */,
-				37B38A9F69D82E848332527B /* Icon-Ruby1024x1024.png in Resources */,
-				C01BEF7D5B103D047D75F60F /* Icon-Sage1024x1024.png in Resources */,
-				0C00732BD0C3E6439922924F /* Icon-Storm1024x1024.png in Resources */,
-				B5C11F4DD663301D4353CAE7 /* Icon-Sunset1024x1024.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,6 +702,7 @@
 				AA0000052F130001000SPLASH /* ParticleCrossSplashView.swift in Sources */,
 				2862174888A3276568560CE5 /* Config.swift in Sources */,
 				AA0000062F140001000ANALYT /* AnalyticsService.swift in Sources */,
+				95AE12042F7AB300001A2B04 /* SentryService.swift in Sources */,
 				CC0000012F640001000NOTIF /* NotificationService.swift in Sources */,
 				CC0000032F640001000NOTIF /* NotificationSettingsView.swift in Sources */,
 				BB0000062F4D0001000TXTPK /* TextSourcesView.swift in Sources */,
@@ -1080,6 +1070,14 @@
 				minimumVersion = 3.7.9;
 			};
 		};
+		95AE12012F7AB300001A2B01 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.8.0;
+			};
+		};
 		95CC662F2E89AD780065E7AD /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI.git";
@@ -1140,6 +1138,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9571A6422E78588F0092C7E2 /* XCRemoteSwiftPackageReference "MJRefresh" */;
 			productName = MJRefresh;
+		};
+		95AE12022F7AB300001A2B02 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 95AE12012F7AB300001A2B01 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 		95CC66302E89AD780065E7AD /* ConfettiSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import Stripe from "npm:stripe@15.8.0";
+import { initSentry, captureException } from "../_shared/sentry.ts";
 
 type JsonResponseBody = Record<string, unknown> | null;
 
@@ -45,6 +46,8 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {});
 
+initSentry("stripe-donation-webhook");
+
 Deno.serve(async (req) => {
   console.log("[stripe-donation-webhook] request", {
     method: req.method,
@@ -84,6 +87,10 @@ Deno.serve(async (req) => {
     const message =
       error instanceof Error ? error.message : "Webhook signature verification failed";
     console.error("[stripe-donation-webhook] verification failed", message);
+    await captureException(error, {
+      functionName: "stripe-donation-webhook",
+      tags: { error_type: "signature_verification" },
+    });
     return jsonResponse({ error: message }, 400);
   }
 
@@ -125,6 +132,10 @@ Deno.serve(async (req) => {
     }
   } catch (error) {
     console.error("[stripe-donation-webhook] handler error", error);
+    await captureException(error, {
+      functionName: "stripe-donation-webhook",
+      extra: { eventType: event.type, eventId: event.id },
+    });
     return jsonResponse({ error: "Webhook processing failed" }, 500);
   }
 

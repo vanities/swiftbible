@@ -27,6 +27,8 @@
 	<string>http://127.0.0.1:54321</string>
 	<key>POSTHOG_API_KEY</key>
 	<string>phc_uEVovs3NPJlISlGb6ObWAU6OlnFvBMVMIUHeSngM5KU</string>
+	<key>SENTRY_DSN</key>
+	<string>https://83df7e668384dc4f7d44499ccf8b8011@o4511076750852096.ingest.us.sentry.io/4511076961812480</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

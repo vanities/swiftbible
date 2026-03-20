@@ -1,6 +1,7 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { initSentry, captureException } from "../_shared/sentry.ts";
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -522,56 +523,67 @@ async function saveDevotional(
 
 // ─── Main handler ───────────────────────────────────────────────────
 
+initSentry("daily-devotional");
+
 Deno.serve(async (req) => {
   if (Deno.env.get("SUPABASE_URL") == req.headers.get("SuperSecret")) {
     return { statusCode: 403, body: "External calls are not allowed" };
   }
 
-  const supabase = createSupabaseClient();
-  const today = new Date();
-  const { formatted, isoDate } = getFormattedDate();
+  try {
+    const supabase = createSupabaseClient();
+    const today = new Date();
+    const { formatted, isoDate } = getFormattedDate();
 
-  // Check for holiday
-  const holiday = getHoliday(today);
-  if (holiday) {
-    console.log(`Holiday detected: ${holiday.name}`);
-  }
+    // Check for holiday
+    const holiday = getHoliday(today);
+    if (holiday) {
+      console.log(`Holiday detected: ${holiday.name}`);
+    }
 
-  // Determine target testament (alternate from yesterday)
-  const yesterdayTestament = await getYesterdayTestament(supabase, today);
-  let targetTestament: "old" | "new";
+    // Determine target testament (alternate from yesterday)
+    const yesterdayTestament = await getYesterdayTestament(supabase, today);
+    let targetTestament: "old" | "new";
 
-  if (holiday) {
-    // For holidays, use the testament of the selected verse
-    targetTestament = holiday.verses[0].testament;
-  } else if (yesterdayTestament) {
-    targetTestament = yesterdayTestament === "old" ? "new" : "old";
-  } else {
-    // Fallback: alternate by day-of-year
-    const start = new Date(today.getFullYear(), 0, 0);
-    const dayOfYear = Math.floor(
-      (today.getTime() - start.getTime()) / 86400000
+    if (holiday) {
+      // For holidays, use the testament of the selected verse
+      targetTestament = holiday.verses[0].testament;
+    } else if (yesterdayTestament) {
+      targetTestament = yesterdayTestament === "old" ? "new" : "old";
+    } else {
+      // Fallback: alternate by day-of-year
+      const start = new Date(today.getFullYear(), 0, 0);
+      const dayOfYear = Math.floor(
+        (today.getTime() - start.getTime()) / 86400000
+      );
+      targetTestament = dayOfYear % 2 === 0 ? "old" : "new";
+    }
+
+    // Select verse
+    const verse = selectVerse(targetTestament, holiday);
+    console.log(
+      `Selected Verse: ${verse.book} ${verse.chapter}:${verse.verse} (${verse.testament}) - ${verse.text.substring(0, 80)}`
     );
-    targetTestament = dayOfYear % 2 === 0 ? "old" : "new";
+
+    // Generate devotional
+    const prompt = createPrompt(verse, formatted, holiday);
+    const devotional = await generateDevotional(prompt);
+    console.log("Generated Devotional:\n", devotional);
+
+    // Save to database
+    await saveDevotional(supabase, devotional, isoDate, verse.testament);
+
+    return new Response(devotional, {
+      headers: { "Content-Type": "text/plain" },
+    });
+  } catch (error) {
+    console.error("[daily-devotional] handler error", error);
+    await captureException(error, { functionName: "daily-devotional" });
+    return new Response(JSON.stringify({ error: "Failed to generate devotional" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
-
-  // Select verse
-  const verse = selectVerse(targetTestament, holiday);
-  console.log(
-    `Selected Verse: ${verse.book} ${verse.chapter}:${verse.verse} (${verse.testament}) - ${verse.text.substring(0, 80)}`
-  );
-
-  // Generate devotional
-  const prompt = createPrompt(verse, formatted, holiday);
-  const devotional = await generateDevotional(prompt);
-  console.log("Generated Devotional:\n", devotional);
-
-  // Save to database
-  await saveDevotional(supabase, devotional, isoDate, verse.testament);
-
-  return new Response(devotional, {
-    headers: { "Content-Type": "text/plain" },
-  });
 });
 
 /* To invoke locally:

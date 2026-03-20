@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { initSentry, captureException } from "../_shared/sentry.ts";
 
 type DonationStatusPayload = {
   anonymousId?: string;
@@ -28,6 +29,7 @@ if (!SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY environment variable");
 }
 
+initSentry("donation-status");
 denoServe();
 
 function denoServe() {
@@ -110,6 +112,10 @@ function denoServe() {
     const { data, count, error } = await query;
     if (error) {
       console.error("[donation-status] query failed", error);
+      await captureException(new Error(error.message), {
+        functionName: "donation-status",
+        extra: { anonymousId, sessionId },
+      });
       return jsonResponse({ error: "Unable to fetch donation status" }, 500);
     }
 

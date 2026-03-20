@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import Stripe from "npm:stripe@15.8.0";
+import { initSentry, captureException } from "../_shared/sentry.ts";
 
 type CreateDonationSessionPayload = {
   amountCents?: number;
@@ -40,6 +41,8 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: "2024-06-20",
   httpClient: Stripe.createFetchHttpClient(),
 });
+
+initSentry("create-donation-session");
 
 Deno.serve(async (req) => {
   console.log("[create-donation-session] request", {
@@ -174,6 +177,10 @@ Deno.serve(async (req) => {
     return jsonResponse(response, 200);
   } catch (error) {
     console.error("[create-donation-session] Stripe session creation failed", error);
+    await captureException(error, {
+      functionName: "create-donation-session",
+      extra: { amountCents, currency, anonymousId },
+    });
     return jsonResponse({ error: "Unable to create donation session" }, 500);
   }
 });

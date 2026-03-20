@@ -49,6 +49,7 @@ class SupabaseService {
             try await self.auth.signInWithOTP(email: email)
         } catch {
             print("Sign-in error: \(error.localizedDescription)")
+            SentryService.shared.capture(error, context: ["action": "signIn", "email": email])
         }
     }
 
@@ -135,6 +136,7 @@ class SupabaseService {
                 return
             } catch {
                 print("Keychain session recovery failed: \(error.localizedDescription)")
+                SentryService.shared.capture(error, context: ["action": "keychainRecovery"])
             }
         }
 
@@ -181,6 +183,7 @@ class SupabaseService {
             await updateDeviceInfo()
         } catch {
             print("Anonymous sign-in error: \(error.localizedDescription)")
+            SentryService.shared.capture(error, context: ["action": "anonymousSignIn"])
         }
     }
 
@@ -330,7 +333,9 @@ extension SupabaseService {
 
         guard (200...299).contains(httpResponse.statusCode) else {
             let message = parseErrorMessage(from: data)
-            throw SupabaseFunctionError(statusCode: httpResponse.statusCode, message: message)
+            let error = SupabaseFunctionError(statusCode: httpResponse.statusCode, message: message)
+            SentryService.shared.capture(error, context: ["function": name, "statusCode": "\(httpResponse.statusCode)"])
+            throw error
         }
 
         if data.isEmpty {

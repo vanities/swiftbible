@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { initSentry, captureException } from "../_shared/sentry.ts";
 
 type DonationHistoryPayload = {
   anonymousId?: string;
@@ -31,6 +32,8 @@ const SUPABASE_SERVICE_ROLE_KEY =
 if (!SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY environment variable");
 }
+
+initSentry("donation-history");
 
 Deno.serve(async (req) => {
   console.log("[donation-history] request", {
@@ -97,6 +100,10 @@ Deno.serve(async (req) => {
   const { data, error } = await query;
   if (error) {
     console.error("[donation-history] query failed", error);
+    await captureException(new Error(error.message), {
+      functionName: "donation-history",
+      extra: { anonymousId, userId },
+    });
     return jsonResponse({ error: "Unable to fetch donation history" }, 500);
   }
 

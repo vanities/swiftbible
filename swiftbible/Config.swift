@@ -54,6 +54,18 @@ enum AppConfig {
     static var supabaseURL: URL { environment.supabaseURL }
     static var supabaseKey: String { environment.supabaseKey }
 
+    static var sentryDSN: String {
+        guard let dsn = Bundle.main.infoDictionary?["SENTRY_DSN"] as? String,
+              !dsn.isEmpty else {
+            #if DEBUG
+            return ""
+            #else
+            fatalError("Missing SENTRY_DSN in Info.plist")
+            #endif
+        }
+        return dsn
+    }
+
     static var posthogAPIKey: String {
         guard let key = Bundle.main.infoDictionary?["POSTHOG_API_KEY"] as? String,
               !key.isEmpty else {

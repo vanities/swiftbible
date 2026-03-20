@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { initSentry, captureException } from "../_shared/sentry.ts";
 
 type StoreKitDonationPayload = {
   transactionId: string;
@@ -20,6 +21,8 @@ const SUPABASE_SERVICE_ROLE_KEY =
 if (!SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY environment variable");
 }
+
+initSentry("record-storekit-donation");
 
 Deno.serve(async (req) => {
   console.log("[record-storekit-donation] request", { method: req.method });
@@ -94,6 +97,10 @@ Deno.serve(async (req) => {
 
   if (error) {
     console.error("[record-storekit-donation] upsert failed", error);
+    await captureException(new Error(error.message), {
+      functionName: "record-storekit-donation",
+      extra: { sessionKey, amountCents, anonymousId: sanitizedAnonId },
+    });
     return jsonResponse({ error: "Failed to record donation" }, 500);
   }
 

@@ -1,7 +1,10 @@
 import { serve } from "https://deno.land/std@0.182.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.14.0";
+import { initSentry, captureException } from "../_shared/sentry.ts";
 
 console.log(`Function "user-self-deletion" up and running!`);
+
+initSentry("user-self-deletion");
 
 serve(async (req: Request) => {
   try {
@@ -45,6 +48,7 @@ serve(async (req: Request) => {
       }
     );
   } catch (error) {
+    await captureException(error, { functionName: "user-self-deletion" });
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { "Content-Type": "application/json" },
       status: 400,
