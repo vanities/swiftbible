@@ -19,17 +19,29 @@ final class SentryService {
         }
         SentrySDK.start { options in
             options.dsn = dsn
+            options.sendDefaultPii = true
             options.enableAutoSessionTracking = true
             options.enableAutoPerformanceTracing = true
             options.enableAppHangTracking = true
+            options.enableCaptureFailedRequests = true
+            options.attachScreenshot = true
+            options.attachViewHierarchy = true
             #if DEBUG
             options.debug = true
             options.environment = "development"
+            options.tracesSampleRate = 1.0
+            options.configureProfiling = {
+                $0.sessionSampleRate = 1.0
+                $0.lifecycle = .trace
+            }
             #else
             options.environment = "production"
-            #endif
-            options.enableCaptureFailedRequests = true
             options.tracesSampleRate = 0.2
+            options.configureProfiling = {
+                $0.sessionSampleRate = 0.2
+                $0.lifecycle = .trace
+            }
+            #endif
         }
     }
 

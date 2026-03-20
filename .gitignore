@@ -71,3 +71,5 @@ supabase/.env
 .mcp.json
 
 appstore/__pycache__/
+
+.sentryclirc
