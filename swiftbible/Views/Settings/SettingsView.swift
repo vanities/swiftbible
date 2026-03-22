@@ -174,9 +174,6 @@ struct SettingsView: View {
                         .onChange(of: showFirstClement) { _, newValue in
                             AnalyticsService.shared.capture(.firstClementToggled, properties: ["enabled": newValue])
                         }
-                    NavigationLink(destination: TextSourcesView()) {
-                        Label("Text Sources", systemImage: "book.closed")
-                    }
                 }
 
                 Section(header: Text("Storage")) {
@@ -316,6 +313,10 @@ struct SettingsView: View {
                         }
                     }) {
                         Label("View our Website", systemImage: "globe")
+                    }
+
+                    NavigationLink(destination: TextSourcesView()) {
+                        Label("Text Sources", systemImage: "book.closed")
                     }
                 }
 
