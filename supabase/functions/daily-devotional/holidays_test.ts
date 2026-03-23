@@ -941,7 +941,7 @@ Deno.test("multi-verse prompt has both holiday and non-holiday branches", () => 
   }
 });
 
-Deno.test("selectMultiVerses function exists with gpt-5-mini", () => {
+Deno.test("selectMultiVerses function exists with gpt-5.4-mini", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
@@ -949,8 +949,8 @@ Deno.test("selectMultiVerses function exists with gpt-5-mini", () => {
   if (!source.includes("async function selectMultiVerses")) {
     throw new Error("selectMultiVerses function not found");
   }
-  if (!source.includes('model: "gpt-5-mini"')) {
-    throw new Error("selectMultiVerses should use gpt-5-mini");
+  if (!source.includes('model: "gpt-5.4-mini"')) {
+    throw new Error("selectMultiVerses should use gpt-5.4-mini");
   }
   if (!source.includes("response_format")) {
     throw new Error("selectMultiVerses should use JSON response format");
@@ -1002,7 +1002,7 @@ Deno.test("model is set to gpt-5.4", () => {
   if (!source.includes('"gpt-5.4"')) {
     throw new Error('Model should be "gpt-5.4"');
   }
-  // gpt-5-mini is still used for verse selection (selectMultiVerses), only the main model should be gpt-5.4
+  // gpt-5.4-mini is used for verse selection (selectMultiVerses), only the main model should be gpt-5.4
   const mainModelMatch = source.match(/const model = "([^"]+)"/);
   if (mainModelMatch && mainModelMatch[1] !== "gpt-5.4") {
     throw new Error(`Main model should be "gpt-5.4", got "${mainModelMatch[1]}"`);

@@ -970,7 +970,7 @@ Return ONLY a JSON object in this exact format:
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: "gpt-5-mini",
+      model: "gpt-5.4-mini",
       messages: [
         {
           role: "system",
@@ -996,8 +996,9 @@ Return ONLY a JSON object in this exact format:
   }
 
   const data = await response.json();
+  console.log("selectMultiVerses response:", JSON.stringify(data, null, 2));
   const content = data?.choices?.[0]?.message?.content;
-  if (!content) throw new Error("Empty verse selection response");
+  if (!content) throw new Error(`Empty verse selection response: ${JSON.stringify(data)}`);
 
   const parsed = JSON.parse(content);
   if (!Array.isArray(parsed.verses) || parsed.verses.length === 0) {
@@ -1005,7 +1006,7 @@ Return ONLY a JSON object in this exact format:
   }
 
   console.log(
-    `Verse selection (gpt-5-mini): ${parsed.verses.map((v: { book: string; chapter: number; verse: number }) => `${v.book} ${v.chapter}:${v.verse}`).join(", ")}`
+    `Verse selection (gpt-5.4-mini): ${parsed.verses.map((v: { book: string; chapter: number; verse: number }) => `${v.book} ${v.chapter}:${v.verse}`).join(", ")}`
   );
 
   return parsed.verses;
@@ -1267,7 +1268,7 @@ Deno.serve(async (req) => {
     let versesUsed: SelectedVerse[];
 
     if (devotionalType === "multi") {
-      // Step 1: gpt-5-mini picks 2 thematically connected verses
+      // Step 1: gpt-5.4-mini picks 2 thematically connected verses
       const verseCount = 2;
       const verseRefs = await selectMultiVerses(verseCount, holiday);
 
