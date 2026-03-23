@@ -51,7 +51,10 @@ enum AnalyticsEvent: String {
     // Donation funnel
     case donationPromptShown = "donation_prompt_shown"
     case donationStarted = "donation_started"
+    case donationPaymentSheetShown = "donation_payment_sheet_shown"
     case donationCompleted = "donation_completed"
+    case donationCancelled = "donation_cancelled"
+    case donationFailed = "donation_failed"
     case donationPromptDismissed = "donation_prompt_dismissed"
     case donationPromptOptedOut = "donation_prompt_opted_out"
 

@@ -33,11 +33,20 @@ class StoreKitDonationService {
     func purchase(amount: Decimal) async throws -> StoreKit.Transaction {
         guard let productID = DonationPreferences.productID(for: amount),
               let product = products.first(where: { $0.id == productID }) else {
+            AnalyticsService.shared.capture(.donationFailed, properties: [
+                "amount": "\(amount)",
+                "reason": "product_not_found"
+            ])
             throw StoreKitDonationError.productNotFound
         }
 
         await MainActor.run { purchaseInProgress = true }
         defer { Task { @MainActor in purchaseInProgress = false } }
+
+        AnalyticsService.shared.capture(.donationPaymentSheetShown, properties: [
+            "amount": "\(amount)",
+            "product_id": productID
+        ])
 
         let result = try await product.purchase()
 
@@ -48,12 +57,22 @@ class StoreKitDonationService {
             return transaction
 
         case .userCancelled:
+            AnalyticsService.shared.capture(.donationCancelled, properties: [
+                "amount": "\(amount)",
+                "product_id": productID,
+                "reason": "user_cancelled"
+            ])
             throw StoreKitDonationError.userCancelled
 
         case .pending:
             throw StoreKitDonationError.pending
 
         @unknown default:
+            AnalyticsService.shared.capture(.donationFailed, properties: [
+                "amount": "\(amount)",
+                "product_id": productID,
+                "reason": "unknown"
+            ])
             throw StoreKitDonationError.unknown
         }
     }
@@ -63,6 +82,10 @@ class StoreKitDonationService {
         await MainActor.run { purchaseInProgress = true }
         defer { Task { @MainActor in purchaseInProgress = false } }
 
+        AnalyticsService.shared.capture(.donationPaymentSheetShown, properties: [
+            "product_id": product.id
+        ])
+
         let result = try await product.purchase()
 
         switch result {
@@ -72,12 +95,20 @@ class StoreKitDonationService {
             return transaction
 
         case .userCancelled:
+            AnalyticsService.shared.capture(.donationCancelled, properties: [
+                "product_id": product.id,
+                "reason": "user_cancelled"
+            ])
             throw StoreKitDonationError.userCancelled
 
         case .pending:
             throw StoreKitDonationError.pending
 
         @unknown default:
+            AnalyticsService.shared.capture(.donationFailed, properties: [
+                "product_id": product.id,
+                "reason": "unknown"
+            ])
             throw StoreKitDonationError.unknown
         }
     }

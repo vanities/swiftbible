@@ -258,6 +258,7 @@ struct ContentView: View {
 
     private func startStoreKitDonationFlow(amount: Decimal, source: String) {
         showDonationPrompt = false
+        showDonationCelebration = true
 
         AnalyticsService.shared.capture(.donationStarted, properties: [
             "amount": "\(amount)",
@@ -274,6 +275,7 @@ struct ContentView: View {
                     confettiTrigger += 1
                     hasCompletedDonation = true
                     donationPromptOptOut = true
+                    showDonationCelebration = false
 
                     AnalyticsService.shared.capture(.donationCompleted, properties: [
                         "amount_cents": StoreKitDonationService.shared.amountCents(for: transaction.productID),
@@ -282,9 +284,10 @@ struct ContentView: View {
                     ])
                 }
             } catch let error as StoreKitDonationError where error == .userCancelled {
-                // User cancelled — do nothing
+                await MainActor.run { showDonationCelebration = false }
             } catch {
                 await MainActor.run {
+                    showDonationCelebration = false
                     presentDonationError(error)
                 }
             }
