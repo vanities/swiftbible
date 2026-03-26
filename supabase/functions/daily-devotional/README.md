@@ -10,7 +10,7 @@ There are two devotional types that rotate on a 3-day cycle:
 |-----|------|-----------|-------------|
 | 1 | Single | Old | One OT verse, full devotional |
 | 2 | Single | New | One NT verse, full devotional |
-| 3 | Multi | Random | 2-3 thematically connected verses |
+| 3 | Multi | Random | 2 thematically connected verses |
 | 4 | Single | Old | Cycle repeats... |
 
 **Holidays override the cycle** and always produce a multi-verse devotional themed to the holiday.
@@ -164,7 +164,7 @@ So single-verse mode **never fires on holidays**. The rotation picks back up on 
 
 | Model | Purpose | Max Tokens |
 |-------|---------|------------|
-| `gpt-5-mini` | Verse selection (multi-verse step 1) | 300 |
+| `gpt-5.4-mini` | Verse selection (multi-verse step 1) | 300 |
 | `gpt-5.4` | Devotional writing (all modes) | 4000 |
 
 ## Database Schema

@@ -943,23 +943,34 @@ async function selectMultiVerses(
   const apiKey = Deno.env.get("OPENAI_API_KEY");
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
 
+  // Step 1: Pick the first verse randomly (guarantees variety)
+  const firstTestament: "old" | "new" = Math.random() < 0.5 ? "old" : "new";
+  const seedVerse = selectRandomVerse(firstTestament);
+  console.log(
+    `Multi-verse seed (random): ${seedVerse.book} ${seedVerse.chapter}:${seedVerse.verse}`
+  );
+
+  const companionCount = count - 1;
   const holidayContext = holiday
     ? `\n\nThis devotional is for ${holiday.name}. ${holiday.themeHint}`
     : "";
 
-  const prompt = `Select exactly ${count} thematically connected Bible verses from the King James Version (KJV) that would make a powerful devotional together.${holidayContext}
+  const prompt = `Given this Bible verse from the King James Version (KJV):
+
+${seedVerse.book} ${seedVerse.chapter}:${seedVerse.verse} — "${seedVerse.text}"
+
+Select exactly ${companionCount} companion verse${companionCount > 1 ? "s" : ""} that ${companionCount > 1 ? "connect" : "connects"} thematically to create a powerful multi-verse devotional.${holidayContext}
 
 Rules:
-- Choose verses from DIFFERENT books of the Bible
-- The verses should develop a unified spiritual theme — each adding a new dimension
+- Choose from a DIFFERENT book than ${seedVerse.book}
+- The companion should add a new dimension to the theme — not just echo the same idea
 - Use exact book names as they appear in the KJV (e.g. "Psalms" not "Psalm", "1 Corinthians" not "First Corinthians", "Song of Solomon" not "Song of Songs")
 - Only use books from the 66-book Protestant canon
 
 Return ONLY a JSON object in this exact format:
 {
   "verses": [
-    { "book": "BookName", "chapter": 1, "verse": 1 },
-    { "book": "AnotherBook", "chapter": 2, "verse": 3 }
+    { "book": "BookName", "chapter": 1, "verse": 1 }
   ]
 }`;
 
@@ -1005,11 +1016,17 @@ Return ONLY a JSON object in this exact format:
     throw new Error("Invalid verse selection format");
   }
 
+  // Combine: random seed verse + GPT companion(s)
+  const allVerses = [
+    { book: seedVerse.book, chapter: seedVerse.chapter, verse: seedVerse.verse },
+    ...parsed.verses,
+  ];
+
   console.log(
-    `Verse selection (gpt-5.4-mini): ${parsed.verses.map((v: { book: string; chapter: number; verse: number }) => `${v.book} ${v.chapter}:${v.verse}`).join(", ")}`
+    `Verse selection: ${allVerses.map((v: { book: string; chapter: number; verse: number }) => `${v.book} ${v.chapter}:${v.verse}`).join(", ")}`
   );
 
-  return parsed.verses;
+  return allVerses;
 }
 
 // ─── Multi-verse prompt creation ────────────────────────────────────
