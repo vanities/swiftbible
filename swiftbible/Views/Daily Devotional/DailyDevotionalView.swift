@@ -129,6 +129,8 @@ struct DailyDevotionalView: View {
                             })
                     }
                     .padding()
+                    .frame(maxWidth: 700)
+                    .frame(maxWidth: .infinity)
                     .contextMenu {
                         Button(action: {
                             AnalyticsService.shared.capture(.devotionalCopied)
@@ -232,6 +234,7 @@ struct DailyDevotionalView: View {
         if let cachedDevotional = CacheService.shared.loadDevotional(for: date) {
             message = cachedDevotional.message
             hasDevotional = true
+            CacheService.shared.syncDevotionalToWidget(cachedDevotional, for: date)
             AnalyticsService.shared.capture(.devotionalViewed, properties: [
                 "date": dateString,
                 "source": "cache"
@@ -259,8 +262,9 @@ struct DailyDevotionalView: View {
                 "source": "network"
             ])
 
-            // Save to cache
+            // Save to cache and sync to widget
             CacheService.shared.saveDevotional(devotional, for: date)
+            CacheService.shared.syncDevotionalToWidget(devotional, for: date)
             updateSavedState(for: date)
         } catch {
             print("No devotional found for \(dateString): \(error)")

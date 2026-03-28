@@ -118,6 +118,12 @@
 		EE766E32F77570D9062D00CB /* AppIconOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70803BE8C452F513C60AFF8C /* AppIconOption.swift */; };
 		F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */; };
 		F922B9355548B1ECA572B372 /* DonationPromptLossView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8757B63A60AEEC9286D584DF /* DonationPromptLossView.swift */; };
+		DD0000072F8A0001000APPNT /* AppIntentNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */; };
+		DD0000082F8A0001000APPNT /* AppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000022F8A0001000APPNT /* AppShortcuts.swift */; };
+		DD0000092F8A0001000APPNT /* OpenBookIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000032F8A0001000APPNT /* OpenBookIntent.swift */; };
+		DD00000A2F8A0001000APPNT /* OpenDailyDevotionalIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000042F8A0001000APPNT /* OpenDailyDevotionalIntent.swift */; };
+		DD00000B2F8A0001000APPNT /* OpenRandomVerseIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000052F8A0001000APPNT /* OpenRandomVerseIntent.swift */; };
+		DD00000C2F8A0001000APPNT /* SearchBibleIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000062F8A0001000APPNT /* SearchBibleIntent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -234,6 +240,12 @@
 		E03C9505B4D5E972B90582E3 /* ReadingTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReadingTheme.swift; sourceTree = "<group>"; };
 		EC3E4DFF77174F609B079B15 /* DonorPerksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonorPerksView.swift; sourceTree = "<group>"; };
 		EDF1104E4373CE709AC642F4 /* DonationPromptReciprocityView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DonationPromptReciprocityView.swift; sourceTree = "<group>"; };
+		DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntentNavigator.swift; sourceTree = "<group>"; };
+		DD0000022F8A0001000APPNT /* AppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShortcuts.swift; sourceTree = "<group>"; };
+		DD0000032F8A0001000APPNT /* OpenBookIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenBookIntent.swift; sourceTree = "<group>"; };
+		DD0000042F8A0001000APPNT /* OpenDailyDevotionalIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenDailyDevotionalIntent.swift; sourceTree = "<group>"; };
+		DD0000052F8A0001000APPNT /* OpenRandomVerseIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenRandomVerseIntent.swift; sourceTree = "<group>"; };
+		DD0000062F8A0001000APPNT /* SearchBibleIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBibleIntent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -270,6 +282,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DD00000D2F8A0001000APPNT /* AppIntents */ = {
+			isa = PBXGroup;
+			children = (
+				DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */,
+				DD0000022F8A0001000APPNT /* AppShortcuts.swift */,
+				DD0000032F8A0001000APPNT /* OpenBookIntent.swift */,
+				DD0000042F8A0001000APPNT /* OpenDailyDevotionalIntent.swift */,
+				DD0000052F8A0001000APPNT /* OpenRandomVerseIntent.swift */,
+				DD0000062F8A0001000APPNT /* SearchBibleIntent.swift */,
+			);
+			path = AppIntents;
+			sourceTree = "<group>";
+		};
 		952F39D02C8BAB64009A412D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -365,6 +390,7 @@
 			isa = PBXGroup;
 			children = (
 				95CC660B2E89A0A20065E7AD /* AppDelegate.swift */,
+				DD00000D2F8A0001000APPNT /* AppIntents */,
 				954BC9EB2C85011800FFCFA6 /* Views */,
 				9537E2652C8A9E0800FD56B9 /* ViewModels */,
 				954BC9E52C8500C200FFCFA6 /* Models */,
@@ -736,6 +762,12 @@
 				97B103699321A6A2D9DFFA8D /* ReadingStatsService.swift in Sources */,
 				ACF0FA995E1B31913CE9B775 /* ReadingStatsView.swift in Sources */,
 				E383E9966C655D2C252F97C3 /* AppIconPickerView.swift in Sources */,
+				DD0000072F8A0001000APPNT /* AppIntentNavigator.swift in Sources */,
+				DD0000082F8A0001000APPNT /* AppShortcuts.swift in Sources */,
+				DD0000092F8A0001000APPNT /* OpenBookIntent.swift in Sources */,
+				DD00000A2F8A0001000APPNT /* OpenDailyDevotionalIntent.swift in Sources */,
+				DD00000B2F8A0001000APPNT /* OpenRandomVerseIntent.swift in Sources */,
+				DD00000C2F8A0001000APPNT /* SearchBibleIntent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

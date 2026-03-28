@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import WidgetKit
 
 class CacheService {
     static let shared = CacheService()
@@ -175,6 +176,33 @@ class CacheService {
                 print("Error processing file for expiration: \(error)")
             }
         }
+    }
+
+    // MARK: - Widget Shared Container
+
+    /// Writes the devotional to the App Group shared container so the widget can read it.
+    /// Requires App Group "group.com.am2.swiftbible" in both targets' entitlements.
+    func syncDevotionalToWidget(_ devotional: DailyDevotional, for date: Date) {
+        guard let containerURL = fileManager.containerURL(
+            forSecurityApplicationGroupIdentifier: "group.com.am2.swiftbible"
+        ) else { return }
+
+        let devotionalsDir = containerURL.appendingPathComponent("Devotionals")
+        if !fileManager.fileExists(atPath: devotionalsDir.path) {
+            try? fileManager.createDirectory(at: devotionalsDir, withIntermediateDirectories: true)
+        }
+
+        let dateString = formatDate(date)
+        let fileURL = devotionalsDir.appendingPathComponent("\(dateString).json")
+
+        // Write only the message field the widget needs
+        struct SharedDevotional: Codable { let message: String }
+        if let data = try? JSONEncoder().encode(SharedDevotional(message: devotional.message)) {
+            try? data.write(to: fileURL, options: .atomic)
+        }
+
+        // Tell WidgetKit to refresh
+        WidgetCenter.shared.reloadAllTimelines()
     }
 
     // MARK: - Helper Methods

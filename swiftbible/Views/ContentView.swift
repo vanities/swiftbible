@@ -131,6 +131,19 @@ struct ContentView: View {
                 donationCurrency = localeCurrency.uppercased()
             }
 
+            // Wire up App Intent navigation
+            AppIntentNavigator.shared.onNavigateToBook = { bookName in
+                selectedTab = .bible
+                appViewModel.navigateToVerse(bookName: bookName, chapterNumber: 1, verseNumber: 1)
+            }
+            AppIntentNavigator.shared.onNavigateToSearch = { _ in
+                selectedTab = .search
+            }
+            AppIntentNavigator.shared.onNavigateToVerse = { bookName, chapter, verse in
+                selectedTab = .bible
+                appViewModel.navigateToVerse(bookName: bookName, chapterNumber: chapter, verseNumber: verse)
+            }
+
             Task {
                 await SupabaseService.shared.ensureSession()
                 userViewModel.user = await SupabaseService.shared.getUser()
@@ -594,6 +607,7 @@ struct ContentView: View {
                     .execute()
                     .value
                 CacheService.shared.saveDevotional(devotional, for: today)
+                CacheService.shared.syncDevotionalToWidget(devotional, for: today)
             } catch {
                 // No devotional for today yet — notification will use generic message
             }
