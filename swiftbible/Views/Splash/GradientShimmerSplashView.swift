@@ -8,6 +8,8 @@ import SwiftUI
 struct GradientShimmerSplashView: View {
     var onFinished: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var gradientOffset: CGFloat = -1.0
     @State private var shimmerOffset: CGFloat = -200
     @State private var contentScale: CGFloat = 0.0
@@ -129,6 +131,18 @@ struct GradientShimmerSplashView: View {
     }
 
     private func animate() {
+        if reduceMotion {
+            contentScale = 1.0
+            contentOpacity = 1.0
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                finalOpacity = 0
+                backgroundOpacity = 0
+                onFinished()
+            }
+            return
+        }
+
         // Pop in the icon and title from the plain blue background
         withAnimation(.spring(response: 0.5, dampingFraction: 0.65)) {
             contentScale = 1.0

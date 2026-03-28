@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct DonationCelebrationView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isAnimating = false
 
     var body: some View {
@@ -12,8 +13,12 @@ struct DonationCelebrationView: View {
                 Image(systemName: "heart.fill")
                     .font(.system(size: 80))
                     .foregroundColor(.pink)
-                    .scaleEffect(isAnimating ? 1.2 : 1.0)
-                    .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: isAnimating)
+                    .accessibilityHidden(true)
+                    .scaleEffect(isAnimating && !reduceMotion ? 1.2 : 1.0)
+                    .animation(
+                        reduceMotion ? nil : .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
+                        value: isAnimating
+                    )
 
                 Text("Preparing donation...")
                     .font(.title2)

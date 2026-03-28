@@ -431,6 +431,8 @@ struct ChapterDetailView: View {
                             .padding(.vertical, 4)
                             .background(.ultraThinMaterial, in: Capsule())
                     }
+                    .accessibilityLabel("Bible translation: \(appViewModel.selectedVersion.displayName)")
+                    .accessibilityHint("Double tap to change translation")
                 }
             }
         }
@@ -617,7 +619,7 @@ struct ChapterDetailView: View {
                 Text(summary)
                     .bold()
                     .padding(.top)
-                    .font(Font.custom(fontName, size: CGFloat(fontSize + 1)))
+                    .font(Font.custom(fontName, size: CGFloat(fontSize + 1), relativeTo: .body))
             }
 
             HStack(alignment: .top) {
@@ -654,6 +656,7 @@ struct ChapterDetailView: View {
                 Capsule()
                     .fill(Color(hex: notedColor))
                     .frame(width: 5)
+                    .accessibilityLabel("Has note")
             }
         }
     }
@@ -676,6 +679,7 @@ struct ChapterDetailView: View {
                 ? .trailing : .leading
         )
         .underline(selectedParagraph == paragraph)
+        .accessibilityHint("Long press for verse actions")
         .onLongPressGesture {
             handleLongPress(paragraph: paragraph)
         }

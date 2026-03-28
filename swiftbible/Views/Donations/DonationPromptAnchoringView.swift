@@ -40,6 +40,7 @@ struct DonationPromptAnchoringView: View {
             Image(systemName: "star.circle.fill")
                 .font(.system(size: 56))
                 .foregroundStyle(.purple)
+                .accessibilityHidden(true)
 
             VStack(spacing: 12) {
                 Text(appViewModel.totalPaidCents > 0
@@ -96,6 +97,8 @@ struct DonationPromptAnchoringView: View {
                             )
                             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                         }
+                        .accessibilityLabel("Donate \(formattedAmount(for: amount))\(amount == recommendedAmount ? ", recommended" : "")")
+                        .accessibilityAddTraits(selectedAmount == amount ? .isSelected : [])
                     }
                 }
 

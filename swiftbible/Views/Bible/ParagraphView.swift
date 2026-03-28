@@ -57,11 +57,11 @@ struct ParagraphView: View {
                 case .regular(let text):
                     verseText = verseText
                         + Text(text)
-                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
+                            .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
                 case .jesus(let text):
                     verseText = verseText
                         + Text(text)
-                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
+                            .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
                             .foregroundColor(showJesusWordsInRed ? .brandRed : .primary)
                 }
             }

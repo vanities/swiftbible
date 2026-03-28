@@ -8,6 +8,8 @@ import SwiftUI
 struct GlowScaleSplashView: View {
     var onFinished: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var iconOpacity: Double = 0
     @State private var iconScale: CGFloat = 0.6
     @State private var glowRadius: CGFloat = 0
@@ -123,6 +125,20 @@ struct GlowScaleSplashView: View {
     }
 
     private func animate() {
+        if reduceMotion {
+            iconOpacity = 1
+            iconScale = 1.0
+            titleOpacity = 1
+            titleOffset = 0
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                finalOpacity = 0
+                backgroundOpacity = 0
+                onFinished()
+            }
+            return
+        }
+
         // Icon fades in and scales up
         withAnimation(.spring(response: 0.6, dampingFraction: 0.7).delay(0.1)) {
             iconOpacity = 1

@@ -203,7 +203,7 @@ struct DailyDevotionalView: View {
             },
             alignment: .top
         )
-        .font(Font.custom(fontName, size: CGFloat(fontSize)))
+        .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
         .onAppear {
             // Clean expired cache on view appearance
             CacheService.shared.cleanExpiredCache()

@@ -43,6 +43,7 @@ struct DonationPromptReciprocityView: View {
             Image(systemName: "gift.fill")
                 .font(.system(size: 56))
                 .foregroundStyle(.green)
+                .accessibilityHidden(true)
 
             VStack(spacing: 12) {
                 Text(appViewModel.totalPaidCents > 0
@@ -106,6 +107,8 @@ struct DonationPromptReciprocityView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     }
                     .foregroundColor(.primary)
+                    .accessibilityLabel("Donate \(formattedAmount(for: amount)), \(impactLabels[amount] ?? "")")
+                    .accessibilityAddTraits(selectedAmount == amount ? .isSelected : [])
                 }
 
                 // OLD FLOW (Stripe): custom amount field — StoreKit requires fixed prices

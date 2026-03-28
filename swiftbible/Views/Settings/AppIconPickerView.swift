@@ -42,6 +42,8 @@ struct AppIconPickerView: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("\(option.displayName), \(option.subtitle)")
+                .accessibilityAddTraits(selectedIcon == option ? .isSelected : [])
             }
         }
         .navigationTitle("App Icon")

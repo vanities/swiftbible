@@ -37,6 +37,7 @@ struct DonationPromptLossView: View {
             Image(systemName: "exclamationmark.shield.fill")
                 .font(.system(size: 56))
                 .foregroundStyle(.orange)
+                .accessibilityHidden(true)
 
             VStack(spacing: 12) {
                 Text(appViewModel.totalPaidCents > 0
@@ -83,6 +84,8 @@ struct DonationPromptLossView: View {
                             )
                             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                         }
+                        .accessibilityLabel("Donate \(formattedAmount(for: amount))\(amount == recommendedAmount ? ", keeps the lights on" : "")")
+                        .accessibilityAddTraits(selectedAmount == amount ? .isSelected : [])
                     }
                 }
 

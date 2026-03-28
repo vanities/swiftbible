@@ -42,6 +42,7 @@ struct NotificationSettingsView: View {
                             )
                             .symbolEffect(.bounce, value: justEnabled)
                     }
+                    .accessibilityHidden(true)
 
                     // Gain Framing (#53) — lead with the benefit
                     Text("Never miss your daily reflection")
@@ -311,6 +312,8 @@ private struct TimePresetButton: View {
                 )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("\(label) preset, \(hour > 12 ? "\(hour - 12) PM" : "\(hour) AM")")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 

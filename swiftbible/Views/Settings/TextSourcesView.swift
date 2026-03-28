@@ -107,7 +107,7 @@ struct TextSourcesView: View {
         List {
             Section {
                 Text("All texts included in SwiftBible use public domain translations. Every translation listed below is freely available without copyright restrictions.")
-                    .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                    .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                     .foregroundStyle(.secondary)
                     .padding(.vertical, 4)
             } header: {
@@ -119,7 +119,7 @@ struct TextSourcesView: View {
                     ForEach(group.sources) { source in
                         VStack(alignment: .leading, spacing: 6) {
                             Text(source.name)
-                                .font(Font.custom(fontName, size: CGFloat(fontSize - 2)))
+                                .font(Font.custom(fontName, size: CGFloat(fontSize - 2), relativeTo: .callout))
                                 .fontWeight(.medium)
 
                             HStack(spacing: 12) {
@@ -133,11 +133,11 @@ struct TextSourcesView: View {
                                     .foregroundStyle(.green)
                                     .cornerRadius(6)
                             }
-                            .font(Font.custom(fontName, size: CGFloat(fontSize - 6)))
+                            .font(Font.custom(fontName, size: CGFloat(fontSize - 6), relativeTo: .caption))
                             .foregroundStyle(.secondary)
 
                             Text("Translated by \(source.translation)")
-                                .font(Font.custom(fontName, size: CGFloat(fontSize - 5)))
+                                .font(Font.custom(fontName, size: CGFloat(fontSize - 5), relativeTo: .caption))
                                 .foregroundStyle(.tertiary)
                         }
                         .padding(.vertical, 4)

@@ -43,6 +43,7 @@ struct DonationPromptSocialView: View {
             Image(systemName: "person.3.fill")
                 .font(.system(size: 56))
                 .foregroundStyle(.blue)
+                .accessibilityHidden(true)
 
             VStack(spacing: 12) {
                 Text(appViewModel.totalPaidCents > 0
@@ -69,6 +70,8 @@ struct DonationPromptSocialView: View {
                         .font(.caption.weight(.medium))
                         .foregroundStyle(.secondary)
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("5 stars. Loved by readers worldwide")
 
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                     ForEach(presetAmounts, id: \.self) { amount in
@@ -97,6 +100,8 @@ struct DonationPromptSocialView: View {
                             )
                             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                         }
+                        .accessibilityLabel("Donate \(formattedAmount(for: amount)), \(tierLabels[amount] ?? "")")
+                        .accessibilityAddTraits(selectedAmount == amount ? .isSelected : [])
                     }
                 }
 

@@ -118,6 +118,8 @@ struct VerseExplanationSheet: View {
                         }
                         .padding(.horizontal)
                         .padding(.bottom)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityLabel("Loading explanation")
                     }
                 }
             }

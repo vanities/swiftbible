@@ -52,6 +52,7 @@ struct SavedDevotionalsListView: View {
                         }
                         .padding(.vertical, 4)
                     }
+                    .accessibilityHint("Double tap to read. Long press for options.")
                     .contextMenu {
                         Button(role: .destructive) {
                             delete(devotional)
@@ -118,6 +119,7 @@ struct SavedDevotionalDetailView: View {
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
+                .accessibilityLabel("More options")
             }
         }
     }

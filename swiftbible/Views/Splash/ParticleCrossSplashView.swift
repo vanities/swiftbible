@@ -18,6 +18,8 @@ struct Particle: Identifiable {
 struct ParticleCrossSplashView: View {
     var onFinished: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var particles: [Particle] = []
     @State private var converged = false
     @State private var crossOpacity: Double = 0
@@ -198,6 +200,23 @@ struct ParticleCrossSplashView: View {
     }
 
     private func animate() {
+        if reduceMotion {
+            // Show bible icon and title immediately, skip particle animation
+            particleOpacity = 0
+            crossOpacity = 1
+            bookOpacity = 1
+            bookScale = 1.0
+            titleOpacity = 1
+            titleOffset = 0
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                finalOpacity = 0
+                backgroundOpacity = 0
+                onFinished()
+            }
+            return
+        }
+
         // Particles converge to cross shape
         withAnimation(.easeInOut(duration: 1.0).delay(0.2)) {
             converged = true

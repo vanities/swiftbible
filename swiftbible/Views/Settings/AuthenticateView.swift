@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct AuthenticateView: View {
     @State private var email = ""
     @State private var verificationCode = ""
@@ -28,7 +27,7 @@ struct AuthenticateView: View {
                 if let user = userViewModel.user {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Signed in as: \(user.email ?? "")")
-                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
+                            .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
 
                         Button("Sign Out") {
                             Task {
@@ -96,7 +95,7 @@ struct AuthenticateView: View {
     private func deleteAccount() async {
         isDeleting = true
         do {
-            let _ = try await SupabaseService.shared.client.functions.invoke("user-self-deletion")
+            _ = try await SupabaseService.shared.client.functions.invoke("user-self-deletion")
             // Clear stored tokens and user data
             supabaseAccessToken = nil
             supabaseRefreshToken = nil
@@ -114,5 +113,3 @@ struct AuthenticateView: View {
     AuthenticateView()
         .environment(UserViewModel())
 }
-
-

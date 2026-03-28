@@ -90,7 +90,7 @@ struct TranslationInfoView: View {
             Section {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("The Bible was originally written in Hebrew (Old Testament), Aramaic (portions of Daniel and Ezra), and Greek (New Testament). Since most people don't read these ancient languages, translations make Scripture accessible to everyone.")
-                        .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                        .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
 
                     Text("Why Translations Differ")
                         .font(.subheadline)
@@ -116,7 +116,7 @@ struct TranslationInfoView: View {
                             Text("**Textual Discoveries**: Since 1611, thousands of earlier manuscripts have been found, improving our understanding of the original text.")
                         }
                     }
-                    .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                    .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
 
                     Text("Why Multiple Translations Matter")
                         .font(.subheadline)
@@ -125,7 +125,7 @@ struct TranslationInfoView: View {
                         .padding(.top, 4)
 
                     Text("No single translation captures every nuance of the original languages. Comparing translations reveals depth and meaning that any one version alone might miss. A literal translation shows the structure of the original; a readable translation conveys the flow of thought. Together, they illuminate Scripture more fully.")
-                        .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                        .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                 }
                 .padding(.vertical, 4)
             } header: {
@@ -154,7 +154,7 @@ struct TranslationInfoView: View {
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
                             Text(translation.history)
-                                .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                                .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                         }
 
                         // Translation Method
@@ -164,7 +164,7 @@ struct TranslationInfoView: View {
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
                             Text(translation.translationMethod)
-                                .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                                .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                         }
 
                         // Source Texts
@@ -174,7 +174,7 @@ struct TranslationInfoView: View {
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
                             Text(translation.sourceTexts)
-                                .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                                .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                         }
 
                         // Notable Features
@@ -186,9 +186,9 @@ struct TranslationInfoView: View {
                             ForEach(translation.notableFeatures, id: \.self) { feature in
                                 HStack(alignment: .top, spacing: 8) {
                                     Text("•")
-                                        .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                                        .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                                     Text(feature)
-                                        .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                                        .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                                         .fixedSize(horizontal: false, vertical: true)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                 }
@@ -202,7 +202,7 @@ struct TranslationInfoView: View {
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
                             Text(translation.whyWeUseIt)
-                                .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                                .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                         }
 
                         // Sources
@@ -221,7 +221,7 @@ struct TranslationInfoView: View {
                                         Image(systemName: "link")
                                             .font(.caption)
                                         Text(source.title)
-                                            .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                                            .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                                     }
                                 }
                             }

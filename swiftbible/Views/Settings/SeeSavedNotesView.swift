@@ -44,7 +44,7 @@ struct SeeSavedNotesView: View {
                                 Text("Created: \(note.created.formatted(date: .long, time: .omitted))")
                                     .foregroundColor(.gray)
                             }
-                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
+                            .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
 
                         }
                     }

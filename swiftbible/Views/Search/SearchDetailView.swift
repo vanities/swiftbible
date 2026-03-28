@@ -52,8 +52,10 @@ struct SearchDetailView: View {
                                 ParagraphView(firstVerseNumber: result.verseNumber, paragraph: result.verseText)
                                     .lineLimit(5)
                             }
-                            .font(Font.custom(fontName, size: CGFloat(fontSize)))
+                            .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
                         }
+                        .accessibilityLabel("\(result.bookName) chapter \(result.chapterNumber) verse \(result.verseNumber)")
+                        .accessibilityHint("Double tap to navigate to this verse")
                     }
                     .buttonStyle(.plain)
                     .scrollDismissesKeyboard(.immediately)

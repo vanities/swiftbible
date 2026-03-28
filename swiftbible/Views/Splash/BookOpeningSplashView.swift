@@ -8,6 +8,8 @@ import SwiftUI
 struct BookOpeningSplashView: View {
     var onFinished: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     // Book entrance
     @State private var bookOpacity: Double = 0
     @State private var bookScale: CGFloat = 0.88
@@ -356,6 +358,29 @@ struct BookOpeningSplashView: View {
     // MARK: - Animation
 
     private func animate() {
+        if reduceMotion {
+            // Show final state immediately, brief pause, then dismiss
+            bookOpacity = 1.0
+            bookScale = 1.0
+            coverAngle = 120
+            showCoverInside = true
+            page1Angle = 50
+            page2Angle = 35
+            page3Angle = 20
+            glowIntensity = 1.0
+            glowScale = 1.2
+            titleOpacity = 1.0
+            titleOffset = 0
+            verseOpacity = 1.0
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                exitOpacity = 0
+                bgOpacity = 0
+                onFinished()
+            }
+            return
+        }
+
         // Phase 1: Book enters
         withAnimation(.easeOut(duration: 0.5).delay(0.1)) {
             bookOpacity = 1.0

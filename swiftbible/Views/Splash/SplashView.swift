@@ -16,6 +16,7 @@ struct SplashView: View {
     // Change this to preview different styles
     var style: SplashStyle = .bookOpening
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showSplash = true
 
     var body: some View {
@@ -27,7 +28,7 @@ struct SplashView: View {
                     .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.4), value: showSplash)
+        .animation(reduceMotion ? .none : .easeInOut(duration: 0.4), value: showSplash)
     }
 
     @ViewBuilder

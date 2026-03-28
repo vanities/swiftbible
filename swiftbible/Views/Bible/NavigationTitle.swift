@@ -25,6 +25,8 @@ struct NavigationTitle: View {
                 Text("")
             }
         }
-        .font(Font.custom(fontName, size: CGFloat(fontSize)))
+        .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(name)\(description.map { ", \($0)" } ?? "")")
     }
 }

@@ -325,7 +325,7 @@ struct SettingsView: View {
                         Spacer()
                         Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
                             .foregroundColor(.gray)
-                            .font(Font.custom(fontName, size: CGFloat(fontSize - 4)))
+                            .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
                         Spacer()
                     }
                     .contentShape(Rectangle())

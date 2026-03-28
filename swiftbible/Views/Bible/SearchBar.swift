@@ -23,6 +23,7 @@ struct SearchBar: View {
                 }) {
                     Image(systemName: "xmark.circle.fill")
                 }
+                .accessibilityLabel("Clear search")
             }
         }
         .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))

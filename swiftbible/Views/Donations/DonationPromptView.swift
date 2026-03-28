@@ -31,11 +31,13 @@ struct DonationPromptView: View {
             if animateSadFace {
                 SadFaceAnimationView(isActive: animateSadFace)
                     .frame(height: 110)
+                    .accessibilityLabel("Sad face")
             } else {
                 Image(systemName: "hands.sparkles.fill")
                     .font(.system(size: 56, weight: .regular, design: .default))
                     .foregroundStyle(.yellow)
                     .rotationEffect(.degrees(-6))
+                    .accessibilityHidden(true)
             }
 
             VStack(spacing: 12) {
@@ -83,6 +85,8 @@ struct DonationPromptView: View {
                             )
                             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                         }
+                        .accessibilityLabel("Donate \(formattedAmount(for: amount))\(amount == recommendedAmount ? ", most chosen" : "")")
+                        .accessibilityAddTraits(selectedAmount == amount ? .isSelected : [])
                     }
                 }
 
@@ -213,6 +217,8 @@ struct DonationPromptView: View {
 private struct SadFaceAnimationView: View {
     var isActive: Bool
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var tearOffset: CGFloat = -6
     @State private var tearOpacity: Double = 0
 
@@ -264,6 +270,12 @@ private struct SadFaceAnimationView: View {
 
     private func playAnimation() {
         resetAnimation()
+        if reduceMotion {
+            // Show static tear without motion
+            tearOpacity = 1
+            tearOffset = 12
+            return
+        }
         withAnimation(.easeIn(duration: 0.25)) {
             tearOpacity = 1
         }

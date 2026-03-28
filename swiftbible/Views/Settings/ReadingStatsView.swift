@@ -98,6 +98,8 @@ struct ReadingStatsView: View {
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("\(entry.label): \(entry.minutes) minutes")
                 }
             }
             .frame(height: 80)
@@ -189,6 +191,8 @@ private struct StatCard: View {
         .padding()
         .background(.ultraThinMaterial)
         .cornerRadius(12)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value)")
     }
 }
 

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct NoteModalView: View {
     @Environment(\.modelContext) private var context
     @State var note: Note
@@ -38,6 +37,7 @@ struct NoteModalView: View {
                     }
                     .bold()
                     .padding()
+                    .accessibilityHint("Save this note")
                     Button("Cancel") {
                         onCancel()
                     }
@@ -48,9 +48,10 @@ struct NoteModalView: View {
                     }
                     .padding()
                     .foregroundColor(.red)
+                    .accessibilityHint("Permanently delete this note")
                 }
             }
-            .font(Font.custom(fontName, size: CGFloat(fontSize)))
+            .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
             .navigationBarTitle("Edit Note", displayMode: .inline)
             .navigationBarItems(trailing: EmptyView())
         }
