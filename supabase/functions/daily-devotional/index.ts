@@ -1285,24 +1285,36 @@ Deno.serve(async (req) => {
     let versesUsed: SelectedVerse[];
 
     if (devotionalType === "multi") {
-      // Step 1: gpt-5.4-mini picks 2 thematically connected verses
-      const verseCount = 2;
-      const verseRefs = await selectMultiVerses(verseCount, holiday);
+      if (holiday && holiday.verses.length > 0) {
+        // Use curated holiday verses directly — no random seed or GPT selection
+        console.log(
+          `Using ${holiday.verses.length} curated verses for ${holiday.name}`
+        );
+        versesUsed = holiday.verses.map((v) => {
+          const resolvedText = lookupVerseText(v.book, v.chapter, v.verse);
+          return {
+            ...v,
+            text: resolvedText || v.text,
+          };
+        });
+      } else {
+        // Non-holiday multi-verse: random seed + GPT companion
+        const verseCount = 2;
+        const verseRefs = await selectMultiVerses(verseCount, holiday);
 
-      // Step 2: Resolve exact text from bible.json
-      versesUsed = verseRefs.map((ref) => {
-        const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
-        const isOT = OT_BOOKS.some((b) => b.name === ref.book);
-        return {
-          book: ref.book,
-          chapter: ref.chapter,
-          verse: ref.verse,
-          text: text || `[${ref.book} ${ref.chapter}:${ref.verse}]`,
-          testament: isOT ? ("old" as const) : ("new" as const),
-        };
-      });
+        versesUsed = verseRefs.map((ref) => {
+          const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
+          const isOT = OT_BOOKS.some((b) => b.name === ref.book);
+          return {
+            book: ref.book,
+            chapter: ref.chapter,
+            verse: ref.verse,
+            text: text || `[${ref.book} ${ref.chapter}:${ref.verse}]`,
+            testament: isOT ? ("old" as const) : ("new" as const),
+          };
+        });
+      }
 
-      // Step 3: Create prompt with all verified verses
       prompt = createMultiVersePrompt(versesUsed, formatted, holiday);
     } else {
       const verse = selectVerse(targetTestament, holiday);
