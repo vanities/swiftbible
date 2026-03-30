@@ -899,16 +899,16 @@ Deno.test("rotation cycle: old → new → multi → old", () => {
   }
 });
 
-Deno.test("holidays always override to multi", () => {
-  // The determineDevotionalType function returns "multi" when holiday is non-null
-  // We test this by verifying the logic in source
+Deno.test("holidays always override to single", () => {
+  // The determineDevotionalType function returns "single" when holiday is non-null
+  // (picks one curated verse for a focused devotional)
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
 
   // Check that the holiday override exists
-  if (!source.includes('if (holiday) {\n    return { type: "multi"')) {
-    throw new Error("Holiday override to multi-verse not found in determineDevotionalType");
+  if (!source.includes('if (holiday) {') || !source.includes('return { type: "single"')) {
+    throw new Error("Holiday override to single-verse not found in determineDevotionalType");
   }
 });
 

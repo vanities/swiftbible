@@ -164,6 +164,9 @@ function getHoliday(date: Date): Holiday | null {
           { book: "Matthew", chapter: 6, verse: 16, text: "Moreover when ye fast, be not, as the hypocrites, of a sad countenance: for they disfigure their faces, that they may appear unto men to fast. Verily I say unto you, They have their reward.", testament: "new" },
           { book: "Joel", chapter: 2, verse: 12, text: "Therefore also now, saith the LORD, turn ye even to me with all your heart, and with fasting, and with weeping, and with mourning.", testament: "old" },
           { book: "1 Corinthians", chapter: 10, verse: 31, text: "Whether therefore ye eat, or drink, or whatsoever ye do, do all to the glory of God.", testament: "new" },
+          { book: "Ecclesiastes", chapter: 3, verse: 1, text: "To every thing there is a season, and a time to every purpose under the heaven.", testament: "old" },
+          { book: "Isaiah", chapter: 58, verse: 6, text: "Is not this the fast that I have chosen? to loose the bands of wickedness, to undo the heavy burdens, and to let the oppressed go free, and that ye break every yoke?", testament: "old" },
+          { book: "2 Corinthians", chapter: 7, verse: 1, text: "Having therefore these promises, dearly beloved, let us cleanse ourselves from all filthiness of the flesh and spirit, perfecting holiness in the fear of God.", testament: "new" },
         ],
       },
     },
@@ -177,6 +180,9 @@ function getHoliday(date: Date): Holiday | null {
           { book: "Joel", chapter: 2, verse: 13, text: "And rend your heart, and not your garments, and turn unto the LORD your God: for he is gracious and merciful, slow to anger, and of great kindness, and repenteth him of the evil.", testament: "old" },
           { book: "Psalms", chapter: 51, verse: 10, text: "Create in me a clean heart, O God; and renew a right spirit within me.", testament: "old" },
           { book: "Matthew", chapter: 6, verse: 6, text: "But thou, when thou prayest, enter into thy closet, and when thou hast shut thy door, pray to thy Father which is in secret; and thy Father which seeth in secret shall reward thee openly.", testament: "new" },
+          { book: "Genesis", chapter: 3, verse: 19, text: "In the sweat of thy face shalt thou eat bread, till thou return unto the ground; for out of it wast thou taken: for dust thou art, and unto dust shalt thou return.", testament: "old" },
+          { book: "Psalms", chapter: 103, verse: 14, text: "For he knoweth our frame; he remembereth that we are dust.", testament: "old" },
+          { book: "James", chapter: 4, verse: 10, text: "Humble yourselves in the sight of the Lord, and he shall lift you up.", testament: "new" },
         ],
       },
     },
@@ -190,6 +196,9 @@ function getHoliday(date: Date): Holiday | null {
           { book: "Isaiah", chapter: 66, verse: 10, text: "Rejoice ye with Jerusalem, and be glad with her, all ye that love her: rejoice for joy with her, all ye that mourn for her.", testament: "old" },
           { book: "John", chapter: 6, verse: 35, text: "And Jesus said unto them, I am the bread of life: he that cometh to me shall never hunger; and he that believeth on me shall never thirst.", testament: "new" },
           { book: "Psalms", chapter: 122, verse: 1, text: "I was glad when they said unto me, Let us go into the house of the LORD.", testament: "old" },
+          { book: "Philippians", chapter: 4, verse: 4, text: "Rejoice in the Lord alway: and again I say, Rejoice.", testament: "new" },
+          { book: "Nehemiah", chapter: 8, verse: 10, text: "Then he said unto them, Go your way, eat the fat, and drink the sweet, and send portions unto them for whom nothing is prepared: for this day is holy unto our Lord: neither be ye sorry; for the joy of the LORD is your strength.", testament: "old" },
+          { book: "Romans", chapter: 15, verse: 13, text: "Now the God of hope fill you with all joy and peace in believing, that ye may abound in hope, through the power of the Holy Ghost.", testament: "new" },
         ],
       },
     },
@@ -203,6 +212,10 @@ function getHoliday(date: Date): Holiday | null {
           { book: "Matthew", chapter: 21, verse: 9, text: "And the multitudes that went before, and that followed, cried, saying, Hosanna to the Son of David: Blessed is he that cometh in the name of the Lord; Hosanna in the highest.", testament: "new" },
           { book: "Zechariah", chapter: 9, verse: 9, text: "Rejoice greatly, O daughter of Zion; shout, O daughter of Jerusalem: behold, thy King cometh unto thee: he is just, and having salvation; lowly, and riding upon an ass, and upon a colt the foal of an ass.", testament: "old" },
           { book: "John", chapter: 12, verse: 13, text: "Took branches of palm trees, and went forth to meet him, and cried, Hosanna: Blessed is the King of Israel that cometh in the name of the Lord.", testament: "new" },
+          { book: "Psalms", chapter: 118, verse: 26, text: "Blessed be he that cometh in the name of the LORD: we have blessed you out of the house of the LORD.", testament: "old" },
+          { book: "Mark", chapter: 11, verse: 9, text: "And they that went before, and they that followed, cried, saying, Hosanna; Blessed is he that cometh in the name of the Lord.", testament: "new" },
+          { book: "Luke", chapter: 19, verse: 40, text: "And he answered and said unto them, I tell you that, if these should hold their peace, the stones would immediately cry out.", testament: "new" },
+          { book: "Philippians", chapter: 2, verse: 8, text: "And being found in fashion as a man, he humbled himself, and became obedient unto death, even the death of the cross.", testament: "new" },
         ],
       },
     },
@@ -216,6 +229,10 @@ function getHoliday(date: Date): Holiday | null {
           { book: "Mark", chapter: 11, verse: 15, text: "And they come to Jerusalem: and Jesus went into the temple, and began to cast out them that sold and bought in the temple, and overthrew the tables of the moneychangers, and the seats of them that sold doves.", testament: "new" },
           { book: "John", chapter: 2, verse: 16, text: "And said unto them that sold doves, Take these things hence; make not my Father's house an house of merchandise.", testament: "new" },
           { book: "Isaiah", chapter: 56, verse: 7, text: "Even them will I bring to my holy mountain, and make them joyful in my house of prayer: their house shall be called an house of prayer for all people.", testament: "old" },
+          { book: "Malachi", chapter: 3, verse: 2, text: "But who may abide the day of his coming? and who shall stand when he appeareth? for he is like a refiner's fire, and like fullers' soap.", testament: "old" },
+          { book: "Psalms", chapter: 69, verse: 9, text: "For the zeal of thine house hath eaten me up; and the reproaches of them that reproached thee are fallen upon me.", testament: "old" },
+          { book: "Jeremiah", chapter: 7, verse: 11, text: "Is this house, which is called by my name, become a den of robbers in your eyes? Behold, even I have seen it, saith the LORD.", testament: "old" },
+          { book: "Matthew", chapter: 21, verse: 13, text: "And said unto them, It is written, My house shall be called the house of prayer; but ye have made it a den of thieves.", testament: "new" },
         ],
       },
     },
@@ -229,6 +246,9 @@ function getHoliday(date: Date): Holiday | null {
           { book: "Matthew", chapter: 26, verse: 15, text: "And said unto them, What will ye give me, and I will deliver him unto you? And they covenanted with him for thirty pieces of silver.", testament: "new" },
           { book: "Psalms", chapter: 41, verse: 9, text: "Yea, mine own familiar friend, in whom I trusted, which did eat of my bread, hath lifted up his heel against me.", testament: "old" },
           { book: "Zechariah", chapter: 11, verse: 12, text: "And I said unto them, If ye think good, give me my price; and if not, forbear. So they weighed for my price thirty pieces of silver.", testament: "old" },
+          { book: "Luke", chapter: 22, verse: 3, text: "Then entered Satan into Judas surnamed Iscariot, being of the number of the twelve.", testament: "new" },
+          { book: "Proverbs", chapter: 27, verse: 6, text: "Faithful are the wounds of a friend; but the kisses of an enemy are deceitful.", testament: "old" },
+          { book: "John", chapter: 13, verse: 27, text: "And after the sop Satan entered into him. Then said Jesus unto him, That thou doest, do quickly.", testament: "new" },
         ],
       },
     },
@@ -242,6 +262,10 @@ function getHoliday(date: Date): Holiday | null {
           { book: "John", chapter: 13, verse: 34, text: "A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another.", testament: "new" },
           { book: "Luke", chapter: 22, verse: 19, text: "And he took bread, and gave thanks, and brake it, and gave unto them, saying, This is my body which is given for you: this do in remembrance of me.", testament: "new" },
           { book: "John", chapter: 13, verse: 14, text: "If I then, your Lord and Master, have washed your feet; ye also ought to wash one another's feet.", testament: "new" },
+          { book: "1 Corinthians", chapter: 11, verse: 26, text: "For as often as ye eat this bread, and drink this cup, ye do shew the Lord's death till he come.", testament: "new" },
+          { book: "Mark", chapter: 14, verse: 22, text: "And as they did eat, Jesus took bread, and blessed, and brake it, and gave to them, and said, Take, eat: this is my body.", testament: "new" },
+          { book: "Exodus", chapter: 12, verse: 14, text: "And this day shall be unto you for a memorial; and ye shall keep it a feast to the LORD throughout your generations; ye shall keep it a feast by an ordinance for ever.", testament: "old" },
+          { book: "Matthew", chapter: 26, verse: 39, text: "And he went a little further, and fell on his face, and prayed, saying, O my Father, if it be possible, let this cup pass from me: nevertheless not as I will, but as thou wilt.", testament: "new" },
         ],
       },
     },
@@ -255,6 +279,11 @@ function getHoliday(date: Date): Holiday | null {
           { book: "John", chapter: 19, verse: 30, text: "When Jesus therefore had received the vinegar, he said, It is finished: and he bowed his head, and gave up the ghost.", testament: "new" },
           { book: "Isaiah", chapter: 53, verse: 5, text: "But he was wounded for our transgressions, he was bruised for our iniquities: the chastisement of our peace was upon him; and with his stripes we are healed.", testament: "old" },
           { book: "Romans", chapter: 5, verse: 8, text: "But God commendeth his love toward us, in that, while we were yet sinners, Christ died for us.", testament: "new" },
+          { book: "Psalms", chapter: 22, verse: 1, text: "My God, my God, why hast thou forsaken me? why art thou so far from helping me, and from the words of my roaring?", testament: "old" },
+          { book: "Luke", chapter: 23, verse: 34, text: "Then said Jesus, Father, forgive them; for they know not what they do. And they parted his raiment, and cast lots.", testament: "new" },
+          { book: "Galatians", chapter: 2, verse: 20, text: "I am crucified with Christ: nevertheless I live; yet not I, but Christ liveth in me: and the life which I now live in the flesh I live by the faith of the Son of God, who loved me, and gave himself for me.", testament: "new" },
+          { book: "1 Peter", chapter: 2, verse: 24, text: "Who his own self bare our sins in his own body on the tree, that we, being dead to sins, should live unto righteousness: by whose stripes ye were healed.", testament: "new" },
+          { book: "Hebrews", chapter: 12, verse: 2, text: "Looking unto Jesus the author and finisher of our faith; who for the joy that was set before him endured the cross, despising the shame, and is set down at the right hand of the throne of God.", testament: "new" },
         ],
       },
     },
@@ -268,6 +297,10 @@ function getHoliday(date: Date): Holiday | null {
           { book: "Psalms", chapter: 130, verse: 5, text: "I wait for the LORD, my soul doth wait, and in his word do I hope.", testament: "old" },
           { book: "Lamentations", chapter: 3, verse: 25, text: "The LORD is good unto them that wait for him, to the soul that seeketh him.", testament: "old" },
           { book: "Romans", chapter: 8, verse: 25, text: "But if we hope for that we see not, then do we with patience wait for it.", testament: "new" },
+          { book: "Psalms", chapter: 16, verse: 10, text: "For thou wilt not leave my soul in hell; neither wilt thou suffer thine Holy One to see corruption.", testament: "old" },
+          { book: "Job", chapter: 19, verse: 25, text: "For I know that my redeemer liveth, and that he shall stand at the latter day upon the earth.", testament: "old" },
+          { book: "Habakkuk", chapter: 2, verse: 3, text: "For the vision is yet for an appointed time, but at the end it shall speak, and not lie: though it tarry, wait for it; because it will surely come, it will not tarry.", testament: "old" },
+          { book: "Isaiah", chapter: 25, verse: 9, text: "And it shall be said in that day, Lo, this is our God; we have waited for him, and he will save us: this is the LORD; we have waited for him, we will be glad and rejoice in his salvation.", testament: "old" },
         ],
       },
     },
@@ -281,6 +314,11 @@ function getHoliday(date: Date): Holiday | null {
           { book: "Matthew", chapter: 28, verse: 6, text: "He is not here: for he is risen, as he said. Come, see the place where the Lord lay.", testament: "new" },
           { book: "John", chapter: 11, verse: 25, text: "Jesus said unto her, I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live.", testament: "new" },
           { book: "1 Corinthians", chapter: 15, verse: 55, text: "O death, where is thy sting? O grave, where is thy victory?", testament: "new" },
+          { book: "Romans", chapter: 6, verse: 9, text: "Knowing that Christ being raised from the dead dieth no more; death hath no more dominion over him.", testament: "new" },
+          { book: "Colossians", chapter: 3, verse: 1, text: "If ye then be risen with Christ, seek those things which are above, where Christ sitteth on the right hand of God.", testament: "new" },
+          { book: "Luke", chapter: 24, verse: 6, text: "He is not here, but is risen: remember how he spake unto you when he was yet in Galilee.", testament: "new" },
+          { book: "Psalms", chapter: 118, verse: 24, text: "This is the day which the LORD hath made; we will rejoice and be glad in it.", testament: "old" },
+          { book: "1 Peter", chapter: 1, verse: 3, text: "Blessed be the God and Father of our Lord Jesus Christ, which according to his abundant mercy hath begotten us again unto a lively hope by the resurrection of Jesus Christ from the dead.", testament: "new" },
         ],
       },
     },
@@ -1184,9 +1222,10 @@ async function determineDevotionalType(
   today: Date,
   holiday: Holiday | null
 ): Promise<{ type: "single" | "multi"; targetTestament: "old" | "new" }> {
-  // Holidays always use multi-verse with all curated verses
+  // Holidays: pick one curated verse (single-verse devotional)
   if (holiday) {
-    return { type: "multi", targetTestament: holiday.verses[0].testament };
+    const randomVerse = holiday.verses[Math.floor(Math.random() * holiday.verses.length)];
+    return { type: "single", targetTestament: randomVerse.testament };
   }
 
   // Check yesterday's devotional for rotation: old single → new single → multi → repeat
@@ -1285,11 +1324,9 @@ Deno.serve(async (req) => {
     let versesUsed: SelectedVerse[];
 
     if (devotionalType === "multi") {
-      // Step 1: gpt-5.4-mini picks 2 thematically connected verses
-      const verseCount = 2;
-      const verseRefs = await selectMultiVerses(verseCount, holiday);
+      // Non-holiday multi-verse: random seed + GPT companion
+      const verseRefs = await selectMultiVerses(2, null);
 
-      // Step 2: Resolve exact text from bible.json
       versesUsed = verseRefs.map((ref) => {
         const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
         const isOT = OT_BOOKS.some((b) => b.name === ref.book);
@@ -1302,7 +1339,6 @@ Deno.serve(async (req) => {
         };
       });
 
-      // Step 3: Create prompt with all verified verses
       prompt = createMultiVersePrompt(versesUsed, formatted, holiday);
     } else {
       const verse = selectVerse(targetTestament, holiday);
