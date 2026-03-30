@@ -7,6 +7,10 @@ import SwiftUI
 /// Set this up in Xcode: Signing & Capabilities > App Groups > group.com.am2.swiftbible
 let appGroupID = "group.com.am2.swiftbible"
 
+// Supabase REST API for direct widget fetching
+let supabaseURL = "https://yvanxjoayoiocwzfpkfm.supabase.co"
+let supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2YW54am9heW9pb2N3emZwa2ZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU0OTQ5NTcsImV4cCI6MjA0MTA3MDk1N30.gG7dCHItgIBQhjA4EK38FJ6ju-I7mSJlvJRzVLaPuOs"
+
 // MARK: - Entry
 
 struct DevotionalEntry: TimelineEntry {
@@ -33,18 +37,83 @@ struct DailyDevotionalProvider: TimelineProvider {
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<DevotionalEntry>) -> Void) {
-        let entry = loadEntry()
-        // Refresh at midnight or in 1 hour if no devotional found
-        let nextUpdate: Date
-        if entry.hasDevotional {
-            nextUpdate = Calendar.current.startOfDay(
+        // Try local cache first
+        let cached = loadEntry()
+        if cached.hasDevotional {
+            let nextUpdate = Calendar.current.startOfDay(
                 for: Calendar.current.date(byAdding: .day, value: 1, to: Date())!
             )
-        } else {
-            nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: Date())!
+            let timeline = Timeline(entries: [cached], policy: .after(nextUpdate))
+            completion(timeline)
+            return
         }
-        let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
-        completion(timeline)
+
+        // Cache miss — fetch from Supabase
+        Task {
+            let entry = await fetchFromSupabase() ?? cached
+            let nextUpdate: Date
+            if entry.hasDevotional {
+                nextUpdate = Calendar.current.startOfDay(
+                    for: Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+                )
+            } else {
+                nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: Date())!
+            }
+            let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
+            completion(timeline)
+        }
+    }
+
+    private func fetchFromSupabase() async -> DevotionalEntry? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: Date())
+
+        // Supabase REST API: GET /rest/v1/Daily%20Devotional?select=*&for_date=eq.{date}
+        var components = URLComponents(string: "\(supabaseURL)/rest/v1/Daily%20Devotional")!
+        components.queryItems = [
+            URLQueryItem(name: "select", value: "message"),
+            URLQueryItem(name: "for_date", value: "eq.\(dateString)")
+        ]
+
+        guard let url = components.url else { return nil }
+
+        var request = URLRequest(url: url)
+        request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        // Return single object instead of array
+        request.setValue("application/vnd.pgrst.object+json", forHTTPHeaderField: "Accept-Profile")
+
+        guard let (data, response) = try? await URLSession.shared.data(for: request),
+              let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200,
+              let devotional = try? JSONDecoder().decode(SharedDevotional.self, from: data) else {
+            return nil
+        }
+
+        // Save to App Group container so it's cached for next refresh
+        saveToSharedContainer(devotional, dateString: dateString)
+
+        let preview = cleanMarkdown(devotional.message)
+        return DevotionalEntry(
+            date: Date(),
+            title: devotionalTitle(for: Date()),
+            preview: preview,
+            hasDevotional: true
+        )
+    }
+
+    private func saveToSharedContainer(_ devotional: SharedDevotional, dateString: String) {
+        guard let containerURL = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: appGroupID
+        ) else { return }
+
+        let dir = containerURL.appendingPathComponent("Devotionals")
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let fileURL = dir.appendingPathComponent("\(dateString).json")
+        if let data = try? JSONEncoder().encode(devotional) {
+            try? data.write(to: fileURL)
+        }
     }
 
     private func loadEntry() -> DevotionalEntry {
@@ -185,7 +254,7 @@ struct DevotionalMediumView: View {
             if entry.hasDevotional {
                 Text("Read more in SwiftBible")
                     .font(.caption2)
-                    .foregroundStyle(.accent)
+                    .foregroundStyle(.blue)
             }
         }
         .padding()

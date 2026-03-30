@@ -72,6 +72,26 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: .devotionalReminderTapped)) { _ in
             selectedTab = .dailyDevotional
         }
+        .onOpenURL { url in
+            if url.scheme == "swiftbible" {
+                switch url.host {
+                case "devotional":
+                    selectedTab = .dailyDevotional
+                case "verse":
+                    if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                       let bookName = components.queryItems?.first(where: { $0.name == "book" })?.value,
+                       let chapterStr = components.queryItems?.first(where: { $0.name == "chapter" })?.value,
+                       let chapter = Int(chapterStr),
+                       let verseStr = components.queryItems?.first(where: { $0.name == "verse" })?.value,
+                       let verse = Int(verseStr) {
+                        selectedTab = .bible
+                        appViewModel.navigateToVerse(bookName: bookName, chapterNumber: chapter, verseNumber: verse)
+                    }
+                default:
+                    break
+                }
+            }
+        }
         .onReceive(NotificationCenter.default.publisher(for: .donationStatusShouldRefresh)) { notification in
             guard DonationPreferences.useStripePayments else { return }
             safariCheckout = nil

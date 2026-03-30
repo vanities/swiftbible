@@ -90,6 +90,9 @@
 		95F3A0062F040001000A1B2C /* TranslationInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F3A0052F040001000A1B2C /* TranslationInfoView.swift */; };
 		95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5D8A12E92D10000A1B2C3 /* DonationService.swift */; };
 		95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */; };
+		95F7C7D12F7B2E2D00B478E6 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F7C7D02F7B2E2D00B478E6 /* WidgetKit.framework */; };
+		95F7C7D32F7B2E2D00B478E6 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F7C7D22F7B2E2D00B478E6 /* SwiftUI.framework */; };
+		95F7C7E02F7B2E2E00B478E6 /* swiftbibleWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 95F7C7CF2F7B2E2D00B478E6 /* swiftbibleWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		95F8A0022F1A2B3400ABCDEF /* SavedDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */; };
 		95F8A0042F1A2B3400ABCDEF /* SavedDevotionalsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */; };
 		97B103699321A6A2D9DFFA8D /* ReadingStatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571690361A4254AFFF8A758B /* ReadingStatsService.swift */; };
@@ -114,16 +117,16 @@
 		CC0000012F640001000NOTIF /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000022F640001000NOTIF /* NotificationService.swift */; };
 		CC0000022F5D0001000ORGTX /* greek.json in Resources */ = {isa = PBXBuildFile; fileRef = CC0000042F5D0001000ORGTX /* greek.json */; };
 		CC0000032F640001000NOTIF /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000042F640001000NOTIF /* NotificationSettingsView.swift */; };
-		E383E9966C655D2C252F97C3 /* AppIconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2CE7334B0BFCB9BCC9CFD5 /* AppIconPickerView.swift */; };
-		EE766E32F77570D9062D00CB /* AppIconOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70803BE8C452F513C60AFF8C /* AppIconOption.swift */; };
-		F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */; };
-		F922B9355548B1ECA572B372 /* DonationPromptLossView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8757B63A60AEEC9286D584DF /* DonationPromptLossView.swift */; };
 		DD0000072F8A0001000APPNT /* AppIntentNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */; };
 		DD0000082F8A0001000APPNT /* AppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000022F8A0001000APPNT /* AppShortcuts.swift */; };
 		DD0000092F8A0001000APPNT /* OpenBookIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000032F8A0001000APPNT /* OpenBookIntent.swift */; };
 		DD00000A2F8A0001000APPNT /* OpenDailyDevotionalIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000042F8A0001000APPNT /* OpenDailyDevotionalIntent.swift */; };
 		DD00000B2F8A0001000APPNT /* OpenRandomVerseIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000052F8A0001000APPNT /* OpenRandomVerseIntent.swift */; };
 		DD00000C2F8A0001000APPNT /* SearchBibleIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000062F8A0001000APPNT /* SearchBibleIntent.swift */; };
+		E383E9966C655D2C252F97C3 /* AppIconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2CE7334B0BFCB9BCC9CFD5 /* AppIconPickerView.swift */; };
+		EE766E32F77570D9062D00CB /* AppIconOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70803BE8C452F513C60AFF8C /* AppIconOption.swift */; };
+		F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */; };
+		F922B9355548B1ECA572B372 /* DonationPromptLossView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8757B63A60AEEC9286D584DF /* DonationPromptLossView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,7 +137,28 @@
 			remoteGlobalIDString = 954BC9CF2C84EDBE00FFCFA6;
 			remoteInfo = swiftbible;
 		};
+		95F7C7DE2F7B2E2E00B478E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 954BC9C82C84EDBE00FFCFA6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95F7C7CE2F7B2E2D00B478E6;
+			remoteInfo = swiftbibleWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		95F7C7E12F7B2E2E00B478E6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				95F7C7E02F7B2E2E00B478E6 /* swiftbibleWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0DBAFC9D9F8443A5A401AC37 /* BookmarkPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPreferences.swift; sourceTree = "<group>"; };
@@ -212,6 +236,10 @@
 		95F3A0052F040001000A1B2C /* TranslationInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationInfoView.swift; sourceTree = "<group>"; };
 		95F5D8A12E92D10000A1B2C3 /* DonationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationService.swift; sourceTree = "<group>"; };
 		95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
+		95F7C7CF2F7B2E2D00B478E6 /* swiftbibleWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = swiftbibleWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		95F7C7D02F7B2E2D00B478E6 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		95F7C7D22F7B2E2D00B478E6 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		95F7C7E82F7B2ED000B478E6 /* swiftbibleWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = swiftbibleWidgetExtension.entitlements; sourceTree = "<group>"; };
 		95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotional.swift; sourceTree = "<group>"; };
 		95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotionalsListView.swift; sourceTree = "<group>"; };
 		9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DailyDevotional.swift; sourceTree = "<group>"; };
@@ -237,19 +265,30 @@
 		CC0000042F5D0001000ORGTX /* greek.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = greek.json; sourceTree = "<group>"; };
 		CC0000042F640001000NOTIF /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 		D1436A3087B4D420B1C9E6BE /* ReadingSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReadingSession.swift; sourceTree = "<group>"; };
-		E03C9505B4D5E972B90582E3 /* ReadingTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReadingTheme.swift; sourceTree = "<group>"; };
-		EC3E4DFF77174F609B079B15 /* DonorPerksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonorPerksView.swift; sourceTree = "<group>"; };
-		EDF1104E4373CE709AC642F4 /* DonationPromptReciprocityView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DonationPromptReciprocityView.swift; sourceTree = "<group>"; };
 		DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntentNavigator.swift; sourceTree = "<group>"; };
 		DD0000022F8A0001000APPNT /* AppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShortcuts.swift; sourceTree = "<group>"; };
 		DD0000032F8A0001000APPNT /* OpenBookIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenBookIntent.swift; sourceTree = "<group>"; };
 		DD0000042F8A0001000APPNT /* OpenDailyDevotionalIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenDailyDevotionalIntent.swift; sourceTree = "<group>"; };
 		DD0000052F8A0001000APPNT /* OpenRandomVerseIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenRandomVerseIntent.swift; sourceTree = "<group>"; };
 		DD0000062F8A0001000APPNT /* SearchBibleIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBibleIntent.swift; sourceTree = "<group>"; };
+		E03C9505B4D5E972B90582E3 /* ReadingTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReadingTheme.swift; sourceTree = "<group>"; };
+		EC3E4DFF77174F609B079B15 /* DonorPerksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonorPerksView.swift; sourceTree = "<group>"; };
+		EDF1104E4373CE709AC642F4 /* DonationPromptReciprocityView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DonationPromptReciprocityView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		95F7C7E42F7B2E2E00B478E6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 95F7C7CE2F7B2E2D00B478E6 /* swiftbibleWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		95AB8B902CAB768000533AA5 /* swiftbibleUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = swiftbibleUITests; sourceTree = "<group>"; };
+		95F7C7D42F7B2E2D00B478E6 /* swiftbibleWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (95F7C7E42F7B2E2E00B478E6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = swiftbibleWidget; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,22 +318,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		95F7C7CC2F7B2E2D00B478E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95F7C7D32F7B2E2D00B478E6 /* SwiftUI.framework in Frameworks */,
+				95F7C7D12F7B2E2D00B478E6 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DD00000D2F8A0001000APPNT /* AppIntents */ = {
-			isa = PBXGroup;
-			children = (
-				DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */,
-				DD0000022F8A0001000APPNT /* AppShortcuts.swift */,
-				DD0000032F8A0001000APPNT /* OpenBookIntent.swift */,
-				DD0000042F8A0001000APPNT /* OpenDailyDevotionalIntent.swift */,
-				DD0000052F8A0001000APPNT /* OpenRandomVerseIntent.swift */,
-				DD0000062F8A0001000APPNT /* SearchBibleIntent.swift */,
-			);
-			path = AppIntents;
-			sourceTree = "<group>";
-		};
 		952F39D02C8BAB64009A412D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -354,6 +389,8 @@
 		9537E25C2C893FBD00FD56B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				95F7C7D02F7B2E2D00B478E6 /* WidgetKit.framework */,
+				95F7C7D22F7B2E2D00B478E6 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -370,8 +407,10 @@
 		954BC9C72C84EDBE00FFCFA6 = {
 			isa = PBXGroup;
 			children = (
+				95F7C7E82F7B2ED000B478E6 /* swiftbibleWidgetExtension.entitlements */,
 				954BC9D22C84EDBE00FFCFA6 /* swiftbible */,
 				95AB8B902CAB768000533AA5 /* swiftbibleUITests */,
+				95F7C7D42F7B2E2D00B478E6 /* swiftbibleWidget */,
 				9537E25C2C893FBD00FD56B9 /* Frameworks */,
 				954BC9D12C84EDBE00FFCFA6 /* Products */,
 			);
@@ -382,6 +421,7 @@
 			children = (
 				954BC9D02C84EDBE00FFCFA6 /* swiftbible.app */,
 				95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */,
+				95F7C7CF2F7B2E2D00B478E6 /* swiftbibleWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -534,6 +574,19 @@
 			path = Splash;
 			sourceTree = "<group>";
 		};
+		DD00000D2F8A0001000APPNT /* AppIntents */ = {
+			isa = PBXGroup;
+			children = (
+				DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */,
+				DD0000022F8A0001000APPNT /* AppShortcuts.swift */,
+				DD0000032F8A0001000APPNT /* OpenBookIntent.swift */,
+				DD0000042F8A0001000APPNT /* OpenDailyDevotionalIntent.swift */,
+				DD0000052F8A0001000APPNT /* OpenRandomVerseIntent.swift */,
+				DD0000062F8A0001000APPNT /* SearchBibleIntent.swift */,
+			);
+			path = AppIntents;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -545,10 +598,12 @@
 				954BC9CD2C84EDBE00FFCFA6 /* Frameworks */,
 				954BC9CE2C84EDBE00FFCFA6 /* Resources */,
 				93C2D2EF8678477E9E93CB92 /* Upload Debug Symbols to Sentry */,
+				95F7C7E12F7B2E2E00B478E6 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				95F7C7DF2F7B2E2E00B478E6 /* PBXTargetDependency */,
 			);
 			name = swiftbible;
 			productName = swiftbible;
@@ -576,6 +631,28 @@
 			productReference = 95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		95F7C7CE2F7B2E2D00B478E6 /* swiftbibleWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95F7C7E52F7B2E2E00B478E6 /* Build configuration list for PBXNativeTarget "swiftbibleWidgetExtension" */;
+			buildPhases = (
+				95F7C7CB2F7B2E2D00B478E6 /* Sources */,
+				95F7C7CC2F7B2E2D00B478E6 /* Frameworks */,
+				95F7C7CD2F7B2E2D00B478E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				95F7C7D42F7B2E2D00B478E6 /* swiftbibleWidget */,
+			);
+			name = swiftbibleWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = swiftbibleWidgetExtension;
+			productReference = 95F7C7CF2F7B2E2D00B478E6 /* swiftbibleWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -583,7 +660,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1610;
+				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					954BC9CF2C84EDBE00FFCFA6 = {
@@ -592,6 +669,9 @@
 					95AB8B8E2CAB768000533AA5 = {
 						CreatedOnToolsVersion = 16.1;
 						TestTargetID = 954BC9CF2C84EDBE00FFCFA6;
+					};
+					95F7C7CE2F7B2E2D00B478E6 = {
+						CreatedOnToolsVersion = 26.4;
 					};
 				};
 			};
@@ -619,6 +699,7 @@
 			targets = (
 				954BC9CF2C84EDBE00FFCFA6 /* swiftbible */,
 				95AB8B8E2CAB768000533AA5 /* swiftbibleUITests */,
+				95F7C7CE2F7B2E2D00B478E6 /* swiftbibleWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -647,6 +728,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		95AB8B8D2CAB768000533AA5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95F7C7CD2F7B2E2D00B478E6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -778,6 +866,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		95F7C7CB2F7B2E2D00B478E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -785,6 +880,11 @@
 			isa = PBXTargetDependency;
 			target = 954BC9CF2C84EDBE00FFCFA6 /* swiftbible */;
 			targetProxy = 95AB8B952CAB768000533AA5 /* PBXContainerItemProxy */;
+		};
+		95F7C7DF2F7B2E2E00B478E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95F7C7CE2F7B2E2D00B478E6 /* swiftbibleWidgetExtension */;
+			targetProxy = 95F7C7DE2F7B2E2E00B478E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1044,6 +1144,71 @@
 			};
 			name = Release;
 		};
+		95F7C7E22F7B2E2E00B478E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = swiftbibleWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = swiftbibleWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = swiftbibleWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.swiftbibleWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		95F7C7E32F7B2E2E00B478E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = swiftbibleWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = swiftbibleWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = swiftbibleWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.swiftbibleWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1070,6 +1235,15 @@
 			buildConfigurations = (
 				95AB8B972CAB768000533AA5 /* Debug */,
 				95AB8B982CAB768000533AA5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95F7C7E52F7B2E2E00B478E6 /* Build configuration list for PBXNativeTarget "swiftbibleWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95F7C7E22F7B2E2E00B478E6 /* Debug */,
+				95F7C7E32F7B2E2E00B478E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
