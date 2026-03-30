@@ -16,6 +16,7 @@ let supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 struct DevotionalEntry: TimelineEntry {
     let date: Date
     let title: String
+    let heading: String?
     let preview: String
     let hasDevotional: Bool
 }
@@ -27,6 +28,7 @@ struct DailyDevotionalProvider: TimelineProvider {
         DevotionalEntry(
             date: Date(),
             title: "Daily Devotional",
+            heading: "A Word for Today",
             preview: "Open SwiftBible to read today's devotional and grow in scripture.",
             hasDevotional: false
         )
@@ -95,9 +97,11 @@ struct DailyDevotionalProvider: TimelineProvider {
         saveToSharedContainer(devotional, dateString: dateString)
 
         let preview = cleanMarkdown(devotional.message)
+        let heading = extractHeading(devotional.message)
         return DevotionalEntry(
             date: Date(),
             title: devotionalTitle(for: Date()),
+            heading: heading,
             preview: preview,
             hasDevotional: true
         )
@@ -138,9 +142,11 @@ struct DailyDevotionalProvider: TimelineProvider {
         }
 
         let preview = cleanMarkdown(devotional.message)
+        let heading = extractHeading(devotional.message)
         return DevotionalEntry(
             date: Date(),
             title: devotionalTitle(for: Date()),
+            heading: heading,
             preview: preview,
             hasDevotional: true
         )
@@ -150,6 +156,7 @@ struct DailyDevotionalProvider: TimelineProvider {
         DevotionalEntry(
             date: Date(),
             title: devotionalTitle(for: Date()),
+            heading: nil,
             preview: "Open SwiftBible to load today's devotional.",
             hasDevotional: false
         )
@@ -161,27 +168,46 @@ struct DailyDevotionalProvider: TimelineProvider {
         return formatter.string(from: date)
     }
 
-    /// Strip markdown formatting for widget display
+    /// Strip markdown formatting and extract body content for widget display
     private func cleanMarkdown(_ text: String) -> String {
-        var clean = text
+        let clean = text
             .replacingOccurrences(of: "**", with: "")
             .replacingOccurrences(of: "*", with: "")
             .replacingOccurrences(of: "##", with: "")
             .replacingOccurrences(of: "#", with: "")
             .replacingOccurrences(of: "> ", with: "")
-        // Take first meaningful paragraph
+        // Split into paragraphs and skip the first (title/date/heading) line
         let paragraphs = clean.components(separatedBy: "\n\n")
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
-        clean = paragraphs.first ?? clean
-        if clean.count > 200 {
-            let truncated = clean.prefix(200)
+        // Use second paragraph (body) if available, otherwise fall back to first
+        let body = paragraphs.count > 1 ? paragraphs[1] : (paragraphs.first ?? clean)
+        if body.count > 300 {
+            let truncated = body.prefix(300)
             if let lastSpace = truncated.lastIndex(of: " ") {
                 return String(truncated[..<lastSpace]) + "..."
             }
             return String(truncated) + "..."
         }
-        return clean
+        return body
+    }
+
+    /// Extract the devotional heading (first paragraph) for display
+    private func extractHeading(_ text: String) -> String? {
+        let clean = text
+            .replacingOccurrences(of: "**", with: "")
+            .replacingOccurrences(of: "*", with: "")
+            .replacingOccurrences(of: "##", with: "")
+            .replacingOccurrences(of: "#", with: "")
+        let paragraphs = clean.components(separatedBy: "\n\n")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+        guard let first = paragraphs.first else { return nil }
+        // Strip the date prefix (e.g. "March 30, 2026 — ") to keep it short
+        if let dashRange = first.range(of: " — ") {
+            return String(first[dashRange.upperBound...])
+        }
+        return first
     }
 }
 
@@ -196,7 +222,7 @@ struct DevotionalSmallView: View {
     let entry: DevotionalEntry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 4) {
                 Image(systemName: "sun.horizon.fill")
                     .font(.caption2)
@@ -208,7 +234,7 @@ struct DevotionalSmallView: View {
 
             Text(entry.preview)
                 .font(.system(size: 12, design: .serif))
-                .lineLimit(5)
+                .lineLimit(6)
                 .minimumScaleFactor(0.8)
 
             Spacer(minLength: 0)
@@ -217,7 +243,7 @@ struct DevotionalSmallView: View {
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
-        .padding()
+        .padding(0)
         .containerBackground(for: .widget) {
             Color(.systemBackground)
         }
@@ -228,36 +254,32 @@ struct DevotionalMediumView: View {
     let entry: DevotionalEntry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Image(systemName: "sun.horizon.fill")
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundStyle(.orange)
                 Text(entry.title)
-                    .font(.caption.weight(.semibold))
+                    .font(.caption2.weight(.semibold))
                     .foregroundStyle(.secondary)
                 Spacer()
-                if !entry.hasDevotional {
-                    Text("Tap to load")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
+            }
+
+            if let heading = entry.heading {
+                Text(heading)
+                    .font(.system(size: 13, weight: .semibold, design: .serif))
+                    .lineLimit(2)
             }
 
             Text(entry.preview)
-                .font(.system(size: 14, design: .serif))
-                .lineLimit(4)
-                .minimumScaleFactor(0.85)
+                .font(.system(size: 12, design: .serif))
+                .foregroundStyle(.secondary)
+                .lineLimit(nil)
+                .minimumScaleFactor(0.8)
 
             Spacer(minLength: 0)
-
-            if entry.hasDevotional {
-                Text("Read more in SwiftBible")
-                    .font(.caption2)
-                    .foregroundStyle(.blue)
-            }
         }
-        .padding()
+        .padding(0)
         .containerBackground(for: .widget) {
             Color(.systemBackground)
         }
@@ -302,6 +324,7 @@ struct DailyDevotionalEntryView: View {
     DevotionalEntry(
         date: Date(),
         title: "Thursday, Mar 27",
+        heading: "Psalm 23: The Lord Is My Shepherd",
         preview: "In Psalm 23, David paints a picture of God as a shepherd who provides, protects, and guides. Even in the darkest valleys, we need not fear.",
         hasDevotional: true
     )
@@ -313,6 +336,7 @@ struct DailyDevotionalEntryView: View {
     DevotionalEntry(
         date: Date(),
         title: "Thursday, Mar 27",
+        heading: "Holy Monday — Matthew 21:13: A House of Prayer, Cleansed by Christ",
         preview: "In Psalm 23, David paints a picture of God as a shepherd who provides, protects, and guides. Even in the darkest valleys, we need not fear — for God's rod and staff bring comfort and direction.",
         hasDevotional: true
     )
