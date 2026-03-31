@@ -2,7 +2,8 @@
 	supabase-start supabase-start-background \
 	functions functions-background \
 	ngrok-up ngrok-down ngrok-background \
-	functions-deploy test_daily_devotional test_slowness fresh
+	functions-deploy test_daily_devotional test_slowness fresh \
+	archive upload release
 
 # Default target
 help:
@@ -23,6 +24,11 @@ help:
 	@echo ""
 	@echo "Deploy:"
 	@echo "  make functions-deploy – Deploy all functions to remote project"
+	@echo ""
+	@echo "App Store:"
+	@echo "  make archive          – Archive the app for App Store"
+	@echo "  make upload           – Upload the latest archive to App Store Connect"
+	@echo "  make release          – Archive + upload in one step"
 	@echo ""
 	@echo "Tests:"
 	@echo "  make test_daily_devotional"
@@ -101,3 +107,36 @@ clean:
 fresh:
 	@echo "🔄 Resetting Supabase database..."
 	supabase db reset --debug # && supabase gen types typescript --local > types/database.ts
+
+# --- App Store ---
+
+ARCHIVE_PATH = build/swiftbible.xcarchive
+EXPORT_PATH = build/export
+EXPORT_OPTIONS = ExportOptions.plist
+SCHEME = swiftbible
+PROJECT = swiftbible.xcodeproj
+
+archive:
+	@echo "Archiving $(SCHEME)..."
+	xcodebuild archive \
+		-project $(PROJECT) \
+		-scheme $(SCHEME) \
+		-destination "generic/platform=iOS" \
+		-archivePath $(ARCHIVE_PATH) \
+		SWIFT_COMPILATION_MODE=wholemodule
+	@echo "Archive complete: $(ARCHIVE_PATH)"
+
+upload:
+	@echo "Exporting and uploading to App Store Connect..."
+	xcodebuild -exportArchive \
+		-archivePath $(ARCHIVE_PATH) \
+		-exportOptionsPlist $(EXPORT_OPTIONS) \
+		-exportPath $(EXPORT_PATH)
+	xcrun altool --upload-app \
+		-f $(EXPORT_PATH)/swiftbible.ipa \
+		-t ios \
+		--apiKey $(APP_STORE_API_KEY) \
+		--apiIssuer $(APP_STORE_API_ISSUER)
+	@echo "Upload complete!"
+
+release: archive upload

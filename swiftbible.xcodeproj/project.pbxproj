@@ -754,10 +754,11 @@
 			);
 			name = "Upload Debug Symbols to Sentry";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/sentry-upload-stamp",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Skip in Xcode Cloud CI\nif [ \"$CI_XCODE_CLOUD\" = \"TRUE\" ]; then\n  echo \"Skipping Sentry upload in Xcode Cloud\"\n  exit 0\nfi\n# This script is responsible for uploading debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=am2\n  export SENTRY_PROJECT=swiftbible\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
+			shellScript = "# Skip in Xcode Cloud CI\nif [ \"$CI_XCODE_CLOUD\" = \"TRUE\" ]; then\n  echo \"Skipping Sentry upload in Xcode Cloud\"\n  touch \"${DERIVED_FILE_DIR}/sentry-upload-stamp\"\n  exit 0\nfi\n# This script is responsible for uploading debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=am2\n  export SENTRY_PROJECT=swiftbible\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\ntouch \"${DERIVED_FILE_DIR}/sentry-upload-stamp\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -961,7 +962,6 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_EXPLICIT_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -1006,7 +1006,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_COMPILATION_MODE = incremental;
+				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
 		};

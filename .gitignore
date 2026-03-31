@@ -73,3 +73,4 @@ supabase/.env
 appstore/__pycache__/
 
 .sentryclirc
+*.p8
