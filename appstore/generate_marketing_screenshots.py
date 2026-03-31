@@ -339,14 +339,24 @@ def load_font(size, bold=False):
     return ImageFont.load_default()
 
 
-def draw_gradient_text(canvas, text, y, font, color_top, color_bottom, canvas_w):
-    """Draw headline text with a vertical gradient fill."""
+def draw_gradient_text(canvas, text, y, font, color_top, color_bottom, canvas_w, glow_color=None):
+    """Draw headline text with a vertical gradient fill and optional glow."""
     # Get text dimensions
     tmp_draw = ImageDraw.Draw(canvas)
     bbox = tmp_draw.textbbox((0, 0), text, font=font)
     text_w = bbox[2] - bbox[0]
     text_h = bbox[3] - bbox[1]
     x = (canvas_w - text_w) // 2
+
+    # Optional glow: soft colored bloom behind the text
+    if glow_color:
+        glow_pad = 60
+        glow_layer = Image.new("RGBA", (canvas_w, text_h + glow_pad * 2), (0, 0, 0, 0))
+        glow_draw = ImageDraw.Draw(glow_layer)
+        glow_draw.text((x, glow_pad - bbox[1]), text, font=font,
+                        fill=(*glow_color, 120))
+        glow_layer = glow_layer.filter(ImageFilter.GaussianBlur(radius=35))
+        canvas.paste(glow_layer, (0, y - glow_pad), glow_layer)
 
     # Create gradient strip for the text area
     grad = Image.new("RGBA", (canvas_w, text_h + 40), (0, 0, 0, 0))
@@ -368,6 +378,221 @@ def draw_gradient_text(canvas, text, y, font, color_top, color_bottom, canvas_w)
     # Composite onto canvas at y position
     canvas.paste(grad, (0, y), grad)
     return text_h
+
+
+def add_device_edge_glow(canvas, x, y, width, height, corner_r, glow_color, intensity=80):
+    """Add a colored glow radiating from device edges."""
+    glow_pad = 40
+    glow = Image.new("RGBA", (width + glow_pad * 2, height + glow_pad * 2), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(glow)
+    draw.rounded_rectangle(
+        [glow_pad, glow_pad, glow_pad + width, glow_pad + height],
+        radius=corner_r,
+        outline=(*glow_color, intensity),
+        width=8,
+    )
+    glow = glow.filter(ImageFilter.GaussianBlur(radius=25))
+    canvas.paste(glow, (x - glow_pad, y - glow_pad), glow)
+
+
+# --- Togglable Visual Effects ---
+# All effects are keyed by name in frame configs.
+# Example: {"bokeh": CYAN, "grain": True, "vignette": True, "god_rays": GOLD, ...}
+
+
+def add_bokeh(canvas, canvas_w, canvas_h, count=12, color=None, seed=42):
+    """Soft out-of-focus light circles for depth."""
+    import random
+    rng = random.Random(seed)
+    overlay = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+    for _ in range(count):
+        cx = rng.randint(0, canvas_w)
+        cy = rng.randint(0, canvas_h)
+        radius = rng.randint(8, 45)
+        alpha = rng.randint(12, 35)
+        c = color if color else (255, 255, 255)
+        draw.ellipse([cx - radius, cy - radius, cx + radius, cy + radius], fill=(*c, alpha))
+    overlay = overlay.filter(ImageFilter.GaussianBlur(radius=8))
+    return Image.alpha_composite(canvas, overlay)
+
+
+def add_film_grain(canvas, canvas_w, canvas_h, intensity=8):
+    """Subtle noise texture for a premium analog feel."""
+    import random
+    grain = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    pixels = grain.load()
+    rng = random.Random(99)
+    for y in range(0, canvas_h, 3):
+        for x in range(0, canvas_w, 3):
+            v = rng.randint(-intensity, intensity)
+            if v > 0:
+                pixels[x, y] = (255, 255, 255, v)
+            else:
+                pixels[x, y] = (0, 0, 0, -v)
+    grain = grain.filter(ImageFilter.GaussianBlur(radius=1))
+    return Image.alpha_composite(canvas, grain)
+
+
+def add_vignette(canvas, canvas_w, canvas_h, strength=0.4):
+    """Darken corners to draw focus toward the center."""
+    vignette = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(vignette)
+    cx, cy = canvas_w // 2, canvas_h // 2
+    max_dist = math.sqrt(cx ** 2 + cy ** 2)
+    for ring in range(0, int(max_dist), 4):
+        ratio = ring / max_dist
+        if ratio < (1.0 - strength):
+            continue
+        alpha = int(((ratio - (1.0 - strength)) / strength) * 80)
+        draw.ellipse([cx - ring, cy - ring, cx + ring, cy + ring], outline=(0, 0, 0, alpha), width=5)
+    vignette = vignette.filter(ImageFilter.GaussianBlur(radius=60))
+    return Image.alpha_composite(canvas, vignette)
+
+
+def add_god_rays(canvas, canvas_w, canvas_h, color, corner="top_right", intensity=40):
+    """Diagonal light beams radiating from a corner."""
+    import random
+    rng = random.Random(77)
+    overlay = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+
+    corners = {
+        "top_left": (0, 0),
+        "top_right": (canvas_w, 0),
+        "bottom_left": (0, canvas_h),
+        "bottom_right": (canvas_w, canvas_h),
+    }
+    ox, oy = corners.get(corner, (canvas_w, 0))
+
+    for _ in range(12):
+        angle = rng.uniform(-0.6, 0.6)
+        length = int(max(canvas_w, canvas_h) * rng.uniform(0.8, 1.4))
+        width = rng.randint(20, 80)
+        alpha = rng.randint(intensity // 3, intensity)
+
+        ex = ox + int(math.cos(math.atan2(canvas_h / 2 - oy, canvas_w / 2 - ox) + angle) * length)
+        ey = oy + int(math.sin(math.atan2(canvas_h / 2 - oy, canvas_w / 2 - ox) + angle) * length)
+
+        draw.line([(ox, oy), (ex, ey)], fill=(*color, alpha), width=width)
+
+    overlay = overlay.filter(ImageFilter.GaussianBlur(radius=50))
+    return Image.alpha_composite(canvas, overlay)
+
+
+def add_light_leak(canvas, canvas_w, canvas_h, color, corner="top_right", size=0.4):
+    """Warm gradient bleeding from a corner — like sun hitting a lens."""
+    overlay = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+
+    corners = {
+        "top_left": (0, 0),
+        "top_right": (canvas_w, 0),
+        "bottom_left": (0, canvas_h),
+        "bottom_right": (canvas_w, canvas_h),
+    }
+    ox, oy = corners.get(corner, (canvas_w, 0))
+    radius = int(min(canvas_w, canvas_h) * size)
+
+    for r in range(radius, 0, -3):
+        ratio = r / radius
+        alpha = int((1.0 - ratio) * 50)
+        draw.ellipse([ox - r, oy - r, ox + r, oy + r], fill=(*color, alpha))
+
+    overlay = overlay.filter(ImageFilter.GaussianBlur(radius=80))
+    return Image.alpha_composite(canvas, overlay)
+
+
+def add_shimmer(canvas, text, y, font, canvas_w, angle=-30):
+    """Diagonal metallic shine streak across headline text."""
+    tmp_draw = ImageDraw.Draw(canvas)
+    bbox = tmp_draw.textbbox((0, 0), text, font=font)
+    text_w = bbox[2] - bbox[0]
+    text_h = bbox[3] - bbox[1]
+    x = (canvas_w - text_w) // 2
+
+    # Create text-shaped mask
+    text_mask = Image.new("L", (canvas_w, text_h + 40), 0)
+    ImageDraw.Draw(text_mask).text((x, -bbox[1]), text, font=font, fill=255)
+
+    # Create diagonal white streak
+    streak = Image.new("RGBA", (canvas_w, text_h + 40), (0, 0, 0, 0))
+    streak_draw = ImageDraw.Draw(streak)
+    # Draw a wide diagonal band
+    cx = canvas_w // 2
+    for offset in range(-40, 40):
+        alpha = max(0, 25 - abs(offset))
+        streak_draw.line(
+            [(cx + offset - 200, 0), (cx + offset + 200, text_h + 40)],
+            fill=(255, 255, 255, alpha), width=1,
+        )
+
+    streak = streak.rotate(angle, expand=False, center=(canvas_w // 2, (text_h + 40) // 2))
+    streak.putalpha(text_mask)
+    canvas.paste(streak, (0, y), streak)
+
+
+def add_accent_line(canvas, y, canvas_w, color, width_pct=0.3):
+    """Thin horizontal gradient accent line — a separator flourish."""
+    line_w = int(canvas_w * width_pct)
+    line_x = (canvas_w - line_w) // 2
+    overlay = Image.new("RGBA", (canvas_w, 6), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+    for px in range(line_w):
+        ratio = px / line_w
+        # Fade in from left, fade out to right
+        fade = min(ratio * 4, (1.0 - ratio) * 4, 1.0)
+        alpha = int(fade * 120)
+        draw.line([(line_x + px, 1), (line_x + px, 4)], fill=(*color, alpha))
+    overlay = overlay.filter(ImageFilter.GaussianBlur(radius=2))
+    canvas.paste(overlay, (0, y), overlay)
+
+
+def add_app_icon_badge(canvas, canvas_w, icon_path, y=None, size=80):
+    """Float the app icon as a small badge, centered above headline."""
+    if not os.path.exists(icon_path):
+        return
+    icon = Image.open(icon_path).convert("RGBA")
+    icon = icon.resize((size, size), Image.LANCZOS)
+    icon = round_corners(icon, size // 4)
+    ix = (canvas_w - size) // 2
+    iy = y if y is not None else 20
+    # Subtle shadow
+    shadow = Image.new("RGBA", (size + 20, size + 20), (0, 0, 0, 0))
+    ImageDraw.Draw(shadow).rounded_rectangle(
+        [10, 10, size + 10, size + 10], radius=size // 4, fill=(0, 0, 0, 60)
+    )
+    shadow = shadow.filter(ImageFilter.GaussianBlur(radius=8))
+    canvas.paste(shadow, (ix - 10, iy - 6), shadow)
+    canvas.paste(icon, (ix, iy), icon)
+    return iy + size + 10  # return bottom y for text positioning
+
+
+def add_color_grade(canvas, canvas_w, canvas_h, warmth=0.1):
+    """Shift the entire frame warm (positive) or cool (negative)."""
+    overlay = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    if warmth > 0:
+        # Warm: add orange tint
+        color = (255, 180, 80, int(warmth * 40))
+    else:
+        # Cool: add blue tint
+        color = (80, 160, 255, int(abs(warmth) * 40))
+    ImageDraw.Draw(overlay).rectangle([(0, 0), (canvas_w, canvas_h)], fill=color)
+    return Image.alpha_composite(canvas, overlay)
+
+
+def add_bloom(canvas, canvas_w, canvas_h, intensity=0.15):
+    """Soft glow on bright areas — dreamy highlight bloom."""
+    # Extract bright areas, blur them, blend back
+    bright = canvas.convert("RGB")
+    bright = Image.eval(bright, lambda x: x if x > 180 else 0)
+    bright = bright.filter(ImageFilter.GaussianBlur(radius=40))
+    bright = bright.convert("RGBA")
+    # Reduce opacity
+    bright_data = bright.split()
+    alpha = Image.eval(bright_data[0], lambda x: int(x * intensity))
+    bright.putalpha(alpha)
+    return Image.alpha_composite(canvas, bright)
 
 
 def draw_text_centered(canvas, text, y, font, fill, canvas_w):
@@ -875,57 +1100,58 @@ def generate_panoramic_strip(device_name, device_config, raw_dir, out_dir):
 
 ULTIMATE_STRIP = {
     "screenshots": [
-        # 1. HERO — straight, large. Primacy Effect (#58): strongest first.
+        # 1. HERO — straight, large. Hook: name the pain, promise the shift.
+        #    Primacy Effect (#58): strongest message first. Stop the scroll.
         {"filename": "01_bible_books",
-         "headline": "The Word at Your Fingertips",
-         "subtitle": "Three translations, one beautiful app",
-         "angle": 0, "scale": 0.75},
-        # 2. Tilt right, standard. Competence Signalling (#95): specific benefit.
+         "headline": "Scripture Without the Clutter",
+         "subtitle": "No ads. No sign-up. Just the Word.",
+         "angle": 0, "scale": 0.92},
+        # 2. Tilt right. Competence Signalling (#95): user outcome, not feature.
         {"filename": "02_chapters",
-         "headline": "Every Chapter, Summarized",
-         "subtitle": "Know what you're reading before you start",
-         "angle": 5, "scale": 0.65},
-        # 3. Tilt left. Von Restorff (#1): the distinctive red-letter feature.
+         "headline": "Understand Before You Read",
+         "subtitle": "Every chapter summarized at a glance",
+         "angle": 4, "scale": 0.85},
+        # 3. Tilt left. Von Restorff (#1): distinctive feature as experience.
         {"filename": "03_verses",
-         "headline": "Jesus's Words in Red",
-         "subtitle": "The tradition, beautifully preserved",
-         "angle": -3, "scale": 0.68},
-        # 4. Straight — anchors "tools" message. Curiosity Gap (#103).
+         "headline": "See What Jesus Actually Said",
+         "subtitle": "Red-letter words, beautifully preserved",
+         "angle": -3, "scale": 0.85},
+        # 4. Straight — anchors "tools" message. Outcome over interaction.
         {"filename": "04_verse_options",
-         "headline": "Long Press. Discover More.",
+         "headline": "Make Every Verse Yours",
          "subtitle": "Bookmark, highlight, take notes, share",
-         "angle": 0, "scale": 0.65},
-        # 5. Right tilt — light mode, headline on next frame with dark pair.
+         "angle": 0, "scale": 0.85},
+        # 5. Right tilt — light mode. Specific benefit, not generic.
         {"filename": "05_translations",
-         "headline": "Read Anytime",
-         "subtitle": "Beautiful in every light",
-         "angle": 4, "scale": 0.62},
+         "headline": "Three Translations. Your Choice.",
+         "subtitle": "KJV, ASV, and WEB \u2014 all free",
+         "angle": 3, "scale": 0.82},
         # 6. Left tilt — dark mode mirror. Aesthetic-Usability (#122).
         {"filename": "05_translations_dark",
-         "headline": "Beautiful in Any Light",
-         "subtitle": "Read comfortably, day or night",
-         "angle": -4, "scale": 0.62},
-        # 7. HERO — straight, large. Peak moment (#117): the devotional climax.
+         "headline": "Easy on Your Eyes",
+         "subtitle": "Dark mode that reads as good as it looks",
+         "angle": -3, "scale": 0.82},
+        # 7. HERO — straight, large. Peak moment (#117): daily habit hook.
         {"filename": "06_devotional",
-         "headline": "Start Each Day in Scripture",
-         "subtitle": "A new devotional, every morning",
-         "angle": 0, "scale": 0.75},
-        # 8. Left tilt — pattern break. Autonomy Bias (#108).
+         "headline": "Start Each Morning Different",
+         "subtitle": "A fresh devotional, every single day",
+         "angle": 0, "scale": 0.92},
+        # 8. Left tilt — Autonomy Bias (#108): ownership language.
         {"filename": "07_settings",
-         "headline": "Make It Yours",
-         "subtitle": "Fonts, colors, and hidden texts to unlock",
-         "angle": -5, "scale": 0.65},
-        # 9. Right tilt — visual bookend (no headline, outro CTA follows).
+         "headline": "Your Bible. Your Way.",
+         "subtitle": "Customize fonts, colors, and more",
+         "angle": -4, "scale": 0.85},
+        # 9. Visual bookend with closing text.
         {"filename": "01_bible_books_dark",
          "headline": "", "subtitle": "",
-         "angle": 3, "scale": 0.68},
+         "angle": 3, "scale": 0.85},
     ],
-    "intro_headline": "SwiftBible",
-    "intro_subtitle": "Open Source Bible App",
-    "bridge_headline": "Open Source & Ad-Free",
-    "bridge_subtitle": "No ads. No tracking. Just scripture.",
-    "outro_headline": "Get Started",
-    "outro_subtitle": "Available on the App Store",
+    "intro_headline": "Scripture Without the Clutter",
+    "intro_subtitle": "No ads. No sign-up. Just the Word.",
+    "bridge_headline": "Free Forever. Open Source.",
+    "bridge_subtitle": "No ads. No tracking. No subscriptions.",
+    "outro_headline": "Read. Study. Grow.",
+    "outro_subtitle": "SwiftBible",
     # Background: deep navy → warm amber (brand palette flow)
     "grad_tl": (13, 18, 45),
     "grad_tr": (42, 26, 10),
@@ -946,11 +1172,641 @@ ULTIMATE_STRIP = {
 }
 
 
-def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
-    """Generate the ultimate panoramic strip with per-device angles, scales, and hero moments.
+# --- Ultimate Mixed ---
+# Mixed layout styles for visual variety.  Each frame is a complete composition.
+# Layout types:
+#   "hero"      — big headline, centered device overflows bottom edge
+#   "panoramic" — two frames share a continuous background, devices on cut line
+#   "split"     — light/dark side by side in one frame
 
-    Unlike the standard strip (alternating 3/-3), this uses intentionally varied
-    angles and two hero devices at larger scale for visual rhythm.
+ULTIMATE_MIXED = [
+    # Frame 1: HERO — stop the scroll, name the pain
+    {"layout": "hero",
+     "filename": "01_bible_books",
+     "headline": "Scripture Without the Clutter",
+     "subtitle": "No ads. No sign-up. Just the Word.",
+     "scale": 0.88, "angle": 0,
+     "grad_top": (13, 18, 45), "grad_bot": (20, 30, 65),
+     "orbs": [(0.2, 0.3, 0.5, ACCENT, 50), (0.8, 0.7, 0.4, CYAN, 35)],
+     "headline_grad": ((255, 255, 255), TINT_TEAL),
+     "headline_font": "intro",
+     "glow": ACCENT, "shimmer": False, "accent_line": ACCENT,
+     "bokeh": CYAN, "grain": True, "vignette": True, "bloom": True},
+
+    # Frame 2: HALVED — eye-catching light/dark split
+    {"layout": "halved",
+     "light_filename": "05_translations",
+     "dark_filename": "05_translations_dark",
+     "headline": "Beautiful in Any Light",
+     "subtitle": "Three translations, light or dark",
+     "grad_top": (38, 30, 10), "grad_bot": (60, 48, 16),
+     "orbs": [(0.5, 0.3, 0.55, GOLD, 45), (0.15, 0.7, 0.3, GOLD, 25)],
+     "headline_grad": ((255, 255, 255), TINT_GOLD)},
+
+    # Frame 3: HERO — devotional, daily habit hook
+    {"layout": "hero",
+     "filename": "06_devotional",
+     "headline": "Start Each Morning Different",
+     "subtitle": "A fresh devotional, every single day",
+     "scale": 0.85, "angle": -5,
+     "grad_top": (42, 26, 10), "grad_bot": (65, 40, 14),
+     "orbs": [(0.6, 0.3, 0.45, GOLD, 45), (0.2, 0.65, 0.35, GOLD, 30)],
+     "headline_grad": ((255, 255, 255), TINT_WARM),
+     "headline_font": "intro",
+     "glow": GOLD, "bokeh": GOLD, "vignette": True,
+     "god_rays": GOLD, "god_rays_corner": "top_left",
+     "shimmer": False, "color_grade": 0.12},
+
+    # Frame 4: HERO — trust bridge
+    {"layout": "hero",
+     "filename": "02_chapters",
+     "headline": "Free Forever. Open Source.",
+     "subtitle": "No ads. No tracking. No subscriptions.",
+     "scale": 0.82, "angle": 3,
+     "grad_top": (8, 22, 48), "grad_bot": (14, 38, 72),
+     "orbs": [(0.7, 0.25, 0.45, CYAN, 45), (0.15, 0.6, 0.35, GREEN, 30)],
+     "headline_grad": ((255, 255, 255), TINT_TEAL),
+     "headline_font": "headline",
+     "light_leak": CYAN, "light_leak_corner": "top_left", "light_leak_size": 0.3,
+     "accent_line": CYAN},
+
+    # Frames 5-6: PANORAMIC PAIR — verses + verse options
+    {"layout": "panoramic",
+     "left_filename": "03_verses",
+     "right_filename": "04_verse_options",
+     "left_headline": "See What Jesus Actually Said",
+     "left_subtitle": "Red-letter words, beautifully preserved",
+     "right_headline": "Make Every Verse Yours",
+     "right_subtitle": "Bookmark, highlight, take notes, share",
+     "left_angle": 4, "right_angle": -4,
+     "scale": 0.88,
+     "grad_tl": (45, 12, 18), "grad_tr": (8, 32, 35),
+     "grad_bl": (72, 20, 30), "grad_br": (14, 55, 58),
+     "orbs": [
+         (0.15, 0.3, 0.22, RED_DARK, 50),
+         (0.5, 0.45, 0.28, ACCENT, 55),
+         (0.85, 0.35, 0.22, ACCENT, 50),
+         (0.35, 0.7, 0.18, RED, 30),
+         (0.65, 0.65, 0.18, GREEN, 30),
+     ],
+     "left_headline_grad": ((255, 255, 255), TINT_RED),
+     "right_headline_grad": ((255, 255, 255), TINT_TEAL)},
+
+    # Frame 7: HERO — settings
+    {"layout": "hero",
+     "filename": "07_settings",
+     "headline": "Your Bible. Your Way.",
+     "subtitle": "Customize fonts, colors, and more",
+     "scale": 0.82, "angle": -3,
+     "grad_top": (16, 18, 30), "grad_bot": (28, 32, 48),
+     "orbs": [(0.3, 0.35, 0.4, ACCENT, 35), (0.75, 0.6, 0.3, CYAN, 25)],
+     "headline_grad": ((255, 255, 255), TINT_TEAL),
+     "headline_font": "headline",
+     "accent_line": ACCENT, "bloom": True},
+
+    # Frame 8: HERO — closing, dark mode bookend
+    {"layout": "hero",
+     "filename": "01_bible_books_dark",
+     "headline": "Read. Study. Grow.",
+     "subtitle": "SwiftBible",
+     "scale": 0.88, "angle": 0,
+     "grad_top": (20, 14, 8), "grad_bot": (42, 28, 12),
+     "orbs": [(0.4, 0.4, 0.5, GOLD, 35), (0.7, 0.6, 0.3, ACCENT, 25)],
+     "headline_grad": ((255, 255, 255), TINT_WARM),
+     "headline_font": "intro",
+     "glow": GOLD, "bokeh": GOLD, "grain": True, "vignette": True,
+     "god_rays": GOLD, "god_rays_corner": "top_right",
+     "shimmer": False, "color_grade": 0.15, "bloom": True},
+]
+
+
+def generate_hero_frame(device_config, raw_dir, frame_cfg, output_path):
+    """Generate a single hero frame: big headline, device overflows bottom."""
+    canvas_w, canvas_h = device_config["canvas"]
+    corner_r = device_config["corner_radius"]
+    is_ipad = "ipad" in device_config.get("name", "")
+
+    raw_path = os.path.join(raw_dir, f"{frame_cfg['filename']}.png")
+    if not os.path.exists(raw_path):
+        print(f"  SKIP hero {frame_cfg['filename']} (not found)")
+        return
+
+    # 1. Gradient background
+    canvas = create_gradient(canvas_w, canvas_h, frame_cfg["grad_top"], frame_cfg["grad_bot"])
+    canvas = canvas.convert("RGBA")
+
+    # 2. Ambient orbs
+    canvas = add_ambient_orbs(canvas, frame_cfg["orbs"], canvas_w, canvas_h)
+
+    # 2b. Optional background effects (applied before text/device)
+    if frame_cfg.get("god_rays"):
+        gr = frame_cfg["god_rays"]
+        gr_color = gr if isinstance(gr, tuple) else GOLD
+        canvas = add_god_rays(canvas, canvas_w, canvas_h, gr_color,
+                              corner=frame_cfg.get("god_rays_corner", "top_right"))
+    if frame_cfg.get("light_leak"):
+        ll = frame_cfg["light_leak"]
+        ll_color = ll if isinstance(ll, tuple) else GOLD
+        canvas = add_light_leak(canvas, canvas_w, canvas_h, ll_color,
+                                corner=frame_cfg.get("light_leak_corner", "top_right"),
+                                size=frame_cfg.get("light_leak_size", 0.4))
+    if frame_cfg.get("bokeh"):
+        bokeh_color = frame_cfg["bokeh"] if isinstance(frame_cfg["bokeh"], tuple) else None
+        canvas = add_bokeh(canvas, canvas_w, canvas_h, count=15, color=bokeh_color)
+    if frame_cfg.get("grain", False):
+        canvas = add_film_grain(canvas, canvas_w, canvas_h, intensity=6)
+    if frame_cfg.get("vignette", False):
+        canvas = add_vignette(canvas, canvas_w, canvas_h, strength=0.35)
+    if frame_cfg.get("color_grade") is not None:
+        canvas = add_color_grade(canvas, canvas_w, canvas_h, warmth=frame_cfg["color_grade"])
+    if frame_cfg.get("bloom", False):
+        canvas = add_bloom(canvas, canvas_w, canvas_h)
+
+    # 3. Headline — auto-size down if text is too wide for canvas
+    font_style = frame_cfg.get("headline_font", "headline")
+    if font_style == "intro":
+        hl_size = 120 if is_ipad else 100
+    else:
+        hl_size = 100 if is_ipad else 88
+    sub_size = 55 if is_ipad else 46
+
+    max_text_w = int(canvas_w * 0.92)  # leave 4% margin each side
+    headline_font = load_font(hl_size, bold=True)
+    # Shrink until headline fits within margins
+    tmp_draw = ImageDraw.Draw(canvas)
+    while hl_size > 60:
+        bbox = tmp_draw.textbbox((0, 0), frame_cfg["headline"], font=headline_font)
+        if (bbox[2] - bbox[0]) <= max_text_w:
+            break
+        hl_size -= 4
+        headline_font = load_font(hl_size, bold=True)
+    subtitle_font = load_font(sub_size, bold=False)
+
+    text_y = int(canvas_h * 0.055)
+    text_gap = int(canvas_h * 0.012)
+
+    h_top, h_bot = frame_cfg["headline_grad"]
+    # Optional: app icon badge above headline
+    if frame_cfg.get("icon"):
+        icon_path = os.path.join(SCRIPT_DIR, frame_cfg["icon"])
+        icon_bottom = add_app_icon_badge(canvas, canvas_w, icon_path, y=int(canvas_h * 0.02))
+        if icon_bottom:
+            text_y = icon_bottom
+
+    glow_color = frame_cfg.get("glow")  # optional glow color tuple
+    hl_h = draw_gradient_text(canvas, frame_cfg["headline"], text_y, headline_font, h_top, h_bot, canvas_w, glow_color=glow_color)
+
+    # Optional: metallic shimmer across headline
+    if frame_cfg.get("shimmer", False):
+        add_shimmer(canvas, frame_cfg["headline"], text_y, headline_font, canvas_w)
+
+    sub_y = text_y + hl_h + text_gap
+    draw_text_centered(canvas, frame_cfg["subtitle"], sub_y, subtitle_font, SUBTITLE_COLOR, canvas_w)
+
+    # Optional: accent line between text and device
+    if frame_cfg.get("accent_line"):
+        al_color = frame_cfg["accent_line"] if isinstance(frame_cfg["accent_line"], tuple) else ACCENT
+        add_accent_line(canvas, sub_y + int(canvas_h * 0.02), canvas_w, al_color)
+
+    # 4. Device — starts right below subtitle, overflows bottom
+    raw = Image.open(raw_path).convert("RGBA")
+    scale = frame_cfg.get("scale", 0.88)
+    angle = frame_cfg.get("angle", 0)
+    device_y = sub_y + int(canvas_h * 0.045)
+
+    scaled = scale_screenshot(raw, canvas_w, scale)
+
+    # Optional device edge glow
+    if glow_color:
+        glow_x = (canvas_w - scaled.size[0]) // 2
+        add_device_edge_glow(canvas, glow_x, device_y, scaled.size[0], scaled.size[1], corner_r, glow_color)
+
+    if angle != 0:
+        rounded = round_corners(scaled, corner_r)
+        rotated = rounded.rotate(angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+        shadow_base = Image.new("RGBA", scaled.size, (0, 0, 0, 110))
+        shadow_base = round_corners(shadow_base, corner_r)
+        shadow_rot = shadow_base.rotate(angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+        shadow_rot = shadow_rot.filter(ImageFilter.GaussianBlur(30))
+        sx = (canvas_w - rotated.size[0]) // 2
+        canvas.paste(shadow_rot, (sx + 8, device_y + 16), shadow_rot)
+        canvas.paste(rotated, (sx, device_y), rotated)
+    else:
+        rounded = round_corners(scaled, corner_r)
+        shadow, s_offset = create_shadow(scaled.size, corner_r, blur_radius=28, offset=(0, 14), opacity=110)
+        sx = (canvas_w - scaled.size[0]) // 2
+        canvas.paste(shadow, (sx - s_offset[0], device_y - s_offset[1]), shadow)
+        canvas.paste(rounded, (sx, device_y), rounded)
+
+    # 5. Save (crop to canvas bounds — device overflow is natural)
+    final = canvas.crop((0, 0, canvas_w, canvas_h)).convert("RGB")
+    final.save(output_path, "PNG", optimize=True)
+    print(f"  -> {output_path}")
+
+
+def generate_mixed_panoramic(device_config, raw_dir, pair_cfg, out_path_left, out_path_right):
+    """Generate a panoramic pair: continuous scene split across two frames."""
+    canvas_w, canvas_h = device_config["canvas"]
+    corner_r = device_config["corner_radius"]
+    is_ipad = "ipad" in device_config.get("name", "")
+    double_w = canvas_w * 2
+
+    left_path = os.path.join(raw_dir, f"{pair_cfg['left_filename']}.png")
+    right_path = os.path.join(raw_dir, f"{pair_cfg['right_filename']}.png")
+    if not os.path.exists(left_path) or not os.path.exists(right_path):
+        print(f"  SKIP panoramic (missing)")
+        return
+
+    left_raw = Image.open(left_path).convert("RGBA")
+    right_raw = Image.open(right_path).convert("RGBA")
+
+    # 1. Double-wide gradient
+    canvas = create_bilinear_gradient(
+        double_w, canvas_h,
+        pair_cfg["grad_tl"], pair_cfg["grad_tr"],
+        pair_cfg["grad_bl"], pair_cfg["grad_br"],
+    ).convert("RGBA")
+
+    # 2. Orbs
+    canvas = add_ambient_orbs(canvas, pair_cfg["orbs"], double_w, canvas_h)
+
+    # 3. Text
+    hl_size = 100 if is_ipad else 88
+    sub_size = 55 if is_ipad else 46
+    headline_font = load_font(hl_size, bold=True)
+    subtitle_font = load_font(sub_size, bold=False)
+
+    text_y = int(canvas_h * 0.055)
+    text_gap = int(canvas_h * 0.012)
+
+    # Left headline
+    left_cx = canvas_w // 2
+    h_top_l, h_bot_l = pair_cfg["left_headline_grad"]
+    left_hl_h = draw_gradient_text_at(canvas, pair_cfg["left_headline"], left_cx, text_y, headline_font, h_top_l, h_bot_l)
+    draw_text_at(canvas, pair_cfg["left_subtitle"], left_cx, text_y + left_hl_h + text_gap, subtitle_font, SUBTITLE_COLOR)
+
+    # Right headline
+    right_cx = canvas_w + canvas_w // 2
+    h_top_r, h_bot_r = pair_cfg["right_headline_grad"]
+    right_hl_h = draw_gradient_text_at(canvas, pair_cfg["right_headline"], right_cx, text_y, headline_font, h_top_r, h_bot_r)
+    draw_text_at(canvas, pair_cfg["right_subtitle"], right_cx, text_y + right_hl_h + text_gap, subtitle_font, SUBTITLE_COLOR)
+
+    text_bottom = max(text_y + left_hl_h, text_y + right_hl_h) + int(canvas_h * 0.06)
+
+    # 4. Place devices — offset from cut line toward their home frames
+    #    Each device still bleeds ~25% into the adjacent frame for the
+    #    panoramic effect, but fills ~75% of its own frame.
+    scale = pair_cfg.get("scale", 0.88)
+    offset = int(canvas_w * 0.34)
+    place_device_at(canvas, left_raw, canvas_w - offset, text_bottom, scale, corner_r, canvas_w, pair_cfg["left_angle"])
+    place_device_at(canvas, right_raw, canvas_w + offset, text_bottom, scale, corner_r, canvas_w, pair_cfg["right_angle"])
+
+    # 5. Split and save
+    left_img = canvas.crop((0, 0, canvas_w, canvas_h)).convert("RGB")
+    right_img = canvas.crop((canvas_w, 0, double_w, canvas_h)).convert("RGB")
+    left_img.save(out_path_left, "PNG", optimize=True)
+    right_img.save(out_path_right, "PNG", optimize=True)
+    print(f"  -> {out_path_left} (panoramic left)")
+    print(f"  -> {out_path_right} (panoramic right)")
+
+
+def generate_mixed_split(device_config, raw_dir, frame_cfg, output_path):
+    """Generate a split frame: light + dark side by side."""
+    canvas_w, canvas_h = device_config["canvas"]
+    corner_r = device_config["corner_radius"]
+    is_ipad = "ipad" in device_config.get("name", "")
+
+    light_path = os.path.join(raw_dir, f"{frame_cfg['light_filename']}.png")
+    dark_path = os.path.join(raw_dir, f"{frame_cfg['dark_filename']}.png")
+    if not os.path.exists(light_path) or not os.path.exists(dark_path):
+        print(f"  SKIP split (missing)")
+        return
+
+    # 1. Background
+    canvas = create_gradient(canvas_w, canvas_h, frame_cfg["grad_top"], frame_cfg["grad_bot"])
+    canvas = canvas.convert("RGBA")
+    canvas = add_ambient_orbs(canvas, frame_cfg["orbs"], canvas_w, canvas_h)
+
+    # 2. Headline
+    hl_size = 100 if is_ipad else 88
+    sub_size = 55 if is_ipad else 46
+    headline_font = load_font(hl_size, bold=True)
+    subtitle_font = load_font(sub_size, bold=False)
+
+    text_y = int(canvas_h * 0.055)
+    text_gap = int(canvas_h * 0.012)
+
+    h_top, h_bot = frame_cfg["headline_grad"]
+    hl_h = draw_gradient_text(canvas, frame_cfg["headline"], text_y, headline_font, h_top, h_bot, canvas_w)
+    sub_y = text_y + hl_h + text_gap
+    draw_text_centered(canvas, frame_cfg["subtitle"], sub_y, subtitle_font, SUBTITLE_COLOR, canvas_w)
+
+    # 3. Two devices side by side, tilted, overflow bottom
+    raw_light = Image.open(light_path).convert("RGBA")
+    raw_dark = Image.open(dark_path).convert("RGBA")
+
+    gap = int(canvas_w * 0.03)
+    single_scale = 0.46
+    tilt = 4
+    device_top = sub_y + int(canvas_h * 0.04)
+
+    light_scaled = scale_screenshot(raw_light, canvas_w, single_scale)
+    dark_scaled = scale_screenshot(raw_dark, canvas_w, single_scale)
+
+    light_rounded = round_corners(light_scaled, corner_r)
+    dark_rounded = round_corners(dark_scaled, corner_r)
+
+    light_tilted = light_rounded.rotate(tilt, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+    dark_tilted = dark_rounded.rotate(-tilt, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+
+    total_w = light_tilted.size[0] + gap + dark_tilted.size[0]
+    left_x = (canvas_w - total_w) // 2
+    right_x = left_x + light_tilted.size[0] + gap
+
+    # Shadows
+    for img, x, a in [(light_scaled, left_x, tilt), (dark_scaled, right_x, -tilt)]:
+        sb = Image.new("RGBA", img.size, (0, 0, 0, 90))
+        sb = round_corners(sb, corner_r)
+        sr = sb.rotate(a, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+        sr = sr.filter(ImageFilter.GaussianBlur(25))
+        canvas.paste(sr, (x + 6, device_top + 14), sr)
+
+    canvas.paste(light_tilted, (left_x, device_top), light_tilted)
+    canvas.paste(dark_tilted, (right_x, device_top), dark_tilted)
+
+    final = canvas.crop((0, 0, canvas_w, canvas_h)).convert("RGB")
+    final.save(output_path, "PNG", optimize=True)
+    print(f"  -> {output_path}")
+
+
+def generate_halved_frame(device_config, raw_dir, frame_cfg, output_path):
+    """Generate a halved frame: left half of light screenshot + right half of dark.
+
+    Creates a clean vertical split — one device, half light half dark.
+    No tilt, no gap, fills the entire frame below the headline.
+    """
+    canvas_w, canvas_h = device_config["canvas"]
+    corner_r = device_config["corner_radius"]
+    is_ipad = "ipad" in device_config.get("name", "")
+
+    light_path = os.path.join(raw_dir, f"{frame_cfg['light_filename']}.png")
+    dark_path = os.path.join(raw_dir, f"{frame_cfg['dark_filename']}.png")
+    if not os.path.exists(light_path) or not os.path.exists(dark_path):
+        print(f"  SKIP halved (missing)")
+        return
+
+    # 1. Background
+    canvas = create_gradient(canvas_w, canvas_h, frame_cfg["grad_top"], frame_cfg["grad_bot"])
+    canvas = canvas.convert("RGBA")
+    canvas = add_ambient_orbs(canvas, frame_cfg["orbs"], canvas_w, canvas_h)
+
+    # 2. Headline
+    hl_size = 100 if is_ipad else 88
+    sub_size = 55 if is_ipad else 46
+    headline_font = load_font(hl_size, bold=True)
+    subtitle_font = load_font(sub_size, bold=False)
+
+    text_y = int(canvas_h * 0.055)
+    text_gap = int(canvas_h * 0.012)
+
+    # Auto-size headline
+    max_text_w = int(canvas_w * 0.92)
+    tmp_draw = ImageDraw.Draw(canvas)
+    while hl_size > 60:
+        bbox = tmp_draw.textbbox((0, 0), frame_cfg["headline"], font=headline_font)
+        if (bbox[2] - bbox[0]) <= max_text_w:
+            break
+        hl_size -= 4
+        headline_font = load_font(hl_size, bold=True)
+
+    h_top, h_bot = frame_cfg["headline_grad"]
+    hl_h = draw_gradient_text(canvas, frame_cfg["headline"], text_y, headline_font, h_top, h_bot, canvas_w)
+    sub_y = text_y + hl_h + text_gap
+    draw_text_centered(canvas, frame_cfg["subtitle"], sub_y, subtitle_font, SUBTITLE_COLOR, canvas_w)
+
+    # 3. Load both screenshots and scale to fill width
+    raw_light = Image.open(light_path).convert("RGBA")
+    raw_dark = Image.open(dark_path).convert("RGBA")
+
+    device_top = sub_y + int(canvas_h * 0.035)
+    device_h = canvas_h - device_top + int(canvas_h * 0.1)  # overflow bottom
+
+    # Scale to full canvas width, maintaining aspect ratio
+    scale_w = canvas_w
+    scale_h = int(raw_light.size[1] * (scale_w / raw_light.size[0]))
+    if scale_h < device_h:
+        # Scale by height instead to ensure we fill vertically
+        scale_h = device_h
+        scale_w = int(raw_light.size[0] * (scale_h / raw_light.size[1]))
+
+    light_scaled = raw_light.resize((scale_w, scale_h), Image.LANCZOS)
+    dark_scaled = raw_dark.resize((scale_w, scale_h), Image.LANCZOS)
+
+    # 4. Crop: left half of light, right half of dark
+    half_w = canvas_w // 2
+    # Center-crop each screenshot horizontally before halving
+    x_offset = max(0, (scale_w - canvas_w) // 2)
+    light_crop = light_scaled.crop((x_offset, 0, x_offset + half_w, scale_h))
+    dark_crop = dark_scaled.crop((x_offset + half_w, 0, x_offset + canvas_w, scale_h))
+
+    # 5. Round only the outer top corners
+    # Create a combined device image first
+    combined = Image.new("RGBA", (canvas_w, scale_h), (0, 0, 0, 0))
+    combined.paste(light_crop, (0, 0))
+    combined.paste(dark_crop, (half_w, 0))
+
+    # Round top corners only
+    rounded = round_corners(combined, corner_r)
+
+    # 6. Add shadow and paste
+    shadow, s_offset = create_shadow(
+        (canvas_w, scale_h), corner_r, blur_radius=28, offset=(0, 14), opacity=110
+    )
+    canvas.paste(shadow, (0 - s_offset[0], device_top - s_offset[1]), shadow)
+    canvas.paste(rounded, (0, device_top), rounded)
+
+    # Add a thin vertical divider line at the center
+    draw = ImageDraw.Draw(canvas)
+    draw.line([(half_w, device_top), (half_w, canvas_h)], fill=(255, 255, 255, 60), width=2)
+
+    final = canvas.crop((0, 0, canvas_w, canvas_h)).convert("RGB")
+    final.save(output_path, "PNG", optimize=True)
+    print(f"  -> {output_path}")
+
+
+def generate_triple_panoramic(device_config, raw_dir, triple_cfg, out_paths):
+    """Generate a triple panoramic: 3 frames from one canvas.
+
+    Left frame: a standalone device.
+    Center frame: split light/dark devices on the cut lines (bleed into L and R).
+    Right frame: a standalone device.
+    """
+    canvas_w, canvas_h = device_config["canvas"]
+    corner_r = device_config["corner_radius"]
+    is_ipad = "ipad" in device_config.get("name", "")
+    triple_w = canvas_w * 3
+
+    # 1. Background
+    canvas = create_bilinear_gradient(
+        triple_w, canvas_h,
+        triple_cfg["grad_tl"], triple_cfg["grad_tr"],
+        triple_cfg["grad_bl"], triple_cfg["grad_br"],
+    ).convert("RGBA")
+
+    # 2. Orbs
+    canvas = add_ambient_orbs(canvas, triple_cfg["orbs"], triple_w, canvas_h)
+
+    # 3. Fonts
+    hl_size = 100 if is_ipad else 88
+    sub_size = 55 if is_ipad else 46
+    headline_font = load_font(hl_size, bold=True)
+    subtitle_font = load_font(sub_size, bold=False)
+
+    text_y = int(canvas_h * 0.055)
+    text_gap = int(canvas_h * 0.012)
+    device_y = int(canvas_h * 0.20)
+
+    # 4. Left frame device (centered-left in frame 0)
+    left = triple_cfg["left"]
+    left_path = os.path.join(raw_dir, f"{left['filename']}.png")
+    if os.path.exists(left_path):
+        left_raw = Image.open(left_path).convert("RGBA")
+        left_cx = int(canvas_w * 0.42)
+        place_device_at(
+            canvas, left_raw, left_cx, device_y,
+            left["scale"], corner_r, canvas_w, left["angle"],
+        )
+
+    # Left headline
+    h_top, h_bot = left["headline_grad"]
+    hl_h = draw_gradient_text_at(
+        canvas, left["headline"], canvas_w // 2, text_y,
+        headline_font, h_top, h_bot,
+    )
+    draw_text_at(
+        canvas, left["subtitle"], canvas_w // 2,
+        text_y + hl_h + text_gap, subtitle_font, SUBTITLE_COLOR,
+    )
+
+    # 5. Center split devices — offset inward from cut lines to fill center frame
+    #    and bleed into adjacent frames
+    center = triple_cfg["center"]
+    split_scale = center.get("scale", 0.52)
+    tilt = center.get("tilt", 5)
+    # Shift each device inward toward center so the gap between them is small
+    inward_offset = int(canvas_w * 0.18)
+
+    light_path = os.path.join(raw_dir, f"{center['light_filename']}.png")
+    dark_path = os.path.join(raw_dir, f"{center['dark_filename']}.png")
+
+    if os.path.exists(light_path):
+        light_raw = Image.open(light_path).convert("RGBA")
+        place_device_at(
+            canvas, light_raw, canvas_w + inward_offset, device_y,
+            split_scale, corner_r, canvas_w, tilt,
+        )
+
+    if os.path.exists(dark_path):
+        dark_raw = Image.open(dark_path).convert("RGBA")
+        place_device_at(
+            canvas, dark_raw, canvas_w * 2 - inward_offset, device_y,
+            split_scale, corner_r, canvas_w, -tilt,
+        )
+
+    # Center headline
+    center_cx = int(canvas_w * 1.5)
+    h_top, h_bot = center["headline_grad"]
+    hl_h = draw_gradient_text_at(
+        canvas, center["headline"], center_cx, text_y,
+        headline_font, h_top, h_bot,
+    )
+    draw_text_at(
+        canvas, center["subtitle"], center_cx,
+        text_y + hl_h + text_gap, subtitle_font, SUBTITLE_COLOR,
+    )
+
+    # 6. Right frame device (centered-right in frame 2)
+    right = triple_cfg["right"]
+    right_path = os.path.join(raw_dir, f"{right['filename']}.png")
+    if os.path.exists(right_path):
+        right_raw = Image.open(right_path).convert("RGBA")
+        right_cx = int(canvas_w * 2.58)
+        place_device_at(
+            canvas, right_raw, right_cx, device_y,
+            right["scale"], corner_r, canvas_w, right["angle"],
+        )
+
+    # Right headline
+    h_top, h_bot = right["headline_grad"]
+    hl_h = draw_gradient_text_at(
+        canvas, right["headline"], int(canvas_w * 2.5), text_y,
+        headline_font, h_top, h_bot,
+    )
+    draw_text_at(
+        canvas, right["subtitle"], int(canvas_w * 2.5),
+        text_y + hl_h + text_gap, subtitle_font, SUBTITLE_COLOR,
+    )
+
+    # 7. Slice into 3 frames
+    for i, out_path in enumerate(out_paths):
+        frame = canvas.crop((i * canvas_w, 0, (i + 1) * canvas_w, canvas_h))
+        frame = frame.convert("RGB")
+        frame.save(out_path, "PNG", optimize=True)
+        print(f"  -> {out_path}")
+
+
+def generate_ultimate_mixed(device_name, device_config, raw_dir, out_dir):
+    """Generate the ultimate screenshot set with mixed layout styles.
+
+    Each frame uses the best layout for its content:
+    - Hero: centered device, overflows bottom, text fills top
+    - Panoramic: two frames with continuous background, split devices
+    - Split: light/dark side by side
+    """
+    os.makedirs(out_dir, exist_ok=True)
+    # Stash name for iPad detection in sub-functions
+    device_config = {**device_config, "name": device_name}
+
+    frame_num = 1
+    for entry in ULTIMATE_MIXED:
+        layout = entry["layout"]
+
+        if layout == "hero":
+            out_path = os.path.join(out_dir, f"ultimate_{frame_num:02d}.png")
+            generate_hero_frame(device_config, raw_dir, entry, out_path)
+            frame_num += 1
+
+        elif layout == "panoramic":
+            left_out = os.path.join(out_dir, f"ultimate_{frame_num:02d}.png")
+            right_out = os.path.join(out_dir, f"ultimate_{frame_num + 1:02d}.png")
+            generate_mixed_panoramic(device_config, raw_dir, entry, left_out, right_out)
+            frame_num += 2
+
+        elif layout == "triple":
+            out_paths = [
+                os.path.join(out_dir, f"ultimate_{frame_num + i:02d}.png")
+                for i in range(3)
+            ]
+            generate_triple_panoramic(device_config, raw_dir, entry, out_paths)
+            frame_num += 3
+
+        elif layout == "halved":
+            out_path = os.path.join(out_dir, f"ultimate_{frame_num:02d}.png")
+            generate_halved_frame(device_config, raw_dir, entry, out_path)
+            frame_num += 1
+
+        elif layout == "split":
+            out_path = os.path.join(out_dir, f"ultimate_{frame_num:02d}.png")
+            generate_mixed_split(device_config, raw_dir, entry, out_path)
+            frame_num += 1
+
+
+def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
+    """Generate the ultimate panoramic strip — devices fill frames edge-to-edge.
+
+    Layout: text fills the top ~20%, device fills the remaining 80% and bleeds
+    off the bottom edge. Devices sit on cut lines for panoramic continuity.
+    No dead space — every pixel is text, device, or flowing gradient.
     """
     canvas_w, canvas_h = device_config["canvas"]
     corner_r = device_config["corner_radius"]
@@ -971,7 +1827,7 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
     num_frames = num_devices + 1
     total_w = num_frames * canvas_w
 
-    # 1. Background
+    # 1. Panoramic gradient background
     canvas = create_bilinear_gradient(
         total_w, canvas_h,
         cfg["grad_tl"], cfg["grad_tr"],
@@ -985,40 +1841,40 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
     # 3. Fonts
     headline_size = 100 if is_ipad else 88
     subtitle_size = 50 if is_ipad else 42
-    intro_size = 130 if is_ipad else 110
+    intro_size = 120 if is_ipad else 100
     headline_font = load_font(headline_size, bold=True)
     subtitle_font = load_font(subtitle_size, bold=False)
     intro_font = load_font(intro_size, bold=True)
 
-    text_y = int(canvas_h * 0.07)
-    text_gap = int(canvas_h * 0.014)
+    text_y = int(canvas_h * 0.055)
+    text_gap = int(canvas_h * 0.012)
 
-    # 4. Frame 0 — standalone hero (not panoramic)
-    #    Intro text + first device centered in frame, no cut-line bleed
+    # Device starts right below text — fills to bottom and beyond
+    device_y_hero = int(canvas_h * 0.19)
+    device_y_std = int(canvas_h * 0.22)
+
+    # 4. Frame 0 — standalone hero: text + large centered device
     hero_cx = canvas_w // 2
     intro_hl_h = draw_gradient_text_at(
         canvas, cfg["intro_headline"], hero_cx, text_y,
         intro_font, (255, 255, 255), TINT_TEAL,
     )
-    intro_sub_y = text_y + intro_hl_h + text_gap
     draw_text_at(
         canvas, cfg["intro_subtitle"], hero_cx,
-        intro_sub_y, subtitle_font, SUBTITLE_COLOR,
+        text_y + intro_hl_h + text_gap,
+        subtitle_font, SUBTITLE_COLOR,
     )
 
-    # Place hero device centered in frame 0
     hero_shot = shots[0]
     hero_raw = Image.open(os.path.join(raw_dir, f"{hero_shot['filename']}.png")).convert("RGBA")
-    hero_scale = hero_shot.get("scale", 0.75)
-    hero_device_y = int(canvas_h * 0.20)
     place_device_at(
-        canvas, hero_raw, hero_cx, hero_device_y,
-        hero_scale, corner_r, canvas_w, hero_shot.get("angle", 0),
+        canvas, hero_raw, hero_cx, device_y_hero,
+        hero_shot.get("scale", 0.92), corner_r, canvas_w,
+        hero_shot.get("angle", 0),
     )
 
-    # 4b. Trust bridge text — frame 1 (between hero and first panoramic device)
-    #     Power of Free (#113) + Transparency Effect (#85)
-    bridge_cx = int(canvas_w * 1.5)  # center of frame 1
+    # 5. Bridge text in frame 1
+    bridge_cx = int(canvas_w * 1.5)
     bridge_hl_h = draw_gradient_text_at(
         canvas, cfg.get("bridge_headline", ""), bridge_cx, text_y,
         headline_font, (255, 255, 255), TINT_TEAL,
@@ -1030,43 +1886,25 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
             subtitle_font, SUBTITLE_COLOR,
         )
 
-    # 5. Remaining devices — on cut lines (panoramic)
+    # 6. Remaining devices on cut lines (panoramic split)
     for j, shot in enumerate(shots[1:]):
-        cut_x = (j + 2) * canvas_w  # skip frame 0, start cuts at frame 1/2 boundary
+        cut_x = (j + 2) * canvas_w
 
-        # Shift first panoramic device left so it fills the bridge frame
-        # instead of leaving empty space on the left of frame 1
+        # First panoramic device shifts left to fill bridge frame
         if j == 0:
-            cut_x -= int(canvas_w * 0.20)
+            cut_x -= int(canvas_w * 0.15)
 
         raw = Image.open(os.path.join(raw_dir, f"{shot['filename']}.png")).convert("RGBA")
-
         angle = shot.get("angle", 0)
-        scale = shot.get("scale", 0.68)
+        scale = shot.get("scale", 0.85)
+        is_hero = scale >= 0.90
+        dy = device_y_hero if is_hero else device_y_std
 
-        # Heroes sit slightly higher for prominence
-        if scale >= 0.75:
-            device_y = int(canvas_h * 0.22)
-        else:
-            device_y = int(canvas_h * 0.25)
+        place_device_at(canvas, raw, cut_x, dy, scale, corner_r, canvas_w, angle)
 
-        place_device_at(
-            canvas, raw, cut_x, device_y,
-            scale, corner_r, canvas_w, angle,
-        )
-
-        # Headline + subtitle — offset into an adjacent frame so text isn't
-        # split across two frames at the cut line.
-        # Last device: shift LEFT (right frame is the outro).
-        # All others: shift RIGHT (into the next frame).
+        # Headline centered in the frame to the RIGHT of the cut
         if shot["headline"]:
-            if scale >= 0.75:
-                hl_grad_bot = TINT_TEAL_HERO
-            else:
-                hl_grad_bot = TINT_NEUTRAL
-
-            # Center headline in the RIGHT frame (frame j+2), independent of
-            # any device offset so text stays fully inside its frame
+            hl_grad_bot = TINT_TEAL_HERO if is_hero else TINT_NEUTRAL
             headline_cx = (j + 2) * canvas_w + canvas_w // 2
 
             hl_h = draw_gradient_text_at(
@@ -1080,7 +1918,7 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
                     subtitle_font, SUBTITLE_COLOR_STRIP,
                 )
 
-    # 6. Outro text — centered in the last frame
+    # 7. Outro text centered in last frame
     outro_cx = int((num_frames - 0.5) * canvas_w)
     outro_hl_h = draw_gradient_text_at(
         canvas, cfg["outro_headline"], outro_cx, text_y,
@@ -1092,7 +1930,7 @@ def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
         subtitle_font, SUBTITLE_COLOR,
     )
 
-    # 7. Slice into individual frames
+    # 8. Slice into individual frames
     os.makedirs(out_dir, exist_ok=True)
     for i in range(num_frames):
         frame = canvas.crop((i * canvas_w, 0, (i + 1) * canvas_w, canvas_h))
@@ -1143,19 +1981,29 @@ def main():
 
         generate_panoramic_strip(device_name, device_config, raw_dir, strip_dir)
 
-    # --- Ultimate Strip (mixed angles, heroes, Gatena-optimized copy) ---
+    # --- Ultimate Strip (panoramic-only, legacy) ---
     for device_name, device_config in DEVICES.items():
         raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
         ultimate_dir = os.path.join(SCRIPT_DIR, "marketing", "ultimate", device_name)
 
-        print(f"\n=== {device_name} (ultimate) ===")
+        print(f"\n=== {device_name} (ultimate strip) ===")
 
         generate_ultimate_strip(device_name, device_config, raw_dir, ultimate_dir)
+
+    # --- Ultimate Mixed (hero + panoramic + split — best of all styles) ---
+    for device_name, device_config in DEVICES.items():
+        raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
+        mixed_dir = os.path.join(SCRIPT_DIR, "marketing", "mixed", device_name)
+
+        print(f"\n=== {device_name} (mixed) ===")
+
+        generate_ultimate_mixed(device_name, device_config, raw_dir, mixed_dir)
 
     print("\nDone! Marketing screenshots saved to marketing/")
     print("Panoramic pairs saved to marketing/panoramic/")
     print("Panoramic strip saved to marketing/strip/")
     print("Ultimate strip saved to marketing/ultimate/")
+    print("Ultimate mixed saved to marketing/mixed/")
 
 
 if __name__ == "__main__":

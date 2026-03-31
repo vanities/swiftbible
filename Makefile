@@ -131,12 +131,11 @@ upload:
 	xcodebuild -exportArchive \
 		-archivePath $(ARCHIVE_PATH) \
 		-exportOptionsPlist $(EXPORT_OPTIONS) \
-		-exportPath $(EXPORT_PATH)
-	xcrun altool --upload-app \
-		-f $(EXPORT_PATH)/swiftbible.ipa \
-		-t ios \
-		--apiKey $(APP_STORE_API_KEY) \
-		--apiIssuer $(APP_STORE_API_ISSUER)
+		-exportPath $(EXPORT_PATH) \
+		-allowProvisioningUpdates \
+		-authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_$(APP_STORE_API_KEY).p8 \
+		-authenticationKeyID $(APP_STORE_API_KEY) \
+		-authenticationKeyIssuerID $(APP_STORE_API_ISSUER)
 	@echo "Upload complete!"
 
 release: archive upload
