@@ -627,7 +627,6 @@ struct ContentView: View {
                     .execute()
                     .value
                 CacheService.shared.saveDevotional(devotional, for: today)
-                CacheService.shared.syncDevotionalToWidget(devotional, for: today)
             } catch {
                 // No devotional for today yet — notification will use generic message
             }
