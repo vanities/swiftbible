@@ -11,12 +11,14 @@ xcodebuild -resolvePackageDependencies \
   -clonedSourcePackagesDirPath "$CI_DERIVED_DATA_PATH/SourcePackages"
 echo "Package resolution complete at $(date)."
 
-# Use incremental compilation on CI to avoid WMO 30-minute silence timeout.
-# WMO compiles the entire module as one unit with zero stdout output.
-# Local builds keep WMO via project settings for optimal binaries.
-echo "Setting incremental compilation for CI..."
-sed -i '' 's/SWIFT_COMPILATION_MODE = wholemodule/SWIFT_COMPILATION_MODE = incremental/g' \
-  "$CI_PRIMARY_REPOSITORY_PATH/swiftbible.xcodeproj/project.pbxproj"
-echo "Done."
+# Force incremental compilation on CI to avoid WMO 30-minute silence timeout.
+# WMO compiles the entire module as one unit with zero stdout output, hitting
+# Xcode Cloud's 30-minute inactivity watchdog. Incremental compiles per-file.
+PBXPROJ="$CI_PRIMARY_REPOSITORY_PATH/swiftbible.xcodeproj/project.pbxproj"
+echo "Before sed:"
+grep "SWIFT_COMPILATION_MODE" "$PBXPROJ"
+sed -i '' 's/SWIFT_COMPILATION_MODE = wholemodule/SWIFT_COMPILATION_MODE = singlefile/' "$PBXPROJ"
+echo "After sed:"
+grep "SWIFT_COMPILATION_MODE" "$PBXPROJ"
 
 echo "=== ci_post_clone.sh finished at $(date) ==="
