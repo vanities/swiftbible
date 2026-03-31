@@ -74,3 +74,5 @@ appstore/__pycache__/
 
 .sentryclirc
 *.p8
+
+build/

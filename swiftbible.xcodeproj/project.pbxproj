@@ -597,8 +597,8 @@
 				954BC9CC2C84EDBE00FFCFA6 /* Sources */,
 				954BC9CD2C84EDBE00FFCFA6 /* Frameworks */,
 				954BC9CE2C84EDBE00FFCFA6 /* Resources */,
-				93C2D2EF8678477E9E93CB92 /* Upload Debug Symbols to Sentry */,
 				95F7C7E12F7B2E2E00B478E6 /* Embed Foundation Extensions */,
+				93C2D2EF8678477E9E93CB92 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -756,7 +756,7 @@
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/sentry-upload-stamp",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "# Skip in Xcode Cloud CI\nif [ \"$CI_XCODE_CLOUD\" = \"TRUE\" ]; then\n  echo \"Skipping Sentry upload in Xcode Cloud\"\n  touch \"${DERIVED_FILE_DIR}/sentry-upload-stamp\"\n  exit 0\nfi\n# This script is responsible for uploading debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=am2\n  export SENTRY_PROJECT=swiftbible\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\ntouch \"${DERIVED_FILE_DIR}/sentry-upload-stamp\"\n";
 		};
