@@ -13,10 +13,4 @@ xcodebuild -resolvePackageDependencies \
   -clonedSourcePackagesDirPath "$CI_DERIVED_DATA_PATH/SourcePackages"
 echo "Package resolution complete at $(date)."
 
-# Reduce compiler parallelism to avoid memory pressure timeouts
-# during whole-module-optimization of large SPM dependencies (Supabase, Sentry)
-echo "Setting build parallelism limits..."
-defaults write com.apple.dt.XCBuild BuildSystemScheduleInherentlyParallelCommandsExclusively -bool YES
-defaults write com.apple.dt.XCBuild IDEBuildOperationMaxNumberOfConcurrentCompileTasks 4
-
 echo "=== ci_post_clone.sh finished at $(date) ==="
