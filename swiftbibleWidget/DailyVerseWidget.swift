@@ -71,8 +71,8 @@ struct DailyDevotionalProvider: TimelineProvider {
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: Date())
 
-        // Supabase REST API: GET /rest/v1/Daily%20Devotional?select=*&for_date=eq.{date}
-        var components = URLComponents(string: "\(supabaseURL)/rest/v1/Daily%20Devotional")!
+        // Supabase REST API: GET /rest/v1/Daily Devotional?select=message&for_date=eq.{date}
+        var components = URLComponents(string: "\(supabaseURL)/rest/v1/Daily Devotional")!
         components.queryItems = [
             URLQueryItem(name: "select", value: "message"),
             URLQueryItem(name: "for_date", value: "eq.\(dateString)")
@@ -82,9 +82,8 @@ struct DailyDevotionalProvider: TimelineProvider {
 
         var request = URLRequest(url: url)
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
         // Return single object instead of array
-        request.setValue("application/vnd.pgrst.object+json", forHTTPHeaderField: "Accept-Profile")
+        request.setValue("application/vnd.pgrst.object+json", forHTTPHeaderField: "Accept")
 
         guard let (data, response) = try? await URLSession.shared.data(for: request),
               let httpResponse = response as? HTTPURLResponse,
