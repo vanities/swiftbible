@@ -136,7 +136,9 @@ class SupabaseService {
                 return
             } catch {
                 print("Keychain session recovery failed: \(error.localizedDescription)")
-                SentryService.shared.capture(error, context: ["action": "keychainRecovery"])
+                if !Self.isExpectedRecoveryError(error) {
+                    SentryService.shared.capture(error, context: ["action": "keychainRecovery"])
+                }
             }
         }
 
@@ -183,8 +185,25 @@ class SupabaseService {
             await updateDeviceInfo()
         } catch {
             print("Anonymous sign-in error: \(error.localizedDescription)")
-            SentryService.shared.capture(error, context: ["action": "anonymousSignIn"])
+            if !Self.isExpectedRecoveryError(error) {
+                SentryService.shared.capture(error, context: ["action": "anonymousSignIn"])
+            }
         }
+    }
+
+    /// Returns true for errors that are expected during session recovery and should not be reported to Sentry.
+    /// Network errors (offline) and expired session tokens are normal — the recovery flow handles them by falling through.
+    private static func isExpectedRecoveryError(_ error: Error) -> Bool {
+        let nsError = error as NSError
+        // NSURLErrorDomain -1009: "The Internet connection appears to be offline."
+        if nsError.domain == NSURLErrorDomain && nsError.code == -1009 {
+            return true
+        }
+        // Auth.AuthError.sessionMissing — tokens expired, recovery will fall through to anonymous sign-in
+        if "\(error)".contains("sessionMissing") {
+            return true
+        }
+        return false
     }
 
     /// Saves device info to the user's profile so we can identify the Apple device.

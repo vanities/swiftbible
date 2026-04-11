@@ -1012,42 +1012,66 @@ Return ONLY a JSON object in this exact format:
   ]
 }`;
 
-  const response = await fetch(OPENAI_CHAT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-5.4-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a Bible verse selector. Return only valid JSON with KJV verse references.",
-        },
-        { role: "user", content: prompt },
-      ],
-      response_format: { type: "json_object" },
-      max_completion_tokens: 300,
-    }),
-    signal: AbortSignal.timeout(30000),
-  });
+  const maxRetries = 2;
+  let content: string | undefined;
+  let lastError: Error | undefined;
 
-  if (!response.ok) {
-    let errorText: string | undefined;
-    try {
-      errorText = JSON.stringify(await response.json());
-    } catch (_) {
-      errorText = await response.text();
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    if (attempt > 0) {
+      const delay = attempt * 1000;
+      console.log(`selectMultiVerses retry ${attempt}/${maxRetries} after ${delay}ms`);
+      await new Promise((r) => setTimeout(r, delay));
     }
-    throw new Error(`Verse selection failed (${response.status}): ${errorText}`);
+
+    try {
+      const response = await fetch(OPENAI_CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-5.4-mini",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are a Bible verse selector. Return only valid JSON with KJV verse references.",
+            },
+            { role: "user", content: prompt },
+          ],
+          response_format: { type: "json_object" },
+          max_completion_tokens: 300,
+        }),
+        signal: AbortSignal.timeout(30000),
+      });
+
+      if (!response.ok) {
+        let errorText: string | undefined;
+        try {
+          errorText = JSON.stringify(await response.json());
+        } catch (_) {
+          errorText = await response.text();
+        }
+        lastError = new Error(`Verse selection failed (${response.status}): ${errorText}`);
+        continue;
+      }
+
+      const data = await response.json();
+      console.log("selectMultiVerses response:", JSON.stringify(data, null, 2));
+      content = data?.choices?.[0]?.message?.content;
+      if (!content) {
+        lastError = new Error(`Empty verse selection response: ${JSON.stringify(data)}`);
+        continue;
+      }
+
+      break;
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+    }
   }
 
-  const data = await response.json();
-  console.log("selectMultiVerses response:", JSON.stringify(data, null, 2));
-  const content = data?.choices?.[0]?.message?.content;
-  if (!content) throw new Error(`Empty verse selection response: ${JSON.stringify(data)}`);
+  if (!content) throw lastError ?? new Error("Verse selection failed after retries");
 
   const parsed = JSON.parse(content);
   if (!Array.isArray(parsed.verses) || parsed.verses.length === 0) {

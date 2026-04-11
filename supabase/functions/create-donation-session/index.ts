@@ -33,6 +33,15 @@ const MAX_AMOUNT_CENTS = Number(
   Deno.env.get("DONATION_MAX_AMOUNT_CENTS") ?? "50000",
 );
 
+// Stripe minimum charge amounts per currency (in smallest currency unit).
+// https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts
+const STRIPE_CURRENCY_MINIMUMS: Record<string, number> = {
+  usd: 50, gbp: 30, eur: 50, cad: 50, aud: 50,
+  brl: 50, chf: 50, dkk: 250, hkd: 400, inr: 50,
+  jpy: 50, mxn: 1000, nok: 300, nzd: 50, pln: 200,
+  sek: 300, sgd: 50, cny: 400,
+};
+
 if (!STRIPE_SECRET_KEY) {
   throw new Error("Missing STRIPE_SECRET_KEY environment variable");
 }
@@ -73,10 +82,14 @@ Deno.serve(async (req) => {
     }, 400);
   }
 
-  if (amountCents < MIN_AMOUNT_CENTS) {
-    console.warn("[create-donation-session] amount below minimum", amountCents);
+  const stripeMin = STRIPE_CURRENCY_MINIMUMS[currency] ?? 50;
+  const effectiveMin = Math.max(MIN_AMOUNT_CENTS, stripeMin);
+
+  if (amountCents < effectiveMin) {
+    console.warn("[create-donation-session] amount below minimum", { amountCents, currency, effectiveMin });
+    const formatted = (effectiveMin / 100).toFixed(currency === "jpy" ? 0 : 2);
     return jsonResponse({
-      error: `Donation must be at least $${(MIN_AMOUNT_CENTS / 100).toFixed(2)}.`,
+      error: `Donation must be at least ${formatted} ${currency.toUpperCase()}.`,
     }, 400);
   }
 
