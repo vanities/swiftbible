@@ -1,0 +1,6 @@
+{
+  "images": [
+    { "filename": "widget.png", "idiom": "universal" }
+  ],
+  "info": { "author": "xcode", "version": 1 }
+}

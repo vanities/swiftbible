@@ -117,6 +117,7 @@
 		CC0000012F640001000NOTIF /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000022F640001000NOTIF /* NotificationService.swift */; };
 		CC0000022F5D0001000ORGTX /* greek.json in Resources */ = {isa = PBXBuildFile; fileRef = CC0000042F5D0001000ORGTX /* greek.json */; };
 		CC0000032F640001000NOTIF /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000042F640001000NOTIF /* NotificationSettingsView.swift */; };
+		CC0000052F850001ONBRD01 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000062F850001ONBRD01 /* OnboardingView.swift */; };
 		DD0000072F8A0001000APPNT /* AppIntentNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */; };
 		DD0000082F8A0001000APPNT /* AppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000022F8A0001000APPNT /* AppShortcuts.swift */; };
 		DD0000092F8A0001000APPNT /* OpenBookIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000032F8A0001000APPNT /* OpenBookIntent.swift */; };
@@ -265,6 +266,7 @@
 		CC0000032F5D0001000ORGTX /* hebrew.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = hebrew.json; sourceTree = "<group>"; };
 		CC0000042F5D0001000ORGTX /* greek.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = greek.json; sourceTree = "<group>"; };
 		CC0000042F640001000NOTIF /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
+		CC0000062F850001ONBRD01 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		D1436A3087B4D420B1C9E6BE /* ReadingSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReadingSession.swift; sourceTree = "<group>"; };
 		DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntentNavigator.swift; sourceTree = "<group>"; };
 		DD0000022F8A0001000APPNT /* AppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShortcuts.swift; sourceTree = "<group>"; };
@@ -365,6 +367,7 @@
 				95F3A0052F040001000A1B2C /* TranslationInfoView.swift */,
 				BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */,
 				CC0000042F640001000NOTIF /* NotificationSettingsView.swift */,
+				CC0000062F850001ONBRD01 /* OnboardingView.swift */,
 				C9D2814EC3F3451C2EB42D8E /* ReadingStatsView.swift */,
 				9F2CE7334B0BFCB9BCC9CFD5 /* AppIconPickerView.swift */,
 			);
@@ -883,6 +886,7 @@
 				95AE12042F7AB300001A2B04 /* SentryService.swift in Sources */,
 				CC0000012F640001000NOTIF /* NotificationService.swift in Sources */,
 				CC0000032F640001000NOTIF /* NotificationSettingsView.swift in Sources */,
+				CC0000052F850001ONBRD01 /* OnboardingView.swift in Sources */,
 				BB0000062F4D0001000TXTPK /* TextSourcesView.swift in Sources */,
 				69E843EED8F1DD0E9ED2EB61 /* DonationPromptVariant.swift in Sources */,
 				F922B9355548B1ECA572B372 /* DonationPromptLossView.swift in Sources */,
@@ -1276,7 +1280,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = swiftbibleWatch;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.vanities.swiftbible";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.vanities.swiftbible;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1310,7 +1314,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = swiftbibleWatch;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.vanities.swiftbible";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.vanities.swiftbible;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
