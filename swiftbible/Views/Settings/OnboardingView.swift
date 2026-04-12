@@ -483,13 +483,66 @@ private struct OnboardingPage: View {
 
     @ViewBuilder
     private var heroImage: some View {
+        switch feature {
+        case .welcome:
+            welcomeIcon
+        case .watchApp:
+            watchFramedImage
+        case .widget:
+            widgetFramedImage
+        }
+    }
+
+    /// The welcome page shows the brand app icon with a modest rounded square
+    /// — Halo Effect via the strongest brand asset on first impression.
+    @ViewBuilder
+    private var welcomeIcon: some View {
         if let imageName = feature.imageName {
             Image(imageName)
                 .resizable()
                 .scaledToFit()
-                .frame(maxHeight: feature == .welcome ? 180 : 280)
-                .clipShape(RoundedRectangle(cornerRadius: 24))
+                .frame(maxHeight: 180)
+                .clipShape(RoundedRectangle(cornerRadius: 36, style: .continuous))
                 .shadow(color: .black.opacity(0.18), radius: 22, y: 10)
+        }
+    }
+
+    /// Wraps the watch screen capture in a heavy continuous-corner frame
+    /// with a dark bezel so it reads as "this is what you'll see ON the
+    /// watch" rather than "this is a flat screenshot."
+    @ViewBuilder
+    private var watchFramedImage: some View {
+        if let imageName = feature.imageName {
+            Image(imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(maxHeight: 300)
+                .clipShape(RoundedRectangle(cornerRadius: 52, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 52, style: .continuous)
+                        .strokeBorder(Color.black.opacity(0.92), lineWidth: 6)
+                )
+                .shadow(color: .black.opacity(0.35), radius: 24, y: 12)
+        }
+    }
+
+    /// Renders the widget screenshot with the standard iOS widget corner
+    /// radius and a soft drop shadow so it looks like it's floating on a
+    /// home screen, not pasted into a flat sheet.
+    @ViewBuilder
+    private var widgetFramedImage: some View {
+        if let imageName = feature.imageName {
+            Image(imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(maxHeight: 220)
+                .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                        .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+                )
+                .shadow(color: .black.opacity(0.20), radius: 18, y: 10)
+                .shadow(color: .black.opacity(0.10), radius: 4, y: 2)
         }
     }
 
