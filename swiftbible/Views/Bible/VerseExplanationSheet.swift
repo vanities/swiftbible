@@ -28,8 +28,16 @@ struct VerseExplanationSheet: View {
     @State private var scrollOffset: CGFloat = 0
     @State private var showToast = false
 
+    // Conversation state
+    @State private var messages: [ChatMessage] = []
+    @State private var inputText: String = ""
+    @State private var isAwaitingFollowUp: Bool = false
+    @State private var followUpTask: Task<Void, Never>?
+    @FocusState private var isInputFocused: Bool
+
     var body: some View {
         NavigationStack {
+            VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     // Collapsing header section
@@ -121,11 +129,23 @@ struct VerseExplanationSheet: View {
                         .accessibilityElement(children: .combine)
                         .accessibilityLabel("Loading explanation")
                     }
+
+                    if !messages.isEmpty {
+                        Divider()
+                            .padding(.horizontal)
+                        conversationView
+                            .padding(.horizontal)
+                            .padding(.top, 8)
+                            .padding(.bottom, 12)
+                    }
                 }
             }
             .coordinateSpace(name: "scroll")
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 scrollOffset = value
+            }
+
+            followUpInputBar
             }
             .navigationTitle("Explain")
             .navigationBarTitleDisplayMode(.inline)
@@ -156,6 +176,7 @@ struct VerseExplanationSheet: View {
             .onAppear { startStreaming() }
             .onDisappear {
                 streamTask?.cancel()
+                followUpTask?.cancel()
                 Task { @MainActor in
                     AppleFoundationModelService.shared.resetSession()
                 }
@@ -198,6 +219,131 @@ struct VerseExplanationSheet: View {
         let threshold: CGFloat = 100
         let opacity = max(0.0, min(1.0, 1.0 - (abs(scrollOffset) / threshold)))
         return opacity
+    }
+
+    struct ChatMessage: Identifiable, Equatable {
+        enum Role: Equatable { case user, assistant }
+        let id = UUID()
+        let role: Role
+        var content: String
+    }
+
+    private var canSendFollowUp: Bool {
+        availabilityStatus.isReadyForGeneration
+            && errorMessage == nil
+            && !isStreaming
+            && !isAwaitingFollowUp
+    }
+
+    @ViewBuilder
+    private var conversationView: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            ForEach(messages) { message in
+                HStack(alignment: .top, spacing: 0) {
+                    if message.role == .user {
+                        Spacer(minLength: 40)
+                        Text(message.content)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 14))
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    } else {
+                        Text(message.content.isEmpty ? "…" : message.content)
+                            .foregroundStyle(message.content.isEmpty ? .secondary : .primary)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+                        Spacer(minLength: 40)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var followUpInputBar: some View {
+        VStack(spacing: 0) {
+            Divider()
+            HStack(alignment: .bottom, spacing: 8) {
+                TextField(
+                    "Ask a follow-up question…",
+                    text: $inputText,
+                    axis: .vertical
+                )
+                .textFieldStyle(.plain)
+                .lineLimit(1...4)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 18)
+                        .fill(Color.secondary.opacity(0.12))
+                )
+                .focused($isInputFocused)
+                .disabled(!canSendFollowUp)
+                .submitLabel(.send)
+                .onSubmit { sendFollowUp() }
+
+                Button {
+                    sendFollowUp()
+                } label: {
+                    Image(systemName: isAwaitingFollowUp ? "stop.circle.fill" : "arrow.up.circle.fill")
+                        .font(.system(size: 28))
+                        .foregroundStyle(sendButtonEnabled ? Color.accentColor : Color.secondary)
+                }
+                .disabled(!sendButtonEnabled && !isAwaitingFollowUp)
+                .accessibilityLabel(isAwaitingFollowUp ? "Stop" : "Send")
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            .background(.bar)
+        }
+    }
+
+    private var sendButtonEnabled: Bool {
+        canSendFollowUp && !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private func sendFollowUp() {
+        if isAwaitingFollowUp {
+            // Treat send as a stop-button when a follow-up is mid-stream.
+            followUpTask?.cancel()
+            return
+        }
+        let trimmed = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, canSendFollowUp else { return }
+
+        messages.append(ChatMessage(role: .user, content: trimmed))
+        let assistantMessage = ChatMessage(role: .assistant, content: "")
+        let assistantId = assistantMessage.id
+        messages.append(assistantMessage)
+        inputText = ""
+        isAwaitingFollowUp = true
+
+        followUpTask = Task { @MainActor in
+            do {
+                let stream = AppleFoundationModelService.shared.streamFollowUp(prompt: trimmed)
+                for try await chunk in stream {
+                    if let index = messages.firstIndex(where: { $0.id == assistantId }) {
+                        messages[index].content.append(chunk)
+                    }
+                }
+                isAwaitingFollowUp = false
+                followUpTask = nil
+            } catch is CancellationError {
+                isAwaitingFollowUp = false
+                followUpTask = nil
+            } catch {
+                let description = (error as? LocalizedError)?.errorDescription
+                    ?? error.localizedDescription
+                if let index = messages.firstIndex(where: { $0.id == assistantId }) {
+                    messages[index].content = description
+                }
+                isAwaitingFollowUp = false
+                followUpTask = nil
+            }
+        }
     }
 
     private func startStreaming(forceRestart: Bool = false) {

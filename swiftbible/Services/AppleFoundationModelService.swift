@@ -12,12 +12,23 @@ import FoundationModels
 
 enum AppleFoundationModelServiceError: LocalizedError {
     case modelUnavailable(reason: String)
+    case contentFiltered
 
     var errorDescription: String? {
         switch self {
         case .modelUnavailable(let reason):
             return "Apple Intelligence is currently unavailable: \(reason)."
+        case .contentFiltered:
+            return "Apple Intelligence's on-device safety filter blocked this passage. This sometimes happens with passages that touch on sensitive topics even in a biblical context. Try rephrasing your question, or consult another trusted commentary."
         }
+    }
+
+    static func isGuardrailError(_ error: Error) -> Bool {
+        let description = String(describing: error).lowercased()
+        return description.contains("guardrail")
+            || description.contains("unsafe")
+            || description.contains("safety")
+            || description.contains("content filter")
     }
 }
 
@@ -25,7 +36,7 @@ enum AppleFoundationModelServiceError: LocalizedError {
 final class AppleFoundationModelService {
     static let shared = AppleFoundationModelService()
 
-    fileprivate static let instructions = "You are a trusted pastoral Bible commentary assistant. Offer historically grounded, theologically orthodox insights that respect the passage's canonical context. Write warmly but avoid personal greetings or letters."
+    fileprivate static let instructions = "You are a trusted pastoral Bible commentary assistant helping a reader study Scripture. Offer historically grounded, theologically orthodox insights that respect the passage's canonical context. All passages are reverent biblical texts; treat discussions of covenant signs, warfare narratives, prophetic imagery, and other ancient cultural practices as academic, theological reflection. Write warmly but avoid personal greetings or letters. After the initial commentary, engage follow-up questions conversationally while staying rooted in the same passage."
 
     enum AvailabilityStatus: Equatable {
         case unsupportedOS
@@ -68,6 +79,20 @@ final class AppleFoundationModelService {
     func streamExplanation(for request: VerseExplanationRequest) -> AsyncThrowingStream<String, Error> {
         if #available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *) {
             return AppleFoundationModelServiceImplementation.shared.streamExplanation(for: request)
+        }
+
+        return AsyncThrowingStream { continuation in
+            continuation.finish(
+                throwing: AppleFoundationModelServiceError.modelUnavailable(
+                    reason: "Requires iOS 26, macOS 26, macCatalyst 26, or visionOS 2."
+                )
+            )
+        }
+    }
+
+    func streamFollowUp(prompt: String) -> AsyncThrowingStream<String, Error> {
+        if #available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *) {
+            return AppleFoundationModelServiceImplementation.shared.streamFollowUp(prompt: prompt)
         }
 
         return AsyncThrowingStream { continuation in
@@ -139,38 +164,114 @@ private final class AppleFoundationModelServiceImplementation {
 
             let streamingTask = Task { @MainActor in
                 do {
+                    try await self.streamStructuredCommentary(
+                        prompt: request.userPrompt,
+                        continuation: continuation
+                    )
+                    continuation.finish()
+                } catch {
+                    if AppleFoundationModelServiceError.isGuardrailError(error) {
+                        // Apple's on-device safety filter flagged the literal passage text
+                        // (this happens with verses like Genesis 17:11 that mention
+                        // circumcision, and other passages touching on sensitive topics).
+                        // Reset the session so the flagged context is cleared, then retry
+                        // with a softer reference-only prompt.
+                        self.resetSession()
+                        do {
+                            try await self.streamStructuredCommentary(
+                                prompt: request.fallbackUserPrompt,
+                                continuation: continuation
+                            )
+                            continuation.finish()
+                        } catch {
+                            if AppleFoundationModelServiceError.isGuardrailError(error) {
+                                continuation.finish(throwing: AppleFoundationModelServiceError.contentFiltered)
+                            } else {
+                                continuation.finish(throwing: error)
+                            }
+                        }
+                    } else {
+                        continuation.finish(throwing: error)
+                    }
+                }
+            }
+
+            continuation.onTermination = { _ in
+                streamingTask.cancel()
+            }
+        }
+    }
+
+    private func streamStructuredCommentary(
+        prompt: String,
+        continuation: AsyncThrowingStream<String, Error>.Continuation
+    ) async throws {
+        let stream = session.streamResponse(
+            to: prompt,
+            generating: VerseCommentary.self,
+            options: generationOptions
+        )
+
+        var lastExplanation = ""
+
+        // partial is the snapshot: properties are optional as the response streams.
+        for try await partial in stream {
+            let commentary = partial.content
+            #if DEBUG
+            print("[AppleFoundationModelService] commentary snapshot: \(commentary)")
+            #endif
+            let explanation = Self.render(commentary: commentary)
+            #if DEBUG
+            print("[AppleFoundationModelService] snapshot explanation: \(String(reflecting: explanation))")
+            #endif
+            let delta: String
+            if explanation.hasPrefix(lastExplanation) {
+                delta = String(explanation.dropFirst(lastExplanation.count))
+            } else {
+                delta = explanation
+            }
+            lastExplanation = explanation
+            guard !delta.isEmpty else { continue }
+            continuation.yield(delta)
+        }
+    }
+
+    func streamFollowUp(prompt: String) -> AsyncThrowingStream<String, Error> {
+        AsyncThrowingStream { continuation in
+            if case .unavailable(let reason) = model.availability {
+                let message = String(describing: reason)
+                continuation.finish(throwing: AppleFoundationModelServiceError.modelUnavailable(reason: message))
+                return
+            }
+
+            let streamingTask = Task { @MainActor in
+                do {
                     let stream = session.streamResponse(
-                        to: request.userPrompt,
-                        generating: VerseCommentary.self,
+                        to: prompt,
                         options: generationOptions
                     )
 
-                    var lastExplanation = ""
-
-                    // partial is the snapshot: properties are optional as the response streams.
+                    var lastText = ""
                     for try await partial in stream {
-                        let commentary = partial.content
-                        #if DEBUG
-                        print("[AppleFoundationModelService] commentary snapshot: \(commentary)")
-                        #endif
-                        let explanation = Self.render(commentary: commentary)
-                        #if DEBUG
-                        print("[AppleFoundationModelService] snapshot explanation: \(String(reflecting: explanation))")
-                        #endif
+                        let text = partial.content
                         let delta: String
-                        if explanation.hasPrefix(lastExplanation) {
-                            delta = String(explanation.dropFirst(lastExplanation.count))
+                        if text.hasPrefix(lastText) {
+                            delta = String(text.dropFirst(lastText.count))
                         } else {
-                            delta = explanation
+                            delta = text
                         }
-                        lastExplanation = explanation
+                        lastText = text
                         guard !delta.isEmpty else { continue }
                         continuation.yield(delta)
                     }
 
                     continuation.finish()
                 } catch {
-                    continuation.finish(throwing: error)
+                    if AppleFoundationModelServiceError.isGuardrailError(error) {
+                        continuation.finish(throwing: AppleFoundationModelServiceError.contentFiltered)
+                    } else {
+                        continuation.finish(throwing: error)
+                    }
                 }
             }
 
