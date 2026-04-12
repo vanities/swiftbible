@@ -132,4 +132,5 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
 
 extension Notification.Name {
     static let devotionalReminderTapped = Notification.Name("devotionalReminderTapped")
+    static let onboardingReplayRequested = Notification.Name("onboardingReplayRequested")
 }

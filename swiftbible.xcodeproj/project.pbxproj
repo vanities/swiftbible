@@ -117,6 +117,7 @@
 		CC0000012F640001000NOTIF /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000022F640001000NOTIF /* NotificationService.swift */; };
 		CC0000022F5D0001000ORGTX /* greek.json in Resources */ = {isa = PBXBuildFile; fileRef = CC0000042F5D0001000ORGTX /* greek.json */; };
 		CC0000032F640001000NOTIF /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000042F640001000NOTIF /* NotificationSettingsView.swift */; };
+		CC0000052F850001ONBRD01 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000062F850001ONBRD01 /* OnboardingView.swift */; };
 		DD0000072F8A0001000APPNT /* AppIntentNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */; };
 		DD0000082F8A0001000APPNT /* AppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000022F8A0001000APPNT /* AppShortcuts.swift */; };
 		DD0000092F8A0001000APPNT /* OpenBookIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000032F8A0001000APPNT /* OpenBookIntent.swift */; };
@@ -240,6 +241,7 @@
 		95F7C7D02F7B2E2D00B478E6 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		95F7C7D22F7B2E2D00B478E6 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		95F7C7E82F7B2ED000B478E6 /* swiftbibleWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = swiftbibleWidgetExtension.entitlements; sourceTree = "<group>"; };
+		95F7F6342F8C3D1200B478E6 /* swiftbibleWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swiftbibleWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotional.swift; sourceTree = "<group>"; };
 		95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedDevotionalsListView.swift; sourceTree = "<group>"; };
 		9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DailyDevotional.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 		CC0000032F5D0001000ORGTX /* hebrew.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = hebrew.json; sourceTree = "<group>"; };
 		CC0000042F5D0001000ORGTX /* greek.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = greek.json; sourceTree = "<group>"; };
 		CC0000042F640001000NOTIF /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
+		CC0000062F850001ONBRD01 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		D1436A3087B4D420B1C9E6BE /* ReadingSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReadingSession.swift; sourceTree = "<group>"; };
 		DD0000012F8A0001000APPNT /* AppIntentNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntentNavigator.swift; sourceTree = "<group>"; };
 		DD0000022F8A0001000APPNT /* AppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShortcuts.swift; sourceTree = "<group>"; };
@@ -289,6 +292,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		95AB8B902CAB768000533AA5 /* swiftbibleUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = swiftbibleUITests; sourceTree = "<group>"; };
 		95F7C7D42F7B2E2D00B478E6 /* swiftbibleWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (95F7C7E42F7B2E2E00B478E6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = swiftbibleWidget; sourceTree = "<group>"; };
+		95F7F6352F8C3D1200B478E6 /* swiftbibleWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "swiftbibleWatch Watch App"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,6 +331,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		95F7F6312F8C3D1200B478E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -356,6 +367,7 @@
 				95F3A0052F040001000A1B2C /* TranslationInfoView.swift */,
 				BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */,
 				CC0000042F640001000NOTIF /* NotificationSettingsView.swift */,
+				CC0000062F850001ONBRD01 /* OnboardingView.swift */,
 				C9D2814EC3F3451C2EB42D8E /* ReadingStatsView.swift */,
 				9F2CE7334B0BFCB9BCC9CFD5 /* AppIconPickerView.swift */,
 			);
@@ -411,6 +423,7 @@
 				954BC9D22C84EDBE00FFCFA6 /* swiftbible */,
 				95AB8B902CAB768000533AA5 /* swiftbibleUITests */,
 				95F7C7D42F7B2E2D00B478E6 /* swiftbibleWidget */,
+				95F7F6352F8C3D1200B478E6 /* swiftbibleWatch Watch App */,
 				9537E25C2C893FBD00FD56B9 /* Frameworks */,
 				954BC9D12C84EDBE00FFCFA6 /* Products */,
 			);
@@ -422,6 +435,7 @@
 				954BC9D02C84EDBE00FFCFA6 /* swiftbible.app */,
 				95AB8B8F2CAB768000533AA5 /* swiftbibleUITests.xctest */,
 				95F7C7CF2F7B2E2D00B478E6 /* swiftbibleWidgetExtension.appex */,
+				95F7F6342F8C3D1200B478E6 /* swiftbibleWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -653,6 +667,28 @@
 			productReference = 95F7C7CF2F7B2E2D00B478E6 /* swiftbibleWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		95F7F6332F8C3D1200B478E6 /* swiftbibleWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95F7F63E2F8C3D1300B478E6 /* Build configuration list for PBXNativeTarget "swiftbibleWatch Watch App" */;
+			buildPhases = (
+				95F7F6302F8C3D1200B478E6 /* Sources */,
+				95F7F6312F8C3D1200B478E6 /* Frameworks */,
+				95F7F6322F8C3D1200B478E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				95F7F6352F8C3D1200B478E6 /* swiftbibleWatch Watch App */,
+			);
+			name = "swiftbibleWatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "swiftbibleWatch Watch App";
+			productReference = 95F7F6342F8C3D1200B478E6 /* swiftbibleWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -671,6 +707,9 @@
 						TestTargetID = 954BC9CF2C84EDBE00FFCFA6;
 					};
 					95F7C7CE2F7B2E2D00B478E6 = {
+						CreatedOnToolsVersion = 26.4;
+					};
+					95F7F6332F8C3D1200B478E6 = {
 						CreatedOnToolsVersion = 26.4;
 					};
 				};
@@ -700,6 +739,7 @@
 				954BC9CF2C84EDBE00FFCFA6 /* swiftbible */,
 				95AB8B8E2CAB768000533AA5 /* swiftbibleUITests */,
 				95F7C7CE2F7B2E2D00B478E6 /* swiftbibleWidgetExtension */,
+				95F7F6332F8C3D1200B478E6 /* swiftbibleWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -735,6 +775,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		95F7C7CD2F7B2E2D00B478E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95F7F6322F8C3D1200B478E6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -839,6 +886,7 @@
 				95AE12042F7AB300001A2B04 /* SentryService.swift in Sources */,
 				CC0000012F640001000NOTIF /* NotificationService.swift in Sources */,
 				CC0000032F640001000NOTIF /* NotificationSettingsView.swift in Sources */,
+				CC0000052F850001ONBRD01 /* OnboardingView.swift in Sources */,
 				BB0000062F4D0001000TXTPK /* TextSourcesView.swift in Sources */,
 				69E843EED8F1DD0E9ED2EB61 /* DonationPromptVariant.swift in Sources */,
 				F922B9355548B1ECA572B372 /* DonationPromptLossView.swift in Sources */,
@@ -868,6 +916,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		95F7C7CB2F7B2E2D00B478E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95F7F6302F8C3D1200B478E6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1045,7 +1100,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.32;
+				MARKETING_VERSION = 1.33;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1094,7 +1149,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.32;
+				MARKETING_VERSION = 1.33;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1153,6 +1208,7 @@
 				CODE_SIGN_ENTITLEMENTS = swiftbibleWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = swiftbibleWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = swiftbibleWidget;
@@ -1163,13 +1219,12 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.32;
+				MARKETING_VERSION = 1.33;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.swiftbibleWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				DEAD_CODE_STRIPPING = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
@@ -1197,7 +1252,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.32;
+				MARKETING_VERSION = 1.33;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.swiftbibleWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1209,6 +1264,75 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		95F7F63C2F8C3D1300B478E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "swiftbibleWatch Watch App/swiftbibleWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8Q3RG3ULSU;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = swiftbibleWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.vanities.swiftbible;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		95F7F63D2F8C3D1300B478E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "swiftbibleWatch Watch App/swiftbibleWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8Q3RG3ULSU;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = swiftbibleWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.vanities.swiftbible;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
 			};
 			name = Release;
 		};
@@ -1247,6 +1371,15 @@
 			buildConfigurations = (
 				95F7C7E22F7B2E2E00B478E6 /* Debug */,
 				95F7C7E32F7B2E2E00B478E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95F7F63E2F8C3D1300B478E6 /* Build configuration list for PBXNativeTarget "swiftbibleWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95F7F63C2F8C3D1300B478E6 /* Debug */,
+				95F7F63D2F8C3D1300B478E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

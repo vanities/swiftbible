@@ -39,6 +39,7 @@ struct SettingsView: View {
     @State private var cacheSize: String = "0 KB"
     @State private var showClearCacheAlert = false
     @State private var showCacheToast = false
+    @State private var showOnboardingResetToast = false
     @State private var versionTapCount = 0
     @State private var showCopiedToast = false
 
@@ -268,6 +269,20 @@ struct SettingsView: View {
                             Label("Test Confetti 🎉", systemImage: "sparkles")
                         }
 
+                        Button {
+                            // Wipe both onboarding flags so the next cold
+                            // launch behaves exactly like a brand-new install.
+                            // We deliberately do NOT present the tour now —
+                            // the goal is to test the actual launch path.
+                            OnboardingPreferences.resetCompletely()
+                            withAnimation { showOnboardingResetToast = true }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                withAnimation { showOnboardingResetToast = false }
+                            }
+                        } label: {
+                            Label("Reset Onboarding (restart app to see)", systemImage: "arrow.counterclockwise.circle")
+                        }
+
                         ForEach(DonationPromptVariant.allCases, id: \.rawValue) { variant in
                             Button {
                                 appViewModel.donationVariant = variant
@@ -317,6 +332,13 @@ struct SettingsView: View {
 
                     NavigationLink(destination: TextSourcesView()) {
                         Label("Text Sources", systemImage: "book.closed")
+                    }
+
+                    Button {
+                        OnboardingPreferences.resetAll()
+                        NotificationCenter.default.post(name: .onboardingReplayRequested, object: nil)
+                    } label: {
+                        Label("Show Welcome Tour", systemImage: "sparkles.rectangle.stack")
                     }
                 }
 
@@ -385,10 +407,11 @@ struct SettingsView: View {
         }
         .overlay(
             Group {
-                if showCacheToast || showCopiedToast {
+                if showCacheToast || showCopiedToast || showOnboardingResetToast {
                     VStack {
                         Spacer()
-                        Text(showCopiedToast ? "ID copied to clipboard" : "Cache cleared successfully")
+                        Text(toastMessage)
+                            .multilineTextAlignment(.center)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 10)
                             .background(.ultraThinMaterial)
@@ -449,6 +472,16 @@ struct SettingsView: View {
 
     private var hasBookmark: Bool {
         !bookmarkedBookName.isEmpty && bookmarkedChapterNumber > 0 && bookmarkedVerseNumber > 0
+    }
+
+    private var toastMessage: String {
+        if showOnboardingResetToast {
+            return "Onboarding reset.\nQuit and relaunch the app to see it."
+        }
+        if showCopiedToast {
+            return "ID copied to clipboard"
+        }
+        return "Cache cleared successfully"
     }
 
     private var bookmarkSummary: String {

@@ -62,6 +62,13 @@ enum AnalyticsEvent: String {
     case readingThemeChanged = "reading_theme_changed"
     case appIconChanged = "app_icon_changed"
     case readingStatsViewed = "reading_stats_viewed"
+
+    // Onboarding
+    case onboardingStarted = "onboarding_started"
+    case onboardingFeatureViewed = "onboarding_feature_viewed"
+    case onboardingCompleted = "onboarding_completed"
+    case onboardingSkipped = "onboarding_skipped"
+    case onboardingReplayRequested = "onboarding_replay_requested"
 }
 
 final class AnalyticsService {

@@ -29,6 +29,18 @@ SwiftBible is an iOS application that provides users with multiple Bible transla
 
 <img src="github_assets/bible.png" alt="screenshot" width="300"> <img src="github_assets/verse.png" alt="screenshot" width="300"> <img src="github_assets/select_verse.png" alt="screenshot" width="300"> <img src="github_assets/add_note.png" alt="screenshot" width="300"> <img src="github_assets/devo.png" alt="screenshot" width="300"> <img src="github_assets/settings.png" alt="screenshot" width="300">
 
+## Apple Watch
+
+Read today's devotional straight from your wrist.
+
+<img src="github_assets/watch-app.png" alt="Apple Watch app showing the daily devotional" width="260">
+
+## Home Screen Widget
+
+Glance at the latest devotional from your iPhone Home Screen or Lock Screen.
+
+<img src="github_assets/widget.png" alt="Home Screen widget showing today's devotional" width="420">
+
 ## Testing
 
 Use this link to download the latest on the AppStore: <https://apps.apple.com/us/app/swiftbible/id6670373108>

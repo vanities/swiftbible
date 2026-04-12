@@ -27,6 +27,8 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
 
     @State private var transactionListenerTask: Task<Void, Error>?
+    @State private var onboardingPresentation: OnboardingPresentation?
+    @State private var didShowOnboardingThisSession = false
     @State private var showDonationPrompt = false
     @State private var showDonationCelebration = false
     @State private var donationFlowActive = false
@@ -147,6 +149,7 @@ struct ContentView: View {
         }
         .onAppear {
             ensureDonationAnonIdentifier()
+            evaluateOnboarding()
             if let localeCurrency = Locale.current.currency?.identifier {
                 donationCurrency = localeCurrency.uppercased()
             }
@@ -214,6 +217,7 @@ struct ContentView: View {
                 ])
             }
         }
+        .modifier(OnboardingHost(presentation: $onboardingPresentation))
         .sheet(isPresented: $showDonationPrompt) {
             DonationPromptContainer(
                 isPresented: $showDonationPrompt,
@@ -271,8 +275,32 @@ struct ContentView: View {
         )
     }
 
+    private func evaluateOnboarding() {
+        let pending = OnboardingPreferences.pendingFeatures()
+        guard !pending.isEmpty else {
+            OnboardingPreferences.markLaunched()
+            return
+        }
+
+        let hasLaunchedBefore = UserDefaults.standard.bool(forKey: OnboardingPreferences.hasLaunchedBeforeKey)
+        let source = hasLaunchedBefore ? "whats_new" : "first_launch"
+        didShowOnboardingThisSession = true
+
+        // Let the view hierarchy settle before presenting.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            onboardingPresentation = OnboardingPresentation(
+                features: pending,
+                source: source
+            )
+        }
+    }
+
     private func evaluateDonationPrompt() {
         guard !donationPromptOptOut else { return }
+        // Don't pile a donation ask on top of (or right after) onboarding.
+        // If the user just saw the welcome tour or a "What's New" sheet this
+        // session, give them space — we'll ask on a future launch instead.
+        guard !didShowOnboardingThisSession else { return }
         appViewModel.donationVariant = DonationPromptVariant.fromPostHog()
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
             showDonationPrompt = true
