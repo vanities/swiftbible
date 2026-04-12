@@ -14,6 +14,8 @@ import Combine
 import ConfettiSwiftUI
 
 struct ContentView: View {
+    var splashFinished: Bool = false
+
     @State private var appViewModel = AppViewModel()
     @State private var userViewModel = UserViewModel()
     @State private var selectedTab: Tabs = .bible
@@ -28,6 +30,7 @@ struct ContentView: View {
 
     @State private var transactionListenerTask: Task<Void, Error>?
     @State private var onboardingPresentation: OnboardingPresentation?
+    @State private var pendingOnboardingPresentation: OnboardingPresentation?
     @State private var didShowOnboardingThisSession = false
     @State private var showDonationPrompt = false
     @State private var showDonationCelebration = false
@@ -44,9 +47,8 @@ struct ContentView: View {
 
     @AppStorage("lastCelebratedDonationSessionID") private var lastCelebratedDonationSessionID: String = ""
 
-    var body: some View {
-        @Bindable var appViewModel = appViewModel
-
+    @ViewBuilder
+    private var mainTabView: some View {
         TabView(selection: $selectedTab) {
             Tab("Bible", systemImage: "book.fill", value: .bible) {
                 BibleView()
@@ -66,6 +68,12 @@ struct ContentView: View {
         }
         .tint(customAccentHex.isEmpty ? nil : Color(hex: customAccentHex))
         .tabViewStyle(.sidebarAdaptable)
+    }
+
+    var body: some View {
+        @Bindable var appViewModel = appViewModel
+
+        mainTabView
         .onChange(of: selectedTab) { _, newTab in
             AnalyticsService.shared.capture(.tabSwitched, properties: [
                 "tab": String(describing: newTab)
@@ -193,6 +201,11 @@ struct ContentView: View {
                 }
             }
         }
+        .onChange(of: splashFinished) { _, finished in
+            if finished {
+                presentOnboardingIfReady()
+            }
+        }
         .onChange(of: scenePhase) { _, newPhase in
             handleScenePhaseChange(newPhase)
             if newPhase == .active {
@@ -286,12 +299,23 @@ struct ContentView: View {
         let source = hasLaunchedBefore ? "whats_new" : "first_launch"
         didShowOnboardingThisSession = true
 
+        // Defer actually presenting the onboarding sheet until after the
+        // splash animation has dismissed — otherwise it would stack up
+        // behind the splash view.
+        pendingOnboardingPresentation = OnboardingPresentation(
+            features: pending,
+            source: source
+        )
+        presentOnboardingIfReady()
+    }
+
+    private func presentOnboardingIfReady() {
+        guard splashFinished, let presentation = pendingOnboardingPresentation else { return }
+        pendingOnboardingPresentation = nil
+
         // Let the view hierarchy settle before presenting.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-            onboardingPresentation = OnboardingPresentation(
-                features: pending,
-                source: source
-            )
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            onboardingPresentation = presentation
         }
     }
 
