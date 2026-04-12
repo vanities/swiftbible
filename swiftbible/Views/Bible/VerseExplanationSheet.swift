@@ -33,119 +33,59 @@ struct VerseExplanationSheet: View {
     @State private var inputText: String = ""
     @State private var isAwaitingFollowUp: Bool = false
     @State private var followUpTask: Task<Void, Never>?
-    @FocusState private var isInputFocused: Bool
+
+    // Sentinel anchor used to auto-scroll as follow-up responses stream in.
+    private let conversationBottomID = "conversationBottom"
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    // Collapsing header section
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 8) {
-                            Text(request.reference)
-                                .font(.headline)
-                            if request.shouldDisplayTranslationBadge {
-                                Text(request.translation.uppercased())
-                                    .font(.caption)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(.secondary)
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 4)
-                                    .background(
-                                        Capsule(style: .continuous)
-                                            .fill(Color.secondary.opacity(0.12))
-                                    )
-                            }
-                            Spacer(minLength: 0)
-                        }
-
-                        if headerScale > 0.3 {
-                            ParagraphView(
-                                firstVerseNumber: request.startingVerse,
-                                paragraph: request.paragraphText
-                            )
-                            .scaleEffect(headerScale, anchor: .top)
-                            .opacity(headerOpacity)
-                            .padding(12 * headerScale)
-                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12 * headerScale))
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.top)
-                    .padding(.bottom, 8)
-                    .background(
-                        GeometryReader { geometry in
-                            Color.clear.preference(
-                                key: ScrollOffsetPreferenceKey.self,
-                                value: geometry.frame(in: .named("scroll")).minY
-                            )
-                        }
-                    )
-
-                    Divider()
-                        .padding(.horizontal)
-
-                    // Content section
-                    Group {
-                        if let errorMessage {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Label(errorMessage, systemImage: "exclamationmark.triangle")
-                                    .foregroundStyle(.red)
-                                    .labelStyle(.titleAndIcon)
-                                Button("Try Again") {
-                                    startStreaming(forceRestart: true)
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .disabled(!availabilityStatus.isReadyForGeneration)
-                            }
-                            .padding()
-                        } else {
-                            VStack(alignment: .leading, spacing: 12) {
-                                if explanation.isEmpty {
-                                    Text("Waiting for Apple Intelligence…")
+            ScrollViewReader { scrollProxy in
+                VStack(spacing: 0) {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 0) {
+                            headerSection
+                            Divider()
+                                .padding(.horizontal)
+                            contentSection
+                            if isStreaming && errorMessage == nil {
+                                HStack(spacing: 8) {
+                                    ProgressView()
+                                    Text("Streaming explanation…")
                                         .foregroundStyle(.secondary)
-                                } else {
-                                    CommentarySectionsView(
-                                        sections: explanationSections(from: explanation),
-                                        badgeMessage: "This explanation was generated on device with Apple Intelligence. Large language models can make mistakes, produce inaccurate information, or generate content that may not align with biblical teaching. Always verify important information and consult trusted sources."
-                                    )
-                                    .padding(.top, 4)
                                 }
+                                .padding(.horizontal)
+                                .padding(.bottom)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("Loading explanation")
                             }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
+                            if !messages.isEmpty {
+                                Divider()
+                                    .padding(.horizontal)
+                                conversationView
+                                    .padding(.horizontal)
+                                    .padding(.top, 8)
+                                    .padding(.bottom, 12)
+                            }
+                            // Sentinel used by ScrollViewReader to keep the
+                            // latest follow-up response in view as it streams.
+                            Color.clear
+                                .frame(height: 1)
+                                .id(conversationBottomID)
+                        }
+                    }
+                    .coordinateSpace(name: "scroll")
+                    .scrollDismissesKeyboard(.interactively)
+                    .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                        scrollOffset = value
+                    }
+                    .onChange(of: messages) { _, _ in
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            scrollProxy.scrollTo(conversationBottomID, anchor: .bottom)
                         }
                     }
 
-                    if isStreaming && errorMessage == nil {
-                        HStack(spacing: 8) {
-                            ProgressView()
-                            Text("Streaming explanation…")
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.horizontal)
-                        .padding(.bottom)
-                        .accessibilityElement(children: .combine)
-                        .accessibilityLabel("Loading explanation")
-                    }
-
-                    if !messages.isEmpty {
-                        Divider()
-                            .padding(.horizontal)
-                        conversationView
-                            .padding(.horizontal)
-                            .padding(.top, 8)
-                            .padding(.bottom, 12)
-                    }
+                    followUpInputBar
                 }
-            }
-            .coordinateSpace(name: "scroll")
-            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                scrollOffset = value
-            }
-
-            followUpInputBar
             }
             .navigationTitle("Explain")
             .navigationBarTitleDisplayMode(.inline)
@@ -221,6 +161,83 @@ struct VerseExplanationSheet: View {
         return opacity
     }
 
+    @ViewBuilder
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Text(request.reference)
+                    .font(.headline)
+                if request.shouldDisplayTranslationBadge {
+                    Text(request.translation.uppercased())
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule(style: .continuous)
+                                .fill(Color.secondary.opacity(0.12))
+                        )
+                }
+                Spacer(minLength: 0)
+            }
+
+            if headerScale > 0.3 {
+                ParagraphView(
+                    firstVerseNumber: request.startingVerse,
+                    paragraph: request.paragraphText
+                )
+                .scaleEffect(headerScale, anchor: .top)
+                .opacity(headerOpacity)
+                .padding(12 * headerScale)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12 * headerScale))
+            }
+        }
+        .padding(.horizontal)
+        .padding(.top)
+        .padding(.bottom, 8)
+        .background(
+            GeometryReader { geometry in
+                Color.clear.preference(
+                    key: ScrollOffsetPreferenceKey.self,
+                    value: geometry.frame(in: .named("scroll")).minY
+                )
+            }
+        )
+    }
+
+    @ViewBuilder
+    private var contentSection: some View {
+        if let errorMessage {
+            VStack(alignment: .leading, spacing: 12) {
+                Label(errorMessage, systemImage: "exclamationmark.triangle")
+                    .foregroundStyle(.red)
+                    .labelStyle(.titleAndIcon)
+                Button("Try Again") {
+                    startStreaming(forceRestart: true)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!availabilityStatus.isReadyForGeneration)
+            }
+            .padding()
+        } else {
+            VStack(alignment: .leading, spacing: 12) {
+                if explanation.isEmpty {
+                    Text("Waiting for Apple Intelligence…")
+                        .foregroundStyle(.secondary)
+                } else {
+                    CommentarySectionsView(
+                        sections: explanationSections(from: explanation),
+                        badgeMessage: "This explanation was generated on device with Apple Intelligence. Large language models can make mistakes, produce inaccurate information, or generate content that may not align with biblical teaching. Always verify important information and consult trusted sources."
+                    )
+                    .padding(.top, 4)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+        }
+    }
+
     struct ChatMessage: Identifiable, Equatable {
         enum Role: Equatable { case user, assistant }
         let id = UUID()
@@ -280,7 +297,6 @@ struct VerseExplanationSheet: View {
                     RoundedRectangle(cornerRadius: 18)
                         .fill(Color.secondary.opacity(0.12))
                 )
-                .focused($isInputFocused)
                 .disabled(!canSendFollowUp)
                 .submitLabel(.send)
                 .onSubmit { sendFollowUp() }
@@ -335,7 +351,7 @@ struct VerseExplanationSheet: View {
                 isAwaitingFollowUp = false
                 followUpTask = nil
             } catch {
-                let description = (error as? LocalizedError)?.errorDescription
+                let description = AppleFoundationModelServiceError.friendly(error).errorDescription
                     ?? error.localizedDescription
                 if let index = messages.firstIndex(where: { $0.id == assistantId }) {
                     messages[index].content = description
@@ -377,7 +393,8 @@ struct VerseExplanationSheet: View {
                     streamTask = nil
                     isStreaming = false
                 } catch {
-                    errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+                    errorMessage = AppleFoundationModelServiceError.friendly(error).errorDescription
+                        ?? error.localizedDescription
                     isStreaming = false
                     streamTask = nil
                 }
