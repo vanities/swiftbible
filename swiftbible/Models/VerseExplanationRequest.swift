@@ -73,6 +73,21 @@ struct VerseExplanationRequest: Identifiable, Equatable {
         """
     }
 
+    /// A softer prompt used as a fallback when Apple's on-device safety filter
+    /// blocks the primary prompt (for example, passages that touch on bodily
+    /// practices, violence, or other sensitive subjects). It deliberately omits
+    /// the literal verse text and frames the request as scholarly theological
+    /// reflection, which is reliably honoured by the guardrails.
+    var fallbackUserPrompt: String {
+        """
+        You are a scholarly biblical commentator writing a reverent, pastoral commentary on \(reference) from the \(translation.uppercased()) translation. This passage is a canonical text from the \(sourceDescriptor) and deserves faithful, traditional exegesis.
+
+        Important: Do NOT quote or reproduce the passage text. Instead discuss the passage by reference only—its themes, covenantal background, historical context, and theological meaning as understood across mainstream Christian tradition.
+
+        Begin with a one-sentence summary that cites the passage in parentheses (for example "(\(reference))"). Then populate every structured field faithfully: context, theology, application, literary notes, and historical/authorship notes. Write warmly, clearly, and concisely; avoid epistolary greetings.
+        """
+    }
+
     private var normalizedBookName: String {
         bookName.trimmingCharacters(in: .whitespacesAndNewlines)
     }

@@ -18,10 +18,11 @@ struct SplashView: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showSplash = true
+    @State private var splashFinished = false
 
     var body: some View {
         ZStack {
-            ContentView()
+            ContentView(splashFinished: splashFinished)
 
             if showSplash {
                 splashContent
@@ -31,24 +32,29 @@ struct SplashView: View {
         .animation(reduceMotion ? .none : .easeInOut(duration: 0.4), value: showSplash)
     }
 
+    private func finishSplash() {
+        showSplash = false
+        splashFinished = true
+    }
+
     @ViewBuilder
     private var splashContent: some View {
         switch style {
         case .bookOpening:
             BookOpeningSplashView {
-                showSplash = false
+                finishSplash()
             }
         case .glowScale:
             GlowScaleSplashView {
-                showSplash = false
+                finishSplash()
             }
         case .gradientShimmer:
             GradientShimmerSplashView {
-                showSplash = false
+                finishSplash()
             }
         case .particleCross:
             ParticleCrossSplashView {
-                showSplash = false
+                finishSplash()
             }
         }
     }
