@@ -89,6 +89,7 @@
 		95F3A0042F032004000A1B2C /* web.json in Resources */ = {isa = PBXBuildFile; fileRef = 95F3A0032F032004000A1B2C /* web.json */; };
 		95F3A0062F040001000A1B2C /* TranslationInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F3A0052F040001000A1B2C /* TranslationInfoView.swift */; };
 		95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F5D8A12E92D10000A1B2C3 /* DonationService.swift */; };
+		95AB1C1D2F7AB500001A2B10 /* AppUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AB1C1D2F7AB500001A2B11 /* AppUpdateService.swift */; };
 		95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */; };
 		95F7C7D12F7B2E2D00B478E6 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F7C7D02F7B2E2D00B478E6 /* WidgetKit.framework */; };
 		95F7C7D32F7B2E2D00B478E6 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F7C7D22F7B2E2D00B478E6 /* SwiftUI.framework */; };
@@ -236,6 +237,7 @@
 		95F3A0032F032004000A1B2C /* web.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = web.json; sourceTree = "<group>"; };
 		95F3A0052F040001000A1B2C /* TranslationInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationInfoView.swift; sourceTree = "<group>"; };
 		95F5D8A12E92D10000A1B2C3 /* DonationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationService.swift; sourceTree = "<group>"; };
+		95AB1C1D2F7AB500001A2B11 /* AppUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateService.swift; sourceTree = "<group>"; };
 		95F7B1332EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/AIGeneratedBadge.swift; sourceTree = "<group>"; };
 		95F7C7CF2F7B2E2D00B478E6 /* swiftbibleWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = swiftbibleWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		95F7C7D02F7B2E2D00B478E6 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -524,6 +526,7 @@
 				95D6F64D2E808D1200042F87 /* AppleFoundationModelService.swift */,
 				95F5D8A12E92D10000A1B2C3 /* DonationService.swift */,
 				B2B23373D685438F8E699542 /* StoreKitDonationService.swift */,
+				95AB1C1D2F7AB500001A2B11 /* AppUpdateService.swift */,
 				AA0000012D89000000000002 /* KeychainService.swift */,
 				9537E25F2C89405C00FD56B9 /* SupabaseClient.swift */,
 				954BC9E92C8500F900FFCFA6 /* BibleService.swift */,
@@ -849,6 +852,7 @@
 				AA0000012D89000000000001 /* KeychainService.swift in Sources */,
 				95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */,
 				2C31E1F14F2C48118A2E2425 /* StoreKitDonationService.swift in Sources */,
+				95AB1C1D2F7AB500001A2B10 /* AppUpdateService.swift in Sources */,
 				87D22F5BA6144031BF880588 /* LocalDonationRecord.swift in Sources */,
 				952F39F92C920778009A412D /* Version.swift in Sources */,
 				95CC651E2E830DA70065E7AD /* DonationPromptView.swift in Sources */,

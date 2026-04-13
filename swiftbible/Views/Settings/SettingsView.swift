@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(AppViewModel.self) private var appViewModel
+    @Environment(AppUpdateService.self) private var updateService
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showApocrypha") var showApocrypha = false
@@ -316,10 +317,23 @@ struct SettingsView: View {
                     }
 
                     Button(action: {
-                        guard let url = URL(string: "itms-apps://itunes.apple.com/app/6670373108") else { return }
+                        guard let url = URL(string: "itms-apps://itunes.apple.com/app/\(AppConfig.appleAppID)") else { return }
                          UIApplication.shared.open(url)
                     }) {
                         Label("View on App Store", systemImage: "apple.logo")
+                    }
+
+                    if case .updateAvailable(let version) = updateService.updateStatus {
+                        Button(action: {
+                            updateService.openAppStore()
+                        }) {
+                            HStack {
+                                Label("Update to v\(version)", systemImage: "arrow.down.circle.fill")
+                                    .fontWeight(.semibold)
+                                Spacer()
+                            }
+                        }
+                        .foregroundColor(.blue)
                     }
 
                     Button(action: {
@@ -343,13 +357,33 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    HStack {
-                        Spacer()
+                    VStack(spacing: 4) {
                         Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
                             .foregroundColor(.gray)
                             .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
-                        Spacer()
+
+                        switch updateService.updateStatus {
+                        case .upToDate:
+                            HStack(spacing: 4) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                Text("Up to date")
+                                    .foregroundColor(.secondary)
+                            }
+                            .font(.caption)
+                        case .updateAvailable(let version):
+                            HStack(spacing: 4) {
+                                Image(systemName: "exclamationmark.circle.fill")
+                                    .foregroundColor(.orange)
+                                Text("v\(version) available")
+                                    .foregroundColor(.orange)
+                            }
+                            .font(.caption)
+                        case .unknown:
+                            EmptyView()
+                        }
                     }
+                    .frame(maxWidth: .infinity)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         versionTapCount += 1

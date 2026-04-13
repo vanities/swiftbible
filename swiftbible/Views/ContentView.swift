@@ -18,7 +18,9 @@ struct ContentView: View {
 
     @State private var appViewModel = AppViewModel()
     @State private var userViewModel = UserViewModel()
+    @State private var updateService = AppUpdateService()
     @State private var selectedTab: Tabs = .bible
+    @State private var showUpdatePrompt = false
 
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
@@ -199,6 +201,19 @@ struct ContentView: View {
                 await MainActor.run {
                     isAppLaunching = false
                 }
+
+                // App Store update check — drives both the Settings "About"
+                // row and the launch-time modal alert. Silent-fails on any
+                // network/parse error so the user never sees a spurious
+                // prompt. Cooldown (1 week) is enforced inside
+                // AppConfig.checkForUpdate so we don't nag.
+                await updateService.checkForUpdate()
+                if await AppConfig.checkForUpdate() {
+                    await MainActor.run {
+                        AppConfig.recordUpdatePromptShown()
+                        showUpdatePrompt = true
+                    }
+                }
             }
         }
         .onChange(of: splashFinished) { _, finished in
@@ -252,6 +267,7 @@ struct ContentView: View {
         }, message: {
             Text(donationErrorMessage ?? "Something went wrong. Please try again.")
         })
+        .modifier(UpdateAvailableAlertModifier(isPresented: $showUpdatePrompt, updateService: updateService))
         .fullScreenCover(item: $safariCheckout) { item in
             SafariContainer(url: item.url)
                 .ignoresSafeArea()
@@ -695,4 +711,28 @@ struct ContentView: View {
         await NotificationService.shared.scheduleDailyReminder(at: time)
     }
 
+}
+
+// Extracted from ContentView.body to sidestep SwiftUI type-check budget.
+// Bundles the environment injection for `AppUpdateService` with the
+// launch-time "Update Available" alert. Applied via `.modifier(...)` so
+// the modifier body is type-checked independently of the main view chain.
+// The service instance is owned by ContentView and passed in so the
+// Settings row (via environment) and the launch-time check share state.
+private struct UpdateAvailableAlertModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    let updateService: AppUpdateService
+
+    func body(content: Content) -> some View {
+        content
+            .environment(updateService)
+            .alert("Update Available", isPresented: $isPresented) {
+                Button("Update Now") {
+                    UIApplication.shared.open(AppConfig.appStoreURL)
+                }
+                Button("Later", role: .cancel) { }
+            } message: {
+                Text("A new version of swiftbible is available with improvements and new features. Please update to get the best experience.")
+            }
+    }
 }
