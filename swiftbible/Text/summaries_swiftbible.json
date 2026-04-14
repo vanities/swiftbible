@@ -1308,6 +1308,24 @@
       "106": "Birth of Noah - First Appendix",
       "107": "Noah's Preservation - First Appendix Continued",
       "108": "Conclusion - Second Appendix"
+    },
+    "Didache": {
+      "1": "The Two Ways: love and generosity",
+      "2": "The second commandment: prohibitions of evil",
+      "3": "Avoiding the small steps that lead to great sins",
+      "4": "Honor of teachers, generosity, household duties",
+      "5": "The way of death: a catalog of vices",
+      "6": "Closing the moral instruction; food offered to idols",
+      "7": "Instructions for baptism",
+      "8": "Fasting and prayer practices",
+      "9": "Eucharistic prayers over cup and bread",
+      "10": "The thanksgiving after the Eucharist",
+      "11": "Discerning true teachers and prophets from false",
+      "12": "Receiving and testing travelers",
+      "13": "Supporting prophets and teachers with firstfruits",
+      "14": "The Lord's day assembly",
+      "15": "Appointment of bishops and deacons",
+      "16": "Watch for the coming of the Lord"
     }
   },
   "passageSummaries": {
@@ -20895,6 +20913,120 @@
           "startVerse": 15,
           "endVerse": null,
           "title": "The final separation between the righteous and wicked is accomplished for eternity."
+        }
+      ]
+    },
+    "Didache": {
+      "1": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The 'Two Ways' framework introduced — the way of life summarized as love of God, love of neighbor, and radical generosity toward enemies."
+        }
+      ],
+      "2": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "An expanded decalogue: the prohibitions of murder, adultery, theft, magic, abortion, false speech, and double-mindedness."
+        }
+      ],
+      "3": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Pastoral warnings against the small habits — anger, lust, omens, lies, murmuring — that grow into the great sins."
+        }
+      ],
+      "4": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Practical instructions on honoring teachers, sharing possessions, training children, and the mutual duties of slaves and masters."
+        }
+      ],
+      "5": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "A comprehensive list of the vices and dispositions that mark the way of death; readers are urged to escape from them."
+        }
+      ],
+      "6": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Closing exhortation to the moral teaching; permission for varied observance levels, but a firm warning against meat sacrificed to idols."
+        }
+      ],
+      "7": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Practical instructions for baptism: the trinitarian formula, preferred forms of water, and the fast that precedes the rite."
+        }
+      ],
+      "8": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Distinguishes Christian fasting and prayer from contemporary practice; appoints Wednesday and Friday fasts and the Lord's Prayer thrice daily."
+        }
+      ],
+      "9": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The earliest known Eucharistic liturgy: prayers over the cup and the broken bread, with the rule that only the baptized may receive."
+        }
+      ],
+      "10": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The post-communion thanksgiving: praise for God's care of the Church and a final petition that grace come and the world pass away."
+        }
+      ],
+      "11": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Tests for traveling teachers, apostles, and prophets — including how long they may stay and what counts as a sign of fraud."
+        }
+      ],
+      "12": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "How to receive Christian travelers: hospitable but not indefinitely, and never supporting the idle who use the faith for gain."
+        }
+      ],
+      "13": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The provision for resident prophets and teachers, who receive the firstfruits as Israel's priests once did."
+        }
+      ],
+      "14": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Sunday gathering for thanksgiving and breaking of bread, with reconciliation required before the offering can be pure."
+        }
+      ],
+      "15": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Appointment of bishops and deacons; manner of reproving fellow believers; their place alongside prophets and teachers."
+        }
+      ],
+      "16": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Apocalyptic warning to remain watchful: false prophets and the world-deceiver will arise, but those who endure will see the Lord come on the clouds."
         }
       ]
     }
