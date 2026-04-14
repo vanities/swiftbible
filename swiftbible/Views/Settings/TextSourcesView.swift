@@ -92,11 +92,19 @@ struct TextSourcesView: View {
             year: "1885",
             status: "Public Domain",
             category: "Early Christian Writings"
+        ),
+        // Study resources
+        TextSourceInfo(
+            name: "Matthew Henry's Concise Commentary",
+            translation: "Matthew Henry (chapter and passage summaries, lightly modernized)",
+            year: "1706",
+            status: "Public Domain",
+            category: "Study Resources"
         )
     ]
 
     private var groupedSources: [(category: String, sources: [TextSourceInfo])] {
-        let categories = ["Bible Translations", "Deuterocanonical", "Jewish Pseudepigrapha", "Early Christian Writings"]
+        let categories = ["Bible Translations", "Deuterocanonical", "Jewish Pseudepigrapha", "Early Christian Writings", "Study Resources"]
         return categories.compactMap { category in
             let items = sources.filter { $0.category == category }
             return items.isEmpty ? nil : (category: category, sources: items)
@@ -147,7 +155,7 @@ struct TextSourcesView: View {
                 }
             }
         }
-        .navigationBarTitle("Text Sources")
+        .navigationTitle("Text Sources")
     }
 }
 

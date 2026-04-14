@@ -124,6 +124,11 @@ struct ChapterDetailView: View {
     @AppStorage(BookmarkPreferences.chapterKey) private var bookmarkedChapterNumber: Int = 0
     @AppStorage(BookmarkPreferences.verseKey) private var bookmarkedVerseNumber: Int = 0
     @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @AppStorage("summarySource") private var summarySourceRaw: String = defaultSummarySource.rawValue
+
+    private var summarySource: SummarySource {
+        SummarySource(rawValue: summarySourceRaw) ?? defaultSummarySource
+    }
 
     private var readingTheme: ReadingTheme {
         ReadingTheme(rawValue: readingThemeRaw) ?? .system
@@ -615,7 +620,12 @@ struct ChapterDetailView: View {
         let hasNote = checkIfNoted(paragraph: paragraph)
 
         Group {
-            if let summary = summaries[currentBook.name]?["\(currentChapter.number):\(paragraph.startingVerse)"] {
+            if let summary = SummariesService.shared.passageSummary(
+                book: currentBook.name,
+                chapter: currentChapter.number,
+                startVerse: paragraph.startingVerse,
+                source: summarySource
+            ) {
                 Text(summary)
                     .bold()
                     .padding(.top)

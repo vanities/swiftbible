@@ -21,6 +21,7 @@ struct SettingsView: View {
     @AppStorage("showDidache") var showDidache = false
     @AppStorage("showFirstClement") var showFirstClement = false
     @AppStorage("showThematicGrouping") var showThematicGrouping = false
+    @AppStorage("summarySource") private var summarySourceRaw: String = defaultSummarySource.rawValue
 
     @AppStorage(DonationPreferences.promptOptOutKey) private var donationPromptOptOut = false
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
@@ -62,6 +63,25 @@ struct SettingsView: View {
                             AnalyticsService.shared.capture(.jesusWordsToggled, properties: ["enabled": newValue])
                         }
                     Toggle("Hide Navigation and Tab Bar while reading", isOn: $hideNavAndTab)
+
+                    Picker(
+                        selection: Binding(
+                            get: { SummarySource(rawValue: summarySourceRaw) ?? defaultSummarySource },
+                            set: { newValue in
+                                summarySourceRaw = newValue.rawValue
+                                AnalyticsService.shared.capture(
+                                    .summarySourceChanged,
+                                    properties: ["source": newValue.rawValue]
+                                )
+                            }
+                        )
+                    ) {
+                        ForEach(SummarySource.allCases) { source in
+                            Text(source.displayName).tag(source)
+                        }
+                    } label: {
+                        Label("Study Notes", systemImage: "book.closed")
+                    }
                 }
 
                 Section(header: Text("Your Content")) {

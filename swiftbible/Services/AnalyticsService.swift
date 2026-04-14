@@ -47,6 +47,7 @@ enum AnalyticsEvent: String {
     case devotionalReminderToggled = "devotional_reminder_toggled"
     case fontChanged = "font_changed"
     case fontSizeChanged = "font_size_changed"
+    case summarySourceChanged = "summary_source_changed"
 
     // Donation funnel
     case donationPromptShown = "donation_prompt_shown"
