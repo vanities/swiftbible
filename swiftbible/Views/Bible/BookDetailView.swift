@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BookDetailView: View {
     @Environment(AppViewModel.self) private var appViewModel
+    @AppStorage("summarySource") private var summarySourceRaw: String = defaultSummarySource.rawValue
 
     // Store only the book name - actual data derived from current version
     let bookName: String
@@ -23,11 +24,22 @@ struct BookDetailView: View {
             ?? Book(name: bookName, description: "", chapters: [])
     }
 
+    private var summarySource: SummarySource {
+        SummarySource(rawValue: summarySourceRaw) ?? defaultSummarySource
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             List(currentBook.chapters, id: \.self) { chapter in
                 NavigationLink(destination: ChapterDetailView(book: currentBook, chapter: chapter)) {
-                    NavigationTitle(name: "Chapter \(chapter.number)", description: chapterSummaries[currentBook.name]?[String(chapter.number)])
+                    NavigationTitle(
+                        name: "Chapter \(chapter.number)",
+                        description: SummariesService.shared.chapterTitle(
+                            book: currentBook.name,
+                            chapter: chapter.number,
+                            source: summarySource
+                        )
+                    )
                 }
             }
         }
