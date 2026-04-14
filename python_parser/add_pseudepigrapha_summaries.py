@@ -57,6 +57,120 @@ SUMMARIES = REPO / "swiftbible" / "Text" / "summaries_swiftbible.json"
 # represented here remain blank in the SwiftBible source — the runtime
 # fallback chain still works, it just shows no entry for those chapters.
 PSEUDEPIGRAPHA_DATA: dict[str, dict[str, dict]] = {
+    # Testaments of the Twelve Patriarchs — twelve short pseudepigraphic
+    # works, each a deathbed speech by one of Jacob's twelve sons,
+    # cataloging a virtue learned or a vice repented of in that
+    # patriarch's life. Each Testament is structured as one chapter with
+    # multiple paragraphs; we add one whole-chapter summary anchored at
+    # the opening paragraph (v1).
+    "Testament of Reuben": {
+        "1": {
+            "title": "Reuben warns against fornication",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Reuben's deathbed confession of his sin with Bilhah, framed as a warning to his sons against the destructive power of lust.",
+            }],
+        },
+    },
+    "Testament of Simeon": {
+        "1": {
+            "title": "Simeon warns against envy",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Simeon repents of his envy toward Joseph and counsels his sons that envy poisons the soul and provokes God's discipline.",
+            }],
+        },
+    },
+    "Testament of Levi": {
+        "1": {
+            "title": "Levi on priesthood and apocalyptic visions",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Levi recounts heavenly visions of the priestly orders, the coming of the Messianic priest, and the moral demands of the priesthood.",
+            }],
+        },
+    },
+    "Testament of Judah": {
+        "1": {
+            "title": "Judah warns against love of money, wine, and lust",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Judah recalls his life of conquest and his fall through wine and the Tamar episode; he charges his sons against drunkenness, greed, and fornication.",
+            }],
+        },
+    },
+    "Testament of Issachar": {
+        "1": {
+            "title": "Issachar extols singleness of heart",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Issachar models the simple, hard-working farmer's life and commends to his sons singleness of heart and integrity in labor.",
+            }],
+        },
+    },
+    "Testament of Zebulun": {
+        "1": {
+            "title": "Zebulun extols compassion and mercy",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Zebulun, who alone wept over Joseph in the pit, urges his sons to practice compassion and almsgiving as the marks of a righteous life.",
+            }],
+        },
+    },
+    "Testament of Dan": {
+        "1": {
+            "title": "Dan warns against anger and lying",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Dan repents of his anger and hatred toward Joseph and warns his sons that anger and falsehood open the soul to the spirits of Beliar.",
+            }],
+        },
+    },
+    "Testament of Naphtali": {
+        "1": {
+            "title": "Naphtali on the order of nature and right conduct",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Naphtali instructs his sons to live according to the order God set in nature, with visions warning of Israel's apostasy and restoration.",
+            }],
+        },
+    },
+    "Testament of Gad": {
+        "1": {
+            "title": "Gad warns against hatred",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Gad confesses his hatred of Joseph and traces hatred itself as the root of murder, slander, and ruin; he commends love and forgiveness.",
+            }],
+        },
+    },
+    "Testament of Asher": {
+        "1": {
+            "title": "Asher on the two faces of every deed",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Asher's doctrine of 'two ways': every action springs from one of two minds, and the soul's posture toward good or evil determines its destiny.",
+            }],
+        },
+    },
+    "Testament of Joseph": {
+        "1": {
+            "title": "Joseph on chastity, patience, and forgiveness",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Joseph rehearses his trials — the pit, slavery, the Egyptian temptation, prison — as proof that chastity, patience, and forgiveness are vindicated by God.",
+            }],
+        },
+    },
+    "Testament of Benjamin": {
+        "1": {
+            "title": "Benjamin on the pure mind",
+            "passages": [{
+                "startVerse": 1, "endVerse": None,
+                "title": "Benjamin commends the 'pure mind' that sees only good in others, modeling himself on the forgiving Joseph and pointing forward to the Messiah.",
+            }],
+        },
+    },
     # Didache (16 chapters) — earliest known Christian church manual,
     # late 1st / early 2nd century. Each chapter is one paragraph.
     "Didache": {
