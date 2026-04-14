@@ -76,3 +76,4 @@ appstore/__pycache__/
 *.p8
 
 build/
+python_parser/summary_quality_report.json
