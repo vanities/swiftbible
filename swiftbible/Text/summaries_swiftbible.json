@@ -1484,6 +1484,73 @@
       "66": "Final exhortation: walk in the Lord's way",
       "67": "Enoch is taken up to the highest heaven",
       "68": "The dates of Enoch's birth and translation"
+    },
+    "1 Clement": {
+      "1": "Greeting from the church at Rome to Corinth",
+      "2": "Praise for Corinth's former humility and order",
+      "3": "How prosperity gave rise to envy and schism",
+      "4": "Old Testament examples of envy from Cain to Saul",
+      "5": "Recent examples: the deaths of Peter and Paul",
+      "6": "The great multitude of recent Christian martyrs",
+      "7": "A summons to common repentance",
+      "8": "The prophetic call to repentance",
+      "9": "Examples of obedience: Enoch and Noah",
+      "10": "Abraham, the friend of God",
+      "11": "Lot saved out of Sodom",
+      "12": "Rahab the harlot saved by faith and hospitality",
+      "13": "A call to humility from the words of the Lord",
+      "14": "Obey God rather than the leaders of sedition",
+      "15": "Cleave to the truly peaceable, not the false",
+      "16": "Christ the supreme example of humility",
+      "17": "Imitate the prophets — Elijah, Elisha, Ezekiel",
+      "18": "David's penitence in Psalm 51",
+      "19": "These examples have improved every generation",
+      "20": "The peaceful order of the natural world",
+      "21": "Walk worthy of God's many kindnesses",
+      "22": "The faith that Christ teaches us by the Spirit",
+      "23": "God's compassion and the danger of double-mindedness",
+      "24": "Resurrection — the seasons and the seed",
+      "25": "The phoenix as a sign of the resurrection",
+      "26": "How much more shall God raise his servants",
+      "27": "Hope grounded in God's faithfulness",
+      "28": "Fear of God since all is seen and heard",
+      "29": "We are the portion of the Holy One",
+      "30": "Holiness practical: avoid sins of the tongue and body",
+      "31": "Means of obtaining God's blessing",
+      "32": "All blessings come from Abraham's seed",
+      "33": "We are not to grow slothful in well-doing",
+      "34": "The diligent servant approaches with confidence",
+      "35": "How blessed are the gifts of God",
+      "36": "Jesus Christ, the great High Priest",
+      "37": "Christians as soldiers of Christ",
+      "38": "Mutual subjection in the body of Christ",
+      "39": "The folly of self-exaltation",
+      "40": "All things in their proper order",
+      "41": "The order of the temple as an analogy",
+      "42": "The apostolic chain: God → Christ → apostles → bishops",
+      "43": "Moses' rod, Aaron's choice, and divine appointment",
+      "44": "It is wicked to expel rightly appointed presbyters",
+      "45": "Look at the Scriptures for examples of the persecuted righteous",
+      "46": "Cleave to the holy and avoid the perverse",
+      "47": "Recall Paul's first epistle to you",
+      "48": "Put an end to the contention quickly",
+      "49": "The greatness of love",
+      "50": "Love perfects the saints",
+      "51": "Confess the sin and seek forgiveness",
+      "52": "God needs nothing but our confession",
+      "53": "Moses' intercession as a model",
+      "54": "The willingness to depart for the sake of peace",
+      "55": "Pagan and biblical examples of self-sacrifice",
+      "56": "Pray for the fallen",
+      "57": "Clement's direct warning to the schismatics",
+      "58": "Yield submission to God's holy name",
+      "59": "Clement's intercessory prayer begins",
+      "60": "Petition for forgiveness and blessing on the church",
+      "61": "Prayer for civil rulers and earthly authorities",
+      "62": "Summary of the matters discussed in the letter",
+      "63": "Clement urges submission and humility",
+      "64": "Final blessing on the elect",
+      "65": "Send the messengers back in peace"
     }
   },
   "passageSummaries": {
@@ -22445,6 +22512,463 @@
           "startVerse": 1,
           "endVerse": null,
           "title": "A closing chronological note: Enoch was born and translated on the same day of the same month, having lived 365 years."
+        }
+      ]
+    },
+    "1 Clement": {
+      "1": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The opening greeting and a regretful note that internal trouble has prevented Rome from writing sooner."
+        }
+      ],
+      "2": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement recalls the Corinthians' past virtues — their humility, their generosity, their willingness to forgive."
+        }
+      ],
+      "3": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Once Corinth grew comfortable, jealousy and contention arose, and the unworthy began to rise up against the elders."
+        }
+      ],
+      "4": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement recites a chain of biblical victims of envy — Abel, Jacob, Joseph, Moses, David — to show its destructive power."
+        }
+      ],
+      "5": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Bringing the lesson up to his own generation, Clement names Peter and Paul as having suffered through envy and fought the good fight."
+        }
+      ],
+      "6": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Many other Christians, including women, have endured cruel deaths in this same generation through envy and persecution."
+        }
+      ],
+      "7": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement reminds his hearers — and himself — that they are all in the same arena and must repent together."
+        }
+      ],
+      "8": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He cites the prophets and the Lord's own oath that he desires not the death of the sinner but his repentance."
+        }
+      ],
+      "9": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch was translated for his obedience and Noah preached repentance to the world; both serve as patterns to follow."
+        }
+      ],
+      "10": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Abraham's repeated obedience — leaving his country, offering Isaac — shows the rewards of faithful obedience."
+        }
+      ],
+      "11": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Lot's hospitality and godliness preserved him while Sodom perished; his wife stands as a warning against doubting hearts."
+        }
+      ],
+      "12": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Rahab is held up for her faith in receiving the spies, and the scarlet cord is read as a symbol of redemption by Christ's blood."
+        }
+      ],
+      "13": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement quotes the Beatitudes-style sayings of Jesus on humility and gentleness as the rule for the church's common life."
+        }
+      ],
+      "14": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He warns that following the schismatic faction means disobeying God himself; the wicked will be cut off from the land."
+        }
+      ],
+      "15": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Some claim peace with their lips but their hearts are far from God; cleave instead to those who cultivate genuine peace."
+        }
+      ],
+      "16": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement quotes Isaiah 53 at length to show that the Lord himself came in lowliness, not in pomp, as the model for all believers."
+        }
+      ],
+      "17": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The prophets walked in goat-skins and sheep-skins, despised in the world; their humility is the church's pattern."
+        }
+      ],
+      "18": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "David, the man after God's own heart, prayed in deep repentance — Clement quotes Psalm 51 in full as the model of contrition."
+        }
+      ],
+      "19": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement insists that the chain of humble examples is a moral inheritance for every age, including the present."
+        }
+      ],
+      "20": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Heavens, sun, moon, stars, seasons, and creatures all move in peaceful order at God's command — a rebuke to human strife."
+        }
+      ],
+      "21": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Take heed lest the multiplied mercies of God become the ground of our condemnation; walk in love and unity."
+        }
+      ],
+      "22": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Christ himself addresses the church through the psalms, calling for the fear of the Lord and the love of life."
+        }
+      ],
+      "23": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The all-merciful Father shows favor to the simple-hearted; Clement warns against double-mindedness and impatience."
+        }
+      ],
+      "24": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The constant cycle of seed dying and rising, and of day succeeding night, witnesses to the resurrection that Christ has secured."
+        }
+      ],
+      "25": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement appeals to the legendary phoenix of Arabia as a natural sign that God can raise the dead."
+        }
+      ],
+      "26": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "If a single bird is so renewed by God's hand, how much more those who have served him in faith — buttressed with psalm citations."
+        }
+      ],
+      "27": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He who has commanded us not to lie cannot himself lie; nothing is impossible with him, and our hope is therefore secure."
+        }
+      ],
+      "28": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Because nothing is hidden from God, we must forsake evil works and live in his sight as those expecting judgment."
+        }
+      ],
+      "29": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Citing Deuteronomy, Clement reminds the church that they are God's own portion and ought to draw near in holiness."
+        }
+      ],
+      "30": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "As people set apart for God, the Corinthians must shun gossip, drunkenness, and impurity, clothing themselves in unity and humility."
+        }
+      ],
+      "31": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Look back at the patriarchs: they obtained blessing through faith and obedience, not through their own ambition."
+        }
+      ],
+      "32": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Priests, Levites, and the Lord himself according to the flesh have come from Abraham — every gift is rooted in his obedience."
+        }
+      ],
+      "33": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Justification by faith does not free us from good works; the Creator himself models tireless activity for our imitation."
+        }
+      ],
+      "34": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The diligent worker can look his master in the face; we should be eager and confident in the work appointed to us."
+        }
+      ],
+      "35": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement enumerates the gifts of God — life, righteousness, truth, faith, self-control — that await the obedient."
+        }
+      ],
+      "36": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Through Christ, the Lord opens the heights of heaven to us; Clement quotes Hebrews-style passages on his high-priestly ministry."
+        }
+      ],
+      "37": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Drawing on military discipline, Clement urges that every member fulfill his rank and follow the order set down by the commander."
+        }
+      ],
+      "38": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Strong and weak, rich and poor, wise and ignorant — each has need of the other and ought to give thanks for the other."
+        }
+      ],
+      "39": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Citing Job 4, Clement mocks the proud who exalt themselves; their boasting is destroyed in a moment by the Lord."
+        }
+      ],
+      "40": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God has fixed times, seasons, and orders for sacrifice and service; we must do all things in the order he has appointed."
+        }
+      ],
+      "41": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "In Israel sacrifices were offered only at the appointed place by the appointed persons; the church's worship needs the same order."
+        }
+      ],
+      "42": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Christ was sent by God, the apostles by Christ, and the apostles in turn appointed bishops and deacons in every place."
+        }
+      ],
+      "43": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "As God settled the priesthood by the budding of Aaron's rod, so the apostles arranged the orderly succession of ministers."
+        }
+      ],
+      "44": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement's central charge: the apostles foresaw strife about the office and provided rules; deposing blameless presbyters is grave sin."
+        }
+      ],
+      "45": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Daniel and the three young men suffered at the hands of the godless, but God vindicated them; the Corinthian rebels mirror the persecutors."
+        }
+      ],
+      "46": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Scripture teaches us to attach ourselves to the holy; one schism in the body wounds the entire body of Christ."
+        }
+      ],
+      "47": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement reminds the Corinthians that even in Paul's day they were given to factions; they should be ashamed to repeat the sin."
+        }
+      ],
+      "48": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Let the Corinthians fall down before the Lord with tears and beg his mercy; the gates of righteousness stand open to repentance."
+        }
+      ],
+      "49": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement begins his hymn to love — love that bears all things, love which the saints have always borne and through which the saints are perfected."
+        }
+      ],
+      "50": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He continues praising love as the only sufficient cover for sin; only those gathered into love will be made manifest in the kingdom."
+        }
+      ],
+      "51": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Implore forgiveness for past faults; the leaders of sedition should consider the common hope rather than their own pride."
+        }
+      ],
+      "52": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The Lord requires no sacrifice but a heart confessing — quotation of the psalms on the offering of thanksgiving."
+        }
+      ],
+      "53": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "When Israel sinned at Sinai, Moses begged that his own name be blotted out so the people might be spared — the perfect picture of selfless love."
+        }
+      ],
+      "54": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement appeals: let any noble Christian whose presence has caused contention voluntarily withdraw, that the body may be at peace."
+        }
+      ],
+      "55": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Even pagan kings and women like Esther and Judith have laid down their lives for their people — Christians ought to do no less."
+        }
+      ],
+      "56": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Pray for those who have stumbled into sin that they may receive correction with meekness from God's hand."
+        }
+      ],
+      "57": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement directly addresses the leaders of the sedition, calling them to submit to the presbyters and bend the knees of their hearts."
+        }
+      ],
+      "58": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He sets life and death before them: those who obey will be enrolled with the holy, those who refuse will inherit ruin."
+        }
+      ],
+      "59": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Should any disobey the words sent through this letter, let them know they sin against God; Clement begins a great intercessory prayer."
+        }
+      ],
+      "60": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He prays that God forgive their iniquities, deliver them from those who hate without cause, and lead them to walk in holiness."
+        }
+      ],
+      "61": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He prays for the rulers and governors that God would guide them in peace and grant them the wisdom to use the authority given to them."
+        }
+      ],
+      "62": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement reviews what he has written: how a godly life is built, how repentance restores, and how love and faith are inseparable."
+        }
+      ],
+      "63": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He calls on the Corinthians to bend the neck and accept correction, that they may attain the goal set before them."
+        }
+      ],
+      "64": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "A closing benediction that God, ruler of all spirits, may grant his elect every gift of grace through the Lord Jesus Christ."
+        }
+      ],
+      "65": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clement asks that the bearers of the letter — Claudius Ephebus, Valerius Bito, and Fortunatus — be sent home swiftly with news of restored peace."
         }
       ]
     }
