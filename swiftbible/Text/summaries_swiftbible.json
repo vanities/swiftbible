@@ -1414,6 +1414,76 @@
       "48": "Moses returns; the plagues and the Exodus",
       "49": "Passover regulations expounded",
       "50": "Sabbath and jubilee laws given on Sinai"
+    },
+    "2 Enoch (Secrets of Enoch)": {
+      "1": "Enoch is summoned to ascend the heavens",
+      "2": "Enoch's last instruction to his sons",
+      "3": "The first heaven: clouds and seas above",
+      "4": "Two hundred angels who rule the stars",
+      "5": "The treasure-houses of the snow",
+      "6": "The treasure-houses of dew and rain",
+      "7": "The second heaven and the apostate angels",
+      "8": "The third heaven: paradise of the righteous",
+      "9": "The blessedness of the righteous in paradise",
+      "10": "The northern hell: place of the wicked",
+      "11": "The fourth heaven: courses of sun and moon",
+      "12": "The phoenixes and chalkydri of the sun",
+      "13": "The eastern gates of the sun",
+      "14": "The western gates of the sun",
+      "15": "The morning song of the phoenixes",
+      "16": "The twelve gates of the moon",
+      "17": "Heavenly armies of singers",
+      "18": "The fifth heaven: the Grigori (Watchers)",
+      "19": "The sixth heaven: seven bands of bright angels",
+      "20": "The seventh heaven: throngs around the throne",
+      "21": "The cherubim and seraphim worship continually",
+      "22": "Enoch is brought before the Lord in the tenth heaven",
+      "23": "Enoch becomes a heavenly scribe",
+      "24": "The Lord summons Enoch to his left hand",
+      "25": "Adoil emerges from the invisible",
+      "26": "Archas emerges and the lower world is fixed",
+      "27": "Light and darkness become water; firmament fixed",
+      "28": "The dry land appears",
+      "29": "Angels and the fall of Satanail",
+      "30": "Plants, paradise, and the creation of man",
+      "31": "Adam in Eden and the testament given him",
+      "32": "Adam's fall and the promise of return",
+      "33": "The eighth day and the great Sabbath of God",
+      "34": "The Lord laments mankind's idolatry",
+      "35": "A future faithful generation foretold",
+      "36": "Enoch given thirty days to teach his sons",
+      "37": "An angel cools Enoch's face for the journey",
+      "38": "Enoch is sent down to earth",
+      "39": "Enoch begins his exhortation to his children",
+      "40": "Enoch claims first-hand knowledge of all things",
+      "41": "Enoch sees the forefathers in their dishonour",
+      "42": "Vision of the gate-keepers of hell and paradise",
+      "43": "Enoch the recorder of every righteous deed",
+      "44": "Man made in God's likeness; mercy commanded",
+      "45": "Acceptable offerings and right intent",
+      "46": "A solemn call to listen",
+      "47": "These words come from the Lord, not from Enoch",
+      "48": "The sun's circuit through the heavenly thrones",
+      "49": "Swear no oaths but only Yes and No",
+      "50": "Every deed is recorded; nothing hidden",
+      "51": "Almsgiving to the poor commended",
+      "52": "Beatitudes on praise and silence",
+      "53": "No one can pray for another's sin after death",
+      "54": "The books left as an inheritance of peace",
+      "55": "Enoch announces the day of his departure",
+      "56": "Methuselah asks his father for a final blessing",
+      "57": "Enoch summons all his household and the elders",
+      "58": "Listen, my children — the great commands",
+      "59": "Defiling the soul of beasts is self-defilement",
+      "60": "Murder ruins both body and soul",
+      "61": "Treat every soul as you would your own",
+      "62": "Patient gifts brought in faith are accepted",
+      "63": "Clothing the naked, feeding the hungry",
+      "64": "The people's plea: Enoch about to be taken",
+      "65": "Enoch on creation, time, and the world to come",
+      "66": "Final exhortation: walk in the Lord's way",
+      "67": "Enoch is taken up to the highest heaven",
+      "68": "The dates of Enoch's birth and translation"
     }
   },
   "passageSummaries": {
@@ -21897,6 +21967,484 @@
           "startVerse": 1,
           "endVerse": null,
           "title": "The closing chapter sets out the laws of the Sabbath and of the jubilee years, sealing the revelation Moses received on the mount."
+        }
+      ]
+    },
+    "2 Enoch (Secrets of Enoch)": {
+      "1": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The frame story: God conceives love for the wise Enoch and sends two angels to bring him up to behold the heavenly dwellings."
+        }
+      ],
+      "2": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Before he is taken away, Enoch warns his sons not to turn from the God who made heaven and earth."
+        }
+      ],
+      "3": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The angels carry Enoch on their wings to the first heaven, where he beholds the upper waters and the firmament."
+        }
+      ],
+      "4": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch is presented to the rulers of the stellar orders — two hundred angels who govern the host of heaven."
+        }
+      ],
+      "5": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch is shown the storehouses of snow and the angels who guard them."
+        }
+      ],
+      "6": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He sees further treasure-houses of dew and rain, kept by their own attendant angels."
+        }
+      ],
+      "7": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "In the second heaven Enoch sees the prison of the angels who rebelled and now await the great judgement."
+        }
+      ],
+      "8": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch is shown paradise in the third heaven — the place prepared for the righteous, with rivers of milk, honey, oil, and wine."
+        }
+      ],
+      "9": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "An angel explains that paradise is the inheritance of those who endured offences and walked in righteousness on earth."
+        }
+      ],
+      "10": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "On the northern side of the third heaven Enoch sees a place of cruel torments prepared for the wicked."
+        }
+      ],
+      "11": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch is taken into the fourth heaven and shown the orderly paths of the sun and moon."
+        }
+      ],
+      "12": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He sees the strange winged elements of the sun — phoenixes and chalkydri — that escort the daystar through the heavens."
+        }
+      ],
+      "13": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch is brought to the gates by which the sun rises in its appointed seasons."
+        }
+      ],
+      "14": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He is shown the corresponding gates in the west by which the sun sets each day of the year."
+        }
+      ],
+      "15": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "At the rising of the sun the phoenixes and chalkydri break forth in song, and all earthly birds answer in their flight."
+        }
+      ],
+      "16": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch is shown the gates by which the moon enters and leaves heaven through the cycle of the year."
+        }
+      ],
+      "17": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "In the midst of the heavens Enoch sees armed angelic hosts who serve the Lord in unending sacred song."
+        }
+      ],
+      "18": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "In the fifth heaven Enoch finds the Grigori — the Watchers — sorrowing in silence over their fallen brethren."
+        }
+      ],
+      "19": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch sees seven companies of glorious angels in the sixth heaven, ordering the seasons and the moral life of mankind."
+        }
+      ],
+      "20": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Reaching the seventh heaven, Enoch sees archangels, dominions, cherubim, and seraphim ranged about the divine throne."
+        }
+      ],
+      "21": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The six-winged seraphim and the cherubim never depart from the throne, covering it with their wings and singing."
+        }
+      ],
+      "22": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "On Aravoth, the tenth heaven, Enoch sees the face of the Lord like glowing iron and is anointed with oil of glory."
+        }
+      ],
+      "23": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "An archangel teaches Enoch all the works of heaven and earth so that he may write them down for his sons."
+        }
+      ],
+      "24": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God calls Enoch to sit at his left hand beside Gabriel and prepares to reveal the secret of creation."
+        }
+      ],
+      "25": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God commands the lower invisible realm to bring forth Adoil, a great light from whose belly all visible creation begins."
+        }
+      ],
+      "26": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "A second invisible being, Archas, comes forth hard from the deep, becoming the foundation of the lower world."
+        }
+      ],
+      "27": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "From light and darkness God forms the waters above and the firmament that divides them."
+        }
+      ],
+      "28": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God gathers the lower waters together and the chaos becomes dry — the third day of creation in 2 Enoch's voice."
+        }
+      ],
+      "29": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God forms the heavenly hosts from fire; one of the archangels, Satanail, is cast down for ambition against his Maker."
+        }
+      ],
+      "30": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "On the third day God commands the earth to bring forth herb and tree; paradise is planted and Adam is shaped on the sixth day."
+        }
+      ],
+      "31": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God places Adam in Eden in the east, charging him to keep the commandment and the testament."
+        }
+      ],
+      "32": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Earth Adam is, and to earth Adam shall return, but God promises not to destroy him utterly."
+        }
+      ],
+      "33": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God appoints the eighth day as a sign of the world to come, when the sevens of history are fulfilled."
+        }
+      ],
+      "34": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Looking down from heaven God grieves over the rejection of his commandments and the rise of idolatry."
+        }
+      ],
+      "35": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "From the seed of the unfaithful God will yet raise up another generation, faithful and discerning."
+        }
+      ],
+      "36": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God grants Enoch thirty days to return home, gather his household, and pass on the books before being taken up forever."
+        }
+      ],
+      "37": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Because Enoch's face has been transformed by the divine glory, an icy angel is sent to cool it so men can bear his appearance."
+        }
+      ],
+      "38": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The Lord commissions the two angels to bring Enoch back to the earth and stand beside him until his term is up."
+        }
+      ],
+      "39": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch opens his fatherly admonition to his children, charging them to receive the will of the Lord."
+        }
+      ],
+      "40": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch tells his sons that what he speaks comes from the Lord's own lips, which his eyes have seen from beginning to end."
+        }
+      ],
+      "41": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He weeps over Adam, Eve, and all who fell into ruin and dishonour through disobedience."
+        }
+      ],
+      "42": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch describes the serpentine guardians of hell and the contrasting blessedness of paradise."
+        }
+      ],
+      "43": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch declares that he has measured and written down every deed and every righteous judgement on earth."
+        }
+      ],
+      "44": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Because every man bears God's likeness, contempt or harm shown to one's neighbor is contempt shown to the Lord himself."
+        }
+      ],
+      "45": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Offerings made in haste and sincerity are received; God values the heart of the giver more than the size of the gift."
+        }
+      ],
+      "46": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch calls his people once again to take in the words of his lips with full attention."
+        }
+      ],
+      "47": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch insists that everything he hands on derives from the Lord's lips and not from his own invention."
+        }
+      ],
+      "48": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "An astronomical interlude on the sun's path through 182 thrones north and south through the year."
+        }
+      ],
+      "49": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch forbids swearing by heaven, earth, or any creature, anticipating the saying later given by Christ."
+        }
+      ],
+      "50": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch warns that no work of any man can stay concealed; every act is written in the heavenly books."
+        }
+      ],
+      "51": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Stretch out your hands to the poor according to your strength — almsgiving is the surest investment with God."
+        }
+      ],
+      "52": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "A series of beatitudes blessing those who praise God, keep peace, judge justly, and refrain from cursing."
+        }
+      ],
+      "53": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch warns his children that no father can intercede for their sins once they have passed; each soul is accountable for itself."
+        }
+      ],
+      "54": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The written books of Enoch are entrusted to his children as a permanent inheritance of peace and instruction."
+        }
+      ],
+      "55": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch tells his children that the day appointed for his removal from the earth has drawn near."
+        }
+      ],
+      "56": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Methuselah requests that his father bless their dwellings and household before his departure."
+        }
+      ],
+      "57": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch instructs Methuselah to gather all his brothers and the people for a final farewell address."
+        }
+      ],
+      "58": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch begins his great farewell discourse on right conduct toward God, neighbor, and beast."
+        }
+      ],
+      "59": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Cruelty even to animals defiles the soul that does it; the responsibility extends beyond human society."
+        }
+      ],
+      "60": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "He who takes a man's life kills also his own soul; no remedy remains for him in time or eternity."
+        }
+      ],
+      "61": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Whatever a man wishes for himself from God, that he should do for every living soul — the golden rule in Enoch's voice."
+        }
+      ],
+      "62": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Blessed is the man who brings his offerings in patience and faith; he shall find pardon and reward."
+        }
+      ],
+      "63": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "When a man clothes the naked and fills the hungry, his recompense is sure with God."
+        }
+      ],
+      "64": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Hearing that Enoch is to be taken up, the people gather and beg one final word of blessing."
+        }
+      ],
+      "65": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Enoch summarises God's making of the visible from the invisible and his appointment of times for every creature."
+        }
+      ],
+      "66": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "His parting charge: keep your souls from injustice, walk before the Lord with fear, and serve no other god."
+        }
+      ],
+      "67": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "While the people watch, the Lord sends darkness, and Enoch is borne away by the angels into the highest heaven."
+        }
+      ],
+      "68": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "A closing chronological note: Enoch was born and translated on the same day of the same month, having lived 365 years."
         }
       ]
     }
