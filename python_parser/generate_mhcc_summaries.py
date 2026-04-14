@@ -26,6 +26,53 @@ REPO = Path(__file__).resolve().parents[1]
 MHCC_PARSED = REPO / "python_parser" / "sources" / "mhcc" / "mhcc_parsed.json"
 OUTPUT = REPO / "swiftbible" / "Text" / "summaries_mhcc.json"
 
+# Hand-written entries for the 4 canonical chapters MHCC's outline parser
+# couldn't extract from the CCEL plain text. Each entry mirrors MHCC's voice
+# (short, declarative, present-tense) and carries `manual: True` so a future
+# audit can distinguish parser output from human additions. Schema-compatible
+# with the rest of summaries_mhcc.json — Swift's Codable decoder ignores the
+# extra `manual` key.
+MANUAL_FALLBACKS: dict[str, dict[str, dict]] = {
+    "2 Kings": {
+        "1": {
+            "title": "Ahaziah's idolatry, Elijah and the captains of fifty",
+            "passages": [
+                {"startVerse":  1, "endVerse":  8, "title": "Ahaziah seeks Baal-zebub; Elijah intercepts the messengers"},
+                {"startVerse":  9, "endVerse": 16, "title": "Three captains of fifty sent to Elijah; fire from heaven"},
+                {"startVerse": 17, "endVerse": 18, "title": "Death of Ahaziah, Jehoram succeeds him"},
+            ],
+        },
+    },
+    "2 Chronicles": {
+        "1": {
+            "title": "Solomon's prayer for wisdom",
+            "passages": [
+                {"startVerse":  1, "endVerse":  6, "title": "Solomon at the high place at Gibeon"},
+                {"startVerse":  7, "endVerse": 12, "title": "Solomon asks for wisdom; God grants wisdom and riches"},
+                {"startVerse": 13, "endVerse": 17, "title": "Solomon's wealth, chariots, and trade with Egypt"},
+            ],
+        },
+    },
+    "Isaiah": {
+        "36": {
+            "title": "Sennacherib invades Judah, Rabshakeh's blasphemy",
+            "passages": [
+                {"startVerse":  1, "endVerse":  3, "title": "Sennacherib's invasion; Rabshakeh sent to Jerusalem"},
+                {"startVerse":  4, "endVerse": 10, "title": "Rabshakeh challenges Hezekiah's trust in Egypt and the LORD"},
+                {"startVerse": 11, "endVerse": 22, "title": "Rabshakeh speaks to the people on the wall in Hebrew"},
+            ],
+        },
+        "39": {
+            "title": "Hezekiah and the Babylonian envoys",
+            "passages": [
+                {"startVerse": 1, "endVerse": 2, "title": "Hezekiah receives Babylonian envoys and shows his treasures"},
+                {"startVerse": 3, "endVerse": 4, "title": "Isaiah questions Hezekiah about the visitors"},
+                {"startVerse": 5, "endVerse": 8, "title": "Prophecy of the Babylonian captivity"},
+            ],
+        },
+    },
+}
+
 # For the chapter-list view we want terse titles. A handful of MHCC chapters
 # (notably Psalms 119, Ezekiel 47) have no structured outline — MHCC just
 # provides a multi-sentence prose paragraph as the whole-chapter intro. Those
@@ -83,6 +130,23 @@ def main() -> None:
         if book_passages:
             passage_summaries[book] = book_passages
 
+    # Merge in hand-written fallback entries for chapters MHCC's outline parser
+    # couldn't extract. These take precedence (well, fill gaps — they never
+    # overwrite parsed data) and carry `manual: True` for auditability.
+    manual_added = 0
+    for book, chapters in MANUAL_FALLBACKS.items():
+        chapter_titles.setdefault(book, {})
+        passage_summaries.setdefault(book, {})
+        for chap_str, entry in chapters.items():
+            if chap_str in chapter_titles[book]:
+                # Parser already produced this chapter — leave it alone.
+                continue
+            chapter_titles[book][chap_str] = entry["title"]
+            passage_summaries[book][chap_str] = [
+                {**p, "manual": True} for p in entry["passages"]
+            ]
+            manual_added += 1
+
     payload = {
         "source": {
             "name": "Matthew Henry's Concise Commentary",
@@ -108,6 +172,8 @@ def main() -> None:
     print(f"Wrote {OUTPUT.relative_to(REPO)}")
     print(f"  chapter titles:    {title_count} across {len(chapter_titles)} books")
     print(f"  passage summaries: {passage_count} across {len(passage_summaries)} books")
+    if manual_added:
+        print(f"  manual fallbacks:  {manual_added} chapters")
 
 
 if __name__ == "__main__":

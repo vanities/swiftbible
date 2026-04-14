@@ -366,7 +366,8 @@
       "22": "Josiah's good reign, His care for repairing the temple, The book of the law found",
       "23": "Josiah reads the law, and renews the covenant",
       "24": "Jehoiakim subdued by Nebuchadnezzar",
-      "25": "Jerusalem besieged, Zedekiah taken"
+      "25": "Jerusalem besieged, Zedekiah taken",
+      "1": "Ahaziah's idolatry, Elijah and the captains of fifty"
     },
     "1 Chronicles": {
       "1": "Genealogies, Adam to Abraham",
@@ -434,7 +435,8 @@
       "33": "Manasseh's and repentance",
       "34": "Josiah's good reign in Judah",
       "35": "The passover kept by Josiah",
-      "36": "The destruction of Jerusalem"
+      "36": "The destruction of Jerusalem",
+      "1": "Solomon's prayer for wisdom"
     },
     "Ezra": {
       "1": "The proclamation of Cyrus for the rebuilding of the temple",
@@ -792,7 +794,9 @@
       "63": "Christ's victory over his enemies",
       "64": "The church prays that God's power may be manifested",
       "65": "The calling of the Gentiles, and the rejection of the Jews",
-      "66": "God looks at the heart, and vengeance is threatened for guilt"
+      "66": "God looks at the heart, and vengeance is threatened for guilt",
+      "36": "Sennacherib invades Judah, Rabshakeh's blasphemy",
+      "39": "Hezekiah and the Babylonian envoys"
     },
     "Jeremiah": {
       "1": "Jeremiah's call to the prophetic office",
@@ -7477,6 +7481,26 @@
           "endVerse": 30,
           "title": "The rest of the Jews flee into Egypt, Evil-merodach relieves the captivity of Jehoiachin"
         }
+      ],
+      "1": [
+        {
+          "startVerse": 1,
+          "endVerse": 8,
+          "title": "Ahaziah seeks Baal-zebub; Elijah intercepts the messengers",
+          "manual": true
+        },
+        {
+          "startVerse": 9,
+          "endVerse": 16,
+          "title": "Three captains of fifty sent to Elijah; fire from heaven",
+          "manual": true
+        },
+        {
+          "startVerse": 17,
+          "endVerse": 18,
+          "title": "Death of Ahaziah, Jehoram succeeds him",
+          "manual": true
+        }
       ]
     },
     "1 Chronicles": {
@@ -8093,6 +8117,26 @@
           "startVerse": 22,
           "endVerse": 23,
           "title": "The proclamation of Cyrus"
+        }
+      ],
+      "1": [
+        {
+          "startVerse": 1,
+          "endVerse": 6,
+          "title": "Solomon at the high place at Gibeon",
+          "manual": true
+        },
+        {
+          "startVerse": 7,
+          "endVerse": 12,
+          "title": "Solomon asks for wisdom; God grants wisdom and riches",
+          "manual": true
+        },
+        {
+          "startVerse": 13,
+          "endVerse": 17,
+          "title": "Solomon's wealth, chariots, and trade with Egypt",
+          "manual": true
         }
       ]
     },
@@ -12636,6 +12680,46 @@
           "startVerse": 15,
           "endVerse": 24,
           "title": "Every enemy of the church shall be destroyed, and the final ruin of ungodly men shall be seen"
+        }
+      ],
+      "36": [
+        {
+          "startVerse": 1,
+          "endVerse": 3,
+          "title": "Sennacherib's invasion; Rabshakeh sent to Jerusalem",
+          "manual": true
+        },
+        {
+          "startVerse": 4,
+          "endVerse": 10,
+          "title": "Rabshakeh challenges Hezekiah's trust in Egypt and the LORD",
+          "manual": true
+        },
+        {
+          "startVerse": 11,
+          "endVerse": 22,
+          "title": "Rabshakeh speaks to the people on the wall in Hebrew",
+          "manual": true
+        }
+      ],
+      "39": [
+        {
+          "startVerse": 1,
+          "endVerse": 2,
+          "title": "Hezekiah receives Babylonian envoys and shows his treasures",
+          "manual": true
+        },
+        {
+          "startVerse": 3,
+          "endVerse": 4,
+          "title": "Isaiah questions Hezekiah about the visitors",
+          "manual": true
+        },
+        {
+          "startVerse": 5,
+          "endVerse": 8,
+          "title": "Prophecy of the Babylonian captivity",
+          "manual": true
         }
       ]
     },
