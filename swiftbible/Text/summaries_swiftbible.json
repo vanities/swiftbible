@@ -1362,6 +1362,58 @@
     },
     "Testament of Benjamin": {
       "1": "Benjamin on the pure mind"
+    },
+    "Book of Jubilees": {
+      "1": "Moses on Sinai; Israel's apostasy and restoration foretold",
+      "2": "The angel dictates the creation week",
+      "3": "Adam in Eden; the naming of animals; the Fall",
+      "4": "From Adam to Noah; Enoch's heavenly journeys",
+      "5": "The Watchers, the Nephilim, and the Flood announced",
+      "6": "Noah's covenant; the feast of weeks instituted",
+      "7": "Noah's vineyard and the division of the earth",
+      "8": "Genealogy of Arpachshad to Peleg; the earth divided",
+      "9": "Inheritances of Ham, Shem, and Japheth",
+      "10": "Mastema and the unclean spirits; medicine given to Noah",
+      "11": "Reu, Serug, Nahor, Terah; the birth of Abram",
+      "12": "Abram rejects idolatry and is called out of Ur",
+      "13": "Abram in Canaan and Egypt; separation from Lot",
+      "14": "The covenant of pieces and the promise of a seed",
+      "15": "Circumcision instituted as the sign of the covenant",
+      "16": "Promise of Isaac; Sodom destroyed; Isaac is born",
+      "17": "Isaac weaned; Hagar sent away; Mastema's challenge",
+      "18": "The binding of Isaac",
+      "19": "Sarah's death; Rebekah; Abraham instructs Jacob",
+      "20": "Abraham gathers his sons and commands the covenant",
+      "21": "Abraham's testament to Isaac",
+      "22": "Abraham's last blessing of Jacob; his death",
+      "23": "Lament for shortened lives; promise of restoration",
+      "24": "Isaac after Abraham; the wells and the Beersheba covenant",
+      "25": "Rebekah charges Jacob not to marry a Canaanite",
+      "26": "Jacob receives Isaac's blessing",
+      "27": "Esau's wrath; Jacob sent to Laban",
+      "28": "Jacob serves Laban; marriages and children",
+      "29": "Jacob departs from Laban and meets Esau",
+      "30": "Dinah and Shechem; warning against intermarriage",
+      "31": "Jacob's return to Bethel; Isaac blesses Levi and Judah",
+      "32": "Levi consecrated as priest at Bethel",
+      "33": "Reuben and Bilhah; laws against incest",
+      "34": "Joseph's brothers attack the Amorites; Joseph sold",
+      "35": "Rebekah's last words and death",
+      "36": "Isaac's testament; division of his property",
+      "37": "Esau's sons rouse him to war against Jacob",
+      "38": "Esau is slain; Edom subjected to Jacob",
+      "39": "Joseph in Egypt; the test of Potiphar's wife",
+      "40": "Pharaoh's dreams interpreted; Joseph promoted",
+      "41": "Judah and Tamar",
+      "42": "Famine begins; the brothers travel to Egypt",
+      "43": "Joseph's cup; Benjamin returned to his brothers",
+      "44": "Jacob's journey to Egypt; sacrifices at Beersheba",
+      "45": "Israel settles in the land of Goshen",
+      "46": "Death of Jacob; oppression of Israel begins",
+      "47": "Birth of Moses; his rescue and flight",
+      "48": "Moses returns; the plagues and the Exodus",
+      "49": "Passover regulations expounded",
+      "50": "Sabbath and jubilee laws given on Sinai"
     }
   },
   "passageSummaries": {
@@ -21171,6 +21223,358 @@
           "startVerse": 1,
           "endVerse": null,
           "title": "Benjamin commends the 'pure mind' that sees only good in others, modeling himself on the forgiving Joseph and pointing forward to the Messiah."
+        }
+      ]
+    },
+    "Book of Jubilees": {
+      "1": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Moses receives the prophecy of Israel's coming apostasy and exile, and of the eventual restoration when God will create a new spirit in his people."
+        }
+      ],
+      "2": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The angel of the presence narrates the six days of creation and the institution of the Sabbath, with each day's works enumerated."
+        }
+      ],
+      "3": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Adam names the animals, Eve is formed, and the Fall is retold with added detail about Eden's geography and the angels' role."
+        }
+      ],
+      "4": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The genealogy from Cain and Abel through Seth and Enoch, with extended attention to Enoch's translation and his role as a heavenly scribe."
+        }
+      ],
+      "5": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The fallen Watchers take human wives, the Nephilim corrupt the earth, and God resolves to bring the Flood; Noah alone finds favor."
+        }
+      ],
+      "6": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "After the Flood, Noah builds an altar and receives a covenant; the feast of weeks and the 364-day calendar are revealed."
+        }
+      ],
+      "7": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Noah plants a vineyard, drinks of its wine, and divides the earth among his three sons by lot."
+        }
+      ],
+      "8": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The descendants of Shem are traced and the boundaries of the three sons' inheritances are set out in detail."
+        }
+      ],
+      "9": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The further subdivision of the earth among the sons of Ham, Shem, and Japheth, with each region named and assigned."
+        }
+      ],
+      "10": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The unclean spirits begin to lead astray Noah's children; Mastema is permitted to keep a tenth, and angels teach Noah the use of medicines."
+        }
+      ],
+      "11": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The line of Shem continues; Mastema's idolatry spreads through the nations; Abram is born and even as a child rejects idols."
+        }
+      ],
+      "12": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Abram challenges his father Terah's idol-making, burns the family idols, and is called by God to leave his country."
+        }
+      ],
+      "13": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Abram travels through Shechem and Bethel, descends to Egypt, and parts from Lot, who chooses the Jordan plain."
+        }
+      ],
+      "14": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God appears to Abram in a vision, promises a son and an innumerable seed, and ratifies the covenant by passing between the divided animals."
+        }
+      ],
+      "15": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "God commands circumcision as the sign of his covenant with Abraham and his descendants, with the eighth day fixed as the time."
+        }
+      ],
+      "16": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The angels visit Abraham at Mamre, announce the birth of Isaac, and bring fire upon Sodom; Isaac is born the following year."
+        }
+      ],
+      "17": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Isaac is weaned, Hagar and Ishmael are sent away, and Mastema challenges God concerning Abraham's loyalty — setting up the test on Moriah."
+        }
+      ],
+      "18": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Abraham's faith is tested at Mount Moriah; Isaac is bound on the altar and a ram is provided in his place."
+        }
+      ],
+      "19": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Sarah dies and is buried at Hebron; Rebekah is brought for Isaac; Abraham instructs and blesses his grandson Jacob."
+        }
+      ],
+      "20": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Abraham assembles all his sons and grandsons, charges them to keep the way of the LORD, and warns them against intermarriage with the Canaanites."
+        }
+      ],
+      "21": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Abraham gives his deathbed instructions to Isaac on offerings, blood, and the avoidance of idolatry."
+        }
+      ],
+      "22": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "At the feast of weeks Abraham gives a final blessing to Jacob and dies; he is buried beside Sarah at Hebron."
+        }
+      ],
+      "23": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The narrator laments how human lifespans have shrunk, and prophesies an end-time restoration when the righteous will live to a great age."
+        }
+      ],
+      "24": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Isaac digs his father's wells, prospers, and makes a covenant of peace with Abimelech at Beersheba."
+        }
+      ],
+      "25": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Rebekah summons Jacob and binds him by oath not to take a Canaanite wife, then blesses him with words of prophecy."
+        }
+      ],
+      "26": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "At Rebekah's instigation Jacob takes the blessing intended for Esau, presenting himself before the blind Isaac with goat-skins on his hands."
+        }
+      ],
+      "27": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Esau plots vengeance, and Rebekah hurries Jacob away to her brother Laban in Haran for safety and a wife."
+        }
+      ],
+      "28": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Jacob serves Laban for Rachel, is given Leah by deceit, and over twenty years his eleven sons and daughter Dinah are born."
+        }
+      ],
+      "29": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Jacob slips away from Laban, is overtaken and reconciled, then meets Esau in fearful expectation."
+        }
+      ],
+      "30": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The defilement of Dinah and the slaughter at Shechem are retold, and a long legal warning against marriage with Gentiles is added."
+        }
+      ],
+      "31": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Jacob purifies his household and returns to Bethel; Isaac blesses Levi (the priesthood) and Judah (the kingship) above his other grandsons."
+        }
+      ],
+      "32": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "At Bethel Levi is set apart for the eternal priesthood; Jacob tithes; the death of Rachel and the Reuben-Bilhah incident are noted."
+        }
+      ],
+      "33": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Reuben's sin with Bilhah is retold and used as the occasion for an extended legal prohibition of incestuous unions."
+        }
+      ],
+      "34": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Jubilees inserts a war between Jacob's sons and the Amorite kings, and then narrates Joseph's betrayal and sale into Egypt."
+        }
+      ],
+      "35": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Rebekah charges Jacob and Esau to remain at peace with one another, blesses Jacob, and dies; she is buried at Hebron."
+        }
+      ],
+      "36": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Isaac calls his two sons, divides his goods, charges them to brotherly love, and dies; he is buried with his fathers."
+        }
+      ],
+      "37": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Esau's sons stir up their father against Jacob over Isaac's blessing; war with hired Edomite forces is prepared."
+        }
+      ],
+      "38": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Battle is joined at the city gate; Judah strikes down Esau, and the Edomites are placed under tribute to Jacob."
+        }
+      ],
+      "39": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Joseph rises in Potiphar's house and resists the seduction of his master's wife, and so is cast into prison."
+        }
+      ],
+      "40": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Joseph interprets Pharaoh's dreams of plenty and famine and is set over all Egypt as second only to the king."
+        }
+      ],
+      "41": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Judah's sons fail to give Tamar offspring, she conceives by Judah himself, and the affair is interpreted as ground for a legal warning."
+        }
+      ],
+      "42": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The famine drives Jacob's sons to Egypt for grain, where they are accused, tested, and sent home with Simeon held back."
+        }
+      ],
+      "43": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The hidden cup ruse is played out and Joseph reveals himself to his brothers, weeping over them and providing for the family."
+        }
+      ],
+      "44": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Jacob sets out for Egypt with his household, offers sacrifices at Beersheba, and is reassured by God in a night vision."
+        }
+      ],
+      "45": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Joseph receives his father in Egypt and settles the family in Goshen; Joseph manages the famine years for Pharaoh."
+        }
+      ],
+      "46": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "After Jacob's death the Israelites multiply in Egypt, and a new king arises who reduces them to bondage."
+        }
+      ],
+      "47": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Moses is born under Pharaoh's edict, hidden in the river, raised in the palace, and flees to Midian after killing the Egyptian."
+        }
+      ],
+      "48": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Moses returns to Egypt at God's call; the plagues fall, Mastema is restrained, and Israel goes out with a high hand."
+        }
+      ],
+      "49": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "An extended legal section on the proper observance of the Passover — its date, the slaughter, the meal, and who may participate."
+        }
+      ],
+      "50": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The closing chapter sets out the laws of the Sabbath and of the jubilee years, sealing the revelation Moses received on the mount."
         }
       ]
     }
