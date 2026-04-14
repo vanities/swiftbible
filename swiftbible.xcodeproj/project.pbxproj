@@ -59,6 +59,7 @@
 		DD0001SUMMARIES0000000001 /* SummariesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0001SUMMARIES0000000002 /* SummariesService.swift */; };
 		DD0001SUMMARIES0000000003 /* summaries_swiftbible.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0001SUMMARIES0000000004 /* summaries_swiftbible.json */; };
 		DD0001SUMMARIES0000000005 /* summaries_mhcc.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0001SUMMARIES0000000006 /* summaries_mhcc.json */; };
+		DD0002JFB000000000000001 /* summaries_jfb.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0002JFB000000000000002 /* summaries_jfb.json */; };
 		954BC9ED2C85012200FFCFA6 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9EC2C85012200FFCFA6 /* BookDetailView.swift */; };
 		954BC9F02C8501C900FFCFA6 /* ChapterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9EF2C8501C900FFCFA6 /* ChapterDetailView.swift */; };
 		954BC9F22C85112D00FFCFA6 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9F12C85112D00FFCFA6 /* SearchBar.swift */; };
@@ -211,6 +212,7 @@
 		DD0001SUMMARIES0000000002 /* SummariesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummariesService.swift; sourceTree = "<group>"; };
 		DD0001SUMMARIES0000000004 /* summaries_swiftbible.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = summaries_swiftbible.json; sourceTree = "<group>"; };
 		DD0001SUMMARIES0000000006 /* summaries_mhcc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = summaries_mhcc.json; sourceTree = "<group>"; };
+		DD0002JFB000000000000002 /* summaries_jfb.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = summaries_jfb.json; sourceTree = "<group>"; };
 		954BC9EC2C85012200FFCFA6 /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
 		954BC9EF2C8501C900FFCFA6 /* ChapterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChapterDetailView.swift; sourceTree = "<group>"; };
 		954BC9F12C85112D00FFCFA6 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
@@ -491,6 +493,7 @@
 				954BC9E32C85005900FFCFA6 /* bible.json */,
 				DD0001SUMMARIES0000000004 /* summaries_swiftbible.json */,
 				DD0001SUMMARIES0000000006 /* summaries_mhcc.json */,
+				DD0002JFB000000000000002 /* summaries_jfb.json */,
 			);
 			path = Text;
 			sourceTree = "<group>";
@@ -770,6 +773,7 @@
 				CC0000022F5D0001000ORGTX /* greek.json in Resources */,
 				DD0001SUMMARIES0000000003 /* summaries_swiftbible.json in Resources */,
 				DD0001SUMMARIES0000000005 /* summaries_mhcc.json in Resources */,
+				DD0002JFB000000000000001 /* summaries_jfb.json in Resources */,
 				954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */,
 				AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */,
 			);

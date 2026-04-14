@@ -21,6 +21,7 @@ import Foundation
 
 enum SummarySource: String, CaseIterable, Identifiable {
     case matthewHenry = "mhcc"
+    case jamiesonFaussetBrown = "jfb"
     case swiftBible = "swiftbible"
     case off = "off"
 
@@ -30,6 +31,7 @@ enum SummarySource: String, CaseIterable, Identifiable {
     var displayName: String {
         switch self {
         case .matthewHenry: return "Matthew Henry"
+        case .jamiesonFaussetBrown: return "Jamieson-Fausset-Brown"
         case .swiftBible: return "SwiftBible Curated"
         case .off: return "Off"
         }
@@ -39,6 +41,7 @@ enum SummarySource: String, CaseIterable, Identifiable {
     fileprivate var resourceName: String? {
         switch self {
         case .matthewHenry: return "summaries_mhcc"
+        case .jamiesonFaussetBrown: return "summaries_jfb"
         case .swiftBible: return "summaries_swiftbible"
         case .off: return nil
         }
