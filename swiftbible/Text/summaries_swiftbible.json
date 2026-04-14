@@ -1030,7 +1030,13 @@
       "7": "Esther Reveals Haman's Plot",
       "8": "The Jews Are Saved and Haman's Execution",
       "9": "The Celebration of Purim",
-      "10": "King Ahasuerus' Decree and Mordecai's Promotion"
+      "10": "King Ahasuerus' Decree and Mordecai's Promotion",
+      "11": "Mordecai's prologue dream",
+      "12": "Mordecai uncovers the eunuchs' plot",
+      "13": "Artaxerxes' decree against the Jews and Mordecai's prayer",
+      "14": "Esther's prayer before approaching the king",
+      "15": "Esther approaches the king and the king's response",
+      "16": "Artaxerxes' second letter reversing the decree"
     },
     "Wisdom of Solomon": {
       "1": "Wisdom's Call to the Righteous",
@@ -1111,7 +1117,8 @@
       "2": "Exhortation to Seek Wisdom",
       "3": "Promise of Restoration",
       "4": "Prayer for Mercy and Salvation",
-      "5": "Conclusion and Final Exhortations"
+      "5": "Conclusion and Final Exhortations",
+      "6": "The Letter of Jeremiah against Babylonian idolatry"
     },
     "Prayer of Azariah": {
       "1": "Prayer of Azariah"
@@ -7952,6 +7959,48 @@
           "startVerse": 3,
           "endVerse": null,
           "title": "Mordecai becomes second in rank to the king, honored by the Jews for his work on their behalf."
+        }
+      ],
+      "11": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "An apocalyptic prologue: Mordecai dreams of two great dragons and a tiny stream that becomes a river — interpreted as the coming deliverance."
+        }
+      ],
+      "12": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Mordecai overhears two royal eunuchs plotting against the king and reveals the conspiracy, earning the king's gratitude."
+        }
+      ],
+      "13": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The full text of Haman's decree against the Jews is preserved, followed by Mordecai's earnest prayer for deliverance."
+        }
+      ],
+      "14": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Esther humbles herself in fasting and prays at length for courage, confessing her revulsion at the trappings of pagan royalty."
+        }
+      ],
+      "15": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "Clothed in glory, Esther enters the king's presence, faints in fear, and is revived by his tender words — an expanded version of canonical Esther 5."
+        }
+      ],
+      "16": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "The full text of Artaxerxes' second decree, which condemns Haman as a Macedonian conspirator and confirms protection for the Jews."
         }
       ]
     },
@@ -19625,6 +19674,13 @@
           "startVerse": 21,
           "endVerse": null,
           "title": "Concludes with final exhortations to trust in God’s plan and maintain hope for future redemption."
+        }
+      ],
+      "6": [
+        {
+          "startVerse": 1,
+          "endVerse": null,
+          "title": "An attached epistle in Jeremiah's name to the exiles, ridiculing the powerlessness of Babylonian idols and urging the people not to fear them."
         }
       ]
     },
