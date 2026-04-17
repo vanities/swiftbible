@@ -85,6 +85,8 @@
 		95CC666F2E89B79B0065E7AD /* SafariViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC666E2E89B79B0065E7AD /* SafariViews.swift */; };
 		95CC66722E89B8BE0065E7AD /* DonationCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC66712E89B8BE0065E7AD /* DonationCelebrationView.swift */; };
 		95D6F64E2E808D1200042F87 /* AppleFoundationModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F64D2E808D1200042F87 /* AppleFoundationModelService.swift */; };
+		95DEADBEEF11111100042F87 /* MockExplainStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DEADBEEF22222200042F87 /* MockExplainStream.swift */; };
+		95DEADBEEF33333300042F87 /* OnboardingExplain.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 95DEADBEEF44444400042F87 /* OnboardingExplain.mp4 */; };
 		95D6F6502E808D8300042F87 /* VerseExplanationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */; };
 		95D6F6522E808D9E00042F87 /* VerseExplanationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */; };
 		95F3A0022F032003000A1B2C /* asv.json in Resources */ = {isa = PBXBuildFile; fileRef = 95F3A0012F032003000A1B2C /* asv.json */; };
@@ -235,6 +237,8 @@
 		95CC666E2E89B79B0065E7AD /* SafariViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariViews.swift; sourceTree = "<group>"; };
 		95CC66712E89B8BE0065E7AD /* DonationCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationCelebrationView.swift; sourceTree = "<group>"; };
 		95D6F64D2E808D1200042F87 /* AppleFoundationModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleFoundationModelService.swift; sourceTree = "<group>"; };
+		95DEADBEEF22222200042F87 /* MockExplainStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExplainStream.swift; sourceTree = "<group>"; };
+		95DEADBEEF44444400042F87 /* OnboardingExplain.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = OnboardingExplain.mp4; sourceTree = "<group>"; };
 		95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationSheet.swift; sourceTree = "<group>"; };
 		95D6F6512E808D9E00042F87 /* VerseExplanationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseExplanationRequest.swift; sourceTree = "<group>"; };
 		95F3A0012F032003000A1B2C /* asv.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = asv.json; sourceTree = "<group>"; };
@@ -494,6 +498,7 @@
 				DD0001SUMMARIES0000000004 /* summaries_swiftbible.json */,
 				DD0001SUMMARIES0000000006 /* summaries_mhcc.json */,
 				DD0002JFB000000000000002 /* summaries_jfb.json */,
+				95DEADBEEF44444400042F87 /* OnboardingExplain.mp4 */,
 			);
 			path = Text;
 			sourceTree = "<group>";
@@ -530,6 +535,7 @@
 				95CC66072E899D560065E7AD /* URLHandler.swift */,
 				95CC66052E899D460065E7AD /* SceneDelegate.swift */,
 				95D6F64D2E808D1200042F87 /* AppleFoundationModelService.swift */,
+				95DEADBEEF22222200042F87 /* MockExplainStream.swift */,
 				95F5D8A12E92D10000A1B2C3 /* DonationService.swift */,
 				B2B23373D685438F8E699542 /* StoreKitDonationService.swift */,
 				95AB1C1D2F7AB500001A2B11 /* AppUpdateService.swift */,
@@ -774,6 +780,7 @@
 				DD0001SUMMARIES0000000003 /* summaries_swiftbible.json in Resources */,
 				DD0001SUMMARIES0000000005 /* summaries_mhcc.json in Resources */,
 				DD0002JFB000000000000001 /* summaries_jfb.json in Resources */,
+				95DEADBEEF33333300042F87 /* OnboardingExplain.mp4 in Resources */,
 				954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */,
 				AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */,
 			);
@@ -845,6 +852,7 @@
 				9537E2642C89502400FD56B9 /* VerificationView.swift in Sources */,
 				954BC9D62C84EDBE00FFCFA6 /* BibleView.swift in Sources */,
 				95D6F64E2E808D1200042F87 /* AppleFoundationModelService.swift in Sources */,
+				95DEADBEEF11111100042F87 /* MockExplainStream.swift in Sources */,
 				95F7B1342EA1B6F700A47D84 /* Components/AIGeneratedBadge.swift in Sources */,
 				954BC9D42C84EDBE00FFCFA6 /* swiftbibleApp.swift in Sources */,
 				95CC660C2E89A0A20065E7AD /* AppDelegate.swift in Sources */,

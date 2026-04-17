@@ -171,6 +171,9 @@ final class AppleFoundationModelService {
     }
 
     var availabilityStatus: AvailabilityStatus {
+        #if DEBUG
+        if MockExplainStream.isEnabled { return .available }
+        #endif
         if #available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *) {
             return AppleFoundationModelServiceImplementation.shared.availabilityStatus
         }
@@ -178,6 +181,11 @@ final class AppleFoundationModelService {
     }
 
     func streamExplanation(for request: VerseExplanationRequest) -> AsyncThrowingStream<String, Error> {
+        #if DEBUG
+        if MockExplainStream.isEnabled {
+            return MockExplainStream.explanation(for: request)
+        }
+        #endif
         if #available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *) {
             return AppleFoundationModelServiceImplementation.shared.streamExplanation(for: request)
         }
@@ -192,6 +200,11 @@ final class AppleFoundationModelService {
     }
 
     func streamFollowUp(prompt: String) -> AsyncThrowingStream<String, Error> {
+        #if DEBUG
+        if MockExplainStream.isEnabled {
+            return MockExplainStream.followUp(prompt: prompt)
+        }
+        #endif
         if #available(iOS 26.0, macOS 26.0, macCatalyst 26.0, visionOS 2.0, *) {
             return AppleFoundationModelServiceImplementation.shared.streamFollowUp(prompt: prompt)
         }

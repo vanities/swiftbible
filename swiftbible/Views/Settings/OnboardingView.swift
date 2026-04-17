@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import AVKit
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -28,18 +29,50 @@ import UIKit
 /// "What's New" sheet; new installs see every case as a full onboarding.
 enum OnboardingFeature: String, CaseIterable, Identifiable {
     case welcome
+    case dailyReminder
     case watchApp
     case widget
+    case explain
 
     var id: String { rawValue }
+
+    /// Cases the current device can actually benefit from. `.explain` is
+    /// hidden on hardware/OS that cannot run Apple Intelligence — showing
+    /// the page there would tease a feature the user can never use.
+    ///
+    /// `@MainActor` because `AppleFoundationModelService.availabilityStatus`
+    /// is MainActor-isolated. All real call sites (SwiftUI bodies,
+    /// `evaluateOnboarding`) are already on the main actor.
+    @MainActor
+    static var availableCases: [OnboardingFeature] {
+        allCases.filter { $0.isSupportedOnThisDevice }
+    }
+
+    @MainActor
+    var isSupportedOnThisDevice: Bool {
+        switch self {
+        case .explain:
+            // Strict gate: only show when Apple Intelligence is actually
+            // ready on this hardware. This covers both unsupported OS and
+            // unsupported hardware (e.g. pre-A17 iPhones). If the model is
+            // temporarily unavailable (downloading, not enabled yet), we
+            // hide the page this launch — the user will see it as a
+            // What's-New spotlight the next time they open the app.
+            return AppleFoundationModelService.shared.availabilityStatus.isReadyForGeneration
+        default:
+            return true
+        }
+    }
 
     /// Identity-led, action-oriented page titles.
     /// (Identity-Based Motivation — "I am someone who reads scripture daily.")
     var title: String {
         switch self {
         case .welcome: return "Make Scripture part of your day"
+        case .dailyReminder: return "A gentle nudge, on your schedule"
         case .watchApp: return "Scripture on your wrist"
         case .widget: return "Today's verse, every unlock"
+        case .explain: return "Ask the text. Go deeper."
         }
     }
 
@@ -49,18 +82,26 @@ enum OnboardingFeature: String, CaseIterable, Identifiable {
         switch self {
         case .welcome:
             return "A quiet space to read, reflect, and return — designed to keep you in the Word."
+        case .dailyReminder:
+            return "Pick a time that fits your day — morning coffee, evening wind-down — "
+                + "and we'll send a gentle reminder to open today's devotional."
         case .watchApp:
             return "After you check the time, glance at today's devotional. A tiny moment, every day."
         case .widget:
             return "Every time you unlock your phone, today's reading is waiting on your Home Screen."
+        case .explain:
+            return "Tap any verse for an AI explanation, then ask follow-up questions. "
+                + "Powered by Apple Intelligence — on-device and private."
         }
     }
 
     var imageName: String? {
         switch self {
         case .welcome: return "Icon-Classic-Preview" // Halo Effect — strong brand impression
+        case .dailyReminder: return nil // animated SF Symbol hero
         case .watchApp: return "OnboardingWatch"
         case .widget: return "OnboardingWidget"
+        case .explain: return nil // video hero
         }
     }
 
@@ -166,7 +207,7 @@ enum OnboardingFeature: String, CaseIterable, Identifiable {
 
     var howToSteps: [String] {
         switch self {
-        case .welcome:
+        case .welcome, .dailyReminder, .explain:
             return []
         case .watchApp:
             return [
@@ -227,15 +268,16 @@ enum OnboardingPreferences {
     /// - On first launch: every feature (full welcome tour).
     /// - On subsequent launches: only features added since the last time the
     ///   user completed the flow (a "What's New" spotlight).
+    @MainActor
     static func pendingFeatures() -> [OnboardingFeature] {
         let hasLaunchedBefore = UserDefaults.standard.bool(forKey: hasLaunchedBeforeKey)
         let seen = seenFeatures()
 
         if !hasLaunchedBefore {
-            return OnboardingFeature.allCases
+            return OnboardingFeature.availableCases
         }
 
-        return OnboardingFeature.allCases.filter { !seen.contains($0) }
+        return OnboardingFeature.availableCases.filter { !seen.contains($0) }
     }
 
     static func markLaunched() {
@@ -427,6 +469,12 @@ private struct OnboardingPage: View {
     /// `feature.welcomeVerse` (which falls back to the pool on cache miss).
     @State private var fetchedSnippet: (text: String, reference: String)?
 
+    /// Toggles the repeating bounce on the `dailyReminder` bell hero.
+    @State private var bellBounce = false
+
+    /// Presents `NotificationSettingsView` from the `dailyReminder` page CTA.
+    @State private var showingReminderSettings = false
+
     /// What the welcome card actually renders.
     /// Priority: network fetch → cache → pool fallback.
     private var displayedVerse: (text: String, reference: String)? {
@@ -439,6 +487,7 @@ private struct OnboardingPage: View {
             heroImage
             titleBlock
             verseGiftOrSteps
+            inlineAction
             Spacer(minLength: 8)
         }
         .task {
@@ -448,6 +497,11 @@ private struct OnboardingPage: View {
             guard feature == .welcome else { return }
             guard OnboardingFeature.todaysDevotionalSnippet() == nil else { return }
             await fetchTodaysDevotionalAndUpdate()
+        }
+        .sheet(isPresented: $showingReminderSettings) {
+            NavigationStack {
+                NotificationSettingsView()
+            }
         }
     }
 
@@ -486,10 +540,85 @@ private struct OnboardingPage: View {
         switch feature {
         case .welcome:
             welcomeIcon
+        case .dailyReminder:
+            dailyReminderBell
         case .watchApp:
             watchFramedImage
         case .widget:
             widgetFramedImage
+        case .explain:
+            explainVideo
+        }
+    }
+
+    /// Gold bell in a soft gradient halo, bouncing on a slow loop to draw
+    /// the eye without feeling frantic. Matches the hero in
+    /// `NotificationSettingsView` so the visual language is continuous when
+    /// the user taps the CTA below.
+    @ViewBuilder
+    private var dailyReminderBell: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [Color.brandGold.opacity(0.25), Color.brandGold.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: 160, height: 160)
+                .shadow(color: Color.brandGold.opacity(0.35), radius: 24, y: 10)
+
+            Image(systemName: "bell.badge.fill")
+                .font(.system(size: 72, weight: .regular))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [.brandGold, .brandGold.opacity(0.7)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .symbolEffect(.bounce, options: .repeat(.continuous), value: bellBounce)
+        }
+        .accessibilityHidden(true)
+        .onAppear {
+            // Flip once so the repeating symbolEffect has a trigger value.
+            bellBounce.toggle()
+        }
+    }
+
+    /// Looping muted preview of the Explain flow (tap → stream → follow-up).
+    /// Falls back to a stylized sparkles hero if the bundled mp4 is missing
+    /// (e.g. during early development before the clip has been recorded).
+    @ViewBuilder
+    private var explainVideo: some View {
+        if let url = Bundle.main.url(forResource: "OnboardingExplain", withExtension: "mp4") {
+            LoopingVideoPlayer(url: url)
+                .aspectRatio(9.0 / 19.5, contentMode: .fit)
+                .frame(maxHeight: 320)
+                .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+                )
+                .shadow(color: .black.opacity(0.22), radius: 20, y: 12)
+        } else {
+            ZStack {
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.brandAccent.opacity(0.22), Color.brandCyan.opacity(0.12)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(maxHeight: 260)
+                Image(systemName: "sparkles")
+                    .font(.system(size: 64, weight: .regular))
+                    .foregroundStyle(Color.brandAccent)
+                    .symbolEffect(.pulse, options: .repeat(.continuous))
+            }
+            .accessibilityHidden(true)
         }
     }
 
@@ -606,6 +735,28 @@ private struct OnboardingPage: View {
         .labelStyle(.titleAndIcon)
     }
 
+    /// Per-page secondary action. Currently only the `dailyReminder` page
+    /// surfaces one: a "Set Reminder Time" button that opens
+    /// `NotificationSettingsView` in a sheet so the user can commit to a
+    /// time without leaving the onboarding flow.
+    @ViewBuilder
+    private var inlineAction: some View {
+        if feature == .dailyReminder {
+            Button {
+                showingReminderSettings = true
+            } label: {
+                Label("Set Reminder Time", systemImage: "clock.fill")
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 10)
+                    .background(Color.brandGold.opacity(0.18))
+                    .foregroundStyle(Color.brandGold)
+                    .clipShape(Capsule())
+            }
+            .accessibilityIdentifier("OnboardingDailyReminderSetTimeButton")
+        }
+    }
+
     private var stepsCard: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("How to add it")
@@ -628,6 +779,47 @@ private struct OnboardingPage: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.secondary.opacity(0.10))
         .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+// MARK: - Looping video player
+
+/// A compact AVPlayerLayer-backed view that loops a muted local video.
+/// Used for the Explain feature preview. AVKit's `VideoPlayer` ships full
+/// playback chrome we don't want for a decorative loop, so we drop to
+/// `AVPlayerLayer` and handle looping via `AVPlayerLooper`.
+private struct LoopingVideoPlayer: UIViewRepresentable {
+    let url: URL
+
+    func makeUIView(context: Context) -> LoopingVideoUIView {
+        let view = LoopingVideoUIView()
+        view.configure(with: url)
+        return view
+    }
+
+    func updateUIView(_ uiView: LoopingVideoUIView, context: Context) { }
+}
+
+private final class LoopingVideoUIView: UIView {
+    override class var layerClass: AnyClass { AVPlayerLayer.self }
+
+    private var looper: AVPlayerLooper?
+    private var queuePlayer: AVQueuePlayer?
+
+    func configure(with url: URL) {
+        let item = AVPlayerItem(url: url)
+        let player = AVQueuePlayer()
+        player.isMuted = true
+        player.actionAtItemEnd = .advance
+        looper = AVPlayerLooper(player: player, templateItem: item)
+        queuePlayer = player
+
+        if let layer = layer as? AVPlayerLayer {
+            layer.player = player
+            layer.videoGravity = .resizeAspectFill
+        }
+
+        player.play()
     }
 }
 
@@ -668,7 +860,7 @@ struct OnboardingHost: ViewModifier {
                 // before. Item-based presentation guarantees the new
                 // features array is what the sheet actually receives.
                 presentation = OnboardingPresentation(
-                    features: OnboardingFeature.allCases,
+                    features: OnboardingFeature.availableCases,
                     source: "settings_replay"
                 )
             }
@@ -676,7 +868,7 @@ struct OnboardingHost: ViewModifier {
 }
 
 #Preview("Full Tour") {
-    OnboardingView(features: OnboardingFeature.allCases, source: "preview_first_launch") { }
+    OnboardingView(features: OnboardingFeature.availableCases, source: "preview_first_launch") { }
 }
 
 #Preview("What's New") {
