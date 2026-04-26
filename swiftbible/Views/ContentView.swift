@@ -26,6 +26,7 @@ struct ContentView: View {
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
     @AppStorage(DonationPreferences.anonIdentifierKey) private var donationAnonIdentifier: String = ""
     @AppStorage("customAccentColor") private var customAccentHex: String = ""
+    @AppStorage("todayDevotionalIsCustom") private var todayDevotionalIsCustom = false
 
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
@@ -56,7 +57,9 @@ struct ContentView: View {
                 BibleView()
             }
 
-            Tab("Devotional", systemImage: "sun.horizon.fill", value: .dailyDevotional) {
+            Tab(todayDevotionalIsCustom ? "Custom" : "Devotional",
+                systemImage: todayDevotionalIsCustom ? "pencil.and.scribble" : "sun.horizon.fill",
+                value: .dailyDevotional) {
                 DailyDevotionalView(selectedTab: $selectedTab)
             }
 
