@@ -1314,6 +1314,20 @@ async function saveDevotional(
   if (error) throw error;
 }
 
+async function fetchExistingDevotional(
+  supabase: ReturnType<typeof createClient>,
+  forDate: string
+): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("Daily Devotional")
+    .select("message")
+    .eq("for_date", forDate)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data?.message ?? null;
+}
+
 // ─── Main handler ───────────────────────────────────────────────────
 
 initSentry("daily-devotional");
@@ -1327,6 +1341,14 @@ Deno.serve(async (req) => {
     const supabase = createSupabaseClient();
     const today = new Date();
     const { formatted, isoDate } = getFormattedDate();
+
+    const existingDevotional = await fetchExistingDevotional(supabase, isoDate);
+    if (existingDevotional) {
+      console.log(`Devotional already exists for ${isoDate}; returning cached content.`);
+      return new Response(existingDevotional, {
+        headers: { "Content-Type": "text/plain" },
+      });
+    }
 
     // Check for holiday
     const holiday = getHoliday(today);
