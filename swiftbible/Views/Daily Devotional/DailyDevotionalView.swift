@@ -34,6 +34,11 @@ struct DailyDevotionalView: View {
     @State private var heartBounce = false
     @State private var devotionalType: String = "single"
     @State private var showCustomDisclosure = false
+    @State private var seriesName: String?
+    @State private var seriesPart: Int?
+    @State private var holidayName: String?
+    @State private var holidayUrl: String?
+    @State private var anchorVerse: String?
     @AppStorage("todayDevotionalIsCustom") private var todayDevotionalIsCustom = false
 
     var body: some View {
@@ -98,6 +103,10 @@ struct DailyDevotionalView: View {
             .padding(.horizontal)
             .padding(.top)
             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+
+            if hasDevotional {
+                themeContextRow
+            }
 
             if isLoading {
                 VStack(spacing: 12) {
@@ -241,6 +250,85 @@ struct DailyDevotionalView: View {
     }
 
     @MainActor
+    private func applyDevotional(_ devotional: DailyDevotional) {
+        message = devotional.message
+        devotionalType = devotional.devotional_type ?? "single"
+        seriesName = devotional.series_name
+        seriesPart = devotional.series_part
+        holidayName = devotional.holiday_name
+        holidayUrl = devotional.holiday_url
+        anchorVerse = devotional.anchor_verse
+        hasDevotional = true
+    }
+
+    @ViewBuilder
+    private var themeContextRow: some View {
+        if let holidayName {
+            themeContextLabel(
+                icon: "sparkles",
+                text: "Created for \(holidayName)",
+                showsExternalLink: holidayUrl != nil
+            )
+            .onTapGesture {
+                guard let url = holidayUrl.flatMap(URL.init(string:)) else { return }
+                UIApplication.shared.open(url)
+            }
+        } else if let seriesName, let seriesPart {
+            themeContextLabel(
+                icon: "books.vertical",
+                text: "\(seriesName) · Week \(seriesPart)",
+                showsExternalLink: false
+            )
+        } else if let anchorVerse, devotionalType == "single",
+                  let parsed = parseVerseReference(anchorVerse) {
+            themeContextLabel(
+                icon: "text.book.closed",
+                text: "Inspired by \(anchorVerse)",
+                showsExternalLink: false
+            )
+            .onTapGesture {
+                selectedTab = .bible
+                appViewModel.navigateToVerse(
+                    bookName: parsed.book,
+                    chapterNumber: parsed.chapter,
+                    verseNumber: parsed.verse
+                )
+            }
+        }
+    }
+
+    private func themeContextLabel(icon: String, text: String, showsExternalLink: Bool) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.caption)
+            Text(text)
+                .font(.caption)
+                .lineLimit(2)
+            if showsExternalLink {
+                Image(systemName: "arrow.up.forward.square")
+                    .font(.caption2)
+            }
+            Spacer()
+        }
+        .foregroundStyle(.secondary)
+        .padding(.horizontal)
+        .padding(.top, 6)
+    }
+
+    private func parseVerseReference(_ ref: String) -> (book: String, chapter: Int, verse: Int)? {
+        let pattern = #"^(.+?)\s+(\d+):(\d+)(?:[-\d]+)?$"#
+        guard let regex = try? NSRegularExpression(pattern: pattern),
+              let match = regex.firstMatch(in: ref, range: NSRange(ref.startIndex..., in: ref)),
+              let bookRange = Range(match.range(at: 1), in: ref),
+              let chapterRange = Range(match.range(at: 2), in: ref),
+              let verseRange = Range(match.range(at: 3), in: ref),
+              let chapter = Int(ref[chapterRange]),
+              let verse = Int(ref[verseRange])
+        else { return nil }
+        return (book: String(ref[bookRange]).trimmingCharacters(in: .whitespaces), chapter: chapter, verse: verse)
+    }
+
+    @MainActor
     private func fetchDailyDevotional(for date: Date) async {
         isLoading = true
         hasDevotional = false
@@ -249,6 +337,11 @@ struct DailyDevotionalView: View {
         savedDevotional = nil
         isFavorite = false
         devotionalType = "single"
+        seriesName = nil
+        seriesPart = nil
+        holidayName = nil
+        holidayUrl = nil
+        anchorVerse = nil
         updateTodayCustomTabState(for: date, devotionalType: nil)
 
         let formatter = DateFormatter()
@@ -257,9 +350,7 @@ struct DailyDevotionalView: View {
 
         // Check cache first
         if let cachedDevotional = CacheService.shared.loadDevotional(for: date) {
-            message = cachedDevotional.message
-            devotionalType = cachedDevotional.devotional_type ?? "single"
-            hasDevotional = true
+            applyDevotional(cachedDevotional)
             updateTodayCustomTabState(for: date, devotionalType: devotionalType)
             AnalyticsService.shared.capture(.devotionalViewed, properties: [
                 "date": dateString,
@@ -280,9 +371,7 @@ struct DailyDevotionalView: View {
                 .execute()
                 .value
 
-            message = devotional.message
-            devotionalType = devotional.devotional_type ?? "single"
-            hasDevotional = true
+            applyDevotional(devotional)
             updateTodayCustomTabState(for: date, devotionalType: devotionalType)
 
             AnalyticsService.shared.capture(.devotionalViewed, properties: [

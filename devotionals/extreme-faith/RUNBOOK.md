@@ -85,21 +85,28 @@ Prayer: short, specific. "I have prayed around your return for too long. Let me 
 
 1. **Compose draft** — write in `devotionals/extreme-faith/NN-slug.md` as plain markdown. Follow the four-beat structure. Match the voice rules.
 2. **Adam edits** — Adam handpicks and rewrites in his own voice. Treat AI drafts as starting material, never final.
-3. **Convert to JSON payload** — once edited, run the bundled crafter:
+3. **Convert to JSON payload** — pass the edited markdown directly via `--message-file` so you don't have to hand-edit the JSON:
    ```bash
-   python3 ~/.claude/skills/custom-devotional-crafter/scripts/compose_custom_devotional.py \
+   python3 skills/custom-devotional-crafter/scripts/compose_custom_devotional.py \
      --for-date 2026-05-03 \
      --theme "Maranatha" \
      --audience "General" \
      --tone "Pastoral" \
      --verse "Revelation 22:20" \
-     --verse "2 Peter 3:11" \
+     --verse "2 Peter 3:9" \
      --verse "Philippians 3:20" \
+     --series-name "Extreme Faith" \
+     --series-part 1 \
+     --message-file devotionals/extreme-faith/01-maranatha.md \
      --output /tmp/maranatha-payload.json
    ```
-   Then replace the auto-generated `message` field with the edited markdown.
-4. **Dry-run publish** — `python3 ... push_custom_devotional.py --file /tmp/maranatha-payload.json --dry-run`
-5. **Publish** — same command without `--dry-run`. Upserts on `for_date`. The iOS app will render the "Custom" badge (tappable, shows the attribution alert) instead of the AI badge.
+4. **Dry-run publish** — `python3 skills/custom-devotional-crafter/scripts/push_custom_devotional.py --file /tmp/maranatha-payload.json --dry-run`
+5. **Publish** — load credentials and run without `--dry-run`:
+   ```bash
+   set -a && source .env.production && set +a
+   python3 skills/custom-devotional-crafter/scripts/push_custom_devotional.py --file /tmp/maranatha-payload.json
+   ```
+   Upserts on `for_date`. The iOS app renders the tappable "Custom" badge (with attribution alert) plus a context line: *"Extreme Faith · Week N"*.
 
 ---
 

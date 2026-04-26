@@ -35,9 +35,9 @@ def main() -> None:
         return
 
     supabase_url = os.getenv("SUPABASE_URL")
-    service_role = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    service_role = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_KEY")
     if not supabase_url or not service_role:
-        raise SystemExit("Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY")
+        raise SystemExit("Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY)")
 
     endpoint = f"{supabase_url.rstrip('/')}/rest/v1/Daily%20Devotional?on_conflict=for_date"
     body = json.dumps(payload).encode("utf-8")

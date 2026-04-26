@@ -83,10 +83,16 @@ def main() -> None:
     parser.add_argument("--title", default="Custom Devotional")
     parser.add_argument("--verse", action="append", required=True, help="Verse ref (repeatable), e.g. 'Romans 5:3'")
     parser.add_argument("--output", help="Optional output JSON file path")
+    parser.add_argument("--series-name", help="Optional series name (e.g. 'Extreme Faith')")
+    parser.add_argument("--series-part", type=int, help="Optional series part number (e.g. 1)")
+    parser.add_argument("--message-file", help="Optional path to a markdown file whose contents replace the auto-generated message")
     args = parser.parse_args()
 
     verses = [parse_verse(v) for v in args.verse]
     markdown = build_markdown(args.title, verses, args.theme, args.audience, args.tone)
+
+    if args.message_file:
+        markdown = Path(args.message_file).read_text(encoding="utf-8")
 
     payload = {
         "for_date": args.for_date,
@@ -95,6 +101,10 @@ def main() -> None:
         "devotional_type": "custom",
         "verses": [v.__dict__ for v in verses],
     }
+    if args.series_name:
+        payload["series_name"] = args.series_name
+    if args.series_part is not None:
+        payload["series_part"] = args.series_part
 
     if args.output:
         output_path = Path(args.output)
