@@ -1,8 +1,15 @@
-# Come, Lord Jesus
+# May 3 — Revelation 22:20: Maranatha
+
+**Most of us pray around it. The Bible closes on a plea.**
+
+> *"He which testifieth these things saith, Surely I come quickly. Amen. Even so, come, Lord Jesus."*
+> **Revelation 22:20**
+
+## We pray around it
 
 Most Christians don't actually pray for Jesus to come back.
 
-We say we believe it. We confess it in the creeds. We sing about it on Sunday morning. But if you're honest, when's the last time you knelt down and asked - *"Lord, come now"*? Not "soon" in some abstract way. Not eventually. But tonight. Today. Before the trip you've planned. Before the wedding. Before your kids grow up.
+We say we believe it. We confess it in the creeds. We sing about it on Sunday morning. But if you're honest, when's the last time you knelt down and asked — *"Lord, come now"*? Not "soon" in some abstract way. Not eventually. But tonight. Today. Before the trip you've planned. Before the wedding. Before your kids grow up.
 
 There's a reason we don't.
 
@@ -12,7 +19,7 @@ And honestly? We're not ready. There are sins we mean to deal with. Conversation
 
 So we don't pray for Christ's return. We pray around it.
 
----
+## Scroll the news
 
 But scroll your news feed for five minutes.
 
@@ -21,21 +28,18 @@ Wars in places that didn't have wars last year. Children buried in rubble. Women
 If you're honest, the world is not getting better. It is groaning.
 
 > *"For we know that the whole creation groaneth and travaileth in pain together until now."*
-> — Romans 8:22
+> **Romans 8:22**
 
 The early church looked around at *their* world — Roman occupation, persecution, plagues, families ripped apart for the name of Christ — and they cried one word: ***Maranatha*** (1 Cor 16:22). *Come, Lord!* They didn't pray it as a metaphor. They prayed it as a request. They wanted it to happen *to them*. They wanted to see his face in their lifetime.
 
-> *"He which testifieth these things saith, Surely I come quickly. Amen. Even so, come, Lord Jesus."*
-> — Revelation 22:20
-
 Those are the last words of the Bible. The whole story closes on a plea.
 
----
+## Looking for
 
 Paul puts it like this:
 
 > *"For our conversation is in heaven; from whence also we look for the Saviour, the Lord Jesus Christ."*
-> — Philippians 3:20
+> **Philippians 3:20**
 
 *Look for.* Watching. Waiting. Wanting.
 
@@ -45,12 +49,14 @@ This isn't about hating life or rejecting good things. The wedding is good. The 
 
 You can love your wife and still want to see Jesus's face. You can want your kids to grow up *and* want him to come back today. These don't have to fight each other. The longing for Christ doesn't crowd out love for the people around you. It deepens it — because everything you love about them was made by him, and they will be more themselves, not less, when he returns.
 
+## He tarries because he's gathering
+
 But why hasn't he come yet?
 
 Peter answers plainly:
 
 > *"The Lord is not slack concerning his promise, as some men count slackness; but is longsuffering to us-ward, not willing that any should perish, but that all should come to repentance."*
-> — 2 Peter 3:9
+> **2 Peter 3:9**
 
 He tarries because he's still gathering people. Every day he waits is mercy for someone who hasn't met him yet.
 
@@ -61,8 +67,6 @@ Pray it tonight, even if it scares you. Even if part of you wants to hold it bac
 ***Come, Lord Jesus.***
 
 If you mean it, the world looks different in the morning.
-
----
 
 ## A prayer
 

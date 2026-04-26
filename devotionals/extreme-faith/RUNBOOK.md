@@ -8,14 +8,46 @@ A recurring Sunday-only custom devotional series for SwiftBible. Each entry conf
 
 ---
 
-## The four-beat structure
+## Markdown structure
 
-Every entry in this series follows the same shape:
+Every entry in this series uses the same markdown skeleton — matching the AI-generated devotionals so the visual rhythm of the app stays consistent. **No `---` horizontal rules** — use `##` section headers between beats instead.
+
+```markdown
+# {Month Day} — {Lead Verse Reference}: {Title}
+
+**{One-line bolded subtitle — the thematic claim, no date or reference here}**
+
+> *"{Lead verse text}"*
+> **{Lead Verse Reference}**
+
+## {Section header for beat 1}
+
+{empathy content}
+
+## {Section header for beat 2}
+
+{Bible content with inline blockquotes for additional verses}
+
+> *"{Verse text}"*
+> **{Citation}**
+
+{...}
+
+## A prayer
+
+{short, specific prayer ending in Amen.}
+```
+
+## The four beats
+
+Within that skeleton, each entry hits these four moves:
 
 1. **Empathize** — the natural human reaction. Specific sensory details, not abstractions. Acknowledge what's actually hard.
-2. **Bible** — what scripture says. The "faith-extreme" position. Direct quotes with citation.
+2. **Bible** — what scripture says. The "faith-extreme" position. Direct quotes in blockquotes with bold citations.
 3. **Mix of empathy + Bible** — the closing argument. Acknowledge the cost frankly. Don't pretend the faith-extreme is easy. Show how the two aren't actually in conflict.
-4. **Prayer / meditation** — short, specific, personal. Not a benediction. Something the reader can actually pray.
+4. **Prayer / meditation** — short, specific, personal. Not a benediction. Something the reader can actually pray. Always under `## A prayer`.
+
+Beats 1–3 can span 2–3 `##` sections depending on how the argument unfolds; beat 4 is always a single `## A prayer` section.
 
 ---
 
