@@ -29,7 +29,50 @@ interface Holiday {
   name: string;
   themeHint: string;
   verses: SelectedVerse[];
+  wikipediaUrl?: string;
 }
+
+// Wikipedia URLs for holiday names. Looked up by Holiday.name in
+// getHoliday() and attached to the returned object so we don't have to
+// edit every holiday literal. Names not present here just get no link.
+const HOLIDAY_WIKIPEDIA_URLS: Record<string, string> = {
+  "Shrove Tuesday": "https://en.wikipedia.org/wiki/Shrove_Tuesday",
+  "Ash Wednesday": "https://en.wikipedia.org/wiki/Ash_Wednesday",
+  "Laetare Sunday": "https://en.wikipedia.org/wiki/Laetare_Sunday",
+  "Palm Sunday": "https://en.wikipedia.org/wiki/Palm_Sunday",
+  "Holy Monday": "https://en.wikipedia.org/wiki/Holy_Monday",
+  "Holy Tuesday": "https://en.wikipedia.org/wiki/Holy_Tuesday",
+  "Holy Wednesday": "https://en.wikipedia.org/wiki/Holy_Wednesday",
+  "Maundy Thursday": "https://en.wikipedia.org/wiki/Maundy_Thursday",
+  "Good Friday": "https://en.wikipedia.org/wiki/Good_Friday",
+  "Holy Saturday": "https://en.wikipedia.org/wiki/Holy_Saturday",
+  "Easter Sunday": "https://en.wikipedia.org/wiki/Easter",
+  "Easter Monday": "https://en.wikipedia.org/wiki/Easter_Monday",
+  "Ascension Day": "https://en.wikipedia.org/wiki/Feast_of_the_Ascension",
+  "Pentecost": "https://en.wikipedia.org/wiki/Pentecost",
+  "Trinity Sunday": "https://en.wikipedia.org/wiki/Trinity_Sunday",
+  "Corpus Christi": "https://en.wikipedia.org/wiki/Feast_of_Corpus_Christi",
+  "Epiphany": "https://en.wikipedia.org/wiki/Epiphany_(holiday)",
+  "Baptism of the Lord": "https://en.wikipedia.org/wiki/Baptism_of_the_Lord",
+  "Annunciation": "https://en.wikipedia.org/wiki/Feast_of_the_Annunciation",
+  "Transfiguration": "https://en.wikipedia.org/wiki/Feast_of_the_Transfiguration",
+  "Assumption of Mary": "https://en.wikipedia.org/wiki/Assumption_of_Mary",
+  "All Saints' Day": "https://en.wikipedia.org/wiki/All_Saints%27_Day",
+  "All Souls' Day": "https://en.wikipedia.org/wiki/All_Souls%27_Day",
+  "Reformation Day": "https://en.wikipedia.org/wiki/Reformation_Day",
+  "Christ the King": "https://en.wikipedia.org/wiki/Feast_of_Christ_the_King",
+  "Advent": "https://en.wikipedia.org/wiki/Advent",
+  "Christmas Eve": "https://en.wikipedia.org/wiki/Christmas_Eve",
+  "Christmas Day": "https://en.wikipedia.org/wiki/Christmas",
+  "Holy Innocents": "https://en.wikipedia.org/wiki/Massacre_of_the_Innocents",
+  "New Year's Day": "https://en.wikipedia.org/wiki/New_Year%27s_Day",
+  "Thanksgiving": "https://en.wikipedia.org/wiki/Thanksgiving_(United_States)",
+  "Mother's Day": "https://en.wikipedia.org/wiki/Mother%27s_Day",
+  "Father's Day": "https://en.wikipedia.org/wiki/Father%27s_Day",
+  "Independence Day": "https://en.wikipedia.org/wiki/Independence_Day_(United_States)",
+  "Memorial Day": "https://en.wikipedia.org/wiki/Memorial_Day",
+  "Veterans Day": "https://en.wikipedia.org/wiki/Veterans_Day",
+};
 
 // ─── Load local KJV Bible data ──────────────────────────────────────
 
@@ -147,6 +190,13 @@ function sameDay(a: Date, b: Date): boolean {
 // ─── Holiday calendar ───────────────────────────────────────────────
 
 function getHoliday(date: Date): Holiday | null {
+  const holiday = getHolidayInternal(date);
+  if (!holiday) return null;
+  const url = HOLIDAY_WIKIPEDIA_URLS[holiday.name];
+  return url ? { ...holiday, wikipediaUrl: url } : holiday;
+}
+
+function getHolidayInternal(date: Date): Holiday | null {
   const year = date.getFullYear();
   const month = date.getMonth(); // 0-indexed
   const day = date.getDate();
@@ -1285,13 +1335,20 @@ async function determineDevotionalType(
   }
 }
 
+interface ThemeMetadata {
+  holidayName?: string | null;
+  holidayUrl?: string | null;
+  anchorVerse?: string | null;
+}
+
 async function saveDevotional(
   supabase: ReturnType<typeof createClient>,
   message: string,
   forDate: string,
   testament: string,
   devotionalType: string,
-  verses: SelectedVerse[]
+  verses: SelectedVerse[],
+  themeMetadata: ThemeMetadata = {}
 ): Promise<void> {
   const versesJson = verses.map((v) => ({
     book: v.book,
@@ -1308,10 +1365,33 @@ async function saveDevotional(
         testament,
         devotional_type: devotionalType,
         verses: versesJson,
+        holiday_name: themeMetadata.holidayName ?? null,
+        holiday_url: themeMetadata.holidayUrl ?? null,
+        anchor_verse: themeMetadata.anchorVerse ?? null,
       },
       { onConflict: "for_date" }
     );
   if (error) throw error;
+}
+
+async function fetchExistingDevotional(
+  supabase: ReturnType<typeof createClient>,
+  forDate: string
+): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("Daily Devotional")
+    .select("message")
+    .eq("for_date", forDate)
+    .maybeSingle();
+
+  if (error) {
+    console.warn(
+      `[daily-devotional] cache lookup failed for ${forDate}; falling through to generation`,
+      error,
+    );
+    return null;
+  }
+  return data?.message ?? null;
 }
 
 // ─── Main handler ───────────────────────────────────────────────────
@@ -1327,6 +1407,14 @@ Deno.serve(async (req) => {
     const supabase = createSupabaseClient();
     const today = new Date();
     const { formatted, isoDate } = getFormattedDate();
+
+    const existingDevotional = await fetchExistingDevotional(supabase, isoDate);
+    if (existingDevotional) {
+      console.log(`Devotional already exists for ${isoDate}; returning cached content.`);
+      return new Response(existingDevotional, {
+        headers: { "Content-Type": "text/plain" },
+      });
+    }
 
     // Check for holiday
     const holiday = getHoliday(today);
@@ -1387,6 +1475,15 @@ Deno.serve(async (req) => {
     const devotional = await generateDevotional(prompt);
     console.log("Generated Devotional:\n", devotional);
 
+    // Theme metadata for the iOS app's "why am I seeing this?" display.
+    // Holidays get name + Wikipedia URL; single AI devotionals get the
+    // seed verse so the reader can tap through to it.
+    const themeMetadata: ThemeMetadata = holiday
+      ? { holidayName: holiday.name, holidayUrl: holiday.wikipediaUrl ?? null }
+      : devotionalType === "single" && versesUsed.length > 0
+        ? { anchorVerse: `${versesUsed[0].book} ${versesUsed[0].chapter}:${versesUsed[0].verse}` }
+        : {};
+
     // Save to database
     await saveDevotional(
       supabase,
@@ -1394,7 +1491,8 @@ Deno.serve(async (req) => {
       isoDate,
       targetTestament,
       devotionalType,
-      versesUsed
+      versesUsed,
+      themeMetadata
     );
 
     return new Response(devotional, {
