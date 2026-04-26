@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.parse
@@ -276,7 +277,7 @@ def fetch_all_rows() -> list[dict]:
     while True:
         url = (
             f"{SUPABASE_URL}/rest/v1/Daily%20Devotional"
-            f"?select=id,for_date,devotional_type,verses,holiday_name,holiday_url,anchor_verse"
+            f"?select=id,for_date,devotional_type,verses,holiday_name,holiday_url,anchor_verse,message"
             f"&order=for_date.asc&limit={page_size}&offset={offset}"
         )
         req = urllib.request.Request(url, headers=HEADERS)
@@ -287,6 +288,49 @@ def fetch_all_rows() -> list[dict]:
             break
         offset += page_size
     return rows
+
+
+# Matches "Book chapter:verse" where Book may have a leading "1 ", "2 ",
+# or "3 " (1 Kings, 2 Corinthians, etc.) and may have multi-word names
+# joined by spaces (e.g. "Song of Solomon"). Greedy on the chapter:verse
+# at the end so we get the first hit, and we constrain Book to start
+# with an uppercase letter to skip dates ("3:21" alone won't match).
+_BOOK_RE = (
+    r"(?:[1-3]\s+)?"  # optional leading number
+    r"[A-Z][A-Za-z]+"  # First book word
+    r"(?:\s+(?:of\s+)?[A-Z][A-Za-z]+)*"  # optional additional words ("of Solomon")
+)
+VERSE_REF_RE = re.compile(rf"\b({_BOOK_RE})\s+(\d+):(\d+)\b")
+
+
+def extract_anchor_from_markdown(message: str) -> Optional[str]:
+    """Try to pull out a 'Book chapter:verse' reference from the H1
+    title first, then from the first blockquote citation, then
+    anywhere in the document. Returns the matched text or None."""
+    if not message:
+        return None
+    lines = message.splitlines()
+    # Prefer the H1 title — the AI prompt bakes the reference into it.
+    for line in lines:
+        if line.startswith("# "):
+            m = VERSE_REF_RE.search(line)
+            if m:
+                return f"{m.group(1)} {m.group(2)}:{m.group(3)}"
+            break
+    # Then any **Book c:v** in a blockquote (the citation pattern).
+    blockquote_cite = re.search(
+        rf"\*\*({_BOOK_RE})\s+(\d+):(\d+)\*\*", message
+    )
+    if blockquote_cite:
+        return (
+            f"{blockquote_cite.group(1)} "
+            f"{blockquote_cite.group(2)}:{blockquote_cite.group(3)}"
+        )
+    # Last resort: first verse-shaped pattern anywhere.
+    m = VERSE_REF_RE.search(message)
+    if m:
+        return f"{m.group(1)} {m.group(2)}:{m.group(3)}"
+    return None
 
 
 def patch_row(row_id: int, updates: dict) -> None:
@@ -329,16 +373,24 @@ def main() -> None:
                     updates["holiday_url"] = HOLIDAY_WIKIPEDIA_URLS[name]
                 holidays_seen[name] = holidays_seen.get(name, 0) + 1
 
-        # Anchor verse for single AI devotionals
+        # Anchor verse for single AI devotionals.
+        # 1) Prefer the structured `verses` JSONB if present.
+        # 2) Fallback to extracting from the message markdown for older
+        #    rows that predate the verses column.
         if row.get("devotional_type") == "single" and not row.get("anchor_verse"):
             verses = row.get("verses") or []
+            anchor: Optional[str] = None
             if verses:
                 v = verses[0]
                 book = v.get("book")
                 chapter = v.get("chapter")
                 verse = v.get("verse")
                 if book and chapter is not None and verse is not None:
-                    updates["anchor_verse"] = f"{book} {chapter}:{verse}"
+                    anchor = f"{book} {chapter}:{verse}"
+            if not anchor:
+                anchor = extract_anchor_from_markdown(row.get("message") or "")
+            if anchor:
+                updates["anchor_verse"] = anchor
 
         if not updates:
             continue
