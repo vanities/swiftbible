@@ -76,24 +76,34 @@ Beats 1–3 can span 2–3 `##` sections depending on how the argument unfolds; 
 
 ## Series schedule
 
-| # | Sunday | Title | Behavioral gap | Anchor verses |
-|---|---|---|---|---|
-| 1 | **2026-05-03** | **Maranatha (Come, Lord Jesus)** | We don't pray for Christ's return — afraid to lose plans, family, comforts | Rev 22:20, 2 Pet 3:11-13, Phil 3:20, Titus 2:13 |
-| 2 | 2026-05-10 | Mourning with hope | Crying in despair when our brothers and sisters are at rest with Christ | 1 Thess 4:13-18, Phil 1:21-23, Rev 21:4 |
-| 3 | 2026-05-17 | Loving the one who wronged you | Holding the grudge, "forgive but don't forget" | Matt 5:43-48, Rom 12:14-21, Luke 6:27-36 |
-| 4 | 2026-05-24 | Treasure that won't last | Building wealth as security, "I worked for this" | Matt 6:19-24, Luke 12:13-21, 1 Tim 6:17-19 |
-| 5 | 2026-05-31 | Anxious for nothing | Planning, worrying, controlling outcomes | Matt 6:25-34, Phil 4:6-7, 1 Pet 5:6-7 |
-| 6 | 2026-06-07 | Seventy times seven | Holding the wrong, demanding they earn it back | Matt 18:21-35, Eph 4:32, Luke 23:34 |
-| 7 | 2026-06-14 | Counting it joy | Avoiding pain, asking "why me?" | James 1:2-4, Rom 5:3-5, 1 Pet 4:12-13 |
-| 8 | 2026-06-21 | The lower seat | Networking, building platform, being seen | Matt 6:1-4, Mark 9:35, Luke 14:7-11 |
-| 9 | 2026-06-28 | Costly discipleship | "Family first," "I have my own life" | Luke 9:23-26, Matt 10:37-39, Mark 8:34-38 |
-| 10 | 2026-07-05 | Unashamed | Keeping faith private, "I don't want to impose" | Mark 8:38, Rom 1:16, Matt 28:18-20 |
-| 11 | 2026-07-12 | The plank in your eye | Cataloging everyone else's faults | Matt 7:1-5, Rom 2:1-4, James 4:11-12 |
-| 12 | 2026-07-19 | Sabbath in a hustle culture | Productivity = worth | Heb 4:1-11, Ex 20:8-11, Mark 2:27 |
+Each entry contrasts the **comfortable middle** (where most Christians actually live) with the **extreme claim** (what Jesus and the apostles actually require). The four-beat structure lets the empathy land first; the extreme claim is the pivot — never softened, always anchored in scripture.
+
+| # | Sunday | Title | Comfortable middle | Extreme claim | Anchor verses |
+|---|---|---|---|---|---|
+| 1 | **2026-05-03** | **Maranatha** | "Jesus will come back — *eventually*." | Pray for him to come back **tonight**, even before your kids grow up. | Rev 22:20, 2 Pet 3:9, Phil 3:20 |
+| 2 | 2026-05-10 | Rejoice at the grave | "Mourn the loss but hold onto hope." | At the funeral, **be visibly glad** they're with Christ. Throw the party they can't attend. | 1 Thess 4:13-18, Phil 1:21-23, 1 Cor 15:54-57 |
+| 3 | 2026-05-17 | Bless the one who hurt you | "Forgive them, but keep your distance." | Pray for your abuser **by name**. Do good to them concretely. While still bleeding. | Matt 5:43-48, Luke 6:27-36, Rom 12:14-21 |
+| 4 | 2026-05-24 | Sell what you have | "Be a generous giver out of your surplus." | Sell everything. Hold all things in common with the church. The rich young ruler walked away — the early church didn't. | Mark 10:17-31, Acts 2:44-45, Acts 4:32-37 |
+| 5 | 2026-05-31 | Take no thought for tomorrow | "Plan wisely but don't worry." | Stop storing up. Stop planning for tomorrow. Trust God for today's bread the way Israel ate manna. | Matt 6:25-34, Ex 16:4-21, Phil 4:6-7 |
+| 6 | 2026-06-07 | Seventy times seven | "Forgive when they apologize." | Forgive while still being wronged. Forgive the unrepentant. Pray for them by name today. | Matt 18:21-35, Luke 23:34, Eph 4:32 |
+| 7 | 2026-06-14 | Glory in tribulation | "Endure suffering with hope." | **Thank God for the suffering.** Sing in the prison cell. Treat trials as gift, not enemy. | James 1:2-4, Acts 16:25, Rom 5:3-5, Acts 5:41 |
+| 8 | 2026-06-21 | Seek the lower seat | "Don't seek attention." | Take the lowest seat **on purpose**. Refuse promotion. Wash feet. Become invisible while others rise. | Luke 14:7-11, Mark 9:35, John 13:1-17 |
+| 9 | 2026-06-28 | Hate father and mother | "Love God first, but family is also important." | Christ will be a sword between you and your family if it comes to it. Be ready. | Luke 14:25-33, Matt 10:34-39, Mark 8:34-38 |
+| 10 | 2026-07-05 | Confess me before men | "Live a quiet Christian life." | Lose your job for the gospel. Lose your friends. Be ready to be martyred. Being ashamed of Christ is being denied by him. | Mark 8:38, Matt 10:32-33, Rom 1:16, Acts 5:41 |
+| 11 | 2026-07-12 | Anger is murder | "Anger isn't a sin if I don't act on it." | Jesus equates anger in the heart with murder. Hatred for a brother is killing him in your heart. | Matt 5:21-26, 1 John 3:15, James 1:19-20 |
+| 12 | 2026-07-19 | Cease entirely | "Take a rest day for self-care." | A literal 24-hour Sabbath — no work, no commerce, no email, no food prep. Your worth doesn't depend on your output. | Heb 4:1-11, Ex 20:8-11, Mark 2:27 |
 
 Order is not fixed after week 1 — Adam may handpick the next theme each week based on what he's been thinking and praying about.
 
-**Strong runner-ups** (swap in if a theme hits): anger as heart-murder (Matt 5:21-22), radical generosity to the poor (Luke 14:12-14), purity of thought-life (Matt 5:27-30), trust over self-reliance (Prov 3:5-6).
+**Strong runner-ups** (swap in if a theme hits):
+- Lust as adultery / pluck out your eye (Matt 5:27-30)
+- Turn the other cheek, give to everyone who asks (Matt 5:38-42)
+- Let your yes be yes — no oaths, no white lies (Matt 5:33-37)
+- Eat my flesh, drink my blood — the disciples left over this (John 6:53-66)
+- The cost of being last (Mark 10:31, the great reversal)
+- Take up your cross *daily* (Luke 9:23) — not just once at conversion
+
+**Diagnostic for "is this extreme enough?"**: if a smart secular reader would nod along with the claim, it's not extreme yet. The faith-extreme position should make the comfortable Christian wince, *then* invite them in with empathy and the cross.
 
 ---
 
