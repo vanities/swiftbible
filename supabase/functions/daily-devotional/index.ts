@@ -1324,7 +1324,13 @@ async function fetchExistingDevotional(
     .eq("for_date", forDate)
     .maybeSingle();
 
-  if (error) throw error;
+  if (error) {
+    console.warn(
+      `[daily-devotional] cache lookup failed for ${forDate}; falling through to generation`,
+      error,
+    );
+    return null;
+  }
   return data?.message ?? null;
 }
 
