@@ -18,7 +18,10 @@ OLD_TESTAMENT_BOOKS = {
     "habakkuk", "zephaniah", "haggai", "zechariah", "malachi",
 }
 
-VERSE_RE = re.compile(r"^\s*(?P<book>.+?)\s+(?P<chapter>\d+):(?P<verse>\d+)(?:-\d+)?\s*$", re.IGNORECASE)
+VERSE_RE = re.compile(
+    r"^\s*(?P<book>.+?)\s+(?P<chapter>\d+):(?P<verse>\d+)(?:-(?P<verse_end>\d+))?\s*$",
+    re.IGNORECASE,
+)
 
 
 @dataclass
@@ -27,6 +30,13 @@ class VerseRef:
     chapter: int
     verse: int
     testament: str
+    verse_end: int | None = None
+
+    @property
+    def reference(self) -> str:
+        if self.verse_end and self.verse_end > self.verse:
+            return f"{self.book} {self.chapter}:{self.verse}-{self.verse_end}"
+        return f"{self.book} {self.chapter}:{self.verse}"
 
 
 def normalize_book(book: str) -> str:
@@ -40,17 +50,29 @@ def detect_testament(book: str) -> str:
 def parse_verse(raw: str) -> VerseRef:
     match = VERSE_RE.match(raw)
     if not match:
-        raise ValueError(f"Invalid verse format: '{raw}'. Use e.g. 'Romans 5:3' or 'Psalm 23:1'.")
+        raise ValueError(f"Invalid verse format: '{raw}'. Use e.g. 'Romans 5:3' or 'Romans 5:3-5'.")
 
     book = normalize_book(match.group("book"))
     chapter = int(match.group("chapter"))
     verse = int(match.group("verse"))
+    end_raw = match.group("verse_end")
+    verse_end = int(end_raw) if end_raw else None
+    if verse_end is not None and verse_end <= verse:
+        raise ValueError(
+            f"Invalid verse range: '{raw}'. End verse must be greater than start verse."
+        )
     testament = detect_testament(book)
-    return VerseRef(book=book, chapter=chapter, verse=verse, testament=testament)
+    return VerseRef(
+        book=book,
+        chapter=chapter,
+        verse=verse,
+        testament=testament,
+        verse_end=verse_end,
+    )
 
 
 def build_markdown(title: str, verses: list[VerseRef], theme: str, audience: str, tone: str) -> str:
-    verse_lines = "\n".join([f"- **{v.book} {v.chapter}:{v.verse}**" for v in verses])
+    verse_lines = "\n".join([f"- **{v.reference}**" for v in verses])
     return f"""# {title}
 
 ## Scripture Focus
@@ -99,7 +121,10 @@ def main() -> None:
         "message": markdown,
         "testament": verses[0].testament,
         "devotional_type": "custom",
-        "verses": [v.__dict__ for v in verses],
+        "verses": [
+            {k: val for k, val in v.__dict__.items() if val is not None}
+            for v in verses
+        ],
     }
     if args.series_name:
         payload["series_name"] = args.series_name

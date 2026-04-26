@@ -34,44 +34,67 @@ interface Holiday {
 
 // Wikipedia URLs for holiday names. Looked up by Holiday.name in
 // getHoliday() and attached to the returned object so we don't have to
-// edit every holiday literal. Names not present here just get no link.
+// edit every holiday literal. Keys MUST exactly match the .name values
+// returned by getHolidayInternal — names not present here just get no
+// link. All URLs verified live (HTTP 200) on 2026-04-26.
 const HOLIDAY_WIKIPEDIA_URLS: Record<string, string> = {
+  // Easter cycle
   "Shrove Tuesday": "https://en.wikipedia.org/wiki/Shrove_Tuesday",
   "Ash Wednesday": "https://en.wikipedia.org/wiki/Ash_Wednesday",
   "Laetare Sunday": "https://en.wikipedia.org/wiki/Laetare_Sunday",
   "Palm Sunday": "https://en.wikipedia.org/wiki/Palm_Sunday",
   "Holy Monday": "https://en.wikipedia.org/wiki/Holy_Monday",
-  "Holy Tuesday": "https://en.wikipedia.org/wiki/Holy_Tuesday",
-  "Holy Wednesday": "https://en.wikipedia.org/wiki/Holy_Wednesday",
+  "Spy Wednesday": "https://en.wikipedia.org/wiki/Holy_Wednesday",
   "Maundy Thursday": "https://en.wikipedia.org/wiki/Maundy_Thursday",
   "Good Friday": "https://en.wikipedia.org/wiki/Good_Friday",
   "Holy Saturday": "https://en.wikipedia.org/wiki/Holy_Saturday",
   "Easter Sunday": "https://en.wikipedia.org/wiki/Easter",
-  "Easter Monday": "https://en.wikipedia.org/wiki/Easter_Monday",
   "Ascension Day": "https://en.wikipedia.org/wiki/Feast_of_the_Ascension",
   "Pentecost": "https://en.wikipedia.org/wiki/Pentecost",
   "Trinity Sunday": "https://en.wikipedia.org/wiki/Trinity_Sunday",
-  "Corpus Christi": "https://en.wikipedia.org/wiki/Feast_of_Corpus_Christi",
+  // Fixed-date Christian
   "Epiphany": "https://en.wikipedia.org/wiki/Epiphany_(holiday)",
-  "Baptism of the Lord": "https://en.wikipedia.org/wiki/Baptism_of_the_Lord",
-  "Annunciation": "https://en.wikipedia.org/wiki/Feast_of_the_Annunciation",
+  "Epiphany Eve": "https://en.wikipedia.org/wiki/Epiphany_(holiday)",
+  "Baptism of Jesus": "https://en.wikipedia.org/wiki/Baptism_of_the_Lord",
   "Transfiguration": "https://en.wikipedia.org/wiki/Feast_of_the_Transfiguration",
-  "Assumption of Mary": "https://en.wikipedia.org/wiki/Assumption_of_Mary",
-  "All Saints' Day": "https://en.wikipedia.org/wiki/All_Saints%27_Day",
-  "All Souls' Day": "https://en.wikipedia.org/wiki/All_Souls%27_Day",
   "Reformation Day": "https://en.wikipedia.org/wiki/Reformation_Day",
-  "Christ the King": "https://en.wikipedia.org/wiki/Feast_of_Christ_the_King",
-  "Advent": "https://en.wikipedia.org/wiki/Advent",
+  "All Saints' Day": "https://en.wikipedia.org/wiki/All_Saints%27_Day",
   "Christmas Eve": "https://en.wikipedia.org/wiki/Christmas_Eve",
   "Christmas Day": "https://en.wikipedia.org/wiki/Christmas",
-  "Holy Innocents": "https://en.wikipedia.org/wiki/Massacre_of_the_Innocents",
+  "New Year's Eve": "https://en.wikipedia.org/wiki/New_Year%27s_Eve",
   "New Year's Day": "https://en.wikipedia.org/wiki/New_Year%27s_Day",
-  "Thanksgiving": "https://en.wikipedia.org/wiki/Thanksgiving_(United_States)",
+  "Christ the King Sunday": "https://en.wikipedia.org/wiki/Feast_of_Christ_the_King",
+  // Advent — each Sunday is a distinct .name
+  "First Sunday of Advent": "https://en.wikipedia.org/wiki/Advent",
+  "Second Sunday of Advent": "https://en.wikipedia.org/wiki/Advent",
+  "Third Sunday of Advent": "https://en.wikipedia.org/wiki/Advent",
+  "Fourth Sunday of Advent": "https://en.wikipedia.org/wiki/Advent",
+  // Moveable secular
   "Mother's Day": "https://en.wikipedia.org/wiki/Mother%27s_Day",
   "Father's Day": "https://en.wikipedia.org/wiki/Father%27s_Day",
-  "Independence Day": "https://en.wikipedia.org/wiki/Independence_Day_(United_States)",
+  "Thanksgiving": "https://en.wikipedia.org/wiki/Thanksgiving_(United_States)",
+  "Martin Luther King Jr. Day": "https://en.wikipedia.org/wiki/Martin_Luther_King_Jr._Day",
+  "Presidents' Day": "https://en.wikipedia.org/wiki/Washington%27s_Birthday",
   "Memorial Day": "https://en.wikipedia.org/wiki/Memorial_Day",
+  "Labor Day": "https://en.wikipedia.org/wiki/Labor_Day",
+  "Election Day": "https://en.wikipedia.org/wiki/Election_Day_(United_States)",
+  "World Day of Prayer": "https://en.wikipedia.org/wiki/World_Day_of_Prayer",
+  "National Day of Prayer": "https://en.wikipedia.org/wiki/National_Day_of_Prayer",
+  // Fixed-date secular & seasonal
+  "Independence Day": "https://en.wikipedia.org/wiki/Independence_Day_(United_States)",
+  "Juneteenth": "https://en.wikipedia.org/wiki/Juneteenth",
   "Veterans Day": "https://en.wikipedia.org/wiki/Veterans_Day",
+  "Valentine's Day": "https://en.wikipedia.org/wiki/Valentine%27s_Day",
+  "St. Patrick's Day": "https://en.wikipedia.org/wiki/Saint_Patrick%27s_Day",
+  "Earth Day": "https://en.wikipedia.org/wiki/Earth_Day",
+  "Flag Day": "https://en.wikipedia.org/wiki/Flag_Day_(United_States)",
+  "Patriot Day": "https://en.wikipedia.org/wiki/Patriot_Day",
+  "International Day of Peace": "https://en.wikipedia.org/wiki/International_Day_of_Peace",
+  "Michaelmas": "https://en.wikipedia.org/wiki/Michaelmas",
+  "Spring Equinox": "https://en.wikipedia.org/wiki/March_equinox",
+  "Summer Solstice": "https://en.wikipedia.org/wiki/Summer_solstice",
+  "Autumn Equinox": "https://en.wikipedia.org/wiki/September_equinox",
+  "Winter Solstice": "https://en.wikipedia.org/wiki/Winter_solstice",
 };
 
 // ─── Load local KJV Bible data ──────────────────────────────────────
