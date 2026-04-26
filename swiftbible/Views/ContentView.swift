@@ -198,6 +198,7 @@ struct ContentView: View {
                 }
 
                 evaluateDonationPrompt()
+                await refreshTodayDevotionalType()
                 await refreshDevotionalReminders()
 
                 // Mark app as no longer launching after initial load
@@ -227,7 +228,10 @@ struct ContentView: View {
         .onChange(of: scenePhase) { _, newPhase in
             handleScenePhaseChange(newPhase)
             if newPhase == .active {
-                Task { await refreshDevotionalReminders() }
+                Task {
+                    await refreshTodayDevotionalType()
+                    await refreshDevotionalReminders()
+                }
             }
         }
         .onChange(of: donationPromptOptOut) { _, newValue in
@@ -675,6 +679,44 @@ struct ContentView: View {
             donationErrorMessage = error.localizedDescription
         }
         showDonationErrorAlert = true
+    }
+
+    /// Keep `todayDevotionalIsCustom` in sync with whatever's on the
+    /// server for today's date — independent of reminders. Without
+    /// this, the tab title can stick on "Custom" after a day rollover
+    /// until the user opens the Devotional tab.
+    private func refreshTodayDevotionalType() async {
+        let today = Date()
+        if let cached = CacheService.shared.loadDevotional(for: today) {
+            await MainActor.run {
+                todayDevotionalIsCustom = (cached.devotional_type == "custom")
+            }
+            return
+        }
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: today)
+
+        do {
+            let devotional: DailyDevotional = try await SupabaseService.shared.client
+                .from("Daily Devotional")
+                .select()
+                .eq("for_date", value: dateString)
+                .single()
+                .execute()
+                .value
+            CacheService.shared.saveDevotional(devotional, for: today)
+            await MainActor.run {
+                todayDevotionalIsCustom = (devotional.devotional_type == "custom")
+            }
+        } catch {
+            // No devotional yet — clear the flag so we don't show a
+            // stale "Custom" tab title from a previous day.
+            await MainActor.run {
+                todayDevotionalIsCustom = false
+            }
+        }
     }
 
     /// Prefetch today's devotional and reschedule the notification with fresh content.

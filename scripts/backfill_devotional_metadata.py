@@ -81,7 +81,7 @@ HOLIDAY_WIKIPEDIA_URLS = {
     "St. Patrick's Day": "https://en.wikipedia.org/wiki/Saint_Patrick%27s_Day",
     "Earth Day": "https://en.wikipedia.org/wiki/Earth_Day",
     "Flag Day": "https://en.wikipedia.org/wiki/Flag_Day_(United_States)",
-    "Patriot Day": "https://en.wikipedia.org/wiki/Patriot_Day_(United_States)",
+    "Patriot Day": "https://en.wikipedia.org/wiki/Patriot_Day",
     "International Day of Peace": "https://en.wikipedia.org/wiki/International_Day_of_Peace",
     "Michaelmas": "https://en.wikipedia.org/wiki/Michaelmas",
     "Spring Equinox": "https://en.wikipedia.org/wiki/March_equinox",

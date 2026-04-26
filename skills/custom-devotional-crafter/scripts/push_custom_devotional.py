@@ -8,6 +8,7 @@ import json
 import os
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -39,6 +40,12 @@ def main() -> None:
     if not supabase_url or not service_role:
         raise SystemExit("Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY)")
 
+    parsed = urllib.parse.urlparse(supabase_url)
+    if parsed.scheme not in ("http", "https"):
+        raise SystemExit(
+            f"SUPABASE_URL must use http(s); got scheme '{parsed.scheme}'."
+        )
+
     endpoint = f"{supabase_url.rstrip('/')}/rest/v1/Daily%20Devotional?on_conflict=for_date"
     body = json.dumps(payload).encode("utf-8")
 
@@ -55,7 +62,9 @@ def main() -> None:
     )
 
     try:
-        with urllib.request.urlopen(req) as response:
+        # 30s is plenty for a single REST upsert; without a timeout a
+        # stalled endpoint would hang the script indefinitely.
+        with urllib.request.urlopen(req, timeout=30) as response:
             output = response.read().decode("utf-8")
             print("Success:", response.status)
             print(output)
