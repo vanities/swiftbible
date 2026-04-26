@@ -57,6 +57,7 @@ struct DailyDevotionalView: View {
                     goToToday()
                 } label: {
                     Label("Today", systemImage: "clock.arrow.circlepath")
+                        .labelStyle(.iconOnly)
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
@@ -84,6 +85,8 @@ struct DailyDevotionalView: View {
                     } label: {
                         Label("Custom", systemImage: "pencil.and.scribble")
                             .font(.caption.weight(.semibold))
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 6)
                             .background(Color.accentColor.opacity(0.15), in: Capsule())
