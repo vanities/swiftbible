@@ -98,6 +98,7 @@
 		95F7C7D12F7B2E2D00B478E6 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F7C7D02F7B2E2D00B478E6 /* WidgetKit.framework */; };
 		95F7C7D32F7B2E2D00B478E6 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F7C7D22F7B2E2D00B478E6 /* SwiftUI.framework */; };
 		95F7C7E02F7B2E2E00B478E6 /* swiftbibleWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 95F7C7CF2F7B2E2D00B478E6 /* swiftbibleWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		95EBED012F8C3D1300B478E6 /* swiftbibleWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 95F7F6342F8C3D1200B478E6 /* swiftbibleWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		95F8A0022F1A2B3400ABCDEF /* SavedDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0012F1A2B3400ABCDEF /* SavedDevotional.swift */; };
 		95F8A0042F1A2B3400ABCDEF /* SavedDevotionalsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F8A0032F1A2B3400ABCDEF /* SavedDevotionalsListView.swift */; };
 		97B103699321A6A2D9DFFA8D /* ReadingStatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571690361A4254AFFF8A758B /* ReadingStatsService.swift */; };
@@ -150,6 +151,13 @@
 			remoteGlobalIDString = 95F7C7CE2F7B2E2D00B478E6;
 			remoteInfo = swiftbibleWidgetExtension;
 		};
+		95EBED032F8C3D1300B478E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 954BC9C82C84EDBE00FFCFA6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95F7F6332F8C3D1200B478E6;
+			remoteInfo = "swiftbibleWatch Watch App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -162,6 +170,17 @@
 				95F7C7E02F7B2E2E00B478E6 /* swiftbibleWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95EBED022F8C3D1300B478E6 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				95EBED012F8C3D1300B478E6 /* swiftbibleWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -627,12 +646,14 @@
 				954BC9CD2C84EDBE00FFCFA6 /* Frameworks */,
 				954BC9CE2C84EDBE00FFCFA6 /* Resources */,
 				95F7C7E12F7B2E2E00B478E6 /* Embed Foundation Extensions */,
+				95EBED022F8C3D1300B478E6 /* Embed Watch Content */,
 				93C2D2EF8678477E9E93CB92 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				95F7C7DF2F7B2E2E00B478E6 /* PBXTargetDependency */,
+				95EBED042F8C3D1300B478E6 /* PBXTargetDependency */,
 			);
 			name = swiftbible;
 			productName = swiftbible;
@@ -961,6 +982,11 @@
 			isa = PBXTargetDependency;
 			target = 95F7C7CE2F7B2E2D00B478E6 /* swiftbibleWidgetExtension */;
 			targetProxy = 95F7C7DE2F7B2E2E00B478E6 /* PBXContainerItemProxy */;
+		};
+		95EBED042F8C3D1300B478E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95F7F6332F8C3D1200B478E6 /* swiftbibleWatch Watch App */;
+			targetProxy = 95EBED032F8C3D1300B478E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
