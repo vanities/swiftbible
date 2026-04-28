@@ -5,6 +5,7 @@
 //  Created by OpenAI.
 //
 
+import MarkdownUI
 import SwiftUI
 import UIKit
 
@@ -266,12 +267,18 @@ struct VerseExplanationSheet: View {
                             .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 14))
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     } else {
-                        Text(message.content.isEmpty ? "…" : message.content)
-                            .foregroundStyle(message.content.isEmpty ? .secondary : .primary)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+                        Group {
+                            if message.content.isEmpty {
+                                Text("…")
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Markdown(message.content)
+                            }
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
                         Spacer(minLength: 40)
                     }
                 }
@@ -429,9 +436,7 @@ private extension VerseExplanationSheet {
                 }
 
                 if let summary = sections.summary {
-                    Text(summary)
-                        .font(.body)
-                        .multilineTextAlignment(.leading)
+                    Markdown(summary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
@@ -441,8 +446,7 @@ private extension VerseExplanationSheet {
                             Text(title)
                                 .font(.headline)
                         }
-                        Text(section.body)
-                            .multilineTextAlignment(.leading)
+                        Markdown(section.body)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.top, 4)
