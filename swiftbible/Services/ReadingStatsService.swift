@@ -5,6 +5,7 @@
 
 import Foundation
 import SwiftData
+import UIKit
 
 @MainActor
 final class ReadingStatsService {
@@ -13,7 +14,40 @@ final class ReadingStatsService {
     private var currentSession: ReadingSession?
     private var modelContext: ModelContext?
 
-    private init() {}
+    // Total foreground time accumulated across all segments of the current session.
+    // Background time is excluded so a chapter left open overnight doesn't record an 8h read.
+    private var accumulatedDuration: TimeInterval = 0
+    // Start of the current foreground segment; nil while backgrounded.
+    private var segmentStartedAt: Date?
+
+    private init() {
+        observeAppLifecycle()
+    }
+
+    private func observeAppLifecycle() {
+        let nc = NotificationCenter.default
+        nc.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification,
+            object: nil,
+            queue: nil
+        ) { [weak self] _ in
+            Task { @MainActor in self?.handleEnteredBackground() }
+        }
+        nc.addObserver(
+            forName: UIApplication.willEnterForegroundNotification,
+            object: nil,
+            queue: nil
+        ) { [weak self] _ in
+            Task { @MainActor in self?.handleEnteredForeground() }
+        }
+        nc.addObserver(
+            forName: UIApplication.willTerminateNotification,
+            object: nil,
+            queue: nil
+        ) { [weak self] _ in
+            Task { @MainActor in self?.stopReading() }
+        }
+    }
 
     func setModelContext(_ context: ModelContext) {
         self.modelContext = context
@@ -29,21 +63,58 @@ final class ReadingStatsService {
         }
         stopReading()
         currentSession = ReadingSession(bookName: bookName, chapterNumber: chapterNumber, version: version)
+        accumulatedDuration = 0
+        segmentStartedAt = Date()
     }
 
     func stopReading() {
-        guard let session = currentSession, let context = modelContext else {
-            currentSession = nil
+        guard let session = currentSession else {
+            resetTrackingState()
             return
         }
-        let duration = Date().timeIntervalSince(session.startedAt)
+        let total = currentForegroundDuration()
         // Only record sessions longer than 5 seconds (skip navigation bounces and tab switches)
-        if duration >= 5 {
-            session.duration = duration
+        if total >= 5, let context = modelContext {
+            session.duration = total
             context.insert(session)
-            try? context.save()
+            do {
+                try context.save()
+            } catch {
+                SentryService.shared.capture(error, context: [
+                    "service": "ReadingStatsService",
+                    "operation": "save_session",
+                    "book": session.bookName,
+                    "chapter": session.chapterNumber,
+                    "version": session.version
+                ])
+            }
         }
+        resetTrackingState()
+    }
+
+    private func currentForegroundDuration() -> TimeInterval {
+        var total = accumulatedDuration
+        if let segmentStart = segmentStartedAt {
+            total += Date().timeIntervalSince(segmentStart)
+        }
+        return total
+    }
+
+    private func resetTrackingState() {
         currentSession = nil
+        accumulatedDuration = 0
+        segmentStartedAt = nil
+    }
+
+    private func handleEnteredBackground() {
+        guard let segmentStart = segmentStartedAt else { return }
+        accumulatedDuration += Date().timeIntervalSince(segmentStart)
+        segmentStartedAt = nil
+    }
+
+    private func handleEnteredForeground() {
+        guard currentSession != nil, segmentStartedAt == nil else { return }
+        segmentStartedAt = Date()
     }
 
     // MARK: - Stats Queries
@@ -118,5 +189,22 @@ final class ReadingStatsService {
         var descriptor = FetchDescriptor<ReadingSession>(sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
         descriptor.fetchLimit = limit
         return (try? context.fetch(descriptor)) ?? []
+    }
+
+    // MARK: - Maintenance
+
+    /// Deletes every recorded reading session. Also clears any in-memory tracking
+    /// so a session in progress when this is called doesn't immediately re-insert.
+    func resetAllSessions(in context: ModelContext) {
+        resetTrackingState()
+        do {
+            try context.delete(model: ReadingSession.self)
+            try context.save()
+        } catch {
+            SentryService.shared.capture(error, context: [
+                "service": "ReadingStatsService",
+                "operation": "reset_all_sessions"
+            ])
+        }
     }
 }

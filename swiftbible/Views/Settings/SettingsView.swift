@@ -51,19 +51,29 @@ struct SettingsView: View {
 
         NavigationStack {
             List {
-                Section(header: Text("Reading")) {
+                Section {
+                    introCard
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                }
+
+                Section {
                     NavigationLink(destination: FontOptionsView()) {
-                        Label("Font Options", systemImage: "textformat.size")
+                        accentLabel("Font Options", systemImage: "textformat.size")
                     }
                     NavigationLink(destination: ColorOptionsView()) {
-                        Label("Color Options", systemImage: "paintpalette.fill")
+                        accentLabel("Color Options", systemImage: "paintpalette.fill")
                     }
-                    Toggle("Show Jesus's Words in Red", isOn: $showJesusWordsInRed)
-                        .onChange(of: showJesusWordsInRed) { _, newValue in
-                            AnalyticsService.shared.capture(.jesusWordsToggled, properties: ["enabled": newValue])
-                        }
-                    Toggle("Hide Navigation and Tab Bar while reading", isOn: $hideNavAndTab)
-
+                    Toggle(isOn: $showJesusWordsInRed) {
+                        accentLabel("Jesus's Words in Red", systemImage: "quote.opening", tint: .brandRed)
+                    }
+                    .onChange(of: showJesusWordsInRed) { _, newValue in
+                        AnalyticsService.shared.capture(.jesusWordsToggled, properties: ["enabled": newValue])
+                    }
+                    Toggle(isOn: $hideNavAndTab) {
+                        accentLabel("Hide Bars While Reading", systemImage: "eye.slash")
+                    }
                     Picker(
                         selection: Binding(
                             get: { SummarySource(rawValue: summarySourceRaw) ?? defaultSummarySource },
@@ -80,178 +90,127 @@ struct SettingsView: View {
                             Text(source.displayName).tag(source)
                         }
                     } label: {
-                        Label("Study Notes", systemImage: "book.closed")
+                        accentLabel("Study Notes", systemImage: "book.closed.fill")
                     }
+                } header: {
+                    sectionHeader("Reading", systemImage: "book.fill")
                 }
 
-                Section(header: Text("Your Content")) {
-                    NavigationLink(destination: SeeSavedNotesView(selectedTab: $selectedTab)) {
-                        Label("Saved Notes", systemImage: "note.text")
-                    }
-                    NavigationLink(destination: SeeHighlightsView(selectedTab: $selectedTab)) {
-                        Label("Highlights", systemImage: "highlighter")
-                    }
-                    NavigationLink(destination: SavedDevotionalsListView()) {
-                        Label("Saved Devotionals", systemImage: "heart.circle")
-                    }
-                    Button {
-                        let bookName = bookmarkedBookName
-                        let chapterNumber = bookmarkedChapterNumber
-                        let verseNumber = bookmarkedVerseNumber
-                        selectedTab = .bible
-                        DispatchQueue.main.async {
-                            appViewModel.navigateToVerse(
-                                bookName: bookName,
-                                chapterNumber: chapterNumber,
-                                verseNumber: verseNumber
-                            )
-                        }
-                    } label: {
-                        HStack {
-                            Label("Go to Bookmark", systemImage: "bookmark.fill")
-                            Spacer()
-                            Text(bookmarkSummary)
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    .disabled(!hasBookmark)
-                }
-
-                Section(header: Text("Notifications")) {
-                    NavigationLink {
-                        NotificationSettingsView()
-                    } label: {
-                        HStack {
-                            Label("Devotional Reminder", systemImage: "bell.fill")
-                            Spacer()
-                            Text(reminderSummary)
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-
-                Section(header: Text("Bible Translation")) {
-                    Picker("Bible Version", selection: $appViewModel.selectedVersion) {
+                Section {
+                    Picker(selection: $appViewModel.selectedVersion) {
                         ForEach(Version.allCases, id: \.rawValue) { version in
                             Text(version.displayName).tag(version)
                         }
+                    } label: {
+                        accentLabel("Translation", systemImage: "character.book.closed.fill")
                     }
                     .onChange(of: appViewModel.selectedVersion) { _, newVersion in
                         AnalyticsService.shared.capture(.versionChanged, properties: [
                             "version": newVersion.rawValue
                         ])
                     }
-                    Toggle("Group Books by Theme", isOn: $showThematicGrouping)
-                        .onChange(of: showThematicGrouping) { _, newValue in
-                            AnalyticsService.shared.capture(.thematicGroupingToggled, properties: ["enabled": newValue])
-                        }
-                    NavigationLink(destination: TranslationInfoView()) {
-                        Label("About Translations", systemImage: "info.circle")
+                    Toggle(isOn: $showThematicGrouping) {
+                        accentLabel("Group Books by Theme", systemImage: "rectangle.3.group")
                     }
+                    .onChange(of: showThematicGrouping) { _, newValue in
+                        AnalyticsService.shared.capture(.thematicGroupingToggled, properties: ["enabled": newValue])
+                    }
+                    NavigationLink(destination: TranslationInfoView()) {
+                        accentLabel("About Translations", systemImage: "info.circle.fill")
+                    }
+                } header: {
+                    sectionHeader("Bible Translation", systemImage: "globe.americas.fill")
                 }
 
-                Section(
-                    header: Text("Deuterocanonical"),
-                    footer: Text("Books included in some Christian canons but not in the Hebrew Bible.")
-                ) {
-                    Toggle("Apocrypha", isOn: $showApocrypha)
-                        .onChange(of: showApocrypha) { _, newValue in
-                            AnalyticsService.shared.capture(.apocryphaToggled, properties: ["enabled": newValue])
+                Section {
+                    DisclosureGroup {
+                        Toggle("Apocrypha", isOn: $showApocrypha)
+                            .onChange(of: showApocrypha) { _, newValue in
+                                AnalyticsService.shared.capture(.apocryphaToggled, properties: ["enabled": newValue])
+                            }
+                        Toggle("Book of Enoch", isOn: $showJewishPseudepigraphaEnoch)
+                            .onChange(of: showJewishPseudepigraphaEnoch) { _, newValue in
+                                AnalyticsService.shared.capture(.enochToggled, properties: ["enabled": newValue])
+                            }
+                        Toggle("2 Enoch (Secrets of Enoch)", isOn: $showSecondEnoch)
+                            .onChange(of: showSecondEnoch) { _, newValue in
+                                AnalyticsService.shared.capture(.secondEnochToggled, properties: ["enabled": newValue])
+                            }
+                        Toggle("Book of Jubilees", isOn: $showJubilees)
+                            .onChange(of: showJubilees) { _, newValue in
+                                AnalyticsService.shared.capture(.jubileesToggled, properties: ["enabled": newValue])
+                            }
+                        Toggle("Testaments of the Twelve Patriarchs", isOn: $showTestaments)
+                            .onChange(of: showTestaments) { _, newValue in
+                                AnalyticsService.shared.capture(.testamentsToggled, properties: ["enabled": newValue])
+                            }
+                        Toggle("Didache", isOn: $showDidache)
+                            .onChange(of: showDidache) { _, newValue in
+                                AnalyticsService.shared.capture(.didacheToggled, properties: ["enabled": newValue])
+                            }
+                        Toggle("1 Clement", isOn: $showFirstClement)
+                            .onChange(of: showFirstClement) { _, newValue in
+                                AnalyticsService.shared.capture(.firstClementToggled, properties: ["enabled": newValue])
+                            }
+                    } label: {
+                        HStack {
+                            accentLabel("Additional Texts", systemImage: "books.vertical.fill")
+                            Spacer()
+                            Text("\(extraTextsEnabledCount) on")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
                         }
+                    }
+                } header: {
+                    sectionHeader("Library Extras", systemImage: "scroll.fill")
+                } footer: {
+                    Text("Apocrypha, Jewish pseudepigrapha, and early Christian writings — valued by some traditions outside the standard biblical canon.")
                 }
 
-                Section(
-                    header: Text("Jewish Pseudepigrapha"),
-                    footer: Text("Ancient Jewish texts attributed to biblical figures, preserved outside the biblical canon.")
-                ) {
-                    Toggle("Book of Enoch", isOn: $showJewishPseudepigraphaEnoch)
-                        .onChange(of: showJewishPseudepigraphaEnoch) { _, newValue in
-                            AnalyticsService.shared.capture(.enochToggled, properties: ["enabled": newValue])
+                Section {
+                    NavigationLink {
+                        NotificationSettingsView()
+                    } label: {
+                        HStack {
+                            accentLabel("Devotional Reminder", systemImage: "bell.fill")
+                            Spacer()
+                            Text(reminderSummary)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
                         }
-                    Toggle("2 Enoch (Secrets of Enoch)", isOn: $showSecondEnoch)
-                        .onChange(of: showSecondEnoch) { _, newValue in
-                            AnalyticsService.shared.capture(.secondEnochToggled, properties: ["enabled": newValue])
-                        }
-                    Toggle("Book of Jubilees", isOn: $showJubilees)
-                        .onChange(of: showJubilees) { _, newValue in
-                            AnalyticsService.shared.capture(.jubileesToggled, properties: ["enabled": newValue])
-                        }
-                    Toggle("Testaments of the Twelve Patriarchs", isOn: $showTestaments)
-                        .onChange(of: showTestaments) { _, newValue in
-                            AnalyticsService.shared.capture(.testamentsToggled, properties: ["enabled": newValue])
-                        }
+                    }
+                } header: {
+                    sectionHeader("Notifications", systemImage: "bell.badge.fill")
                 }
 
-                Section(
-                    header: Text("Early Christian Writings"),
-                    footer: Text("Writings from the apostolic and early church period, valued for historical and theological insight.")
-                ) {
-                    Toggle("Didache", isOn: $showDidache)
-                        .onChange(of: showDidache) { _, newValue in
-                            AnalyticsService.shared.capture(.didacheToggled, properties: ["enabled": newValue])
-                        }
-                    Toggle("1 Clement", isOn: $showFirstClement)
-                        .onChange(of: showFirstClement) { _, newValue in
-                            AnalyticsService.shared.capture(.firstClementToggled, properties: ["enabled": newValue])
-                        }
-                }
-
-                Section(header: Text("Storage")) {
+                Section {
                     HStack {
-                        Label("Cache Size", systemImage: "internaldrive")
+                        accentLabel("Cache Size", systemImage: "internaldrive.fill")
                         Spacer()
                         Text(cacheSize)
                             .foregroundStyle(.secondary)
                     }
-
                     Button(role: .destructive) {
                         showClearCacheAlert = true
                     } label: {
                         Label("Clear All Cache", systemImage: "trash")
                     }
+                } header: {
+                    sectionHeader("Storage", systemImage: "externaldrive.fill")
                 }
 
-                Section(header: Text("Support")) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Keep swiftbible online")
-                            .font(.headline)
-
-                        Text("Donations help cover weekly server costs and the Apple developer fee. Thank you for considering a gift.")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.vertical, 4)
+                Section {
+                    supportCard
 
                     if appViewModel.totalPaidCents > 0 || !appViewModel.donationHistory.isEmpty {
                         NavigationLink(destination: DonationHistoryView()) {
                             HStack {
-                                Label("Donation History", systemImage: "clock.arrow.circlepath")
+                                accentLabel("Donation History", systemImage: "clock.arrow.circlepath")
                                 Spacer()
                                 Text(appViewModel.formattedNetDonation)
                                     .font(.footnote)
                                     .foregroundStyle(.secondary)
                             }
-                        }
-                    }
-
-                    Button {
-                        showDonationSheet = true
-                    } label: {
-                        if appViewModel.totalPaidCents > 0 {
-                            HStack {
-                                AnimatedDonorHeart()
-                                    .frame(width: 24, height: 24)
-                                Text("Donate")
-                                Spacer()
-                                Text("Thank you!")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        } else {
-                            Label("Donate", systemImage: "heart.fill")
-                                .tint(.accentColor)
                         }
                     }
 
@@ -264,13 +223,13 @@ struct SettingsView: View {
                             }
                         }
                     )) {
-                        Text("Show donation reminder pop up")
+                        accentLabel("Donation Reminder Popup", systemImage: "bubble.left.and.bubble.right.fill")
                     }
 
                     if canAccessDonorPerks {
                         NavigationLink(destination: DonorPerksView()) {
                             HStack {
-                                Label("Donor Perks", systemImage: "sparkles")
+                                accentLabel("Donor Perks", systemImage: "sparkles", tint: .brandGold)
                                 Spacer()
                                 if !customAccentHex.isEmpty {
                                     Circle()
@@ -280,16 +239,72 @@ struct SettingsView: View {
                             }
                         }
                     }
+                } header: {
+                    sectionHeader("Support swiftbible", systemImage: "heart.fill")
+                }
+
+                Section {
+                    Button {
+                        openMail(subject: "swiftbible - Contact Us")
+                    } label: {
+                        accentLabel("Contact Us", systemImage: "envelope.fill")
+                    }
+                    Button {
+                        openMail(subject: "swiftbible - Bug")
+                    } label: {
+                        accentLabel("Report a Bug", systemImage: "ladybug.fill")
+                    }
+                    Button {
+                        if let url = URL(string: "https://github.com/vanities/swiftbible") {
+                            UIApplication.shared.open(url)
+                        }
+                    } label: {
+                        accentLabel("View Source on GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
+                    }
+                    Button {
+                        guard let url = URL(string: "itms-apps://itunes.apple.com/app/\(AppConfig.appleAppID)") else { return }
+                        UIApplication.shared.open(url)
+                    } label: {
+                        accentLabel("View on App Store", systemImage: "applelogo")
+                    }
+                    if case .updateAvailable(let version) = updateService.updateStatus {
+                        Button {
+                            updateService.openAppStore()
+                        } label: {
+                            HStack {
+                                accentLabel("Update to v\(version)", systemImage: "arrow.down.circle.fill", tint: .accentColor)
+                                    .fontWeight(.semibold)
+                                Spacer()
+                            }
+                        }
+                    }
+                    Button {
+                        if let url = URL(string: "https://am2.biz/swiftbible") {
+                            UIApplication.shared.open(url)
+                        }
+                    } label: {
+                        accentLabel("Website", systemImage: "globe")
+                    }
+                    NavigationLink(destination: TextSourcesView()) {
+                        accentLabel("Text Sources", systemImage: "books.vertical.fill")
+                    }
+                    Button {
+                        OnboardingPreferences.resetAll()
+                        NotificationCenter.default.post(name: .onboardingReplayRequested, object: nil)
+                    } label: {
+                        accentLabel("Replay Welcome Tour", systemImage: "sparkles.rectangle.stack.fill")
+                    }
+                } header: {
+                    sectionHeader("About", systemImage: "info.circle.fill")
                 }
 
                 if showDebugSection {
-                    Section(header: Text("Debug")) {
+                    Section {
                         Button {
                             appViewModel.testConfetti()
                         } label: {
-                            Label("Test Confetti 🎉", systemImage: "sparkles")
+                            accentLabel("Test Confetti 🎉", systemImage: "sparkles", tint: .brandGold)
                         }
-
                         Button {
                             // Wipe both onboarding flags so the next cold
                             // launch behaves exactly like a brand-new install.
@@ -301,78 +316,18 @@ struct SettingsView: View {
                                 withAnimation { showOnboardingResetToast = false }
                             }
                         } label: {
-                            Label("Reset Onboarding (restart app to see)", systemImage: "arrow.counterclockwise.circle")
+                            accentLabel("Reset Onboarding (restart to see)", systemImage: "arrow.counterclockwise.circle.fill")
                         }
-
                         ForEach(DonationPromptVariant.allCases, id: \.rawValue) { variant in
                             Button {
                                 appViewModel.donationVariant = variant
                                 showDonationSheet = true
                             } label: {
-                                Label("Donation: \(variant.rawValue)", systemImage: "rectangle.portrait.and.arrow.right")
+                                accentLabel("Donation: \(variant.rawValue)", systemImage: "rectangle.portrait.and.arrow.right")
                             }
                         }
-                    }
-                }
-
-                Section(header: Text("About")) {
-                    Button(action: {
-                        openMail(subject: "swiftbible - Contact Us")
-                    }) {
-                        Label("Contact Us", systemImage: "envelope")
-                    }
-
-                    Button(action: {
-                        openMail(subject: "swiftbible - Bug")
-                    }) {
-                        Label("Report a Bug", systemImage: "ladybug")
-                    }
-
-                    Button(action: {
-                        if let url = URL(string: "https://github.com/vanities/swiftbible") {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        Label("Check out the code on GitHub", systemImage: "link")
-                    }
-
-                    Button(action: {
-                        guard let url = URL(string: "itms-apps://itunes.apple.com/app/\(AppConfig.appleAppID)") else { return }
-                         UIApplication.shared.open(url)
-                    }) {
-                        Label("View on App Store", systemImage: "apple.logo")
-                    }
-
-                    if case .updateAvailable(let version) = updateService.updateStatus {
-                        Button(action: {
-                            updateService.openAppStore()
-                        }) {
-                            HStack {
-                                Label("Update to v\(version)", systemImage: "arrow.down.circle.fill")
-                                    .fontWeight(.semibold)
-                                Spacer()
-                            }
-                        }
-                        .foregroundColor(.blue)
-                    }
-
-                    Button(action: {
-                        if let url = URL(string: "https://am2.biz/swiftbible") {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        Label("View our Website", systemImage: "globe")
-                    }
-
-                    NavigationLink(destination: TextSourcesView()) {
-                        Label("Text Sources", systemImage: "book.closed")
-                    }
-
-                    Button {
-                        OnboardingPreferences.resetAll()
-                        NotificationCenter.default.post(name: .onboardingReplayRequested, object: nil)
-                    } label: {
-                        Label("Show Welcome Tour", systemImage: "sparkles.rectangle.stack")
+                    } header: {
+                        sectionHeader("Debug", systemImage: "hammer.fill")
                     }
                 }
 
@@ -572,6 +527,105 @@ struct SettingsView: View {
                 showCacheToast = false
             }
         }
+    }
+
+    // MARK: - Visual helpers
+
+    private var extraTextsEnabledCount: Int {
+        [showApocrypha, showJewishPseudepigraphaEnoch, showSecondEnoch, showJubilees,
+         showTestaments, showDidache, showFirstClement].filter { $0 }.count
+    }
+
+    private func sectionHeader(_ title: String, systemImage: String) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: systemImage)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(Color.brandAccent)
+            Text(title.uppercased())
+                .tracking(0.5)
+        }
+    }
+
+    private func accentLabel(_ title: String, systemImage: String, tint: Color = .brandAccent) -> some View {
+        Label {
+            Text(title)
+        } icon: {
+            Image(systemName: systemImage)
+                .foregroundStyle(tint)
+        }
+    }
+
+    private var introCard: some View {
+        HStack(alignment: .center, spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(Color.brandGold.opacity(0.20))
+                    .frame(width: 40, height: 40)
+                Image(systemName: "wand.and.stars")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(Color.brandGold)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Personalize your reading")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.primary)
+                Text("Fonts, translations, notifications, and what's in the Bible browser.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color(red: 0.965, green: 0.94, blue: 0.88))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .strokeBorder(Color.brandGold.opacity(0.25), lineWidth: 0.5)
+                }
+        )
+    }
+
+    private var supportCard: some View {
+        Button {
+            showDonationSheet = true
+        } label: {
+            HStack(alignment: .center, spacing: 14) {
+                if appViewModel.totalPaidCents > 0 {
+                    AnimatedDonorHeart()
+                        .frame(width: 36, height: 36)
+                } else {
+                    ZStack {
+                        Circle()
+                            .fill(Color.brandRed.opacity(0.18))
+                            .frame(width: 40, height: 40)
+                        Image(systemName: "heart.fill")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(Color.brandRed)
+                    }
+                }
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(appViewModel.totalPaidCents > 0 ? "Thank you for supporting us" : "Keep swiftbible online")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.primary)
+                    Text(appViewModel.totalPaidCents > 0
+                         ? "Tap to give again — every gift helps."
+                         : "Donations cover server costs and the Apple developer fee.")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.vertical, 4)
+        }
+        .buttonStyle(.plain)
     }
 }
 

@@ -12,6 +12,10 @@ struct HistoryArticleView: View {
     let article: HistoryArticle
     @Environment(\.colorScheme) private var colorScheme
 
+    // Persisted so MoreView can offer a "Continue reading" hook (Zeigarnik).
+    @AppStorage("lastHistoryArticleId") private var lastHistoryArticleId: String = ""
+    @AppStorage("lastHistoryArticleAt") private var lastHistoryArticleAt: Double = 0
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
@@ -48,6 +52,10 @@ struct HistoryArticleView: View {
         .parchmentBackground()
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            lastHistoryArticleId = article.id
+            lastHistoryArticleAt = Date().timeIntervalSince1970
+        }
     }
 
     private var articleHeader: some View {

@@ -258,13 +258,11 @@ struct DailyDevotionalView: View {
 
     private var customBadge: some View {
         Button { showCustomDisclosure = true } label: {
-            embossedBadgeLabel(
-                icon: "pencil.and.scribble",
-                text: "Custom",
-                fillTop: .brandGoldLight,
-                fillBottom: .brandGold,
-                foreground: .brandCoverDark,
-                shadow: .brandGold
+            AnimatedBadgeCircle(
+                symbolName: "pencil.and.scribble",
+                primaryTint: .brandGold,
+                secondaryTint: .brandGoldLight,
+                tertiaryTint: .brandPeridot
             )
         }
         .buttonStyle(.plain)
@@ -277,14 +275,13 @@ struct DailyDevotionalView: View {
     }
 
     private func holidayBadge(name: String) -> some View {
-        Button { showHolidayDisclosure = true } label: {
-            embossedBadgeLabel(
-                icon: "calendar.badge.clock",
-                text: "Holiday",
-                fillTop: .brandRed,
-                fillBottom: .brandRedDark,
-                foreground: .white,
-                shadow: .brandRed
+        let palette = HolidayBadgePalette.palette(for: name)
+        return Button { showHolidayDisclosure = true } label: {
+            AnimatedBadgeCircle(
+                symbolName: palette.symbol,
+                primaryTint: palette.primary,
+                secondaryTint: palette.secondary,
+                tertiaryTint: palette.tertiary
             )
         }
         .buttonStyle(.plain)
@@ -297,43 +294,6 @@ struct DailyDevotionalView: View {
         } message: {
             Text(AIAttribution.devotionalHoliday(name: name, model: model))
         }
-    }
-
-    private func embossedBadgeLabel(
-        icon: String,
-        text: String,
-        fillTop: Color,
-        fillBottom: Color,
-        foreground: Color,
-        shadow: Color
-    ) -> some View {
-        HStack(spacing: 5) {
-            Image(systemName: icon)
-                .font(.caption2.weight(.bold))
-            Text(text)
-                .font(.caption.weight(.bold))
-                .lineLimit(1)
-                .fixedSize(horizontal: true, vertical: false)
-        }
-        .foregroundStyle(foreground)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 7)
-        .background {
-            Capsule().fill(
-                LinearGradient(colors: [fillTop, fillBottom], startPoint: .top, endPoint: .bottom)
-            )
-        }
-        .overlay {
-            Capsule().strokeBorder(
-                LinearGradient(
-                    colors: [.white.opacity(0.7), .white.opacity(0.0)],
-                    startPoint: .top,
-                    endPoint: .bottom
-                ),
-                lineWidth: 0.8
-            )
-        }
-        .shadow(color: shadow.opacity(0.45), radius: 4, y: 2)
     }
 
     @MainActor

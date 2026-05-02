@@ -49,6 +49,7 @@ struct ContentView: View {
     private var donationVariant: DonationPromptVariant { appViewModel.donationVariant }
 
     @AppStorage("lastCelebratedDonationSessionID") private var lastCelebratedDonationSessionID: String = ""
+    @AppStorage("readingStatsResetV1Done") private var readingStatsResetV1Done = false
 
     @ViewBuilder
     private var mainTabView: some View {
@@ -67,7 +68,7 @@ struct ContentView: View {
                 SearchDetailView(selectedTab: $selectedTab)
             }
 
-            Tab("More", systemImage: "ellipsis.circle.fill", value: .settings) {
+            Tab("More", systemImage: "square.grid.2x2.fill", value: .settings) {
                 MoreView(selectedTab: $selectedTab)
             }
         }
@@ -163,6 +164,10 @@ struct ContentView: View {
         .onAppear {
             ensureDonationAnonIdentifier()
             evaluateOnboarding()
+            if !readingStatsResetV1Done {
+                ReadingStatsService.shared.resetAllSessions(in: modelContext)
+                readingStatsResetV1Done = true
+            }
             if let localeCurrency = Locale.current.currency?.identifier {
                 donationCurrency = localeCurrency.uppercased()
             }

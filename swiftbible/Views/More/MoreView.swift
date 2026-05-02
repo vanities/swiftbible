@@ -8,16 +8,37 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MoreView: View {
     @Binding var selectedTab: Tabs
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.modelContext) private var modelContext
+    @Environment(AppViewModel.self) private var appViewModel
+
+    // Surfaced by HistoryArticleView — used to show a "Continue reading"
+    // card so unfinished articles pull users back (Zeigarnik effect).
+    @AppStorage("lastHistoryArticleId") private var lastHistoryArticleId: String = ""
+    @AppStorage("lastHistoryArticleAt") private var lastHistoryArticleAt: Double = 0
+
+    @AppStorage(BookmarkPreferences.bookKey) private var bookmarkedBookName: String = ""
+    @AppStorage(BookmarkPreferences.chapterKey) private var bookmarkedChapterNumber: Int = 0
+    @AppStorage(BookmarkPreferences.verseKey) private var bookmarkedVerseNumber: Int = 0
+
+    @State private var streakDays: Int = 0
+    @State private var chaptersThisWeek: Int = 0
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 18) {
                     historyHero
+                    if let unfinished = unfinishedArticle {
+                        continueReadingCard(article: unfinished)
+                    }
+                    if hasBookmark {
+                        bibleBookmarkCard
+                    }
                     librarySection
                     statsCard
                     settingsCard
@@ -29,6 +50,7 @@ struct MoreView: View {
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
             .navigationTitle("More")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear { refreshStats() }
         }
     }
 
@@ -132,7 +154,124 @@ struct MoreView: View {
                 radius: 8, x: 0, y: 3)
     }
 
-    // MARK: - Library row
+    // MARK: - Continue reading card (Zeigarnik open-loop)
+
+    private var unfinishedArticle: HistoryArticle? {
+        guard !lastHistoryArticleId.isEmpty else { return nil }
+        let last = Date(timeIntervalSince1970: lastHistoryArticleAt)
+        guard Date().timeIntervalSince(last) < 7 * 24 * 3600 else { return nil }
+        return HistoryContent.article(id: lastHistoryArticleId)
+    }
+
+    private func continueReadingCard(article: HistoryArticle) -> some View {
+        NavigationLink(destination: HistoryArticleView(article: article)) {
+            HStack(spacing: 12) {
+                Image(systemName: "bookmark.fill")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(Color.brandGold)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("CONTINUE READING")
+                        .font(.system(size: 9, weight: .bold, design: .serif))
+                        .tracking(2)
+                        .foregroundStyle(Color.brandGold)
+                    Text(article.title)
+                        .font(.system(size: 15, weight: .semibold, design: .serif))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                }
+
+                Spacer()
+
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Color.brandGold)
+            }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(Color(.secondarySystemGroupedBackground))
+                    .overlay(alignment: .leading) {
+                        Rectangle()
+                            .fill(Color.brandGold)
+                            .frame(width: 3)
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Bible bookmark card
+
+    private var hasBookmark: Bool {
+        !bookmarkedBookName.isEmpty && bookmarkedChapterNumber > 0
+    }
+
+    private var bookmarkSummary: String {
+        guard hasBookmark else { return "" }
+        if bookmarkedVerseNumber > 0 {
+            return "\(bookmarkedBookName) \(bookmarkedChapterNumber):\(bookmarkedVerseNumber)"
+        }
+        return "\(bookmarkedBookName) \(bookmarkedChapterNumber)"
+    }
+
+    private var bibleBookmarkCard: some View {
+        Button {
+            let book = bookmarkedBookName
+            let chapter = bookmarkedChapterNumber
+            let verse = bookmarkedVerseNumber
+            selectedTab = .bible
+            DispatchQueue.main.async {
+                appViewModel.navigateToVerse(
+                    bookName: book,
+                    chapterNumber: chapter,
+                    verseNumber: verse
+                )
+            }
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "bookmark.fill")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(Color.brandRedDark)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("BIBLE BOOKMARK")
+                        .font(.system(size: 9, weight: .bold, design: .serif))
+                        .tracking(2)
+                        .foregroundStyle(Color.brandRedDark)
+                    Text(bookmarkSummary)
+                        .font(.system(size: 15, weight: .semibold, design: .serif))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                }
+
+                Spacer()
+
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Color.brandRedDark)
+            }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(Color(.secondarySystemGroupedBackground))
+                    .overlay(alignment: .leading) {
+                        Rectangle()
+                            .fill(Color.brandRedDark)
+                            .frame(width: 3)
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Library row (Notes in centre — Centre-Stage Effect)
 
     private var librarySection: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -145,16 +284,16 @@ struct MoreView: View {
 
             HStack(spacing: 10) {
                 libraryCard(
-                    title: "Notes",
-                    icon: "note.text",
-                    tint: .brandAccent,
-                    destination: AnyView(SeeSavedNotesView(selectedTab: $selectedTab))
-                )
-                libraryCard(
                     title: "Highlights",
                     icon: "highlighter",
                     tint: .brandGold,
                     destination: AnyView(SeeHighlightsView(selectedTab: $selectedTab))
+                )
+                libraryCard(
+                    title: "Notes",
+                    icon: "note.text",
+                    tint: .brandAccent,
+                    destination: AnyView(SeeSavedNotesView(selectedTab: $selectedTab))
                 )
                 libraryCard(
                     title: "Devotionals",
@@ -196,7 +335,7 @@ struct MoreView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: - Reading stats card
+    // MARK: - Reading stats card (live numbers — Endowed Progress)
 
     private var statsCard: some View {
         NavigationLink(destination: ReadingStatsView()) {
@@ -204,10 +343,33 @@ struct MoreView: View {
                 icon: "chart.bar.fill",
                 tint: .brandGreen,
                 title: "Reading Stats",
-                subtitle: "Streaks, verses, and time spent reading"
+                subtitle: statsSubtitle
             )
         }
         .buttonStyle(.plain)
+    }
+
+    private var statsSubtitle: String {
+        if streakDays == 0 && chaptersThisWeek == 0 {
+            return "Streaks, verses, and time spent reading"
+        }
+        var parts: [String] = []
+        if streakDays > 0 {
+            parts.append("\u{1F525} \(streakDays)-day streak")
+        }
+        if chaptersThisWeek > 0 {
+            parts.append("\(chaptersThisWeek) chapter\(chaptersThisWeek == 1 ? "" : "s") this week")
+        }
+        return parts.joined(separator: " · ")
+    }
+
+    private func refreshStats() {
+        Task { @MainActor in
+            streakDays = ReadingStatsService.shared.currentStreak(in: modelContext)
+            let weekly = ReadingStatsService.shared.sessionsThisWeek(in: modelContext)
+            let unique = Set(weekly.map { "\($0.bookName)-\($0.chapterNumber)" })
+            chaptersThisWeek = unique.count
+        }
     }
 
     // MARK: - Settings card

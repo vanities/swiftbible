@@ -105,19 +105,6 @@ struct DonorPerksView: View {
                 }
             }
 
-            Section(
-                header: Text("Reading Stats"),
-                footer: Text("Track your reading progress and streaks.")
-            ) {
-                NavigationLink {
-                    ReadingStatsView()
-                } label: {
-                    Label("View Reading Stats", systemImage: "chart.bar.fill")
-                }
-                .onAppear {
-                    AnalyticsService.shared.capture(.readingStatsViewed)
-                }
-            }
         }
         .navigationTitle("Donor Perks")
         .navigationBarTitleDisplayMode(.inline)
