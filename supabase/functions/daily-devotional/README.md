@@ -34,7 +34,7 @@ selectRandomVerse("old")
 createPrompt(verse, date, null)
   └── single-verse prompt template with verse text
 
-generateDevotional(prompt)  [gpt-5.4]
+generateDevotional(prompt)  [gpt-5.5]
   └── returns markdown devotional
 
 saveDevotional(message, date, "old", "single", [verse])
@@ -56,7 +56,7 @@ selectRandomVerse("new")
 createPrompt(verse, date, null)
   └── single-verse prompt template
 
-generateDevotional(prompt)  [gpt-5.4]
+generateDevotional(prompt)  [gpt-5.5]
 
 saveDevotional(message, date, "new", "single", [verse])
 ```
@@ -89,7 +89,7 @@ createMultiVersePrompt(resolvedVerses, date, null)
   ├── lists all verses with exact KJV text
   └── non-holiday template (thematic thread, cross-references)
 
-generateDevotional(prompt)  [gpt-5.4]
+generateDevotional(prompt)  [gpt-5.5]
   └── weaves all verified verses into one devotional
 
 saveDevotional(message, date, testament, "multi", verses)
@@ -140,7 +140,7 @@ createMultiVersePrompt(resolvedVerses, date, holiday)
   ├── title includes holiday name
   └── modern relevance connects to holiday significance
 
-generateDevotional(prompt)  [gpt-5.4]
+generateDevotional(prompt)  [gpt-5.5]
 
 saveDevotional(message, date, testament, "multi", verses)
 ```
@@ -165,7 +165,7 @@ So single-verse mode **never fires on holidays**. The rotation picks back up on 
 | Model | Purpose | Max Tokens |
 |-------|---------|------------|
 | `gpt-5.4-mini` | Verse selection (multi-verse step 1) | 300 |
-| `gpt-5.4` | Devotional writing (all modes) | 4000 |
+| `gpt-5.5` | Devotional writing (all modes) | 4000 |
 
 ## Database Schema
 

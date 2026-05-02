@@ -1028,18 +1028,18 @@ Deno.test("handler accepts forDate request body param", () => {
   }
 });
 
-Deno.test("DEVOTIONAL_MODEL constant defaults to gpt-5.4 and is used for generation", () => {
+Deno.test("DEVOTIONAL_MODEL constant defaults to gpt-5.5 and is used for generation", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
 
   if (
     !source.includes(
-      'DEVOTIONAL_MODEL =\n  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.4"'
+      'DEVOTIONAL_MODEL =\n  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.5"'
     )
   ) {
     throw new Error(
-      "DEVOTIONAL_MODEL should default to gpt-5.4 and read from env"
+      "DEVOTIONAL_MODEL should default to gpt-5.5 and read from env"
     );
   }
   if (!source.includes("const model = DEVOTIONAL_MODEL")) {
