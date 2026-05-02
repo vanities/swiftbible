@@ -25,4 +25,5 @@ struct DailyDevotional: Codable {
     let holiday_url: String?
     let anchor_verse: String?
     let verses: [DevotionalVerse]?
+    let model: String?
 }

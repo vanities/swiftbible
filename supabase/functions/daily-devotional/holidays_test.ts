@@ -941,7 +941,7 @@ Deno.test("multi-verse prompt has both holiday and non-holiday branches", () => 
   }
 });
 
-Deno.test("selectMultiVerses function exists with gpt-5.4-mini", () => {
+Deno.test("selectMultiVerses uses VERSE_SELECTION_MODEL constant (gpt-5.4-mini)", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
@@ -949,8 +949,19 @@ Deno.test("selectMultiVerses function exists with gpt-5.4-mini", () => {
   if (!source.includes("async function selectMultiVerses")) {
     throw new Error("selectMultiVerses function not found");
   }
-  if (!source.includes('model: "gpt-5.4-mini"')) {
-    throw new Error("selectMultiVerses should use gpt-5.4-mini");
+  if (!source.includes("model: VERSE_SELECTION_MODEL")) {
+    throw new Error(
+      "selectMultiVerses should reference the VERSE_SELECTION_MODEL constant"
+    );
+  }
+  if (
+    !source.includes(
+      'VERSE_SELECTION_MODEL =\n  Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.4-mini"'
+    )
+  ) {
+    throw new Error(
+      "VERSE_SELECTION_MODEL should default to gpt-5.4-mini and read from env"
+    );
   }
   if (!source.includes("response_format")) {
     throw new Error("selectMultiVerses should use JSON response format");
@@ -995,16 +1006,23 @@ Deno.test("all holiday verse books are in the iOS bookNames list", () => {
   }
 });
 
-Deno.test("model is set to gpt-5.4", () => {
+Deno.test("DEVOTIONAL_MODEL constant defaults to gpt-5.4 and is used for generation", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
-  if (!source.includes('"gpt-5.4"')) {
-    throw new Error('Model should be "gpt-5.4"');
+
+  if (
+    !source.includes(
+      'DEVOTIONAL_MODEL =\n  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.4"'
+    )
+  ) {
+    throw new Error(
+      "DEVOTIONAL_MODEL should default to gpt-5.4 and read from env"
+    );
   }
-  // gpt-5.4-mini is used for verse selection (selectMultiVerses), only the main model should be gpt-5.4
-  const mainModelMatch = source.match(/const model = "([^"]+)"/);
-  if (mainModelMatch && mainModelMatch[1] !== "gpt-5.4") {
-    throw new Error(`Main model should be "gpt-5.4", got "${mainModelMatch[1]}"`);
+  if (!source.includes("const model = DEVOTIONAL_MODEL")) {
+    throw new Error(
+      "generateDevotional should reference the DEVOTIONAL_MODEL constant"
+    );
   }
 });

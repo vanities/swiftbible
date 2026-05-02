@@ -147,6 +147,41 @@ function lookupVerseText(
 
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 
+// LLM models — overridable via env so we can swap without redeploy.
+// The model used for each devotional is also persisted to the
+// "Daily Devotional".model column so the iOS app can attribute it
+// accurately in its disclosure alerts.
+const DEVOTIONAL_MODEL =
+  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.4";
+const VERSE_SELECTION_MODEL =
+  Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.4-mini";
+
+// Token usage captured from each OpenAI call and persisted alongside
+// each devotional for cost auditing.
+interface TokenUsage {
+  model: string;
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+}
+
+interface DevotionalUsage {
+  generation: TokenUsage;
+  selection?: TokenUsage;
+}
+
+function extractUsage(
+  data: { usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } } | null | undefined,
+  model: string
+): TokenUsage {
+  return {
+    model,
+    prompt_tokens: data?.usage?.prompt_tokens ?? 0,
+    completion_tokens: data?.usage?.completion_tokens ?? 0,
+    total_tokens: data?.usage?.total_tokens ?? 0,
+  };
+}
+
 // ─── Easter computation (Anonymous Gregorian algorithm) ─────────────
 
 function computeEaster(year: number): Date {
@@ -1050,7 +1085,10 @@ Example Markdown Structure
 async function selectMultiVerses(
   count: number,
   holiday: Holiday | null
-): Promise<Array<{ book: string; chapter: number; verse: number }>> {
+): Promise<{
+  verses: Array<{ book: string; chapter: number; verse: number }>;
+  usage: TokenUsage;
+}> {
   const apiKey = Deno.env.get("OPENAI_API_KEY");
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
 
@@ -1088,6 +1126,7 @@ Return ONLY a JSON object in this exact format:
   const maxRetries = 2;
   let content: string | undefined;
   let lastError: Error | undefined;
+  let usage: TokenUsage = extractUsage(null, VERSE_SELECTION_MODEL);
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     if (attempt > 0) {
@@ -1104,7 +1143,7 @@ Return ONLY a JSON object in this exact format:
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: "gpt-5.4-mini",
+          model: VERSE_SELECTION_MODEL,
           messages: [
             {
               role: "system",
@@ -1133,6 +1172,7 @@ Return ONLY a JSON object in this exact format:
       const data = await response.json();
       console.log("selectMultiVerses response:", JSON.stringify(data, null, 2));
       content = data?.choices?.[0]?.message?.content;
+      usage = extractUsage(data, VERSE_SELECTION_MODEL);
       if (!content) {
         lastError = new Error(`Empty verse selection response: ${JSON.stringify(data)}`);
         continue;
@@ -1161,7 +1201,7 @@ Return ONLY a JSON object in this exact format:
     `Verse selection: ${allVerses.map((v: { book: string; chapter: number; verse: number }) => `${v.book} ${v.chapter}:${v.verse}`).join(", ")}`
   );
 
-  return allVerses;
+  return { verses: allVerses, usage };
 }
 
 // ─── Multi-verse prompt creation ────────────────────────────────────
@@ -1252,10 +1292,12 @@ Devotional Guidelines:
 
 // ─── Devotional generation (OpenAI) ─────────────────────────────────
 
-async function generateDevotional(prompt: string): Promise<string> {
+async function generateDevotional(
+  prompt: string
+): Promise<{ message: string; usage: TokenUsage }> {
   const apiKey = Deno.env.get("OPENAI_API_KEY");
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
-  const model = "gpt-5.4";
+  const model = DEVOTIONAL_MODEL;
 
   const response = await fetch(OPENAI_CHAT_URL, {
     method: "POST",
@@ -1293,13 +1335,14 @@ async function generateDevotional(prompt: string): Promise<string> {
 
   const data = await response.json();
   console.log("OpenAI API Response:", JSON.stringify(data, null, 2));
+  const usage = extractUsage(data, model);
   const content = data?.choices?.[0]?.message?.content;
   if (typeof content === "string" && content.trim().length > 0) {
-    return content.trim();
+    return { message: content.trim(), usage };
   }
   const alt = data?.choices?.[0]?.text;
   if (typeof alt === "string" && alt.trim().length > 0) {
-    return alt.trim();
+    return { message: alt.trim(), usage };
   }
   console.log("Content was:", content, "Alt was:", alt);
   throw new Error("Empty model output from Chat Completions API");
@@ -1371,6 +1414,8 @@ async function saveDevotional(
   testament: string,
   devotionalType: string,
   verses: SelectedVerse[],
+  model: string,
+  usage: DevotionalUsage,
   themeMetadata: ThemeMetadata = {}
 ): Promise<void> {
   const versesJson = verses.map((v) => ({
@@ -1388,6 +1433,8 @@ async function saveDevotional(
         testament,
         devotional_type: devotionalType,
         verses: versesJson,
+        model,
+        usage,
         holiday_name: themeMetadata.holidayName ?? null,
         holiday_url: themeMetadata.holidayUrl ?? null,
         anchor_verse: themeMetadata.anchorVerse ?? null,
@@ -1457,10 +1504,12 @@ Deno.serve(async (req) => {
     // Select verse(s) and create prompt
     let prompt: string;
     let versesUsed: SelectedVerse[];
+    let selectionUsage: TokenUsage | undefined;
 
     if (devotionalType === "multi") {
       // Non-holiday multi-verse: random seed + GPT companion
-      const verseRefs = await selectMultiVerses(2, null);
+      const { verses: verseRefs, usage } = await selectMultiVerses(2, null);
+      selectionUsage = usage;
 
       versesUsed = verseRefs.map((ref) => {
         const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
@@ -1495,8 +1544,14 @@ Deno.serve(async (req) => {
     );
 
     // Generate devotional
-    const devotional = await generateDevotional(prompt);
+    const { message: devotional, usage: generationUsage } =
+      await generateDevotional(prompt);
     console.log("Generated Devotional:\n", devotional);
+
+    const devotionalUsage: DevotionalUsage = {
+      generation: generationUsage,
+      ...(selectionUsage ? { selection: selectionUsage } : {}),
+    };
 
     // Theme metadata for the iOS app's "why am I seeing this?" display.
     // Holidays get name + Wikipedia URL; single AI devotionals get the
@@ -1515,6 +1570,8 @@ Deno.serve(async (req) => {
       targetTestament,
       devotionalType,
       versesUsed,
+      DEVOTIONAL_MODEL,
+      devotionalUsage,
       themeMetadata
     );
 
