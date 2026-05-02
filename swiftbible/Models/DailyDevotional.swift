@@ -7,6 +7,13 @@
 
 import Foundation
 
+struct DevotionalVerse: Codable, Equatable {
+    let book: String
+    let chapter: Int
+    let verse: Int
+    let testament: String
+}
+
 struct DailyDevotional: Codable {
     let id: Int
     let message: String
@@ -17,4 +24,5 @@ struct DailyDevotional: Codable {
     let holiday_name: String?
     let holiday_url: String?
     let anchor_verse: String?
+    let verses: [DevotionalVerse]?
 }
