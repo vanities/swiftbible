@@ -134,6 +134,23 @@
 		EE766E32F77570D9062D00CB /* AppIconOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70803BE8C452F513C60AFF8C /* AppIconOption.swift */; };
 		F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */; };
 		F922B9355548B1ECA572B372 /* DonationPromptLossView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8757B63A60AEEC9286D584DF /* DonationPromptLossView.swift */; };
+		HH01HISTBR00000001HISTRY /* HistoryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH01HISTFR00000001HISTRY /* HistoryModels.swift */; };
+		HH02HISTBR00000002HISTRY /* HistoryContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH02HISTFR00000002HISTRY /* HistoryContent.swift */; };
+		HH03HISTBR00000003HISTRY /* HistoryOrigins.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH03HISTFR00000003HISTRY /* HistoryOrigins.swift */; };
+		HH04HISTBR00000004HISTRY /* HistoryEarlyChurch.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH04HISTFR00000004HISTRY /* HistoryEarlyChurch.swift */; };
+		HH05HISTBR00000005HISTRY /* HistorySplits.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH05HISTFR00000005HISTRY /* HistorySplits.swift */; };
+		HH06HISTBR00000006HISTRY /* HistoryDenominations.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH06HISTFR00000006HISTRY /* HistoryDenominations.swift */; };
+		HH07HISTBR00000007HISTRY /* HistoryPractices.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH07HISTFR00000007HISTRY /* HistoryPractices.swift */; };
+		HH08HISTBR00000008HISTRY /* HistoryFurtherReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH08HISTFR00000008HISTRY /* HistoryFurtherReading.swift */; };
+		HH09HISTBR00000009HISTRY /* ParchmentBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH09HISTFR00000009HISTRY /* ParchmentBackground.swift */; };
+		HH10HISTBR00000010HISTRY /* HistoryComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH10HISTFR00000010HISTRY /* HistoryComponents.swift */; };
+		HH11HISTBR00000011HISTRY /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH11HISTFR00000011HISTRY /* HistoryView.swift */; };
+		HH12HISTBR00000012HISTRY /* HistorySectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH12HISTFR00000012HISTRY /* HistorySectionView.swift */; };
+		HH13HISTBR00000013HISTRY /* HistoryArticleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH13HISTFR00000013HISTRY /* HistoryArticleView.swift */; };
+		HH14HISTBR00000014HISTRY /* HistoryAncientIsrael.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH14HISTFR00000014HISTRY /* HistoryAncientIsrael.swift */; };
+		HH15HISTBR00000015HISTRY /* HistoryIntertestamental.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH15HISTFR00000015HISTRY /* HistoryIntertestamental.swift */; };
+		HH16HISTBR00000016HISTRY /* HistoryHebrewBible.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH16HISTFR00000016HISTRY /* HistoryHebrewBible.swift */; };
+		HH17MOREVWBR00000017HISTRY /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HH17MOREVWFR00000017HISTRY /* MoreView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -306,6 +323,23 @@
 		E03C9505B4D5E972B90582E3 /* ReadingTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReadingTheme.swift; sourceTree = "<group>"; };
 		EC3E4DFF77174F609B079B15 /* DonorPerksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonorPerksView.swift; sourceTree = "<group>"; };
 		EDF1104E4373CE709AC642F4 /* DonationPromptReciprocityView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DonationPromptReciprocityView.swift; sourceTree = "<group>"; };
+		HH01HISTFR00000001HISTRY /* HistoryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModels.swift; sourceTree = "<group>"; };
+		HH02HISTFR00000002HISTRY /* HistoryContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryContent.swift; sourceTree = "<group>"; };
+		HH03HISTFR00000003HISTRY /* HistoryOrigins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryOrigins.swift; sourceTree = "<group>"; };
+		HH04HISTFR00000004HISTRY /* HistoryEarlyChurch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEarlyChurch.swift; sourceTree = "<group>"; };
+		HH05HISTFR00000005HISTRY /* HistorySplits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySplits.swift; sourceTree = "<group>"; };
+		HH06HISTFR00000006HISTRY /* HistoryDenominations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDenominations.swift; sourceTree = "<group>"; };
+		HH07HISTFR00000007HISTRY /* HistoryPractices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPractices.swift; sourceTree = "<group>"; };
+		HH08HISTFR00000008HISTRY /* HistoryFurtherReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryFurtherReading.swift; sourceTree = "<group>"; };
+		HH09HISTFR00000009HISTRY /* ParchmentBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParchmentBackground.swift; sourceTree = "<group>"; };
+		HH10HISTFR00000010HISTRY /* HistoryComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryComponents.swift; sourceTree = "<group>"; };
+		HH11HISTFR00000011HISTRY /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		HH12HISTFR00000012HISTRY /* HistorySectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySectionView.swift; sourceTree = "<group>"; };
+		HH13HISTFR00000013HISTRY /* HistoryArticleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryArticleView.swift; sourceTree = "<group>"; };
+		HH14HISTFR00000014HISTRY /* HistoryAncientIsrael.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryAncientIsrael.swift; sourceTree = "<group>"; };
+		HH15HISTFR00000015HISTRY /* HistoryIntertestamental.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryIntertestamental.swift; sourceTree = "<group>"; };
+		HH16HISTFR00000016HISTRY /* HistoryHebrewBible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHebrewBible.swift; sourceTree = "<group>"; };
+		HH17MOREVWFR00000017HISTRY /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -502,6 +536,7 @@
 		954BC9E22C85001900FFCFA6 /* Text */ = {
 			isa = PBXGroup;
 			children = (
+				HHTXTHISTGRP000001HISTRY /* History */,
 				95F3A0032F032004000A1B2C /* web.json */,
 				95F3A0012F032003000A1B2C /* asv.json */,
 				959BA4E82E751E0900B7C7AB /* enoch.json */,
@@ -543,8 +578,46 @@
 				E03C9505B4D5E972B90582E3 /* ReadingTheme.swift */,
 				70803BE8C452F513C60AFF8C /* AppIconOption.swift */,
 				D1436A3087B4D420B1C9E6BE /* ReadingSession.swift */,
+				HH01HISTFR00000001HISTRY /* HistoryModels.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		HHTXTHISTGRP000001HISTRY /* History */ = {
+			isa = PBXGroup;
+			children = (
+				HH02HISTFR00000002HISTRY /* HistoryContent.swift */,
+				HH14HISTFR00000014HISTRY /* HistoryAncientIsrael.swift */,
+				HH15HISTFR00000015HISTRY /* HistoryIntertestamental.swift */,
+				HH16HISTFR00000016HISTRY /* HistoryHebrewBible.swift */,
+				HH03HISTFR00000003HISTRY /* HistoryOrigins.swift */,
+				HH04HISTFR00000004HISTRY /* HistoryEarlyChurch.swift */,
+				HH05HISTFR00000005HISTRY /* HistorySplits.swift */,
+				HH06HISTFR00000006HISTRY /* HistoryDenominations.swift */,
+				HH07HISTFR00000007HISTRY /* HistoryPractices.swift */,
+				HH08HISTFR00000008HISTRY /* HistoryFurtherReading.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		HHVWSHISTGRP000002HISTRY /* History */ = {
+			isa = PBXGroup;
+			children = (
+				HH09HISTFR00000009HISTRY /* ParchmentBackground.swift */,
+				HH10HISTFR00000010HISTRY /* HistoryComponents.swift */,
+				HH11HISTFR00000011HISTRY /* HistoryView.swift */,
+				HH12HISTFR00000012HISTRY /* HistorySectionView.swift */,
+				HH13HISTFR00000013HISTRY /* HistoryArticleView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		HHVWSMOREGRP000003HISTRY /* More */ = {
+			isa = PBXGroup;
+			children = (
+				HH17MOREVWFR00000017HISTRY /* MoreView.swift */,
+			);
+			path = More;
 			sourceTree = "<group>";
 		};
 		954BC9E82C8500EE00FFCFA6 /* Services */ = {
@@ -582,6 +655,8 @@
 				952F39CE2C8BA7F3009A412D /* ContentView.swift */,
 				952F39E02C8E383B009A412D /* Bible */,
 				952F39E12C8E3852009A412D /* Daily Devotional */,
+				HHVWSHISTGRP000002HISTRY /* History */,
+				HHVWSMOREGRP000003HISTRY /* More */,
 				95978F1B2CA88B7200C520EF /* Search */,
 				952F39DB2C8E366A009A412D /* Settings */,
 				AA00000B2F130001000SPLASH /* Splash */,
@@ -946,6 +1021,23 @@
 				DD00000A2F8A0001000APPNT /* OpenDailyDevotionalIntent.swift in Sources */,
 				DD00000B2F8A0001000APPNT /* OpenRandomVerseIntent.swift in Sources */,
 				DD00000C2F8A0001000APPNT /* SearchBibleIntent.swift in Sources */,
+				HH01HISTBR00000001HISTRY /* HistoryModels.swift in Sources */,
+				HH02HISTBR00000002HISTRY /* HistoryContent.swift in Sources */,
+				HH03HISTBR00000003HISTRY /* HistoryOrigins.swift in Sources */,
+				HH04HISTBR00000004HISTRY /* HistoryEarlyChurch.swift in Sources */,
+				HH05HISTBR00000005HISTRY /* HistorySplits.swift in Sources */,
+				HH06HISTBR00000006HISTRY /* HistoryDenominations.swift in Sources */,
+				HH07HISTBR00000007HISTRY /* HistoryPractices.swift in Sources */,
+				HH08HISTBR00000008HISTRY /* HistoryFurtherReading.swift in Sources */,
+				HH09HISTBR00000009HISTRY /* ParchmentBackground.swift in Sources */,
+				HH10HISTBR00000010HISTRY /* HistoryComponents.swift in Sources */,
+				HH11HISTBR00000011HISTRY /* HistoryView.swift in Sources */,
+				HH12HISTBR00000012HISTRY /* HistorySectionView.swift in Sources */,
+				HH13HISTBR00000013HISTRY /* HistoryArticleView.swift in Sources */,
+				HH14HISTBR00000014HISTRY /* HistoryAncientIsrael.swift in Sources */,
+				HH15HISTBR00000015HISTRY /* HistoryIntertestamental.swift in Sources */,
+				HH16HISTBR00000016HISTRY /* HistoryHebrewBible.swift in Sources */,
+				HH17MOREVWBR00000017HISTRY /* MoreView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1120,7 +1212,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = swiftbible/swiftbible.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"swiftbible/Preview Content\"";
@@ -1146,7 +1238,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.36;
+				MARKETING_VERSION = 1.37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1169,7 +1261,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = swiftbible/swiftbible.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"swiftbible/Preview Content\"";
@@ -1195,7 +1287,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.36;
+				MARKETING_VERSION = 1.37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1213,10 +1305,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
-				MARKETING_VERSION = 1.36;
+				MARKETING_VERSION = 1.37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbibleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1231,10 +1323,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
-				MARKETING_VERSION = 1.36;
+				MARKETING_VERSION = 1.37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbibleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1253,7 +1345,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = swiftbibleWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = swiftbibleWidget/Info.plist;
@@ -1265,7 +1357,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.36;
+				MARKETING_VERSION = 1.37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.swiftbibleWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1286,7 +1378,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = swiftbibleWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = swiftbibleWidget/Info.plist;
@@ -1298,7 +1390,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.36;
+				MARKETING_VERSION = 1.37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.swiftbibleWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1320,7 +1412,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "swiftbibleWatch Watch App/swiftbibleWatch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8Q3RG3ULSU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1331,7 +1423,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.36;
+				MARKETING_VERSION = 1.37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1354,7 +1446,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "swiftbibleWatch Watch App/swiftbibleWatch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8Q3RG3ULSU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1365,7 +1457,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.36;
+				MARKETING_VERSION = 1.37;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vanities.swiftbible.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;

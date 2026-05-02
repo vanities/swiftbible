@@ -67,8 +67,8 @@ struct ContentView: View {
                 SearchDetailView(selectedTab: $selectedTab)
             }
 
-            Tab("Settings", systemImage: "gearshape.fill", value: .settings) {
-                SettingsView(selectedTab: $selectedTab)
+            Tab("More", systemImage: "ellipsis.circle.fill", value: .settings) {
+                MoreView(selectedTab: $selectedTab)
             }
         }
         .tint(customAccentHex.isEmpty ? nil : Color(hex: customAccentHex))
