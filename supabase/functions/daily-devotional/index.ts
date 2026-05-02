@@ -152,7 +152,7 @@ const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 // "Daily Devotional".model column so the iOS app can attribute it
 // accurately in its disclosure alerts.
 const DEVOTIONAL_MODEL =
-  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.5";
+  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.4";
 const VERSE_SELECTION_MODEL =
   Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.4-mini";
 
