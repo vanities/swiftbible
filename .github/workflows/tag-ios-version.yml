@@ -1,0 +1,82 @@
+name: Tag iOS Version
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "swiftbible.xcodeproj/project.pbxproj"
+      - ".github/workflows/tag-ios-version.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from pbxproj
+        id: version
+        run: |
+          set -euo pipefail
+          pbxproj="swiftbible.xcodeproj/project.pbxproj"
+
+          marketing=$(grep -E "^[[:space:]]*MARKETING_VERSION = " "$pbxproj" \
+            | sed -E 's/.*MARKETING_VERSION = ([^;]+);.*/\1/' \
+            | sort -u)
+          build=$(grep -E "^[[:space:]]*CURRENT_PROJECT_VERSION = " "$pbxproj" \
+            | sed -E 's/.*CURRENT_PROJECT_VERSION = ([^;]+);.*/\1/' \
+            | sort -u)
+
+          if [ "$(printf '%s\n' "$marketing" | wc -l)" -ne 1 ] || [ -z "$marketing" ]; then
+            echo "::error::MARKETING_VERSION is missing or not uniform across build configs:"
+            printf '%s\n' "$marketing"
+            exit 1
+          fi
+          if [ "$(printf '%s\n' "$build" | wc -l)" -ne 1 ] || [ -z "$build" ]; then
+            echo "::error::CURRENT_PROJECT_VERSION is missing or not uniform across build configs:"
+            printf '%s\n' "$build"
+            exit 1
+          fi
+
+          tag="v${marketing}-${build}"
+          echo "marketing=$marketing" >> "$GITHUB_OUTPUT"
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Detected: MARKETING_VERSION=$marketing, CURRENT_PROJECT_VERSION=$build → tag $tag"
+
+      - name: Check if tag already exists
+        id: check
+        run: |
+          set -euo pipefail
+          tag="${{ steps.version.outputs.tag }}"
+          if git rev-parse --verify --quiet "refs/tags/$tag" >/dev/null; then
+            echo "Tag $tag already exists locally — skipping."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          elif git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+            echo "Tag $tag already exists on remote — skipping."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create and push tag
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          set -euo pipefail
+          tag="${{ steps.version.outputs.tag }}"
+          marketing="${{ steps.version.outputs.marketing }}"
+          build="${{ steps.version.outputs.build }}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git tag -a "$tag" -m "iOS $marketing (build $build)"
+          git push origin "$tag"
+          echo "Tagged $tag at $GITHUB_SHA"
