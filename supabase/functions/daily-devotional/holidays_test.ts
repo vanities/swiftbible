@@ -941,7 +941,7 @@ Deno.test("multi-verse prompt has both holiday and non-holiday branches", () => 
   }
 });
 
-Deno.test("selectMultiVerses uses VERSE_SELECTION_MODEL constant (gpt-5.5-mini)", () => {
+Deno.test("selectMultiVerses uses VERSE_SELECTION_MODEL constant (gpt-5.4-mini)", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
@@ -956,11 +956,11 @@ Deno.test("selectMultiVerses uses VERSE_SELECTION_MODEL constant (gpt-5.5-mini)"
   }
   if (
     !source.includes(
-      'VERSE_SELECTION_MODEL =\n  Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.5-mini"'
+      'VERSE_SELECTION_MODEL =\n  Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.4-mini"'
     )
   ) {
     throw new Error(
-      "VERSE_SELECTION_MODEL should default to gpt-5.5-mini and read from env"
+      "VERSE_SELECTION_MODEL should default to gpt-5.4-mini and read from env"
     );
   }
   if (!source.includes("response_format")) {
@@ -1028,18 +1028,18 @@ Deno.test("handler accepts forDate request body param", () => {
   }
 });
 
-Deno.test("DEVOTIONAL_MODEL constant defaults to gpt-5.5 and is used for generation", () => {
+Deno.test("DEVOTIONAL_MODEL constant defaults to gpt-5.4 and is used for generation", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
 
   if (
     !source.includes(
-      'DEVOTIONAL_MODEL =\n  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.5"'
+      'DEVOTIONAL_MODEL =\n  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.4"'
     )
   ) {
     throw new Error(
-      "DEVOTIONAL_MODEL should default to gpt-5.5 and read from env"
+      "DEVOTIONAL_MODEL should default to gpt-5.4 and read from env"
     );
   }
   if (!source.includes("const model = DEVOTIONAL_MODEL")) {
