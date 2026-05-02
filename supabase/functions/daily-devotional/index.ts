@@ -156,13 +156,38 @@ const DEVOTIONAL_MODEL =
 const VERSE_SELECTION_MODEL =
   Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.4-mini";
 
+// Per-model pricing in USD per million tokens (input, output).
+// Source: OpenAI pricing page, snapshotted 2026-05-02.
+// Update when pricing changes; cost is locked-in at generation time so
+// historical rows keep the price actually paid.
+const MODEL_PRICING: Record<string, { input: number; output: number }> = {
+  "gpt-5.5":      { input: 5.00,  output: 30.00 },
+  "gpt-5.4":      { input: 2.50,  output: 15.00 },
+  "gpt-5.4-mini": { input: 0.75,  output:  4.50 },
+};
+
+function computeCost(
+  model: string,
+  prompt_tokens: number,
+  completion_tokens: number
+): number {
+  const p = MODEL_PRICING[model];
+  if (!p) return 0;
+  return (
+    (prompt_tokens * p.input + completion_tokens * p.output) / 1_000_000
+  );
+}
+
 // Token usage captured from each OpenAI call and persisted alongside
-// each devotional for cost auditing.
+// each devotional for cost auditing. cost_usd is computed at the time
+// of the call using MODEL_PRICING, so historical rows reflect the
+// price that was actually paid.
 interface TokenUsage {
   model: string;
   prompt_tokens: number;
   completion_tokens: number;
   total_tokens: number;
+  cost_usd: number;
 }
 
 interface DevotionalUsage {
@@ -174,11 +199,14 @@ function extractUsage(
   data: { usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } } | null | undefined,
   model: string
 ): TokenUsage {
+  const prompt_tokens = data?.usage?.prompt_tokens ?? 0;
+  const completion_tokens = data?.usage?.completion_tokens ?? 0;
   return {
     model,
-    prompt_tokens: data?.usage?.prompt_tokens ?? 0,
-    completion_tokens: data?.usage?.completion_tokens ?? 0,
+    prompt_tokens,
+    completion_tokens,
     total_tokens: data?.usage?.total_tokens ?? 0,
+    cost_usd: computeCost(model, prompt_tokens, completion_tokens),
   };
 }
 
