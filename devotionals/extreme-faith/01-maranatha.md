@@ -1,6 +1,11 @@
 # May 3 — Revelation 22:20: Maranatha
 
-**Most of us pray around it. The Bible closes on a plea.**
+**I have prayed the Lord's Prayer all my life. I'm not at all sure I have ever meant *thy kingdom come*.**
+
+> *"Our Father which art in heaven, Hallowed be thy name. Thy kingdom come. Thy will be done in earth, as it is in heaven..."*
+> **Matthew 6:9-10**
+
+The Bible ends with the same request.
 
 > *"He which testifieth these things saith, Surely I come quickly. Amen. Even so, come, Lord Jesus."*
 > **Revelation 22:20**
@@ -16,6 +21,8 @@ There's a reason we don't.
 We have plans. The career we're still building. The marriage that's young. The grandkids we want to meet. The vacation we saved for. The book we mean to write. We've watched parents and grandparents grow old and die without seeing this day, and somewhere along the way we quietly accepted that we probably will too — that history will keep grinding on as it has for two thousand years, and we'll slip out of it like everyone else.
 
 And honestly? We're not ready. There are sins we mean to deal with. Conversations we mean to have. People we mean to forgive. *Later. Not yet.*
+
+*"Later" is the most pious-sounding word in the Christian vocabulary. It is also the most cowardly.*
 
 So we don't pray for Christ's return. We pray around it.
 
@@ -70,7 +77,7 @@ If you mean it, the world looks different in the morning.
 
 ## A prayer
 
-King Jesus,
+Jesus our King,
 
 I have prayed around your return for too long.
 I have wanted you to come — *eventually, later, after I've finished my plans*.
