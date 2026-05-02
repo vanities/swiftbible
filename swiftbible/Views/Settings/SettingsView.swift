@@ -11,6 +11,7 @@ struct SettingsView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(AppUpdateService.self) private var updateService
+    @Environment(\.colorScheme) private var colorScheme
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
     @AppStorage("showApocrypha") var showApocrypha = false
@@ -556,7 +557,17 @@ struct SettingsView: View {
     }
 
     private var introCard: some View {
-        HStack(alignment: .center, spacing: 12) {
+        let parchmentSurface: Color = colorScheme == .dark
+            ? Color(red: 0.15, green: 0.10, blue: 0.07)
+            : Color(red: 0.965, green: 0.94, blue: 0.88)
+        let parchmentInk: Color = colorScheme == .dark
+            ? Color(red: 0.95, green: 0.92, blue: 0.85)
+            : Color(red: 0.18, green: 0.13, blue: 0.10)
+        let parchmentMutedInk: Color = colorScheme == .dark
+            ? Color(red: 0.78, green: 0.74, blue: 0.66)
+            : Color(red: 0.40, green: 0.32, blue: 0.24)
+
+        return HStack(alignment: .center, spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(Color.brandGold.opacity(0.20))
@@ -568,10 +579,10 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Personalize your reading")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(parchmentInk)
                 Text("Fonts, translations, notifications, and what's in the Bible browser.")
                     .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(parchmentMutedInk)
                     .fixedSize(horizontal: false, vertical: true)
             }
             Spacer(minLength: 0)
@@ -580,7 +591,7 @@ struct SettingsView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(red: 0.965, green: 0.94, blue: 0.88))
+                .fill(parchmentSurface)
                 .overlay {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .strokeBorder(Color.brandGold.opacity(0.25), lineWidth: 0.5)
