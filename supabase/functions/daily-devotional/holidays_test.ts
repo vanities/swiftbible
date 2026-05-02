@@ -1006,6 +1006,28 @@ Deno.test("all holiday verse books are in the iOS bookNames list", () => {
   }
 });
 
+Deno.test("handler accepts forDate request body param", () => {
+  const source = Deno.readTextFileSync(
+    new URL("./index.ts", import.meta.url).pathname
+  );
+
+  if (!source.includes("body?.forDate")) {
+    throw new Error(
+      "handler should parse forDate from the request body"
+    );
+  }
+  if (!source.includes("getFormattedDate(targetDate)")) {
+    throw new Error(
+      "handler should pass the resolved targetDate to getFormattedDate"
+    );
+  }
+  if (!source.includes("Invalid forDate")) {
+    throw new Error(
+      "handler should reject malformed forDate with a 400 response"
+    );
+  }
+});
+
 Deno.test("DEVOTIONAL_MODEL constant defaults to gpt-5.5 and is used for generation", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname

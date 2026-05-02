@@ -1013,8 +1013,10 @@ function selectVerse(
 
 // ─── Date formatting ────────────────────────────────────────────────
 
-function getFormattedDate(): { formatted: string; isoDate: string } {
-  const now = new Date();
+function getFormattedDate(
+  date?: Date
+): { formatted: string; isoDate: string } {
+  const now = date ?? new Date();
   const formatted = now.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -1475,8 +1477,30 @@ Deno.serve(async (req) => {
 
   try {
     const supabase = createSupabaseClient();
-    const today = new Date();
-    const { formatted, isoDate } = getFormattedDate();
+
+    // Optional `forDate` (YYYY-MM-DD) request body param lets callers
+    // generate a devotional for a specific date — useful for testing
+    // or backfilling. Falls back to current date if absent or empty.
+    let targetDate = new Date();
+    try {
+      const body = await req.json();
+      if (typeof body?.forDate === "string" && body.forDate.length > 0) {
+        const parsed = new Date(`${body.forDate}T00:00:00Z`);
+        if (Number.isNaN(parsed.getTime())) {
+          return new Response(
+            JSON.stringify({ error: `Invalid forDate: ${body.forDate}` }),
+            { status: 400, headers: { "Content-Type": "application/json" } }
+          );
+        }
+        targetDate = parsed;
+        console.log(`forDate override: ${body.forDate}`);
+      }
+    } catch (_) {
+      // Empty body or non-JSON is fine — fall back to current date.
+    }
+
+    const today = targetDate;
+    const { formatted, isoDate } = getFormattedDate(targetDate);
 
     const existingDevotional = await fetchExistingDevotional(supabase, isoDate);
     if (existingDevotional) {
