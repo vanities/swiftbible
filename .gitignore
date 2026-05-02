@@ -72,6 +72,8 @@ supabase/.env
 .env.staging
 *.md
 !devotionals/**/*.md
+!speakers/**/*.md
+!.claude/skills/**/*.md
 .claude/settings.local.json
 .mcp.json
 
