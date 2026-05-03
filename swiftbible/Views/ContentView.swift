@@ -26,7 +26,6 @@ struct ContentView: View {
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
     @AppStorage(DonationPreferences.anonIdentifierKey) private var donationAnonIdentifier: String = ""
     @AppStorage("customAccentColor") private var customAccentHex: String = ""
-    @AppStorage("todayDevotionalIsCustom") private var todayDevotionalIsCustom = false
 
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
@@ -58,9 +57,7 @@ struct ContentView: View {
                 BibleView()
             }
 
-            Tab(todayDevotionalIsCustom ? "Custom" : "Devotional",
-                systemImage: todayDevotionalIsCustom ? "pencil.and.scribble" : "sun.horizon.fill",
-                value: .dailyDevotional) {
+            Tab("Devotional", systemImage: "sun.horizon.fill", value: .dailyDevotional) {
                 DailyDevotionalView(selectedTab: $selectedTab)
             }
 
@@ -104,15 +101,14 @@ struct ContentView: View {
                         appViewModel.navigateToVerse(bookName: bookName, chapterNumber: chapter, verseNumber: verse)
                     }
                 case "event":
-                    // App Store In-App Event deep link. Path is /<slug> e.g. swiftbible://event/pentecost
-                    // STUB: route to a sensible default per event until EventDetailView ships.
-                    let slug = url.pathComponents.dropFirst().first
-                    switch slug {
-                    case "pentecost":
-                        selectedTab = .bible
-                        appViewModel.navigateToVerse(bookName: "Acts", chapterNumber: 2, verseNumber: 1)
-                    default:
-                        break
+                    // App Store In-App Event deep link, e.g. swiftbible://event/pentecost-2026
+                    // Also accepts slugs without the year suffix (e.g. /pentecost) — finds the
+                    // first matching event by id prefix.
+                    let slug = url.pathComponents.dropFirst().first ?? ""
+                    if let event = AppEventRegistry.allEvents.first(where: {
+                        $0.id == slug || $0.id.hasPrefix(slug + "-")
+                    }) {
+                        appViewModel.presentedEvent = event
                     }
                 default:
                     break
@@ -216,7 +212,6 @@ struct ContentView: View {
                     await MainActor.run { loadLocalDonationHistory() }
                 }
 
-                await refreshTodayDevotionalType()
                 await refreshDevotionalReminders()
 
                 // Mark app as no longer launching after initial load
@@ -247,7 +242,6 @@ struct ContentView: View {
             handleScenePhaseChange(newPhase)
             if newPhase == .active {
                 Task {
-                    await refreshTodayDevotionalType()
                     await refreshDevotionalReminders()
                 }
             }
@@ -293,6 +287,7 @@ struct ContentView: View {
             Text(donationErrorMessage ?? String(localized: "Something went wrong. Please try again."))
         })
         .modifier(UpdateAvailableAlertModifier(isPresented: $showUpdatePrompt, updateService: updateService))
+        .modifier(EventSheetModifier())
         .fullScreenCover(item: $safariCheckout) { item in
             SafariContainer(url: item.url)
                 .ignoresSafeArea()
@@ -699,44 +694,6 @@ struct ContentView: View {
         showDonationErrorAlert = true
     }
 
-    /// Keep `todayDevotionalIsCustom` in sync with whatever's on the
-    /// server for today's date — independent of reminders. Without
-    /// this, the tab title can stick on "Custom" after a day rollover
-    /// until the user opens the Devotional tab.
-    private func refreshTodayDevotionalType() async {
-        let today = Date()
-        if let cached = CacheService.shared.loadDevotional(for: today) {
-            await MainActor.run {
-                todayDevotionalIsCustom = (cached.devotional_type == "custom")
-            }
-            return
-        }
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let dateString = formatter.string(from: today)
-
-        do {
-            let devotional: DailyDevotional = try await SupabaseService.shared.client
-                .from("Daily Devotional")
-                .select()
-                .eq("for_date", value: dateString)
-                .single()
-                .execute()
-                .value
-            CacheService.shared.saveDevotional(devotional, for: today)
-            await MainActor.run {
-                todayDevotionalIsCustom = (devotional.devotional_type == "custom")
-            }
-        } catch {
-            // No devotional yet — clear the flag so we don't show a
-            // stale "Custom" tab title from a previous day.
-            await MainActor.run {
-                todayDevotionalIsCustom = false
-            }
-        }
-    }
-
     /// Prefetch today's devotional and reschedule the notification with fresh content.
     private func refreshDevotionalReminders() async {
         let enabled = UserDefaults.standard.bool(forKey: "devotionalReminderEnabled")
@@ -782,6 +739,21 @@ struct ContentView: View {
 // the modifier body is type-checked independently of the main view chain.
 // The service instance is owned by ContentView and passed in so the
 // Settings row (via environment) and the launch-time check share state.
+/// Presents EventDetailView as a sheet driven by AppViewModel.presentedEvent.
+/// Extracted from ContentView's body to keep that body small enough for
+/// SwiftUI's type checker.
+private struct EventSheetModifier: ViewModifier {
+    @Environment(AppViewModel.self) private var appViewModel
+
+    func body(content: Content) -> some View {
+        @Bindable var vm = appViewModel
+        content.sheet(item: $vm.presentedEvent) { event in
+            EventDetailView(event: event)
+                .environment(appViewModel)
+        }
+    }
+}
+
 private struct UpdateAvailableAlertModifier: ViewModifier {
     @Binding var isPresented: Bool
     let updateService: AppUpdateService

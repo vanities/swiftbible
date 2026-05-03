@@ -39,6 +39,7 @@ struct SettingsView: View {
     @State private var donationCurrency: String = "USD"
     @State private var showDonationSheet = false
     @AppStorage("customAccentColor") private var customAccentHex: String = ""
+    @AppStorage("debug_forceShowEvents") private var debugForceShowEvents: Bool = false
     @State private var cacheSize: String = "0 KB"
     @State private var showClearCacheAlert = false
     @State private var showCacheToast = false
@@ -301,6 +302,21 @@ struct SettingsView: View {
 
                 if showDebugSection {
                     Section {
+                        Toggle(isOn: $debugForceShowEvents) {
+                            accentLabel(
+                                "Force-Show Events (ignore date)",
+                                systemImage: "flame.fill",
+                                tint: .brandGold
+                            )
+                        }
+                        Button {
+                            // Open the Pentecost EventDetailView immediately for testing.
+                            if let event = AppEventRegistry.event(forId: "pentecost-2026") {
+                                appViewModel.presentedEvent = event
+                            }
+                        } label: {
+                            accentLabel("Open Pentecost Event View", systemImage: "calendar.badge.clock", tint: .brandGold)
+                        }
                         Button {
                             appViewModel.testConfetti()
                         } label: {

@@ -79,6 +79,9 @@ class AppViewModel {
     var totalPaidCents: Int = 0
     var totalRefundedCents: Int = 0
     var shouldTriggerConfetti: Bool = false
+    /// In-app event currently being presented in EventDetailView (sheet).
+    /// Set by MoreView card tap or by `swiftbible://event/<slug>` URL handler.
+    var presentedEvent: AppEvent?
 
     var netDonatedCents: Int {
         max(totalPaidCents - totalRefundedCents, 0)

@@ -44,7 +44,6 @@ struct DailyDevotionalView: View {
     @State private var anchorVerse: String?
     @State private var verses: [DevotionalVerse]?
     @State private var model: String?
-    @AppStorage("todayDevotionalIsCustom") private var todayDevotionalIsCustom = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -404,7 +403,6 @@ struct DailyDevotionalView: View {
         holidayName = nil
         holidayUrl = nil
         anchorVerse = nil
-        updateTodayCustomTabState(for: date, devotionalType: nil)
 
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -413,7 +411,6 @@ struct DailyDevotionalView: View {
         // Check cache first
         if let cachedDevotional = CacheService.shared.loadDevotional(for: date) {
             applyDevotional(cachedDevotional)
-            updateTodayCustomTabState(for: date, devotionalType: devotionalType)
             AnalyticsService.shared.capture(.devotionalViewed, properties: [
                 "date": dateString,
                 "source": "cache"
@@ -434,7 +431,6 @@ struct DailyDevotionalView: View {
                 .value
 
             applyDevotional(devotional)
-            updateTodayCustomTabState(for: date, devotionalType: devotionalType)
 
             AnalyticsService.shared.capture(.devotionalViewed, properties: [
                 "date": dateString,
@@ -446,7 +442,6 @@ struct DailyDevotionalView: View {
             updateSavedState(for: date)
         } catch {
             print("No devotional found for \(dateString): \(error)")
-            updateTodayCustomTabState(for: date, devotionalType: nil)
             updateSavedState(for: date)
         }
 
@@ -486,11 +481,6 @@ struct DailyDevotionalView: View {
             default: return "th"
             }
         }
-    }
-
-    private func updateTodayCustomTabState(for date: Date, devotionalType: String?) {
-        guard Calendar.current.isDateInToday(date) else { return }
-        todayDevotionalIsCustom = devotionalType == "custom"
     }
 
     @MainActor

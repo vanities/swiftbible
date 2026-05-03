@@ -19,13 +19,18 @@ struct AppEvent: Identifiable, Equatable {
     let startDate: Date
     let endDate: Date
     let action: AppEventAction
+    /// Optional asset-catalog image name to render as a hero banner on the
+    /// MoreView card. Same source as the App Store EVENT_CARD image.
+    let bannerImageName: String?
     /// Optional day-by-day reading plan. When non-empty, the event opens an
     /// EventDetailView with day pagination. When empty, action is used.
     let readingPlan: [EventReadingDay]
 
     init(id: String, name: String, subtitle: String, iconName: String,
          accent: AppEventAccent, startDate: Date, endDate: Date,
-         action: AppEventAction, readingPlan: [EventReadingDay] = []) {
+         action: AppEventAction,
+         bannerImageName: String? = nil,
+         readingPlan: [EventReadingDay] = []) {
         self.id = id
         self.name = name
         self.subtitle = subtitle
@@ -34,6 +39,7 @@ struct AppEvent: Identifiable, Equatable {
         self.startDate = startDate
         self.endDate = endDate
         self.action = action
+        self.bannerImageName = bannerImageName
         self.readingPlan = readingPlan
     }
 
@@ -123,6 +129,7 @@ enum AppEventRegistry {
         startDate: parseISO("2026-05-25T00:00:00Z"),
         endDate: parseISO("2026-06-07T23:59:59Z"),
         action: .openEvent,
+        bannerImageName: "PentecostEventBanner",
         readingPlan: pentecostReadingPlan
     )
 
@@ -134,6 +141,19 @@ enum AppEventRegistry {
     /// Events currently within their date window.
     static var activeEvents: [AppEvent] {
         allEvents.filter(\.isActive)
+    }
+
+    /// What MoreView actually shows. In DEBUG builds, the
+    /// `debug_forceShowEvents` AppStorage flag overrides date-gating so all
+    /// events appear regardless of window — useful for testing the card
+    /// + EventDetailView flow before the real event window opens.
+    static var visibleEvents: [AppEvent] {
+        #if DEBUG
+        if UserDefaults.standard.bool(forKey: "debug_forceShowEvents") {
+            return allEvents
+        }
+        #endif
+        return activeEvents
     }
 
     /// Look up an event by id. Used by URL scheme handler.
@@ -158,7 +178,7 @@ enum AppEventRegistry {
             reflection: """
             The first chapter of Acts opens with Jesus eating with his disciples for forty days after the resurrection. He has time. He could explain anything. Instead, he keeps coming back to one promise: wait.
 
-            "Ye shall be baptized with the Holy Ghost not many days hence." (v.5)
+            > [J] "Ye shall be baptized with the Holy Ghost not many days hence." (v.5)
 
             That's the whole charter. Don't go yet. Don't try yet. Wait.
 
@@ -194,7 +214,7 @@ enum AppEventRegistry {
             reflection: """
             This isn't from Acts. Jesus said this on the night before he died. The disciples are confused, grieving in advance, and Jesus is trying to prepare them.
 
-            "I will pray the Father, and he shall give you another Comforter, that he may abide with you for ever." (v.16)
+            > [J] "I will pray the Father, and he shall give you another Comforter, that he may abide with you for ever." (v.16)
 
             The word in Greek is paraklētos — literally, one called alongside. A helper, a counselor, an advocate. The word "another" matters: the same kind of helper Jesus has been, just not in a body. The Spirit is not a downgrade. The Spirit is what makes Jesus's promise possible — that he won't leave them as orphans.
 
@@ -211,9 +231,9 @@ enum AppEventRegistry {
             reflection: """
             Two days from Pentecost. This passage describes what the Spirit does after he comes. It's specific.
 
-            "He will reprove the world of sin, and of righteousness, and of judgment." (v.8)
-            "He will guide you into all truth." (v.13)
-            "He shall glorify me." (v.14)
+            > [J] "He will reprove the world of sin, and of righteousness, and of judgment." (v.8)
+            > [J] "He will guide you into all truth." (v.13)
+            > [J] "He shall glorify me." (v.14)
 
             Three things: convict, guide, glorify. Notice what's not on the list — the Spirit isn't here to make you feel good, give you opinions about politics, or confirm what you already think. The Spirit's work is harder than that and better than that.
 
@@ -234,7 +254,7 @@ enum AppEventRegistry {
             reflection: """
             Eight hundred years before Pentecost, the prophet Joel saw it.
 
-            "And it shall come to pass afterward, that I will pour out my spirit upon all flesh." (v.28)
+            > "And it shall come to pass afterward, that I will pour out my spirit upon all flesh." (v.28)
 
             Read the verse slowly. All flesh. Not the priests. Not the prophets. Not the leaders. All flesh — sons, daughters, old men, young men, even servants. Both genders. Every age. Every class.
 
@@ -253,7 +273,7 @@ enum AppEventRegistry {
             reflection: """
             Pentecost morning. The day was fully come. They were all together in one place. And then, suddenly:
 
-            "And there came a sound from heaven as of a rushing mighty wind, and it filled all the house where they were sitting. And there appeared unto them cloven tongues like as of fire, and it sat upon each of them, and they were all filled with the Holy Ghost." (vv.2-4)
+            > "And there came a sound from heaven as of a rushing mighty wind, and it filled all the house where they were sitting. And there appeared unto them cloven tongues like as of fire, and it sat upon each of them, and they were all filled with the Holy Ghost." (vv.2-4)
 
             Three things you can almost see: sound (wind), sight (fire), speech (other tongues). Every sense. Then they spilled out into the city, speaking in languages they had never learned, and the Jews who had come from every nation heard each one in their own native tongue.
 
@@ -276,7 +296,7 @@ enum AppEventRegistry {
 
             The crowd is cut to the heart. "What shall we do?"
 
-            Peter's answer is the same one we still preach: "Repent, and be baptized every one of you in the name of Jesus Christ for the remission of sins, and ye shall receive the gift of the Holy Ghost." (v.38)
+            Peter's answer is the same one we still preach: > "Repent, and be baptized every one of you in the name of Jesus Christ for the remission of sins, and ye shall receive the gift of the Holy Ghost." (v.38)
 
             That day, three thousand were added.
 
@@ -293,7 +313,7 @@ enum AppEventRegistry {
             reflection: """
             Three thousand new converts, mostly visiting Jews from a dozen countries. What did they do next?
 
-            "And they continued steadfastly in the apostles' doctrine and fellowship, and in breaking of bread, and in prayers." (v.42)
+            > "And they continued steadfastly in the apostles' doctrine and fellowship, and in breaking of bread, and in prayers." (v.42)
 
             Four things, every day: teaching, fellowship, the Lord's Supper, prayer. Not programs. Not strategies. The basics, done together.
 

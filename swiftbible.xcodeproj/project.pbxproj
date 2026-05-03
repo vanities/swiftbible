@@ -17,6 +17,7 @@
 		6CA76925561A17B90B4E22AA /* ReadingTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C9505B4D5E972B90582E3 /* ReadingTheme.swift */; };
 		7F85AD2685634C81DDD2F461 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F3B1712A28409C5CA1370A /* CacheService.swift */; };
 		87D22F5BA6144031BF880588 /* LocalDonationRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1D76DD1ECC49199554D9DB /* LocalDonationRecord.swift */; };
+		950C04DB2FA801A8009CCA37 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950C04DA2FA801A8009CCA37 /* EventDetailView.swift */; };
 		9510097C2C92766A0040B21A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097B2C92766A0040B21A /* String.swift */; };
 		9510097E2C92815B0040B21A /* SeeSavedNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097D2C92815B0040B21A /* SeeSavedNotesView.swift */; };
 		951009802C92824A0040B21A /* SeeHighlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9510097F2C92824A0040B21A /* SeeHighlightsView.swift */; };
@@ -217,6 +218,7 @@
 		792DE080532D4DFE742D3C32 /* DonationPromptSocialView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DonationPromptSocialView.swift; sourceTree = "<group>"; };
 		7F5E225BC324A9C07359BDF2 /* DonationPromptVariant.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DonationPromptVariant.swift; sourceTree = "<group>"; };
 		8757B63A60AEEC9286D584DF /* DonationPromptLossView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DonationPromptLossView.swift; sourceTree = "<group>"; };
+		950C04DA2FA801A8009CCA37 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
 		9510097B2C92766A0040B21A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		9510097D2C92815B0040B21A /* SeeSavedNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeSavedNotesView.swift; sourceTree = "<group>"; };
 		9510097F2C92824A0040B21A /* SeeHighlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeHighlightsView.swift; sourceTree = "<group>"; };
@@ -713,6 +715,7 @@
 		HHVWSMOREGRP000003HISTRY /* More */ = {
 			isa = PBXGroup;
 			children = (
+				950C04DA2FA801A8009CCA37 /* EventDetailView.swift */,
 				HH17MOREVWFR00000017HISTRY /* MoreView.swift */,
 			);
 			path = More;
@@ -997,6 +1000,7 @@
 				95F5D8A22E92D10000A1B2C3 /* DonationService.swift in Sources */,
 				2C31E1F14F2C48118A2E2425 /* StoreKitDonationService.swift in Sources */,
 				95AB1C1D2F7AB500001A2B10 /* AppUpdateService.swift in Sources */,
+				950C04DB2FA801A8009CCA37 /* EventDetailView.swift in Sources */,
 				9588F82C2FA7857F007316CE /* AppEvent.swift in Sources */,
 				87D22F5BA6144031BF880588 /* LocalDonationRecord.swift in Sources */,
 				952F39F92C920778009A412D /* Version.swift in Sources */,

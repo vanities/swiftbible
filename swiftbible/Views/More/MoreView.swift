@@ -32,7 +32,7 @@ struct MoreView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 18) {
-                    ForEach(AppEventRegistry.activeEvents) { event in
+                    ForEach(AppEventRegistry.visibleEvents) { event in
                         eventCard(event)
                     }
                     historyHero
@@ -63,48 +63,82 @@ struct MoreView: View {
         Button {
             handleEventTap(event)
         } label: {
-            HStack(spacing: 12) {
-                Image(systemName: event.iconName)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(event.accent.color)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("HAPPENING NOW")
-                        .font(.system(size: 9, weight: .bold, design: .serif))
-                        .tracking(2)
-                        .foregroundStyle(event.accent.color)
-                    Text(event.name)
-                        .font(.system(size: 15, weight: .semibold, design: .serif))
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-                    Text(event.subtitle)
-                        .font(.system(size: 12, design: .serif))
-                        .italic()
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+            VStack(spacing: 0) {
+                if let banner = event.bannerImageName {
+                    eventBanner(image: banner, event: event)
                 }
-
-                Spacer()
-
-                Image(systemName: "arrow.right")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(event.accent.color)
+                eventCardBody(event)
             }
-            .padding(.vertical, 12)
-            .padding(.horizontal, 16)
-            .frame(maxWidth: .infinity, alignment: .leading)
             .background(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(Color(.secondarySystemGroupedBackground))
-                    .overlay(alignment: .leading) {
-                        Rectangle()
-                            .fill(event.accent.color)
-                            .frame(width: 3)
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             )
+            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .strokeBorder(event.accent.color.opacity(0.35), lineWidth: 1)
+            )
+            .shadow(color: .black.opacity(colorScheme == .dark ? 0.30 : 0.06),
+                    radius: 8, x: 0, y: 3)
         }
         .buttonStyle(.plain)
+    }
+
+    private func eventBanner(image: String, event: AppEvent) -> some View {
+        ZStack(alignment: .bottomLeading) {
+            Image(image)
+                .resizable()
+                .aspectRatio(16.0/9.0, contentMode: .fill)
+                .frame(maxWidth: .infinity)
+                .clipped()
+
+            // Bottom gradient so the "HAPPENING NOW" pill stays legible
+            LinearGradient(
+                colors: [.clear, .black.opacity(0.55)],
+                startPoint: .top, endPoint: .bottom
+            )
+            .frame(height: 60)
+            .frame(maxHeight: .infinity, alignment: .bottom)
+
+            HStack(spacing: 6) {
+                Image(systemName: event.iconName)
+                    .font(.system(size: 10, weight: .semibold))
+                Text("HAPPENING NOW")
+                    .font(.system(size: 10, weight: .bold, design: .serif))
+                    .tracking(2)
+            }
+            .foregroundStyle(.white)
+            .padding(.vertical, 6)
+            .padding(.horizontal, 10)
+            .background(
+                Capsule().fill(event.accent.color)
+            )
+            .padding(12)
+        }
+    }
+
+    private func eventCardBody(_ event: AppEvent) -> some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(event.name)
+                    .font(.system(size: 16, weight: .semibold, design: .serif))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                Text(event.subtitle)
+                    .font(.system(size: 13, design: .serif))
+                    .italic()
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+
+            Spacer()
+
+            Image(systemName: "arrow.right")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(event.accent.color)
+        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 14)
     }
 
     private func handleEventTap(_ event: AppEvent) {
@@ -120,6 +154,10 @@ struct MoreView: View {
             }
         case .openTab(let tab):
             selectedTab = tab
+        case .openEvent:
+            // Present the curated EventDetailView via AppViewModel state.
+            // ContentView observes presentedEvent and presents the sheet.
+            appViewModel.presentedEvent = event
         }
     }
 
