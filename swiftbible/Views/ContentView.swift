@@ -108,6 +108,9 @@ struct ContentView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .donationPromptMilestone)) { _ in
+            evaluateDonationPrompt()
+        }
         .onReceive(NotificationCenter.default.publisher(for: .donationStatusShouldRefresh)) { notification in
             guard DonationPreferences.useStripePayments else { return }
             safariCheckout = nil
@@ -202,7 +205,6 @@ struct ContentView: View {
                     await MainActor.run { loadLocalDonationHistory() }
                 }
 
-                evaluateDonationPrompt()
                 await refreshTodayDevotionalType()
                 await refreshDevotionalReminders()
 

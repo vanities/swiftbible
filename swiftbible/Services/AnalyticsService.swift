@@ -11,18 +11,33 @@ import SwiftUI
 @MainActor
 enum ReviewPromptService {
     private static let countKey = "engagementMomentCount"
-    private static let milestones: Set<Int> = [3, 10, 25]
+    private static let reviewMilestones: Set<Int> = [3, 10, 25]
+    private static let donationMilestones: Set<Int> = [6, 15, 40]
 
     static func recordHappyMoment(requestReview: RequestReviewAction) {
         let count = UserDefaults.standard.integer(forKey: countKey) + 1
         UserDefaults.standard.set(count, forKey: countKey)
 
         #if !DEBUG
-        if milestones.contains(count) {
+        if reviewMilestones.contains(count) {
             requestReview()
+        }
+        if donationMilestones.contains(count) {
+            DonationPromptService.fireMilestone()
         }
         #endif
     }
+}
+
+@MainActor
+enum DonationPromptService {
+    static func fireMilestone() {
+        NotificationCenter.default.post(name: .donationPromptMilestone, object: nil)
+    }
+}
+
+extension Notification.Name {
+    static let donationPromptMilestone = Notification.Name("donationPromptMilestone")
 }
 
 enum AnalyticsEvent: String {
