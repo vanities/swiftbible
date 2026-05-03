@@ -21,7 +21,9 @@ struct VerificationView: View {
         Form {
             Section(header: Text("Verify Email")) {
                 Text("Enter the verification code sent to \(email)")
-                TextField("123456", text: $verificationCode)
+                TextField(text: $verificationCode, prompt: Text(verbatim: "123456")) {
+                    Text("Verification code")
+                }
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.numberPad)
                     .focused($isFocused)

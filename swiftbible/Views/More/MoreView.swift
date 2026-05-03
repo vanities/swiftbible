@@ -32,6 +32,9 @@ struct MoreView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 18) {
+                    ForEach(AppEventRegistry.activeEvents) { event in
+                        eventCard(event)
+                    }
                     historyHero
                     if let unfinished = unfinishedArticle {
                         continueReadingCard(article: unfinished)
@@ -51,6 +54,72 @@ struct MoreView: View {
             .navigationTitle("More")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear { refreshStats() }
+        }
+    }
+
+    // MARK: - Event card (date-gated, mirrors bibleBookmarkCard pattern)
+
+    private func eventCard(_ event: AppEvent) -> some View {
+        Button {
+            handleEventTap(event)
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: event.iconName)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(event.accent.color)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("HAPPENING NOW")
+                        .font(.system(size: 9, weight: .bold, design: .serif))
+                        .tracking(2)
+                        .foregroundStyle(event.accent.color)
+                    Text(event.name)
+                        .font(.system(size: 15, weight: .semibold, design: .serif))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                    Text(event.subtitle)
+                        .font(.system(size: 12, design: .serif))
+                        .italic()
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+
+                Spacer()
+
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(event.accent.color)
+            }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(Color(.secondarySystemGroupedBackground))
+                    .overlay(alignment: .leading) {
+                        Rectangle()
+                            .fill(event.accent.color)
+                            .frame(width: 3)
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func handleEventTap(_ event: AppEvent) {
+        switch event.action {
+        case .openVerse(let book, let chapter, let verse):
+            selectedTab = .bible
+            DispatchQueue.main.async {
+                appViewModel.navigateToVerse(
+                    bookName: book,
+                    chapterNumber: chapter,
+                    verseNumber: verse
+                )
+            }
+        case .openTab(let tab):
+            selectedTab = tab
         }
     }
 

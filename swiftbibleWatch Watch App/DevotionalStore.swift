@@ -44,7 +44,7 @@ final class DevotionalStore: ObservableObject {
                 markdown = cached.message
                 errorMessage = nil
             } else {
-                errorMessage = "No devotional available. Try again later."
+                errorMessage = String(localized: "No devotional available. Try again later.")
             }
         }
     }

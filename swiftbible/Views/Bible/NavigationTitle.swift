@@ -22,7 +22,7 @@ struct NavigationTitle: View {
                     .font(.footnote)
                     .fontWeight(.light)
             } else {
-                Text("")
+                EmptyView()
             }
         }
         .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))

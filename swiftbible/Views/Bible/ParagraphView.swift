@@ -27,7 +27,7 @@ struct ParagraphView: View {
     }
 
     func VerseText() -> Text {
-        return verses.reduce(Text(""), { acc, verse in
+        return verses.reduce(Text(verbatim: ""), { acc, verse in
             var verseText = acc
 
             // Append verse number if available
@@ -44,7 +44,7 @@ struct ParagraphView: View {
                             .baselineOffset(6.0)
                 }
                 numberText = numberText
-                    + Text(" ")
+                    + Text(verbatim: " ")
                         .foregroundColor(themeSecondaryColor ?? .gray)
                         .font(.footnote)
                         .baselineOffset(6.0)

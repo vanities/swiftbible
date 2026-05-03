@@ -5,7 +5,8 @@
 	functions-deploy test_daily_devotional test_slowness fresh \
 	archive upload release \
 	pull-listings dry-listings push-listings push-listing \
-	pull-screenshots dry-screenshots push-screenshots
+	pull-screenshots dry-screenshots push-screenshots \
+	pull-events push-event submit-event submit-version
 
 # Default target
 help:
@@ -43,6 +44,14 @@ help:
 	@echo "  make dry-screenshots                 – Preview what would be uploaded"
 	@echo "  make push-screenshots                – Upload screenshots from appstore/marketing/ultimate (en-US)"
 	@echo "  make push-screenshots SOURCE=... LOCALE=es-ES FORCE=1 – override source/locale/force"
+	@echo ""
+	@echo "App Store In-App Events:"
+	@echo "  make pull-events                     – List existing events in ASC"
+	@echo "  make push-event EVENT=pentecost      – Create/update event from appstore/events/<slug>/event.yaml"
+	@echo "  make submit-event EVENT=pentecost    – Same as push-event then submit for review"
+	@echo ""
+	@echo "App Store Submission:"
+	@echo "  make submit-version                  – Submit current editable version for Apple review"
 	@echo ""
 	@echo "Tests:"
 	@echo "  make test_daily_devotional"
@@ -195,3 +204,28 @@ push-screenshots:
 		$(if $(SOURCE),--source $(SOURCE),) \
 		$(if $(LOCALE),--locale $(LOCALE),) \
 		$(if $(FORCE),--force,)
+
+# --- App Store In-App Events ---
+# Reads from appstore/events/<slug>/event.yaml. Pass EVENT=<slug>.
+
+EVENT_DEPS = --with PyJWT --with cryptography --with requests --with python-dotenv --with PyYAML
+
+pull-events:
+	@uv run $(EVENT_DEPS) python3 appstore/push_event.py --pull
+
+push-event:
+	@if [ -z "$(EVENT)" ]; then echo "Usage: make push-event EVENT=pentecost"; exit 1; fi
+	@uv run $(EVENT_DEPS) python3 appstore/push_event.py --event $(EVENT) \
+		$(if $(DRY),--dry-run,)
+
+submit-event:
+	@if [ -z "$(EVENT)" ]; then echo "Usage: make submit-event EVENT=pentecost"; exit 1; fi
+	@uv run $(EVENT_DEPS) python3 appstore/push_event.py --event $(EVENT) --submit \
+		$(if $(DRY),--dry-run,)
+
+# --- App Store Version Submission ---
+# Submits the current editable version for Apple review.
+
+submit-version:
+	@uv run --with PyJWT --with cryptography --with requests --with python-dotenv \
+		python3 appstore/submit_version.py $(if $(DRY),--dry-run,)

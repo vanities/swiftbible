@@ -1,968 +1,438 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "" : {
-
+  "sourceLanguage": "en",
+  "strings": {
+    "": {
+      "shouldTranslate": false
     },
-    " " : {
-
+    " %lld": {
+      "shouldTranslate": false
     },
-    " %lld" : {
-
+    "%@": {
+      "shouldTranslate": false
     },
-    "%@" : {
-
-    },
-    "%@ %@ %lld:%lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@ %3$lld:%4$lld"
+    "%@ %@ %lld:%lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@ %3$lld:%4$lld"
           }
         }
       }
     },
-    "%@ %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$lld"
+    "%@ %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$lld"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@ %lld:%lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$lld:%3$lld"
           }
         }
       }
     },
-    "%@ %lld:%lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$lld:%3$lld"
+    "%@ Note": {},
+    "%@ chapter %lld verse %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ chapter %2$lld verse %3$lld"
           }
         }
       }
     },
-    "%@ Note" : {
-
-    },
-    "%@ chapter %lld verse %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ chapter %2$lld verse %3$lld"
+    "%@ preset, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ preset, %2$@"
           }
         }
       }
     },
-    "%@ preset, %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ preset, %2$@"
+    "%@%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@%2$@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@, %2$@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: %2$@"
           }
         }
       }
     },
-    "%@%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@%2$@"
+    "%@: %lld minutes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: %2$lld minutes"
           }
         }
       }
     },
-    "%@, %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@, %2$@"
+    "%lld": {
+      "shouldTranslate": false
+    },
+    "%lld ARTICLE%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld ARTICLE%2$@"
           }
         }
       }
     },
-    "%@: %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@: %2$@"
+    "%lld min": {},
+    "%lld min read": {},
+    "%lld on": {},
+    "%lld.": {
+      "shouldTranslate": false
+    },
+    "**Language Evolution**: English changes over time. \"Suffer the little children\" (KJV) means \"let\" not \"cause pain.\"": {},
+    "**Source Texts**: Translators use different ancient manuscripts. Older doesn't always mean better—scholars weigh manuscript quality, not just age.": {},
+    "**Textual Discoveries**: Since 1611, thousands of earlier manuscripts have been found, improving our understanding of the original text.": {},
+    "**Translation Philosophy**: Some prioritize word-for-word accuracy (formal equivalence), others thought-for-thought clarity (dynamic equivalence).": {},
+    "1 Clement": {},
+    "2 Enoch (Secrets of Enoch)": {},
+    "5 stars. Loved by readers worldwide": {},
+    "9 SECTIONS · 29 ARTICLES": {},
+    "A BRIEF HISTORY OF": {},
+    "A Small Gift Goes a Long Way": {},
+    "A Word for Today": {},
+    "A gentle reminder each day to pause, reflect, and grow in scripture.": {},
+    "A new version of swiftbible is available with improvements and new features. Please update to get the best experience.": {},
+    "AI Generated": {},
+    "AI Generated Content": {},
+    "About Our Sources": {},
+    "About Public Domain": {},
+    "About Translations": {},
+    "Accent Color": {},
+    "All texts included in SwiftBible use public domain translations. Every translation listed below is freely available without copyright restrictions.": {},
+    "All translations in SwiftBible are in the public domain, meaning they can be freely used, shared, and distributed without copyright restrictions.": {},
+    "Apocrypha": {},
+    "Apocrypha, Jewish pseudepigrapha, and early Christian writings — valued by some traditions outside the standard biblical canon.": {},
+    "App Icon": {},
+    "Are you sure you want to delete your account? This action cannot be undone.": {},
+    "Ask a follow-up question…": {},
+    "Authenticate": {},
+    "BIBLE BOOKMARK": {},
+    "Bible": {},
+    "Bible (%@)": {},
+    "Bible Book": {},
+    "Bible translation: %@": {},
+    "Book": {},
+    "Book of Enoch": {},
+    "Book of Jubilees": {},
+    "Bookmark": {},
+    "Bookmarked verse": {},
+    "CONTINUE READING": {},
+    "Cancel": {},
+    "Changes the color of toggles, links, and active tabs throughout the app.": {},
+    "Choose an amount": {},
+    "Choose an amount to protect access": {},
+    "Choose your preferred app icon style.": {},
+    "Clear": {},
+    "Clear All Cache": {},
+    "Clear All Cache?": {},
+    "Clear search": {},
+    "Close": {},
+    "Color Options": {},
+    "Come back on %@!": {},
+    "Continue Your Investment": {},
+    "Contribute %@": {},
+    "Copied to clipboard": {},
+    "Copy": {},
+    "Copy Devotional": {},
+    "Create Account / Sign In": {},
+    "Created: %@": {},
+    "Custom": {},
+    "Custom Accent Color": {},
+    "Custom devotional. Tap to learn more.": {},
+    "Customize the look of the reading view.": {},
+    "Daily Devotional": {},
+    "Daily Reminder": {},
+    "Daily reminder": {},
+    "Debug": {},
+    "Delete": {},
+    "Delete Account": {},
+    "Devotional": {},
+    "Devotional Reminder": {},
+    "Didache": {},
+    "Donate %@%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Donate %1$@%2$@"
           }
         }
       }
     },
-    "%@: %lld minutes" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@: %2$lld minutes"
+    "Donate %@, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Donate %1$@, %2$@"
           }
         }
       }
     },
-    "%lld" : {
-
-    },
-    "%lld ARTICLE%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld ARTICLE%2$@"
+    "Donation": {},
+    "Donation History": {},
+    "Donations cover server costs and the Apple developer fee.": {},
+    "Done": {},
+    "Donor Perks": {},
+    "Double tap to change translation": {},
+    "Double tap to navigate to this verse": {},
+    "Double tap to read. Long press for options.": {},
+    "Each day, a new devotional is generated from scripture. Set a reminder to build it into your routine — even a few minutes of daily reflection adds up.": {},
+    "Early Christian Writings (1 Clement)": {},
+    "Early Christian Writings (Didache)": {},
+    "Edit Note": {},
+    "Email": {},
+    "Enable notifications in your device settings to receive reminders.": {},
+    "Enter the verification code sent to %@": {},
+    "Every contribution sustains free access to Scripture": {},
+    "Every gift keeps swiftbible free for readers worldwide": {},
+    "Explain": {},
+    "Fin.": {},
+    "Font": {},
+    "Font Options": {},
+    "Font Size": {},
+    "Font Size: %lld": {},
+    "Fonts, translations, notifications, and what's in the Bible browser.": {},
+    "Free": {},
+    "From the patriarchs to today — Israel, the canon,\nthe councils, the splits, and the practices of worship.": {},
+    "Give %@": {},
+    "Give %@ Again! 🎉": {},
+    "Give Again — %@": {},
+    "Give Back — %@": {},
+    "Go to today's devotional": {},
+    "HAPPENING NOW": {},
+    "Hand-crafted devotional": {},
+    "Has note": {},
+    "Highlight Color": {},
+    "Highlighted Verses": {},
+    "History": {},
+    "History of the\nChristian Church": {},
+    "Holiday devotional for %@. Tap to learn more.": {},
+    "How it works": {},
+    "How to add it": {},
+    "I like to read the daily devotional before bed during my wind-down routine. It's a nice way to reflect on the day and settle in with something meaningful.": {},
+    "In the beginning God created the heaven and the earth.": {},
+    "In the beginning was the Word": {},
+    "Invest in Scripture": {},
+    "Jewish Pseudepigrapha (Book of Enoch)": {},
+    "Join Hundreds of Supporters": {},
+    "Join the Supporters — %@": {},
+    "Keep swiftbible online": {},
+    "Keeps the lights on": {},
+    "LEARN": {},
+    "Later": {},
+    "Learn More": {},
+    "Loading explanation": {},
+    "Long press for verse actions": {},
+    "Long-press any verse, then tap Highlight to mark it.": {},
+    "Long-press any verse, then tap Note to write your reflection.": {},
+    "Loved by readers worldwide": {},
+    "More": {},
+    "More options": {},
+    "Most chosen": {},
+    "Never miss your daily reflection": {},
+    "New Testament": {},
+    "No Ads": {},
+    "No devotional available. Try again later.": {},
+    "No devotional found for this day.": {},
+    "No donations yet.": {},
+    "No highlighted verses yet": {},
+    "No reading this week yet": {},
+    "No results found.": {},
+    "No saved devotionals yet": {},
+    "No saved notes yet": {},
+    "No single translation captures every nuance of the original languages. Comparing translations reveals depth and meaning that any one version alone might miss. A literal translation shows the structure of the original; a readable translation conveys the flow of thought. Together, they illuminate Scripture more fully.": {},
+    "Not now": {},
+    "Notable Features": {},
+    "Note": {},
+    "Note Details": {},
+    "Note Indicator Color": {},
+    "Notifications Disabled": {},
+    "OK": {},
+    "Old Testament": {},
+    "Once it's gone, it's gone — help today": {},
+    "Open": {},
+    "Open Bible Book": {},
+    "Open Book": {},
+    "Open Daily Devotional": {},
+    "Open Random Verse": {},
+    "Open Source": {},
+    "Open SwiftBible to load today's devotional.": {},
+    "Open SwiftBible to read today's devotional and grow in scripture.": {},
+    "Opens a random Bible verse in SwiftBible for inspiration.": {},
+    "Opens a specific book of the Bible in SwiftBible.": {},
+    "Opens today's daily devotional in SwiftBible.": {},
+    "Permanently delete this note": {},
+    "Personalize your reading": {},
+    "Preparing donation...": {},
+    "Protect Free Access — %@": {},
+    "Query": {},
+    "Random Verse": {},
+    "Read on Wikipedia": {},
+    "Readers just like you chip in to keep swiftbible free for everyone. Join the community that makes it possible.": {},
+    "Reading Stats": {},
+    "Reading Theme": {},
+    "Recent Reading": {},
+    "Recommended": {},
+    "Refunded %@": {},
+    "Reminder": {},
+    "Remove": {},
+    "Remove from saved devotionals": {},
+    "Reset to Default": {},
+    "Retry": {},
+    "Sad face": {},
+    "Save": {},
+    "Save devotional": {},
+    "Save this note": {},
+    "Saved Devotionals": {},
+    "Saved Notes": {},
+    "Scheduled daily at %@": {},
+    "Search": {},
+    "Search the Bible": {},
+    "Searches the Bible for a phrase or word in SwiftBible.": {},
+    "See your impact": {},
+    "Selected Verse %@ %lld:%lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Selected Verse %1$@ %2$lld:%3$lld"
           }
         }
       }
     },
-    "%lld min" : {
-
-    },
-    "%lld min read" : {
-
-    },
-    "%lld on" : {
-
-    },
-    "%lld." : {
-
-    },
-    "**Language Evolution**: English changes over time. \"Suffer the little children\" (KJV) means \"let\" not \"cause pain.\"" : {
-
-    },
-    "**Source Texts**: Translators use different ancient manuscripts. Older doesn't always mean better—scholars weigh manuscript quality, not just age." : {
-
-    },
-    "**Textual Discoveries**: Since 1611, thousands of earlier manuscripts have been found, improving our understanding of the original text." : {
-
-    },
-    "**Translation Philosophy**: Some prioritize word-for-word accuracy (formal equivalence), others thought-for-thought clarity (dynamic equivalence)." : {
-
-    },
-    "1 Clement" : {
-
-    },
-    "123456" : {
-
-    },
-    "2 Enoch (Secrets of Enoch)" : {
-
-    },
-    "5 stars. Loved by readers worldwide" : {
-
-    },
-    "9 SECTIONS · 29 ARTICLES" : {
-
-    },
-    "A BRIEF HISTORY OF" : {
-
-    },
-    "A Small Gift Goes a Long Way" : {
-
-    },
-    "A gentle reminder each day to pause, reflect, and grow in scripture." : {
-
-    },
-    "A new version of swiftbible is available with improvements and new features. Please update to get the best experience." : {
-
-    },
-    "AI Generated" : {
-
-    },
-    "AI Generated Content" : {
-
-    },
-    "About Our Sources" : {
-
-    },
-    "About Public Domain" : {
-
-    },
-    "About Translations" : {
-
-    },
-    "Accent Color" : {
-
-    },
-    "All texts included in SwiftBible use public domain translations. Every translation listed below is freely available without copyright restrictions." : {
-
-    },
-    "All translations in SwiftBible are in the public domain, meaning they can be freely used, shared, and distributed without copyright restrictions." : {
-
-    },
-    "Apocrypha" : {
-
-    },
-    "Apocrypha, Jewish pseudepigrapha, and early Christian writings — valued by some traditions outside the standard biblical canon." : {
-
-    },
-    "App Icon" : {
-
-    },
-    "Are you sure you want to delete your account? This action cannot be undone." : {
-
-    },
-    "Ask a follow-up question…" : {
-
-    },
-    "Authenticate" : {
-
-    },
-    "BIBLE BOOKMARK" : {
-
-    },
-    "Bible" : {
-
-    },
-    "Bible (%@)" : {
-
-    },
-    "Bible Book" : {
-
-    },
-    "Bible translation: %@" : {
-
-    },
-    "Book" : {
-
-    },
-    "Book of Enoch" : {
-
-    },
-    "Book of Jubilees" : {
-
-    },
-    "Bookmark" : {
-
-    },
-    "Bookmarked verse" : {
-
-    },
-    "CONTINUE READING" : {
-
-    },
-    "Cancel" : {
-
-    },
-    "Changes the color of toggles, links, and active tabs throughout the app." : {
-
-    },
-    "Choose an amount" : {
-
-    },
-    "Choose an amount to protect access" : {
-
-    },
-    "Choose your preferred app icon style." : {
-
-    },
-    "Clear" : {
-
-    },
-    "Clear All Cache" : {
-
-    },
-    "Clear All Cache?" : {
-
-    },
-    "Clear search" : {
-
-    },
-    "Close" : {
-
-    },
-    "Color Options" : {
-
-    },
-    "Come back on %@!" : {
-
-    },
-    "Continue Your Investment" : {
-
-    },
-    "Contribute %@" : {
-
-    },
-    "Copied to clipboard" : {
-
-    },
-    "Copy" : {
-
-    },
-    "Copy Devotional" : {
-
-    },
-    "Create Account / Sign In" : {
-
-    },
-    "Created: %@" : {
-
-    },
-    "Custom" : {
-
-    },
-    "Custom Accent Color" : {
-
-    },
-    "Custom devotional. Tap to learn more." : {
-
-    },
-    "Customize the look of the reading view." : {
-
-    },
-    "Daily Devotional" : {
-
-    },
-    "Daily Reminder" : {
-
-    },
-    "Daily reminder" : {
-
-    },
-    "Debug" : {
-
-    },
-    "Delete" : {
-
-    },
-    "Delete Account" : {
-
-    },
-    "Devotional" : {
-
-    },
-    "Devotional Reminder" : {
-
-    },
-    "Didache" : {
-
-    },
-    "Donate %@%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Donate %1$@%2$@"
+    "Send": {},
+    "Send Test Notification Now": {},
+    "Set Reminder Time": {},
+    "Settings": {},
+    "Share": {},
+    "Show donation reminder pop up": {},
+    "Sign Out": {},
+    "Signed in as: %@": {},
+    "Skip": {},
+    "Something went wrong. Please try again.": {},
+    "Source Texts": {},
+    "Start reading to see your history": {},
+    "Step %lld of %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Step %1$lld of %2$lld"
           }
         }
       }
     },
-    "Donate %@, %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Donate %1$@, %2$@"
-          }
-        }
-      }
-    },
-    "Donation" : {
-
-    },
-    "Donation History" : {
-
-    },
-    "Donations cover server costs and the Apple developer fee." : {
-
-    },
-    "Done" : {
-
-    },
-    "Donor Perks" : {
-
-    },
-    "Double tap to change translation" : {
-
-    },
-    "Double tap to navigate to this verse" : {
-
-    },
-    "Double tap to read. Long press for options." : {
-
-    },
-    "Each day, a new devotional is generated from scripture. Set a reminder to build it into your routine — even a few minutes of daily reflection adds up." : {
-
-    },
-    "Early Christian Writings (1 Clement)" : {
-
-    },
-    "Early Christian Writings (Didache)" : {
-
-    },
-    "Edit Note" : {
-
-    },
-    "Email" : {
-
-    },
-    "Enable notifications in your device settings to receive reminders." : {
-
-    },
-    "Enter the verification code sent to %@" : {
-
-    },
-    "Every contribution sustains free access to Scripture" : {
-
-    },
-    "Every gift keeps swiftbible free for readers worldwide" : {
-
-    },
-    "Explain" : {
-
-    },
-    "Fin." : {
-
-    },
-    "Font" : {
-
-    },
-    "Font Options" : {
-
-    },
-    "Font Size" : {
-
-    },
-    "Font Size: %lld" : {
-
-    },
-    "Fonts, translations, notifications, and what's in the Bible browser." : {
-
-    },
-    "Free" : {
-
-    },
-    "From the patriarchs to today — Israel, the canon,\nthe councils, the splits, and the practices of worship." : {
-
-    },
-    "Give %@" : {
-
-    },
-    "Give %@ Again! 🎉" : {
-
-    },
-    "Give Again — %@" : {
-
-    },
-    "Give Back — %@" : {
-
-    },
-    "Go to today's devotional" : {
-
-    },
-    "Hand-crafted devotional" : {
-
-    },
-    "Has note" : {
-
-    },
-    "Highlight Color" : {
-
-    },
-    "Highlighted Verses" : {
-
-    },
-    "History" : {
-
-    },
-    "History of the\nChristian Church" : {
-
-    },
-    "Holiday devotional for %@. Tap to learn more." : {
-
-    },
-    "How it works" : {
-
-    },
-    "How to add it" : {
-
-    },
-    "I like to read the daily devotional before bed during my wind-down routine. It's a nice way to reflect on the day and settle in with something meaningful." : {
-
-    },
-    "In the beginning God created the heaven and the earth." : {
-
-    },
-    "In the beginning was the Word" : {
-
-    },
-    "Invest in Scripture" : {
-
-    },
-    "Jewish Pseudepigrapha (Book of Enoch)" : {
-
-    },
-    "Join Hundreds of Supporters" : {
-
-    },
-    "Join the Supporters — %@" : {
-
-    },
-    "Keep swiftbible online" : {
-
-    },
-    "Keeps the lights on" : {
-
-    },
-    "LEARN" : {
-
-    },
-    "Later" : {
-
-    },
-    "Learn More" : {
-
-    },
-    "Loading explanation" : {
-
-    },
-    "Long press for verse actions" : {
-
-    },
-    "Long-press any verse, then tap Highlight to mark it." : {
-
-    },
-    "Long-press any verse, then tap Note to write your reflection." : {
-
-    },
-    "Loved by readers worldwide" : {
-
-    },
-    "More" : {
-
-    },
-    "More options" : {
-
-    },
-    "Most chosen" : {
-
-    },
-    "Never miss your daily reflection" : {
-
-    },
-    "New Testament" : {
-
-    },
-    "No Ads" : {
-
-    },
-    "No devotional found for this day." : {
-
-    },
-    "No donations yet." : {
-
-    },
-    "No highlighted verses yet" : {
-
-    },
-    "No reading this week yet" : {
-
-    },
-    "No results found." : {
-
-    },
-    "No saved devotionals yet" : {
-
-    },
-    "No saved notes yet" : {
-
-    },
-    "No single translation captures every nuance of the original languages. Comparing translations reveals depth and meaning that any one version alone might miss. A literal translation shows the structure of the original; a readable translation conveys the flow of thought. Together, they illuminate Scripture more fully." : {
-
-    },
-    "Not now" : {
-
-    },
-    "Notable Features" : {
-
-    },
-    "Note" : {
-
-    },
-    "Note Details" : {
-
-    },
-    "Note Indicator Color" : {
-
-    },
-    "Notifications Disabled" : {
-
-    },
-    "OK" : {
-
-    },
-    "Old Testament" : {
-
-    },
-    "Once it's gone, it's gone — help today" : {
-
-    },
-    "Open" : {
-
-    },
-    "Open Bible Book" : {
-
-    },
-    "Open Book" : {
-
-    },
-    "Open Daily Devotional" : {
-
-    },
-    "Open Random Verse" : {
-
-    },
-    "Open Source" : {
-
-    },
-    "Opens a random Bible verse in SwiftBible for inspiration." : {
-
-    },
-    "Opens a specific book of the Bible in SwiftBible." : {
-
-    },
-    "Opens today's daily devotional in SwiftBible." : {
-
-    },
-    "Permanently delete this note" : {
-
-    },
-    "Personalize your reading" : {
-
-    },
-    "Preparing donation..." : {
-
-    },
-    "Protect Free Access — %@" : {
-
-    },
-    "Query" : {
-
-    },
-    "Random Verse" : {
-
-    },
-    "Read on Wikipedia" : {
-
-    },
-    "Readers just like you chip in to keep swiftbible free for everyone. Join the community that makes it possible." : {
-
-    },
-    "Reading Stats" : {
-
-    },
-    "Reading Theme" : {
-
-    },
-    "Recent Reading" : {
-
-    },
-    "Recommended" : {
-
-    },
-    "Refunded %@" : {
-
-    },
-    "Reminder" : {
-
-    },
-    "Remove" : {
-
-    },
-    "Remove from saved devotionals" : {
-
-    },
-    "Reset to Default" : {
-
-    },
-    "Retry" : {
-
-    },
-    "Sad face" : {
-
-    },
-    "Save" : {
-
-    },
-    "Save devotional" : {
-
-    },
-    "Save this note" : {
-
-    },
-    "Saved Devotionals" : {
-
-    },
-    "Saved Notes" : {
-
-    },
-    "Scheduled daily at %@" : {
-
-    },
-    "Search" : {
-
-    },
-    "Search the Bible" : {
-
-    },
-    "Searches the Bible for a phrase or word in SwiftBible." : {
-
-    },
-    "See your impact" : {
-
-    },
-    "Selected Verse %@ %lld:%lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Selected Verse %1$@ %2$lld:%3$lld"
-          }
-        }
-      }
-    },
-    "Send" : {
-
-    },
-    "Send Test Notification Now" : {
-
-    },
-    "Set Reminder Time" : {
-
-    },
-    "Settings" : {
-
-    },
-    "Share" : {
-
-    },
-    "Show donation reminder pop up" : {
-
-    },
-    "Sign Out" : {
-
-    },
-    "Signed in as: %@" : {
-
-    },
-    "Skip" : {
-
-    },
-    "Source Texts" : {
-
-    },
-    "Start reading to see your history" : {
-
-    },
-    "Step %lld of %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Step %1$lld of %2$lld"
-          }
-        }
-      }
-    },
-    "Stop" : {
-
-    },
-    "Streaming explanation…" : {
-
-    },
-    "Supabase Authentication" : {
-
-    },
-    "Support swiftbible" : {
-
-    },
-    "Support swiftbible Again!" : {
-
-    },
-    "SwiftBible" : {
-
-    },
-    "Tap the heart on any devotional to save it for later." : {
-
-    },
-    "Tap to give again — every gift helps." : {
-
-    },
-    "Taps your wrist each day with a haptic nudge to read the devotional." : {
-
-    },
-    "Testaments of the Twelve Patriarchs" : {
-
-    },
-    "Text Sources" : {
-
-    },
-    "Thank You" : {
-
-    },
-    "Thank you for supporting us" : {
-
-    },
-    "Thanks to supporters like you, swiftbible stays free for everyone. Your continued generosity makes a real difference. 🙏" : {
-
-    },
-    "The Bible was originally written in Hebrew (Old Testament), Aramaic (portions of Daniel and Ezra), and Greek (New Testament). Since most people don't read these ancient languages, translations make Scripture accessible to everyone." : {
-
-    },
-    "Theme" : {
-
-    },
-    "This Week" : {
-
-    },
-    "This devotional was personally written by Adam, the developer of SwiftBible, rather than generated by AI." : {
-
-    },
-    "This will clear all cached devotionals and free up %@ of storage. You can always re-download devotionals when you view them." : {
-
-    },
-    "Time" : {
-
-    },
-    "Today" : {
-
-    },
-    "Today's devotional from SwiftBible." : {
-
-    },
-    "Total Donated" : {
-
-    },
-    "Translated by %@" : {
-
-    },
-    "Translation Method" : {
-
-    },
-    "Try Again" : {
-
-    },
-    "Two thousand years — from the patriarchs to today, in 29 articles." : {
-
-    },
-    "Understanding Bible Translations" : {
-
-    },
-    "Up to date" : {
-
-    },
-    "Update Available" : {
-
-    },
-    "Update Now" : {
-
-    },
-    "Verification" : {
-
-    },
-    "Verify" : {
-
-    },
-    "Verify Email" : {
-
-    },
-    "Version %@" : {
-
-    },
-    "Waiting for Apple Intelligence…" : {
-
-    },
-    "We may have missed this one." : {
-
-    },
-    "Welcome Back, Supporter!" : {
-
-    },
-    "Why Multiple Translations Matter" : {
-
-    },
-    "Why Translations Differ" : {
-
-    },
-    "Why We Use It" : {
-
-    },
-    "Without reader support, swiftbible's servers and future updates are at risk. Don't let free access to Scripture disappear." : {
-
-    },
-    "Written from a neutral, descriptive perspective.\nEvery claim links to primary or scholarly sources." : {
-
-    },
-    "YOUR LIBRARY" : {
-
-    },
-    "You're already part of the community keeping swiftbible free. Every repeat gift strengthens the mission." : {
-
-    },
-    "You've been reading Scripture for free — a small gift back helps keep swiftbible running for everyone." : {
-
-    },
-    "Your Impact Continues" : {
-
-    },
-    "Your contributions sustain free access for readers around the world. Thank you for investing in what matters." : {
-
-    },
-    "Your donation helps keep SwiftBible online and free for everyone. Here are some perks as a thank you." : {
-
-    },
-    "Your past generosity kept swiftbible running. Here's how another gift makes a direct impact:" : {
-
-    },
-    "Your past support made a difference. But servers run every day, and without continued help, free access to Scripture is at risk." : {
-
-    },
-    "swiftbible" : {
-
-    },
-    "swiftbible Needs Your Help" : {
-
-    },
-    "swiftbible Still Needs You" : {
-
-    },
-    "swiftbible brings Scripture to thousands of readers — for free. Your investment keeps it that way." : {
-
-    },
-    "swiftbible is free for everyone — and your generosity keeps it that way. Every gift directly supports the servers and tools that bring Scripture to readers worldwide." : {
-
-    },
-    "the Christian Church" : {
-
-    },
-    "v%@" : {
-
-    },
-    "v%@ available" : {
-
-    },
-    "— %@" : {
-
-    },
-    "— Adam, developer" : {
-
-    },
-    "“" : {
-
-    },
-    "“%@”" : {
-
-    },
-    "•" : {
-
-    },
-    "…" : {
-
-    }
+    "Stop": {},
+    "Streaming explanation…": {},
+    "Supabase Authentication": {},
+    "Support swiftbible": {},
+    "Support swiftbible Again!": {},
+    "SwiftBible": {},
+    "Tap the heart on any devotional to save it for later.": {},
+    "Tap to give again — every gift helps.": {},
+    "Taps your wrist each day with a haptic nudge to read the devotional.": {},
+    "Testaments of the Twelve Patriarchs": {},
+    "Text Sources": {},
+    "Thank You": {},
+    "Thank you for supporting us": {},
+    "Thanks to supporters like you, swiftbible stays free for everyone. Your continued generosity makes a real difference. 🙏": {},
+    "The Bible was originally written in Hebrew (Old Testament), Aramaic (portions of Daniel and Ezra), and Greek (New Testament). Since most people don't read these ancient languages, translations make Scripture accessible to everyone.": {},
+    "Theme": {},
+    "This Week": {},
+    "This devotional was personally written by Adam, the developer of SwiftBible, rather than generated by AI.": {},
+    "This will clear all cached devotionals and free up %@ of storage. You can always re-download devotionals when you view them.": {},
+    "Time": {},
+    "Today": {},
+    "Today's devotional from SwiftBible.": {},
+    "Total Donated": {},
+    "Translated by %@": {},
+    "Translation Method": {},
+    "Try Again": {},
+    "Two thousand years — from the patriarchs to today, in 29 articles.": {},
+    "Understanding Bible Translations": {},
+    "Up to date": {},
+    "Update Available": {},
+    "Update Now": {},
+    "Verification": {},
+    "Verification code": {},
+    "Verify": {},
+    "Verify Email": {},
+    "Version %@": {},
+    "Waiting for Apple Intelligence…": {},
+    "We may have missed this one.": {},
+    "Welcome Back, Supporter!": {},
+    "Why Multiple Translations Matter": {},
+    "Why Translations Differ": {},
+    "Why We Use It": {},
+    "Without reader support, swiftbible's servers and future updates are at risk. Don't let free access to Scripture disappear.": {},
+    "Written from a neutral, descriptive perspective.\nEvery claim links to primary or scholarly sources.": {},
+    "YOUR LIBRARY": {},
+    "You're already part of the community keeping swiftbible free. Every repeat gift strengthens the mission.": {},
+    "You've been reading Scripture for free — a small gift back helps keep swiftbible running for everyone.": {},
+    "Your Impact Continues": {},
+    "Your contributions sustain free access for readers around the world. Thank you for investing in what matters.": {},
+    "Your donation helps keep SwiftBible online and free for everyone. Here are some perks as a thank you.": {},
+    "Your past generosity kept swiftbible running. Here's how another gift makes a direct impact:": {},
+    "Your past support made a difference. But servers run every day, and without continued help, free access to Scripture is at risk.": {},
+    "swiftbible": {},
+    "swiftbible Needs Your Help": {},
+    "swiftbible Still Needs You": {},
+    "swiftbible brings Scripture to thousands of readers — for free. Your investment keeps it that way.": {},
+    "swiftbible is free for everyone — and your generosity keeps it that way. Every gift directly supports the servers and tools that bring Scripture to readers worldwide.": {},
+    "the Christian Church": {},
+    "v%@": {},
+    "v%@ available": {},
+    "— %@": {},
+    "— Adam, developer": {},
+    "“": {},
+    "“%@”": {},
+    "•": {},
+    "…": {}
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

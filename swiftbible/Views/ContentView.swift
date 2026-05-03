@@ -279,7 +279,7 @@ struct ContentView: View {
         .alert("Donation", isPresented: $showDonationErrorAlert, actions: {
             Button("OK", role: .cancel) {}
         }, message: {
-            Text(donationErrorMessage ?? "Something went wrong. Please try again.")
+            Text(donationErrorMessage ?? String(localized: "Something went wrong. Please try again."))
         })
         .modifier(UpdateAvailableAlertModifier(isPresented: $showUpdatePrompt, updateService: updateService))
         .fullScreenCover(item: $safariCheckout) { item in

@@ -1,10 +1,15 @@
 ---
-description: SwiftBible's App Store Connect listing automation — push localized name, subtitle, keywords, description, promo text, and what's new across 20+ locales without Fastlane. Use when the user wants to update App Store listings, add what's new for a new release, refresh promotional text, add a new locale, translate version notes across all locales, pull current ASC state, or troubleshoot the push_listing.py / listings.yaml workflow.
+description: SwiftBible's App Store Connect listing automation — push localized name, subtitle, keywords, description, promo text, what's new, and screenshots across 20+ locales without Fastlane, AND submit the version for Apple review. Use when the user wants to update App Store listings, add what's new for a new release, refresh promotional text, add a new locale, translate version notes across all locales, pull current ASC state, push localized screenshots, submit the current version for review, or troubleshoot the push_listing.py / push_screenshots.py / submit_version.py workflow.
 allowed-tools:
   - Bash(uv run python appstore/push_listing.py --dry-run*)
   - Bash(uv run python appstore/push_listing.py --pull*)
+  - Bash(uv run python appstore/push_screenshots.py --pull*)
+  - Bash(uv run python appstore/push_screenshots.py *--dry-run*)
+  - Bash(uv run python appstore/submit_version.py --dry-run*)
   - Bash(make pull-listings*)
   - Bash(make dry-listings*)
+  - Bash(make pull-screenshots*)
+  - Bash(make dry-screenshots*)
 ---
 
 # App Store Listing Automation
@@ -137,6 +142,35 @@ The script handles this automatically. For debugging:
 
 If a script run dies between step 1 and step 3, the screenshot may be left in a half-uploaded state. Apple cleans these up eventually; you can also `--force` to delete and re-upload.
 
+## Workflow: submit the current version for review
+
+When everything is staged (metadata, screenshots, build attached), submit via the API:
+
+```bash
+make submit-version DRY=1   # preview
+make submit-version         # actually submit
+```
+
+The script wraps Apple's review submission flow:
+1. Finds the editable AppStoreVersion
+2. Creates a `reviewSubmission` (or reuses an in-progress one)
+3. Adds the version as an item
+4. Sets `submitted: true` — this triggers Apple's review queue
+
+Apple typically reviews in 24-48h. Track status at App Store Connect → SwiftBible → App Store → version → Submission Status.
+
+### Pre-submission checklist (the script doesn't validate these — Apple will reject if missing)
+
+- [ ] Build uploaded and selected for the version (via Xcode `make release` or Transporter)
+- [ ] All required device size screenshots present (at least 6.9" iPhone + 13" iPad)
+- [ ] Privacy policy URL set in every locale (use `make push-listings` after editing `listings.yaml`)
+- [ ] Age rating questionnaire completed
+- [ ] Pricing & availability set
+- [ ] App Review notes (if any features need explanation)
+- [ ] Encryption / export compliance set in `Info.plist` (`ITSAppUsesNonExemptEncryption`)
+
+If the submission errors with `Cannot create review submission`, one of those is missing. The error message usually points at the field.
+
 ## Workflow: refresh promo text without resubmitting
 
 Promo text (170 chars, top of description) is the only field you can change without a new App Store version. Useful for:
@@ -203,7 +237,9 @@ The `.p8` lives at the repo root (gitignored via `*.p8`). Apple's centralized lo
 ## Related
 
 - `/aso` — full ASO playbook (keyword strategy, screenshots/OCR, In-App Events, CPPs, ratings)
+- `/app-store-events` — adjacent skill for In-App Events (Pentecost, Advent, Lent, etc.)
 - `appstore/README.md` — extended setup docs and screenshot pipeline
+- `appstore/EVENTS.md` — 12-month event calendar
 - `CLAUDE.md` — repo overview and deployment policy
 
 ## Don't

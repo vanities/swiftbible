@@ -1,0 +1,108 @@
+# Pentecost 2026 — In-App Event copy
+# ----------------------------------------------------------------
+# Paste these values into App Store Connect → SwiftBible → In-App Events.
+# Field limits: name 30, short 50, long 120 (per Apple's IAE spec).
+# ----------------------------------------------------------------
+
+reference_name: "Pentecost 2026"   # private, ASC-only
+event_type: "Special Event"
+priority: "HIGH"
+purpose: "Appropriate for All Users"
+purchase_requirement: "FREE"
+primary_locale: "en-US"
+
+# Schedule: a week before through a week after Pentecost Sunday (Jun 1, 2026).
+schedule:
+  start: "2026-05-25 00:00 UTC"
+  end:   "2026-06-07 23:59 UTC"
+  publish_start: "2026-05-25 00:00 UTC"   # when the IAE card becomes visible
+  event_start: "2026-06-01 00:00 UTC"      # the actual event moment
+  event_end: "2026-06-07 23:59 UTC"
+
+deep_link: "swiftbible://verse/Acts/2/1"
+# (Or: swiftbible://event/pentecost  if you add a curated event view — see SETUP.md)
+
+notification_opt_in: |
+  Get a daily reading notification through Pentecost week.
+
+# ----------------------------------------------------------------
+# Localized copy (paste into ASC per-locale tab)
+# Limits: name 30 chars, short 50, long 120.
+# Locales chosen by Christian-population overlap from EVENTS.md.
+# ----------------------------------------------------------------
+
+locales:
+
+  en-US:
+    name: "Pentecost Reading Plan"           # 22
+    short: "Acts 2 + 7 days of devotionals"  # 32
+    long: "Walk through the birth of the Church. Daily Pentecost-themed scripture and reflections through June 7."  # 113
+
+  es-ES:
+    name: "Plan de Lectura de Pentecostés"   # 30
+    short: "Hechos 2 + 7 días de devocional" # 31
+    long: "Camina con el nacimiento de la Iglesia. Lecturas y reflexiones diarias hasta el 7 de junio."  # 96
+
+  es-MX:
+    name: "Lecturas de Pentecostés"           # 28
+    short: "Hechos 2 y 7 días de devocional"  # 33
+    long: "Camina con el nacimiento de la Iglesia. Lecturas y reflexiones diarias hasta el 7 de junio."  # 96
+
+  pt-BR:
+    name: "Plano de Leitura — Pentecostes"    # 30
+    short: "Atos 2 + 7 dias de devocional"    # 30
+    long: "Caminhe pelo nascimento da Igreja. Leituras e reflexões diárias até 7 de junho."  # 84
+
+  pt-PT:
+    name: "Plano de Leitura — Pentecostes"    # 30
+    short: "Atos 2 + 7 dias de devocional"    # 30
+    long: "Caminha pelo nascimento da Igreja. Leituras e reflexões diárias até 7 de junho."  # 84
+
+  fr-FR:
+    name: "Plan de Lecture de Pentecôte"      # 30
+    short: "Actes 2 + 7 jours de méditation"  # 33
+    long: "Vivez la naissance de l'Église. Lectures et méditations quotidiennes jusqu'au 7 juin."  # 91
+
+  de-DE:
+    name: "Pfingst-Leseplan"                  # 17
+    short: "Apostelg. 2 + 7 Tage Andacht"     # 32
+    long: "Begleite die Geburt der Kirche. Tägliche Pfingst-Lesungen und Andachten bis zum 7. Juni."  # 92
+
+  it:
+    name: "Piano di Lettura Pentecoste"       # 30
+    short: "Atti 2 + 7 giorni di devozione"   # 32
+    long: "Cammina con la nascita della Chiesa. Letture e riflessioni quotidiane fino al 7 giugno."  # 91
+
+  pl:
+    name: "Plan Czytania na Zesłanie"         # 29
+    short: "Dz 2 + 7 dni rozważań"            # 26
+    long: "Świętuj narodziny Kościoła. Codzienne czytania i rozważania na Zesłanie Ducha Świętego."  # 92
+
+  ru:
+    name: "Чтения на Пятидесятницу"           # 29
+    short: "Деяния 2 + 7 дней размышлений"    # 35
+    long: "Празднуйте рождение Церкви. Ежедневные чтения и размышления до 7 июня."  # 76
+
+  ko:
+    name: "오순절 성경 읽기"                    # 11
+    short: "사도행전 2장 + 7일 묵상"           # 17
+    long: "교회의 탄생을 함께 걷기. 6월 7일까지 매일 성경 읽기와 묵상."  # 33
+
+  el:
+    name: "Πεντηκοστή — Σχέδιο Ανάγνωσης"     # 30
+    short: "Πράξεις 2 + 7 ημέρες στοχασμού"   # 36
+    long: "Γιόρτασε τη γέννηση της Εκκλησίας. Καθημερινές αναγνώσεις και στοχασμοί έως τις 7 Ιουνίου."  # 95
+
+  ro:
+    name: "Plan de Lectură — Cincizecimea"    # 30
+    short: "Faptele 2 + 7 zile de devoțional" # 32
+    long: "Pășește alături de nașterea Bisericii. Lecturi și reflecții zilnice până pe 7 iunie."  # 91
+
+  nl-NL:
+    name: "Pinksteren Leesplan"               # 17
+    short: "Handelingen 2 + 7 daagse overdenking"  # 41
+    long: "Beleef de geboorte van de Kerk. Dagelijkse lezingen en overdenkingen tot 7 juni."  # 87
+
+# Locales SKIPPED (low Christian observance / no cultural traction for Pentecost):
+#   ja, zh-Hans, zh-Hant, hi, id, tr
+# Apple will surface en-US fallback in those storefronts.

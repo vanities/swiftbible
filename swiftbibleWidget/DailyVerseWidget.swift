@@ -27,9 +27,9 @@ struct DailyDevotionalProvider: TimelineProvider {
     func placeholder(in context: Context) -> DevotionalEntry {
         DevotionalEntry(
             date: Date(),
-            title: "Daily Devotional",
-            heading: "A Word for Today",
-            preview: "Open SwiftBible to read today's devotional and grow in scripture.",
+            title: String(localized: "Daily Devotional"),
+            heading: String(localized: "A Word for Today"),
+            preview: String(localized: "Open SwiftBible to read today's devotional and grow in scripture."),
             hasDevotional: false
         )
     }
@@ -156,7 +156,7 @@ struct DailyDevotionalProvider: TimelineProvider {
             date: Date(),
             title: devotionalTitle(for: Date()),
             heading: nil,
-            preview: "Open SwiftBible to load today's devotional.",
+            preview: String(localized: "Open SwiftBible to load today's devotional."),
             hasDevotional: false
         )
     }
