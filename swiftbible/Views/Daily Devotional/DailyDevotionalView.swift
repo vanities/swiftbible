@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import StoreKit
 import MarkdownUI
 
 struct DailyDevotionalView: View {
@@ -15,6 +16,7 @@ struct DailyDevotionalView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
+    @Environment(\.requestReview) private var requestReview
 
     @Binding var selectedTab: Tabs
 
@@ -520,6 +522,8 @@ struct DailyDevotionalView: View {
                 isFavorite = true
             }
             savedDevotional = devotional
+
+            ReviewPromptService.recordHappyMoment(requestReview: requestReview)
         }
 
         updateSavedState(for: selectedDate)

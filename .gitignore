@@ -78,6 +78,7 @@ supabase/.env
 .mcp.json
 
 appstore/__pycache__/
+appstore/listings.pulled.yaml
 
 .sentryclirc
 *.p8

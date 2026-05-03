@@ -5,6 +5,25 @@
 
 import Foundation
 import PostHog
+import StoreKit
+import SwiftUI
+
+@MainActor
+enum ReviewPromptService {
+    private static let countKey = "engagementMomentCount"
+    private static let milestones: Set<Int> = [3, 10, 25]
+
+    static func recordHappyMoment(requestReview: RequestReviewAction) {
+        let count = UserDefaults.standard.integer(forKey: countKey) + 1
+        UserDefaults.standard.set(count, forKey: countKey)
+
+        #if !DEBUG
+        if milestones.contains(count) {
+            requestReview()
+        }
+        #endif
+    }
+}
 
 enum AnalyticsEvent: String {
     // Navigation

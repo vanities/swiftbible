@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import StoreKit
 import UIKit
 import MJRefresh
 
@@ -142,6 +143,7 @@ struct ChapterDetailView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
+    @Environment(\.requestReview) private var requestReview
 
     // Store only identifying info - the actual data is derived from current version
     let bookName: String
@@ -423,9 +425,9 @@ struct ChapterDetailView: View {
                                 appViewModel.selectedVersion = version
                             } label: {
                                 if version == appViewModel.selectedVersion {
-                                    Label(version.shortName, systemImage: "checkmark")
+                                    Label(version.displayName, systemImage: "checkmark")
                                 } else {
-                                    Text(version.shortName)
+                                    Text(version.displayName)
                                 }
                             }
                         }
@@ -438,6 +440,7 @@ struct ChapterDetailView: View {
                     }
                     .accessibilityLabel("Bible translation: \(appViewModel.selectedVersion.displayName)")
                     .accessibilityHint("Double tap to change translation")
+                    .accessibilityIdentifier("VersionPickerButton")
                 }
             }
         }
@@ -471,6 +474,7 @@ struct ChapterDetailView: View {
                     self.selectedParagraph = nil
                     alreadyHighlighted = nil
                     alreadyNoted = nil
+                    ReviewPromptService.recordHappyMoment(requestReview: requestReview)
                 } label: {
                     Text("Bookmark")
                 }
@@ -491,6 +495,7 @@ struct ChapterDetailView: View {
                         startingVerse: selectedParagraph!.startingVerse
                     )
 
+                    let wasAdding = alreadyHighlighted == nil
                     if let alreadyHighlightedVerse = alreadyHighlighted {
                         context.delete(alreadyHighlightedVerse)
                     } else {
@@ -503,6 +508,9 @@ struct ChapterDetailView: View {
                     }
                     selectedParagraph = nil
                     alreadyHighlighted = nil
+                    if wasAdding {
+                        ReviewPromptService.recordHappyMoment(requestReview: requestReview)
+                    }
                 } label: {
                     Text("\(alreadyHighlighted != nil ? "Unhighlight" : "Highlight")")
                 }
@@ -535,6 +543,7 @@ struct ChapterDetailView: View {
                     selectedParagraph = nil
                     alreadyHighlighted = nil
                     alreadyNoted = nil
+                    ReviewPromptService.recordHappyMoment(requestReview: requestReview)
                 } label: {
                     Text("Explain")
                 }
@@ -551,6 +560,7 @@ struct ChapterDetailView: View {
                     }
                     selectedParagraph = nil
                     alreadyHighlighted = nil
+                    ReviewPromptService.recordHappyMoment(requestReview: requestReview)
                 } label: {
                     Text("Share")
                 }
@@ -769,6 +779,7 @@ struct ChapterDetailView: View {
                 selectedParagraph = nil
                 alreadyHighlighted = nil
                 showNoteModal = false
+                ReviewPromptService.recordHappyMoment(requestReview: requestReview)
             },
             onCancel: {
                 selectedParagraph = nil

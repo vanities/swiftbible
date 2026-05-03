@@ -6,12 +6,10 @@
 //
 
 import SwiftUI
-import StoreKit
 
 struct BibleView: View {
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(UserViewModel.self) private var userViewModel
-    @Environment(\.requestReview) var requestReview
 
     @State private var bibleData: (oldTestament: [Book], newTestament: [Book], apocrypha: [Book], enoch: [Book], jubilees: [Book], testaments: [Book], secondEnoch: [Book], didache: [Book], firstClement: [Book]) = ([], [], [], [], [], [], [], [], [])
     @State private var searchText = ""
@@ -250,9 +248,6 @@ struct BibleView: View {
             fetchSecondEnochData()
             fetchDidacheData()
             fetchFirstClementData()
-            #if !DEBUG
-            requestReview()
-            #endif
         }
             .onChange(of: showApocrypha) { _, newValue in
                 if newValue && bibleData.apocrypha.isEmpty {

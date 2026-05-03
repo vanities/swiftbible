@@ -60,7 +60,9 @@ struct ReadingStatsView: View {
                 title: "Current Streak",
                 value: "\(streak)d",
                 icon: "flame.fill",
-                color: .orange
+                color: .orange,
+                animated: streak > 0,
+                animationSpeed: streakAnimationSpeed
             )
             StatCard(
                 title: "Time Reading",
@@ -157,6 +159,11 @@ struct ReadingStatsView: View {
         }
     }
 
+    private var streakAnimationSpeed: Double {
+        guard streak > 0 else { return 1.0 }
+        return min(3.0, 1.0 + log2(Double(streak) + 1) * 0.3)
+    }
+
     private func formatDuration(_ seconds: TimeInterval) -> String {
         let hours = Int(seconds) / 3600
         let minutes = (Int(seconds) % 3600) / 60
@@ -175,12 +182,16 @@ private struct StatCard: View {
     let value: String
     let icon: String
     let color: Color
+    var animated: Bool = false
+    var animationSpeed: Double = 1.0
 
     var body: some View {
         VStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.title2)
                 .foregroundStyle(color)
+                .symbolEffect(.variableColor.iterative.reversing, options: .repeating.speed(animationSpeed), isActive: animated)
+                .symbolEffect(.wiggle.byLayer, options: .repeating.speed(animationSpeed), isActive: animated)
             Text(value)
                 .font(.title2.bold())
             Text(title)

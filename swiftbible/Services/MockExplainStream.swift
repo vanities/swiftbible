@@ -27,22 +27,23 @@ enum MockExplainStream {
     private static let tokenInterval: UInt64 = UInt64(1_000_000_000.0 / tokensPerSecond)
 
     private static let explanationBody: String = """
-    This short verse closes a striking moment in Nehemiah's restoration narrative. \
-    The people who chose to dwell in Jerusalem were not coerced — they "willingly \
-    offered themselves." The community responded by *blessing* them, recognising \
-    that the work of rebuilding required more than walls; it required willing hearts.
+    This opening verse establishes the Bible's foundational claim: God exists \
+    before creation and is its sovereign author. The Hebrew word *bara*, \
+    translated "created," is reserved in Scripture for divine creative action — \
+    signalling that this is no human craftsmanship but a unique act of God.
 
-    Three things stand out: the freedom of the choice, the sacrifice it implied \
-    (Jerusalem was less prosperous than the surrounding cities), and the public \
-    affirmation that followed. The verse quietly honours people who step into \
-    hard, often unseen work for the sake of the wider community.
+    Three pillars rest on this single sentence: God is *eternal* (he was "in \
+    the beginning"), God is *creator* (everything else is created), and the \
+    cosmos is *purposeful* — the heavens and the earth are the deliberate \
+    result of his work, not the product of accident or chaos.
     """
 
     private static let followUpBody: String = """
-    Yes — the language of "willingly offered" echoes earlier covenant moments \
-    where God's people brought freewill offerings (Exodus 35, 1 Chronicles 29). \
-    Nehemiah is signalling continuity: this generation, like their ancestors, \
-    is restoring worship through voluntary devotion rather than compulsion.
+    Yes — the rabbis observed that *bara* (created) appears only with God as \
+    its subject in Genesis 1, while later verses use *yatsar* (formed) and \
+    *asah* (made) for ordinary work. The distinction signals that creation \
+    *ex nihilo* — out of nothing — is uniquely God's act, not something humans \
+    or even angels can replicate.
     """
 
     static func explanation(

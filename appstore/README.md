@@ -167,6 +167,73 @@ The script can:
 - Export at exact App Store Connect resolutions
 - Batch process all screenshots for all device sizes
 
+## Localized Listing Push (App Store Connect API)
+
+Automation for pushing localized name / subtitle / keywords / description / promo text / what's new across many locales without Fastlane.
+
+### Files
+
+| File | Purpose |
+|---|---|
+| `push_listing.py` | The script — auths to App Store Connect, pulls or pushes localizations |
+| `listings.yaml` | Source of truth — per-locale content for ~20 locales (committed) |
+| `listings.pulled.yaml` | Output of `--pull` — current ASC state for diffing (gitignored) |
+| `.env` | Credentials (gitignored). Copy from `.env.example` |
+| `.env.example` | Template documenting required env vars |
+| `listing-requirements.txt` | Python deps (PyJWT, requests, python-dotenv, PyYAML) |
+
+### Setup
+
+```bash
+# 1. Confirm credentials in appstore/.env (already populated for this repo)
+cat appstore/.env
+
+# 2. Install Python deps (uv handles it on the fly)
+uv pip install -r appstore/listing-requirements.txt
+```
+
+### Workflow
+
+```bash
+# Pull current state from App Store Connect (writes listings.pulled.yaml)
+uv run python appstore/push_listing.py --pull
+
+# Preview what would be pushed
+uv run python appstore/push_listing.py --dry-run
+
+# Push everything in listings.yaml
+uv run python appstore/push_listing.py
+
+# Push one or two locales
+uv run python appstore/push_listing.py --locales pt-BR,es-MX
+```
+
+### Locales currently in listings.yaml
+
+en-US (partial), es-ES, es-MX, pt-BR, pt-PT, fr-FR, de-DE, it, nl-NL, pl, ru, ko, ja, zh-Hans, zh-Hant, id, el, ro, tr, hi, ml.
+
+`ml` (Malayalam) targets the Kerala user signal observed in PostHog. If Apple hasn't enabled Malayalam as a listing locale for this app, the API will return an error and the script will skip it — other locales push normally.
+
+### Editing the YAML
+
+| Field | Limit | Notes |
+|---|---|---|
+| `name` | 30 chars | Lead with primary keyword, brand second |
+| `subtitle` | 30 chars | Secondary keywords, no overlap with name |
+| `keywords` | 100 chars | Comma-separated, NO spaces around commas, no overlap with name/subtitle |
+| `promo_text` | 170 chars | NOT indexed for search — conversion copy only |
+| `description` | 4000 chars | NOT indexed for search — conversion copy only |
+| `whats_new` | 4000 chars | NOT indexed for search — fresh per-version notes |
+
+The script warns (and skips Apple-side rejection) when any field exceeds its limit.
+
+### Caveats
+
+1. **Native review is recommended for keyword fields specifically.** Apple stems differently per language; what's a strong keyword in English may have a different optimal form in Korean or Polish. The seeded values are reasonable starts, not optimized finals.
+2. **Pushing requires an editable App Store Version.** If your app is in `READY_FOR_SALE` and there's no in-flight version, create a new version in App Store Connect first.
+3. **`whats_new` is per-version.** When you ship a new build, update `whats_new` in `listings.yaml` and re-push.
+4. **The script does not handle screenshots or app preview videos.** Those are uploaded separately via App Store Connect or extending the script with `appScreenshotSets` / `appPreviewSets` endpoints.
+
 ## App Store Connect Checklist
 
 - [ ] App name and subtitle

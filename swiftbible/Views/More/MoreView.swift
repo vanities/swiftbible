@@ -58,20 +58,29 @@ struct MoreView: View {
 
     private var parchmentInk: Color {
         colorScheme == .dark
-            ? Color(red: 0.95, green: 0.92, blue: 0.85)
+            ? .primary                                         // iOS-native, adapts cleanly
             : Color(red: 0.18, green: 0.13, blue: 0.10)
     }
 
     private var parchmentMutedInk: Color {
         colorScheme == .dark
-            ? Color(red: 0.78, green: 0.74, blue: 0.66)
+            ? .secondary                                       // iOS-native muted
             : Color(red: 0.40, green: 0.32, blue: 0.24)
     }
 
     private var parchmentSurface: Color {
         colorScheme == .dark
-            ? Color(red: 0.15, green: 0.10, blue: 0.07)
+            // Match the other cards in MoreView (Highlights/Notes/Stats/Settings).
+            // Lets the card sit naturally in the dark grouped list instead of
+            // competing with its own theme.
+            ? Color(.secondarySystemGroupedBackground)
             : Color(red: 0.965, green: 0.94, blue: 0.88)
+    }
+
+    /// Accent color for the History hero. Stays gold in both modes — gold pops
+    /// on neutral dark grey (was muddy on warm brown previously).
+    private var heroAccent: Color {
+        Color.brandGold
     }
 
     // MARK: - History hero
@@ -82,18 +91,18 @@ struct MoreView: View {
                 HStack(spacing: 8) {
                     Rectangle()
                         .frame(width: 16, height: 1)
-                        .foregroundStyle(Color.brandGold.opacity(0.85))
+                        .foregroundStyle(heroAccent.opacity(0.85))
                     Text("LEARN")
                         .font(.system(size: 10, weight: .semibold, design: .serif))
                         .tracking(2.5)
-                        .foregroundStyle(Color.brandGold)
+                        .foregroundStyle(heroAccent)
                     Rectangle()
                         .frame(width: 16, height: 1)
-                        .foregroundStyle(Color.brandGold.opacity(0.85))
+                        .foregroundStyle(heroAccent.opacity(0.85))
                     Spacer()
                     Image(systemName: "scroll.fill")
                         .font(.system(size: 18))
-                        .foregroundStyle(Color.brandGold.opacity(0.9))
+                        .foregroundStyle(heroAccent.opacity(0.9))
                 }
 
                 Text("History of the\nChristian Church")
@@ -111,7 +120,7 @@ struct MoreView: View {
                     .fixedSize(horizontal: false, vertical: true)
 
                 Divider()
-                    .overlay(Color.brandGold.opacity(0.32))
+                    .overlay(heroAccent.opacity(0.32))
                     .padding(.top, 4)
 
                 HStack {
@@ -122,7 +131,7 @@ struct MoreView: View {
                     Spacer()
                     Image(systemName: "arrow.right")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Color.brandGold)
+                        .foregroundStyle(heroAccent)
                 }
             }
             .padding(20)
@@ -135,20 +144,25 @@ struct MoreView: View {
     private var heroBackground: some View {
         ZStack {
             parchmentSurface
-            RadialGradient(
-                colors: colorScheme == .dark
-                    ? [Color.brandGold.opacity(0.12), .clear]
-                    : [Color(red: 1.0, green: 0.93, blue: 0.72).opacity(0.55), .clear],
-                center: .topLeading,
-                startRadius: 10,
-                endRadius: 320
-            )
-            .blendMode(colorScheme == .dark ? .screen : .multiply)
+            // Light mode keeps the warm parchment glow; dark mode stays clean
+            // (no gradients) to match the other cards in MoreView.
+            if colorScheme == .light {
+                RadialGradient(
+                    colors: [Color(red: 1.0, green: 0.93, blue: 0.72).opacity(0.55), .clear],
+                    center: .topLeading,
+                    startRadius: 10,
+                    endRadius: 320
+                )
+                .blendMode(.multiply)
+            }
         }
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay {
+            // Subtle gold border in both modes — single accent that ties the
+            // card to its "ancient text" identity without overwhelming.
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .strokeBorder(Color.brandGold.opacity(0.30), lineWidth: 1)
+                .strokeBorder(Color.brandGold.opacity(colorScheme == .dark ? 0.40 : 0.30),
+                              lineWidth: 1)
         }
         .shadow(color: .black.opacity(colorScheme == .dark ? 0.30 : 0.06),
                 radius: 8, x: 0, y: 3)

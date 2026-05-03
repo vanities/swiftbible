@@ -3,7 +3,9 @@
 	functions functions-background \
 	ngrok-up ngrok-down ngrok-background \
 	functions-deploy test_daily_devotional test_slowness fresh \
-	archive upload release
+	archive upload release \
+	pull-listings dry-listings push-listings push-listing \
+	pull-screenshots dry-screenshots push-screenshots
 
 # Default target
 help:
@@ -29,6 +31,18 @@ help:
 	@echo "  make archive          – Archive the app for App Store"
 	@echo "  make upload           – Upload the latest archive to App Store Connect"
 	@echo "  make release          – Archive + upload in one step"
+	@echo ""
+	@echo "App Store Listings (metadata across locales):"
+	@echo "  make pull-listings    – Download current ASC state to listings.pulled.yaml"
+	@echo "  make dry-listings     – Preview what would change without pushing"
+	@echo "  make push-listings    – Push all locales from listings.yaml"
+	@echo "  make push-listing LOCALES=ml,hi – Push specific locales"
+	@echo ""
+	@echo "App Store Screenshots:"
+	@echo "  make pull-screenshots                – List current screenshots in ASC"
+	@echo "  make dry-screenshots                 – Preview what would be uploaded"
+	@echo "  make push-screenshots                – Upload screenshots from appstore/marketing/ultimate (en-US)"
+	@echo "  make push-screenshots SOURCE=... LOCALE=es-ES FORCE=1 – override source/locale/force"
 	@echo ""
 	@echo "Tests:"
 	@echo "  make test_daily_devotional"
@@ -139,3 +153,45 @@ upload:
 	@echo "Upload complete!"
 
 release: archive upload
+
+# --- App Store Listings ---
+# See .claude/skills/app-store-listing/SKILL.md for the full workflow.
+
+pull-listings:
+	@uv run --with PyJWT --with cryptography --with requests --with python-dotenv --with PyYAML \
+		python3 appstore/push_listing.py --pull
+
+dry-listings:
+	@uv run --with PyJWT --with cryptography --with requests --with python-dotenv --with PyYAML \
+		python3 appstore/push_listing.py --dry-run $(if $(LOCALES),--locales $(LOCALES),)
+
+push-listings:
+	@uv run --with PyJWT --with cryptography --with requests --with python-dotenv --with PyYAML \
+		python3 appstore/push_listing.py
+
+push-listing:
+	@if [ -z "$(LOCALES)" ]; then echo "Usage: make push-listing LOCALES=ml,hi"; exit 1; fi
+	@uv run --with PyJWT --with cryptography --with requests --with python-dotenv --with PyYAML \
+		python3 appstore/push_listing.py --locales $(LOCALES)
+
+# --- App Store Screenshots ---
+# SOURCE defaults to appstore/marketing/ultimate. LOCALE defaults to en-US.
+# FORCE=1 to delete-and-replace existing screenshots in ASC.
+
+SCREENSHOT_DEPS = --with PyJWT --with cryptography --with requests --with python-dotenv
+
+pull-screenshots:
+	@uv run $(SCREENSHOT_DEPS) python3 appstore/push_screenshots.py --pull \
+		$(if $(LOCALE),--locale $(LOCALE),)
+
+dry-screenshots:
+	@uv run $(SCREENSHOT_DEPS) python3 appstore/push_screenshots.py --dry-run \
+		$(if $(SOURCE),--source $(SOURCE),) \
+		$(if $(LOCALE),--locale $(LOCALE),) \
+		$(if $(FORCE),--force,)
+
+push-screenshots:
+	@uv run $(SCREENSHOT_DEPS) python3 appstore/push_screenshots.py \
+		$(if $(SOURCE),--source $(SOURCE),) \
+		$(if $(LOCALE),--locale $(LOCALE),) \
+		$(if $(FORCE),--force,)

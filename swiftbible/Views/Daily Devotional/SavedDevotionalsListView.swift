@@ -20,12 +20,13 @@ struct SavedDevotionalsListView: View {
     }()
 
     var body: some View {
-        List {
+        Group {
             if savedDevotionals.isEmpty {
                 VStack(alignment: .center, spacing: 12) {
                     Image(systemName: "heart")
                         .font(.largeTitle)
                         .foregroundStyle(.secondary)
+                        .symbolEffect(.pulse, options: .repeating)
                     Text("No saved devotionals yet")
                         .font(.headline)
                     Text("Tap the heart on any devotional to save it for later.")
@@ -33,39 +34,40 @@ struct SavedDevotionalsListView: View {
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 32)
-                .listRowBackground(Color.clear)
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                ForEach(savedDevotionals) { devotional in
-                    NavigationLink {
-                        SavedDevotionalDetailView(devotional: devotional)
-                    } label: {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(dateFormatter.string(from: devotional.date))
-                                .font(.headline)
-                                .foregroundStyle(.primary)
-                            Text(devotional.message.preview(maxLength: 150))
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(3)
-                        }
-                        .padding(.vertical, 4)
-                    }
-                    .accessibilityHint("Double tap to read. Long press for options.")
-                    .contextMenu {
-                        Button(role: .destructive) {
-                            delete(devotional)
+                List {
+                    ForEach(savedDevotionals) { devotional in
+                        NavigationLink {
+                            SavedDevotionalDetailView(devotional: devotional)
                         } label: {
-                            Label("Remove", systemImage: "trash")
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(dateFormatter.string(from: devotional.date))
+                                    .font(.headline)
+                                    .foregroundStyle(.primary)
+                                Text(devotional.message.preview(maxLength: 150))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(3)
+                            }
+                            .padding(.vertical, 4)
+                        }
+                        .accessibilityHint("Double tap to read. Long press for options.")
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                delete(devotional)
+                            } label: {
+                                Label("Remove", systemImage: "trash")
+                            }
                         }
                     }
+                    .onDelete(perform: delete)
                 }
-                .onDelete(perform: delete)
+                .listStyle(.insetGrouped)
             }
         }
         .navigationTitle("Saved Devotionals")
-        .listStyle(.insetGrouped)
     }
 
     private func delete(_ devotional: SavedDevotional) {

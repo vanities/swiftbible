@@ -59,11 +59,6 @@ DEVICES = {
         "screenshot_scale": 0.75,
         "corner_radius": 55,
     },
-    "iphone-6.5": {
-        "canvas": (1284, 2778),
-        "screenshot_scale": 0.75,
-        "corner_radius": 52,
-    },
     "ipad-13": {
         "canvas": (2048, 2732),
         "screenshot_scale": 0.70,
@@ -74,72 +69,93 @@ DEVICES = {
 # --- Screenshot Definitions ---
 # (filename, headline, subtitle, style, gradient_top, gradient_bottom, orb_color, headline_gradient)
 
+# Slot order follows Sebastian's playbook: lead with most visually impressive +
+# differentiating feature. Headlines double as OCR-indexed keyword surface
+# (Apple change, Jun 2025) — each one contains a target keyword for that theme.
+#
+# Appearance mix: dark dominates for visual cohesion / premium feel; slot 2
+# (translations) breaks pattern in light mode for contrast and readability of
+# the dropdown menu listing "King James / American Standard / World English /
+# Original (Hebrew OT / Greek NT)".
 SCREENSHOTS = [
-    {
-        "filename": "01_bible_books",
-        "headline": "The Word at Your Fingertips",        # Gain Framing (#53)
-        "subtitle": "Three translations, one beautiful app",
-        "style": "straight",
-        "grad_top": (13, 18, 45),       # deep navy tint
-        "grad_bot": (20, 30, 65),
-        "orbs": [(0.2, 0.3, 0.5, ACCENT, 50), (0.8, 0.7, 0.4, CYAN, 35)],
-        "headline_grad": ((255, 255, 255), TINT_TEAL),
-    },
-    {
-        "filename": "02_chapters",
-        "headline": "Every Chapter, Summarized",           # Competence Signalling (#95)
-        "subtitle": "Know what you're reading before you start",
-        "style": "tilt_right",
-        "grad_top": (8, 22, 48),        # deep blue (navy family)
-        "grad_bot": (14, 38, 72),
-        "orbs": [(0.7, 0.25, 0.45, CYAN, 45), (0.15, 0.6, 0.35, GREEN, 30)],
-        "headline_grad": ((255, 255, 255), TINT_BLUE),
-    },
-    {
-        "filename": "03_verses",
-        "headline": "Jesus's Words in Red",                # Von Restorff (#1)
-        "subtitle": "The tradition, beautifully preserved",
-        "style": "tilt_left",
-        "grad_top": (45, 12, 18),       # deep warm red (ribbon red family)
-        "grad_bot": (72, 20, 30),
-        "orbs": [(0.3, 0.35, 0.5, RED_DARK, 45), (0.85, 0.65, 0.3, RED, 30)],
-        "headline_grad": ((255, 255, 255), TINT_RED),
-    },
-    {
-        "filename": "04_verse_options",
-        "headline": "Long Press. Discover More.",          # Curiosity Gap (#103)
-        "subtitle": "Bookmark, highlight, take notes, share",
-        "style": "straight",
-        "grad_top": (8, 32, 35),        # deep teal (accent family)
-        "grad_bot": (14, 55, 58),
-        "orbs": [(0.5, 0.3, 0.5, ACCENT, 45), (0.1, 0.7, 0.35, GREEN, 30)],
-        "headline_grad": ((255, 255, 255), TINT_TEAL),
-        "badges": ["Copy", "Bookmark", "Highlight", "Explain", "Share"],
-    },
-    {
-        "filename": "05_translations",
-        "headline": "Beautiful in Any Light",              # Aesthetic-Usability (#122)
-        "subtitle": "Four translations with your preferred style",
-        "style": "split",
-        "grad_top": (38, 30, 10),       # warm amber/gold (brand warm family)
-        "grad_bot": (60, 48, 16),
-        "orbs": [(0.5, 0.3, 0.55, GOLD, 45), (0.15, 0.7, 0.3, GOLD, 25)],
-        "headline_grad": ((255, 255, 255), TINT_GOLD),
-    },
+    # --- Slot 1: Hook — daily devotional (kw: "daily devotional") ---
     {
         "filename": "06_devotional",
-        "headline": "Start Each Day in Scripture",         # Tiny Habits (#114)
-        "subtitle": "A new devotional, every morning",
+        "appearance": "dark",
+        "headline": "Daily Devotional, Every Morning",
+        "subtitle": "Verse, context & prayer to start your day",
         "style": "tilt_right",
         "grad_top": (42, 26, 10),       # warm brown (cover dark family)
         "grad_bot": (65, 40, 14),
         "orbs": [(0.6, 0.3, 0.45, GOLD, 45), (0.2, 0.65, 0.35, GOLD, 30)],
         "headline_grad": ((255, 255, 255), TINT_WARM),
     },
+    # --- Slot 2: Unique moat (kw: "Hebrew Greek Bible"). LIGHT — pattern
+    #     break for contrast, and the dropdown reads more clearly on white. ---
     {
-        "filename": "07_settings",
-        "headline": "Make It Yours",                       # Autonomy Bias (#108)
-        "subtitle": "Fonts, colors, and hidden texts to unlock",
+        "filename": "05_translations",
+        "appearance": "light",
+        "headline": "Hebrew & Greek Bible",
+        "subtitle": "KJV, ASV, WEB — switch as you read",
+        "style": "split",
+        "grad_top": (38, 30, 10),       # warm amber/gold (brand warm family)
+        "grad_bot": (60, 48, 16),
+        "orbs": [(0.5, 0.3, 0.55, GOLD, 45), (0.15, 0.7, 0.3, GOLD, 25)],
+        "headline_grad": ((255, 255, 255), TINT_GOLD),
+    },
+    # --- Slot 3: Visual standout (kw: "red letter Bible") ---
+    {
+        "filename": "03_verses",
+        "appearance": "dark",
+        "headline": "Red Letter Bible",
+        "subtitle": "Jesus's words in red, beautifully preserved",
+        "style": "tilt_left",
+        "grad_top": (45, 12, 18),       # deep warm red (ribbon red family)
+        "grad_bot": (72, 20, 30),
+        "orbs": [(0.3, 0.35, 0.5, RED_DARK, 45), (0.85, 0.65, 0.3, RED, 30)],
+        "headline_grad": ((255, 255, 255), TINT_RED),
+    },
+    # --- Slot 4: Premium AI signal (kw: "Bible AI explanations") ---
+    {
+        "filename": "04b_explain",
+        "appearance": "dark",
+        "headline": "Bible AI Verse Explanations",
+        "subtitle": "Apple Intelligence, on device & private",
+        "style": "straight",
+        "grad_top": (8, 32, 35),        # deep teal (accent family)
+        "grad_bot": (14, 55, 58),
+        "orbs": [(0.5, 0.3, 0.5, ACCENT, 45), (0.1, 0.7, 0.35, GREEN, 30)],
+        "headline_grad": ((255, 255, 255), TINT_TEAL),
+    },
+    # --- Slot 5: Library depth (kw: "Apocrypha Bible") ---
+    {
+        "filename": "01_bible_books",
+        "appearance": "dark",
+        "headline": "Apocrypha & Enoch Included",
+        "subtitle": "Jubilees, Clement, Didache — all public domain",
+        "style": "straight",
+        "grad_top": (13, 18, 45),       # deep navy tint
+        "grad_bot": (20, 30, 65),
+        "orbs": [(0.2, 0.3, 0.5, ACCENT, 50), (0.8, 0.7, 0.4, CYAN, 35)],
+        "headline_grad": ((255, 255, 255), TINT_TEAL),
+    },
+    # --- Slot 6: Study-tool signal (kw: "chapter summary") ---
+    {
+        "filename": "02_chapters",
+        "appearance": "dark",
+        "headline": "Summary on Every Chapter",
+        "subtitle": "Know the gist before you read",
+        "style": "tilt_right",
+        "grad_top": (8, 22, 48),        # deep blue (navy family)
+        "grad_bot": (14, 38, 72),
+        "orbs": [(0.7, 0.25, 0.45, CYAN, 45), (0.15, 0.6, 0.35, GREEN, 30)],
+        "headline_grad": ((255, 255, 255), TINT_BLUE),
+    },
+    # --- Slot 7: Close — bookmarks/highlights/notes (kw: "Bible notes") ---
+    {
+        "filename": "07_more",
+        "headline": "Bible Notes & Bookmarks",
+        "subtitle": "Highlights, stats & history in one place",
         "style": "straight",
         "grad_top": (16, 18, 30),       # dark navy (deep navy family)
         "grad_bot": (28, 32, 48),
@@ -176,11 +192,11 @@ PANORAMIC_PAIRS = [
     },
     {
         "left_filename": "06_devotional",
-        "right_filename": "07_settings",
-        "left_headline": "Start Each Day in Scripture",    # Tiny Habits (#114)
-        "left_subtitle": "A new devotional, every morning",
-        "right_headline": "Make It Yours",                  # Autonomy Bias (#108)
-        "right_subtitle": "Fonts, colors, and hidden texts to unlock",
+        "right_filename": "07_more",
+        "left_headline": "A New Word, Every Morning",
+        "left_subtitle": "Daily devotional with verse, context & prayer",
+        "right_headline": "Your Library, At a Glance",
+        "right_subtitle": "Bookmarks, stats & history in one place",
         "left_angle": 5,
         "right_angle": -5,
         "grad_tl": (42, 26, 10),
@@ -205,22 +221,22 @@ PANORAMIC_PAIRS = [
 
 PANORAMIC_STRIP = {
     "screenshots": [
-        {"filename": "01_bible_books", "headline": "The Word at Your Fingertips",
-         "subtitle": "Three translations, one beautiful app"},
-        {"filename": "02_chapters", "headline": "Every Chapter, Summarized",
-         "subtitle": "Know what you're reading before you start"},
+        {"filename": "06_devotional", "headline": "A New Word, Every Morning",
+         "subtitle": "Daily devotional with verse, context & prayer"},
+        {"filename": "05_translations", "headline": "Hebrew, Greek & English",
+         "subtitle": "Four translations, switch as you read"},
         {"filename": "03_verses", "headline": "Jesus's Words in Red",
          "subtitle": "The tradition, beautifully preserved"},
-        {"filename": "04_verse_options", "headline": "Long Press. Discover More.",
-         "subtitle": "Bookmark, highlight, take notes, share"},
-        {"filename": "05_translations", "headline": "Beautiful in Any Light",
-         "subtitle": "Read comfortably, any time"},
+        {"filename": "04b_explain", "headline": "Understand Any Verse",
+         "subtitle": "AI-powered explanations on device"},
+        {"filename": "01_bible_books", "headline": "Apocrypha, Enoch & Beyond",
+         "subtitle": "Eight extra collections, all public domain"},
         # Dark mode device — no headline; visual contrast speaks for itself
         {"filename": "05_translations_dark", "headline": "", "subtitle": ""},
-        {"filename": "06_devotional", "headline": "Start Each Day in Scripture",
-         "subtitle": "A new devotional, every morning"},
-        {"filename": "07_settings", "headline": "Make It Yours",
-         "subtitle": "Fonts, colors, and hidden texts to unlock"},
+        {"filename": "02_chapters", "headline": "Know Before You Read",
+         "subtitle": "Plain-English summary at every chapter"},
+        {"filename": "07_more", "headline": "Your Library, At a Glance",
+         "subtitle": "Bookmarks, stats & history in one place"},
         {"filename": "01_bible_books_dark", "headline": "Read Anytime",
          "subtitle": "Beautiful in every light"},
     ],
@@ -1136,10 +1152,10 @@ ULTIMATE_STRIP = {
          "headline": "Start Each Morning Different",
          "subtitle": "A fresh devotional, every single day",
          "angle": 0, "scale": 0.92},
-        # 8. Left tilt — Autonomy Bias (#108): ownership language.
-        {"filename": "07_settings",
-         "headline": "Your Bible. Your Way.",
-         "subtitle": "Customize fonts, colors, and more",
+        # 8. Left tilt — library breadth via the More hub.
+        {"filename": "07_more",
+         "headline": "Your Library, At a Glance",
+         "subtitle": "Bookmarks, stats & history in one place",
          "angle": -4, "scale": 0.85},
         # 9. Visual bookend with closing text.
         {"filename": "01_bible_books_dark",
@@ -1179,104 +1195,121 @@ ULTIMATE_STRIP = {
 #   "panoramic" — two frames share a continuous background, devices on cut line
 #   "split"     — light/dark side by side in one frame
 
+# ULTIMATE_MIXED — the marketing set actually uploaded to App Store Connect.
+#
+# Slot order follows Sebastian's playbook (devotional hook → unique moat →
+# visual standout → premium feature → depth → study tool → close).
+#
+# Appearance: mostly DARK for visual cohesion and a premium feel; slot 2
+# breaks pattern as a halved light/dark split — both reads as "we have light
+# AND dark" AND showcases the translation dropdown clearly.
+#
+# Headlines are OCR-indexed (Apple change Jun 2025) and contain the target
+# keyword for each theme.
+# Reordered to front-load the three most distinctive features
+# (Devotional → Explain → More), then the unique-moat translations break,
+# then secondary features. Mostly DARK with one LIGHT/DARK halved break.
 ULTIMATE_MIXED = [
-    # Frame 1: HERO — stop the scroll, name the pain
+    # Slot 1: HERO (DARK) — daily devotional hook (kw: "daily devotional")
     {"layout": "hero",
-     "filename": "01_bible_books",
-     "headline": "Scripture Without the Clutter",
-     "subtitle": "No ads. No sign-up. Just the Word.",
+     "filename": "06_devotional_dark",
+     "headline": "Daily Devotional, Every Morning",
+     "subtitle": "Verse, context & prayer to start your day",
      "scale": 0.88, "angle": 0,
-     "grad_top": (13, 18, 45), "grad_bot": (20, 30, 65),
-     "orbs": [(0.2, 0.3, 0.5, ACCENT, 50), (0.8, 0.7, 0.4, CYAN, 35)],
-     "headline_grad": ((255, 255, 255), TINT_TEAL),
-     "headline_font": "intro",
-     "glow": ACCENT, "shimmer": False, "accent_line": ACCENT,
-     "bokeh": CYAN, "grain": True, "vignette": True, "bloom": True},
-
-    # Frame 2: HALVED — eye-catching light/dark split
-    {"layout": "halved",
-     "light_filename": "05_translations",
-     "dark_filename": "05_translations_dark",
-     "headline": "Beautiful in Any Light",
-     "subtitle": "Three translations, light or dark",
-     "grad_top": (38, 30, 10), "grad_bot": (60, 48, 16),
-     "orbs": [(0.5, 0.3, 0.55, GOLD, 45), (0.15, 0.7, 0.3, GOLD, 25)],
-     "headline_grad": ((255, 255, 255), TINT_GOLD)},
-
-    # Frame 3: HERO — devotional, daily habit hook
-    {"layout": "hero",
-     "filename": "06_devotional",
-     "headline": "Start Each Morning Different",
-     "subtitle": "A fresh devotional, every single day",
-     "scale": 0.85, "angle": -5,
      "grad_top": (42, 26, 10), "grad_bot": (65, 40, 14),
      "orbs": [(0.6, 0.3, 0.45, GOLD, 45), (0.2, 0.65, 0.35, GOLD, 30)],
      "headline_grad": ((255, 255, 255), TINT_WARM),
      "headline_font": "intro",
      "glow": GOLD, "bokeh": GOLD, "vignette": True,
      "god_rays": GOLD, "god_rays_corner": "top_left",
-     "shimmer": False, "color_grade": 0.12},
+     "shimmer": False, "color_grade": 0.12, "bloom": True},
 
-    # Frame 4: HERO — trust bridge
+    # Slot 2: HERO (DARK) — Apple Intelligence verse explanations
     {"layout": "hero",
-     "filename": "02_chapters",
-     "headline": "Free Forever. Open Source.",
-     "subtitle": "No ads. No tracking. No subscriptions.",
-     "scale": 0.82, "angle": 3,
-     "grad_top": (8, 22, 48), "grad_bot": (14, 38, 72),
-     "orbs": [(0.7, 0.25, 0.45, CYAN, 45), (0.15, 0.6, 0.35, GREEN, 30)],
+     "filename": "04b_explain_dark",
+     "headline": "Bible AI Verse Explanations",
+     "subtitle": "Apple Intelligence, on device & private",
+     "scale": 0.85, "angle": 4,
+     "grad_top": (8, 32, 35), "grad_bot": (14, 55, 58),
+     "orbs": [(0.5, 0.3, 0.5, ACCENT, 45), (0.1, 0.7, 0.35, GREEN, 30)],
      "headline_grad": ((255, 255, 255), TINT_TEAL),
      "headline_font": "headline",
-     "light_leak": CYAN, "light_leak_corner": "top_left", "light_leak_size": 0.3,
-     "accent_line": CYAN},
+     "light_leak": ACCENT, "light_leak_corner": "top_right", "light_leak_size": 0.3,
+     "accent_line": ACCENT, "bloom": True},
 
-    # Frames 5-6: PANORAMIC PAIR — verses + verse options
-    {"layout": "panoramic",
-     "left_filename": "03_verses",
-     "right_filename": "04_verse_options",
-     "left_headline": "See What Jesus Actually Said",
-     "left_subtitle": "Red-letter words, beautifully preserved",
-     "right_headline": "Make Every Verse Yours",
-     "right_subtitle": "Bookmark, highlight, take notes, share",
-     "left_angle": 4, "right_angle": -4,
-     "scale": 0.88,
-     "grad_tl": (45, 12, 18), "grad_tr": (8, 32, 35),
-     "grad_bl": (72, 20, 30), "grad_br": (14, 55, 58),
-     "orbs": [
-         (0.15, 0.3, 0.22, RED_DARK, 50),
-         (0.5, 0.45, 0.28, ACCENT, 55),
-         (0.85, 0.35, 0.22, ACCENT, 50),
-         (0.35, 0.7, 0.18, RED, 30),
-         (0.65, 0.65, 0.18, GREEN, 30),
-     ],
-     "left_headline_grad": ((255, 255, 255), TINT_RED),
-     "right_headline_grad": ((255, 255, 255), TINT_TEAL)},
-
-    # Frame 7: HERO — settings
+    # Slot 3: HERO (DARK) — More hub (bookmarks, notes, library at a glance)
     {"layout": "hero",
-     "filename": "07_settings",
-     "headline": "Your Bible. Your Way.",
-     "subtitle": "Customize fonts, colors, and more",
-     "scale": 0.82, "angle": -3,
+     "filename": "07_more_dark",
+     "headline": "Bible Notes & Bookmarks",
+     "subtitle": "Highlights, stats & history in one place",
+     "scale": 0.85, "angle": -4,
      "grad_top": (16, 18, 30), "grad_bot": (28, 32, 48),
      "orbs": [(0.3, 0.35, 0.4, ACCENT, 35), (0.75, 0.6, 0.3, CYAN, 25)],
      "headline_grad": ((255, 255, 255), TINT_TEAL),
      "headline_font": "headline",
+     "glow": ACCENT, "bokeh": CYAN, "vignette": True,
      "accent_line": ACCENT, "bloom": True},
 
-    # Frame 8: HERO — closing, dark mode bookend
+    # Slot 4: HALVED (LIGHT/DARK split) — translations + appearance combo.
+    # The split itself signals "we support light AND dark" while the open
+    # dropdown lands the Hebrew/Greek moat keyword.
+    {"layout": "halved",
+     "light_filename": "05_translations",
+     "dark_filename": "05_translations_dark",
+     "headline": "Hebrew & Greek Bible",
+     "subtitle": "KJV, ASV, WEB — switch as you read",
+     "grad_top": (38, 30, 10), "grad_bot": (60, 48, 16),
+     "orbs": [(0.5, 0.3, 0.55, GOLD, 45), (0.15, 0.7, 0.3, GOLD, 25)],
+     "headline_grad": ((255, 255, 255), TINT_GOLD)},
+
+    # Slot 5: HERO (DARK) — Jesus's words in red (kw: "red letter Bible")
     {"layout": "hero",
-     "filename": "01_bible_books_dark",
-     "headline": "Read. Study. Grow.",
-     "subtitle": "SwiftBible",
-     "scale": 0.88, "angle": 0,
+     "filename": "03_red_letter_dark",
+     "headline": "Red Letter Bible",
+     "subtitle": "Jesus's words in red, beautifully preserved",
+     "scale": 0.85, "angle": 4,
+     "grad_top": (45, 12, 18), "grad_bot": (72, 20, 30),
+     "orbs": [(0.3, 0.35, 0.5, RED_DARK, 45), (0.85, 0.65, 0.3, RED, 30)],
+     "headline_grad": ((255, 255, 255), TINT_RED),
+     "headline_font": "headline",
+     "vignette": True, "accent_line": RED, "bloom": True},
+
+    # Slots 6+7: PANORAMIC (DARK) — library depth + study tool combo.
+    # Left uses the apocrypha-scrolled book list so the headline matches.
+    {"layout": "panoramic",
+     "left_filename": "01b_apocrypha_books_dark",
+     "right_filename": "02_chapters_dark",
+     "left_headline": "Apocrypha & Enoch Included",
+     "left_subtitle": "Jubilees, Clement, Didache — public domain",
+     "right_headline": "Summary on Every Chapter",
+     "right_subtitle": "Know the gist before you read",
+     "left_angle": 4, "right_angle": -4,
+     "scale": 0.88,
+     "grad_tl": (13, 18, 45), "grad_tr": (8, 22, 48),
+     "grad_bl": (20, 30, 65), "grad_br": (14, 38, 72),
+     "orbs": [
+         (0.15, 0.3, 0.22, ACCENT, 50),
+         (0.5, 0.45, 0.28, CYAN, 55),
+         (0.85, 0.35, 0.22, CYAN, 50),
+         (0.35, 0.7, 0.18, GREEN, 30),
+         (0.65, 0.65, 0.18, ACCENT, 30),
+     ],
+     "left_headline_grad": ((255, 255, 255), TINT_TEAL),
+     "right_headline_grad": ((255, 255, 255), TINT_BLUE)},
+
+    # Slot 8: WATCH+WIDGET composite — companion experiences.
+    # Custom layout reads from the asset catalog (OnboardingWatch/Widget) since
+    # those are shipped product art, not simulator captures.
+    {"layout": "watch_widget",
+     "headline": "On Apple Watch & Widget Too",
+     "subtitle": "Verse-of-the-day at a wrist or home-screen glance",
      "grad_top": (20, 14, 8), "grad_bot": (42, 28, 12),
      "orbs": [(0.4, 0.4, 0.5, GOLD, 35), (0.7, 0.6, 0.3, ACCENT, 25)],
      "headline_grad": ((255, 255, 255), TINT_WARM),
      "headline_font": "intro",
-     "glow": GOLD, "bokeh": GOLD, "grain": True, "vignette": True,
+     "vignette": True,
      "god_rays": GOLD, "god_rays_corner": "top_right",
-     "shimmer": False, "color_grade": 0.15, "bloom": True},
+     "color_grade": 0.15},
 ]
 
 
@@ -1430,25 +1463,39 @@ def generate_mixed_panoramic(device_config, raw_dir, pair_cfg, out_path_left, ou
     # 2. Orbs
     canvas = add_ambient_orbs(canvas, pair_cfg["orbs"], double_w, canvas_h)
 
-    # 3. Text
-    hl_size = 100 if is_ipad else 88
+    # 3. Text — each headline must fit within its own frame's width.
+    base_hl_size = 100 if is_ipad else 88
     sub_size = 55 if is_ipad else 46
-    headline_font = load_font(hl_size, bold=True)
     subtitle_font = load_font(sub_size, bold=False)
+    max_text_w = int(canvas_w * 0.92)  # 4% margin each side per frame
+    tmp_draw = ImageDraw.Draw(canvas)
+
+    def fit_headline_font(text):
+        size = base_hl_size
+        font = load_font(size, bold=True)
+        while size > 50:
+            bbox = tmp_draw.textbbox((0, 0), text, font=font)
+            if (bbox[2] - bbox[0]) <= max_text_w:
+                break
+            size -= 4
+            font = load_font(size, bold=True)
+        return font
 
     text_y = int(canvas_h * 0.055)
     text_gap = int(canvas_h * 0.012)
 
-    # Left headline
+    # Left headline (auto-fit)
+    left_font = fit_headline_font(pair_cfg["left_headline"])
     left_cx = canvas_w // 2
     h_top_l, h_bot_l = pair_cfg["left_headline_grad"]
-    left_hl_h = draw_gradient_text_at(canvas, pair_cfg["left_headline"], left_cx, text_y, headline_font, h_top_l, h_bot_l)
+    left_hl_h = draw_gradient_text_at(canvas, pair_cfg["left_headline"], left_cx, text_y, left_font, h_top_l, h_bot_l)
     draw_text_at(canvas, pair_cfg["left_subtitle"], left_cx, text_y + left_hl_h + text_gap, subtitle_font, SUBTITLE_COLOR)
 
-    # Right headline
+    # Right headline (auto-fit)
+    right_font = fit_headline_font(pair_cfg["right_headline"])
     right_cx = canvas_w + canvas_w // 2
     h_top_r, h_bot_r = pair_cfg["right_headline_grad"]
-    right_hl_h = draw_gradient_text_at(canvas, pair_cfg["right_headline"], right_cx, text_y, headline_font, h_top_r, h_bot_r)
+    right_hl_h = draw_gradient_text_at(canvas, pair_cfg["right_headline"], right_cx, text_y, right_font, h_top_r, h_bot_r)
     draw_text_at(canvas, pair_cfg["right_subtitle"], right_cx, text_y + right_hl_h + text_gap, subtitle_font, SUBTITLE_COLOR)
 
     text_bottom = max(text_y + left_hl_h, text_y + right_hl_h) + int(canvas_h * 0.06)
@@ -1800,6 +1847,178 @@ def generate_ultimate_mixed(device_name, device_config, raw_dir, out_dir):
             generate_mixed_split(device_config, raw_dir, entry, out_path)
             frame_num += 1
 
+        elif layout == "watch_widget":
+            out_path = os.path.join(out_dir, f"ultimate_{frame_num:02d}.png")
+            generate_watch_widget_frame(device_config, entry, out_path)
+            frame_num += 1
+
+
+def generate_watch_widget_frame(device_config, frame_cfg, output_path):
+    """Composite Apple Watch + Home Screen Widget on a single frame.
+
+    Reads source images from absolute paths (the asset catalog) instead of the
+    raw_dir, since these aren't simulator captures — they're shipped product
+    art that already has a transparent / dark background.
+    """
+    canvas_w, canvas_h = device_config["canvas"]
+    is_ipad = "ipad" in device_config.get("name", "")
+
+    # 1. Background gradient + ambient effects (same as hero)
+    canvas = create_gradient(canvas_w, canvas_h, frame_cfg["grad_top"], frame_cfg["grad_bot"])
+    canvas = canvas.convert("RGBA")
+    canvas = add_ambient_orbs(canvas, frame_cfg["orbs"], canvas_w, canvas_h)
+
+    if frame_cfg.get("god_rays"):
+        gr = frame_cfg["god_rays"]
+        gr_color = gr if isinstance(gr, tuple) else GOLD
+        canvas = add_god_rays(canvas, canvas_w, canvas_h, gr_color,
+                              corner=frame_cfg.get("god_rays_corner", "top_right"))
+    if frame_cfg.get("vignette", False):
+        canvas = add_vignette(canvas, canvas_w, canvas_h, strength=0.35)
+    if frame_cfg.get("color_grade") is not None:
+        canvas = add_color_grade(canvas, canvas_w, canvas_h, warmth=frame_cfg["color_grade"])
+
+    # 2. Headline + subtitle
+    font_style = frame_cfg.get("headline_font", "headline")
+    if font_style == "intro":
+        hl_size = 120 if is_ipad else 100
+    else:
+        hl_size = 100 if is_ipad else 88
+    sub_size = 55 if is_ipad else 46
+
+    max_text_w = int(canvas_w * 0.92)
+    headline_font = load_font(hl_size, bold=True)
+    tmp_draw = ImageDraw.Draw(canvas)
+    while hl_size > 60:
+        bbox = tmp_draw.textbbox((0, 0), frame_cfg["headline"], font=headline_font)
+        if (bbox[2] - bbox[0]) <= max_text_w:
+            break
+        hl_size -= 4
+        headline_font = load_font(hl_size, bold=True)
+    subtitle_font = load_font(sub_size, bold=False)
+
+    text_y = int(canvas_h * 0.055)
+    text_gap = int(canvas_h * 0.012)
+    h_top, h_bot = frame_cfg["headline_grad"]
+    hl_h = draw_gradient_text(canvas, frame_cfg["headline"], text_y, headline_font,
+                              h_top, h_bot, canvas_w)
+    sub_y = text_y + hl_h + text_gap
+    draw_text_centered(canvas, frame_cfg["subtitle"], sub_y, subtitle_font, SUBTITLE_COLOR, canvas_w)
+
+    # 3. Watch image — top of the device area, centered, ~40% canvas width
+    watch_path = os.path.join(SCRIPT_DIR, "..", "swiftbible", "Assets.xcassets",
+                              "OnboardingWatch.imageset", "watch.png")
+    widget_medium_path = os.path.join(SCRIPT_DIR, "widget_assets", "widget_medium.png")
+    widget_small_path = os.path.join(SCRIPT_DIR, "widget_assets", "widget_small.png")
+
+    if not os.path.exists(watch_path) or not os.path.exists(widget_medium_path):
+        print(f"  SKIP watch_widget (missing source)")
+        return
+
+    device_top = sub_y + int(canvas_h * 0.05)
+    bottom_margin = int(canvas_h * 0.04)
+    available_h = canvas_h - device_top - bottom_margin
+    gap = int(canvas_h * 0.025)
+
+    watch = Image.open(watch_path).convert("RGBA")
+    widget_medium = Image.open(widget_medium_path).convert("RGBA")
+
+    def scale_to_width(img, target_w):
+        s = target_w / img.size[0]
+        return img.resize((target_w, int(img.size[1] * s)), Image.LANCZOS)
+
+    # Each tuple: (kind, image, angle_degrees, x_offset_px, overlap_with_previous)
+    # x_offset shifts the item off-center; overlap pulls it up into the previous item.
+    if is_ipad:
+        widget_small = Image.open(widget_small_path).convert("RGBA") \
+            if os.path.exists(widget_small_path) else None
+        watch = scale_to_width(watch, int(canvas_w * 0.36))
+        widget_medium = scale_to_width(widget_medium, int(canvas_w * 0.55))
+        items = [("watch", watch, -7, -int(canvas_w * 0.10), 0)]
+        if widget_small is not None:
+            widget_small = scale_to_width(widget_small, int(canvas_w * 0.28))
+            items.append(("widget_small", widget_small, 8, int(canvas_w * 0.16), int(canvas_h * 0.05)))
+        items.append(("widget_medium", widget_medium, -4, -int(canvas_w * 0.04), int(canvas_h * 0.04)))
+    else:
+        widget_small = Image.open(widget_small_path).convert("RGBA") \
+            if os.path.exists(widget_small_path) else None
+        watch = scale_to_width(watch, int(canvas_w * 0.55))
+        widget_medium = scale_to_width(widget_medium, int(canvas_w * 0.85))
+        items = [("watch", watch, -7, -int(canvas_w * 0.10), 0)]
+        if widget_small is not None:
+            widget_small = scale_to_width(widget_small, int(canvas_w * 0.42))
+            items.append(("widget_small", widget_small, 8, int(canvas_w * 0.18), int(canvas_h * 0.05)))
+        items.append(("widget_medium", widget_medium, -4, -int(canvas_w * 0.02), int(canvas_h * 0.04)))
+
+    # Rotation expands the bounding box — compute the actual rendered height
+    # for each item (cos|θ| · h + sin|θ| · w, approximately) so the stack math
+    # accounts for it and the bottom item doesn't overflow the canvas.
+    import math
+    def rotated_h(img, angle):
+        a = math.radians(abs(angle))
+        return int(abs(math.cos(a)) * img.size[1] + abs(math.sin(a)) * img.size[0])
+
+    def stack_height(items_list):
+        h = 0
+        for i, (_, img, ang, _, overlap) in enumerate(items_list):
+            h += rotated_h(img, ang)
+            if i > 0:
+                h -= overlap
+                h += gap
+        return h
+
+    total_h = stack_height(items)
+    if total_h > available_h:
+        shrink = available_h / total_h
+        scaled = []
+        for kind, img, ang, xoff, overlap in items:
+            new_w = int(img.size[0] * shrink)
+            scaled.append((kind, scale_to_width(img, new_w), ang, int(xoff * shrink), int(overlap * shrink)))
+        items = scaled
+        gap = int(gap * shrink)
+        total_h = stack_height(items)
+
+    # Distribute leftover vertical space as extra spacing.
+    extra_space = available_h - total_h
+    if extra_space > 0 and len(items) > 1:
+        gap += extra_space // (len(items) - 1)
+
+    cursor_y = device_top
+    widget_corner = int(canvas_w * 0.045)
+    for i, (kind, img, angle, x_offset, overlap) in enumerate(items):
+        if kind == "watch":
+            corner = int(min(img.size) * 0.18)
+        else:
+            corner = widget_corner
+
+        if i > 0:
+            cursor_y -= overlap
+
+        x_centered = (canvas_w - img.size[0]) // 2 + x_offset
+        rounded = round_corners(img, corner)
+
+        if angle != 0:
+            rotated = rounded.rotate(angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+            # Build a matching shadow (rotated)
+            shadow_base = Image.new("RGBA", img.size, (0, 0, 0, 130))
+            shadow_base = round_corners(shadow_base, corner)
+            shadow_rot = shadow_base.rotate(angle, expand=True, resample=Image.BICUBIC, fillcolor=(0, 0, 0, 0))
+            shadow_rot = shadow_rot.filter(ImageFilter.GaussianBlur(28))
+            sx = (canvas_w - rotated.size[0]) // 2 + x_offset
+            canvas.paste(shadow_rot, (sx + 10, cursor_y + 18), shadow_rot)
+            canvas.paste(rotated, (sx, cursor_y), rotated)
+            cursor_y += rotated.size[1] + gap
+        else:
+            shadow, off = create_shadow(img.size, corner, blur_radius=24, offset=(0, 12), opacity=130)
+            canvas.paste(shadow, (x_centered - off[0], cursor_y - off[1]), shadow)
+            canvas.paste(rounded, (x_centered, cursor_y), rounded)
+            cursor_y += img.size[1] + gap
+
+    # 4. Save
+    final = canvas.crop((0, 0, canvas_w, canvas_h)).convert("RGB")
+    final.save(output_path, "PNG", optimize=True)
+    print(f"  -> {output_path}")
+
 
 def generate_ultimate_strip(device_name, device_config, raw_dir, out_dir):
     """Generate the ultimate panoramic strip — devices fill frames edge-to-edge.
@@ -1950,60 +2169,20 @@ def create_faux_dark(img):
 
 
 def main():
+    """Generate ONLY the ultimate (mixed-layout) marketing set.
+
+    Other variants (basic per-slot, panoramic pair, panoramic strip, legacy
+    ultimate strip) were dropped — only the mixed-layout set goes to App
+    Store Connect, so we don't waste cycles regenerating the rest.
+    """
     for device_name, device_config in DEVICES.items():
         raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
-        out_dir = os.path.join(SCRIPT_DIR, "marketing", device_name)
-        os.makedirs(out_dir, exist_ok=True)
+        out_dir = os.path.join(SCRIPT_DIR, "marketing", "ultimate", device_name)
 
-        print(f"\n=== {device_name} ===")
+        print(f"\n=== {device_name} (ultimate) ===")
+        generate_ultimate_mixed(device_name, device_config, raw_dir, out_dir)
 
-        for shot_config in SCREENSHOTS:
-            output_path = os.path.join(out_dir, f"{shot_config['filename']}.png")
-            generate_screenshot(device_name, device_config, raw_dir, shot_config, output_path)
-
-    # --- Panoramic Pairs ---
-    for device_name, device_config in DEVICES.items():
-        raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
-        pano_dir = os.path.join(SCRIPT_DIR, "marketing", "panoramic", device_name)
-        os.makedirs(pano_dir, exist_ok=True)
-
-        print(f"\n=== {device_name} (panoramic) ===")
-
-        for pair_config in PANORAMIC_PAIRS:
-            generate_panoramic_pair(device_name, device_config, raw_dir, pair_config, pano_dir)
-
-    # --- Panoramic Strip (full continuous canvas) ---
-    for device_name, device_config in DEVICES.items():
-        raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
-        strip_dir = os.path.join(SCRIPT_DIR, "marketing", "strip", device_name)
-
-        print(f"\n=== {device_name} (strip) ===")
-
-        generate_panoramic_strip(device_name, device_config, raw_dir, strip_dir)
-
-    # --- Ultimate Strip (panoramic-only, legacy) ---
-    for device_name, device_config in DEVICES.items():
-        raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
-        ultimate_dir = os.path.join(SCRIPT_DIR, "marketing", "ultimate", device_name)
-
-        print(f"\n=== {device_name} (ultimate strip) ===")
-
-        generate_ultimate_strip(device_name, device_config, raw_dir, ultimate_dir)
-
-    # --- Ultimate Mixed (hero + panoramic + split — best of all styles) ---
-    for device_name, device_config in DEVICES.items():
-        raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
-        mixed_dir = os.path.join(SCRIPT_DIR, "marketing", "mixed", device_name)
-
-        print(f"\n=== {device_name} (mixed) ===")
-
-        generate_ultimate_mixed(device_name, device_config, raw_dir, mixed_dir)
-
-    print("\nDone! Marketing screenshots saved to marketing/")
-    print("Panoramic pairs saved to marketing/panoramic/")
-    print("Panoramic strip saved to marketing/strip/")
-    print("Ultimate strip saved to marketing/ultimate/")
-    print("Ultimate mixed saved to marketing/mixed/")
+    print("\nDone! Marketing screenshots saved to marketing/ultimate/")
 
 
 if __name__ == "__main__":

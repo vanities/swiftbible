@@ -19,10 +19,22 @@ struct SeeHighlightsView: View {
     @Binding var selectedTab: Tabs
 
     var body: some View {
-        VStack {
+        Group {
             if highlightedVerses.isEmpty {
-                Text("No Highlights saved")
-
+                VStack(alignment: .center, spacing: 12) {
+                    Image(systemName: "highlighter")
+                        .font(.largeTitle)
+                        .foregroundStyle(.secondary)
+                        .symbolEffect(.variableColor.iterative, options: .repeating)
+                    Text("No highlighted verses yet")
+                        .font(.headline)
+                    Text("Long-press any verse, then tap Highlight to mark it.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List {
                     ForEach(highlightedVerses) { highlightedVerse in
@@ -44,6 +56,7 @@ struct SeeHighlightsView: View {
                         }
                     }
                 }
+                .listStyle(.insetGrouped)
             }
         }
         .navigationBarTitle("Highlighted Verses")

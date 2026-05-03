@@ -19,10 +19,22 @@ struct SeeSavedNotesView: View {
     @Binding var selectedTab: Tabs
 
     var body: some View {
-        VStack {
+        Group {
             if notes.isEmpty {
-                Text("No Notes saved")
-
+                VStack(alignment: .center, spacing: 12) {
+                    Image(systemName: "square.and.pencil")
+                        .font(.largeTitle)
+                        .foregroundStyle(.secondary)
+                        .symbolEffect(.wiggle, options: .repeating)
+                    Text("No saved notes yet")
+                        .font(.headline)
+                    Text("Long-press any verse, then tap Note to write your reflection.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List {
                     ForEach(notes) { note in
@@ -49,6 +61,7 @@ struct SeeSavedNotesView: View {
                         }
                     }
                 }
+                .listStyle(.insetGrouped)
             }
         }
         .navigationBarTitle("Saved Notes")

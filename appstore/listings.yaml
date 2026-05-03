@@ -1,0 +1,685 @@
+# SwiftBible App Store Listings
+# ----------------------------------------------------------------
+# Edit, then preview with:  uv run python push_listing.py --dry-run
+# Push with:                uv run python push_listing.py
+# Push one locale:          uv run python push_listing.py --locales pt-BR
+#
+# Field limits (Apple): name 30, subtitle 30, keywords 100, promo_text 170,
+#                       description 4000, whats_new 4000.
+# Keyword field rules:  comma-separated, NO spaces around commas, no overlap
+#                       with name/subtitle, no plurals if singular used,
+#                       no competitor names. USE ALL 100 chars.
+# ----------------------------------------------------------------
+
+en-US:
+  name: "Bible KJV - SwiftBible"
+  subtitle: "Devotional, Apocrypha, Greek"
+  keywords: "asv,web,scripture,gospel,prayer,jesus,christian,faith,study,notes,jubilees,enoch,hebrew,catholic,god"
+  promo_text: "Read the Bible in KJV, ASV, WEB & Original Hebrew/Greek. Includes Apocrypha, Enoch, Jubilees, and more. Highlight, take notes, and get AI explanations."
+  whats_new: |-
+    new marketing stuff, fix some dark mode issues
+
+es-ES:
+  name: "Biblia KJV - SwiftBible"
+  subtitle: "Devocional, Apócrifos, Enoc"
+  keywords: "asv,web,escritura,evangelio,oración,jesús,cristiano,estudio,notas,jubileos,hebreo,católico,dios"
+  promo_text: "Lee la Biblia en KJV, ASV, WEB y hebreo y griego original. Incluye Apócrifos, Enoc, Jubileos y más. Resalta versículos, toma notas y recibe explicaciones con IA."
+  description: |
+    SwiftBible es una aplicación de Biblia para iOS de código abierto, bellamente diseñada para lectores y estudiantes serios de las Escrituras.
+
+    Cuatro traducciones de dominio público:
+    • King James Version (KJV) — la atemporal traducción de 1611
+    • American Standard Version (ASV) — la Biblia inglesa más literal
+    • World English Bible (WEB) — moderna, precisa y legible
+    • Hebreo (AT) y Griego (NT) originales — con soporte de derecha a izquierda
+
+    Más allá del canon, estudia la biblioteca completa:
+    • Apócrifos deuterocanónicos (Macabeos, Sabiduría, Sirácide y más)
+    • 1 Enoc y 2 Enoc (Vigilantes, Parábolas, Libro Astronómico — 108 capítulos)
+    • Libro de los Jubileos
+    • Testamentos de los Doce Patriarcas
+    • Didaché y 1 Clemente
+
+    Herramientas de estudio para uso diario:
+    • Resalta versículos con colores personalizados
+    • Toma notas personales en cualquier versículo
+    • Las palabras de Jesús destacadas en rojo
+    • Mantén pulsado para explicaciones con IA (Apple Intelligence)
+    • Búsqueda de texto completo en todas las traducciones
+    • Resúmenes de capítulo y versículo
+
+    Devocionales diarios, modos claro y oscuro, fuentes ajustables y soporte completo de VoiceOver.
+
+    SwiftBible es totalmente de código abierto. Lee y contribuye al código en GitHub.
+  whats_new: |-
+    Nuevo material de marketing, arreglos en modo oscuro
+
+es-MX:
+  name: "Biblia KJV - SwiftBible"
+  subtitle: "Devocional, Apócrifos, Enoc"
+  keywords: "asv,web,escritura,evangelio,oración,jesús,cristiano,estudio,notas,jubileos,hebreo,católico,dios"
+  promo_text: "Lee la Biblia en KJV, ASV, WEB y hebreo y griego original. Incluye Apócrifos, Enoc, Jubileos y más. Resalta versículos, toma notas y obtén explicaciones con IA."
+  description: |
+    SwiftBible es una app de Biblia para iOS de código abierto, diseñada con cuidado para lectores y estudiantes de las Escrituras.
+
+    Cuatro traducciones de dominio público:
+    • King James Version (KJV) — la traducción clásica de 1611
+    • American Standard Version (ASV) — la Biblia inglesa más literal
+    • World English Bible (WEB) — moderna, precisa y legible
+    • Hebreo (AT) y Griego (NT) originales — con soporte de derecha a izquierda
+
+    Más allá del canon, estudia la biblioteca completa:
+    • Apócrifos deuterocanónicos (Macabeos, Sabiduría, Eclesiástico y más)
+    • 1 Enoc y 2 Enoc (Vigilantes, Parábolas, Libro Astronómico — 108 capítulos)
+    • Libro de los Jubileos
+    • Testamentos de los Doce Patriarcas
+    • Didaché y 1 Clemente
+
+    Herramientas de estudio para uso diario:
+    • Resalta versículos con colores personalizados
+    • Agrega notas personales a cualquier versículo
+    • Las palabras de Jesús destacadas en rojo
+    • Mantén presionado para explicaciones con IA (Apple Intelligence)
+    • Búsqueda en todas las traducciones
+    • Resúmenes de capítulo y versículo
+
+    Devocionales diarios, modo claro y oscuro, fuentes ajustables y soporte completo de VoiceOver.
+
+    SwiftBible es 100% de código abierto. Lee y contribuye en GitHub.
+  whats_new: |-
+    Nuevo material de marketing, arreglos en modo oscuro
+
+pt-BR:
+  name: "Bíblia KJV - SwiftBible"
+  subtitle: "Devocional, Apócrifos, Enoque"
+  keywords: "asv,web,escritura,evangelho,oração,jesus,cristão,estudo,notas,jubileus,hebraico,católico,deus,salmos"
+  promo_text: "Leia a Bíblia em KJV, ASV, WEB e nos originais hebraico e grego. Inclui Apócrifos, Enoque, Jubileus e mais. Destaque, anote e veja explicações com IA."
+  description: |
+    SwiftBible é um aplicativo de Bíblia para iOS de código aberto, lindamente projetado para leitores e estudantes das Escrituras.
+
+    Quatro traduções de domínio público:
+    • King James Version (KJV) — a tradução atemporal de 1611
+    • American Standard Version (ASV) — a Bíblia em inglês mais literal
+    • World English Bible (WEB) — moderna, precisa e legível
+    • Hebraico (AT) e Grego (NT) originais — com suporte da direita para a esquerda
+
+    Além do cânone, estude toda a biblioteca:
+    • Apócrifos deuterocanônicos (Macabeus, Sabedoria, Eclesiástico e mais)
+    • 1 Enoque e 2 Enoque (Vigilantes, Parábolas, Livro Astronômico — 108 capítulos)
+    • Livro dos Jubileus
+    • Testamentos dos Doze Patriarcas
+    • Didaqué e 1 Clemente
+
+    Ferramentas de estudo para uso diário:
+    • Destaque versículos com cores personalizadas
+    • Faça anotações pessoais em qualquer versículo
+    • Palavras de Jesus em vermelho no nível da frase
+    • Pressione e segure para explicações com IA (Apple Intelligence)
+    • Busca em texto completo em todas as traduções
+    • Resumos de capítulos e versículos
+
+    Devocionais diários, modos claro e escuro, fontes ajustáveis e suporte completo a VoiceOver.
+
+    SwiftBible é totalmente de código aberto. Veja e contribua no GitHub.
+  whats_new: |-
+    Novo material de marketing, correções no modo escuro
+
+pt-PT:
+  name: "Bíblia KJV - SwiftBible"
+  subtitle: "Devocional, Apócrifos, Enoque"
+  keywords: "asv,web,escritura,evangelho,oração,jesus,cristão,estudo,notas,jubileus,hebraico,católico,deus,salmos"
+  promo_text: "Lê a Bíblia em KJV, ASV, WEB e nos originais hebraico e grego. Inclui Apócrifos, Enoque, Jubileus e mais. Destaca versículos, faz anotações e obtém explicações com IA."
+  description: |
+    SwiftBible é uma aplicação de Bíblia para iOS de código aberto, cuidadosamente concebida para leitores e estudantes das Escrituras.
+
+    Quatro traduções de domínio público:
+    • King James Version (KJV) — a tradução atemporal de 1611
+    • American Standard Version (ASV) — a Bíblia em inglês mais literal
+    • World English Bible (WEB) — moderna, precisa e legível
+    • Hebraico (AT) e Grego (NT) originais — com suporte da direita para a esquerda
+
+    Para além do cânone, estuda toda a biblioteca:
+    • Apócrifos deuterocanónicos (Macabeus, Sabedoria, Eclesiástico e mais)
+    • 1 Enoque e 2 Enoque (Vigilantes, Parábolas, Livro Astronómico — 108 capítulos)
+    • Livro dos Jubileus
+    • Testamentos dos Doze Patriarcas
+    • Didaqué e 1 Clemente
+
+    Ferramentas de estudo para uso diário:
+    • Destaca versículos com cores personalizadas
+    • Faz anotações pessoais em qualquer versículo
+    • Palavras de Jesus a vermelho ao nível da frase
+    • Mantém premido para explicações com IA (Apple Intelligence)
+    • Pesquisa em todas as traduções
+    • Resumos de capítulos e versículos
+
+    Devocionais diários, modos claro e escuro, tipos de letra ajustáveis e suporte completo a VoiceOver.
+
+    SwiftBible é totalmente de código aberto. Vê e contribui no GitHub.
+  whats_new: |-
+    Novo material de marketing, correções no modo escuro
+
+fr-FR:
+  name: "Bible KJV - SwiftBible"
+  subtitle: "Dévotion, Apocryphes, Hénoch"
+  keywords: "asv,web,écriture,évangile,prière,jésus,chrétien,étude,notes,jubilés,hébreu,catholique,dieu"
+  promo_text: "Lisez la Bible en KJV, ASV, WEB et dans les originaux hébreu et grec. Apocryphes, Hénoch, Jubilés inclus. Surlignez, notez, explications par IA."
+  description: |
+    SwiftBible est une application Bible iOS open-source, élégamment conçue pour les lecteurs et étudiants sérieux des Écritures.
+
+    Quatre traductions du domaine public :
+    • King James Version (KJV) — l'intemporelle traduction de 1611
+    • American Standard Version (ASV) — la Bible anglaise la plus littérale
+    • World English Bible (WEB) — moderne, précise et lisible
+    • Hébreu (AT) et Grec (NT) originaux — avec affichage de droite à gauche
+
+    Au-delà du canon, étudiez la bibliothèque complète :
+    • Apocryphes deutérocanoniques (Maccabées, Sagesse, Ecclésiastique, etc.)
+    • 1 Hénoch et 2 Hénoch (Veilleurs, Paraboles, Livre Astronomique — 108 chapitres)
+    • Livre des Jubilés
+    • Testaments des Douze Patriarches
+    • Didachè et 1 Clément
+
+    Outils d'étude pour l'usage quotidien :
+    • Surlignez les versets avec des couleurs personnalisées
+    • Prenez des notes personnelles sur n'importe quel verset
+    • Paroles de Jésus en rouge au niveau de la phrase
+    • Appui long pour des explications par IA (Apple Intelligence)
+    • Recherche plein-texte dans toutes les traductions
+    • Résumés de chapitre et de verset
+
+    Méditations quotidiennes, modes clair et sombre, polices ajustables et prise en charge complète de VoiceOver.
+
+    SwiftBible est entièrement open-source. Consultez et contribuez sur GitHub.
+  whats_new: |-
+    Nouveaux visuels marketing, corrections du mode sombre
+
+de-DE:
+  name: "Bibel KJV - SwiftBible"
+  subtitle: "Andacht, Apokryphen, Henoch"
+  keywords: "asv,web,schrift,evangelium,gebet,jesus,christ,glaube,studium,notiz,jubiläen,hebräisch,gott"
+  promo_text: "Lies die Bibel in KJV, ASV, WEB und im hebräischen und griechischen Original. Mit Apokryphen, Henoch, Jubiläen u.v.m. Markieren, Notizen, KI-Erklärungen."
+  description: |
+    SwiftBible ist eine Open-Source-Bibel-App für iOS, sorgfältig gestaltet für ernsthafte Leser und Studenten der Heiligen Schrift.
+
+    Vier gemeinfreie Übersetzungen:
+    • King James Version (KJV) — die zeitlose Übersetzung von 1611
+    • American Standard Version (ASV) — die wörtlichste englische Bibel
+    • World English Bible (WEB) — modern, genau und lesbar
+    • Hebräisch (AT) und Griechisch (NT) — Schrift in den Ursprungssprachen mit Rechts-nach-Links-Darstellung
+
+    Über den Kanon hinaus die ganze Bibliothek studieren:
+    • Deuterokanonische Apokryphen (Makkabäer, Weisheit, Sirach, u.a.)
+    • 1 Henoch und 2 Henoch (Wächter, Bilderreden, Astronomisches Buch — 108 Kapitel)
+    • Buch der Jubiläen
+    • Testamente der Zwölf Patriarchen
+    • Didache und 1 Klemensbrief
+
+    Studienwerkzeuge für den täglichen Gebrauch:
+    • Verse mit eigenen Farben markieren
+    • Persönliche Notizen zu jedem Vers
+    • Worte Jesu phrasenweise in Rot
+    • Langes Drücken für KI-Erklärungen (Apple Intelligence)
+    • Volltextsuche über alle Übersetzungen
+    • Kapitel- und Verszusammenfassungen
+
+    Tägliche Andachten, helle und dunkle Modi, einstellbare Schriften und vollständige VoiceOver-Unterstützung.
+
+    SwiftBible ist vollständig Open Source. Code ansehen und beitragen auf GitHub.
+  whats_new: |-
+    Neues Marketingmaterial, Korrekturen im dunklen Modus
+
+it:
+  name: "Bibbia KJV - SwiftBible"
+  subtitle: "Devozione, Apocrifi, Enoch"
+  keywords: "asv,web,scrittura,vangelo,preghiera,gesù,cristiano,studio,note,giubilei,ebraico,cattolico,dio,salmi"
+  promo_text: "Leggi la Bibbia in KJV, ASV, WEB e nei testi originali ebraico e greco. Include Apocrifi, Enoch, Giubilei e altro. Evidenzia, prendi note, ottieni spiegazioni con IA."
+  description: |
+    SwiftBible è un'app Bibbia per iOS open-source, progettata con cura per lettori e studiosi delle Scritture.
+
+    Quattro traduzioni di pubblico dominio:
+    • King James Version (KJV) — l'intramontabile traduzione del 1611
+    • American Standard Version (ASV) — la Bibbia inglese più letterale
+    • World English Bible (WEB) — moderna, accurata, leggibile
+    • Ebraico (AT) e Greco (NT) originali — con supporto da destra a sinistra
+
+    Oltre al canone, studia tutta la biblioteca:
+    • Apocrifi deuterocanonici (Maccabei, Sapienza, Siracide e altri)
+    • 1 Enoch e 2 Enoch (Vigilanti, Parabole, Libro Astronomico — 108 capitoli)
+    • Libro dei Giubilei
+    • Testamenti dei Dodici Patriarchi
+    • Didaché e 1 Clemente
+
+    Strumenti di studio per l'uso quotidiano:
+    • Evidenzia versetti con colori personalizzati
+    • Aggiungi note personali a qualsiasi versetto
+    • Parole di Gesù in rosso al livello di frase
+    • Pressione prolungata per spiegazioni con IA (Apple Intelligence)
+    • Ricerca a testo intero in tutte le traduzioni
+    • Riassunti di capitolo e versetto
+
+    Devozionali quotidiani, modalità chiara e scura, font regolabili e pieno supporto VoiceOver.
+
+    SwiftBible è completamente open source. Codice e contributi su GitHub.
+  whats_new: |-
+    Nuovi materiali di marketing, correzioni alla modalità scura
+
+nl-NL:
+  name: "Bijbel KJV - SwiftBible"
+  subtitle: "Dagboek, Apocriefen, Henoch"
+  keywords: "asv,web,schrift,evangelie,gebed,jezus,christen,studie,notities,jubileeën,hebreeuws,katholiek,god"
+  promo_text: "Lees de Bijbel in KJV, ASV, WEB en in de originele Hebreeuwse en Griekse teksten. Met Apocriefen, Henoch, Jubileeën en meer. Markeren, notities, AI-uitleg."
+  description: |
+    SwiftBible is een open-source iOS Bijbel-app, zorgvuldig ontworpen voor serieuze lezers en studenten van de Schrift.
+
+    Vier vertalingen in het publieke domein:
+    • King James Version (KJV) — de tijdloze vertaling uit 1611
+    • American Standard Version (ASV) — de meest letterlijke Engelstalige Bijbel
+    • World English Bible (WEB) — modern, nauwkeurig, leesbaar
+    • Originele Hebreeuws (OT) en Grieks (NT) — met rechts-naar-links weergave
+
+    Naast de canon de hele bibliotheek:
+    • Deuterocanonieke Apocriefen (Makkabeeën, Wijsheid, Jezus Sirach, e.a.)
+    • 1 Henoch en 2 Henoch (Wachters, Parabels, Astronomisch boek — 108 hoofdstukken)
+    • Boek der Jubileeën
+    • Testamenten van de Twaalf Aartsvaders
+    • Didache en 1 Clemens
+
+    Studiehulp voor dagelijks gebruik:
+    • Markeer verzen met eigen kleuren
+    • Maak persoonlijke notities bij elk vers
+    • Woorden van Jezus in rood op zinsniveau
+    • Lang indrukken voor AI-uitleg (Apple Intelligence)
+    • Volledige tekstzoekfunctie in alle vertalingen
+    • Hoofdstuk- en versamenvattingen
+
+    Dagelijkse meditaties, lichte en donkere modus, instelbare lettertypen en volledige VoiceOver-ondersteuning.
+
+    SwiftBible is volledig open source. Bekijk en draag bij op GitHub.
+  whats_new: |-
+    Nieuw marketingmateriaal, fixes voor donkere modus
+
+pl:
+  name: "Biblia KJV - SwiftBible"
+  subtitle: "Apokryfy, Henoch, Modlitwa"
+  keywords: "asv,web,pismo,ewangelia,jezus,wiara,studium,notatki,jubileusze,hebrajski,katolik,bog,psalm"
+  promo_text: "Czytaj Biblię w KJV, ASV, WEB oraz w oryginalnym języku hebrajskim i greckim. Zawiera Apokryfy, Henocha, Jubileusze i więcej. Notatki, podświetlenia i wyjaśnienia AI."
+  description: |
+    SwiftBible to otwartoźródłowa aplikacja biblijna na iOS, starannie zaprojektowana dla poważnych czytelników i studentów Pisma Świętego.
+
+    Cztery przekłady w domenie publicznej:
+    • King James Version (KJV) — ponadczasowy przekład z 1611 roku
+    • American Standard Version (ASV) — najdosłowniejsza Biblia angielska
+    • World English Bible (WEB) — nowoczesny, dokładny, czytelny
+    • Oryginalny hebrajski (ST) i grecki (NT) — z obsługą pisma od prawej do lewej
+
+    Poza kanonem także cała biblioteka:
+    • Apokryfy deuterokanoniczne (Machabejskie, Mądrość, Syrach i inne)
+    • 1 Henoch i 2 Henoch (Strażnicy, Przypowieści, Księga Astronomiczna — 108 rozdziałów)
+    • Księga Jubileuszów
+    • Testamenty Dwunastu Patriarchów
+    • Didache i 1 List Klemensa
+
+    Narzędzia do codziennego studium:
+    • Podświetlanie wersetów własnymi kolorami
+    • Osobiste notatki przy dowolnym wersecie
+    • Słowa Jezusa wyróżnione na czerwono
+    • Długie przytrzymanie dla wyjaśnień AI (Apple Intelligence)
+    • Pełnotekstowe wyszukiwanie we wszystkich przekładach
+    • Streszczenia rozdziałów i wersetów
+
+    Codzienne rozważania, tryb jasny i ciemny, regulowane czcionki i pełna obsługa VoiceOver.
+
+    SwiftBible jest w pełni otwartoźródłowa. Kod i wkład w GitHubie.
+  whats_new: |-
+    Nowe materiały marketingowe, poprawki trybu ciemnego
+
+ru:
+  name: "Библия KJV - SwiftBible"
+  subtitle: "Апокрифы, Енох, Молитва"
+  keywords: "asv,web,писание,евангелие,иисус,христианин,вера,изучение,заметки,юбилеи,еврейский,католик,бог,псалом"
+  promo_text: "Читайте Библию в переводах KJV, ASV, WEB и в оригинальных еврейских и греческих текстах. Включает Апокрифы, Книгу Еноха, Юбилеи и многое другое."
+  description: |
+    SwiftBible — это библейское приложение с открытым исходным кодом для iOS, тщательно разработанное для серьёзных читателей и исследователей Писания.
+
+    Четыре общественных перевода:
+    • King James Version (KJV) — вечный перевод 1611 года
+    • American Standard Version (ASV) — наиболее буквальная английская Библия
+    • World English Bible (WEB) — современный, точный, читаемый
+    • Оригиналы на иврите (ВЗ) и греческом (НЗ) — с поддержкой письма справа налево
+
+    Помимо канона — вся библиотека:
+    • Второканонические апокрифы (Маккавеи, Премудрость, Сирах и др.)
+    • 1 Енох и 2 Енох (Стражи, Притчи, Астрономическая книга — 108 глав)
+    • Книга Юбилеев
+    • Заветы двенадцати патриархов
+    • Дидахе и 1 Климента
+
+    Инструменты для ежедневного изучения:
+    • Выделение стихов выбранными цветами
+    • Личные заметки к любому стиху
+    • Слова Иисуса выделены красным на уровне фразы
+    • Долгое нажатие для пояснений ИИ (Apple Intelligence)
+    • Полнотекстовый поиск во всех переводах
+    • Краткие пересказы глав и стихов
+
+    Ежедневные размышления, светлая и тёмная темы, настраиваемые шрифты и полная поддержка VoiceOver.
+
+    SwiftBible полностью с открытым исходным кодом. Код и вклад на GitHub.
+  whats_new: |-
+    Новые маркетинговые материалы, исправления тёмной темы
+
+ko:
+  name: "성경 KJV - SwiftBible"
+  subtitle: "묵상, 외경, 에녹서"
+  keywords: "asv,web,말씀,복음,기도,예수,기독교,믿음,연구,노트,희년서,히브리어,가톨릭,하나님"
+  promo_text: "KJV, ASV, WEB과 원어 히브리어/그리스어로 성경을 읽으세요. 외경, 에녹서, 희년서 포함. 강조, 노트, AI 설명 기능."
+  description: |
+    SwiftBible은 성경을 깊이 있게 읽고 연구하는 분들을 위해 정성스럽게 디자인된 오픈소스 iOS 성경 앱입니다.
+
+    네 가지 공공 도메인 번역본:
+    • King James Version (KJV) — 시대를 초월한 1611년 번역본
+    • American Standard Version (ASV) — 가장 직역에 가까운 영어 성경
+    • World English Bible (WEB) — 현대적이고 정확하며 읽기 쉬운 번역본
+    • 원어 히브리어(구약)와 그리스어(신약) — 우측에서 좌측으로 읽기 지원
+
+    정경을 넘어 전체 도서관:
+    • 제2경전 외경 (마카베오기, 지혜서, 집회서 등)
+    • 에녹1서와 에녹2서 (감시자, 비유, 천문서 — 108장)
+    • 희년서
+    • 12족장의 유언
+    • 디다케와 클레멘스1서
+
+    매일 사용할 수 있는 연구 도구:
+    • 사용자 지정 색상으로 구절 강조
+    • 어떤 구절에도 개인 노트 추가
+    • 예수님의 말씀을 구절 단위로 빨간색 표시
+    • 길게 눌러 AI 설명 (Apple Intelligence)
+    • 모든 번역본에서 전체 텍스트 검색
+    • 장과 구절 요약
+
+    매일 묵상, 라이트/다크 모드, 글꼴 조절 및 전체 VoiceOver 지원.
+
+    SwiftBible은 완전한 오픈소스입니다. GitHub에서 코드를 보고 기여할 수 있습니다.
+  whats_new: |-
+    새로운 마케팅 자료, 다크 모드 버그 수정
+
+ja:
+  name: "聖書 KJV - SwiftBible"
+  subtitle: "黙想、外典、エノク書"
+  keywords: "asv,web,聖句,福音,祈り,イエス,キリスト教,信仰,学び,ノート,ヨベル書,ヘブライ語,カトリック,神"
+  promo_text: "KJV、ASV、WEB、ヘブライ語・ギリシャ語原典で聖書を読めます。外典、エノク書、ヨベル書も収録。ハイライト、ノート、AI解説機能。"
+  description: |
+    SwiftBibleは、聖書を真剣に読み学ぶ方のために丁寧にデザインされた、オープンソースのiOS聖書アプリです。
+
+    パブリックドメインの4つの翻訳:
+    • King James Version(KJV)— 1611年の不朽の翻訳
+    • American Standard Version(ASV)— 最も直訳に忠実な英語聖書
+    • World English Bible(WEB)— 現代的で正確、読みやすい翻訳
+    • ヘブライ語(旧約)・ギリシャ語(新約)原典 — 右から左への表示対応
+
+    正典を超えた幅広いライブラリ:
+    • 第二正典外典(マカバイ記、知恵の書、シラ書など)
+    • エノク書1と2(監視者、比喩、天文書 — 全108章)
+    • ヨベル書
+    • 十二族長の遺訓
+    • ディダケーと1クレメンス
+
+    毎日使える学習ツール:
+    • 任意の色で聖句をハイライト
+    • どの聖句にも個人的なメモを追加
+    • イエスの言葉を句単位で赤く表示
+    • 長押しでAIによる解説(Apple Intelligence)
+    • すべての翻訳を横断する全文検索
+    • 章と聖句の要約
+
+    毎日の黙想、ライト/ダークモード、フォント調整、完全なVoiceOver対応。
+
+    SwiftBibleは完全にオープンソースです。GitHubでコードの閲覧・貢献ができます。
+  whats_new: |-
+    新しいマーケティング素材、ダークモードの修正
+
+zh-Hans:
+  name: "圣经 KJV - SwiftBible"
+  subtitle: "灵修、次经、以诺书"
+  keywords: "asv,web,经文,福音,祷告,耶稣,基督徒,信仰,研经,笔记,禧年书,希伯来,天主教,神"
+  promo_text: "用 KJV、ASV、WEB 及希伯来文/希腊文原文阅读圣经。包含次经、以诺书、禧年书等。可高亮、做笔记并获取 AI 解释。"
+  description: |
+    SwiftBible 是一款精心设计的开源 iOS 圣经应用,为认真阅读和研究圣经的读者打造。
+
+    四种公有领域译本:
+    • King James Version (KJV) — 永恒的 1611 年译本
+    • American Standard Version (ASV) — 最逐字直译的英文圣经
+    • World English Bible (WEB) — 现代、准确、易读
+    • 希伯来文(旧约)和希腊文(新约)原文 — 支持从右到左显示
+
+    超越正典的完整文库:
+    • 次经(马加比传、智慧篇、便西拉智训等)
+    • 以诺一书与以诺二书(守望者、寓言、天文书 — 共 108 章)
+    • 禧年书
+    • 十二族长遗训
+    • 十二使徒遗训与革利免一书
+
+    适合日常使用的研经工具:
+    • 用自选颜色高亮经文
+    • 在任意经文上添加个人笔记
+    • 耶稣的话以红色短语级显示
+    • 长按获取 AI 解释 (Apple Intelligence)
+    • 全部译本中的全文检索
+    • 章节与经文摘要
+
+    每日灵修、浅色/深色模式、字体调整及完整 VoiceOver 支持。
+
+    SwiftBible 完全开源。可在 GitHub 查看代码并贡献。
+  whats_new: |-
+    新增营销素材,修复深色模式问题
+
+zh-Hant:
+  name: "聖經 KJV - SwiftBible"
+  subtitle: "靈修、次經、以諾書"
+  keywords: "asv,web,經文,福音,禱告,耶穌,基督徒,信仰,研經,筆記,禧年書,希伯來,天主教,神"
+  promo_text: "以 KJV、ASV、WEB 及希伯來文/希臘文原文閱讀聖經。包含次經、以諾書、禧年書等。可高亮、做筆記並取得 AI 解釋。"
+  description: |
+    SwiftBible 是一款精心設計的開源 iOS 聖經應用,為認真閱讀和研究聖經的讀者打造。
+
+    四種公有領域譯本:
+    • King James Version (KJV) — 永恆的 1611 年譯本
+    • American Standard Version (ASV) — 最逐字直譯的英文聖經
+    • World English Bible (WEB) — 現代、準確、易讀
+    • 希伯來文(舊約)和希臘文(新約)原文 — 支援從右到左顯示
+
+    超越正典的完整文庫:
+    • 次經(瑪加伯傳、智慧篇、德訓篇等)
+    • 以諾一書與以諾二書(守望者、寓言、天文書 — 共 108 章)
+    • 禧年書
+    • 十二族長遺訓
+    • 十二宗徒遺訓與克勉一書
+
+    適合日常使用的研經工具:
+    • 以自選顏色高亮經文
+    • 在任意經文上添加個人筆記
+    • 耶穌的話以紅色短語級顯示
+    • 長按取得 AI 解釋 (Apple Intelligence)
+    • 全部譯本中的全文檢索
+    • 章節與經文摘要
+
+    每日靈修、淺色/深色模式、字型調整及完整 VoiceOver 支援。
+
+    SwiftBible 完全開源。可在 GitHub 查看程式碼並貢獻。
+  whats_new: |-
+    新增行銷素材,修正深色模式問題
+
+id:
+  name: "Alkitab KJV - SwiftBible"
+  subtitle: "Renungan, Apokrifa, Henokh"
+  keywords: "asv,web,kitab,injil,doa,yesus,kristen,iman,studi,catatan,yobel,ibrani,katolik,tuhan,mazmur"
+  promo_text: "Baca Alkitab dalam KJV, ASV, WEB, dan teks asli Ibrani/Yunani. Termasuk Apokrifa, Kitab Henokh, Yobel, dan lainnya. Sorot, catat, dan dapatkan penjelasan AI."
+  description: |
+    SwiftBible adalah aplikasi Alkitab iOS sumber terbuka yang dirancang dengan cermat untuk pembaca dan pelajar Kitab Suci yang serius.
+
+    Empat terjemahan domain publik:
+    • King James Version (KJV) — terjemahan abadi tahun 1611
+    • American Standard Version (ASV) — Alkitab Inggris paling harfiah
+    • World English Bible (WEB) — modern, akurat, mudah dibaca
+    • Ibrani (PL) dan Yunani (PB) asli — dengan dukungan kanan-ke-kiri
+
+    Di luar kanon, jelajahi seluruh perpustakaan:
+    • Apokrifa Deuterokanonika (Makabe, Hikmat, Sirakh, dll.)
+    • 1 Henokh dan 2 Henokh (Para Pengawas, Perumpamaan, Kitab Astronomi — 108 pasal)
+    • Kitab Yobel
+    • Wasiat Dua Belas Bapa Bangsa
+    • Didakhe dan 1 Klemens
+
+    Alat studi untuk penggunaan sehari-hari:
+    • Sorot ayat dengan warna pilihan Anda
+    • Tambahkan catatan pribadi pada ayat mana pun
+    • Kata-kata Yesus ditampilkan merah pada tingkat frasa
+    • Tekan lama untuk penjelasan AI (Apple Intelligence)
+    • Pencarian teks lengkap di semua terjemahan
+    • Ringkasan pasal dan ayat
+
+    Renungan harian, mode terang/gelap, font yang dapat disesuaikan, dan dukungan VoiceOver penuh.
+
+    SwiftBible sepenuhnya sumber terbuka. Lihat kode dan berkontribusi di GitHub.
+  whats_new: |-
+    Materi pemasaran baru, perbaikan mode gelap
+
+el:
+  name: "Αγία Γραφή - SwiftBible"
+  subtitle: "Στοχασμός, Απόκρυφα, Ενώχ"
+  keywords: "kjv,asv,web,βίβλος,ευαγγέλιο,προσευχή,ιησούς,χριστιανός,μελέτη,σημειώσεις,ιωβηλαία,εβραϊκά,θεός"
+  promo_text: "Διάβασε τη Βίβλο σε KJV, ASV, WEB και στα πρωτότυπα Εβραϊκά/Ελληνικά. Περιλαμβάνει Απόκρυφα, Ενώχ, Ιωβηλαία και άλλα. Επισημάνσεις, σημειώσεις, εξηγήσεις AI."
+  description: |
+    Το SwiftBible είναι μια εφαρμογή Βίβλου ανοιχτού κώδικα για iOS, σχεδιασμένη με προσοχή για σοβαρούς αναγνώστες και μελετητές των Γραφών.
+
+    Τέσσερις μεταφράσεις δημόσιας χρήσης:
+    • King James Version (KJV) — η αιώνια μετάφραση του 1611
+    • American Standard Version (ASV) — η πιο κυριολεκτική αγγλική Βίβλος
+    • World English Bible (WEB) — σύγχρονη, ακριβής και ευανάγνωστη
+    • Πρωτότυπα Εβραϊκά (ΠΔ) και Ελληνικά (ΚΔ) — με υποστήριξη από δεξιά προς τα αριστερά
+
+    Πέρα από τον κανόνα, όλη η βιβλιοθήκη:
+    • Δευτεροκανονικά Απόκρυφα (Μακκαβαίοι, Σοφία, Σιράχ κ.ά.)
+    • 1 Ενώχ και 2 Ενώχ (Εγρήγοροι, Παραβολές, Αστρονομικό Βιβλίο — 108 κεφάλαια)
+    • Βιβλίο των Ιωβηλαίων
+    • Διαθήκες των Δώδεκα Πατριαρχών
+    • Διδαχή και 1 Κλήμεντος
+
+    Εργαλεία μελέτης για καθημερινή χρήση:
+    • Επισήμανση εδαφίων με προσαρμοσμένα χρώματα
+    • Προσωπικές σημειώσεις σε οποιοδήποτε εδάφιο
+    • Λόγια του Ιησού με κόκκινο σε επίπεδο φράσης
+    • Παρατεταμένο πάτημα για εξηγήσεις AI (Apple Intelligence)
+    • Αναζήτηση πλήρους κειμένου σε όλες τις μεταφράσεις
+    • Περιλήψεις κεφαλαίων και εδαφίων
+
+    Καθημερινοί στοχασμοί, ανοιχτή και σκοτεινή λειτουργία, ρυθμιζόμενες γραμματοσειρές και πλήρης υποστήριξη VoiceOver.
+
+    Το SwiftBible είναι πλήρως ανοιχτού κώδικα. Δες τον κώδικα και συνεισέφερε στο GitHub.
+  whats_new: |-
+    Νέο υλικό μάρκετινγκ, διορθώσεις στη σκοτεινή λειτουργία
+
+ro:
+  name: "Biblia KJV - SwiftBible"
+  subtitle: "Devoțional, Apocrife, Enoh"
+  keywords: "asv,web,scriptură,evanghelie,rugăciune,iisus,creștin,credință,studiu,note,iubileuri,ebraică,catolic"
+  promo_text: "Citește Biblia în KJV, ASV, WEB și în textele originale ebraice și grecești. Include Apocrife, Enoh, Iubileuri și mai multe. Evidențiază, ia notițe, explicații AI."
+  description: |
+    SwiftBible este o aplicație Biblică open-source pentru iOS, atent proiectată pentru cititori și studenți serioși ai Scripturilor.
+
+    Patru traduceri din domeniul public:
+    • King James Version (KJV) — traducerea atemporală din 1611
+    • American Standard Version (ASV) — Biblia engleză cea mai literală
+    • World English Bible (WEB) — modernă, exactă, ușor de citit
+    • Originalele ebraice (VT) și grecești (NT) — cu suport de la dreapta la stânga
+
+    Dincolo de canon, întreaga bibliotecă:
+    • Apocrife deuterocanonice (Macabei, Înțelepciune, Sirah etc.)
+    • 1 Enoh și 2 Enoh (Veghetorii, Pildele, Cartea Astronomică — 108 capitole)
+    • Cartea Iubileurilor
+    • Testamentele celor Doisprezece Patriarhi
+    • Didahia și 1 Clement
+
+    Instrumente de studiu pentru uz zilnic:
+    • Evidențiere versete cu culori personalizate
+    • Note personale la orice verset
+    • Cuvintele lui Iisus marcate cu roșu la nivel de frază
+    • Apăsare lungă pentru explicații AI (Apple Intelligence)
+    • Căutare integrală în toate traducerile
+    • Rezumate de capitole și versete
+
+    Devoționale zilnice, mod luminos/întunecat, fonturi reglabile și suport VoiceOver complet.
+
+    SwiftBible este complet open-source. Cod și contribuții pe GitHub.
+  whats_new: |-
+    Materiale noi de marketing, remedieri pentru modul întunecat
+
+tr:
+  name: "İncil KJV - SwiftBible"
+  subtitle: "Tefekkür, Apokrif, Hanok"
+  keywords: "asv,web,kutsal,kitap,müjde,dua,isa,hristiyan,iman,çalışma,not,yobel,ibranice,katolik,tanrı,mezmur"
+  promo_text: "İncil'i KJV, ASV, WEB ve orijinal İbranice/Yunanca metinlerle okuyun. Apokrif, Hanok Kitabı, Yobel ve daha fazlası dahil. Vurgulama, not, yapay zeka açıklamaları."
+  description: |
+    SwiftBible, Kutsal Yazıların ciddi okuyucuları ve öğrencileri için özenle tasarlanmış açık kaynaklı bir iOS Kutsal Kitap uygulamasıdır.
+
+    Dört kamu malı çeviri:
+    • King James Version (KJV) — 1611'in zamansız çevirisi
+    • American Standard Version (ASV) — en sözel İngilizce Kutsal Kitap
+    • World English Bible (WEB) — modern, doğru, okunabilir
+    • Orijinal İbranice (Eski Antlaşma) ve Yunanca (Yeni Antlaşma) — sağdan sola destekli
+
+    Kanonun ötesinde tüm kütüphane:
+    • Deuterocanonical Apokrif (Makabeler, Bilgelik, Sirak vb.)
+    • 1 Hanok ve 2 Hanok (Gözcüler, Benzetmeler, Astronomi Kitabı — 108 bölüm)
+    • Yobel Kitabı
+    • On İki Atanın Vasiyetleri
+    • Didakhe ve 1 Klement
+
+    Günlük kullanım için çalışma araçları:
+    • Ayetleri özel renklerle vurgulayın
+    • Herhangi bir ayete kişisel notlar ekleyin
+    • İsa'nın sözleri ifade düzeyinde kırmızı renkte
+    • Yapay zeka açıklamaları için uzun basın (Apple Intelligence)
+    • Tüm çevirilerde tam metin arama
+    • Bölüm ve ayet özetleri
+
+    Günlük tefekkürler, açık/koyu mod, ayarlanabilir yazı tipleri ve tam VoiceOver desteği.
+
+    SwiftBible tamamen açık kaynaktır. Kodu görüntüleyin ve GitHub'da katkıda bulunun.
+  whats_new: |-
+    Yeni pazarlama görselleri, koyu mod düzeltmeleri
+
+hi:
+  name: "बाइबिल KJV - SwiftBible"
+  subtitle: "ध्यान, अपोक्रिफ़ा, हनोक"
+  keywords: "asv,web,पवित्र,सुसमाचार,प्रार्थना,यीशु,ईसाई,विश्वास,अध्ययन,नोट्स,यूबिली,इब्रानी,कैथोलिक,परमेश्वर"
+  promo_text: "KJV, ASV, WEB तथा मूल इब्रानी/यूनानी में बाइबिल पढ़ें। अपोक्रिफ़ा, हनोक की पुस्तक, यूबिली आदि शामिल। हाइलाइट, नोट्स और AI व्याख्या।"
+  description: |
+    SwiftBible एक ओपन-सोर्स iOS बाइबिल ऐप है, जो शास्त्रों के गंभीर पाठकों और छात्रों के लिए सावधानीपूर्वक डिज़ाइन किया गया है।
+
+    चार पब्लिक डोमेन अनुवाद:
+    • King James Version (KJV) — 1611 का कालातीत अनुवाद
+    • American Standard Version (ASV) — सबसे शाब्दिक अंग्रेज़ी बाइबिल
+    • World English Bible (WEB) — आधुनिक, सटीक, पढ़ने में सरल
+    • मूल इब्रानी (पुराना नियम) और यूनानी (नया नियम) — दाएँ-से-बाएँ समर्थन के साथ
+
+    कैनन से परे पूरी लाइब्रेरी:
+    • ड्यूटेरोकैनोनिकल अपोक्रिफ़ा (मक्काबीस, ज्ञान, सिराख आदि)
+    • 1 हनोक और 2 हनोक (निगरानी रखने वाले, दृष्टांत, खगोल पुस्तक — 108 अध्याय)
+    • यूबिली की पुस्तक
+    • बारह कुलपतियों के वसीयतनामे
+    • दिदाखे और 1 क्लेमेंट
+
+    दैनिक उपयोग के लिए अध्ययन उपकरण:
+    • कस्टम रंगों के साथ छंदों को हाइलाइट करें
+    • किसी भी छंद पर व्यक्तिगत नोट्स जोड़ें
+    • यीशु के शब्द वाक्यांश स्तर पर लाल रंग में
+    • AI व्याख्या के लिए लंबे समय तक दबाएं (Apple Intelligence)
+    • सभी अनुवादों में पूर्ण-पाठ खोज
+    • अध्याय और छंद सारांश
+
+    दैनिक ध्यान, लाइट/डार्क मोड, समायोज्य फ़ॉन्ट और पूर्ण VoiceOver समर्थन।
+
+    SwiftBible पूरी तरह ओपन-सोर्स है। GitHub पर कोड देखें और योगदान करें।
+  whats_new: |-
+    नई मार्केटिंग सामग्री, डार्क मोड में सुधार
