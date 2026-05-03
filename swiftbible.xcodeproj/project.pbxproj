@@ -54,6 +54,9 @@
 		954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 954BC9D72C84EDBF00FFCFA6 /* Assets.xcassets */; };
 		954BC9DC2C84EDBF00FFCFA6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 954BC9DB2C84EDBF00FFCFA6 /* Preview Assets.xcassets */; };
 		954BC9E42C85005900FFCFA6 /* bible.json in Resources */ = {isa = PBXBuildFile; fileRef = 954BC9E32C85005900FFCFA6 /* bible.json */; };
+		LC0000022F8C3D00LOCAL002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = LC0000012F8C3D00LOCAL001 /* Localizable.xcstrings */; };
+		LC0000032F8C3D00LOCAL003 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = LC0000012F8C3D00LOCAL001 /* Localizable.xcstrings */; };
+		LC0000042F8C3D00LOCAL004 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = LC0000012F8C3D00LOCAL001 /* Localizable.xcstrings */; };
 		954BC9E72C8500D800FFCFA6 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9E62C8500D800FFCFA6 /* Book.swift */; };
 		954BC9EA2C8500F900FFCFA6 /* BibleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954BC9E92C8500F900FFCFA6 /* BibleService.swift */; };
 		DD0001SUMMARIES0000000001 /* SummariesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0001SUMMARIES0000000002 /* SummariesService.swift */; };
@@ -245,6 +248,7 @@
 		954BC9D92C84EDBF00FFCFA6 /* swiftbible.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = swiftbible.entitlements; sourceTree = "<group>"; };
 		954BC9DB2C84EDBF00FFCFA6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		954BC9E32C85005900FFCFA6 /* bible.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = bible.json; sourceTree = "<group>"; };
+		LC0000012F8C3D00LOCAL001 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		954BC9E62C8500D800FFCFA6 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		954BC9E92C8500F900FFCFA6 /* BibleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleService.swift; sourceTree = "<group>"; };
 		DD0001SUMMARIES0000000002 /* SummariesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummariesService.swift; sourceTree = "<group>"; };
@@ -518,6 +522,7 @@
 				954BC9F52C85456400FFCFA6 /* Info.plist */,
 				AA00000E2F130001000LNCHSB /* LaunchScreen.storyboard */,
 				954BC9D72C84EDBF00FFCFA6 /* Assets.xcassets */,
+				LC0000012F8C3D00LOCAL001 /* Localizable.xcstrings */,
 				954BC9D92C84EDBF00FFCFA6 /* swiftbible.entitlements */,
 				954BC9DA2C84EDBF00FFCFA6 /* Preview Content */,
 				0DD056121DE08359D63F5F37 /* Config.swift */,
@@ -832,6 +837,25 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				el,
+				es,
+				"es-MX",
+				fr,
+				hi,
+				id,
+				it,
+				ja,
+				ko,
+				nl,
+				pl,
+				"pt-BR",
+				"pt-PT",
+				ro,
+				ru,
+				tr,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 954BC9C72C84EDBE00FFCFA6;
 			packageReferences = (
@@ -878,6 +902,7 @@
 				DD0002JFB000000000000001 /* summaries_jfb.json in Resources */,
 				95DEADBEEF33333300042F87 /* OnboardingExplain.mp4 in Resources */,
 				954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */,
+				LC0000022F8C3D00LOCAL002 /* Localizable.xcstrings in Resources */,
 				AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -893,6 +918,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				LC0000032F8C3D00LOCAL003 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -900,6 +926,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				LC0000042F8C3D00LOCAL004 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,7 +19,13 @@ Output goes to marketing/ subfolders.
 
 import os
 import math
+import argparse
+import sys
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
+
+# Local module: caption translations per locale (Spanish, Portuguese, French, etc.)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from screenshot_translations import TRANSLATIONS, localize_config_list
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -2199,19 +2205,42 @@ def create_faux_dark(img):
 
 
 def main():
-    """Generate ONLY the ultimate (mixed-layout) marketing set.
+    """Generate the ultimate (mixed-layout) marketing set.
 
-    Other variants (basic per-slot, panoramic pair, panoramic strip, legacy
-    ultimate strip) were dropped — only the mixed-layout set goes to App
-    Store Connect, so we don't waste cycles regenerating the rest.
+    Use --locale to render with localized captions. Default is en-US which
+    outputs to marketing/ultimate/<device>/ for backward compatibility.
+    Non-English locales output to marketing/ultimate/<locale>/<device>/.
     """
-    for device_name, device_config in DEVICES.items():
-        raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
-        out_dir = os.path.join(SCRIPT_DIR, "marketing", "ultimate", device_name)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--locale", default="en-US",
+        help="Locale to render captions in (default: en-US). Pass 'all' to render every locale in TRANSLATIONS."
+    )
+    args = parser.parse_args()
 
-        print(f"\n=== {device_name} (ultimate) ===")
-        generate_ultimate_mixed(device_name, device_config, raw_dir, out_dir)
+    locales = list(TRANSLATIONS.keys()) + ["en-US"] if args.locale == "all" else [args.locale]
+    locales = list(dict.fromkeys(locales))  # dedupe, preserve order
 
+    global ULTIMATE_MIXED
+    original_config = list(ULTIMATE_MIXED)
+
+    for locale in locales:
+        if locale != "en-US" and locale not in TRANSLATIONS:
+            print(f"WARN: no translations for '{locale}', skipping")
+            continue
+        # Swap caption strings for this locale
+        ULTIMATE_MIXED = localize_config_list(original_config, locale)
+
+        locale_subdir = "" if locale == "en-US" else locale
+        for device_name, device_config in DEVICES.items():
+            raw_dir = os.path.join(SCRIPT_DIR, "screenshots", device_name)
+            out_dir = os.path.join(SCRIPT_DIR, "marketing", "ultimate", locale_subdir, device_name)
+
+            print(f"\n=== {device_name} (ultimate, {locale}) ===")
+            generate_ultimate_mixed(device_name, device_config, raw_dir, out_dir)
+
+    # Restore original (in case anything imports this module after main)
+    ULTIMATE_MIXED = original_config
     print("\nDone! Marketing screenshots saved to marketing/ultimate/")
 
 

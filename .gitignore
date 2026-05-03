@@ -79,6 +79,7 @@ supabase/.env
 
 appstore/__pycache__/
 appstore/listings.pulled.yaml
+appstore/marketing/ultimate/*/*/*.png
 
 .sentryclirc
 *.p8
