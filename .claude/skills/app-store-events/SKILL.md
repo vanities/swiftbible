@@ -128,10 +128,43 @@ Then list it in `allEvents`. The MoreView card auto-shows during the date window
 `readingPlan: [EventReadingDay]` — one entry per day. Voice/format conventions (see project memory `feedback_devotional_voice.md`):
 
 - Concrete > abstract; acknowledge cost; no preachy/AI tells
-- 150-250 words per reflection
-- KJV passages
+- Walk-through format: opening intro paragraph → each verse printed as a blockquote with a brief commentary (one or two sentences) → closing reflection paragraph
+- KJV passages — pulled directly from `swiftbible/Text/bible.json` for accuracy
 - **Markdown blockquotes for scripture quotes** — the EventDetailView's MarkdownUI theme renders them with a gold left bar, italic, secondary color
-- **`[J]` marker for Jesus's words** — red-letter convention. `> [J] "..."` blockquotes render in red (or normal if user has `Settings → Show Jesus's words in red` off). Only mark scripture where Jesus himself is the speaker; narrators / apostles / prophets / observers stay as plain `> "..."` blockquotes.
+- **`[J]` marker for Jesus's words** — red-letter convention. `> [J] "..."` blockquotes render in red (or normal if user has `Settings → Show Jesus's words in red` off). The generator script auto-detects this from the `<JESUS>...</JESUS>` tags in `bible.json` — don't mark by hand.
+
+#### Generator pattern (recommended)
+
+`appstore/events/pentecost/gen_reading_plan.py` is a one-off script that:
+
+- Loads `swiftbible/Text/bible.json`
+- For each day's spec, extracts the exact KJV verse text and detects Jesus-speaking verses via the `<JESUS>` tags
+- Combines with hand-written intros / per-verse commentary / conclusions defined inline
+- Outputs the full `pentecostReadingPlan: [EventReadingDay] = [...]` Swift block
+
+For a new event, copy the script, adapt the `DAYS` list (book/chapter/verse range, intro, comment dict per verse, conclusion), then:
+
+```bash
+uv run --quiet python3 appstore/events/<slug>/gen_reading_plan.py > /tmp/new_plan.swift
+# Then surgically replace the existing readingPlan block in AppEvent.swift, e.g.
+uv run --quiet python3 -c "
+from pathlib import Path
+src = Path('swiftbible/Models/AppEvent.swift')
+text = src.read_text()
+new_block = Path('/tmp/new_plan.swift').read_text().rstrip() + '\\n'
+i = text.index('    private static let <slug>ReadingPlan: [EventReadingDay] = [')
+j = text.index('\\n    ]\\n', i) + len('\\n    ]')
+src.write_text(text[:i] + new_block.rstrip() + text[j:])
+"
+```
+
+Why a generator instead of writing markdown by hand:
+- Verse text is verbatim KJV (no transcription drift between Bible app and reading plan)
+- Jesus markers come from the same source the Bible view uses (consistent red-letter rendering)
+- Commentary edits stay in Python, easy to re-run
+- A typo in the verse text won't slip through because nobody types verses
+
+For trivial connector verses where commentary adds nothing, set the commentary string to `""` — the verse still prints, but no commentary line appears.
 
 ```swift
 EventReadingDay(

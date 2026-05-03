@@ -1,0 +1,263 @@
+"""Generate the pentecostReadingPlan Swift block from bible.json.
+
+One-off generator that:
+- Pulls each verse's exact KJV text + isJesusSpeaking flag from swiftbible/Text/bible.json
+- Combines with hand-written intros, per-verse commentary, and conclusions
+- Outputs a Swift `[EventReadingDay]` array literal
+
+Voice notes (per saved feedback memory): concrete > abstract, acknowledge
+cost, no preachy/AI tells. Commentary is tight — usually one sentence per
+verse, occasionally two.
+"""
+import json, re, sys
+
+data = json.load(open("swiftbible/Text/bible.json"))
+
+def parse_chapter(book, ch):
+    b = next(x for x in data if x["name"] == book)
+    chap = next(c for c in b["chapters"] if c["number"] == ch)
+    out = {}
+    for p in chap["paragraphs"]:
+        chunks = re.split(rf'\s*({ch}):(\d+)\s*', p["text"])
+        out[p["startingVerse"]] = _clean(chunks[0])
+        for i in range(1, len(chunks), 3):
+            v = int(chunks[i+1])
+            out[v] = _clean(chunks[i+2])
+    return out
+
+def _clean(raw):
+    is_jesus = "<JESUS>" in raw
+    cleaned = re.sub(r"</?JESUS>", "", raw).strip()
+    return (cleaned, is_jesus)
+
+# Per-day plan. Each commentary value can be empty string (just print verse, no note).
+DAYS = [
+    {
+        "id": "pentecost-2026-day-1",
+        "date_iso": "2026-05-25T00:00:00Z",
+        "theme": "The Promise of the Spirit",
+        "book": "Acts", "chapter": 1, "start": 1, "end": 11,
+        "intro": "Luke wrote Acts as a sequel to his Gospel for the same reader, Theophilus. Eleven verses cover Jesus's last forty days on earth — what he taught, what he commanded, and how he left.",
+        "comment": {
+            1: '"Began." Acts is what Jesus continued doing — through the Spirit and the Church.',
+            2: 'Even Jesus\'s commandments to the apostles came "through the Holy Ghost." The Spirit was already at work.',
+            3: "Forty days. Many proofs. The resurrection was witnessed, eaten with, and discussed — not a vision or a feeling.",
+            4: "First instruction: don't leave. Wait. That is the only command on the table.",
+            5: "John's baptism prepared. The Spirit's baptism fulfills. \"Not many days\" turns out to be ten.",
+            6: "Forty days of teaching and they are still hoping for political restoration. Old expectations die hard.",
+            7: "Jesus declines to answer. Some things are not yours to know — your job is faithfulness, not foresight.",
+            8: "The mission, in one verse. Power for witness, expanding outward — Jerusalem, Judaea, Samaria, the world. Acts is structured around these geographic circles.",
+            9: "He left mid-thought. They saw it happen.",
+            10: "They keep staring. Two angels appear.",
+            11: "The angels redirect them. Don't sky-gaze. He will return the same way. Get on with the mission he just gave you.",
+        },
+        "conclusion": "Acts begins in the gap. Jesus is gone. The Spirit has not come. The disciples have a command (wait), a mission (witness), and a promise (he returns). Pentecost makes everything else possible — but first, ten days in an upper room.",
+    },
+    {
+        "id": "pentecost-2026-day-2",
+        "date_iso": "2026-05-26T00:00:00Z",
+        "theme": "Waiting Together",
+        "book": "Acts", "chapter": 1, "start": 12, "end": 26,
+        "intro": "The ten days between the ascension and Pentecost. Most of this passage is what nobody photographs — a hundred and twenty people praying in a room, plus the only piece of business they did during the wait: replacing Judas.",
+        "comment": {
+            12: "About two-thirds of a mile. Close enough to walk back the same morning Jesus left.",
+            13: "Probably the same upper room from the Last Supper. Eleven names; Judas Iscariot is conspicuously missing.",
+            14: "Three groups: the eleven, the women who followed Jesus, Mary and Jesus's brothers. The brothers had not believed him before the resurrection (John 7:5). Something changed.",
+            15: "One hundred and twenty. Not just the eleven — a small congregation.",
+            16: "Peter is already reading the Scriptures Christologically — David's words about a betrayer applied to Judas.",
+            17: "A sober reminder. Judas was an apostle. Position alone does not save you.",
+            18: "A hard verse. Luke does not soften Judas's end.",
+            19: "Public knowledge. The field had a name.",
+            20: "Two psalms (69 and 109) read as prophecy. The second clause justifies replacing Judas.",
+            21: "",
+            22: "The qualification: someone who was there from John's baptism through the ascension. An eyewitness, not a recent convert.",
+            23: "Two qualified men. Either would do.",
+            24: "They do not vote. They ask God to choose.",
+            25: '"His own place." A measured way of saying what they meant.',
+            26: "They cast lots — the last time the New Testament records this method. After Pentecost the Spirit guides decisions directly.",
+        },
+        "conclusion": "They were not waiting alone. They were not waiting passively. One hundred and twenty people in a room, praying for ten days, doing the next small thing they could do. When God seems quiet, that is often the work — gather, ask, keep showing up.",
+    },
+    {
+        "id": "pentecost-2026-day-3",
+        "date_iso": "2026-05-27T00:00:00Z",
+        "theme": "Another Comforter",
+        "book": "John", "chapter": 14, "start": 15, "end": 31,
+        "intro": "Back up in the timeline. Before the cross, before the resurrection, before the ascension — Jesus prepares his disciples for a world without his physical presence. The Spirit is not the consolation prize. He is the means by which Jesus's promises become possible.",
+        "comment": {
+            15: "Love and obedience are linked. The Spirit comes alongside the people who actually try to live like Jesus said.",
+            16: 'The Greek word for "Comforter" is paraklētos — literally one called alongside. A helper, advocate, counselor. The same kind of helper Jesus has been, just not in a body.',
+            17: "The world cannot receive him because the world is not looking. The disciples will know him intimately — \"with you\" becomes \"in you.\"",
+            18: '"Comfortless" is literally "orphans." Jesus is leaving but he is not abandoning them.',
+            19: "Resurrection life is about to be the new normal. Because he lives, they will too.",
+            20: "Mutual indwelling. A union deeper than physical proximity ever was.",
+            21: "Three ways of saying the same thing: love proves itself in obedience.",
+            22: "Judas (not Iscariot — likely Thaddaeus) asks what every Christian eventually asks: why isn't this more obvious to the world?",
+            23: "The answer: love and obedience open the door. The Father and Son make their home with the obedient. Notice the plural \"we.\"",
+            24: "The reverse: refusing his words means refusing the Father, not just him.",
+            25: "He is teaching them now what they will need later.",
+            26: "Two roles for the Spirit: teach and remind. Much of the New Testament is the apostles being reminded of Jesus's words by the Spirit.",
+            27: "Not the world's peace — the world's peace is fragile. His peace is given, not earned.",
+            28: "If they really loved him, they would rejoice that he is going home, not grieve that he is leaving.",
+            29: "He tells them in advance so they will believe later, not now.",
+            30: "Time is short. The cross is hours away.",
+            31: "The world must see his obedience to the Father — even unto death. Last sentence before the upper room emptied.",
+        },
+        "conclusion": "Pentecost is not about a feeling. It is about being equipped to do what Jesus already commanded. The Comforter comes alongside obedience. Without obedience there is no doorway for him to enter; with it, the Father and the Son make their home in you.",
+    },
+    {
+        "id": "pentecost-2026-day-4",
+        "date_iso": "2026-05-28T00:00:00Z",
+        "theme": "Into All Truth",
+        "book": "John", "chapter": 16, "start": 5, "end": 15,
+        "intro": "Two chapters later in the same upper-room conversation. Jesus describes what the Spirit will actually do — convict, guide, glorify. The Spirit is not vague spiritual energy. He has a job description.",
+        "comment": {
+            5: "They are sad about losing him but not curious about where he is going. Grief can blind us to what's coming next.",
+            6: "Honest. Their hearts are filled with sorrow. He does not scold them for it.",
+            7: 'Stunning. It is to their advantage that he leaves. They cannot have what comes next without losing what they have now.',
+            8: "Three things the Spirit will reprove the world of. Not your truth — the world's wrong reading of sin, of righteousness, and of judgment.",
+            9: "Sin's root: unbelief in Jesus. Other sins are symptoms.",
+            10: "Righteousness is no longer measured against the law alone — it is measured against Christ, who is now glorified.",
+            11: "Judgment has already happened at the cross. \"The prince of this world\" — Satan — has been judged.",
+            12: "There is more to teach. They cannot bear it now. Jesus knows what to hold back.",
+            13: "Three things again: the Spirit will guide into all truth, will not speak from himself, will report what he hears. He is sent, not autonomous.",
+            14: "The point. Everything the Spirit does glorifies Christ. If a \"spirituality\" leads you somewhere else, it is not the Holy Spirit.",
+            15: "Trinity in three lines: what the Father has, the Son has; what the Son has, the Spirit gives.",
+        },
+        "conclusion": "If your prayers feel different lately — if there is an uncomfortable awareness of something you have avoided — that may be the Spirit doing his work. He convicts. He guides. He glorifies Christ. Don't run from any of it. He is preparing you.",
+    },
+    {
+        "id": "pentecost-2026-day-5",
+        "date_iso": "2026-05-29T00:00:00Z",
+        "theme": "Poured Out on All Flesh",
+        "book": "Joel", "chapter": 2, "start": 28, "end": 32,
+        "intro": "Eight hundred years before Pentecost, the prophet Joel saw it. On Pentecost morning Peter will quote this passage to explain what just happened. Joel said the Spirit was for everyone. Pentecost made him right.",
+        "comment": {
+            28: "Read the verse slowly. All flesh. Not the priests. Not the prophets. Sons, daughters, old men, young men.",
+            29: '"Servants" includes both genders, both classes. Even the lowest. The Spirit democratized.',
+            30: "Cosmic signs. Joel does not separate Pentecost from the day of the Lord — both come together in his vision.",
+            31: "The same imagery Jesus uses in the Olivet Discourse. Joel sees the whole arc.",
+            32: "The promise inside the warning. Anyone who calls on the name of the Lord will be saved. Peter will land on this verse in his Pentecost sermon.",
+        },
+        "conclusion": "If you have ever felt unqualified to be used by God — too young, too old, too uneducated, too late — this passage is your answer. The Spirit did not come on a few. He came on all who would call.",
+    },
+    {
+        "id": "pentecost-2026-day-6",
+        "date_iso": "2026-05-30T00:00:00Z",
+        "theme": "Tongues Like as of Fire",
+        "book": "Acts", "chapter": 2, "start": 1, "end": 13,
+        "intro": "Pentecost morning. The waiting ends. Sound, sight, speech — every sense engaged at once. The promise lands.",
+        "comment": {
+            1: '"Pentecost" means fiftieth. Fifty days after Passover. They are still in the upper room, still together.',
+            2: "Sound first. A wind that is not a wind — the noise of one. The whole house fills.",
+            3: "Then sight. Tongues like fire — the Old Testament image of God's presence (the burning bush, Sinai, the pillar). One on each of them. Personal.",
+            4: "Then speech. They speak languages they have never learned. The Spirit gives the words.",
+            5: "Pentecost was a pilgrimage feast. Jews from the diaspora were in town for it.",
+            6: "The crowd hears the noise and gathers. Each one hears in his own language.",
+            7: "Galileans were known for their accent and considered uneducated. Suddenly they are speaking the dialects of fifteen nations fluently.",
+            8: "Each man hears, in his own native tongue, the wonderful works of God.",
+            9: "",
+            10: "",
+            11: "Fifteen regions named. The Mediterranean world is in Jerusalem this morning, and they are all hearing the gospel for the first time — in their mother tongue.",
+            12: "Confused. Wondering. The crowd does not yet know what to make of it.",
+            13: "Some mock. \"These men are full of new wine.\" Mockery and amazement have followed every real move of God since.",
+        },
+        "conclusion": "If the Spirit is at work in your life and nobody finds it confusing or worth mocking, ask whether anything has actually changed. The flame leaves a mark. Pentecost reverses Babel — God scattered languages there to stop a project of pride; here he gives them back to gather a Church.",
+    },
+    {
+        "id": "pentecost-2026-day-7",
+        "date_iso": "2026-05-31T00:00:00Z",
+        "theme": "Peter Lifts Up His Voice",
+        "book": "Acts", "chapter": 2, "start": 14, "end": 41,
+        "intro": "Twenty-eight verses. Peter's first sermon — and the longest single block of preaching in Acts. The same man who denied Jesus three times stands up, explains what just happened, and three thousand people are baptized before sundown. Walk through it.",
+        "comment": {
+            14: "He stands up with the eleven. Public, not hiding. The voice that denied is the voice that now preaches.",
+            15: "He addresses the mockery first. \"It's nine in the morning.\" Then he reframes.",
+            16: "His next move is Scripture: this is what Joel was talking about.",
+            17: "Quoting Joel 2:28. The last days have begun. Pentecost is the inauguration.",
+            18: "All flesh — including servants, including women. Nothing is held back.",
+            19: "",
+            20: "",
+            21: "The promise that anchors everything: whoever calls on the name of the Lord shall be saved.",
+            22: "Now to Jesus. \"Approved of God\" — Peter argues from what they themselves saw.",
+            23: "God's plan and human responsibility, side by side. Foreknowledge does not erase guilt.",
+            24: "Death could not hold him. The resurrection is the headline.",
+            25: "",
+            26: "",
+            27: "",
+            28: "Quoting Psalm 16. David spoke about resurrection — but David died and stayed dead. So who was the psalm really about?",
+            29: "Peter's argument: David's tomb is right here. We can visit it.",
+            30: "But David was a prophet. He saw further than himself.",
+            31: "He saw Christ. The psalm is about the resurrection of Jesus.",
+            32: "We are witnesses. Not arguing from theory — from experience.",
+            33: "Jesus is now exalted. What you see and hear today is his gift.",
+            34: "Quoting Psalm 110. Even David did not ascend.",
+            35: "",
+            36: "The verdict. \"All the house of Israel\" — including those listening — must reckon with this: the Jesus they crucified is Lord and Christ.",
+            37: "Cut to the heart. The honest response of a convicted conscience.",
+            38: "The gospel in one verse: repent, be baptized, receive the Spirit.",
+            39: "The promise extends — to your children, to those far off, to as many as the Lord calls.",
+            40: "Many more words. Peter keeps going.",
+            41: "Three thousand baptized that day. The Church is born.",
+        },
+        "conclusion": "Pentecost is not just an experience — it is a sermon and a response. Peter preached. People were cut to the heart. They asked what to do. He told them. Three thousand obeyed. The pattern still works: speak Christ plainly, expect the Spirit to do the convicting, invite the response.",
+    },
+    {
+        "id": "pentecost-2026-day-8",
+        "date_iso": "2026-06-01T00:00:00Z",
+        "theme": "The New Community",
+        "book": "Acts", "chapter": 2, "start": 42, "end": 47,
+        "intro": "Three thousand new converts, mostly visiting Jews from a dozen countries. What did they do next? Six verses describe the shape of the post-Pentecost Church. Not programs. Not strategies. The basics, done together.",
+        "comment": {
+            42: "Four things, every day. Apostles' doctrine, fellowship, breaking of bread, prayers. The first church syllabus.",
+            43: "Reverence and signs. The supernatural was normal.",
+            44: "Together, with a shared life. Not just at services — in their houses.",
+            45: "Voluntary radical generosity. The Spirit reorganized their relationship to property.",
+            46: "Daily, in the temple AND in homes. Public worship and private hospitality. Gladness.",
+            47: "Praising God. Favored by outsiders. The Lord adding new believers daily.",
+        },
+        "conclusion": "If you have been through a powerful spiritual moment but it did not change how you live with the people in your life, the moment did not finish. Pentecost was not over when the wind stopped. It was just beginning. The same Spirit that filled the house also formed the Church. May this week land that way for you, too — not just feeling, but new community.",
+    },
+]
+
+def render_reflection(day, verses):
+    lines = [day["intro"]]
+    for v in range(day["start"], day["end"] + 1):
+        text, is_jesus = verses[v]
+        marker = "[J] " if is_jesus else ""
+        # Escape Swift string escapes
+        verse_text = text.replace("\\", "\\\\")
+        lines.append("")
+        lines.append(f'> {marker}"{verse_text}" (v.{v})')
+        commentary = day["comment"].get(v, "")
+        if commentary:
+            lines.append("")
+            lines.append(commentary)
+    lines.append("")
+    lines.append(day["conclusion"])
+    return "\n".join(lines)
+
+def render_swift_entry(day, verses):
+    refl = render_reflection(day, verses)
+    # Indent each line by 12 spaces (inside Swift triple-quoted string)
+    indented = "\n".join(("            " + line) if line else "" for line in refl.split("\n"))
+    return f"""        EventReadingDay(
+            id: "{day['id']}",
+            date: parseISO("{day['date_iso']}"),
+            theme: "{day['theme']}",
+            passage: ScriptureRef(book: "{day['book']}", chapter: {day['chapter']}, startVerse: {day['start']}, endVerse: {day['end']}),
+            reflection: \"\"\"
+{indented}
+            \"\"\"
+        ),"""
+
+# Generate
+out = []
+for day in DAYS:
+    verses = parse_chapter(day["book"], day["chapter"])
+    out.append(render_swift_entry(day, verses))
+
+# Print full block
+print("    private static let pentecostReadingPlan: [EventReadingDay] = [")
+print("\n".join(out))
+print("    ]")
