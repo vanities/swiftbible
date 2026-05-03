@@ -1274,15 +1274,17 @@ ULTIMATE_MIXED = [
      "headline_font": "headline",
      "vignette": True, "accent_line": RED, "bloom": True},
 
-    # Slots 6+7: PANORAMIC (DARK) — library depth + study tool combo.
-    # Left uses the apocrypha-scrolled book list so the headline matches.
+    # Slots 6+7: PANORAMIC (DARK) — library depth.
+    # Left = Apocrypha books (Tobit, Judith, Wisdom...), Right = Book of Enoch
+    # sections (Watchers, Parables, Astronomical...). Together they show the
+    # breadth of pseudepigrapha that no other free Bible app includes.
     {"layout": "panoramic",
-     "left_filename": "01b_apocrypha_books_dark",
-     "right_filename": "02_chapters_dark",
-     "left_headline": "Apocrypha & Enoch Included",
-     "left_subtitle": "Jubilees, Clement, Didache — public domain",
-     "right_headline": "Summary on Every Chapter",
-     "right_subtitle": "Know the gist before you read",
+     "left_filename": "06_apocrypha_dark",
+     "right_filename": "07_enoch_dark",
+     "left_headline": "Apocrypha Included",
+     "left_subtitle": "Tobit, Judith, Wisdom, Maccabees, Esdras",
+     "right_headline": "Book of Enoch & Beyond",
+     "right_subtitle": "Watchers, Parables, Jubilees, Clement",
      "left_angle": 4, "right_angle": -4,
      "scale": 0.88,
      "grad_tl": (13, 18, 45), "grad_tr": (8, 22, 48),
@@ -1310,6 +1312,34 @@ ULTIMATE_MIXED = [
      "vignette": True,
      "god_rays": GOLD, "god_rays_corner": "top_right",
      "color_grade": 0.15},
+
+    # Slot 9: HERO (DARK) — search (kw: "Bible search")
+    {"layout": "hero",
+     "filename": "09_search_dark",
+     "headline": "Find Any Verse, Instantly",
+     "subtitle": "Search the entire Bible in a tap",
+     "scale": 0.88, "angle": 0,
+     "grad_top": (8, 22, 48), "grad_bot": (14, 38, 72),
+     "orbs": [(0.3, 0.3, 0.5, CYAN, 50), (0.75, 0.65, 0.35, ACCENT, 35)],
+     "headline_grad": ((255, 255, 255), TINT_BLUE),
+     "headline_font": "headline",
+     "light_leak": CYAN, "light_leak_corner": "top_left", "light_leak_size": 0.3,
+     "accent_line": CYAN, "bloom": True},
+
+    # Slot 10: HERO (DARK) — emotional close. Per Sebastian: peak-end last
+    # slot. Free/open-source is the strongest moat against monetized rivals.
+    {"layout": "hero",
+     "filename": "08_settings_dark",
+     "headline": "Free Forever. Open Source.",
+     "subtitle": "No ads. No tracking. No subscriptions.",
+     "scale": 0.85, "angle": 0,
+     "grad_top": (16, 18, 30), "grad_bot": (28, 32, 48),
+     "orbs": [(0.4, 0.4, 0.5, GOLD, 35), (0.7, 0.6, 0.3, ACCENT, 25)],
+     "headline_grad": ((255, 255, 255), TINT_GOLD),
+     "headline_font": "intro",
+     "glow": GOLD, "bokeh": GOLD, "grain": True, "vignette": True,
+     "god_rays": GOLD, "god_rays_corner": "top_right",
+     "color_grade": 0.15, "bloom": True},
 ]
 
 
