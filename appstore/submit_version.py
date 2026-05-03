@@ -85,15 +85,11 @@ def get_editable_version(token, app_id):
 
 
 def find_inflight_review_submission(token, app_id):
-    """Apple allows ONE in-progress review submission per app at a time."""
+    """Find a reviewSubmission we can still add items to / submit. Only the
+    READY_FOR_REVIEW state is editable; COMPLETE / IN_REVIEW / etc are not."""
     r = api("GET", f"/apps/{app_id}/reviewSubmissions?limit=20", token)
     for s in r.get("data", []):
-        state = s["attributes"].get("state")
-        if state in ("READY_FOR_REVIEW", "WAITING_FOR_REVIEW", "IN_REVIEW", "UNRESOLVED_ISSUES"):
-            return s
-    # Look for an in-progress draft we created previously
-    for s in r.get("data", []):
-        if not s["attributes"].get("submitted"):
+        if s["attributes"].get("state") == "READY_FOR_REVIEW":
             return s
     return None
 

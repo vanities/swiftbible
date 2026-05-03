@@ -103,6 +103,17 @@ struct ContentView: View {
                         selectedTab = .bible
                         appViewModel.navigateToVerse(bookName: bookName, chapterNumber: chapter, verseNumber: verse)
                     }
+                case "event":
+                    // App Store In-App Event deep link. Path is /<slug> e.g. swiftbible://event/pentecost
+                    // STUB: route to a sensible default per event until EventDetailView ships.
+                    let slug = url.pathComponents.dropFirst().first
+                    switch slug {
+                    case "pentecost":
+                        selectedTab = .bible
+                        appViewModel.navigateToVerse(bookName: "Acts", chapterNumber: 2, verseNumber: 1)
+                    default:
+                        break
+                    }
                 default:
                     break
                 }

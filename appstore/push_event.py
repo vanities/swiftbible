@@ -119,6 +119,27 @@ def list_events(token, app_id):
     return r["data"]
 
 
+_territory_cache = None
+
+
+def list_all_territories(token):
+    """Fetch every territory Apple supports — needed to set a 'worldwide' IAE
+    (territories array MUST be non-empty or Apple's API 500s)."""
+    global _territory_cache
+    if _territory_cache is not None:
+        return _territory_cache
+    out = []
+    url = f"{ASC_BASE}/territories?limit=200"
+    while url:
+        r = requests.get(url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
+        r.raise_for_status()
+        j = r.json()
+        out.extend([t["id"] for t in j["data"]])
+        url = j.get("links", {}).get("next")
+    _territory_cache = out
+    return out
+
+
 def find_event_by_reference_name(token, app_id, reference_name):
     for ev in list_events(token, app_id):
         if ev["attributes"].get("referenceName") == reference_name:
@@ -136,6 +157,27 @@ def list_event_assets(token, event_id, locale_id):
     return r["data"]
 
 
+def delete_event_asset(token, asset_id):
+    api("DELETE", f"/appEventScreenshots/{asset_id}", token)
+
+
+# Map filename suffix → Apple's appEventAssetType.
+# Drop these naming conventions in appstore/events/<slug>/:
+#   <slug>_event.png         OR  event_card.png    →  EVENT_CARD       (1080x1080)
+#   <slug>_event_details.png OR  event_details.png →  EVENT_DETAILS_PAGE    (1920x1080)
+def find_event_images(event_dir):
+    """Return [(path, asset_type), ...] for the recognized images in event_dir."""
+    images = []
+    for p in sorted(event_dir.glob("*.png")):
+        name = p.stem.lower()
+        if name.endswith("_event_details") or name in ("event_details", "details"):
+            images.append((p, "EVENT_DETAILS_PAGE"))
+        elif (name.endswith("_event") or name.endswith("_event_card")
+              or name in ("event_card", "card")):
+            images.append((p, "EVENT_CARD"))
+    return images
+
+
 def build_event_attributes(cfg):
     attrs = {
         "referenceName": cfg["reference_name"],
@@ -148,14 +190,23 @@ def build_event_attributes(cfg):
         "primaryLocale": cfg.get("primary_locale", "en-US"),
         "deepLink": cfg.get("deep_link"),
     }
-    sched = cfg.get("schedule") or {}
-    if sched:
-        attrs["territorySchedules"] = [{
-            "publishStart": _iso(sched.get("publish_start") or sched.get("start")),
-            "eventStart":   _iso(sched.get("event_start")   or sched.get("start")),
-            "eventEnd":     _iso(sched.get("event_end")     or sched.get("end")),
-        }]
+    # territorySchedules is set later (needs explicit territories list)
     return {k: v for k, v in attrs.items() if v is not None}
+
+
+def build_territory_schedule(cfg, token):
+    sched = cfg.get("schedule") or {}
+    if not sched:
+        return None
+    territories = cfg.get("territories")
+    if not territories or territories == "all":
+        territories = list_all_territories(token)
+    return [{
+        "publishStart": _iso(sched.get("publish_start") or sched.get("start")),
+        "eventStart":   _iso(sched.get("event_start")   or sched.get("start")),
+        "eventEnd":     _iso(sched.get("event_end")     or sched.get("end")),
+        "territories":  territories,
+    }]
 
 
 def _iso(s):
@@ -230,21 +281,26 @@ def upsert_event_localization(token, event_id, locale, payload, existing, dry_ru
     return r["data"]["id"]
 
 
-def upload_event_image(token, locale_id, image_path, dry_run):
-    """Three-step asset upload for the event image, attached to a locale."""
+def upload_event_image(token, locale_id, image_path, asset_type, dry_run):
+    """Three-step asset upload for an event image of the given asset_type
+    (EVENT_CARD or EVENT_DETAILS_PAGE), attached to a locale."""
     if not image_path.exists():
         print(f"  ! image not found: {image_path}", file=sys.stderr)
         return
     file_size = image_path.stat().st_size
-    print(f"  [img] uploading {image_path.name} ({file_size//1024}KB) → locale {locale_id}")
+    print(f"  [img] uploading {image_path.name} ({file_size//1024}KB) as {asset_type} → locale {locale_id}")
     if dry_run:
         return
 
-    # 1. Reserve
+    # 1. Reserve.
     body = {
         "data": {
             "type": "appEventScreenshots",
-            "attributes": {"fileName": image_path.name, "fileSize": file_size},
+            "attributes": {
+                "fileName": image_path.name,
+                "fileSize": file_size,
+                "appEventAssetType": asset_type,
+            },
             "relationships": {
                 "appEventLocalization": {
                     "data": {"type": "appEventLocalizations", "id": locale_id}
@@ -264,32 +320,73 @@ def upload_event_image(token, locale_id, image_path, dry_run):
         resp = requests.request(op["method"], op["url"], headers=ch_headers, data=chunk, timeout=120)
         resp.raise_for_status()
 
-    # 3. Commit
+    # 3. Commit. appEventScreenshots doesn't accept sourceFileChecksum
+    # (unlike appScreenshots which does).
     commit = {
         "data": {
             "type": "appEventScreenshots",
             "id": sid,
-            "attributes": {"uploaded": True, "sourceFileChecksum": md5(image_path)},
+            "attributes": {"uploaded": True},
         }
     }
     api("PATCH", f"/appEventScreenshots/{sid}", token, json=commit)
     print(f"        ✓ committed")
 
 
-def submit_event_for_review(token, event_id, dry_run):
-    """Transition the event from DRAFT to READY_FOR_REVIEW."""
-    body = {
+def submit_event_for_review(token, app_id, event_id, dry_run):
+    """Submit an IAE through Apple's reviewSubmissions flow (same flow as
+    version submission, just with appEvent items instead of appStoreVersion)."""
+    if dry_run:
+        print(f"  → DRY would submit event {event_id} via reviewSubmissions")
+        return
+
+    # 1. Find or create an in-progress reviewSubmission for this app.
+    # Only READY_FOR_REVIEW state allows adding items / submitting; anything
+    # else (COMPLETE, IN_REVIEW, etc) needs a fresh submission.
+    r = api("GET", f"/apps/{app_id}/reviewSubmissions?limit=20", token)
+    existing = None
+    for s in r.get("data", []):
+        if s["attributes"].get("state") == "READY_FOR_REVIEW":
+            existing = s
+            break
+    if existing:
+        sub_id = existing["id"]
+        print(f"  → using existing review submission {sub_id} (state READY_FOR_REVIEW)")
+    else:
+        body = {
+            "data": {
+                "type": "reviewSubmissions",
+                "attributes": {"platform": "IOS"},
+                "relationships": {"app": {"data": {"type": "apps", "id": app_id}}},
+            }
+        }
+        sub = api("POST", "/reviewSubmissions", token, json=body)
+        sub_id = sub["data"]["id"]
+        print(f"  → created review submission {sub_id}")
+
+    # 2. Add the appEvent as an item on the submission.
+    item_body = {
         "data": {
-            "type": "appEvents",
-            "id": event_id,
-            "attributes": {"eventState": "READY_FOR_REVIEW"},
+            "type": "reviewSubmissionItems",
+            "relationships": {
+                "reviewSubmission": {"data": {"type": "reviewSubmissions", "id": sub_id}},
+                "appEvent":         {"data": {"type": "appEvents", "id": event_id}},
+            }
         }
     }
-    print(f"  → submitting event {event_id} (READY_FOR_REVIEW)")
-    if dry_run:
-        return
-    api("PATCH", f"/appEvents/{event_id}", token, json=body)
-    print(f"        ✓ submitted for review")
+    api("POST", "/reviewSubmissionItems", token, json=item_body)
+    print(f"  → added event {event_id} as submission item")
+
+    # 3. Mark submitted: true to send to Apple's review queue.
+    submit_body = {
+        "data": {
+            "type": "reviewSubmissions",
+            "id": sub_id,
+            "attributes": {"submitted": True},
+        }
+    }
+    api("PATCH", f"/reviewSubmissions/{sub_id}", token, json=submit_body)
+    print(f"  ✓ submitted for review (Apple will respond in 24-72h)")
 
 
 def cmd_pull(token, app_id):
@@ -314,7 +411,7 @@ def cmd_pull(token, app_id):
         print()
 
 
-def cmd_push(token, app_id, event_slug, submit, dry_run):
+def cmd_push(token, app_id, event_slug, submit, dry_run, replace_images=False):
     event_dir = EVENTS_DIR / event_slug
     yaml_path = event_dir / "event.yaml"
     if not yaml_path.exists():
@@ -325,16 +422,12 @@ def cmd_push(token, app_id, event_slug, submit, dry_run):
     print(f"Event: {cfg['reference_name']}")
     print(f"Source: {yaml_path}")
 
-    # Find the event image (any 1080x1080 PNG in the dir)
-    image_path = None
-    for p in event_dir.glob("*.png"):
-        image_path = p
-        break
+    # Find recognized event images (EVENT_CARD + optional EVENT_DETAILS_PAGE).
+    image_specs = find_event_images(event_dir)
 
     # 1. Find or create the AppEvent
     attrs = build_event_attributes(cfg)
-    # Apple's API doesn't accept territorySchedules at creation time — split it out.
-    schedules = attrs.pop("territorySchedules", None)
+    schedules = build_territory_schedule(cfg, token) if not dry_run else None
 
     existing = find_event_by_reference_name(token, app_id, cfg["reference_name"])
     if existing:
@@ -348,9 +441,18 @@ def cmd_push(token, app_id, event_slug, submit, dry_run):
         event_id = create_event(token, app_id, attrs, dry_run)
         print(f"  Created event {event_id}")
 
-    # 1b. Apply territorySchedules via PATCH (must happen after the event exists).
-    if schedules:
-        update_event(token, event_id, {"territorySchedules": schedules}, dry_run)
+    # 1b. Apply territorySchedules via PATCH (must happen after the event exists,
+    # and territories array MUST be non-empty or Apple's API 500s).
+    if schedules and not dry_run:
+        n_terr = len(schedules[0].get("territories", []))
+        print(f"  Setting schedule across {n_terr} territor{'y' if n_terr == 1 else 'ies'}")
+        try:
+            update_event(token, event_id, {"territorySchedules": schedules}, dry_run)
+        except requests.HTTPError as e:
+            sys.stderr.write(
+                f"  ! territorySchedules PATCH failed ({e.response.status_code}). "
+                f"Set schedule manually in ASC web UI before submitting.\n"
+            )
 
     # 2. Localizations
     if not dry_run and existing:
@@ -364,24 +466,34 @@ def cmd_push(token, app_id, event_slug, submit, dry_run):
         if loc_id:
             locale_ids[locale] = loc_id
 
-    # 3. Image upload — attach to primary locale (per Apple's IAE asset model)
-    if image_path:
+    # 3. Image upload(s) — attach to primary locale per Apple's IAE asset model.
+    if image_specs:
         primary_locale = cfg.get("primary_locale", "en-US")
         primary_loc_id = locale_ids.get(primary_locale)
         if primary_loc_id and not str(primary_loc_id).startswith("<dry-run"):
-            existing_assets = list_event_assets(token, event_id, primary_loc_id) if not dry_run else []
-            if existing_assets:
-                print(f"  [img] {len(existing_assets)} existing asset(s) — skipping upload (delete in ASC to replace)")
-            else:
-                upload_event_image(token, primary_loc_id, image_path, dry_run)
+            existing_assets = list_event_assets(token, event_id, primary_loc_id)
+            existing_by_type = {
+                a["attributes"].get("appEventAssetType"): a for a in existing_assets
+            }
+            for image_path, asset_type in image_specs:
+                existing = existing_by_type.get(asset_type)
+                if existing and not replace_images:
+                    print(f"  [img] {asset_type} already exists ({existing['attributes'].get('fileName')}) — pass REPLACE_IMAGES=1 to overwrite")
+                    continue
+                if existing and replace_images:
+                    print(f"  [img] deleting existing {asset_type} ({existing['attributes'].get('fileName')})")
+                    if not dry_run:
+                        delete_event_asset(token, existing["id"])
+                upload_event_image(token, primary_loc_id, image_path, asset_type, dry_run)
         elif dry_run:
-            print(f"  [img] DRY would upload {image_path.name}")
+            for image_path, asset_type in image_specs:
+                print(f"  [img] DRY would upload {image_path.name} as {asset_type}")
     else:
-        print("  ! no PNG found in event dir — skipping image upload")
+        print("  ! no recognized event PNG in dir (looking for *_event.png or *_event_details.png)")
 
     # 4. Submit if requested
     if submit:
-        submit_event_for_review(token, event_id, dry_run)
+        submit_event_for_review(token, app_id, event_id, dry_run)
 
     print(f"\nDone." + (" (dry-run)" if dry_run else ""))
 
@@ -394,6 +506,8 @@ def main():
     p.add_argument("--event", help="Event slug (folder name under appstore/events/)")
     p.add_argument("--submit", action="store_true", help="Also transition to READY_FOR_REVIEW")
     p.add_argument("--dry-run", action="store_true", help="Preview without making changes")
+    p.add_argument("--replace-images", action="store_true",
+                   help="Delete existing event assets before uploading (otherwise existing ones are preserved)")
     args = p.parse_args()
 
     env = load_env()
@@ -407,7 +521,7 @@ def main():
     if not args.event:
         sys.exit("ERROR: --event <slug> required (or use --pull)")
 
-    cmd_push(token, env["app_id"], args.event, args.submit, args.dry_run)
+    cmd_push(token, env["app_id"], args.event, args.submit, args.dry_run, args.replace_images)
 
 
 if __name__ == "__main__":

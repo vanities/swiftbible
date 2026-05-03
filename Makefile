@@ -216,12 +216,14 @@ pull-events:
 push-event:
 	@if [ -z "$(EVENT)" ]; then echo "Usage: make push-event EVENT=pentecost"; exit 1; fi
 	@uv run $(EVENT_DEPS) python3 appstore/push_event.py --event $(EVENT) \
-		$(if $(DRY),--dry-run,)
+		$(if $(DRY),--dry-run,) \
+		$(if $(REPLACE_IMAGES),--replace-images,)
 
 submit-event:
 	@if [ -z "$(EVENT)" ]; then echo "Usage: make submit-event EVENT=pentecost"; exit 1; fi
 	@uv run $(EVENT_DEPS) python3 appstore/push_event.py --event $(EVENT) --submit \
-		$(if $(DRY),--dry-run,)
+		$(if $(DRY),--dry-run,) \
+		$(if $(REPLACE_IMAGES),--replace-images,)
 
 # --- App Store Version Submission ---
 # Submits the current editable version for Apple review.

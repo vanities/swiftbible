@@ -19,8 +19,10 @@ schedule:
   event_start: "2026-06-01 00:00 UTC"      # the actual event moment
   event_end: "2026-06-07 23:59 UTC"
 
-deep_link: "swiftbible://verse/Acts/2/1"
-# (Or: swiftbible://event/pentecost  if you add a curated event view — see SETUP.md)
+deep_link: "swiftbible://event/pentecost"
+# Routes to the curated Pentecost event view via the `event` URL host.
+# Currently stubbed to land on Acts 2:1 in ContentView.onOpenURL until
+# the EventDetailView + 8-day reading plan ships in a follow-up version.
 
 notification_opt_in: |
   Get a daily reading notification through Pentecost week.
