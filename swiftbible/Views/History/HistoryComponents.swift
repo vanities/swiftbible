@@ -67,7 +67,7 @@ struct HistorySectionCard: View {
                 .padding(.top, 4)
 
             HStack {
-                Text("\(section.articles.count) ARTICLE\(section.articles.count == 1 ? "" : "S")")
+                Text("\(section.articles.count) ARTICLES")
                     .font(.system(size: 10, weight: .semibold, design: .serif))
                     .tracking(2)
                     .foregroundStyle(ManuscriptPalette.mutedInk(colorScheme))

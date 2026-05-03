@@ -56,7 +56,7 @@ struct VerificationView: View {
             userViewModel.user = await SupabaseService.shared.getUser()
             dismiss()
         } catch {
-            errorMessage = "Verification error: \(error.localizedDescription)"
+            errorMessage = String(localized: "Verification error: \(error.localizedDescription)")
         }
     }
 }

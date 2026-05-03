@@ -85,7 +85,9 @@ struct DonationPromptView: View {
                             )
                             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                         }
-                        .accessibilityLabel("Donate \(formattedAmount(for: amount))\(amount == recommendedAmount ? ", most chosen" : "")")
+                        .accessibilityLabel(amount == recommendedAmount
+                            ? "Donate \(formattedAmount(for: amount)), most chosen"
+                            : "Donate \(formattedAmount(for: amount))")
                         .accessibilityAddTraits(selectedAmount == amount ? .isSelected : [])
                     }
                 }

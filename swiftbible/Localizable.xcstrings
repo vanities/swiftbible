@@ -41,7 +41,6 @@
         }
       }
     },
-    "%@ Note": {},
     "%@ chapter %lld verse %lld": {
       "localizations": {
         "en": {
@@ -98,8 +97,30 @@
       "localizations": {
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "%1$@: %2$lld minutes"
+            "state": "translated",
+            "value": "%1$@: %#@minuteCount@"
+          },
+          "substitutions": {
+            "minuteCount": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg minute"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg minutes"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -107,12 +128,24 @@
     "%lld": {
       "shouldTranslate": false
     },
-    "%lld ARTICLE%@": {
+    "%lld ARTICLES": {
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld ARTICLE%2$@"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld ARTICLE"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld ARTICLES"
+                }
+              }
+            }
           }
         }
       }
@@ -134,14 +167,18 @@
     "A BRIEF HISTORY OF": {},
     "A Small Gift Goes a Long Way": {},
     "A Word for Today": {},
+    "A gentle nudge, on your schedule": {},
     "A gentle reminder each day to pause, reflect, and grow in scripture.": {},
     "A new version of swiftbible is available with improvements and new features. Please update to get the best experience.": {},
+    "A quiet space to read, reflect, and return — designed to keep you in the Word.": {},
     "AI Generated": {},
     "AI Generated Content": {},
     "About Our Sources": {},
     "About Public Domain": {},
     "About Translations": {},
     "Accent Color": {},
+    "Add Note": {},
+    "After you check the time, glance at today's devotional. A tiny moment, every day.": {},
     "All texts included in SwiftBible use public domain translations. Every translation listed below is freely available without copyright restrictions.": {},
     "All translations in SwiftBible are in the public domain, meaning they can be freely used, shared, and distributed without copyright restrictions.": {},
     "Apocrypha": {},
@@ -149,6 +186,7 @@
     "App Icon": {},
     "Are you sure you want to delete your account? This action cannot be undone.": {},
     "Ask a follow-up question…": {},
+    "Ask the text. Go deeper.": {},
     "Authenticate": {},
     "BIBLE BOOKMARK": {},
     "Bible": {},
@@ -193,6 +231,7 @@
     "Devotional": {},
     "Devotional Reminder": {},
     "Didache": {},
+    "Donate %@": {},
     "Donate %@%@": {
       "localizations": {
         "en": {
@@ -213,6 +252,7 @@
         }
       }
     },
+    "Donate %@, most chosen": {},
     "Donation": {},
     "Donation History": {},
     "Donations cover server costs and the Apple developer fee.": {},
@@ -230,6 +270,7 @@
     "Enter the verification code sent to %@": {},
     "Every contribution sustains free access to Scripture": {},
     "Every gift keeps swiftbible free for readers worldwide": {},
+    "Every time you unlock your phone, today's reading is waiting on your Home Screen.": {},
     "Explain": {},
     "Fin.": {},
     "Font": {},
@@ -247,6 +288,7 @@
     "HAPPENING NOW": {},
     "Hand-crafted devotional": {},
     "Has note": {},
+    "Highlight": {},
     "Highlight Color": {},
     "Highlighted Verses": {},
     "History": {},
@@ -271,6 +313,7 @@
     "Long-press any verse, then tap Highlight to mark it.": {},
     "Long-press any verse, then tap Note to write your reflection.": {},
     "Loved by readers worldwide": {},
+    "Make Scripture part of your day": {},
     "More": {},
     "More options": {},
     "Most chosen": {},
@@ -308,6 +351,7 @@
     "Opens today's daily devotional in SwiftBible.": {},
     "Permanently delete this note": {},
     "Personalize your reading": {},
+    "Pick a time that fits your day — morning coffee, evening wind-down — and we'll send a gentle reminder to open today's devotional.": {},
     "Preparing donation...": {},
     "Protect Free Access — %@": {},
     "Query": {},
@@ -331,6 +375,7 @@
     "Saved Devotionals": {},
     "Saved Notes": {},
     "Scheduled daily at %@": {},
+    "Scripture on your wrist": {},
     "Search": {},
     "Search the Bible": {},
     "Searches the Bible for a phrase or word in SwiftBible.": {},
@@ -373,6 +418,7 @@
     "Support swiftbible": {},
     "Support swiftbible Again!": {},
     "SwiftBible": {},
+    "Tap any verse for an AI explanation, then ask follow-up questions. Powered by Apple Intelligence — on-device and private.": {},
     "Tap the heart on any devotional to save it for later.": {},
     "Tap to give again — every gift helps.": {},
     "Taps your wrist each day with a haptic nudge to read the devotional.": {},
@@ -389,20 +435,24 @@
     "Time": {},
     "Today": {},
     "Today's devotional from SwiftBible.": {},
+    "Today's verse, every unlock": {},
     "Total Donated": {},
     "Translated by %@": {},
     "Translation Method": {},
     "Try Again": {},
     "Two thousand years — from the patriarchs to today, in 29 articles.": {},
     "Understanding Bible Translations": {},
+    "Unhighlight": {},
     "Up to date": {},
     "Update Available": {},
     "Update Now": {},
     "Verification": {},
     "Verification code": {},
+    "Verification error: %@": {},
     "Verify": {},
     "Verify Email": {},
     "Version %@": {},
+    "View Note": {},
     "Waiting for Apple Intelligence…": {},
     "We may have missed this one.": {},
     "Welcome Back, Supporter!": {},

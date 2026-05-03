@@ -312,7 +312,7 @@ private struct TimePresetButton: View {
                 )
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(label) preset, \(hour > 12 ? "\(hour - 12) PM" : "\(hour) AM")")
+        .accessibilityLabel("\(label) preset, \((Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: Date()) ?? Date()).formatted(.dateTime.hour()))")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }

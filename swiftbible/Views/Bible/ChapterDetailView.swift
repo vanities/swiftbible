@@ -512,7 +512,11 @@ struct ChapterDetailView: View {
                         ReviewPromptService.recordHappyMoment(requestReview: requestReview)
                     }
                 } label: {
-                    Text("\(alreadyHighlighted != nil ? "Unhighlight" : "Highlight")")
+                    if alreadyHighlighted != nil {
+                        Text("Unhighlight")
+                    } else {
+                        Text("Highlight")
+                    }
                 }
                 Button {
                     AnalyticsService.shared.capture(.verseNoteOpened, properties: [
@@ -523,7 +527,11 @@ struct ChapterDetailView: View {
                     ])
                     showNoteModal = true
                 } label: {
-                    Text("\(alreadyNoted != nil ? "View" : "Add") Note")
+                    if alreadyNoted != nil {
+                        Text("View Note")
+                    } else {
+                        Text("Add Note")
+                    }
                 }
                 Button {
                     guard selectedParagraph != nil else { return }

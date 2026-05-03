@@ -68,11 +68,11 @@ enum OnboardingFeature: String, CaseIterable, Identifiable {
     /// (Identity-Based Motivation — "I am someone who reads scripture daily.")
     var title: String {
         switch self {
-        case .welcome: return "Make Scripture part of your day"
-        case .dailyReminder: return "A gentle nudge, on your schedule"
-        case .watchApp: return "Scripture on your wrist"
-        case .widget: return "Today's verse, every unlock"
-        case .explain: return "Ask the text. Go deeper."
+        case .welcome: return String(localized: "Make Scripture part of your day")
+        case .dailyReminder: return String(localized: "A gentle nudge, on your schedule")
+        case .watchApp: return String(localized: "Scripture on your wrist")
+        case .widget: return String(localized: "Today's verse, every unlock")
+        case .explain: return String(localized: "Ask the text. Go deeper.")
         }
     }
 
@@ -81,17 +81,15 @@ enum OnboardingFeature: String, CaseIterable, Identifiable {
     var subtitle: String {
         switch self {
         case .welcome:
-            return "A quiet space to read, reflect, and return — designed to keep you in the Word."
+            return String(localized: "A quiet space to read, reflect, and return — designed to keep you in the Word.")
         case .dailyReminder:
-            return "Pick a time that fits your day — morning coffee, evening wind-down — "
-                + "and we'll send a gentle reminder to open today's devotional."
+            return String(localized: "Pick a time that fits your day — morning coffee, evening wind-down — and we'll send a gentle reminder to open today's devotional.")
         case .watchApp:
-            return "After you check the time, glance at today's devotional. A tiny moment, every day."
+            return String(localized: "After you check the time, glance at today's devotional. A tiny moment, every day.")
         case .widget:
-            return "Every time you unlock your phone, today's reading is waiting on your Home Screen."
+            return String(localized: "Every time you unlock your phone, today's reading is waiting on your Home Screen.")
         case .explain:
-            return "Tap any verse for an AI explanation, then ask follow-up questions. "
-                + "Powered by Apple Intelligence — on-device and private."
+            return String(localized: "Tap any verse for an AI explanation, then ask follow-up questions. Powered by Apple Intelligence — on-device and private.")
         }
     }
 
