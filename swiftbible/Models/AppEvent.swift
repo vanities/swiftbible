@@ -190,7 +190,9 @@ enum AppEventRegistry {
 
             Forty days. Many proofs. The resurrection was witnessed, eaten with, and discussed — not a vision or a feeling.
 
-            > [J] "And, being assembled together with them, commanded them that they should not depart from Jerusalem, but wait for the promise of the Father, which, saith he, ye have heard of me." (v.4)
+            > "And, being assembled together with them, commanded them that they should not depart from Jerusalem, but wait for the promise of the Father, which, saith he,"
+
+            > [J] "ye have heard of me." (v.4)
 
             First instruction: don't leave. Wait. That is the only command on the table.
 
@@ -202,7 +204,9 @@ enum AppEventRegistry {
 
             Forty days of teaching and they are still hoping for political restoration. Old expectations die hard.
 
-            > [J] "And he said unto them, It is not for you to know the times or the seasons, which the Father hath put in his own power." (v.7)
+            > "And he said unto them,"
+
+            > [J] "It is not for you to know the times or the seasons, which the Father hath put in his own power." (v.7)
 
             Jesus declines to answer. Some things are not yours to know — your job is faithfulness, not foresight.
 
@@ -334,7 +338,9 @@ enum AppEventRegistry {
 
             Judas (not Iscariot — likely Thaddaeus) asks what every Christian eventually asks: why isn't this more obvious to the world?
 
-            > [J] "Jesus answered and said unto him, If a man love me, he will keep my words: and my Father will love him, and we will come unto him, and make our abode with him." (v.23)
+            > "Jesus answered and said unto him,"
+
+            > [J] "If a man love me, he will keep my words: and my Father will love him, and we will come unto him, and make our abode with him." (v.23)
 
             The answer: love and obedience open the door. The Father and Son make their home with the obedient. Notice the plural "we."
 

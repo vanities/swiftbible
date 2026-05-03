@@ -18,14 +18,18 @@ Both sides are needed for a complete event. Don't ship one without the other.
 
 | File | Purpose |
 |---|---|
-| `appstore/push_event.py` | Script: create/update/submit events + upload images |
-| `appstore/submit_version.py` | Sibling script for version submission |
+| `appstore/push_event.py` | Script: create/update/submit events + upload images. Auths via `.env` + `.p8`; orchestrates create → localizations → image upload → optional submit. |
 | `appstore/events/<slug>/event.yaml` | Per-event definition (metadata + localized copy) |
+| `appstore/events/<slug>/days.py` | Per-event reading plan content — `PLAN_NAME` + `DAYS` list (intros, per-verse commentary, conclusion); consumed by the generator |
 | `appstore/events/<slug>/<slug>_event.png` | EVENT_CARD image, **1920×1080** landscape |
 | `appstore/events/<slug>/<slug>_event_details.png` | EVENT_DETAILS_PAGE image, **1080×1920** portrait |
 | `appstore/events/<slug>/SETUP.md` | Per-event setup notes (deep link, devotional content, etc.) |
 | `appstore/EVENTS.md` | 12-month rolling calendar with submit-by dates per event |
-| `appstore/.env` | Credentials (shared with push_listing.py) |
+| `appstore/.env` | ASC credentials (shared with `push_listing.py`). See [Credentials reference](#credentials-reference). |
+| `Makefile` (`pull-events`, `push-event`, `submit-event` targets) | One-liner wrappers around `push_event.py` |
+| `.claude/skills/app-store-events/gen_reading_plan.py` | Shared Swift array generator — verse extraction, partial-`<JESUS>` splitting, markdown/Swift rendering. Invoke with `--event <slug>`. |
+
+> `appstore/submit_version.py` is **not** part of this skill — it submits an app *version* for review (see `/app-store-listing`). For events, use `make submit-event` (which calls `push_event.py --submit`).
 
 ### iOS app side (`swiftbible/`)
 
@@ -86,19 +90,24 @@ Use `appstore/events/pentecost/event.yaml` as the template. Field limits: name 3
 
 ### 4. Add the banner to the iOS asset catalog
 
+**Convert PNG → HEIC before copying.** The 1920×1080 source PNG is ~2MB; HEIC at quality 80 is ~150–300KB. Xcode's PNG compression doesn't re-encode, so the full PNG would otherwise ship in every install. ASC uploads (step 7) stay PNG — Apple requires it — but the in-app banner does not.
+
 ```bash
 mkdir -p swiftbible/Assets.xcassets/<EventName>EventBanner.imageset
-cp appstore/events/<slug>/<slug>_event.png \
-   swiftbible/Assets.xcassets/<EventName>EventBanner.imageset/<slug>_event.png
+sips -s format heic -s formatOptions 80 \
+  appstore/events/<slug>/<slug>_event.png \
+  --out swiftbible/Assets.xcassets/<EventName>EventBanner.imageset/<slug>_event.heic
 cat > swiftbible/Assets.xcassets/<EventName>EventBanner.imageset/Contents.json <<'EOF'
 {
   "images" : [
-    { "filename" : "<slug>_event.png", "idiom" : "universal" }
+    { "filename" : "<slug>_event.heic", "idiom" : "universal" }
   ],
   "info" : { "author" : "xcode", "version" : 1 }
 }
 EOF
 ```
+
+If HEIC ever causes an issue, fall back to JPEG: `sips -s format jpeg -s formatOptions 85 ... --out <slug>_event.jpg` (~250–400KB) and update Contents.json filename to match.
 
 Xcode auto-discovers `.imageset` folders inside `Assets.xcassets` — no `.pbxproj` edit required. Naming convention: `<EventName>EventBanner` (e.g., `PentecostEventBanner`, `AdventEventBanner`).
 
@@ -131,22 +140,20 @@ Then list it in `allEvents`. The MoreView card auto-shows during the date window
 - Walk-through format: opening intro paragraph → each verse printed as a blockquote with a brief commentary (one or two sentences) → closing reflection paragraph
 - KJV passages — pulled directly from `swiftbible/Text/bible.json` for accuracy
 - **Markdown blockquotes for scripture quotes** — the EventDetailView's MarkdownUI theme renders them with a gold left bar, italic, secondary color
-- **`[J]` marker for Jesus's words** — red-letter convention. `> [J] "..."` blockquotes render in red (or normal if user has `Settings → Show Jesus's words in red` off). The generator script auto-detects this from the `<JESUS>...</JESUS>` tags in `bible.json` — don't mark by hand.
+- **`[J]` marker for Jesus's words** — red-letter convention. `> [J] "..."` blockquotes render in red (or normal if user has `Settings → Show Jesus's words in red` off). The generator script auto-splits this from the `<JESUS>...</JESUS>` tags in `bible.json` — **don't mark by hand**.
+- **Mixed-content verses** (narrator framing + Jesus speech, e.g. Acts 1:7 *"And he said unto them, <JESUS>It is not for you to know...</JESUS>"*) emit two adjacent blockquotes — one normal, one `[J]` — so only the actual Jesus speech turns red. The generator handles this; if you ever hand-edit, preserve the split (don't put the speaker tag inside the `[J]` line).
 
-#### Generator pattern (recommended)
+#### Generator pattern (always use this)
 
-`appstore/events/pentecost/gen_reading_plan.py` is a one-off script that:
+The generator is a single shared script at `.claude/skills/app-store-events/gen_reading_plan.py`. Per-event data lives at `appstore/events/<slug>/days.py` — the script handles verse extraction, partial-verse `<JESUS>` tag splitting, markdown formatting, and Swift escaping; `days.py` only contains content (intros, per-verse commentary, conclusions).
 
-- Loads `swiftbible/Text/bible.json`
-- For each day's spec, extracts the exact KJV verse text and detects Jesus-speaking verses via the `<JESUS>` tags
-- Combines with hand-written intros / per-verse commentary / conclusions defined inline
-- Outputs the full `pentecostReadingPlan: [EventReadingDay] = [...]` Swift block
+For a new event:
 
-For a new event, copy the script, adapt the `DAYS` list (book/chapter/verse range, intro, comment dict per verse, conclusion), then:
+1. Create `appstore/events/<slug>/days.py` with `PLAN_NAME = "<slug>ReadingPlan"` and a `DAYS = [...]` list. Each day dict needs: `id`, `date_iso`, `theme`, `book`, `chapter`, `start`, `end`, `intro`, `comment={verse_int: str}`, `conclusion`. (See `appstore/events/pentecost/days.py` as the reference.)
+2. Run the generator and splice it into `AppEvent.swift`:
 
 ```bash
-uv run --quiet python3 appstore/events/<slug>/gen_reading_plan.py > /tmp/new_plan.swift
-# Then surgically replace the existing readingPlan block in AppEvent.swift, e.g.
+uv run --quiet python3 .claude/skills/app-store-events/gen_reading_plan.py --event <slug> > /tmp/new_plan.swift
 uv run --quiet python3 -c "
 from pathlib import Path
 src = Path('swiftbible/Models/AppEvent.swift')
@@ -160,26 +167,34 @@ src.write_text(text[:i] + new_block.rstrip() + text[j:])
 
 Why a generator instead of writing markdown by hand:
 - Verse text is verbatim KJV (no transcription drift between Bible app and reading plan)
-- Jesus markers come from the same source the Bible view uses (consistent red-letter rendering)
-- Commentary edits stay in Python, easy to re-run
+- Jesus markers come from the same source the Bible view uses (consistent red-letter rendering, including the partial-verse split)
+- Commentary edits stay in `days.py`, easy to re-run
 - A typo in the verse text won't slip through because nobody types verses
 
 For trivial connector verses where commentary adds nothing, set the commentary string to `""` — the verse still prints, but no commentary line appears.
 
-```swift
-EventReadingDay(
-    id: "advent-2026-day-1",
-    date: parseISO("2026-11-29T00:00:00Z"),
-    theme: "And the Word Became Flesh",
-    passage: ScriptureRef(book: "John", chapter: 1, startVerse: 1, endVerse: 14),
-    reflection: """
-    Opening sentence framing the whole passage.
+`days.py` skeleton:
 
-    > "In the beginning was the Word, and the Word was with God, and the Word was God." (v.1)
+```python
+# appstore/events/<slug>/days.py
+PLAN_NAME = "adventReadingPlan"   # matches the Swift identifier in AppEventRegistry
 
-    Reflection text continues...
-    """
-)
+DAYS = [
+    {
+        "id": "advent-2026-day-1",
+        "date_iso": "2026-11-29T00:00:00Z",
+        "theme": "And the Word Became Flesh",
+        "book": "John", "chapter": 1, "start": 1, "end": 14,
+        "intro": "Opening sentence framing the whole passage.",
+        "comment": {
+            1: "Note on verse 1.",
+            2: "",                 # connector verse — verse prints, no commentary
+            # ...
+        },
+        "conclusion": "Closing reflection paragraph.",
+    },
+    # ...one entry per day in the event window...
+]
 ```
 
 ### 7. Push + submit
@@ -288,6 +303,32 @@ ContentView's `onOpenURL` automatically routes `swiftbible://event/<slug>` for a
 | `Cannot transition to READY_FOR_REVIEW` | Required fields missing (image, primary localization, schedule). `pull-events` to inspect. |
 | `INVALID locale` | Locale not supported as IAE locale. See project memory `project_apple_listing_locales.md` (e.g., `ml` is unsupported). Remove from YAML. |
 | Deep link opens app but doesn't navigate | URL format mismatch. ContentView handler expects `swiftbible://event/<slug>` (path) for events, OR `swiftbible://verse?book=X&chapter=Y&verse=Z` (query) for verses. |
+| `JWT expired` | Tokens last 20 min. Re-run; `push_event.py` mints a fresh token each invocation. |
+| `403 FORBIDDEN_KEY_INVALID` | `appstore/.env` mismatch — `ASC_KEY_ID` must match the `AuthKey_<ID>.p8` filename, `ASC_ISSUER_ID` is the team UUID from ASC → Users and Access → Integrations → Keys. |
+| `key file not found` | `ASC_KEY_FILE` path in `.env` is wrong. The path is relative to repo root; the `.p8` lives at the repo root (gitignored via `*.p8`). |
+
+## Three-step image upload protocol (informational)
+
+`push_event.py`'s `upload_event_image` handles this automatically; you only need it when debugging a half-uploaded asset:
+
+1. **POST** `/v1/appEventAssets` to reserve the asset (returns `uploadOperations` with signed URLs and per-chunk byte ranges)
+2. **PUT** each chunk to its signed URL — **DO NOT include the bearer token** in those PUT requests; the URL is pre-signed
+3. **PATCH** `/v1/appEventAssets/{id}` with `uploaded: true` to commit (note: events do **not** take `sourceFileChecksum` — that's a screenshots-only attribute)
+
+If the run dies between step 1 and step 3, the asset stays in a half-uploaded state — Apple eventually GCs it, or you can force a clean re-upload with `make push-event EVENT=<slug> REPLACE_IMAGES=1` (deletes existing assets first).
+
+## Credentials reference
+
+`push_event.py` reads from `appstore/.env` (gitignored; see `appstore/.env.example`). Same file the listing automation uses.
+
+```
+ASC_KEY_ID=<10-char ID>          # matches the AuthKey_<ID>.p8 filename
+ASC_ISSUER_ID=<team UUID>        # ASC → Users and Access → Integrations → Keys
+ASC_APP_ID=6670373108            # SwiftBible's App Store Apple ID
+ASC_KEY_FILE=AuthKey_<ID>.p8     # path relative to repo root
+```
+
+The `.p8` private key lives at the **repo root** (gitignored via `*.p8`). The script generates a fresh ES256-signed JWT per invocation (20-min validity), so a `JWT expired` error means the run took >20 min — just re-run.
 
 ## Post-event housekeeping
 

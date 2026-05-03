@@ -1,36 +1,17 @@
-"""Generate the pentecostReadingPlan Swift block from bible.json.
+"""Per-day spec for the Pentecost 2026 reading plan.
 
-One-off generator that:
-- Pulls each verse's exact KJV text + isJesusSpeaking flag from swiftbible/Text/bible.json
-- Combines with hand-written intros, per-verse commentary, and conclusions
-- Outputs a Swift `[EventReadingDay]` array literal
+Consumed by .claude/skills/app-store-events/gen_reading_plan.py — that script
+handles verse extraction, partial-verse <JESUS> tag splitting, markdown
+formatting, and Swift escaping. Edit per-event content here; edit shared
+rendering in the skill script.
 
 Voice notes (per saved feedback memory): concrete > abstract, acknowledge
 cost, no preachy/AI tells. Commentary is tight — usually one sentence per
-verse, occasionally two.
+verse, occasionally two. Set commentary to "" for connector verses.
 """
-import json, re, sys
 
-data = json.load(open("swiftbible/Text/bible.json"))
+PLAN_NAME = "pentecostReadingPlan"
 
-def parse_chapter(book, ch):
-    b = next(x for x in data if x["name"] == book)
-    chap = next(c for c in b["chapters"] if c["number"] == ch)
-    out = {}
-    for p in chap["paragraphs"]:
-        chunks = re.split(rf'\s*({ch}):(\d+)\s*', p["text"])
-        out[p["startingVerse"]] = _clean(chunks[0])
-        for i in range(1, len(chunks), 3):
-            v = int(chunks[i+1])
-            out[v] = _clean(chunks[i+2])
-    return out
-
-def _clean(raw):
-    is_jesus = "<JESUS>" in raw
-    cleaned = re.sub(r"</?JESUS>", "", raw).strip()
-    return (cleaned, is_jesus)
-
-# Per-day plan. Each commentary value can be empty string (just print verse, no note).
 DAYS = [
     {
         "id": "pentecost-2026-day-1",
@@ -219,45 +200,3 @@ DAYS = [
         "conclusion": "If you have been through a powerful spiritual moment but it did not change how you live with the people in your life, the moment did not finish. Pentecost was not over when the wind stopped. It was just beginning. The same Spirit that filled the house also formed the Church. May this week land that way for you, too — not just feeling, but new community.",
     },
 ]
-
-def render_reflection(day, verses):
-    lines = [day["intro"]]
-    for v in range(day["start"], day["end"] + 1):
-        text, is_jesus = verses[v]
-        marker = "[J] " if is_jesus else ""
-        # Escape Swift string escapes
-        verse_text = text.replace("\\", "\\\\")
-        lines.append("")
-        lines.append(f'> {marker}"{verse_text}" (v.{v})')
-        commentary = day["comment"].get(v, "")
-        if commentary:
-            lines.append("")
-            lines.append(commentary)
-    lines.append("")
-    lines.append(day["conclusion"])
-    return "\n".join(lines)
-
-def render_swift_entry(day, verses):
-    refl = render_reflection(day, verses)
-    # Indent each line by 12 spaces (inside Swift triple-quoted string)
-    indented = "\n".join(("            " + line) if line else "" for line in refl.split("\n"))
-    return f"""        EventReadingDay(
-            id: "{day['id']}",
-            date: parseISO("{day['date_iso']}"),
-            theme: "{day['theme']}",
-            passage: ScriptureRef(book: "{day['book']}", chapter: {day['chapter']}, startVerse: {day['start']}, endVerse: {day['end']}),
-            reflection: \"\"\"
-{indented}
-            \"\"\"
-        ),"""
-
-# Generate
-out = []
-for day in DAYS:
-    verses = parse_chapter(day["book"], day["chapter"])
-    out.append(render_swift_entry(day, verses))
-
-# Print full block
-print("    private static let pentecostReadingPlan: [EventReadingDay] = [")
-print("\n".join(out))
-print("    ]")

@@ -77,7 +77,7 @@ supabase/.env
 .claude/settings.local.json
 .mcp.json
 
-appstore/__pycache__/
+appstore/**/__pycache__/
 appstore/listings.pulled.yaml
 appstore/marketing/ultimate/*/*/*.png
 

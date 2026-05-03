@@ -22,12 +22,13 @@ Automation for pushing localized App Store metadata (name / subtitle / keywords 
 |---|---|
 | `appstore/push_listing.py` | Metadata script — auths to ASC, pulls or pushes localizations |
 | `appstore/push_screenshots.py` | Screenshot upload script — three-step asset upload |
+| `appstore/submit_version.py` | App-version submission — wraps the `reviewSubmissions` flow to transition the editable AppStoreVersion → READY_FOR_REVIEW |
 | `appstore/listings.yaml` | Source of truth for metadata (committed) |
 | `appstore/listings.pulled.yaml` | Output of `--pull` for diffing (gitignored) |
 | `appstore/marketing/<set>/<device>/*.png` | Source screenshots (e.g. `marketing/ultimate/iphone-6.9/`) |
 | `appstore/.env` | Credentials (gitignored). See `.env.example` |
 | `appstore/listing-requirements.txt` | Python deps (PyJWT, requests, python-dotenv, PyYAML) |
-| `Makefile` (`*-listings`, `*-screenshots` targets) | One-liner wrappers |
+| `Makefile` (`*-listings`, `*-screenshots`, `submit-version` targets) | One-liner wrappers |
 
 ## Quick command reference
 
@@ -60,12 +61,20 @@ Source directory layout the script expects:
 ```
 Files are sorted by filename — name them `01_*.png`, `02_*.png` etc. for stable display order.
 
+### Submit the current app version for review
+
+```bash
+make submit-version DRY=1                                      # Preview the reviewSubmission flow
+make submit-version                                            # Actually submit (DRAFT → READY_FOR_REVIEW)
+```
+
 ### Direct invocation (no Make)
 
 ```bash
 uv run python appstore/push_listing.py --pull
 uv run python appstore/push_screenshots.py --pull
 uv run python appstore/push_screenshots.py --source appstore/marketing/ultimate --force
+uv run python appstore/submit_version.py --dry-run
 ```
 
 ## When to push

@@ -6,7 +6,7 @@ allowed-tools: Bash(python3:*), Read, Write, Edit
 
 # Custom Devotional Crafter
 
-Author and publish hand-crafted devotionals for SwiftBible. Bundled scripts live alongside this `SKILL.md` under `scripts/` — invoke them by their skill-relative paths so this works whether the skill is loaded from the SwiftBible repo or via symlink in `~/.claude/skills/`.
+Author and publish hand-crafted devotionals for SwiftBible. Bundled scripts live alongside this `SKILL.md` under `scripts/` — invoke them via `${CLAUDE_SKILL_DIR}/scripts/<name>.py` so they resolve regardless of the current working directory.
 
 ## 1) Gather essentials
 
@@ -19,10 +19,10 @@ Ask the user for:
 
 ## 2) Compose a draft
 
-Run the composer script bundled with this skill (`scripts/compose_custom_devotional.py`):
+Run the composer script bundled with this skill:
 
 ```bash
-python3 scripts/compose_custom_devotional.py \
+python3 ${CLAUDE_SKILL_DIR}/scripts/compose_custom_devotional.py \
   --for-date 2026-04-26 \
   --theme "Hope after disappointment" \
   --audience "General" \
@@ -51,7 +51,7 @@ When approved, run the publisher script:
 
 ```bash
 SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... \
-  python3 scripts/push_custom_devotional.py --file /tmp/custom-devotional.json
+  python3 ${CLAUDE_SKILL_DIR}/scripts/push_custom_devotional.py --file /tmp/custom-devotional.json
 ```
 
 Always run with `--dry-run` first to confirm the endpoint and payload before sending.
