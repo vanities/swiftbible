@@ -1,14 +1,13 @@
 # May 3 — Revelation 22:20: Maranatha
 
-**I have prayed the Lord's Prayer all my life. I'm not at all sure I have ever meant *thy kingdom come*.**
-
-> *"Our Father which art in heaven, Hallowed be thy name. Thy kingdom come. Thy will be done in earth, as it is in heaven..."*
-> **Matthew 6:9-10**
-
-The Bible ends with the same request.
+**The Bible ends with a prayer I'm not sure I have ever meant.**
 
 > *"He which testifieth these things saith, Surely I come quickly. Amen. Even so, come, Lord Jesus."*
 > **Revelation 22:20**
+
+We pray *thy kingdom come* and we mean it. The kingdom came at Pentecost — the church is what that prayer asked for and got. We belong to it.
+
+But the *King* has not yet returned to his kingdom. And the Bible's last word is a request for *that* day.
 
 ## We pray around it
 
@@ -50,7 +49,7 @@ Paul puts it like this:
 
 *Look for.* Watching. Waiting. Wanting.
 
-The faith-extreme position is this: our citizenship is in heaven, not here. Every prayer you've ever prayed — *thy kingdom come, thy will be done on earth as it is in heaven* — is asking for this. We say it on autopilot. Do we mean it?
+The faith-extreme position is this: our citizenship is in heaven, not here. The kingdom is here — we are it — but the King is not. *"Even so, come, Lord Jesus"* is the prayer for *his* return. Do we mean it?
 
 This isn't about hating life or rejecting good things. The wedding is good. The children are good. The work is good. But Paul could write "***to die is gain***" (Phil 1:21) and mean it — not because he hated being alive, but because he saw what was on the other side.
 
