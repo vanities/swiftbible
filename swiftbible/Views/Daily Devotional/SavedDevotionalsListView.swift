@@ -13,11 +13,23 @@ struct SavedDevotionalsListView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \SavedDevotional.date, order: .reverse) private var savedDevotionals: [SavedDevotional]
 
+    @State private var searchText = ""
+    @State private var sortOrder: ListSortOrder = .newest
+
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
         return formatter
     }()
+
+    private var displayedDevotionals: [SavedDevotional] {
+        let filtered = searchText.isEmpty
+            ? savedDevotionals
+            : savedDevotionals.filter { $0.message.localizedCaseInsensitiveContains(searchText) }
+        return filtered.sorted { lhs, rhs in
+            sortOrder == .newest ? lhs.date > rhs.date : lhs.date < rhs.date
+        }
+    }
 
     var body: some View {
         Group {
@@ -38,36 +50,60 @@ struct SavedDevotionalsListView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List {
-                    ForEach(savedDevotionals) { devotional in
-                        NavigationLink {
-                            SavedDevotionalDetailView(devotional: devotional)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(dateFormatter.string(from: devotional.date))
-                                    .font(.headline)
-                                    .foregroundStyle(.primary)
-                                Text(devotional.message.preview(maxLength: 150))
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(3)
-                            }
-                            .padding(.vertical, 4)
-                        }
-                        .accessibilityHint("Double tap to read. Long press for options.")
-                        .contextMenu {
-                            Button(role: .destructive) {
-                                delete(devotional)
+                    if displayedDevotionals.isEmpty {
+                        ContentUnavailableView.search(text: searchText)
+                            .listRowBackground(Color.clear)
+                    } else {
+                        ForEach(displayedDevotionals) { devotional in
+                            NavigationLink {
+                                SavedDevotionalDetailView(devotional: devotional)
                             } label: {
-                                Label("Remove", systemImage: "trash")
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(dateFormatter.string(from: devotional.date))
+                                        .font(.headline)
+                                        .foregroundStyle(.primary)
+                                    Text(devotional.message.preview(maxLength: 150))
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                        .lineLimit(3)
+                                }
+                                .padding(.vertical, 4)
+                            }
+                            .accessibilityHint("Double tap to read. Long press for options.")
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    delete(devotional)
+                                } label: {
+                                    Label("Remove", systemImage: "trash")
+                                }
                             }
                         }
+                        .onDelete(perform: deleteDisplayed)
                     }
-                    .onDelete(perform: delete)
                 }
                 .listStyle(.insetGrouped)
+                .searchable(text: $searchText, prompt: "Search devotionals")
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        sortMenu
+                    }
+                }
             }
         }
         .navigationTitle("Saved Devotionals")
+    }
+
+    private var sortMenu: some View {
+        Menu {
+            Picker("Sort", selection: $sortOrder) {
+                ForEach(ListSortOrder.allCases) { order in
+                    Label(order.label, systemImage: order.systemImage).tag(order)
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
+        }
+        .accessibilityLabel("Sort")
     }
 
     private func delete(_ devotional: SavedDevotional) {
@@ -75,9 +111,9 @@ struct SavedDevotionalsListView: View {
         try? context.save()
     }
 
-    private func delete(at offsets: IndexSet) {
+    private func deleteDisplayed(at offsets: IndexSet) {
         for index in offsets {
-            let devotional = savedDevotionals[index]
+            let devotional = displayedDevotionals[index]
             delete(devotional)
         }
     }
