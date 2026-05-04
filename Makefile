@@ -4,7 +4,7 @@
 	ngrok-up ngrok-down ngrok-background \
 	functions-deploy test_daily_devotional test_slowness fresh \
 	archive upload release \
-	pull-listings dry-listings push-listings push-listing \
+	pull-listings dry-listings push-listings push-listing create-version \
 	pull-screenshots dry-screenshots push-screenshots \
 	pull-events push-event submit-event submit-version
 
@@ -34,9 +34,10 @@ help:
 	@echo "  make release          – Archive + upload in one step"
 	@echo ""
 	@echo "App Store Listings (metadata across locales):"
-	@echo "  make pull-listings    – Download current ASC state to listings.pulled.yaml"
-	@echo "  make dry-listings     – Preview what would change without pushing"
-	@echo "  make push-listings    – Push all locales from listings.yaml"
+	@echo "  make pull-listings              – Download current ASC state to listings.pulled.yaml"
+	@echo "  make dry-listings               – Preview what would change without pushing"
+	@echo "  make push-listings              – Push all locales from listings.yaml"
+	@echo "  make create-version VERSION=X.YY – Create a new editable AppStoreVersion in ASC"
 	@echo "  make push-listing LOCALES=ml,hi – Push specific locales"
 	@echo ""
 	@echo "App Store Screenshots:"
@@ -182,6 +183,11 @@ push-listing:
 	@if [ -z "$(LOCALES)" ]; then echo "Usage: make push-listing LOCALES=ml,hi"; exit 1; fi
 	@uv run --with PyJWT --with cryptography --with requests --with python-dotenv --with PyYAML \
 		python3 appstore/push_listing.py --locales $(LOCALES)
+
+create-version:
+	@if [ -z "$(VERSION)" ]; then echo "Usage: make create-version VERSION=1.40 [DRY=1]"; exit 1; fi
+	@uv run --with PyJWT --with cryptography --with requests --with python-dotenv --with PyYAML \
+		python3 appstore/push_listing.py --create-version $(VERSION) $(if $(DRY),--dry-run,)
 
 # --- App Store Screenshots ---
 # SOURCE defaults to appstore/marketing/ultimate. LOCALE defaults to en-US.

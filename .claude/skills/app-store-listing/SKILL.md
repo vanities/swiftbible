@@ -35,10 +35,12 @@ Automation for pushing localized App Store metadata (name / subtitle / keywords 
 ### Metadata (name, subtitle, keywords, descriptions, what's new)
 
 ```bash
-make pull-listings                # Download current ASC state → listings.pulled.yaml
-make dry-listings                 # Preview what would change
-make push-listings                # Push everything in listings.yaml
-make push-listing LOCALES=ml,hi   # Push specific locales
+make pull-listings                       # Download current ASC state → listings.pulled.yaml
+make dry-listings                        # Preview what would change
+make push-listings                       # Push everything in listings.yaml
+make push-listing LOCALES=ml,hi          # Push specific locales
+make create-version VERSION=1.40         # Create a new editable AppStoreVersion (run before pushing whats_new for a new release)
+make create-version VERSION=1.40 DRY=1   # Preview only
 ```
 
 ### Screenshots
@@ -92,7 +94,7 @@ Default workflow: always `make dry-listings` before `make push-listings`. Catche
 
 The most common operation. When you ship a new version:
 
-1. Confirm an editable App Store version exists in App Store Connect (state `PREPARE_FOR_SUBMISSION`).
+1. Confirm an editable App Store version exists in App Store Connect (state `PREPARE_FOR_SUBMISSION`). If not, create one: `make create-version VERSION=1.40` (mirrors the iOS `MARKETING_VERSION` you just bumped).
 2. **Draft the English what's new from git commits** since the last version bump:
    ```bash
    # Find the last version-bump commit (preceding the current one)
@@ -210,7 +212,7 @@ The push lands within minutes; no Apple review wait.
 
 | Error | Fix |
 |---|---|
-| `no editable AppStoreVersion found` | Create a new version in App Store Connect (Distribution → App Store → "+" version) |
+| `no editable AppStoreVersion found` | Run `make create-version VERSION=X.YY` (or create manually in ASC: Distribution → App Store → "+" version) |
 | `PARAMETER_ERROR.INVALID locale` | Locale code not supported by Apple for this app. Remove from `listings.yaml` or use a fallback. |
 | `PARAMETER_ERROR.LENGTH_EXCEEDED` | Field over its char limit. Re-run `make dry-listings` — script warns before push. |
 | `JWT expired` | Tokens last 20 min. Just re-run; the script generates a fresh token each invocation. |

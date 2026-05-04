@@ -132,9 +132,37 @@ def get_editable_version(token, app_id):
             if v["attributes"]["appStoreState"] == state:
                 return v["id"], v["attributes"]["versionString"], v["attributes"]["appStoreState"]
     sys.exit(
-        "ERROR: no editable AppStoreVersion found. Create a new version in App Store Connect first "
+        "ERROR: no editable AppStoreVersion found. Run `make create-version VERSION=X.YY` to create one "
         "(or wait for an in-flight version to enter an editable state)."
     )
+
+
+def create_version(token, app_id, version_string, dry_run, platform="IOS"):
+    """Create a new editable AppStoreVersion in PREPARE_FOR_SUBMISSION state.
+
+    Apple returns 409 if a version with this versionString already exists for the platform.
+    """
+    body = {
+        "data": {
+            "type": "appStoreVersions",
+            "attributes": {
+                "platform": platform,
+                "versionString": version_string,
+            },
+            "relationships": {
+                "app": {"data": {"type": "apps", "id": app_id}},
+            },
+        }
+    }
+    print(f"Creating AppStoreVersion {version_string} (platform={platform}) for app {app_id}...")
+    if dry_run:
+        print("  [DRY RUN] would POST /appStoreVersions")
+        return None
+    r = api("POST", "/appStoreVersions", token, json=body)
+    new_id = r["data"]["id"]
+    state = r["data"]["attributes"]["appStoreState"]
+    print(f"  ✓ Created version {version_string} (id={new_id}, state={state})")
+    return new_id
 
 
 def list_app_info_localizations(token, info_id):
@@ -274,11 +302,18 @@ def main():
     p.add_argument("--dry-run", action="store_true", help="Show what would be pushed without changing anything")
     p.add_argument("--locales", help="Comma-separated locale codes to push (default: all in listings.yaml)")
     p.add_argument("--listings", default=str(SCRIPT_DIR / "listings.yaml"), help="Path to listings YAML")
+    p.add_argument("--create-version", metavar="X.YY",
+                   help="Create a new editable AppStoreVersion (e.g. 1.40) and exit. "
+                        "Required before push when no editable version exists in ASC.")
     args = p.parse_args()
 
     env = load_env()
     print(f"Authenticating to App Store Connect (key {env['key_id']})...")
     token = make_token(env)
+
+    if args.create_version:
+        create_version(token, env["app_id"], args.create_version, args.dry_run)
+        return
 
     if args.pull:
         cmd_pull(token, env)
