@@ -1,8 +1,6 @@
 package biz.am2.swiftbible.ui.settings
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,14 +14,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.Brightness6
+import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ColorLens
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.automirrored.filled.LibraryBooks
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.DropdownMenu
@@ -66,8 +63,6 @@ fun SettingsScreen(
     onOpen: (String) -> Unit,
 ) {
     val prefs by appVm.prefsState.collectAsState()
-    val chaptersRead by appVm.chaptersRead.collectAsState(initial = 0)
-    val totalVisits by appVm.totalVisits.collectAsState(initial = 0)
 
     Scaffold(
         topBar = {
@@ -90,37 +85,6 @@ fun SettingsScreen(
                 .padding(padding)
                 .verticalScroll(rememberScrollState()),
         ) {
-            // Stats summary
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                biz.am2.swiftbible.ui.components.StatCard(
-                    label = "Chapters",
-                    value = chaptersRead.toString(),
-                    modifier = Modifier.weight(1f),
-                )
-                biz.am2.swiftbible.ui.components.StatCard(
-                    label = "Reads",
-                    value = (totalVisits ?: 0).toString(),
-                    modifier = Modifier.weight(1f),
-                )
-            }
-
-            SectionHeader("My library")
-            NavRow(Icons.Filled.Brush, "Highlights") { onOpen("highlights") }
-            NavRow(Icons.Filled.Edit, "Notes") { onOpen("notes") }
-            NavRow(Icons.Filled.Bookmark, "Bookmarks") { onOpen("bookmarks") }
-            NavRow(Icons.Filled.History, "Reading history") { onOpen("history") }
-            NavRow(Icons.Filled.Layers, "Reading stats") { onOpen("stats") }
-
-            SectionHeader("Translation")
-            VersionRow(prefs.version) { appVm.setVersion(it) }
-            NavRow(Icons.Filled.Translate, "About translations") { onOpen("translations") }
-            NavRow(Icons.AutoMirrored.Filled.LibraryBooks, "Text sources") { onOpen("text_sources") }
-
             SectionHeader("Reading")
             ThemeRow(prefs.theme) { appVm.setTheme(it) }
             FontRow(prefs.fontFamily) { appVm.setFontFamily(it) }
@@ -135,20 +99,28 @@ fun SettingsScreen(
                 checked = prefs.showSummaries,
                 onChange = { appVm.setShowSummaries(it) },
             )
+
+            SectionHeader("Bible translation")
+            VersionRow(prefs.version) { appVm.setVersion(it) }
             ToggleRow(
-                label = "Group OT/NT by tradition",
+                label = "Group books by tradition",
                 checked = prefs.showThematic,
                 onChange = { appVm.setShowThematic(it) },
             )
+            NavRow(Icons.Filled.Translate, "About translations") { onOpen("translations") }
 
-            SectionHeader("Text sources")
-            ToggleRow("Show Apocrypha", prefs.showApocrypha) { appVm.setShowApocrypha(it) }
-            ToggleRow("Show Book of Enoch", prefs.showEnoch) { appVm.setShowEnoch(it) }
-            ToggleRow("Show Jubilees", prefs.showJubilees) { appVm.setShowJubilees(it) }
-            ToggleRow("Show Testaments of the Twelve Patriarchs", prefs.showTestaments) { appVm.setShowTestaments(it) }
-            ToggleRow("Show 2 Enoch (Secrets of Enoch)", prefs.show2Enoch) { appVm.setShow2Enoch(it) }
-            ToggleRow("Show Didache", prefs.showDidache) { appVm.setShowDidache(it) }
-            ToggleRow("Show 1 Clement", prefs.show1Clement) { appVm.setShow1Clement(it) }
+            SectionHeader("Library extras")
+            ToggleRow("Apocrypha", prefs.showApocrypha) { appVm.setShowApocrypha(it) }
+            ToggleRow("Book of Enoch", prefs.showEnoch) { appVm.setShowEnoch(it) }
+            ToggleRow("2 Enoch (Secrets of Enoch)", prefs.show2Enoch) { appVm.setShow2Enoch(it) }
+            ToggleRow("Book of Jubilees", prefs.showJubilees) { appVm.setShowJubilees(it) }
+            ToggleRow("Testaments of the Twelve Patriarchs", prefs.showTestaments) { appVm.setShowTestaments(it) }
+            ToggleRow("Didache", prefs.showDidache) { appVm.setShowDidache(it) }
+            ToggleRow("1 Clement", prefs.show1Clement) { appVm.setShow1Clement(it) }
+
+            SectionHeader("About")
+            NavRow(Icons.AutoMirrored.Filled.LibraryBooks, "Text sources") { onOpen("text_sources") }
+            AboutLinks()
 
             Spacer(Modifier.size(40.dp))
             About()
@@ -333,6 +305,37 @@ private fun FontSizeRow(value: Int, onChange: (Int) -> Unit) {
             valueRange = 12f..30f,
             steps = 17,
         )
+    }
+}
+
+@Composable
+private fun AboutLinks() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    NavRow(Icons.Filled.Email, "Contact us") {
+        val intent = android.content.Intent(android.content.Intent.ACTION_SENDTO).apply {
+            data = android.net.Uri.parse("mailto:mischke@proton.me?subject=swiftbible%20Android")
+        }
+        runCatching { context.startActivity(intent) }
+    }
+    NavRow(Icons.Filled.BugReport, "Report a bug") {
+        val intent = android.content.Intent(android.content.Intent.ACTION_SENDTO).apply {
+            data = android.net.Uri.parse("mailto:mischke@proton.me?subject=swiftbible%20Android%20Bug")
+        }
+        runCatching { context.startActivity(intent) }
+    }
+    NavRow(Icons.Filled.Code, "View source on GitHub") {
+        val intent = android.content.Intent(
+            android.content.Intent.ACTION_VIEW,
+            android.net.Uri.parse("https://github.com/vanities/swiftbible"),
+        )
+        runCatching { context.startActivity(intent) }
+    }
+    NavRow(Icons.Filled.Public, "Website") {
+        val intent = android.content.Intent(
+            android.content.Intent.ACTION_VIEW,
+            android.net.Uri.parse("https://am2.biz/swiftbible"),
+        )
+        runCatching { context.startActivity(intent) }
     }
 }
 
