@@ -163,6 +163,27 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun setHideBars(b: Boolean) = viewModelScope.launch { prefs.setHideBars(b) }
     fun setLast(book: String, chapter: Int) = viewModelScope.launch { prefs.setLast(book, chapter) }
 
+    fun setReminderEnabled(b: Boolean) = viewModelScope.launch {
+        prefs.setReminderEnabled(b)
+        val ctx = getApplication<Application>()
+        if (b) {
+            val s = prefs.snapshot.first()
+            biz.am2.swiftbible.notifications.DevotionalReminderScheduler
+                .schedule(ctx, s.reminderHour, s.reminderMinute)
+        } else {
+            biz.am2.swiftbible.notifications.DevotionalReminderScheduler.cancel(ctx)
+        }
+    }
+
+    fun setReminderTime(hour: Int, minute: Int) = viewModelScope.launch {
+        prefs.setReminderTime(hour, minute)
+        val s = prefs.snapshot.first()
+        if (s.reminderEnabled) {
+            biz.am2.swiftbible.notifications.DevotionalReminderScheduler
+                .schedule(getApplication(), hour, minute)
+        }
+    }
+
     fun bookByName(name: String): Book? = bible.value.allBooks.firstOrNull { it.name == name }
 
     fun addHighlight(book: String, chapter: Int, verse: Int, color: Long) = viewModelScope.launch {

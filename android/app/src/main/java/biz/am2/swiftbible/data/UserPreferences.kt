@@ -35,6 +35,9 @@ class UserPreferences(private val context: Context) {
         val HIDE_BARS = booleanPreferencesKey("hide_bars")
         val LAST_BOOK = stringPreferencesKey("last_book")
         val LAST_CHAPTER = intPreferencesKey("last_chapter")
+        val REMINDER_ENABLED = booleanPreferencesKey("reminder_enabled")
+        val REMINDER_HOUR = intPreferencesKey("reminder_hour")
+        val REMINDER_MINUTE = intPreferencesKey("reminder_minute")
     }
 
     data class Snapshot(
@@ -56,6 +59,9 @@ class UserPreferences(private val context: Context) {
         val hideBars: Boolean = false,
         val lastBook: String? = null,
         val lastChapter: Int = 1,
+        val reminderEnabled: Boolean = false,
+        val reminderHour: Int = 21,
+        val reminderMinute: Int = 0,
     )
 
     val snapshot: Flow<Snapshot> = context.dataStore.data.map { p ->
@@ -78,6 +84,9 @@ class UserPreferences(private val context: Context) {
             hideBars = p[Keys.HIDE_BARS] ?: false,
             lastBook = p[Keys.LAST_BOOK],
             lastChapter = p[Keys.LAST_CHAPTER] ?: 1,
+            reminderEnabled = p[Keys.REMINDER_ENABLED] ?: false,
+            reminderHour = p[Keys.REMINDER_HOUR] ?: 21,
+            reminderMinute = p[Keys.REMINDER_MINUTE] ?: 0,
         )
     }
 
@@ -100,6 +109,11 @@ class UserPreferences(private val context: Context) {
     suspend fun setLast(book: String, chapter: Int) = update {
         it[Keys.LAST_BOOK] = book
         it[Keys.LAST_CHAPTER] = chapter
+    }
+    suspend fun setReminderEnabled(b: Boolean) = update { it[Keys.REMINDER_ENABLED] = b }
+    suspend fun setReminderTime(hour: Int, minute: Int) = update {
+        it[Keys.REMINDER_HOUR] = hour
+        it[Keys.REMINDER_MINUTE] = minute
     }
 
     private suspend fun update(block: (androidx.datastore.preferences.core.MutablePreferences) -> Unit) {

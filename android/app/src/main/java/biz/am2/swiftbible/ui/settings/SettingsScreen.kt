@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.Brightness6
 import androidx.compose.material.icons.filled.BugReport
@@ -20,9 +21,11 @@ import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.automirrored.filled.LibraryBooks
 import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -61,6 +64,7 @@ import biz.am2.swiftbible.ui.theme.ReadingTheme
 fun SettingsScreen(
     appVm: AppViewModel,
     onOpen: (String) -> Unit,
+    onBack: (() -> Unit)? = null,
 ) {
     val prefs by appVm.prefsState.collectAsState()
 
@@ -73,6 +77,13 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
+                },
+                navigationIcon = {
+                    if (onBack != null) {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        }
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             )
@@ -104,6 +115,9 @@ fun SettingsScreen(
                 checked = prefs.hideBars,
                 onChange = { appVm.setHideBars(it) },
             )
+
+            SectionHeader("Notifications")
+            NavRow(Icons.Filled.Notifications, "Devotional Reminder") { onOpen("reminder") }
 
             SectionHeader("Bible translation")
             VersionRow(prefs.version) { appVm.setVersion(it) }

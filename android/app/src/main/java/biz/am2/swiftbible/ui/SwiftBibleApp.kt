@@ -41,6 +41,7 @@ import biz.am2.swiftbible.ui.more.MoreScreen
 import biz.am2.swiftbible.ui.onboarding.OnboardingScreen
 import biz.am2.swiftbible.ui.search.SearchScreen
 import biz.am2.swiftbible.ui.settings.BookmarksScreen
+import biz.am2.swiftbible.ui.settings.DevotionalReminderScreen
 import biz.am2.swiftbible.ui.settings.HighlightsScreen
 import biz.am2.swiftbible.ui.settings.HistoryScreen
 import biz.am2.swiftbible.ui.settings.NotesScreen
@@ -179,6 +180,13 @@ fun SwiftBibleApp(appVm: AppViewModel) {
                 SettingsScreen(
                     appVm = appVm,
                     onOpen = { route -> navController.navigate(route) },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable("reminder") {
+                DevotionalReminderScreen(
+                    appVm = appVm,
+                    onBack = { navController.popBackStack() },
                 )
             }
             composable("saved_devotionals") {
