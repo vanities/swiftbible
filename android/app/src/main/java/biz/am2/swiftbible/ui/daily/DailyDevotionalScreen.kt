@@ -56,6 +56,10 @@ import biz.am2.swiftbible.data.DailyDevotional
 import biz.am2.swiftbible.data.DevotionalRepository
 import biz.am2.swiftbible.ui.AppViewModel
 import biz.am2.swiftbible.ui.components.MarkdownText
+import biz.am2.swiftbible.ui.settings.BrandedEmpty
+import biz.am2.swiftbible.ui.settings.DevotionalBg
+import biz.am2.swiftbible.ui.settings.DevotionalTint
+import biz.am2.swiftbible.ui.settings.EnterAnimation
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -151,19 +155,21 @@ fun DailyDevotionalScreen(
             ) {
                 when (val s = state) {
                     is DevState.Loading -> Loading()
-                    is DevState.Loaded -> Loaded(
-                        devotional = s.devotional,
-                        bodyStyle = TextStyle(
-                            fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
-                            fontSize = 17.sp(),
-                            lineHeight = 26.sp(),
-                            color = MaterialTheme.colorScheme.onSurface,
-                        ),
-                        onLinkClick = { url ->
-                            handleVerseLink(url)?.let { (book, chapter, _) -> onOpenChapter(book, chapter) }
-                        },
-                        onShare = { share(ctx, s.devotional) },
-                    )
+                    is DevState.Loaded -> EnterAnimation {
+                        Loaded(
+                            devotional = s.devotional,
+                            bodyStyle = TextStyle(
+                                fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
+                                fontSize = 17.sp(),
+                                lineHeight = 26.sp(),
+                                color = MaterialTheme.colorScheme.onSurface,
+                            ),
+                            onLinkClick = { url ->
+                                handleVerseLink(url)?.let { (book, chapter, _) -> onOpenChapter(book, chapter) }
+                            },
+                            onShare = { share(ctx, s.devotional) },
+                        )
+                    }
                     is DevState.None -> NoDevotional(date = selectedDate, message = s.message)
                 }
                 Spacer(Modifier.size(96.dp))
@@ -294,33 +300,18 @@ private fun Loaded(
 
 @Composable
 private fun NoDevotional(date: LocalDate, message: String?) {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(top = 80.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Icon(
-            Icons.Filled.AutoAwesome,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(64.dp),
-        )
-        Spacer(Modifier.size(16.dp))
-        Text(
-            text = "No devotional for this day.",
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Spacer(Modifier.size(8.dp))
-        val subtitle = if (date.isAfter(LocalDate.now())) {
-            "Come back on ${date.format(DateTimeFormatter.ofPattern("MMMM d"))}!"
-        } else if (message != null) {
-            "Couldn't load: $message"
-        } else "We may have missed this one."
-        Text(
-            text = subtitle,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
+    val subtitle = if (date.isAfter(LocalDate.now())) {
+        "Come back on ${date.format(DateTimeFormatter.ofPattern("MMMM d"))} — your devotional will be waiting."
+    } else if (message != null) {
+        "Couldn't load: $message"
+    } else "We may have missed this one. Try a different date."
+    BrandedEmpty(
+        icon = Icons.Filled.AutoAwesome,
+        tint = DevotionalTint,
+        bg = DevotionalBg,
+        title = "No devotional for this day",
+        subtitle = subtitle,
+    )
 }
 
 private fun handleVerseLink(url: String): Triple<String, Int, Int>? {
