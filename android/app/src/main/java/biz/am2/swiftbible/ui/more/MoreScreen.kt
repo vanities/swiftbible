@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -64,6 +65,7 @@ fun MoreScreen(
     val highlights by appVm.highlights.collectAsState(initial = emptyList())
     val notes by appVm.notes.collectAsState(initial = emptyList())
     val saved by appVm.savedDevotionals.collectAsState(initial = emptyList())
+    val history by appVm.history.collectAsState(initial = emptyList())
     val chaptersRead by appVm.chaptersRead.collectAsState(initial = 0)
 
     val events = AppEventRegistry.visible(forceAll = biz.am2.swiftbible.BuildConfig.DEBUG)
@@ -147,6 +149,10 @@ fun MoreScreen(
                     modifier = Modifier.weight(1f),
                 )
             }
+            HistoryRow(
+                count = history.size,
+                onClick = { onOpen("history") },
+            )
 
             ReadingStatsCard(
                 chaptersRead = chaptersRead,
@@ -387,6 +393,52 @@ private fun LibraryTile(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun HistoryRow(count: Int, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(14.dp)),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFFEEF7C6)),
+                contentAlignment = Alignment.Center,
+            ) {
+                androidx.compose.material3.Icon(
+                    Icons.AutoMirrored.Filled.MenuBook,
+                    contentDescription = null,
+                    tint = Color(0xFF7AA800),
+                )
+            }
+            Spacer(Modifier.size(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Reading History", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = if (count == 0) "Open chapters to start tracking your journey"
+                    else "$count chapter${if (count == 1) "" else "s"} visited",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            androidx.compose.material3.Icon(
+                Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }

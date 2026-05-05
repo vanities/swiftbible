@@ -2,20 +2,22 @@ package biz.am2.swiftbible.ui.bible
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,15 +27,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import biz.am2.swiftbible.ui.AppViewModel
 import biz.am2.swiftbible.ui.components.OutlinedFrame
-import biz.am2.swiftbible.ui.components.SectionHeader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,6 +49,16 @@ fun BookDetailScreen(
     onBack: () -> Unit,
 ) {
     val book = appVm.bookByName(bookName)
+    var titles by remember(bookName) { mutableStateOf<Map<Int, String>>(emptyMap()) }
+
+    LaunchedEffect(bookName) {
+        val chapters = book?.chapters ?: return@LaunchedEffect
+        val resolved = mutableMapOf<Int, String>()
+        for (ch in chapters) {
+            appVm.chapterTitle(bookName, ch.number)?.let { resolved[ch.number] = it }
+        }
+        titles = resolved
+    }
 
     Scaffold(
         topBar = {
@@ -74,16 +89,13 @@ fun BookDetailScreen(
             return@Scaffold
         }
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 72.dp),
+        LazyColumn(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.fillMaxSize().padding(padding),
         ) {
             if (book.description.isNotBlank()) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    OutlinedFrame(modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)) {
+                item {
+                    OutlinedFrame(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = "About this book",
@@ -100,36 +112,63 @@ fun BookDetailScreen(
                     }
                 }
             }
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                SectionHeader("Chapters · ${book.chapters.size}")
-            }
             items(book.chapters, key = { it.number }) { chapter ->
-                ChapterTile(number = chapter.number, onClick = { onChapterClick(chapter.number) })
+                ChapterRow(
+                    number = chapter.number,
+                    title = titles[chapter.number],
+                    onClick = { onChapterClick(chapter.number) },
+                )
             }
         }
     }
 }
 
 @Composable
-private fun ChapterTile(number: Int, onClick: () -> Unit) {
-    val scheme = MaterialTheme.colorScheme
-    val gradient = Brush.verticalGradient(
-        listOf(scheme.surfaceContainerHigh, scheme.surfaceContainer),
-    )
-    Box(
+private fun ChapterRow(
+    number: Int,
+    title: String?,
+    onClick: () -> Unit,
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
-            .background(gradient)
             .clickable(onClick = onClick)
-            .padding(vertical = 18.dp),
-        contentAlignment = Alignment.Center,
+            .padding(horizontal = 4.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = number.toString(),
-            style = MaterialTheme.typography.titleLarge,
-            color = scheme.primary,
-            fontWeight = FontWeight.SemiBold,
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceContainer),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = number.toString(),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+        Spacer(Modifier.size(14.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "Chapter $number",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+            if (!title.isNullOrBlank()) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        Icon(
+            Icons.AutoMirrored.Filled.NavigateNext,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

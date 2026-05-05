@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.dp
 
 const val MD_LINK_TAG = "md_link"
 
-data class MarkdownBlock(val text: AnnotatedString, val type: BlockType)
+data class MarkdownBlock(val text: AnnotatedString, val type: BlockType, val raw: String = "")
 
-enum class BlockType { H1, H2, H3, BodyParagraph, Quote }
+enum class BlockType { H1, H2, H3, BodyParagraph, Quote, Bullet }
 
 private val LINK_REGEX = Regex("""\[([^\]]+)\]\(([^)]+)\)""")
 private val BOLD_REGEX = Regex("""\*\*([^*]+?)\*\*""")
@@ -45,7 +45,7 @@ fun parseMarkdown(
         val text = buffer.toString().trim()
         if (text.isNotEmpty()) {
             val type = bufferType ?: BlockType.BodyParagraph
-            out.add(MarkdownBlock(buildInline(text, bodyColor, linkColor), type))
+            out.add(MarkdownBlock(buildInline(text, bodyColor, linkColor), type, text))
         }
         buffer.clear()
         bufferType = null
@@ -62,6 +62,12 @@ fun parseMarkdown(
                 bufferType = BlockType.Quote
                 if (buffer.isNotEmpty()) buffer.append(' ')
                 buffer.append(l.removePrefix("> "))
+            }
+            l.startsWith("- ") || l.startsWith("* ") -> {
+                flush()
+                buffer.append(l.removePrefix("- ").removePrefix("* "))
+                bufferType = BlockType.Bullet
+                flush()
             }
             l.isBlank() -> flush()
             else -> {
@@ -147,18 +153,49 @@ fun MarkdownText(
                 BlockType.H2 -> MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
                 BlockType.H3 -> MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
                 BlockType.Quote -> bodyStyle.copy(fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                BlockType.Bullet -> bodyStyle
                 BlockType.BodyParagraph -> bodyStyle
             }
             val isHeader = block.type in listOf(BlockType.H1, BlockType.H2, BlockType.H3)
-            val topPad = if (i == 0) 0.dp else if (isHeader) 16.dp else 8.dp
-            ClickableMarkdownText(
-                text = block.text,
-                style = style,
-                onLinkClick = onLinkClick,
-                modifier = Modifier.padding(top = topPad),
-            )
+            val isItalicOnly = isFullyItalic(block.raw)
+            val prevWasBullet = i > 0 && blocks[i - 1].type == BlockType.Bullet
+            val topPad = when {
+                i == 0 -> 0.dp
+                isHeader -> 20.dp
+                isItalicOnly -> 18.dp           // prayer / pull-quote separation
+                block.type == BlockType.Bullet && prevWasBullet -> 4.dp
+                block.type == BlockType.Bullet -> 12.dp
+                else -> 14.dp
+            }
+            if (block.type == BlockType.Bullet) {
+                androidx.compose.foundation.layout.Row(
+                    modifier = Modifier.padding(top = topPad),
+                ) {
+                    Text(text = "•  ", style = style)
+                    ClickableMarkdownText(
+                        text = block.text,
+                        style = style,
+                        onLinkClick = onLinkClick,
+                    )
+                }
+            } else {
+                ClickableMarkdownText(
+                    text = block.text,
+                    style = style,
+                    onLinkClick = onLinkClick,
+                    modifier = Modifier.padding(top = topPad),
+                )
+            }
         }
     }
+}
+
+private fun isFullyItalic(text: String): Boolean {
+    val trimmed = text.trim()
+    if (trimmed.length < 4) return false
+    return trimmed.startsWith("*") && trimmed.endsWith("*") &&
+        !trimmed.startsWith("**") && !trimmed.endsWith("**") &&
+        trimmed.indexOf('*', 1) == trimmed.length - 1
 }
 
 @Composable
