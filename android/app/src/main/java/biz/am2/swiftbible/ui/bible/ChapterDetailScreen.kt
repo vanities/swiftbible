@@ -1,6 +1,7 @@
 package biz.am2.swiftbible.ui.bible
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -19,9 +20,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.NavigateBefore
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Brush
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -65,7 +69,6 @@ import biz.am2.swiftbible.model.Paragraph
 import biz.am2.swiftbible.ui.AppViewModel
 import biz.am2.swiftbible.ui.theme.BrandRed
 import kotlinx.coroutines.flow.first
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.ui.text.TextStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -189,16 +192,64 @@ fun ChapterDetailScreen(
         }
     }
 
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    var explainVerse by remember { mutableStateOf<Triple<String, Int, Int>?>(null) }
     highlightVerse?.let { verse ->
-        HighlightDialog(
+        val verseText = chapter?.paragraphs?.firstOrNull { it.startingVerse == verse }?.text.orEmpty()
+        VerseActionSheet(
+            verseRef = "$bookName $chapterNumber:$verse",
+            verseText = verseText,
             currentColor = highlightMap[verse],
+            isBookmarked = verse in bookmarkSet,
+            hasNote = verse in noteMap,
             onDismiss = { highlightVerse = null },
-            onPick = { color ->
-                if (color == null) appVm.removeHighlight(bookName, chapterNumber, verse)
-                else appVm.addHighlight(bookName, chapterNumber, verse, color)
+            onPickColor = { color ->
+                if (color == null) {
+                    appVm.removeHighlight(bookName, chapterNumber, verse)
+                    biz.am2.swiftbible.data.Analytics.capture(
+                        biz.am2.swiftbible.data.Analytics.Event.VerseUnhighlighted,
+                        mapOf("book" to bookName, "chapter" to chapterNumber, "verse" to verse),
+                    )
+                } else {
+                    appVm.addHighlight(bookName, chapterNumber, verse, color)
+                    biz.am2.swiftbible.data.Analytics.capture(
+                        biz.am2.swiftbible.data.Analytics.Event.VerseHighlighted,
+                        mapOf("book" to bookName, "chapter" to chapterNumber, "verse" to verse, "color" to color),
+                    )
+                }
                 highlightVerse = null
             },
             onAddNote = { highlightVerse = null; noteVerse = verse },
+            onToggleBookmark = {
+                appVm.toggleBookmark(bookName, chapterNumber, verse)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.VerseBookmarked,
+                    mapOf("book" to bookName, "chapter" to chapterNumber, "verse" to verse),
+                )
+                highlightVerse = null
+            },
+            onCopy = {
+                copyVerse(ctx, "$bookName $chapterNumber:$verse", verseText)
+                biz.am2.swiftbible.data.Analytics.capture(biz.am2.swiftbible.data.Analytics.Event.VerseCopied)
+                highlightVerse = null
+            },
+            onShare = {
+                shareVerse(ctx, "$bookName $chapterNumber:$verse", verseText)
+                highlightVerse = null
+            },
+            onExplain = {
+                explainVerse = Triple(bookName, chapterNumber, verse)
+                highlightVerse = null
+            },
+        )
+    }
+
+    explainVerse?.let { (b, c, v) ->
+        val verseText = chapter?.paragraphs?.firstOrNull { it.startingVerse == v }?.text.orEmpty()
+        ExplainSheet(
+            verseRef = "$b $c:$v",
+            verseText = verseText,
+            onDismiss = { explainVerse = null },
         )
     }
 
@@ -286,33 +337,37 @@ private fun ParagraphRow(
         lineHeight = fontSize * 1.55f,
         color = scheme.onBackground,
     )
+    var layoutResult by remember(paragraph.startingVerse) { mutableStateOf<androidx.compose.ui.text.TextLayoutResult?>(null) }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(highlightColor?.copy(alpha = 0.35f) ?: Color.Transparent)
-            .pointerInput(paragraph.startingVerse) {
+            .pointerInput(paragraph.startingVerse, layoutResult) {
                 detectTapGestures(
                     onLongPress = { onLongPress() },
+                    onTap = { pos ->
+                        val lr = layoutResult ?: return@detectTapGestures
+                        val offset = lr.getOffsetForPosition(pos)
+                        annotated.getStringAnnotations(CROSS_REF_TAG, offset, offset).firstOrNull()?.let { ann ->
+                            val parts = ann.item.split('|')
+                            if (parts.size == 3) {
+                                val ch = parts[1].toIntOrNull() ?: return@let
+                                onCrossRef(parts[0], ch)
+                            }
+                        }
+                    },
                 )
             }
             .padding(horizontal = 4.dp, vertical = 4.dp),
     ) {
         Column {
-            ClickableText(
+            Text(
                 text = annotated,
                 style = textStyle,
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { offset ->
-                    annotated.getStringAnnotations(CROSS_REF_TAG, offset, offset).firstOrNull()?.let { ann ->
-                        val parts = ann.item.split('|')
-                        if (parts.size == 3) {
-                            val ch = parts[1].toIntOrNull() ?: return@ClickableText
-                            onCrossRef(parts[0], ch)
-                        }
-                    }
-                },
+                onTextLayout = { layoutResult = it },
             )
             if (hasNote || isBookmarked) {
                 Row(
@@ -417,58 +472,127 @@ private fun androidx.compose.ui.text.AnnotatedString.Builder.highlightQuotes(tex
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HighlightDialog(
+private fun VerseActionSheet(
+    verseRef: String,
+    verseText: String,
     currentColor: Long?,
+    isBookmarked: Boolean,
+    hasNote: Boolean,
     onDismiss: () -> Unit,
-    onPick: (Long?) -> Unit,
+    onPickColor: (Long?) -> Unit,
     onAddNote: () -> Unit,
+    onToggleBookmark: () -> Unit,
+    onCopy: () -> Unit,
+    onShare: () -> Unit,
+    onExplain: () -> Unit,
 ) {
     val palette = listOf(
-        0xFFFFD54F to "Gold",
-        0xFFB39DDB to "Lavender",
-        0xFFA5D6A7 to "Mint",
-        0xFFEF9A9A to "Rose",
-        0xFF80DEEA to "Sky",
-        0xFFFFAB91 to "Coral",
+        0xFFFFD54FL to "Gold",
+        0xFFB39DDBL to "Lavender",
+        0xFFA5D6A7L to "Mint",
+        0xFFEF9A9AL to "Rose",
+        0xFF80DEEAL to "Sky",
+        0xFFFFAB91L to "Coral",
     )
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Mark this verse") },
-        text = {
-            Column {
-                Text("Choose a color or add a note")
-                Spacer(Modifier.size(16.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    palette.forEach { (color, label) ->
-                        Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(RoundedCornerShape(50))
-                                .background(Color(color))
-                                .clickable { onPick(color) },
-                        )
-                    }
+    androidx.compose.material3.ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 12.dp),
+        ) {
+            Text(verseRef, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = verseText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 3,
+                modifier = Modifier.padding(top = 4.dp),
+            )
+            Spacer(Modifier.size(16.dp))
+            Text("HIGHLIGHT", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+            Spacer(Modifier.size(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                palette.forEach { (color, _) ->
+                    val isCurrent = currentColor == color
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(50))
+                            .background(Color(color))
+                            .clickable { onPickColor(color) }
+                            .then(
+                                if (isCurrent) Modifier.border(
+                                    2.dp,
+                                    MaterialTheme.colorScheme.onSurface,
+                                    RoundedCornerShape(50)
+                                ) else Modifier
+                            ),
+                    )
                 }
                 if (currentColor != null) {
-                    Spacer(Modifier.size(12.dp))
-                    TextButton(onClick = { onPick(null) }) {
-                        Text("Remove highlight", color = MaterialTheme.colorScheme.error)
+                    TextButton(onClick = { onPickColor(null) }) {
+                        Text("Remove", color = MaterialTheme.colorScheme.error)
                     }
                 }
             }
-        },
-        confirmButton = {
-            TextButton(onClick = onAddNote) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Edit, contentDescription = null, modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.size(6.dp))
-                    Text("Add note")
-                }
+
+            Spacer(Modifier.size(20.dp))
+            Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+                ActionTile("Note", Icons.Filled.Edit, accent = hasNote, onClick = onAddNote)
+                ActionTile(
+                    if (isBookmarked) "Bookmarked" else "Bookmark",
+                    if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                    accent = isBookmarked,
+                    onClick = onToggleBookmark,
+                )
+                ActionTile("Copy", Icons.Filled.ContentCopy, onClick = onCopy)
+                ActionTile("Share", Icons.Filled.Share, onClick = onShare)
+                ActionTile("Explain", Icons.Filled.AutoAwesome, onClick = onExplain)
             }
-        },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
-    )
+            Spacer(Modifier.size(24.dp))
+        }
+    }
+}
+
+@Composable
+private fun ActionTile(label: String, icon: androidx.compose.ui.graphics.vector.ImageVector, accent: Boolean = false, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier.clickable(onClick = onClick).padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(44.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(if (accent) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainer),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                icon,
+                contentDescription = label,
+                tint = if (accent) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+        Spacer(Modifier.size(4.dp))
+        Text(label, style = MaterialTheme.typography.labelSmall)
+    }
+}
+
+private fun shareVerse(ctx: android.content.Context, ref: String, text: String) {
+    val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(android.content.Intent.EXTRA_TEXT, "$ref — $text")
+    }
+    ctx.startActivity(android.content.Intent.createChooser(intent, "Share verse"))
+}
+
+private fun copyVerse(ctx: android.content.Context, ref: String, text: String) {
+    val cm = ctx.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+    cm.setPrimaryClip(android.content.ClipData.newPlainText("verse", "$ref — $text"))
+    android.widget.Toast.makeText(ctx, "Copied", android.widget.Toast.LENGTH_SHORT).show()
 }
 
 @Composable

@@ -5,12 +5,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import biz.am2.swiftbible.data.Analytics
 import biz.am2.swiftbible.data.AppDatabase
 import biz.am2.swiftbible.data.BibleRepository
 import biz.am2.swiftbible.data.BookmarkEntity
+import biz.am2.swiftbible.data.DailyDevotional
+import biz.am2.swiftbible.data.DevotionalRepository
 import biz.am2.swiftbible.data.Highlight
 import biz.am2.swiftbible.data.HistoryEntity
 import biz.am2.swiftbible.data.NoteEntity
+import biz.am2.swiftbible.data.SavedDevotionalEntity
 import biz.am2.swiftbible.data.SummariesRepository
 import biz.am2.swiftbible.data.UserPreferences
 import biz.am2.swiftbible.model.Book
@@ -47,6 +51,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     val repository = BibleRepository(application)
     val summaries = SummariesRepository(application)
+    val devotionals = DevotionalRepository(application)
     val prefs = UserPreferences(application)
     val db = AppDatabase.get(application)
 
@@ -59,8 +64,30 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val notes: Flow<List<NoteEntity>> = db.noteDao().all()
     val history: Flow<List<HistoryEntity>> = db.historyDao().recent()
     val bookmarks: Flow<List<BookmarkEntity>> = db.bookmarkDao().all()
+    val savedDevotionals: Flow<List<SavedDevotionalEntity>> = db.savedDevotionalDao().all()
     val chaptersRead: Flow<Int> = db.historyDao().chaptersRead()
     val totalVisits: Flow<Int?> = db.historyDao().totalVisits()
+
+    suspend fun fetchDevotional(date: java.time.LocalDate) = devotionals.fetch(date)
+
+    suspend fun savedDevotionalForDate(date: java.time.LocalDate): SavedDevotionalEntity? =
+        db.savedDevotionalDao().byDate(date.toString())
+
+    fun saveDevotional(d: DailyDevotional) = viewModelScope.launch {
+        db.savedDevotionalDao().upsert(
+            SavedDevotionalEntity(
+                forDate = d.for_date,
+                message = d.message,
+                anchorVerse = d.anchor_verse,
+                seriesName = d.series_name,
+            )
+        )
+        Analytics.capture(Analytics.Event.DevotionalViewed, mapOf("date" to d.for_date, "saved" to true))
+    }
+
+    fun unsaveDevotional(date: String) = viewModelScope.launch {
+        db.savedDevotionalDao().deleteByDate(date)
+    }
 
     init {
         viewModelScope.launch {

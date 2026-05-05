@@ -8,9 +8,9 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.WbTwilight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -35,12 +35,14 @@ import biz.am2.swiftbible.ui.bible.BibleScreen
 import biz.am2.swiftbible.ui.bible.BookDetailScreen
 import biz.am2.swiftbible.ui.bible.ChapterDetailScreen
 import biz.am2.swiftbible.ui.daily.DailyDevotionalScreen
+import biz.am2.swiftbible.ui.more.MoreScreen
 import biz.am2.swiftbible.ui.onboarding.OnboardingScreen
 import biz.am2.swiftbible.ui.search.SearchScreen
 import biz.am2.swiftbible.ui.settings.BookmarksScreen
 import biz.am2.swiftbible.ui.settings.HighlightsScreen
 import biz.am2.swiftbible.ui.settings.HistoryScreen
 import biz.am2.swiftbible.ui.settings.NotesScreen
+import biz.am2.swiftbible.ui.settings.SavedDevotionalsScreen
 import biz.am2.swiftbible.ui.settings.SettingsScreen
 import biz.am2.swiftbible.ui.settings.StatsScreen
 import biz.am2.swiftbible.ui.settings.TextSourcesScreen
@@ -48,12 +50,12 @@ import biz.am2.swiftbible.ui.settings.TranslationInfoScreen
 
 private sealed class Tab(val route: String, val labelRes: Int, val icon: ImageVector) {
     object Bible : Tab("bible", R.string.tab_bible, Icons.AutoMirrored.Filled.MenuBook)
-    object Daily : Tab("daily", R.string.tab_daily, Icons.Filled.AutoAwesome)
+    object Devotional : Tab("daily", R.string.tab_daily, Icons.Filled.WbTwilight)
     object Search : Tab("search", R.string.tab_search, Icons.Filled.Search)
-    object Settings : Tab("settings", R.string.tab_settings, Icons.Filled.Settings)
+    object More : Tab("settings", R.string.tab_settings, Icons.Filled.GridView)
 }
 
-private val tabs = listOf(Tab.Bible, Tab.Daily, Tab.Search, Tab.Settings)
+private val tabs = listOf(Tab.Bible, Tab.Devotional, Tab.More, Tab.Search)
 
 @Composable
 fun SwiftBibleApp(appVm: AppViewModel) {
@@ -150,7 +152,7 @@ fun SwiftBibleApp(appVm: AppViewModel) {
                     },
                 )
             }
-            composable(Tab.Daily.route) {
+            composable(Tab.Devotional.route) {
                 DailyDevotionalScreen(
                     appVm = appVm,
                     onOpenChapter = { book, chapter -> navController.navigate("chapter/${encode(book)}/$chapter") },
@@ -164,10 +166,23 @@ fun SwiftBibleApp(appVm: AppViewModel) {
                     },
                 )
             }
-            composable(Tab.Settings.route) {
+            composable(Tab.More.route) {
+                MoreScreen(
+                    appVm = appVm,
+                    onOpen = { route -> navController.navigate(route) },
+                    onOpenChapter = { book, ch -> navController.navigate("chapter/${encode(book)}/$ch") },
+                )
+            }
+            composable("settings_detail") {
                 SettingsScreen(
                     appVm = appVm,
                     onOpen = { route -> navController.navigate(route) },
+                )
+            }
+            composable("saved_devotionals") {
+                SavedDevotionalsScreen(
+                    appVm = appVm,
+                    onBack = { navController.popBackStack() },
                 )
             }
             composable("highlights") {

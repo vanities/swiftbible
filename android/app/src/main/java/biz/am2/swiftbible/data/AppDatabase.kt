@@ -68,6 +68,19 @@ data class BookmarkEntity(
     val createdAt: Long = System.currentTimeMillis(),
 )
 
+@Entity(
+    tableName = "saved_devotionals",
+    indices = [Index(value = ["forDate"], unique = true)],
+)
+data class SavedDevotionalEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val forDate: String,
+    val message: String,
+    val anchorVerse: String? = null,
+    val seriesName: String? = null,
+    val createdAt: Long = System.currentTimeMillis(),
+)
+
 @Dao
 interface HighlightDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -131,9 +144,24 @@ interface BookmarkDao {
     fun all(): Flow<List<BookmarkEntity>>
 }
 
+@Dao
+interface SavedDevotionalDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(d: SavedDevotionalEntity)
+
+    @Query("DELETE FROM saved_devotionals WHERE forDate=:date")
+    suspend fun deleteByDate(date: String)
+
+    @Query("SELECT * FROM saved_devotionals ORDER BY forDate DESC")
+    fun all(): Flow<List<SavedDevotionalEntity>>
+
+    @Query("SELECT * FROM saved_devotionals WHERE forDate=:date LIMIT 1")
+    suspend fun byDate(date: String): SavedDevotionalEntity?
+}
+
 @Database(
-    entities = [Highlight::class, NoteEntity::class, HistoryEntity::class, BookmarkEntity::class],
-    version = 1,
+    entities = [Highlight::class, NoteEntity::class, HistoryEntity::class, BookmarkEntity::class, SavedDevotionalEntity::class],
+    version = 2,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -141,6 +169,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
     abstract fun historyDao(): HistoryDao
     abstract fun bookmarkDao(): BookmarkDao
+    abstract fun savedDevotionalDao(): SavedDevotionalDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null

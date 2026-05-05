@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">SwiftBible</string>
     <string name="tab_bible">Bible</string>
-    <string name="tab_daily">Daily</string>
+    <string name="tab_daily">Devotional</string>
     <string name="tab_search">Search</string>
-    <string name="tab_settings">Settings</string>
+    <string name="tab_settings">More</string>
     <string name="search_placeholder">Search books, verses…</string>
     <string name="settings_version">Version</string>
     <string name="settings_appearance">Appearance</string>

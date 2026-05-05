@@ -1,5 +1,7 @@
 package biz.am2.swiftbible.ui.daily
 
+import android.app.DatePickerDialog
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,47 +14,58 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Today
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import biz.am2.swiftbible.data.Analytics
+import biz.am2.swiftbible.data.DailyDevotional
+import biz.am2.swiftbible.data.DevotionalRepository
 import biz.am2.swiftbible.ui.AppViewModel
-import biz.am2.swiftbible.ui.components.BrandMark
-import biz.am2.swiftbible.ui.components.PeridotGradient
-import biz.am2.swiftbible.ui.components.SectionHeader
-import biz.am2.swiftbible.ui.theme.BrandAccent
-import biz.am2.swiftbible.ui.theme.BrandAccentLight
-import biz.am2.swiftbible.ui.theme.BrandGold
-import biz.am2.swiftbible.ui.theme.BrandGoldLight
+import biz.am2.swiftbible.ui.components.MarkdownText
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
-private data class DailyVerse(
-    val book: String,
-    val chapter: Int,
-    val verse: Int,
-    val text: String,
-    val theme: String,
-    val reflection: String,
-)
+private sealed class DevState {
+    data object Loading : DevState()
+    data class Loaded(val devotional: DailyDevotional) : DevState()
+    data class None(val message: String? = null) : DevState()
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,198 +73,272 @@ fun DailyDevotionalScreen(
     appVm: AppViewModel,
     onOpenChapter: (String, Int) -> Unit,
 ) {
-    val bible by appVm.bible.collectAsState()
-    val today = remember { LocalDate.now() }
-    val daily = remember(bible.allBooks.size, today) { selectDaily(bible.allBooks, today) }
+    val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var state by remember { mutableStateOf<DevState>(DevState.Loading) }
+    var saved by remember { mutableStateOf(false) }
+
+    val savedList by appVm.savedDevotionals.collectAsState(initial = emptyList())
+
+    fun load(date: LocalDate) {
+        scope.launch {
+            state = DevState.Loading
+            saved = false
+            when (val r = appVm.fetchDevotional(date)) {
+                is DevotionalRepository.Result.Success -> {
+                    state = DevState.Loaded(r.devotional)
+                    Analytics.capture(
+                        Analytics.Event.DevotionalViewed,
+                        mapOf("date" to r.devotional.for_date, "source" to "network")
+                    )
+                }
+                is DevotionalRepository.Result.NotFound -> state = DevState.None()
+                is DevotionalRepository.Result.Failure -> state = DevState.None(r.message)
+            }
+            saved = appVm.savedDevotionalForDate(date) != null
+        }
+    }
+    LaunchedEffect(selectedDate) { load(selectedDate) }
+    LaunchedEffect(savedList, selectedDate) {
+        saved = savedList.any { it.forDate == selectedDate.toString() }
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                        BrandMark(size = 28)
-                        Spacer(Modifier.size(10.dp))
-                        Text(
-                            text = "Daily Devotional",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
+                    Text("Devotional", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                ),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             )
         },
         containerColor = MaterialTheme.colorScheme.background,
     ) { padding ->
-        if (daily == null) {
-            Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = androidx.compose.ui.Alignment.Center) {
-                Text("Loading…")
-            }
-            return@Scaffold
-        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+                .padding(padding),
         ) {
-            DateBanner(today = today)
-            Spacer(Modifier.size(16.dp))
-            VerseCard(daily, onOpen = { onOpenChapter(daily.book, daily.chapter) })
-            Spacer(Modifier.size(20.dp))
-            SectionHeader("Reflection")
-            ReflectionBlock(daily.reflection)
-            Spacer(Modifier.size(20.dp))
-            SectionHeader("This Theme")
-            ThemeBadge(daily.theme)
-            Spacer(Modifier.size(72.dp))
+            DateBar(
+                date = selectedDate,
+                onPickDate = {
+                    val cal = Calendar.getInstance()
+                    cal.set(selectedDate.year, selectedDate.monthValue - 1, selectedDate.dayOfMonth)
+                    DatePickerDialog(
+                        ctx,
+                        { _, y, m, d -> selectedDate = LocalDate.of(y, m + 1, d) },
+                        cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
+                    ).show()
+                },
+                onToday = { selectedDate = LocalDate.now() },
+                isFavorite = saved,
+                onToggleFavorite = {
+                    val current = (state as? DevState.Loaded)?.devotional ?: return@DateBar
+                    if (saved) appVm.unsaveDevotional(current.for_date)
+                    else appVm.saveDevotional(current)
+                    saved = !saved
+                },
+                favoriteEnabled = state is DevState.Loaded,
+                isToday = selectedDate == LocalDate.now(),
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            ) {
+                when (val s = state) {
+                    is DevState.Loading -> Loading()
+                    is DevState.Loaded -> Loaded(
+                        devotional = s.devotional,
+                        bodyStyle = TextStyle(
+                            fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
+                            fontSize = 17.sp(),
+                            lineHeight = 26.sp(),
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        onLinkClick = { url ->
+                            handleVerseLink(url)?.let { (book, chapter, _) -> onOpenChapter(book, chapter) }
+                        },
+                        onShare = { share(ctx, s.devotional) },
+                    )
+                    is DevState.None -> NoDevotional(date = selectedDate, message = s.message)
+                }
+                Spacer(Modifier.size(96.dp))
+            }
         }
     }
 }
 
 @Composable
-private fun DateBanner(today: LocalDate) {
-    Column {
-        Text(
-            text = today.format(DateTimeFormatter.ofPattern("EEEE")).uppercase(),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.SemiBold,
-        )
-        Text(
-            text = today.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            fontWeight = FontWeight.SemiBold,
-        )
-    }
-}
-
-@Composable
-private fun VerseCard(d: DailyVerse, onOpen: () -> Unit) {
-    val gradient = Brush.linearGradient(listOf(BrandAccent, BrandAccentLight))
-    Box(
+private fun DateBar(
+    date: LocalDate,
+    onPickDate: () -> Unit,
+    onToday: () -> Unit,
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit,
+    favoriteEnabled: Boolean,
+    isToday: Boolean,
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .background(gradient)
-            .clickable(onClick = onOpen)
-            .padding(24.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column {
-            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .clickable(onClick = onPickDate)
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    Icons.Filled.AutoAwesome,
-                    contentDescription = null,
-                    tint = BrandGoldLight,
+                    Icons.Filled.CalendarToday,
+                    contentDescription = "Pick date",
+                    modifier = Modifier.size(16.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(Modifier.size(8.dp))
                 Text(
-                    text = "VERSE OF THE DAY",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = BrandGoldLight,
-                    fontWeight = FontWeight.SemiBold,
+                    text = date.format(DateTimeFormatter.ofPattern("MMM d, yyyy")),
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
-            Spacer(Modifier.size(14.dp))
-            Text(
-                text = "“${d.text}”",
-                style = MaterialTheme.typography.headlineSmall,
-                color = androidx.compose.ui.graphics.Color.White,
-                fontWeight = FontWeight.Medium,
-                fontStyle = FontStyle.Italic,
-                lineHeight = 32.sp(),
+        }
+        Spacer(Modifier.size(8.dp))
+        IconButton(onClick = onToday, enabled = !isToday) {
+            Icon(Icons.Filled.Today, contentDescription = "Today")
+        }
+        Spacer(Modifier.weight(1f))
+        IconButton(onClick = onToggleFavorite, enabled = favoriteEnabled) {
+            Icon(
+                if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                contentDescription = if (isFavorite) "Saved" else "Save",
+                tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Spacer(Modifier.size(14.dp))
-            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                Text(
-                    text = "${d.book} ${d.chapter}:${d.verse}",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = BrandGoldLight,
-                    fontWeight = FontWeight.SemiBold,
-                )
-                Spacer(Modifier.weight(1f))
-                Text(
-                    text = "Open chapter",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = androidx.compose.ui.graphics.Color.White,
-                )
-                Spacer(Modifier.size(6.dp))
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowForward,
-                    contentDescription = null,
-                    tint = androidx.compose.ui.graphics.Color.White,
-                )
-            }
         }
     }
 }
 
 @Composable
-private fun ReflectionBlock(text: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(20.dp),
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
+private fun Loading() {
+    Box(modifier = Modifier.fillMaxSize().padding(top = 80.dp), contentAlignment = Alignment.Center) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.size(16.dp))
+            Text("Loading devotional…", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+@Composable
+private fun Loaded(
+    devotional: DailyDevotional,
+    bodyStyle: TextStyle,
+    onLinkClick: (String) -> Unit,
+    onShare: () -> Unit,
+) {
+    Column {
+        if (!devotional.series_name.isNullOrBlank()) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
+            ) {
+                Text(
+                    text = "${devotional.series_name}${devotional.series_part?.let { " · Part $it" } ?: ""}",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+            Spacer(Modifier.size(8.dp))
+        }
+        if (!devotional.holiday_name.isNullOrBlank()) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
+            ) {
+                Text(
+                    text = devotional.holiday_name,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+            Spacer(Modifier.size(12.dp))
+        }
+        if (!devotional.anchor_verse.isNullOrBlank()) {
+            Text(
+                text = "${devotional.for_date} — ${devotional.anchor_verse}",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(bottom = 12.dp),
+            )
+        }
+        MarkdownText(
+            raw = devotional.message,
+            bodyStyle = bodyStyle,
+            onLinkClick = onLinkClick,
         )
     }
 }
 
 @Composable
-private fun ThemeBadge(theme: String) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(50))
-            .background(PeridotGradient)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+private fun NoDevotional(date: LocalDate, message: String?) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(top = 80.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Icon(
+            Icons.Filled.AutoAwesome,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(64.dp),
+        )
+        Spacer(Modifier.size(16.dp))
         Text(
-            text = theme,
-            color = androidx.compose.ui.graphics.Color.White,
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.SemiBold,
+            text = "No devotional for this day.",
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Spacer(Modifier.size(8.dp))
+        val subtitle = if (date.isAfter(LocalDate.now())) {
+            "Come back on ${date.format(DateTimeFormatter.ofPattern("MMMM d"))}!"
+        } else if (message != null) {
+            "Couldn't load: $message"
+        } else "We may have missed this one."
+        Text(
+            text = subtitle,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
 
-private fun selectDaily(books: List<biz.am2.swiftbible.model.Book>, date: LocalDate): DailyVerse? {
-    if (books.isEmpty()) return null
-    val seed = date.toEpochDay()
-    val themes = listOf("Faith", "Hope", "Love", "Peace", "Joy", "Strength", "Wisdom", "Courage")
-    val theme = themes[(seed % themes.size).toInt().let { if (it < 0) it + themes.size else it }]
-    val reflections = listOf(
-        "Sit with this verse for a moment. What word stands out to you today? Why might that be?",
-        "Read it slowly, three times. Notice what you feel — and bring that to prayer.",
-        "Where in your life today does this verse meet you? Where does it challenge you?",
-        "What would change in your day if you let this be true?",
-        "Pray it back to God in your own words. Don’t rush the silence.",
-        "Memorize a single phrase. Carry it with you between meetings, drives, and chores.",
-        "Whose face came to mind as you read? What does this verse ask of you toward them?",
-    )
-    val reflection = reflections[(seed % reflections.size).toInt().let { if (it < 0) it + reflections.size else it }]
+private fun handleVerseLink(url: String): Triple<String, Int, Int>? {
+    if (!url.startsWith("swiftbible://verse")) return null
+    val u = android.net.Uri.parse(url)
+    val book = u.getQueryParameter("book") ?: return null
+    val chapter = u.getQueryParameter("chapter")?.toIntOrNull() ?: return null
+    val verse = u.getQueryParameter("verse")?.toIntOrNull() ?: 1
+    return Triple(book, chapter, verse)
+}
 
-    val book = books[(seed.toInt() % books.size + books.size) % books.size]
-    val chapter = book.chapters[(seed.toInt() / 7 % book.chapters.size + book.chapters.size) % book.chapters.size]
-    val paragraph = chapter.paragraphs[(seed.toInt() / 13 % chapter.paragraphs.size + chapter.paragraphs.size) % chapter.paragraphs.size]
-    val firstSentence = paragraph.text.split('.', '!', '?').firstOrNull { it.isNotBlank() }?.trim()?.let { "$it." } ?: paragraph.text
-    return DailyVerse(
-        book = book.name,
-        chapter = chapter.number,
-        verse = paragraph.startingVerse,
-        text = firstSentence,
-        theme = theme,
-        reflection = reflection,
-    )
+private fun share(ctx: android.content.Context, devotional: DailyDevotional) {
+    val text = (devotional.anchor_verse?.let { "$it\n\n" } ?: "") + devotional.message
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, text)
+    }
+    ctx.startActivity(Intent.createChooser(intent, "Share devotional"))
 }
 
 private fun Int.sp() = androidx.compose.ui.unit.TextUnit(this.toFloat(), androidx.compose.ui.unit.TextUnitType.Sp)
