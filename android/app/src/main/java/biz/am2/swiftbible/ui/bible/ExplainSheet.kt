@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import biz.am2.swiftbible.data.Analytics
 import biz.am2.swiftbible.data.GeminiNanoExplainer
+import biz.am2.swiftbible.ui.components.MarkdownText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -121,10 +122,10 @@ fun ExplainSheet(
                     )
                 }
                 else -> {
-                    Text(
-                        explanation,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+                    MarkdownText(
+                        raw = explanation,
+                        bodyStyle = MaterialTheme.typography.bodyLarge,
+                        onLinkClick = {},
                     )
                 }
             }

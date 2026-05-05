@@ -38,15 +38,11 @@ Use clear, accessible English. Avoid jargon. Don't moralize.
         // Simulate latency
         delay(800)
         return """
-**$verseRef**
-
-> $verseText
-
 This verse sits within a longer passage; reading the surrounding chapter will surface its full meaning. The plain reading invites us to slow down and notice each phrase before reaching for application.
 
 A useful question: what would change in your day if you read this verse as if it were addressed personally to you?
 
-(On-device AI explanations powered by Google's AICore are coming soon. Until then, this is a placeholder reflection.)
+_On-device AI explanations powered by Google's AICore are coming soon. Until then, this is a placeholder reflection._
         """.trimIndent()
     }
 }
