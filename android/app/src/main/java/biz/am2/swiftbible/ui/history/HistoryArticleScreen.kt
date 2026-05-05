@@ -169,7 +169,7 @@ private fun Paragraph(text: String, isOpening: Boolean) {
                 fontSize = 56.sp,
                 fontWeight = FontWeight.Black,
                 color = ManuscriptAccent,
-                modifier = Modifier.padding(end = 6.dp, top = (-4).dp),
+                modifier = Modifier.padding(end = 6.dp),
             )
             Text(
                 text = text.drop(1),
@@ -315,7 +315,6 @@ private fun PullQuoteView(quote: PullQuote) {
                 fontSize = 56.sp,
                 fontWeight = FontWeight.Bold,
                 color = ManuscriptAccent.copy(alpha = 0.55f),
-                modifier = Modifier.padding(bottom = (-12).dp),
             )
             Text(
                 text = quote.text,
