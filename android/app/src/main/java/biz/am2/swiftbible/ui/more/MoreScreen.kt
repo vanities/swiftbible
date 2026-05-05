@@ -19,9 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
@@ -154,8 +152,6 @@ fun MoreScreen(
             )
 
             SettingsCard(onClick = { onOpen("settings_detail") })
-
-            BookmarksRow(onClick = { onOpen("bookmarks") })
 
             Spacer(Modifier.size(16.dp))
             Text(
@@ -455,43 +451,7 @@ private fun SettingsCard(onClick: () -> Unit) {
             Column(modifier = Modifier.weight(1f)) {
                 Text("Settings", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 Text(
-                    text = "Translations, fonts, themes, and more",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun BookmarksRow(onClick: () -> Unit) {
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surface,
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(14.dp)),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFFFFE4E1)),
-                contentAlignment = Alignment.Center,
-            ) {
-                androidx.compose.material3.Icon(Icons.Filled.Bookmark, contentDescription = null, tint = BrandRedDark)
-            }
-            Spacer(Modifier.size(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Bookmarks", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(
-                    text = "Saved verses",
+                    text = "Translations, fonts, notifications, and more",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
