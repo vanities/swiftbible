@@ -31,10 +31,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import biz.am2.swiftbible.R
+import biz.am2.swiftbible.data.AppEventRegistry
 import biz.am2.swiftbible.ui.bible.BibleScreen
 import biz.am2.swiftbible.ui.bible.BookDetailScreen
 import biz.am2.swiftbible.ui.bible.ChapterDetailScreen
 import biz.am2.swiftbible.ui.daily.DailyDevotionalScreen
+import biz.am2.swiftbible.ui.events.EventDetailScreen
 import biz.am2.swiftbible.ui.more.MoreScreen
 import biz.am2.swiftbible.ui.onboarding.OnboardingScreen
 import biz.am2.swiftbible.ui.search.SearchScreen
@@ -221,6 +223,20 @@ fun SwiftBibleApp(appVm: AppViewModel) {
             }
             composable("text_sources") {
                 TextSourcesScreen(onBack = { navController.popBackStack() })
+            }
+            composable("event/{id}") { entry ->
+                val id = entry.arguments?.getString("id") ?: ""
+                val event = AppEventRegistry.byId(id)
+                if (event != null) {
+                    EventDetailScreen(
+                        event = event,
+                        onBack = { navController.popBackStack() },
+                        onOpenInBible = { book, ch, _ ->
+                            navController.popBackStack()
+                            navController.navigate("chapter/${encode(book)}/$ch")
+                        },
+                    )
+                }
             }
         }
     }

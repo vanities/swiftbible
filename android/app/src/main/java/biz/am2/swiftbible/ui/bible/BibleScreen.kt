@@ -1,8 +1,5 @@
 package biz.am2.swiftbible.ui.bible
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoStories
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -49,8 +46,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import biz.am2.swiftbible.model.Book
 import biz.am2.swiftbible.ui.AppViewModel
-import biz.am2.swiftbible.ui.components.BrandMark
-import biz.am2.swiftbible.ui.components.PillBadge
 import biz.am2.swiftbible.ui.components.SectionHeader
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,29 +63,10 @@ fun BibleScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        BrandMark(size = 28)
-                        Spacer(Modifier.size(10.dp))
-                        Column {
-                            Text(
-                                text = "SwiftBible",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Text(
-                                text = bible.version.shortName,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    PillBadge(
-                        text = bible.version.shortName,
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        onColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.padding(end = 16.dp),
+                    Text(
+                        text = "Bible (${bible.version.shortName})",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -221,41 +197,26 @@ private fun BookListItem(book: Book, onClick: (String) -> Unit) {
             .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colorScheme.surfaceContainer),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                Icons.Filled.AutoStories,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(20.dp),
-            )
-        }
-        Spacer(Modifier.size(14.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = book.name,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.SemiBold,
             )
             if (book.description.isNotBlank()) {
                 Text(
                     text = book.description,
                     style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Light,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                 )
             }
         }
-        Text(
-            text = book.chapters.size.toString(),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        Icon(
+            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
         )
     }
 }

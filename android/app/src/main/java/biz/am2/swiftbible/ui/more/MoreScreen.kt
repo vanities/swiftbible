@@ -67,7 +67,7 @@ fun MoreScreen(
     val saved by appVm.savedDevotionals.collectAsState(initial = emptyList())
     val chaptersRead by appVm.chaptersRead.collectAsState(initial = 0)
 
-    val events = AppEventRegistry.visible(forceAll = false)
+    val events = AppEventRegistry.visible(forceAll = biz.am2.swiftbible.BuildConfig.DEBUG)
 
     Scaffold(
         topBar = {
@@ -97,7 +97,7 @@ fun MoreScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             events.forEach { event ->
-                EventCard(event = event, onClick = { handleEvent(event, onOpenChapter) })
+                EventCard(event = event, onClick = { handleEvent(event, onOpenChapter, onOpen) })
             }
 
             HistoryHeroCard(onClick = { /* future: history articles */ })
@@ -170,11 +170,15 @@ fun MoreScreen(
     }
 }
 
-private fun handleEvent(event: AppEvent, onOpenChapter: (String, Int) -> Unit) {
+private fun handleEvent(
+    event: AppEvent,
+    onOpenChapter: (String, Int) -> Unit,
+    onOpen: (String) -> Unit,
+) {
     when (val a = event.action) {
         is biz.am2.swiftbible.data.EventAction.OpenVerse -> onOpenChapter(a.book, a.chapter)
-        is biz.am2.swiftbible.data.EventAction.OpenDevotional -> Unit
-        biz.am2.swiftbible.data.EventAction.OpenEvent -> Unit
+        is biz.am2.swiftbible.data.EventAction.OpenDevotional -> onOpen("daily")
+        biz.am2.swiftbible.data.EventAction.OpenEvent -> onOpen("event/${event.id}")
     }
 }
 

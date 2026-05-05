@@ -28,10 +28,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -58,7 +55,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -159,34 +155,43 @@ fun ChapterDetailScreen(
             return@Scaffold
         }
 
+        val passageByVerse = remember(passages) { passages.associateBy { it.startVerse } }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (prefs.showSummaries && passages.isNotEmpty()) {
-                item(key = "summaries") {
-                    PassageSummariesCard(passages)
-                }
-            }
             items(chapter.paragraphs, key = { it.startingVerse }) { paragraph ->
-                ParagraphRow(
-                    paragraph = paragraph,
-                    fontSize = prefs.fontSize.sp,
-                    fontFamily = prefs.fontFamily.family,
-                    bookName = bookName,
-                    jesusRed = prefs.jesusRed,
-                    isFirst = paragraph.startingVerse == chapter.paragraphs.first().startingVerse,
-                    highlightColor = highlightMap[paragraph.startingVerse]?.let { Color(it) },
-                    hasNote = noteMap[paragraph.startingVerse] != null,
-                    isBookmarked = paragraph.startingVerse in bookmarkSet,
-                    onLongPress = { highlightVerse = paragraph.startingVerse },
-                    onCrossRef = onCrossRef,
-                    onNote = { noteVerse = paragraph.startingVerse },
-                    onBookmark = { appVm.toggleBookmark(bookName, chapterNumber, paragraph.startingVerse) },
-                )
+                Column {
+                    if (prefs.showSummaries) {
+                        passageByVerse[paragraph.startingVerse]?.let { summary ->
+                            Text(
+                                text = summary.title,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
+                            )
+                        }
+                    }
+                    ParagraphRow(
+                        paragraph = paragraph,
+                        fontSize = prefs.fontSize.sp,
+                        fontFamily = prefs.fontFamily.family,
+                        bookName = bookName,
+                        jesusRed = prefs.jesusRed,
+                        isFirst = paragraph.startingVerse == chapter.paragraphs.first().startingVerse,
+                        highlightColor = highlightMap[paragraph.startingVerse]?.let { Color(it) },
+                        hasNote = noteMap[paragraph.startingVerse] != null,
+                        isBookmarked = paragraph.startingVerse in bookmarkSet,
+                        onLongPress = { highlightVerse = paragraph.startingVerse },
+                        onCrossRef = onCrossRef,
+                        onNote = { noteVerse = paragraph.startingVerse },
+                        onBookmark = { appVm.toggleBookmark(bookName, chapterNumber, paragraph.startingVerse) },
+                    )
+                }
             }
             item { Spacer(Modifier.size(64.dp)) }
         }
@@ -263,53 +268,6 @@ fun ChapterDetailScreen(
                 noteVerse = null
             },
         )
-    }
-}
-
-@Composable
-private fun PassageSummariesCard(passages: List<PassageSummary>) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(16.dp),
-    ) {
-        Column {
-            Text(
-                text = "AT A GLANCE",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-            )
-            Spacer(Modifier.size(8.dp))
-            passages.forEach { summary ->
-                Row(
-                    modifier = Modifier.padding(vertical = 4.dp),
-                    verticalAlignment = Alignment.Top,
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(width = 28.dp, height = 22.dp),
-                        contentAlignment = Alignment.TopEnd,
-                    ) {
-                        Text(
-                            text = "v${summary.startVerse}",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.secondary,
-                            fontWeight = FontWeight.SemiBold,
-                            textAlign = TextAlign.End,
-                        )
-                    }
-                    Spacer(Modifier.size(8.dp))
-                    Text(
-                        text = summary.title,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                }
-            }
-        }
     }
 }
 

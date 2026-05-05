@@ -6,7 +6,11 @@ import biz.am2.swiftbible.ui.theme.BrandRedDark
 import androidx.compose.ui.graphics.Color
 import java.time.LocalDate
 
-data class ScriptureRef(val book: String, val chapter: Int, val startVerse: Int, val endVerse: Int? = null)
+data class ScriptureRef(val book: String, val chapter: Int, val startVerse: Int, val endVerse: Int? = null) {
+    val displayLabel: String
+        get() = if (endVerse != null && endVerse > startVerse) "$book $chapter:$startVerse-$endVerse"
+        else "$book $chapter:$startVerse"
+}
 
 data class EventReadingDay(
     val id: String,
@@ -52,7 +56,17 @@ object AppEventRegistry {
         startDate = LocalDate.of(2026, 5, 25),
         endDate = LocalDate.of(2026, 6, 7),
         action = EventAction.OpenEvent,
+        readingPlan = pentecostReadingPlan,
     )
+
+    fun todayReadingIndex(event: AppEvent, today: LocalDate = LocalDate.now()): Int {
+        if (event.readingPlan.isEmpty()) return 0
+        val match = event.readingPlan.indexOfFirst { it.date == today }
+        if (match >= 0) return match
+        val upcoming = event.readingPlan.indexOfFirst { !it.date.isBefore(today) }
+        if (upcoming >= 0) return upcoming
+        return event.readingPlan.size - 1
+    }
 
     val all: List<AppEvent> = listOf(pentecost2026)
 
