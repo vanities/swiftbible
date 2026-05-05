@@ -1,0 +1,28 @@
+# Gradle
+.gradle/
+build/
+local.properties
+captures/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keystores & service accounts (NEVER commit)
+*.jks
+*.keystore
+keystore.properties
+service-account.json
+google-play-key.json
+
+# APKs / AABs
+*.apk
+*.aab
+
+# Logs
+*.log

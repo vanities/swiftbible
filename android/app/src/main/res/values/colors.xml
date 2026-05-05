@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand_peridot">#FFBFD900</color>
+    <color name="brand_green">#FF33CC66</color>
+    <color name="brand_cyan">#FF00BFD9</color>
+    <color name="brand_accent">#FF00B4A0</color>
+    <color name="brand_accent_light">#FF00C8B4</color>
+    <color name="brand_accent_dark">#FF007A6D</color>
+    <color name="brand_gold">#FFD9AD52</color>
+    <color name="brand_gold_light">#FFFFEDBA</color>
+    <color name="brand_red">#FFCC3333</color>
+    <color name="brand_red_dark">#FF8C1F1F</color>
+    <color name="brand_deep_navy">#FF0D1226</color>
+    <color name="ic_launcher_background">#FF0D1226</color>
+</resources>

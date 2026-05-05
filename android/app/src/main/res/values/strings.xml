@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SwiftBible</string>
+    <string name="tab_bible">Bible</string>
+    <string name="tab_daily">Daily</string>
+    <string name="tab_search">Search</string>
+    <string name="tab_settings">Settings</string>
+    <string name="search_placeholder">Search books, verses…</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_text_sources">Text Sources</string>
+    <string name="settings_show_apocrypha">Show Apocrypha</string>
+    <string name="settings_show_enoch">Show Book of Enoch</string>
+    <string name="settings_show_jubilees">Show Book of Jubilees</string>
+    <string name="settings_show_testaments">Show Testaments of the Twelve Patriarchs</string>
+    <string name="settings_show_2enoch">Show 2 Enoch (Secrets of Enoch)</string>
+    <string name="settings_show_didache">Show Didache</string>
+    <string name="settings_show_1clement">Show 1 Clement</string>
+    <string name="settings_jesus_red">Jesus\'s words in red</string>
+    <string name="settings_font_size">Font size</string>
+    <string name="section_old_testament">Old Testament</string>
+    <string name="section_new_testament">New Testament</string>
+    <string name="section_apocrypha">Apocrypha</string>
+    <string name="section_enoch">Book of Enoch</string>
+    <string name="section_jubilees">Book of Jubilees</string>
+    <string name="section_testaments">Testaments of the Twelve Patriarchs</string>
+    <string name="section_2enoch">2 Enoch (Secrets of Enoch)</string>
+    <string name="section_didache">Didache</string>
+    <string name="section_1clement">1 Clement</string>
+    <string name="empty_search">Type to search across all loaded books</string>
+    <string name="no_results">No results</string>
+</resources>
