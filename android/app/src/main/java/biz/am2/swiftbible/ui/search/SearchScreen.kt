@@ -1,7 +1,6 @@
 package biz.am2.swiftbible.ui.search
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
@@ -38,6 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import biz.am2.swiftbible.ui.AppViewModel
+import biz.am2.swiftbible.ui.settings.BrandedEmpty
+import biz.am2.swiftbible.ui.settings.EnterAnimation
+import biz.am2.swiftbible.ui.settings.StatsBg
+import biz.am2.swiftbible.ui.settings.StatsTint
 
 private data class Hit(val book: String, val chapter: Int, val verse: Int, val text: String)
 
@@ -100,35 +103,37 @@ fun SearchScreen(
             )
 
             when {
-                query.length < 2 -> EmptyState("Type a word or phrase to search across every loaded book.")
-                hits.isEmpty() -> EmptyState("No matches found for “$query”.")
-                else -> {
-                    Text(
-                        text = "${hits.size} result${if (hits.size == 1) "" else "s"}${if (hits.size >= 500) " (truncated)" else ""}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
-                    )
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        items(hits, key = { "${it.book}-${it.chapter}-${it.verse}" }) { hit ->
-                            HitRow(hit, query, onClick = { onResultClick(hit.book, hit.chapter) })
+                query.length < 2 -> BrandedEmpty(
+                    icon = Icons.Filled.Search,
+                    tint = StatsTint,
+                    bg = StatsBg,
+                    title = "Search the Bible",
+                    subtitle = "Type a word or phrase to find it across every loaded book.",
+                )
+                hits.isEmpty() -> BrandedEmpty(
+                    icon = Icons.Filled.SearchOff,
+                    tint = StatsTint,
+                    bg = StatsBg,
+                    title = "No matches",
+                    subtitle = "Nothing matched “$query”. Try a shorter word or different spelling.",
+                )
+                else -> EnterAnimation {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Text(
+                            text = "${hits.size} result${if (hits.size == 1) "" else "s"}${if (hits.size >= 500) " (truncated)" else ""}",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
+                        )
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            items(hits, key = { "${it.book}-${it.chapter}-${it.verse}" }) { hit ->
+                                HitRow(hit, query, onClick = { onResultClick(hit.book, hit.chapter) })
+                            }
                         }
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun EmptyState(message: String) {
-    Box(modifier = Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
-        Text(
-            text = message,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-        )
     }
 }
 

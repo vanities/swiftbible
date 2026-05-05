@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import biz.am2.swiftbible.data.AppEvent
 import biz.am2.swiftbible.data.AppEventRegistry
 import biz.am2.swiftbible.ui.AppViewModel
+import biz.am2.swiftbible.ui.settings.EnterAnimation
 import biz.am2.swiftbible.ui.theme.BrandAccent
 import biz.am2.swiftbible.ui.theme.BrandGold
 import biz.am2.swiftbible.ui.theme.BrandGoldLight
@@ -86,6 +87,7 @@ fun MoreScreen(
         },
         containerColor = MaterialTheme.colorScheme.background,
     ) { padding ->
+        EnterAnimation {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -162,6 +164,7 @@ fun MoreScreen(
                 textAlign = TextAlign.Center,
             )
             Spacer(Modifier.size(72.dp))
+        }
         }
     }
 }
