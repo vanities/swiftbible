@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -50,6 +51,7 @@ import biz.am2.swiftbible.ui.AppViewModel
 import biz.am2.swiftbible.ui.settings.EnterAnimation
 import biz.am2.swiftbible.ui.theme.BrandAccent
 import biz.am2.swiftbible.ui.theme.BrandGold
+import biz.am2.swiftbible.ui.theme.BrandGoldLight
 import biz.am2.swiftbible.ui.theme.BrandRed
 import biz.am2.swiftbible.ui.theme.BrandRedDark
 
@@ -100,6 +102,8 @@ fun MoreScreen(
             events.forEach { event ->
                 EventCard(event = event, onClick = { handleEvent(event, onOpenChapter, onOpen) })
             }
+
+            HistoryHeroCard(onClick = { onOpen("church_history") })
 
             if (prefs.lastBook != null) {
                 BibleBookmarkCard(
@@ -240,6 +244,70 @@ private fun EventCard(event: AppEvent, onClick: () -> Unit) {
                     Icons.AutoMirrored.Filled.ArrowForward,
                     contentDescription = null,
                     tint = accent,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HistoryHeroCard(onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(18.dp),
+        color = Color(0xFFF7E9C7),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, BrandGold.copy(alpha = 0.30f), RoundedCornerShape(18.dp)),
+    ) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(modifier = Modifier.width(16.dp).height(1.dp).background(BrandGold.copy(alpha = 0.85f)))
+                Spacer(Modifier.size(6.dp))
+                Text(
+                    text = "LEARN",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = BrandGold,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Spacer(Modifier.size(6.dp))
+                Box(modifier = Modifier.width(16.dp).height(1.dp).background(BrandGold.copy(alpha = 0.85f)))
+                Spacer(Modifier.weight(1f))
+                Text(text = "📜", style = MaterialTheme.typography.titleLarge)
+            }
+            Spacer(Modifier.size(12.dp))
+            Text(
+                text = "History of the\nChristian Church",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Black,
+                color = Color(0xFF2E1A0B),
+            )
+            Spacer(Modifier.size(8.dp))
+            Text(
+                text = "Two thousand years — from the patriarchs to today, in 29 articles.",
+                style = MaterialTheme.typography.bodyMedium.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic),
+                color = Color(0xFF5A4423),
+            )
+            Spacer(Modifier.size(12.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(BrandGold.copy(alpha = 0.32f)),
+            )
+            Spacer(Modifier.size(10.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "9 SECTIONS · 29 ARTICLES",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color(0xFF806239),
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Spacer(Modifier.weight(1f))
+                androidx.compose.material3.Icon(
+                    Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = null,
+                    tint = BrandGold,
                 )
             }
         }

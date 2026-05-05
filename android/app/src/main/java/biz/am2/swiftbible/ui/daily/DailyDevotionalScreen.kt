@@ -167,6 +167,7 @@ fun DailyDevotionalScreen(
                             onLinkClick = { url ->
                                 handleVerseLink(url)?.let { (book, chapter, _) -> onOpenChapter(book, chapter) }
                             },
+                            onOpenChapter = onOpenChapter,
                             onShare = { share(ctx, s.devotional) },
                         )
                     }
@@ -246,6 +247,7 @@ private fun Loaded(
     devotional: DailyDevotional,
     bodyStyle: TextStyle,
     onLinkClick: (String) -> Unit,
+    onOpenChapter: (String, Int) -> Unit,
     onShare: () -> Unit,
 ) {
     Column {
@@ -282,12 +284,21 @@ private fun Loaded(
             Spacer(Modifier.size(12.dp))
         }
         if (!devotional.anchor_verse.isNullOrBlank()) {
+            val parsed = remember(devotional.anchor_verse) { parseReference(devotional.anchor_verse) }
+            val anchorText = "${devotional.for_date} — ${devotional.anchor_verse}"
+            val anchorModifier = if (parsed != null) {
+                Modifier
+                    .clickable { onOpenChapter(parsed.first, parsed.second) }
+                    .padding(bottom = 12.dp)
+            } else {
+                Modifier.padding(bottom = 12.dp)
+            }
             Text(
-                text = "${devotional.for_date} — ${devotional.anchor_verse}",
+                text = anchorText,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(bottom = 12.dp),
+                color = if (parsed != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
+                modifier = anchorModifier,
             )
         }
         MarkdownText(
@@ -321,6 +332,15 @@ private fun handleVerseLink(url: String): Triple<String, Int, Int>? {
     val chapter = u.getQueryParameter("chapter")?.toIntOrNull() ?: return null
     val verse = u.getQueryParameter("verse")?.toIntOrNull() ?: 1
     return Triple(book, chapter, verse)
+}
+
+private val REFERENCE_REGEX = Regex("""^([1-3]?\s?[A-Za-z]+(?:\s[A-Za-z]+)*?)\s+(\d+)(?::\d+)?""")
+
+private fun parseReference(raw: String): Pair<String, Int>? {
+    val match = REFERENCE_REGEX.find(raw.trim()) ?: return null
+    val book = match.groupValues[1].replace(Regex("""\s+"""), " ").trim()
+    val chapter = match.groupValues[2].toIntOrNull() ?: return null
+    return book to chapter
 }
 
 private fun share(ctx: android.content.Context, devotional: DailyDevotional) {

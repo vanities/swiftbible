@@ -44,6 +44,9 @@ import biz.am2.swiftbible.ui.search.SearchScreen
 import biz.am2.swiftbible.ui.donations.DonationCelebrationDialog
 import biz.am2.swiftbible.ui.donations.DonationHistoryScreen
 import biz.am2.swiftbible.ui.donations.DonationPromptDialog
+import biz.am2.swiftbible.ui.history.ChurchHistoryScreen
+import biz.am2.swiftbible.ui.history.HistoryArticleScreen
+import biz.am2.swiftbible.ui.history.HistorySectionScreen
 import biz.am2.swiftbible.ui.settings.BookmarksScreen
 import biz.am2.swiftbible.ui.settings.DevotionalReminderScreen
 import biz.am2.swiftbible.ui.settings.HighlightsScreen
@@ -265,6 +268,28 @@ fun SwiftBibleApp(appVm: AppViewModel) {
             }
             composable("donation_history") {
                 DonationHistoryScreen(appVm = appVm, onBack = { navController.popBackStack() })
+            }
+            composable("church_history") {
+                ChurchHistoryScreen(
+                    onBack = { navController.popBackStack() },
+                    onOpenSection = { id -> navController.navigate("church_history_section/$id") },
+                )
+            }
+            composable("church_history_section/{id}") { entry ->
+                val id = entry.arguments?.getString("id") ?: ""
+                HistorySectionScreen(
+                    sectionId = id,
+                    onBack = { navController.popBackStack() },
+                    onOpenArticle = { aid -> navController.navigate("church_history_article/$aid") },
+                )
+            }
+            composable("church_history_article/{id}") { entry ->
+                val id = entry.arguments?.getString("id") ?: ""
+                HistoryArticleScreen(
+                    articleId = id,
+                    onBack = { navController.popBackStack() },
+                    onOpenArticle = { aid -> navController.navigate("church_history_article/$aid") },
+                )
             }
         }
     }
