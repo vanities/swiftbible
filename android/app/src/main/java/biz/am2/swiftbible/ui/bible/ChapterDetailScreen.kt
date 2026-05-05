@@ -364,6 +364,10 @@ private val GOSPEL_BOOKS = setOf("Matthew", "Mark", "Luke", "John")
 
 private const val CROSS_REF_TAG = "crossref"
 
+private val INLINE_VERSE_MARKER = Regex("""\b(\d+):(\d+)([a-z]?)\b""")
+
+private data class VerseAnnotation(val start: Int, val end: Int, val isRef: Boolean, val payload: String)
+
 private fun buildVerseText(
     paragraph: Paragraph,
     bookName: String,
@@ -372,41 +376,66 @@ private fun buildVerseText(
     bodyColor: Color,
     refColor: Color,
 ): AnnotatedString = buildAnnotatedString {
+    appendVerseNumber("${paragraph.startingVerse} ", verseNumberColor)
+
+    val text = paragraph.text
+    val refs = CrossReference.findReferences(text)
+    val refRanges = refs.map { it.start until it.endExclusive }
+
+    // KJV (and similar) inlines additional verse markers like "1:15" mid-paragraph.
+    // Render those as superscript verse numbers, matching iOS ParagraphView behaviour.
+    val inlineMarkers = INLINE_VERSE_MARKER.findAll(text)
+        .filter { m -> refRanges.none { r -> m.range.first in r } }
+        .map { m -> VerseAnnotation(m.range.first, m.range.last + 1, isRef = false, payload = m.groupValues[2] + m.groupValues[3]) }
+        .toList()
+
+    val annotations = (refs.map {
+        VerseAnnotation(it.start, it.endExclusive, isRef = true, payload = "${it.book}|${it.chapter}|${it.verse}")
+    } + inlineMarkers).sortedBy { it.start }
+
+    val highlightSpeech = jesusRed && bookName in GOSPEL_BOOKS
+    var i = 0
+    for (ann in annotations) {
+        if (ann.start > i) {
+            val between = text.substring(i, ann.start)
+            if (highlightSpeech) highlightQuotes(between, bodyColor) else append(between)
+        }
+        if (ann.isRef) {
+            pushStringAnnotation(CROSS_REF_TAG, ann.payload)
+            withStyle(
+                SpanStyle(
+                    color = refColor,
+                    fontWeight = FontWeight.SemiBold,
+                    textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline,
+                )
+            ) {
+                append(text.substring(ann.start, ann.end))
+            }
+            pop()
+        } else {
+            // Drop any trailing space after the marker so the body still flows naturally.
+            appendVerseNumber(" ${ann.payload} ", verseNumberColor)
+        }
+        i = ann.end
+        // Skip a single trailing space so we don't render double-spaces around the marker.
+        if (!ann.isRef && i < text.length && text[i] == ' ') i++
+    }
+    if (i < text.length) {
+        val tail = text.substring(i)
+        if (highlightSpeech) highlightQuotes(tail, bodyColor) else append(tail)
+    }
+}
+
+private fun androidx.compose.ui.text.AnnotatedString.Builder.appendVerseNumber(num: String, color: Color) {
     withStyle(
         SpanStyle(
             fontWeight = FontWeight.Bold,
-            color = verseNumberColor,
+            color = color,
             fontSize = 14.sp,
             baselineShift = androidx.compose.ui.text.style.BaselineShift(0.4f),
         )
     ) {
-        append("${paragraph.startingVerse} ")
-    }
-    val text = paragraph.text
-    val refs = CrossReference.findReferences(text)
-    val highlightSpeech = jesusRed && bookName in GOSPEL_BOOKS
-    var i = 0
-    for (ref in refs) {
-        if (ref.start > i) {
-            if (highlightSpeech) highlightQuotes(text.substring(i, ref.start), bodyColor)
-            else append(text.substring(i, ref.start))
-        }
-        pushStringAnnotation(CROSS_REF_TAG, "${ref.book}|${ref.chapter}|${ref.verse}")
-        withStyle(
-            SpanStyle(
-                color = refColor,
-                fontWeight = FontWeight.SemiBold,
-                textDecoration = androidx.compose.ui.text.style.TextDecoration.Underline,
-            )
-        ) {
-            append(text.substring(ref.start, ref.endExclusive))
-        }
-        pop()
-        i = ref.endExclusive
-    }
-    if (i < text.length) {
-        if (highlightSpeech) highlightQuotes(text.substring(i), bodyColor)
-        else append(text.substring(i))
+        append(num)
     }
 }
 
