@@ -203,12 +203,30 @@ private fun EventCard(event: AppEvent, onClick: () -> Unit) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(140.dp)
                     .background(
                         Brush.verticalGradient(listOf(accent.copy(alpha = 0.6f), accent.copy(alpha = 0.9f)))
                     ),
                 contentAlignment = Alignment.BottomStart,
             ) {
+                if (event.bannerRes != null) {
+                    androidx.compose.foundation.Image(
+                        painter = androidx.compose.ui.res.painterResource(id = event.bannerRes),
+                        contentDescription = null,
+                        contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                        modifier = Modifier.fillMaxWidth().height(140.dp),
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(140.dp)
+                            .background(
+                                Brush.verticalGradient(
+                                    listOf(Color.Transparent, Color.Black.copy(alpha = 0.45f))
+                                )
+                            ),
+                    )
+                }
                 Box(
                     modifier = Modifier
                         .padding(12.dp)
@@ -252,10 +270,15 @@ private fun EventCard(event: AppEvent, onClick: () -> Unit) {
 
 @Composable
 private fun HistoryHeroCard(onClick: () -> Unit) {
+    val dark = androidx.compose.foundation.isSystemInDarkTheme()
+    val cardBg = if (dark) Color(0xFF24180D) else Color(0xFFF7E9C7)
+    val titleInk = if (dark) Color(0xFFF1E2C4) else Color(0xFF2E1A0B)
+    val bodyInk = if (dark) Color(0xFFB89865) else Color(0xFF5A4423)
+    val mutedInk = if (dark) Color(0xFFB89865) else Color(0xFF806239)
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(18.dp),
-        color = Color(0xFFF7E9C7),
+        color = cardBg,
         modifier = Modifier
             .fillMaxWidth()
             .border(1.dp, BrandGold.copy(alpha = 0.30f), RoundedCornerShape(18.dp)),
@@ -280,13 +303,13 @@ private fun HistoryHeroCard(onClick: () -> Unit) {
                 text = "History of the\nChristian Church",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Black,
-                color = Color(0xFF2E1A0B),
+                color = titleInk,
             )
             Spacer(Modifier.size(8.dp))
             Text(
                 text = "Two thousand years — from the patriarchs to today, in 29 articles.",
                 style = MaterialTheme.typography.bodyMedium.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic),
-                color = Color(0xFF5A4423),
+                color = bodyInk,
             )
             Spacer(Modifier.size(12.dp))
             Box(
@@ -300,7 +323,7 @@ private fun HistoryHeroCard(onClick: () -> Unit) {
                 Text(
                     text = "9 SECTIONS · 29 ARTICLES",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF806239),
+                    color = mutedInk,
                     fontWeight = FontWeight.SemiBold,
                 )
                 Spacer(Modifier.weight(1f))

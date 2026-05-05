@@ -39,7 +39,7 @@ data class AppEvent(
     val startDate: LocalDate,
     val endDate: LocalDate,
     val action: EventAction,
-    val bannerAsset: String? = null,
+    @androidx.annotation.DrawableRes val bannerRes: Int? = null,
     val readingPlan: List<EventReadingDay> = emptyList(),
 ) {
     fun isActive(today: LocalDate = LocalDate.now()): Boolean =
@@ -56,6 +56,7 @@ object AppEventRegistry {
         startDate = LocalDate.of(2026, 5, 25),
         endDate = LocalDate.of(2026, 6, 7),
         action = EventAction.OpenEvent,
+        bannerRes = biz.am2.swiftbible.R.drawable.pentecost_event,
         readingPlan = pentecostReadingPlan,
     )
 

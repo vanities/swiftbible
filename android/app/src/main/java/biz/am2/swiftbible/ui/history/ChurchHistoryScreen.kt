@@ -228,9 +228,41 @@ internal fun EraBadge(era: String) {
     }
 }
 
-internal val ParchmentBg = androidx.compose.ui.graphics.Color(0xFFFAF3E0)
-internal val ParchmentCard = androidx.compose.ui.graphics.Color(0xFFFFF8EA)
-internal val ParchmentBorder = androidx.compose.ui.graphics.Color(0x33806239)
-internal val ManuscriptInk = androidx.compose.ui.graphics.Color(0xFF2E1A0B)
-internal val ManuscriptMutedInk = androidx.compose.ui.graphics.Color(0xFF806239)
+// Parchment palette — light values for day, deep manuscript values for night.
+private val ParchmentBgLight = androidx.compose.ui.graphics.Color(0xFFFAF3E0)
+private val ParchmentBgDark = androidx.compose.ui.graphics.Color(0xFF1A130A)
+private val ParchmentCardLight = androidx.compose.ui.graphics.Color(0xFFFFF8EA)
+private val ParchmentCardDark = androidx.compose.ui.graphics.Color(0xFF24180D)
+private val ParchmentBorderLight = androidx.compose.ui.graphics.Color(0x33806239)
+private val ParchmentBorderDark = androidx.compose.ui.graphics.Color(0x55D9AD52)
+private val ManuscriptInkLight = androidx.compose.ui.graphics.Color(0xFF2E1A0B)
+private val ManuscriptInkDark = androidx.compose.ui.graphics.Color(0xFFF1E2C4)
+private val ManuscriptMutedInkLight = androidx.compose.ui.graphics.Color(0xFF806239)
+private val ManuscriptMutedInkDark = androidx.compose.ui.graphics.Color(0xFFB89865)
+
+internal val ParchmentBg: androidx.compose.ui.graphics.Color
+    @androidx.compose.runtime.Composable
+    @androidx.compose.runtime.ReadOnlyComposable
+    get() = if (androidx.compose.foundation.isSystemInDarkTheme()) ParchmentBgDark else ParchmentBgLight
+
+internal val ParchmentCard: androidx.compose.ui.graphics.Color
+    @androidx.compose.runtime.Composable
+    @androidx.compose.runtime.ReadOnlyComposable
+    get() = if (androidx.compose.foundation.isSystemInDarkTheme()) ParchmentCardDark else ParchmentCardLight
+
+internal val ParchmentBorder: androidx.compose.ui.graphics.Color
+    @androidx.compose.runtime.Composable
+    @androidx.compose.runtime.ReadOnlyComposable
+    get() = if (androidx.compose.foundation.isSystemInDarkTheme()) ParchmentBorderDark else ParchmentBorderLight
+
+internal val ManuscriptInk: androidx.compose.ui.graphics.Color
+    @androidx.compose.runtime.Composable
+    @androidx.compose.runtime.ReadOnlyComposable
+    get() = if (androidx.compose.foundation.isSystemInDarkTheme()) ManuscriptInkDark else ManuscriptInkLight
+
+internal val ManuscriptMutedInk: androidx.compose.ui.graphics.Color
+    @androidx.compose.runtime.Composable
+    @androidx.compose.runtime.ReadOnlyComposable
+    get() = if (androidx.compose.foundation.isSystemInDarkTheme()) ManuscriptMutedInkDark else ManuscriptMutedInkLight
+
 internal val ManuscriptAccent = BrandGold
