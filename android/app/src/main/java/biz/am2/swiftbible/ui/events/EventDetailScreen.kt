@@ -139,7 +139,7 @@ private fun PageDots(current: Int, total: Int, accent: Color) {
 }
 
 private fun isUnlocked(day: EventReadingDay, today: LocalDate = LocalDate.now()): Boolean =
-    !day.date.isAfter(today)
+    biz.am2.swiftbible.BuildConfig.DEBUG || !day.date.isAfter(today)
 
 @Composable
 private fun EventDayPage(

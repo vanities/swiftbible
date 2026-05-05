@@ -146,7 +146,7 @@ fun MarkdownText(
                 BlockType.H1 -> MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
                 BlockType.H2 -> MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
                 BlockType.H3 -> MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
-                BlockType.Quote -> bodyStyle.copy(fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.primary)
+                BlockType.Quote -> bodyStyle.copy(fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 BlockType.BodyParagraph -> bodyStyle
             }
             val isHeader = block.type in listOf(BlockType.H1, BlockType.H2, BlockType.H3)
