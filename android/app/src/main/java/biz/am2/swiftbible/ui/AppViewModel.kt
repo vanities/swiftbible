@@ -160,6 +160,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun setTheme(t: biz.am2.swiftbible.ui.theme.ReadingTheme) = viewModelScope.launch { prefs.setTheme(t) }
     fun setOnboarded(b: Boolean) = viewModelScope.launch { prefs.setOnboarded(b) }
     fun setShowSummaries(b: Boolean) = viewModelScope.launch { prefs.setShowSummaries(b) }
+    fun setHideBars(b: Boolean) = viewModelScope.launch { prefs.setHideBars(b) }
     fun setLast(book: String, chapter: Int) = viewModelScope.launch { prefs.setLast(book, chapter) }
 
     fun bookByName(name: String): Book? = bible.value.allBooks.firstOrNull { it.name == name }

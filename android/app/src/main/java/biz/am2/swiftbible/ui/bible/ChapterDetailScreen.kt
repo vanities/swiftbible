@@ -105,46 +105,48 @@ fun ChapterDetailScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(
-                            text = "$bookName $chapterNumber",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                        chapterTitle?.let {
+            if (!prefs.hideBars) {
+                TopAppBar(
+                    title = {
+                        Column {
                             Text(
-                                text = it,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.primary,
+                                text = "$bookName $chapterNumber",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.SemiBold,
                             )
+                            chapterTitle?.let {
+                                Text(
+                                    text = it,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                            }
                         }
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    IconButton(
-                        onClick = { onJumpChapter(chapterNumber - 1) },
-                        enabled = chapterNumber > 1,
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.NavigateBefore, contentDescription = "Previous chapter")
-                    }
-                    IconButton(
-                        onClick = { onJumpChapter(chapterNumber + 1) },
-                        enabled = chapterNumber < totalChapters,
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = "Next chapter")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                ),
-            )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        }
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = { onJumpChapter(chapterNumber - 1) },
+                            enabled = chapterNumber > 1,
+                        ) {
+                            Icon(Icons.AutoMirrored.Filled.NavigateBefore, contentDescription = "Previous chapter")
+                        }
+                        IconButton(
+                            onClick = { onJumpChapter(chapterNumber + 1) },
+                            enabled = chapterNumber < totalChapters,
+                        ) {
+                            Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = "Next chapter")
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                    ),
+                )
+            }
         },
         containerColor = MaterialTheme.colorScheme.background,
     ) { padding ->

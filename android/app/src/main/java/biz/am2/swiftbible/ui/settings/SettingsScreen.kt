@@ -99,6 +99,11 @@ fun SettingsScreen(
                 checked = prefs.showSummaries,
                 onChange = { appVm.setShowSummaries(it) },
             )
+            ToggleRow(
+                label = "Hide bars while reading",
+                checked = prefs.hideBars,
+                onChange = { appVm.setHideBars(it) },
+            )
 
             SectionHeader("Bible translation")
             VersionRow(prefs.version) { appVm.setVersion(it) }

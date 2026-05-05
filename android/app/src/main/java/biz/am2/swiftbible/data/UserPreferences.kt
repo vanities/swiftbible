@@ -32,6 +32,7 @@ class UserPreferences(private val context: Context) {
         val THEME = stringPreferencesKey("theme")
         val ONBOARDED = booleanPreferencesKey("onboarded")
         val SHOW_SUMMARIES = booleanPreferencesKey("show_summaries")
+        val HIDE_BARS = booleanPreferencesKey("hide_bars")
         val LAST_BOOK = stringPreferencesKey("last_book")
         val LAST_CHAPTER = intPreferencesKey("last_chapter")
     }
@@ -52,6 +53,7 @@ class UserPreferences(private val context: Context) {
         val theme: ReadingTheme = ReadingTheme.SYSTEM,
         val onboarded: Boolean = false,
         val showSummaries: Boolean = true,
+        val hideBars: Boolean = false,
         val lastBook: String? = null,
         val lastChapter: Int = 1,
     )
@@ -73,6 +75,7 @@ class UserPreferences(private val context: Context) {
             theme = ReadingTheme.fromName(p[Keys.THEME] ?: ReadingTheme.SYSTEM.name),
             onboarded = p[Keys.ONBOARDED] ?: false,
             showSummaries = p[Keys.SHOW_SUMMARIES] ?: true,
+            hideBars = p[Keys.HIDE_BARS] ?: false,
             lastBook = p[Keys.LAST_BOOK],
             lastChapter = p[Keys.LAST_CHAPTER] ?: 1,
         )
@@ -93,6 +96,7 @@ class UserPreferences(private val context: Context) {
     suspend fun setTheme(t: ReadingTheme) = update { it[Keys.THEME] = t.name }
     suspend fun setOnboarded(b: Boolean) = update { it[Keys.ONBOARDED] = b }
     suspend fun setShowSummaries(b: Boolean) = update { it[Keys.SHOW_SUMMARIES] = b }
+    suspend fun setHideBars(b: Boolean) = update { it[Keys.HIDE_BARS] = b }
     suspend fun setLast(book: String, chapter: Int) = update {
         it[Keys.LAST_BOOK] = book
         it[Keys.LAST_CHAPTER] = chapter
