@@ -38,6 +38,9 @@ class UserPreferences(private val context: Context) {
         val REMINDER_ENABLED = booleanPreferencesKey("reminder_enabled")
         val REMINDER_HOUR = intPreferencesKey("reminder_hour")
         val REMINDER_MINUTE = intPreferencesKey("reminder_minute")
+        val HAPPY_MOMENT_COUNT = intPreferencesKey("happy_moment_count")
+        val DONATION_OPT_OUT = booleanPreferencesKey("donation_opt_out")
+        val LAST_REVIEW_PROMPTED_AT = intPreferencesKey("last_review_prompted_at")
     }
 
     data class Snapshot(
@@ -62,6 +65,9 @@ class UserPreferences(private val context: Context) {
         val reminderEnabled: Boolean = false,
         val reminderHour: Int = 21,
         val reminderMinute: Int = 0,
+        val happyMomentCount: Int = 0,
+        val donationOptOut: Boolean = false,
+        val lastReviewPromptedAt: Int = 0,
     )
 
     val snapshot: Flow<Snapshot> = context.dataStore.data.map { p ->
@@ -87,6 +93,9 @@ class UserPreferences(private val context: Context) {
             reminderEnabled = p[Keys.REMINDER_ENABLED] ?: false,
             reminderHour = p[Keys.REMINDER_HOUR] ?: 21,
             reminderMinute = p[Keys.REMINDER_MINUTE] ?: 0,
+            happyMomentCount = p[Keys.HAPPY_MOMENT_COUNT] ?: 0,
+            donationOptOut = p[Keys.DONATION_OPT_OUT] ?: false,
+            lastReviewPromptedAt = p[Keys.LAST_REVIEW_PROMPTED_AT] ?: 0,
         )
     }
 
@@ -114,6 +123,19 @@ class UserPreferences(private val context: Context) {
     suspend fun setReminderTime(hour: Int, minute: Int) = update {
         it[Keys.REMINDER_HOUR] = hour
         it[Keys.REMINDER_MINUTE] = minute
+    }
+
+    suspend fun setDonationOptOut(b: Boolean) = update { it[Keys.DONATION_OPT_OUT] = b }
+    suspend fun setLastReviewPromptedAt(count: Int) = update { it[Keys.LAST_REVIEW_PROMPTED_AT] = count }
+
+    suspend fun incrementHappyMomentCount(): Int {
+        var next = 0
+        context.dataStore.edit { p ->
+            val curr = p[Keys.HAPPY_MOMENT_COUNT] ?: 0
+            next = curr + 1
+            p[Keys.HAPPY_MOMENT_COUNT] = next
+        }
+        return next
     }
 
     private suspend fun update(block: (androidx.datastore.preferences.core.MutablePreferences) -> Unit) {

@@ -20,9 +20,11 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Public
+import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.automirrored.filled.LibraryBooks
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.IconButton
@@ -118,6 +120,10 @@ fun SettingsScreen(
 
             SectionHeader("Notifications")
             NavRow(Icons.Filled.Notifications, "Devotional Reminder") { onOpen("reminder") }
+
+            SectionHeader("Support SwiftBible")
+            NavRow(Icons.Filled.Favorite, "Donate") { appVm.showDonationPrompt() }
+            NavRow(Icons.Filled.Receipt, "Donation history") { onOpen("donation_history") }
 
             SectionHeader("Bible translation")
             VersionRow(prefs.version) { appVm.setVersion(it) }

@@ -223,6 +223,7 @@ fun ChapterDetailScreen(
                         biz.am2.swiftbible.data.Analytics.Event.VerseHighlighted,
                         mapOf("book" to bookName, "chapter" to chapterNumber, "verse" to verse, "color" to color),
                     )
+                    appVm.recordHappyMoment()
                 }
                 highlightVerse = null
             },
@@ -233,6 +234,7 @@ fun ChapterDetailScreen(
                     biz.am2.swiftbible.data.Analytics.Event.VerseBookmarked,
                     mapOf("book" to bookName, "chapter" to chapterNumber, "verse" to verse),
                 )
+                appVm.recordHappyMoment()
                 highlightVerse = null
             },
             onCopy = {
@@ -242,10 +244,12 @@ fun ChapterDetailScreen(
             },
             onShare = {
                 shareVerse(ctx, "$bookName $chapterNumber:$verse", verseText)
+                appVm.recordHappyMoment()
                 highlightVerse = null
             },
             onExplain = {
                 explainVerse = Triple(bookName, chapterNumber, verse)
+                appVm.recordHappyMoment()
                 highlightVerse = null
             },
         )
@@ -267,6 +271,7 @@ fun ChapterDetailScreen(
             onDismiss = { noteVerse = null },
             onSave = { text ->
                 appVm.saveNote(bookName, chapterNumber, verse, text)
+                if (text.isNotBlank()) appVm.recordHappyMoment()
                 noteVerse = null
             },
         )

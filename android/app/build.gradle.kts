@@ -105,6 +105,12 @@ dependencies {
     // PostHog analytics
     implementation("com.posthog:posthog-android:3.13.0")
 
+    // Google Play Billing (donations)
+    implementation("com.android.billingclient:billing-ktx:7.1.1")
+
+    // Google Play In-App Review
+    implementation("com.google.android.play:review-ktx:2.0.2")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

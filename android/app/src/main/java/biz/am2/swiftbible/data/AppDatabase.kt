@@ -81,6 +81,20 @@ data class SavedDevotionalEntity(
     val createdAt: Long = System.currentTimeMillis(),
 )
 
+@Entity(
+    tableName = "donations",
+    indices = [Index(value = ["purchaseToken"], unique = true)],
+)
+data class DonationRecord(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val purchaseToken: String,
+    val productId: String,
+    val amountCents: Int,
+    val currency: String = "USD",
+    val purchaseTime: Long = System.currentTimeMillis(),
+    val status: String = "completed",
+)
+
 @Dao
 interface HighlightDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -159,9 +173,31 @@ interface SavedDevotionalDao {
     suspend fun byDate(date: String): SavedDevotionalEntity?
 }
 
+@Dao
+interface DonationDao {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(d: DonationRecord)
+
+    @Query("SELECT * FROM donations ORDER BY purchaseTime DESC")
+    fun all(): Flow<List<DonationRecord>>
+
+    @Query("SELECT COALESCE(SUM(amountCents), 0) FROM donations WHERE status='completed'")
+    fun totalPaidCents(): Flow<Int>
+
+    @Query("SELECT COUNT(*) FROM donations WHERE status='completed'")
+    fun donationCount(): Flow<Int>
+}
+
 @Database(
-    entities = [Highlight::class, NoteEntity::class, HistoryEntity::class, BookmarkEntity::class, SavedDevotionalEntity::class],
-    version = 2,
+    entities = [
+        Highlight::class,
+        NoteEntity::class,
+        HistoryEntity::class,
+        BookmarkEntity::class,
+        SavedDevotionalEntity::class,
+        DonationRecord::class,
+    ],
+    version = 3,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -170,6 +206,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
     abstract fun bookmarkDao(): BookmarkDao
     abstract fun savedDevotionalDao(): SavedDevotionalDao
+    abstract fun donationDao(): DonationDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null

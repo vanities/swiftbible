@@ -30,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import biz.am2.swiftbible.R
 import biz.am2.swiftbible.data.AppEventRegistry
 import biz.am2.swiftbible.ui.bible.BibleScreen
@@ -40,6 +41,9 @@ import biz.am2.swiftbible.ui.events.EventDetailScreen
 import biz.am2.swiftbible.ui.more.MoreScreen
 import biz.am2.swiftbible.ui.onboarding.OnboardingScreen
 import biz.am2.swiftbible.ui.search.SearchScreen
+import biz.am2.swiftbible.ui.donations.DonationCelebrationDialog
+import biz.am2.swiftbible.ui.donations.DonationHistoryScreen
+import biz.am2.swiftbible.ui.donations.DonationPromptDialog
 import biz.am2.swiftbible.ui.settings.BookmarksScreen
 import biz.am2.swiftbible.ui.settings.DevotionalReminderScreen
 import biz.am2.swiftbible.ui.settings.HighlightsScreen
@@ -66,6 +70,19 @@ fun SwiftBibleApp(appVm: AppViewModel) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val prefs by appVm.prefsState.collectAsState()
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val activity = context as? android.app.Activity
+    val showDonation by appVm.showDonationPrompt.collectAsState()
+    val celebration by appVm.donationCelebration.collectAsState()
+    val pendingReview by appVm.pendingReviewRequest.collectAsState()
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+
+    androidx.compose.runtime.LaunchedEffect(pendingReview) {
+        if (pendingReview && activity != null) {
+            scope.launch { biz.am2.swiftbible.donations.InAppReviewService.request(activity) }
+            appVm.consumeReviewRequest()
+        }
+    }
 
     AnimatedVisibility(
         visible = !prefs.onboarded,
@@ -246,7 +263,25 @@ fun SwiftBibleApp(appVm: AppViewModel) {
                     )
                 }
             }
+            composable("donation_history") {
+                DonationHistoryScreen(appVm = appVm, onBack = { navController.popBackStack() })
+            }
         }
+    }
+
+    if (showDonation && activity != null) {
+        DonationPromptDialog(
+            appVm = appVm,
+            activity = activity,
+            onDismiss = { appVm.dismissDonationPrompt() },
+        )
+    }
+
+    celebration?.let { record ->
+        DonationCelebrationDialog(
+            record = record,
+            onDismiss = { appVm.dismissDonationCelebration() },
+        )
     }
 }
 

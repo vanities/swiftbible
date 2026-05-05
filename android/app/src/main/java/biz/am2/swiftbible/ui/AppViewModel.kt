@@ -67,6 +67,28 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val savedDevotionals: Flow<List<SavedDevotionalEntity>> = db.savedDevotionalDao().all()
     val chaptersRead: Flow<Int> = db.historyDao().chaptersRead()
     val totalVisits: Flow<Int?> = db.historyDao().totalVisits()
+    val donations: Flow<List<biz.am2.swiftbible.data.DonationRecord>> = db.donationDao().all()
+    val totalDonatedCents: Flow<Int> = db.donationDao().totalPaidCents()
+
+    private val _showDonationPrompt = MutableStateFlow(false)
+    val showDonationPrompt: StateFlow<Boolean> = _showDonationPrompt.asStateFlow()
+    private val _donationCelebration = MutableStateFlow<biz.am2.swiftbible.data.DonationRecord?>(null)
+    val donationCelebration: StateFlow<biz.am2.swiftbible.data.DonationRecord?> = _donationCelebration.asStateFlow()
+    private val _pendingReviewRequest = MutableStateFlow(false)
+    val pendingReviewRequest: StateFlow<Boolean> = _pendingReviewRequest.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            biz.am2.swiftbible.donations.DonationService.get(application).events.collect { event ->
+                when (event) {
+                    is biz.am2.swiftbible.donations.DonationService.Event.Completed -> {
+                        _donationCelebration.value = event.record
+                    }
+                    else -> { /* surface failure UI later if needed */ }
+                }
+            }
+        }
+    }
 
     suspend fun fetchDevotional(date: java.time.LocalDate) = devotionals.fetch(date)
 
@@ -213,6 +235,36 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun visitChapter(book: String, chapter: Int) = viewModelScope.launch {
         db.historyDao().visit(book, chapter)
         prefs.setLast(book, chapter)
+    }
+
+    fun recordHappyMoment() = viewModelScope.launch {
+        if (biz.am2.swiftbible.BuildConfig.DEBUG) return@launch
+        when (biz.am2.swiftbible.donations.HappyMomentTracker.record(prefs)) {
+            biz.am2.swiftbible.donations.HappyMomentTracker.Action.PromptReview -> {
+                _pendingReviewRequest.value = true
+            }
+            biz.am2.swiftbible.donations.HappyMomentTracker.Action.PromptDonation -> {
+                if (!prefs.snapshot.first().donationOptOut) _showDonationPrompt.value = true
+            }
+            biz.am2.swiftbible.donations.HappyMomentTracker.Action.None -> {}
+        }
+    }
+
+    fun consumeReviewRequest() {
+        _pendingReviewRequest.value = false
+    }
+
+    fun showDonationPrompt() {
+        _showDonationPrompt.value = true
+    }
+
+    fun dismissDonationPrompt(optOut: Boolean = false) = viewModelScope.launch {
+        _showDonationPrompt.value = false
+        if (optOut) prefs.setDonationOptOut(true)
+    }
+
+    fun dismissDonationCelebration() {
+        _donationCelebration.value = null
     }
 
     suspend fun chapterTitle(book: String, chapter: Int) = summaries.chapterTitle(book, chapter)
