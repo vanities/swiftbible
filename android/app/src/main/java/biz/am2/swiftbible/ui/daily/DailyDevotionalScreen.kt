@@ -145,6 +145,7 @@ fun DailyDevotionalScreen(
                 },
                 favoriteEnabled = state is DevState.Loaded,
                 isToday = selectedDate == LocalDate.now(),
+                devotional = (state as? DevState.Loaded)?.devotional,
             )
 
             Column(
@@ -188,6 +189,7 @@ private fun DateBar(
     onToggleFavorite: () -> Unit,
     favoriteEnabled: Boolean,
     isToday: Boolean,
+    devotional: DailyDevotional? = null,
 ) {
     Row(
         modifier = Modifier
@@ -228,6 +230,13 @@ private fun DateBar(
                 tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+        if (devotional != null) {
+            biz.am2.swiftbible.ui.components.DevotionalBadge(
+                devotionalType = devotional.devotional_type,
+                holidayName = devotional.holiday_name,
+                model = devotional.model,
+            )
+        }
     }
 }
 
@@ -251,23 +260,6 @@ private fun Loaded(
     onShare: () -> Unit,
 ) {
     Column {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            biz.am2.swiftbible.ui.components.DevotionalBadge(
-                devotionalType = devotional.devotional_type,
-                holidayName = devotional.holiday_name,
-                model = devotional.model,
-            )
-            Spacer(Modifier.size(10.dp))
-            Text(
-                text = badgeLabel(devotional),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
         if (!devotional.series_name.isNullOrBlank()) {
             Box(
                 modifier = Modifier
@@ -349,12 +341,6 @@ private fun handleVerseLink(url: String): Triple<String, Int, Int>? {
     val chapter = u.getQueryParameter("chapter")?.toIntOrNull() ?: return null
     val verse = u.getQueryParameter("verse")?.toIntOrNull() ?: 1
     return Triple(book, chapter, verse)
-}
-
-private fun badgeLabel(d: DailyDevotional): String = when {
-    d.devotional_type == "custom" -> "Hand-crafted by Adam"
-    !d.holiday_name.isNullOrBlank() -> d.holiday_name!!
-    else -> biz.am2.swiftbible.ui.components.AIAttribution.displayName(d.model)
 }
 
 private val REFERENCE_REGEX = Regex("""^([1-3]?\s?[A-Za-z]+(?:\s[A-Za-z]+)*?)\s+(\d+)(?::(\d+))?""")
