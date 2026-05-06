@@ -53,7 +53,8 @@ fun parseMarkdown(
         val text = buffer.toString().trim()
         if (text.isNotEmpty()) {
             val type = bufferType ?: BlockType.BodyParagraph
-            out.add(MarkdownBlock(buildInline(text, bodyColor, linkColor), type, text))
+            val isHeading = type in listOf(BlockType.H1, BlockType.H2, BlockType.H3)
+            out.add(MarkdownBlock(buildInline(text, bodyColor, linkColor, linkRefs = !isHeading), type, text))
         }
         buffer.clear()
         bufferType = null
@@ -94,9 +95,10 @@ private fun buildInline(
     text: String,
     bodyColor: androidx.compose.ui.graphics.Color,
     linkColor: androidx.compose.ui.graphics.Color,
+    linkRefs: Boolean = true,
 ): AnnotatedString {
     val base = buildBaseInline(text, bodyColor, linkColor)
-    return augmentWithBibleRefs(base, linkColor)
+    return if (linkRefs) augmentWithBibleRefs(base, linkColor) else base
 }
 
 private fun augmentWithBibleRefs(
