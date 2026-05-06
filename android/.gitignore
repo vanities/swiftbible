@@ -19,6 +19,7 @@ Thumbs.db
 keystore.properties
 service-account.json
 google-play-key.json
+play-key.json
 
 # APKs / AABs
 *.apk

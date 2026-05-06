@@ -5,6 +5,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
@@ -21,6 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -41,9 +46,11 @@ import biz.am2.swiftbible.ui.events.EventDetailScreen
 import biz.am2.swiftbible.ui.more.MoreScreen
 import biz.am2.swiftbible.ui.onboarding.OnboardingScreen
 import biz.am2.swiftbible.ui.search.SearchScreen
+import biz.am2.swiftbible.ui.splash.BookOpeningSplash
 import biz.am2.swiftbible.ui.donations.DonationCelebrationDialog
 import biz.am2.swiftbible.ui.donations.DonationHistoryScreen
 import biz.am2.swiftbible.ui.donations.DonationPromptDialog
+import biz.am2.swiftbible.ui.donations.DonorPerksScreen
 import biz.am2.swiftbible.ui.history.ChurchHistoryScreen
 import biz.am2.swiftbible.ui.history.HistoryArticleScreen
 import biz.am2.swiftbible.ui.history.HistorySectionScreen
@@ -69,10 +76,27 @@ private val tabs = listOf(Tab.Bible, Tab.Devotional, Tab.More, Tab.Search)
 
 @Composable
 fun SwiftBibleApp(appVm: AppViewModel) {
+    var splashFinished by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        SwiftBibleAppContent(appVm = appVm)
+        AnimatedVisibility(
+            visible = !splashFinished,
+            enter = fadeIn(),
+            exit = fadeOut(animationSpec = androidx.compose.animation.core.tween(400)),
+        ) {
+            BookOpeningSplash(onFinished = { splashFinished = true })
+        }
+    }
+}
+
+@Composable
+private fun SwiftBibleAppContent(appVm: AppViewModel) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val prefs by appVm.prefsState.collectAsState()
+    val prefsLoaded by appVm.prefsLoaded.collectAsState()
     val context = androidx.compose.ui.platform.LocalContext.current
     val activity = context as? android.app.Activity
     val showDonation by appVm.showDonationPrompt.collectAsState()
@@ -87,14 +111,26 @@ fun SwiftBibleApp(appVm: AppViewModel) {
         }
     }
 
+    if (!prefsLoaded) return
+
+    val pendingFeatures by appVm.pendingOnboardingFeatures.collectAsState()
+    val showOnboarding = pendingFeatures.isNotEmpty()
+
     AnimatedVisibility(
-        visible = !prefs.onboarded,
+        visible = showOnboarding,
         enter = fadeIn(),
         exit = fadeOut() + slideOutHorizontally(),
     ) {
-        OnboardingScreen(onDone = { appVm.setOnboarded(true) })
+        OnboardingScreen(
+            features = pendingFeatures,
+            onDone = { appVm.completeOnboarding(pendingFeatures) },
+            onSetReminder = {
+                appVm.completeOnboarding(pendingFeatures)
+                navController.navigate("reminder")
+            },
+        )
     }
-    if (!prefs.onboarded) return
+    if (showOnboarding) return
 
     Scaffold(
         bottomBar = {
@@ -283,6 +319,9 @@ fun SwiftBibleApp(appVm: AppViewModel) {
             }
             composable("donation_history") {
                 DonationHistoryScreen(appVm = appVm, onBack = { navController.popBackStack() })
+            }
+            composable("donor_perks") {
+                DonorPerksScreen(appVm = appVm, onBack = { navController.popBackStack() })
             }
             composable("church_history") {
                 ChurchHistoryScreen(

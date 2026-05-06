@@ -98,18 +98,33 @@ private val SepiaColors = lightColorScheme(
 
 val LocalReadingTheme = staticCompositionLocalOf { ReadingTheme.SYSTEM }
 
+/** Parses `#RRGGBB` or `RRGGBB`. Returns null on empty/bad input. */
+private fun parseHexColor(hex: String): Color? {
+    val trimmed = hex.trim().removePrefix("#")
+    if (trimmed.length != 6) return null
+    return runCatching { Color(android.graphics.Color.parseColor("#$trimmed")) }.getOrNull()
+}
+
 @Composable
 fun SwiftBibleTheme(
     theme: ReadingTheme = ReadingTheme.SYSTEM,
+    customAccentHex: String = "",
     content: @Composable () -> Unit,
 ) {
     val systemDark = isSystemInDarkTheme()
-    val colors = when (theme) {
+    val baseColors = when (theme) {
         ReadingTheme.LIGHT -> LightColors
         ReadingTheme.DARK -> DarkColors
         ReadingTheme.SEPIA -> SepiaColors
         ReadingTheme.SYSTEM -> if (systemDark) DarkColors else LightColors
     }
+    val accent = parseHexColor(customAccentHex)
+    val colors = if (accent != null) {
+        baseColors.copy(
+            primary = accent,
+            inversePrimary = accent.copy(alpha = 0.85f),
+        )
+    } else baseColors
     val view = LocalView.current
     val isDark = theme == ReadingTheme.DARK || (theme == ReadingTheme.SYSTEM && systemDark)
     if (!view.isInEditMode) {

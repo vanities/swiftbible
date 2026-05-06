@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val appVm: AppViewModel = viewModel(factory = AppViewModel.Factory)
             val prefs by appVm.prefsState.collectAsState()
-            SwiftBibleTheme(theme = prefs.theme) {
+            SwiftBibleTheme(theme = prefs.theme, customAccentHex = prefs.customAccentHex) {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     SwiftBibleApp(appVm = appVm)
                 }

@@ -1,0 +1,168 @@
+name: Release Android
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'android/app/**'
+      - 'android/build.gradle.kts'
+      - 'android/gradle.properties'
+      - '.github/workflows/release-android.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version
+        id: version
+        run: |
+          set -euo pipefail
+          gradle="android/app/build.gradle.kts"
+          versionName=$(grep -E '^[[:space:]]*versionName = ' "$gradle" \
+            | sed -E 's/.*versionName = "([^"]+)".*/\1/' | head -1)
+          versionCode=$(grep -E '^[[:space:]]*versionCode = ' "$gradle" \
+            | sed -E 's/.*versionCode = ([0-9]+).*/\1/' | head -1)
+          if [ -z "$versionName" ] || [ -z "$versionCode" ]; then
+            echo "::error::Could not parse versionName/versionCode from $gradle"
+            exit 1
+          fi
+          tag="android-v${versionName}-${versionCode}"
+          {
+            echo "versionName=$versionName"
+            echo "versionCode=$versionCode"
+            echo "tag=$tag"
+          } >> "$GITHUB_OUTPUT"
+          echo "Detected: versionName=$versionName, versionCode=$versionCode → tag $tag"
+
+      - name: Skip if already shipped
+        id: check
+        run: |
+          set -euo pipefail
+          tag="${{ steps.version.outputs.tag }}"
+          if git rev-parse --verify --quiet "refs/tags/$tag" >/dev/null; then
+            echo "Tag $tag already exists locally — skipping."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          elif git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+            echo "Tag $tag already exists on remote — skipping."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up JDK 17
+        if: steps.check.outputs.exists == 'false'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        if: steps.check.outputs.exists == 'false'
+        uses: android-actions/setup-android@v3
+
+      - name: Decode upload keystore
+        if: steps.check.outputs.exists == 'false'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+        run: |
+          set -euo pipefail
+          if [ -z "${KEYSTORE_BASE64:-}" ]; then
+            echo "::error::RELEASE_KEYSTORE_BASE64 secret is missing. Generate locally with:  base64 -i android/release.keystore | pbcopy"
+            exit 1
+          fi
+          printf "%s" "$KEYSTORE_BASE64" | base64 -d > android/app/release.keystore
+          size=$(wc -c < android/app/release.keystore)
+          echo "Wrote android/app/release.keystore ($size bytes)"
+
+      - name: Write keystore.properties
+        if: steps.check.outputs.exists == 'false'
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          for var in KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            if [ -z "${!var:-}" ]; then
+              echo "::error::Repo secret $var is missing"
+              exit 1
+            fi
+          done
+          cat > android/keystore.properties <<EOF
+          storeFile=release.keystore
+          storePassword=${KEYSTORE_PASSWORD}
+          keyAlias=${KEY_ALIAS}
+          keyPassword=${KEY_PASSWORD}
+          EOF
+          echo "Wrote android/keystore.properties"
+
+      - name: Write play-key.json
+        if: steps.check.outputs.exists == 'false'
+        env:
+          PLAY_KEY_JSON: ${{ secrets.PLAY_KEY_JSON }}
+        run: |
+          set -euo pipefail
+          if [ -z "${PLAY_KEY_JSON:-}" ]; then
+            echo "::error::PLAY_KEY_JSON secret is missing"
+            exit 1
+          fi
+          printf "%s" "$PLAY_KEY_JSON" > android/play-key.json
+          # Sanity-check it parses as JSON
+          if ! python3 -c "import json,sys;json.load(open('android/play-key.json'))"; then
+            echo "::error::PLAY_KEY_JSON is not valid JSON"
+            exit 1
+          fi
+          echo "Wrote android/play-key.json"
+
+      - name: Build release bundle
+        if: steps.check.outputs.exists == 'false'
+        working-directory: android
+        run: |
+          set -euo pipefail
+          ./gradlew clean :app:bundleRelease --stacktrace
+          aab="app/build/outputs/bundle/release/app-release.aab"
+          if [ ! -f "$aab" ]; then
+            echo "::error::Build did not produce $aab"
+            exit 1
+          fi
+          ls -lh "$aab"
+
+      - name: Publish to internal track
+        if: steps.check.outputs.exists == 'false'
+        working-directory: android
+        run: |
+          set -euo pipefail
+          ./gradlew :app:publishBundle \
+            --track=internal \
+            --release-status=completed \
+            --stacktrace
+
+      - name: Tag release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION_NAME: ${{ steps.version.outputs.versionName }}
+          VERSION_CODE: ${{ steps.version.outputs.versionCode }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Android $VERSION_NAME (build $VERSION_CODE)"
+          git push origin "$TAG"
+          echo "Tagged $TAG at $GITHUB_SHA"
+
+      - name: Cleanup credentials
+        if: always()
+        run: |
+          rm -f android/app/release.keystore android/keystore.properties android/play-key.json
+          echo "Removed credential files"

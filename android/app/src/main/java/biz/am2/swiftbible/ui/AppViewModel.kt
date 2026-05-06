@@ -20,12 +20,16 @@ import biz.am2.swiftbible.data.UserPreferences
 import biz.am2.swiftbible.model.Book
 import biz.am2.swiftbible.model.BookCatalog
 import biz.am2.swiftbible.model.Version
+import biz.am2.swiftbible.ui.onboarding.OnboardingFeature
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -59,6 +63,41 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val bible: StateFlow<BibleState> = _bible.asStateFlow()
 
     val prefsState = prefs.snapshot.stateIn(viewModelScope, SharingStarted.Eagerly, UserPreferences.Snapshot())
+    val prefsLoaded: StateFlow<Boolean> = prefs.snapshot
+        .map { true }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+    /**
+     * Onboarding cases this device can actually run. Resolved once on launch
+     * because availability is per-device (e.g. EXPLAIN requires Gemini Nano).
+     * The seed value is empty so the gate stays closed until the real check
+     * resolves — preventing a flash of an unsupported page.
+     */
+    private val availableOnboardingCases: StateFlow<List<OnboardingFeature>> = flow {
+        emit(OnboardingFeature.availableCases())
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+    /**
+     * Onboarding features the user should see next.
+     *
+     * - First launch (`onboarded == false`): every available feature (full welcome tour).
+     * - Subsequent launches: only features added since the last completion ("What's New").
+     *
+     * Mirrors `OnboardingPreferences.pendingFeatures()` on iOS. The list is empty
+     * when the user is up-to-date, which gates the onboarding sheet off.
+     */
+    val pendingOnboardingFeatures: StateFlow<List<OnboardingFeature>> = combine(
+        prefs.snapshot,
+        availableOnboardingCases,
+    ) { snap, available ->
+        if (available.isEmpty()) {
+            emptyList()
+        } else if (!snap.onboarded) {
+            available
+        } else {
+            available.filter { it.id !in snap.seenOnboardingFeatures }
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     val highlights: Flow<List<Highlight>> = db.highlightDao().all()
     val notes: Flow<List<NoteEntity>> = db.noteDao().all()
@@ -87,6 +126,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     else -> { /* surface failure UI later if needed */ }
                 }
             }
+        }
+        // Kick off Gemini Nano model download on supported devices so the
+        // first Explain tap doesn't sit on the loading spinner. No-ops on
+        // unsupported devices.
+        viewModelScope.launch {
+            biz.am2.swiftbible.data.GeminiNanoExplainer.prefetchModel()
         }
     }
 
@@ -181,6 +226,15 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun setFontFamily(f: biz.am2.swiftbible.ui.theme.ReadingFont) = viewModelScope.launch { prefs.setFontFamily(f) }
     fun setTheme(t: biz.am2.swiftbible.ui.theme.ReadingTheme) = viewModelScope.launch { prefs.setTheme(t) }
     fun setOnboarded(b: Boolean) = viewModelScope.launch { prefs.setOnboarded(b) }
+
+    /** Mark the given onboarding features as seen and flag the user as onboarded. */
+    fun completeOnboarding(features: List<OnboardingFeature>) = viewModelScope.launch {
+        prefs.markOnboardingFeaturesSeen(features.map { it.id })
+        prefs.setOnboarded(true)
+    }
+
+    /** Wipe seen features + onboarded flag so the next launch re-runs the full tour. */
+    fun replayOnboarding() = viewModelScope.launch { prefs.resetOnboarding() }
     fun setShowSummaries(b: Boolean) = viewModelScope.launch { prefs.setShowSummaries(b) }
     fun setHideBars(b: Boolean) = viewModelScope.launch { prefs.setHideBars(b) }
     fun setForceShowEvents(b: Boolean) = viewModelScope.launch { prefs.setForceShowEvents(b) }
@@ -268,8 +322,38 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         _donationCelebration.value = null
     }
 
-    suspend fun chapterTitle(book: String, chapter: Int) = summaries.chapterTitle(book, chapter)
-    suspend fun passageSummaries(book: String, chapter: Int) = summaries.passageSummaries(book, chapter)
+    suspend fun chapterTitle(book: String, chapter: Int) =
+        summaries.chapterTitle(book, chapter, prefsState.value.summarySource)
+    suspend fun passageSummaries(book: String, chapter: Int) =
+        summaries.passageSummaries(book, chapter, prefsState.value.summarySource)
+
+    fun setSummarySource(source: biz.am2.swiftbible.data.SummarySource) =
+        viewModelScope.launch { prefs.setSummarySource(source) }
+
+    fun setDonationOptOut(optOut: Boolean) =
+        viewModelScope.launch { prefs.setDonationOptOut(optOut) }
+
+    private val _cacheSizeBytes = MutableStateFlow(0L)
+    val cacheSizeBytes: StateFlow<Long> = _cacheSizeBytes.asStateFlow()
+
+    fun refreshCacheSize() = viewModelScope.launch {
+        _cacheSizeBytes.value = devotionals.cacheSizeBytes()
+    }
+
+    fun clearAllCache() = viewModelScope.launch {
+        devotionals.clearAllCache()
+        _cacheSizeBytes.value = devotionals.cacheSizeBytes()
+    }
+
+    fun setCustomAccentHex(hex: String) = viewModelScope.launch { prefs.setCustomAccentHex(hex) }
+
+    /**
+     * True when the user has shown active financial support (donations) — gates donor-perks UI.
+     * In DEBUG builds, always true so we can preview the screen.
+     */
+    val canAccessDonorPerks: StateFlow<Boolean> = totalDonatedCents
+        .map { biz.am2.swiftbible.BuildConfig.DEBUG || it > 0 }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, biz.am2.swiftbible.BuildConfig.DEBUG)
 
     companion object {
         val Factory = object : ViewModelProvider.AndroidViewModelFactory() {

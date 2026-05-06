@@ -6,6 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.google.devtools.ksp") version "2.0.21-1.0.28"
+    id("com.github.triplet.play")
 }
 
 val keystorePropsFile = rootProject.file("keystore.properties")
@@ -54,6 +55,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+        // ML Kit GenAI 1.0.0-beta2 ships compiled with Kotlin 2.2 metadata; until we
+        // bump the project Kotlin version, allow consuming higher metadata versions.
+        freeCompilerArgs += listOf("-Xskip-metadata-version-check")
     }
 
     buildFeatures {
@@ -70,6 +74,18 @@ android {
     bundle {
         language { enableSplit = false }
     }
+}
+
+play {
+    val playKey = rootProject.file("play-key.json")
+    if (playKey.exists()) {
+        serviceAccountCredentials.set(playKey)
+    } else {
+        enabled.set(false)
+    }
+    track.set("internal")
+    defaultToAppBundles.set(true)
+    releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.DRAFT)
 }
 
 dependencies {
@@ -110,6 +126,9 @@ dependencies {
 
     // Google Play In-App Review
     implementation("com.google.android.play:review-ktx:2.0.2")
+
+    // ML Kit GenAI Prompt API (on-device Gemini Nano via AICore)
+    implementation("com.google.mlkit:genai-prompt:1.0.0-beta2")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

@@ -22,7 +22,16 @@ import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.filled.Replay
+import androidx.compose.material.icons.filled.SdStorage
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.automirrored.filled.LibraryBooks
@@ -112,6 +121,7 @@ fun SettingsScreen(
                 checked = prefs.showSummaries,
                 onChange = { appVm.setShowSummaries(it) },
             )
+            StudyNotesRow(prefs.summarySource) { appVm.setSummarySource(it) }
             ToggleRow(
                 label = "Hide bars while reading",
                 checked = prefs.hideBars,
@@ -121,9 +131,21 @@ fun SettingsScreen(
             SectionHeader("Notifications")
             NavRow(Icons.Filled.Notifications, "Devotional Reminder") { onOpen("reminder") }
 
+            SectionHeader("Storage")
+            StorageSection(appVm = appVm)
+
             SectionHeader("Support SwiftBible")
             NavRow(Icons.Filled.Favorite, "Donate") { appVm.showDonationPrompt() }
             NavRow(Icons.Filled.Receipt, "Donation history") { onOpen("donation_history") }
+            ToggleRow(
+                label = "Donation reminder popup",
+                checked = !prefs.donationOptOut,
+                onChange = { appVm.setDonationOptOut(!it) },
+            )
+            val canPerks by appVm.canAccessDonorPerks.collectAsState()
+            if (canPerks) {
+                NavRow(Icons.Filled.AutoAwesome, "Donor Perks") { onOpen("donor_perks") }
+            }
 
             SectionHeader("Bible translation")
             VersionRow(prefs.version) { appVm.setVersion(it) }
@@ -145,6 +167,9 @@ fun SettingsScreen(
 
             SectionHeader("About")
             NavRow(Icons.AutoMirrored.Filled.LibraryBooks, "Text sources") { onOpen("text_sources") }
+            NavRow(Icons.Filled.AutoAwesome, "Replay Welcome Tour") {
+                appVm.replayOnboarding()
+            }
             AboutLinks()
 
             if (biz.am2.swiftbible.BuildConfig.DEBUG) {
@@ -154,6 +179,9 @@ fun SettingsScreen(
                     checked = prefs.forceShowEvents,
                     onChange = { appVm.setForceShowEvents(it) },
                 )
+                NavRow(Icons.Filled.Replay, "Reset onboarding (full tour)") {
+                    appVm.replayOnboarding()
+                }
             }
 
             Spacer(Modifier.size(40.dp))
@@ -219,6 +247,116 @@ private fun ToggleRow(label: String, checked: Boolean, onChange: (Boolean) -> Un
                 checkedTrackColor = MaterialTheme.colorScheme.primary,
             ),
         )
+    }
+}
+
+@Composable
+private fun StorageSection(appVm: AppViewModel) {
+    val cacheBytes by appVm.cacheSizeBytes.collectAsState()
+    var showConfirm by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { appVm.refreshCacheSize() }
+
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(36.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainer),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                Icons.Filled.SdStorage,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+        Spacer(Modifier.size(14.dp))
+        Text("Cache size", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Text(
+            biz.am2.swiftbible.data.formatBytes(cacheBytes),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+    NavRow(Icons.Filled.DeleteSweep, "Clear all cache") { showConfirm = true }
+
+    if (showConfirm) {
+        AlertDialog(
+            onDismissRequest = { showConfirm = false },
+            title = { Text("Clear all cache?") },
+            text = {
+                Text(
+                    "This will clear ${biz.am2.swiftbible.data.formatBytes(cacheBytes)} of cached devotionals. " +
+                        "You can always re-download devotionals when you view them."
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    appVm.clearAllCache()
+                    showConfirm = false
+                }) { Text("Clear", color = MaterialTheme.colorScheme.error) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showConfirm = false }) { Text("Cancel") }
+            },
+        )
+    }
+}
+
+@Composable
+private fun StudyNotesRow(
+    current: biz.am2.swiftbible.data.SummarySource,
+    onPick: (biz.am2.swiftbible.data.SummarySource) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(36.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainer),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                Icons.Filled.MenuBook,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+        Spacer(Modifier.size(14.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                "Study Notes",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+            Text(
+                current.displayName,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Box {
+            OutlinedButton(onClick = { expanded = true }, shape = RoundedCornerShape(20.dp)) {
+                Text(current.displayName)
+            }
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                biz.am2.swiftbible.data.SummarySource.entries.forEach { s ->
+                    DropdownMenuItem(
+                        text = { Text(s.displayName) },
+                        onClick = { onPick(s); expanded = false },
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -363,6 +501,19 @@ private fun AboutLinks() {
             android.net.Uri.parse("https://github.com/vanities/swiftbible"),
         )
         runCatching { context.startActivity(intent) }
+    }
+    NavRow(Icons.Filled.Star, "Rate on Play Store") {
+        val intent = android.content.Intent(
+            android.content.Intent.ACTION_VIEW,
+            android.net.Uri.parse("market://details?id=biz.am2.swiftbible"),
+        ).apply { addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK) }
+        runCatching { context.startActivity(intent) }.onFailure {
+            val web = android.content.Intent(
+                android.content.Intent.ACTION_VIEW,
+                android.net.Uri.parse("https://play.google.com/store/apps/details?id=biz.am2.swiftbible"),
+            )
+            runCatching { context.startActivity(web) }
+        }
     }
     NavRow(Icons.Filled.Public, "Website") {
         val intent = android.content.Intent(

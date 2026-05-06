@@ -42,6 +42,9 @@ class UserPreferences(private val context: Context) {
         val DONATION_OPT_OUT = booleanPreferencesKey("donation_opt_out")
         val LAST_REVIEW_PROMPTED_AT = intPreferencesKey("last_review_prompted_at")
         val FORCE_SHOW_EVENTS = booleanPreferencesKey("force_show_events")
+        val SEEN_ONBOARDING_FEATURES = stringPreferencesKey("onboarding_seen_features")
+        val SUMMARY_SOURCE = stringPreferencesKey("summary_source")
+        val CUSTOM_ACCENT_HEX = stringPreferencesKey("custom_accent_hex")
     }
 
     data class Snapshot(
@@ -70,6 +73,9 @@ class UserPreferences(private val context: Context) {
         val donationOptOut: Boolean = false,
         val lastReviewPromptedAt: Int = 0,
         val forceShowEvents: Boolean = false,
+        val seenOnboardingFeatures: Set<String> = emptySet(),
+        val summarySource: SummarySource = SummarySource.Default,
+        val customAccentHex: String = "",
     )
 
     val snapshot: Flow<Snapshot> = context.dataStore.data.map { p ->
@@ -99,6 +105,12 @@ class UserPreferences(private val context: Context) {
             donationOptOut = p[Keys.DONATION_OPT_OUT] ?: false,
             lastReviewPromptedAt = p[Keys.LAST_REVIEW_PROMPTED_AT] ?: 0,
             forceShowEvents = p[Keys.FORCE_SHOW_EVENTS] ?: false,
+            seenOnboardingFeatures = (p[Keys.SEEN_ONBOARDING_FEATURES] ?: "")
+                .split(',')
+                .filter { it.isNotBlank() }
+                .toSet(),
+            summarySource = SummarySource.fromId(p[Keys.SUMMARY_SOURCE]),
+            customAccentHex = p[Keys.CUSTOM_ACCENT_HEX] ?: "",
         )
     }
 
@@ -126,6 +138,25 @@ class UserPreferences(private val context: Context) {
     suspend fun setReminderTime(hour: Int, minute: Int) = update {
         it[Keys.REMINDER_HOUR] = hour
         it[Keys.REMINDER_MINUTE] = minute
+    }
+
+    suspend fun markOnboardingFeaturesSeen(ids: Collection<String>) = context.dataStore.edit { p ->
+        val current = (p[Keys.SEEN_ONBOARDING_FEATURES] ?: "")
+            .split(',')
+            .filter { it.isNotBlank() }
+            .toMutableSet()
+        current.addAll(ids)
+        p[Keys.SEEN_ONBOARDING_FEATURES] = current.sorted().joinToString(",")
+    }
+
+    suspend fun resetOnboarding() = context.dataStore.edit { p ->
+        p.remove(Keys.SEEN_ONBOARDING_FEATURES)
+        p[Keys.ONBOARDED] = false
+    }
+
+    suspend fun setSummarySource(source: SummarySource) = update { it[Keys.SUMMARY_SOURCE] = source.id }
+    suspend fun setCustomAccentHex(hex: String) = update {
+        if (hex.isBlank()) it.remove(Keys.CUSTOM_ACCENT_HEX) else it[Keys.CUSTOM_ACCENT_HEX] = hex
     }
 
     suspend fun setDonationOptOut(b: Boolean) = update { it[Keys.DONATION_OPT_OUT] = b }

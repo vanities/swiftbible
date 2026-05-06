@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.SwiftBible" parent="Theme.SplashScreen">
+        <!-- Match iOS: solid deep navy launch, no icon. Compose splash takes over. -->
         <item name="windowSplashScreenBackground">@color/brand_deep_navy</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_transparent</item>
+        <item name="windowSplashScreenAnimationDuration">0</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/brand_deep_navy</item>
         <item name="postSplashScreenTheme">@style/Theme.SwiftBible.Main</item>
     </style>
     <style name="Theme.SwiftBible.Main" parent="android:Theme.Material.NoActionBar">
