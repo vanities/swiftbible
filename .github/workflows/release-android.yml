@@ -142,14 +142,9 @@ jobs:
         working-directory: android
         run: |
           set -euo pipefail
-          # Bootstrap: app is still in Play "draft" state (never launched).
-          # The Play API rejects --release-status=completed on a draft app.
-          # After the first manual promotion in Play Console, flip this to
-          # --release-status=completed so subsequent releases ship without
-          # any manual click-through.
           ./gradlew :app:publishBundle \
             --track=internal \
-            --release-status=draft \
+            --release-status=completed \
             --stacktrace
 
       - name: Tag release
