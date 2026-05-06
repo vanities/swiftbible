@@ -75,7 +75,7 @@ Use only when you skipped internal entirely.
 
 ## What this skill does NOT do
 
-- Does not bump version. Run `/bump-android-version` first if you need a new versionCode.
+- Does not bump version. Run `/bump-version --android-only` first if you need a new versionCode.
 - Does not commit or tag (CI tagging happens in `release-android.yml` after a successful publish).
 - Does not handle keystore setup. Run `android/scripts/generate_keystore.sh` separately.
 - Does not push iOS. Use the iOS `app-store-listing` skill / `submit-version` flow.
@@ -84,4 +84,4 @@ Use only when you skipped internal entirely.
 
 - `gradle-play-publisher` does not have a `--dry-run`. To preview without affecting Play, leave the `play{}` block in `app/build.gradle.kts` set to `track=internal` + `releaseStatus=DRAFT` (current default) and run `./gradlew :app:publishBundle` without overrides — drafts on internal aren't visible to anyone.
 - Google Play does **not** require a separate "submit for review" step. Uploading to a production-grade track triggers review automatically.
-- If the Play API rejects the bundle for `versionCode already exists`, run `/bump-android-version --build` and try again.
+- If the Play API rejects the bundle for `versionCode already exists`, run `/bump-version --android-only --build` and try again.

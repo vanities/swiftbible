@@ -1,70 +1,85 @@
 ---
-description: Bump the SwiftBible iOS app version (MARKETING_VERSION + CURRENT_PROJECT_VERSION) in swiftbible.xcodeproj/project.pbxproj. Use when shipping a release. Default bumps the marketing version by 0.01 and increments the build number; accepts an explicit version like `1.40` or `--build` for build-number-only.
+description: Bump SwiftBible's marketing version + build number on iOS and Android in lockstep. Default bumps both platforms; `--ios-only` / `--android-only` scopes to one. Use when shipping a release.
 disable-model-invocation: true
-argument-hint: [<explicit-version> | --build | --major]
+argument-hint: [<explicit-version> | --build | --major] [--ios-only | --android-only]
 allowed-tools: Bash(grep:*) Bash(sed:*) Read Edit
 ---
 
-# Bump SwiftBible app version
+# Bump SwiftBible app version (iOS + Android)
 
-This skill updates the iOS app version in the Xcode project file.
+Updates marketing version and build number in **both** the iOS Xcode project and the Android Gradle build, keeping them in sync. iOS and Android share the same `versionName` (marketing) but each has its own build counter.
 
-**Two version fields, both in `swiftbible.xcodeproj/project.pbxproj`:**
+## Files this skill touches
 
-| Field | Format | Purpose | Apple-facing |
-|-------|--------|---------|--------------|
-| `MARKETING_VERSION` | `X.YY` (e.g. `1.36`) | Public/App-Store-visible version | Yes — `CFBundleShortVersionString` |
-| `CURRENT_PROJECT_VERSION` | integer (e.g. `1`, `2`) | Build number; must increment per App Store submission | Yes — `CFBundleVersion` |
+| Platform | File | Marketing field | Build field |
+|---|---|---|---|
+| iOS | `swiftbible.xcodeproj/project.pbxproj` | `MARKETING_VERSION` | `CURRENT_PROJECT_VERSION` |
+| Android | `android/app/build.gradle.kts` | `versionName` | `versionCode` |
 
-Both fields appear 8 times in the pbxproj (one per build configuration × target). Always update with `replace_all` to keep all targets in sync — never edit just one occurrence.
+iOS fields appear 8 times each in pbxproj (one per build configuration × target) — always update with `replace_all`. Android fields appear once each.
 
-## Behavior by argument
+`versionCode` cannot decrease — Google Play rejects uploads ≤ what's already on the track.
+
+## Scope
+
+- **No flag** (default): bump both platforms.
+- **`--ios-only`**: only update the pbxproj.
+- **`--android-only`**: only update the gradle file.
+
+## Bump rules
+
+These apply to whichever platform(s) are in scope:
 
 ### No arguments (default)
 
-Bump `MARKETING_VERSION` by 0.01 (e.g. 1.36 → 1.37) and increment `CURRENT_PROJECT_VERSION` by 1 (e.g. 1 → 2). This matches the convention of recent SwiftBible releases.
+Bump marketing version by 0.01 (e.g. 1.40 → 1.41), increment build by 1.
 
-### Explicit version (e.g. `1.40`, `2.0`)
+### Explicit version (e.g. `1.50`, `2.0`)
 
-Set `MARKETING_VERSION` to the provided value. Increment `CURRENT_PROJECT_VERSION` by 1.
+Set marketing version to the value, increment build by 1.
 
 ### `--build`
 
-Only increment `CURRENT_PROJECT_VERSION`. `MARKETING_VERSION` stays put. Useful for re-submission of the same marketing version (e.g. after a TestFlight rejection).
+Increment build only. Marketing version stays put. Use for resubmission of the same marketing version after a rejection.
 
 ### `--major`
 
-Bump `MARKETING_VERSION` by 1 and reset the second decimal to 0 (e.g. 1.36 → 2.0). Increment `CURRENT_PROJECT_VERSION` by 1.
+Bump major (e.g. 1.40 → 2.0), increment build by 1.
 
 ## Workflow
 
-1. Read current values from the pbxproj:
+1. Read both files' current values:
    ```bash
    grep -E "MARKETING_VERSION|CURRENT_PROJECT_VERSION" swiftbible.xcodeproj/project.pbxproj | sort -u
+   grep -E 'versionCode|versionName' android/app/build.gradle.kts
    ```
-2. Verify each field appears 8 times (one per config × target). If counts diverge, stop and ask — non-uniform version state may need manual triage.
-3. Compute the new values per the argument rules above.
-4. Apply both updates via `Edit` with `replace_all=true`.
-5. Re-grep to verify. The output of step 1 should show the new values, still 8 each.
-6. Report the bump in the form `1.36 (build 1) → 1.37 (build 2)`.
+2. If the two platforms' marketing versions disagree, **stop and ask** which to use as the basis (or whether the user wants to resync them). Don't auto-pick.
+3. For iOS pbxproj fields, verify `grep -c "MARKETING_VERSION = X.YY"` returns 8 (one per config × target). If not, stop and check.
+4. Compute new values per the bump rules.
+5. Apply edits:
+   - iOS: `Edit` with `replace_all=true` for both fields.
+   - Android: single `Edit` per field (each appears once).
+6. Re-grep to verify. iOS fields should still be 8 each.
+7. Report: `1.40 (iOS build 5, Android build 5) → 1.41 (iOS build 6, Android build 6)`.
 
 ## What this skill does NOT do
 
-- Does not touch any other field in the pbxproj.
-- Does not commit or push. The user runs `/ship` (or commits manually) afterward.
-- Does not update `CHANGELOG.md`, App Store metadata, release notes, or other markdown docs. If the user wants release notes, they should ask separately.
-- Does not bump server-side versions (Edge Functions, migrations). Those have their own deploy cadence.
+- Does not commit or push. Run `/ship` (iOS) and/or `/ship-android` afterward.
+- Does not update App Store metadata, release notes, or `CHANGELOG.md`. Ask separately.
+- Does not bump server-side versions (Edge Functions, migrations).
 
 ## Examples
 
 ```text
-/bump-version                # 1.36 (build 1) → 1.37 (build 2)
-/bump-version 1.40           # 1.36 (build 1) → 1.40 (build 2)
-/bump-version --build        # 1.36 (build 1) → 1.36 (build 2)
-/bump-version --major        # 1.36 (build 1) → 2.0  (build 2)
+/bump-version                       # both: 1.40(5/5) → 1.41(6/6)
+/bump-version 1.50                  # both: 1.40(5/5) → 1.50(6/6)
+/bump-version --build               # both: 1.40(5/5) → 1.40(6/6)
+/bump-version --major               # both: 1.40(5/5) → 2.0(6/6)
+/bump-version --ios-only            # only iOS:     1.40(5) → 1.41(6)
+/bump-version 1.50 --android-only   # only Android: 1.40(5) → 1.50(6)
 ```
 
 ## Safety notes
 
-- `swiftbible.xcodeproj/project.pbxproj` is also occasionally edited by other Claude sessions or by Xcode itself when files are added/removed. Before running this skill, ensure no in-progress structural changes are pending. The skill operates only on the version fields, but the file is shared.
-- If `grep -c "MARKETING_VERSION = X.YY"` returns a number other than 8 before bumping, do not proceed without checking with the user.
+- pbxproj is shared with Xcode and other Claude sessions. Before running, ensure no structural changes (file adds/removes) are pending.
+- If iOS and Android marketing versions have diverged for legitimate reasons (rare), use the platform-scoped flags rather than the unified bump.
