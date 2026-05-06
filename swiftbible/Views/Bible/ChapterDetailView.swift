@@ -492,7 +492,8 @@ struct ChapterDetailView: View {
                         version: currentBook.version.rawValue,
                         book: currentBook.name,
                         chapter: currentChapter.number,
-                        startingVerse: selectedParagraph!.startingVerse
+                        startingVerse: selectedParagraph!.startingVerse,
+                        color: highlightedColor
                     )
 
                     let wasAdding = alreadyHighlighted == nil
@@ -691,9 +692,10 @@ struct ChapterDetailView: View {
 
     @ViewBuilder
     private func paragraphContent(paragraph: Paragraph, isHighlighted: Bool, isBookmarked: Bool) -> some View {
-        let backgroundColor: Color = isHighlighted ? Color(hex: highlightedColor) : .clear
+        let effectiveHighlightHex = highlightColor(for: paragraph) ?? highlightedColor
+        let backgroundColor: Color = isHighlighted ? Color(hex: effectiveHighlightHex) : .clear
         let defaultTextColor: Color = readingTheme.isCustom ? readingTheme.textColor(for: colorScheme) : .primary
-        let foregroundColor: Color = isHighlighted ? Color(hex: highlightedColor).accessibleFontColor : defaultTextColor
+        let foregroundColor: Color = isHighlighted ? Color(hex: effectiveHighlightHex).accessibleFontColor : defaultTextColor
 
         ParagraphView(
             firstVerseNumber: paragraph.startingVerse,
@@ -722,6 +724,17 @@ struct ChapterDetailView: View {
             $0.startingVerse == paragraph.startingVerse &&
             $0.chapter == currentChapter.number
         }
+    }
+
+    private func highlightColor(for paragraph: Paragraph) -> String? {
+        let match = highlightedVerses.first {
+            $0.version == currentBook.version.rawValue &&
+            $0.book == currentBook.name &&
+            $0.startingVerse == paragraph.startingVerse &&
+            $0.chapter == currentChapter.number
+        }
+        guard let hex = match?.color, !hex.isEmpty else { return nil }
+        return hex
     }
 
     private func checkIfBookmarked(paragraph: Paragraph) -> Bool {
