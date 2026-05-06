@@ -75,7 +75,7 @@ private sealed class DevState {
 @Composable
 fun DailyDevotionalScreen(
     appVm: AppViewModel,
-    onOpenChapter: (String, Int) -> Unit,
+    onOpenVerse: (String, Int, Int?) -> Unit,
 ) {
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -165,9 +165,9 @@ fun DailyDevotionalScreen(
                                 color = MaterialTheme.colorScheme.onSurface,
                             ),
                             onLinkClick = { url ->
-                                handleVerseLink(url)?.let { (book, chapter, _) -> onOpenChapter(book, chapter) }
+                                handleVerseLink(url)?.let { (book, chapter, verse) -> onOpenVerse(book, chapter, verse) }
                             },
-                            onOpenChapter = onOpenChapter,
+                            onOpenVerse = onOpenVerse,
                             onShare = { share(ctx, s.devotional) },
                         )
                     }
@@ -247,10 +247,27 @@ private fun Loaded(
     devotional: DailyDevotional,
     bodyStyle: TextStyle,
     onLinkClick: (String) -> Unit,
-    onOpenChapter: (String, Int) -> Unit,
+    onOpenVerse: (String, Int, Int?) -> Unit,
     onShare: () -> Unit,
 ) {
     Column {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            biz.am2.swiftbible.ui.components.DevotionalBadge(
+                devotionalType = devotional.devotional_type,
+                holidayName = devotional.holiday_name,
+                model = devotional.model,
+            )
+            Spacer(Modifier.size(10.dp))
+            Text(
+                text = badgeLabel(devotional),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         if (!devotional.series_name.isNullOrBlank()) {
             Box(
                 modifier = Modifier
@@ -288,7 +305,7 @@ private fun Loaded(
             val anchorText = "${devotional.for_date} — ${devotional.anchor_verse}"
             val anchorModifier = if (parsed != null) {
                 Modifier
-                    .clickable { onOpenChapter(parsed.first, parsed.second) }
+                    .clickable { onOpenVerse(parsed.book, parsed.chapter, parsed.verse) }
                     .padding(bottom = 12.dp)
             } else {
                 Modifier.padding(bottom = 12.dp)
@@ -334,13 +351,22 @@ private fun handleVerseLink(url: String): Triple<String, Int, Int>? {
     return Triple(book, chapter, verse)
 }
 
-private val REFERENCE_REGEX = Regex("""^([1-3]?\s?[A-Za-z]+(?:\s[A-Za-z]+)*?)\s+(\d+)(?::\d+)?""")
+private fun badgeLabel(d: DailyDevotional): String = when {
+    d.devotional_type == "custom" -> "Hand-crafted by Adam"
+    !d.holiday_name.isNullOrBlank() -> d.holiday_name!!
+    else -> biz.am2.swiftbible.ui.components.AIAttribution.displayName(d.model)
+}
 
-private fun parseReference(raw: String): Pair<String, Int>? {
+private val REFERENCE_REGEX = Regex("""^([1-3]?\s?[A-Za-z]+(?:\s[A-Za-z]+)*?)\s+(\d+)(?::(\d+))?""")
+
+internal data class ParsedReference(val book: String, val chapter: Int, val verse: Int?)
+
+internal fun parseReference(raw: String): ParsedReference? {
     val match = REFERENCE_REGEX.find(raw.trim()) ?: return null
     val book = match.groupValues[1].replace(Regex("""\s+"""), " ").trim()
     val chapter = match.groupValues[2].toIntOrNull() ?: return null
-    return book to chapter
+    val verse = match.groupValues.getOrNull(3)?.toIntOrNull()
+    return ParsedReference(book, chapter, verse)
 }
 
 private fun share(ctx: android.content.Context, devotional: DailyDevotional) {

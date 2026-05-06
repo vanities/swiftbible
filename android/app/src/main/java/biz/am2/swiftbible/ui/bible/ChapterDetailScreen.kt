@@ -76,6 +76,7 @@ fun ChapterDetailScreen(
     onBack: () -> Unit,
     onJumpChapter: (Int) -> Unit,
     onCrossRef: (String, Int) -> Unit,
+    targetVerse: Int? = null,
 ) {
     val book = appVm.bookByName(bookName)
     val chapter = book?.chapters?.firstOrNull { it.number == chapterNumber }
@@ -158,7 +159,16 @@ fun ChapterDetailScreen(
         }
 
         val passageByVerse = remember(passages) { passages.associateBy { it.startVerse } }
+        val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+        LaunchedEffect(targetVerse, chapter.paragraphs.size) {
+            if (targetVerse != null) {
+                val index = chapter.paragraphs.indexOfFirst { it.startingVerse <= targetVerse &&
+                    (chapter.paragraphs.find { p -> p.startingVerse > it.startingVerse && p.startingVerse <= targetVerse } == null) }
+                if (index >= 0) listState.animateScrollToItem(index)
+            }
+        }
         LazyColumn(
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),

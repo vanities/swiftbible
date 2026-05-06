@@ -157,13 +157,24 @@ fun SwiftBibleApp(appVm: AppViewModel) {
                     onBack = { navController.popBackStack() },
                 )
             }
-            composable("chapter/{name}/{chapter}") { entry ->
+            composable(
+                route = "chapter/{name}/{chapter}?verse={verse}",
+                arguments = listOf(
+                    androidx.navigation.navArgument("verse") {
+                        type = androidx.navigation.NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    },
+                ),
+            ) { entry ->
                 val name = decode(entry.arguments?.getString("name") ?: "")
                 val ch = entry.arguments?.getString("chapter")?.toIntOrNull() ?: 1
+                val verse = entry.arguments?.getString("verse")?.toIntOrNull()
                 ChapterDetailScreen(
                     appVm = appVm,
                     bookName = name,
                     chapterNumber = ch,
+                    targetVerse = verse,
                     onBack = { navController.popBackStack() },
                     onJumpChapter = { newCh ->
                         navController.navigate("chapter/${encode(name)}/$newCh") {
@@ -178,7 +189,11 @@ fun SwiftBibleApp(appVm: AppViewModel) {
             composable(Tab.Devotional.route) {
                 DailyDevotionalScreen(
                     appVm = appVm,
-                    onOpenChapter = { book, chapter -> navController.navigate("chapter/${encode(book)}/$chapter") },
+                    onOpenVerse = { book, chapter, verse ->
+                        val route = if (verse != null) "chapter/${encode(book)}/$chapter?verse=$verse"
+                        else "chapter/${encode(book)}/$chapter"
+                        navController.navigate(route)
+                    },
                 )
             }
             composable(Tab.Search.route) {

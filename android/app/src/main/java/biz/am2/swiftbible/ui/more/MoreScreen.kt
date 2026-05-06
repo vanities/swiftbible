@@ -271,10 +271,10 @@ private fun EventCard(event: AppEvent, onClick: () -> Unit) {
 @Composable
 private fun HistoryHeroCard(onClick: () -> Unit) {
     val dark = androidx.compose.foundation.isSystemInDarkTheme()
-    val cardBg = if (dark) Color(0xFF24180D) else Color(0xFFF7E9C7)
-    val titleInk = if (dark) Color(0xFFF1E2C4) else Color(0xFF2E1A0B)
-    val bodyInk = if (dark) Color(0xFFB89865) else Color(0xFF5A4423)
-    val mutedInk = if (dark) Color(0xFFB89865) else Color(0xFF806239)
+    val cardBg = if (dark) MaterialTheme.colorScheme.surfaceContainer else Color(0xFFF7E9C7)
+    val titleInk = if (dark) MaterialTheme.colorScheme.onBackground else Color(0xFF2E1A0B)
+    val bodyInk = if (dark) MaterialTheme.colorScheme.onSurfaceVariant else Color(0xFF5A4423)
+    val mutedInk = if (dark) MaterialTheme.colorScheme.onSurfaceVariant else Color(0xFF806239)
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(18.dp),
