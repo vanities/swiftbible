@@ -41,6 +41,7 @@ class UserPreferences(private val context: Context) {
         val HAPPY_MOMENT_COUNT = intPreferencesKey("happy_moment_count")
         val DONATION_OPT_OUT = booleanPreferencesKey("donation_opt_out")
         val LAST_REVIEW_PROMPTED_AT = intPreferencesKey("last_review_prompted_at")
+        val FORCE_SHOW_EVENTS = booleanPreferencesKey("force_show_events")
     }
 
     data class Snapshot(
@@ -68,6 +69,7 @@ class UserPreferences(private val context: Context) {
         val happyMomentCount: Int = 0,
         val donationOptOut: Boolean = false,
         val lastReviewPromptedAt: Int = 0,
+        val forceShowEvents: Boolean = false,
     )
 
     val snapshot: Flow<Snapshot> = context.dataStore.data.map { p ->
@@ -96,6 +98,7 @@ class UserPreferences(private val context: Context) {
             happyMomentCount = p[Keys.HAPPY_MOMENT_COUNT] ?: 0,
             donationOptOut = p[Keys.DONATION_OPT_OUT] ?: false,
             lastReviewPromptedAt = p[Keys.LAST_REVIEW_PROMPTED_AT] ?: 0,
+            forceShowEvents = p[Keys.FORCE_SHOW_EVENTS] ?: false,
         )
     }
 
@@ -127,6 +130,7 @@ class UserPreferences(private val context: Context) {
 
     suspend fun setDonationOptOut(b: Boolean) = update { it[Keys.DONATION_OPT_OUT] = b }
     suspend fun setLastReviewPromptedAt(count: Int) = update { it[Keys.LAST_REVIEW_PROMPTED_AT] = count }
+    suspend fun setForceShowEvents(b: Boolean) = update { it[Keys.FORCE_SHOW_EVENTS] = b }
 
     suspend fun incrementHappyMomentCount(): Int {
         var next = 0

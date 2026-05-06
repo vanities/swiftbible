@@ -147,6 +147,15 @@ fun SettingsScreen(
             NavRow(Icons.AutoMirrored.Filled.LibraryBooks, "Text sources") { onOpen("text_sources") }
             AboutLinks()
 
+            if (biz.am2.swiftbible.BuildConfig.DEBUG) {
+                SectionHeader("Debug")
+                ToggleRow(
+                    label = "Force show events (Pentecost, etc.)",
+                    checked = prefs.forceShowEvents,
+                    onChange = { appVm.setForceShowEvents(it) },
+                )
+            }
+
             Spacer(Modifier.size(40.dp))
             About()
             Spacer(Modifier.size(96.dp))

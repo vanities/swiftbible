@@ -69,7 +69,9 @@ fun MoreScreen(
     val history by appVm.history.collectAsState(initial = emptyList())
     val chaptersRead by appVm.chaptersRead.collectAsState(initial = 0)
 
-    val events = AppEventRegistry.visible(forceAll = biz.am2.swiftbible.BuildConfig.DEBUG)
+    val events = AppEventRegistry.visible(
+        forceAll = biz.am2.swiftbible.BuildConfig.DEBUG && prefs.forceShowEvents,
+    )
 
     Scaffold(
         topBar = {
