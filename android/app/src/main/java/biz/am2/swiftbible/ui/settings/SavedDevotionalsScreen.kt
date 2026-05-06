@@ -92,7 +92,7 @@ fun SavedDevotionalsScreen(
             text = {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     MarkdownText(
-                        raw = d.message,
+                        raw = biz.am2.swiftbible.ui.components.stripJesusTags(d.message),
                         bodyStyle = TextStyle(
                             fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
                             fontSize = 15.sp(),

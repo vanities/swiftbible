@@ -10,6 +10,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -86,6 +87,70 @@ internal val TranslateBg = Color(0xFFEEF7C6)
 internal val SourcesTint = BrandGold
 internal val SourcesBg = Color(0xFFFFF4D4)
 
+enum class HighlightSort(val label: String) {
+    RECENT("Recent first"),
+    OLDEST("Oldest first"),
+    BOOK("Book order"),
+}
+
+@Composable
+private fun HighlightColorFilterRow(
+    palette: List<Long>,
+    selected: Long?,
+    onSelect: (Long?) -> Unit,
+) {
+    androidx.compose.foundation.lazy.LazyRow(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        item {
+            FilterDot(
+                selected = selected == null,
+                onClick = { onSelect(null) },
+                fill = MaterialTheme.colorScheme.surfaceContainer,
+                ring = MaterialTheme.colorScheme.outlineVariant,
+                label = "All",
+            )
+        }
+        items(items = palette) { c ->
+            FilterDot(
+                selected = selected == c,
+                onClick = { onSelect(if (selected == c) null else c) },
+                fill = Color(c),
+                ring = MaterialTheme.colorScheme.outlineVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun FilterDot(
+    selected: Boolean,
+    onClick: () -> Unit,
+    fill: Color,
+    ring: Color,
+    label: String? = null,
+) {
+    val borderWidth = if (selected) 2.dp else 1.dp
+    val borderColor = if (selected) MaterialTheme.colorScheme.primary else ring
+    val shape = if (label != null) RoundedCornerShape(50) else CircleShape
+    val widthMod = if (label != null) Modifier else Modifier.size(32.dp)
+    Box(
+        modifier = widthMod
+            .clip(shape)
+            .background(if (label != null) MaterialTheme.colorScheme.surfaceContainer else fill)
+            .border(borderWidth, borderColor, shape)
+            .clickable(onClick = onClick)
+            .padding(horizontal = if (label != null) 14.dp else 0.dp, vertical = if (label != null) 6.dp else 0.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (label != null) {
+            Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HighlightsScreen(
@@ -95,6 +160,40 @@ fun HighlightsScreen(
 ) {
     val list by appVm.highlights.collectAsState(initial = emptyList())
     val books = appVm.bible.collectAsState().value.allBooks.associateBy { it.name }
+    val bookOrder = remember(books) { books.keys.toList() }
+
+    var query by remember { mutableStateOf("") }
+    var sort by remember { mutableStateOf(HighlightSort.RECENT) }
+    var colorFilter by remember { mutableStateOf<Long?>(null) }
+
+    val palette = remember(list) { list.map { it.color }.distinct() }
+    val filtered = remember(list, query, sort, colorFilter, books) {
+        list.asSequence()
+            .filter { colorFilter == null || it.color == colorFilter }
+            .filter {
+                if (query.isBlank()) return@filter true
+                val text = books[it.book]?.chapters?.firstOrNull { c -> c.number == it.chapter }
+                    ?.paragraphs?.firstOrNull { p -> p.startingVerse == it.startingVerse }?.text.orEmpty()
+                val ref = "${it.book} ${it.chapter}:${it.startingVerse}"
+                ref.contains(query, ignoreCase = true) ||
+                    biz.am2.swiftbible.ui.components.stripJesusTags(text).contains(query, ignoreCase = true)
+            }
+            .let { seq ->
+                when (sort) {
+                    HighlightSort.RECENT -> seq.sortedByDescending { it.createdAt }
+                    HighlightSort.OLDEST -> seq.sortedBy { it.createdAt }
+                    HighlightSort.BOOK -> seq.sortedWith(
+                        compareBy(
+                            { bookOrder.indexOf(it.book).let { i -> if (i < 0) Int.MAX_VALUE else i } },
+                            { it.chapter },
+                            { it.startingVerse },
+                        )
+                    )
+                }
+            }
+            .toList()
+    }
+
     LibraryFrame(title = "Highlights", count = list.size, onBack = onBack) {
         if (list.isEmpty()) {
             BrandedEmpty(
@@ -105,38 +204,66 @@ fun HighlightsScreen(
                 subtitle = "Long-press any verse, then tap Highlight to mark it.",
             )
         } else EnterAnimation {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(list, key = { it.id }) { h ->
-                    val verseText = books[h.book]?.chapters?.firstOrNull { it.number == h.chapter }
-                        ?.paragraphs?.firstOrNull { it.startingVerse == h.startingVerse }?.text ?: ""
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onOpen(h.book, h.chapter) }
-                            .padding(horizontal = 20.dp, vertical = 14.dp),
-                        verticalAlignment = Alignment.Top,
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(width = 4.dp, height = 36.dp)
-                                .clip(CircleShape)
-                                .background(Color(h.color)),
+            Column(modifier = Modifier.fillMaxSize()) {
+                biz.am2.swiftbible.ui.components.LibraryToolbar(
+                    query = query,
+                    onQueryChange = { query = it },
+                    sortOptions = HighlightSort.entries,
+                    currentSort = sort,
+                    sortLabel = { it.label },
+                    onSortChange = { sort = it },
+                    placeholder = "Search highlights…",
+                )
+                if (palette.size > 1) {
+                    HighlightColorFilterRow(
+                        palette = palette,
+                        selected = colorFilter,
+                        onSelect = { colorFilter = it },
+                    )
+                }
+                if (filtered.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
+                        Text(
+                            "No highlights match.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        Spacer(Modifier.size(12.dp))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = "${h.book} ${h.chapter}:${h.startingVerse}",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = HighlightTint,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Spacer(Modifier.size(4.dp))
-                            Text(
-                                text = verseText,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                maxLines = 2,
-                            )
+                    }
+                } else {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(filtered, key = { it.id }) { h ->
+                            val verseText = books[h.book]?.chapters?.firstOrNull { it.number == h.chapter }
+                                ?.paragraphs?.firstOrNull { it.startingVerse == h.startingVerse }?.text ?: ""
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onOpen(h.book, h.chapter) }
+                                    .padding(horizontal = 20.dp, vertical = 14.dp),
+                                verticalAlignment = Alignment.Top,
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(width = 4.dp, height = 36.dp)
+                                        .clip(CircleShape)
+                                        .background(Color(h.color)),
+                                )
+                                Spacer(Modifier.size(12.dp))
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = "${h.book} ${h.chapter}:${h.startingVerse}",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = HighlightTint,
+                                        fontWeight = FontWeight.SemiBold,
+                                    )
+                                    Spacer(Modifier.size(4.dp))
+                                    Text(
+                                        text = biz.am2.swiftbible.ui.components.stripJesusTags(verseText),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        maxLines = 2,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -179,7 +306,7 @@ fun NotesScreen(
                         )
                         Spacer(Modifier.size(4.dp))
                         Text(
-                            text = n.text,
+                            text = biz.am2.swiftbible.ui.components.stripJesusTags(n.text),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             maxLines = 4,

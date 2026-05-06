@@ -311,7 +311,7 @@ private fun Loaded(
             )
         }
         MarkdownText(
-            raw = devotional.message,
+            raw = biz.am2.swiftbible.ui.components.stripJesusTags(devotional.message),
             bodyStyle = bodyStyle,
             onLinkClick = onLinkClick,
         )
