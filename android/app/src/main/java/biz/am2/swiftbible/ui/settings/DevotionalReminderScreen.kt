@@ -187,6 +187,10 @@ fun DevotionalReminderScreen(
                         Switch(
                             checked = prefs.reminderEnabled,
                             onCheckedChange = { wantOn ->
+                                biz.am2.swiftbible.data.Analytics.capture(
+                                    biz.am2.swiftbible.data.Analytics.Event.DevotionalReminderToggled,
+                                    mapOf("enabled" to wantOn),
+                                )
                                 if (wantOn) {
                                     if (hasNotifPermission()) {
                                         appVm.setReminderEnabled(true)

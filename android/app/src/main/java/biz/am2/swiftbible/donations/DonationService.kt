@@ -3,6 +3,7 @@ package biz.am2.swiftbible.donations
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import biz.am2.swiftbible.data.Analytics
 import biz.am2.swiftbible.data.AppDatabase
 import biz.am2.swiftbible.data.DonationRecord
 import com.android.billingclient.api.AcknowledgePurchaseParams
@@ -122,7 +123,17 @@ class DonationService private constructor(private val appContext: Context) : Pur
             )
             .build()
         val result = client.launchBillingFlow(activity, params)
-        return result.responseCode == BillingClient.BillingResponseCode.OK
+        val ok = result.responseCode == BillingClient.BillingResponseCode.OK
+        if (ok) {
+            Analytics.capture(
+                Analytics.Event.DonationPaymentSheetShown,
+                mapOf(
+                    "product_id" to product.productId,
+                    "amount_cents" to DonationProducts.amountCents(product.productId),
+                ),
+            )
+        }
+        return ok
     }
 
     override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Purchase>?) {
@@ -131,9 +142,17 @@ class DonationService private constructor(private val appContext: Context) : Pur
                 purchases?.forEach { p -> scope.launch { handlePurchase(p) } }
             }
             BillingClient.BillingResponseCode.USER_CANCELED -> {
+                Analytics.capture(Analytics.Event.DonationCancelled)
                 scope.launch { _events.emit(Event.Cancelled) }
             }
             else -> {
+                Analytics.capture(
+                    Analytics.Event.DonationFailed,
+                    mapOf(
+                        "code" to result.responseCode,
+                        "message" to result.debugMessage.ifBlank { "Purchase failed" },
+                    ),
+                )
                 scope.launch {
                     _events.emit(Event.Failed(result.debugMessage.ifBlank { "Purchase failed" }))
                 }
@@ -156,6 +175,14 @@ class DonationService private constructor(private val appContext: Context) : Pur
         val consumed = consume(purchase.purchaseToken)
         if (!consumed) acknowledge(purchase.purchaseToken)
 
+        Analytics.capture(
+            Analytics.Event.DonationCompleted,
+            mapOf(
+                "product_id" to productId,
+                "amount_cents" to record.amountCents,
+                "currency" to record.currency,
+            ),
+        )
         _events.emit(Event.Completed(record))
     }
 

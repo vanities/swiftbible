@@ -108,20 +108,50 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             SectionHeader("Reading")
-            ThemeRow(prefs.theme) { appVm.setTheme(it) }
-            FontRow(prefs.fontFamily) { appVm.setFontFamily(it) }
-            FontSizeRow(prefs.fontSize) { appVm.setFontSize(it) }
+            ThemeRow(prefs.theme) {
+                appVm.setTheme(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.ReadingThemeChanged,
+                    mapOf("theme" to it.name),
+                )
+            }
+            FontRow(prefs.fontFamily) {
+                appVm.setFontFamily(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.FontChanged,
+                    mapOf("font" to it.name),
+                )
+            }
+            FontSizeRow(prefs.fontSize) {
+                appVm.setFontSize(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.FontSizeChanged,
+                    mapOf("size" to it),
+                )
+            }
             ToggleRow(
                 label = "Jesus’s words in red",
                 checked = prefs.jesusRed,
-                onChange = { appVm.setJesusRed(it) },
+                onChange = {
+                    appVm.setJesusRed(it)
+                    biz.am2.swiftbible.data.Analytics.capture(
+                        biz.am2.swiftbible.data.Analytics.Event.JesusWordsToggled,
+                        mapOf("enabled" to it),
+                    )
+                },
             )
             ToggleRow(
                 label = "Show passage summaries",
                 checked = prefs.showSummaries,
                 onChange = { appVm.setShowSummaries(it) },
             )
-            StudyNotesRow(prefs.summarySource) { appVm.setSummarySource(it) }
+            StudyNotesRow(prefs.summarySource) {
+                appVm.setSummarySource(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.SummarySourceChanged,
+                    mapOf("source" to it.name),
+                )
+            }
             ToggleRow(
                 label = "Hide bars while reading",
                 checked = prefs.hideBars,
@@ -140,7 +170,14 @@ fun SettingsScreen(
             ToggleRow(
                 label = "Donation reminder popup",
                 checked = !prefs.donationOptOut,
-                onChange = { appVm.setDonationOptOut(!it) },
+                onChange = {
+                    appVm.setDonationOptOut(!it)
+                    if (!it) {
+                        biz.am2.swiftbible.data.Analytics.capture(
+                            biz.am2.swiftbible.data.Analytics.Event.DonationPromptOptedOut,
+                        )
+                    }
+                },
             )
             val canPerks by appVm.canAccessDonorPerks.collectAsState()
             if (canPerks) {
@@ -148,26 +185,83 @@ fun SettingsScreen(
             }
 
             SectionHeader("Bible translation")
-            VersionRow(prefs.version) { appVm.setVersion(it) }
+            VersionRow(prefs.version) {
+                appVm.setVersion(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.VersionChanged,
+                    mapOf("version" to it.shortName),
+                )
+            }
             ToggleRow(
                 label = "Group books by tradition",
                 checked = prefs.showThematic,
-                onChange = { appVm.setShowThematic(it) },
+                onChange = {
+                    appVm.setShowThematic(it)
+                    biz.am2.swiftbible.data.Analytics.capture(
+                        biz.am2.swiftbible.data.Analytics.Event.ThematicGroupingToggled,
+                        mapOf("enabled" to it),
+                    )
+                },
             )
             NavRow(Icons.Filled.Translate, "About translations") { onOpen("translations") }
 
             SectionHeader("Library extras")
-            ToggleRow("Apocrypha", prefs.showApocrypha) { appVm.setShowApocrypha(it) }
-            ToggleRow("Book of Enoch", prefs.showEnoch) { appVm.setShowEnoch(it) }
-            ToggleRow("2 Enoch (Secrets of Enoch)", prefs.show2Enoch) { appVm.setShow2Enoch(it) }
-            ToggleRow("Book of Jubilees", prefs.showJubilees) { appVm.setShowJubilees(it) }
-            ToggleRow("Testaments of the Twelve Patriarchs", prefs.showTestaments) { appVm.setShowTestaments(it) }
-            ToggleRow("Didache", prefs.showDidache) { appVm.setShowDidache(it) }
-            ToggleRow("1 Clement", prefs.show1Clement) { appVm.setShow1Clement(it) }
+            ToggleRow("Apocrypha", prefs.showApocrypha) {
+                appVm.setShowApocrypha(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.ApocryphaToggled,
+                    mapOf("enabled" to it),
+                )
+            }
+            ToggleRow("Book of Enoch", prefs.showEnoch) {
+                appVm.setShowEnoch(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.EnochToggled,
+                    mapOf("enabled" to it),
+                )
+            }
+            ToggleRow("2 Enoch (Secrets of Enoch)", prefs.show2Enoch) {
+                appVm.setShow2Enoch(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.SecondEnochToggled,
+                    mapOf("enabled" to it),
+                )
+            }
+            ToggleRow("Book of Jubilees", prefs.showJubilees) {
+                appVm.setShowJubilees(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.JubileesToggled,
+                    mapOf("enabled" to it),
+                )
+            }
+            ToggleRow("Testaments of the Twelve Patriarchs", prefs.showTestaments) {
+                appVm.setShowTestaments(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.TestamentsToggled,
+                    mapOf("enabled" to it),
+                )
+            }
+            ToggleRow("Didache", prefs.showDidache) {
+                appVm.setShowDidache(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.DidacheToggled,
+                    mapOf("enabled" to it),
+                )
+            }
+            ToggleRow("1 Clement", prefs.show1Clement) {
+                appVm.setShow1Clement(it)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.FirstClementToggled,
+                    mapOf("enabled" to it),
+                )
+            }
 
             SectionHeader("About")
             NavRow(Icons.AutoMirrored.Filled.LibraryBooks, "Text sources") { onOpen("text_sources") }
             NavRow(Icons.Filled.AutoAwesome, "Replay Welcome Tour") {
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.OnboardingReplayRequested,
+                )
                 appVm.replayOnboarding()
             }
             AboutLinks()

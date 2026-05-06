@@ -90,6 +90,20 @@ fun OnboardingScreen(
     val showsProgressChrome = features.size > 1
     val isLastPage = pagerState.currentPage == features.lastIndex
 
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        biz.am2.swiftbible.data.Analytics.capture(
+            biz.am2.swiftbible.data.Analytics.Event.OnboardingStarted,
+            mapOf("feature_count" to features.size),
+        )
+    }
+    androidx.compose.runtime.LaunchedEffect(pagerState.currentPage) {
+        val feature = features.getOrNull(pagerState.currentPage) ?: return@LaunchedEffect
+        biz.am2.swiftbible.data.Analytics.capture(
+            biz.am2.swiftbible.data.Analytics.Event.OnboardingFeatureViewed,
+            mapOf("feature" to feature.name, "index" to pagerState.currentPage),
+        )
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = BrandDeepNavy,
@@ -97,7 +111,13 @@ fun OnboardingScreen(
         Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
             HeaderRow(
                 stepLabel = if (showsProgressChrome) "Step ${pagerState.currentPage + 1} of ${features.size}" else null,
-                onSkip = onDone,
+                onSkip = {
+                    biz.am2.swiftbible.data.Analytics.capture(
+                        biz.am2.swiftbible.data.Analytics.Event.OnboardingSkipped,
+                        mapOf("at_index" to pagerState.currentPage, "feature_count" to features.size),
+                    )
+                    onDone()
+                },
             )
 
             if (showsProgressChrome) {
@@ -132,8 +152,13 @@ fun OnboardingScreen(
 
             Button(
                 onClick = {
-                    if (isLastPage) onDone()
-                    else scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                    if (isLastPage) {
+                        biz.am2.swiftbible.data.Analytics.capture(
+                            biz.am2.swiftbible.data.Analytics.Event.OnboardingCompleted,
+                            mapOf("feature_count" to features.size),
+                        )
+                        onDone()
+                    } else scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

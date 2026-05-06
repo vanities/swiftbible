@@ -150,6 +150,10 @@ private fun SwiftBibleAppContent(appVm: AppViewModel) {
                             selected = selected,
                             onClick = {
                                 if (!selected) {
+                                    biz.am2.swiftbible.data.Analytics.capture(
+                                        biz.am2.swiftbible.data.Analytics.Event.TabSwitched,
+                                        mapOf("from" to (currentRoute ?: "unknown"), "to" to tab.route),
+                                    )
                                     navController.navigate(tab.route) {
                                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                                         launchSingleTop = true

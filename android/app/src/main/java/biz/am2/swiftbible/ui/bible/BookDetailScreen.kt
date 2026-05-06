@@ -46,6 +46,10 @@ fun BookDetailScreen(
     var titles by remember(bookName) { mutableStateOf<Map<Int, String>>(emptyMap()) }
 
     LaunchedEffect(bookName) {
+        biz.am2.swiftbible.data.Analytics.capture(
+            biz.am2.swiftbible.data.Analytics.Event.BookOpened,
+            mapOf("book" to bookName),
+        )
         val chapters = book?.chapters ?: return@LaunchedEffect
         val resolved = mutableMapOf<Int, String>()
         for (ch in chapters) {

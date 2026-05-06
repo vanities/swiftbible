@@ -104,6 +104,13 @@ fun ChapterDetailScreen(
     val highlightMap = highlights.associate { it.startingVerse to it.color }
     val noteMap = notes.associate { it.startingVerse to it.text }
 
+    LaunchedEffect(bookName, chapterNumber) {
+        biz.am2.swiftbible.data.Analytics.capture(
+            biz.am2.swiftbible.data.Analytics.Event.ChapterViewed,
+            mapOf("book" to bookName, "chapter" to chapterNumber),
+        )
+    }
+
     Scaffold(
         topBar = {
             if (!prefs.hideBars) {
@@ -131,13 +138,25 @@ fun ChapterDetailScreen(
                     },
                     actions = {
                         IconButton(
-                            onClick = { onJumpChapter(chapterNumber - 1) },
+                            onClick = {
+                                biz.am2.swiftbible.data.Analytics.capture(
+                                    biz.am2.swiftbible.data.Analytics.Event.ChapterNavigated,
+                                    mapOf("book" to bookName, "from" to chapterNumber, "to" to (chapterNumber - 1), "direction" to "previous"),
+                                )
+                                onJumpChapter(chapterNumber - 1)
+                            },
                             enabled = chapterNumber > 1,
                         ) {
                             Icon(Icons.AutoMirrored.Filled.NavigateBefore, contentDescription = "Previous chapter")
                         }
                         IconButton(
-                            onClick = { onJumpChapter(chapterNumber + 1) },
+                            onClick = {
+                                biz.am2.swiftbible.data.Analytics.capture(
+                                    biz.am2.swiftbible.data.Analytics.Event.ChapterNavigated,
+                                    mapOf("book" to bookName, "from" to chapterNumber, "to" to (chapterNumber + 1), "direction" to "next"),
+                                )
+                                onJumpChapter(chapterNumber + 1)
+                            },
                             enabled = chapterNumber < totalChapters,
                         ) {
                             Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = "Next chapter")
@@ -198,9 +217,21 @@ fun ChapterDetailScreen(
                         highlightColor = highlightMap[paragraph.startingVerse]?.let { Color(it) },
                         hasNote = noteMap[paragraph.startingVerse] != null,
                         isBookmarked = paragraph.startingVerse in bookmarkSet,
-                        onLongPress = { highlightVerse = paragraph.startingVerse },
+                        onLongPress = {
+                            biz.am2.swiftbible.data.Analytics.capture(
+                                biz.am2.swiftbible.data.Analytics.Event.VerseActionMenu,
+                                mapOf("book" to bookName, "chapter" to chapterNumber, "verse" to paragraph.startingVerse),
+                            )
+                            highlightVerse = paragraph.startingVerse
+                        },
                         onCrossRef = onCrossRef,
-                        onNote = { noteVerse = paragraph.startingVerse },
+                        onNote = {
+                            biz.am2.swiftbible.data.Analytics.capture(
+                                biz.am2.swiftbible.data.Analytics.Event.VerseNoteOpened,
+                                mapOf("book" to bookName, "chapter" to chapterNumber, "verse" to paragraph.startingVerse),
+                            )
+                            noteVerse = paragraph.startingVerse
+                        },
                         onBookmark = { appVm.toggleBookmark(bookName, chapterNumber, paragraph.startingVerse) },
                     )
                 }
@@ -256,11 +287,19 @@ fun ChapterDetailScreen(
             },
             onShare = {
                 shareVerse(ctx, "$bookName $chapterNumber:$verse", verseText)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.VerseShared,
+                    mapOf("book" to bookName, "chapter" to chapterNumber, "verse" to verse),
+                )
                 appVm.recordHappyMoment()
                 highlightVerse = null
             },
             onExplain = {
                 explainVerse = Triple(bookName, chapterNumber, verse)
+                biz.am2.swiftbible.data.Analytics.capture(
+                    biz.am2.swiftbible.data.Analytics.Event.VerseExplained,
+                    mapOf("book" to bookName, "chapter" to chapterNumber, "verse" to verse),
+                )
                 appVm.recordHappyMoment()
                 highlightVerse = null
             },

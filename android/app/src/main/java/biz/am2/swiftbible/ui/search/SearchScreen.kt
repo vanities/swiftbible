@@ -78,6 +78,15 @@ fun SearchScreen(
         }
     }
 
+    androidx.compose.runtime.LaunchedEffect(query) {
+        if (query.length < 2) return@LaunchedEffect
+        kotlinx.coroutines.delay(500)
+        biz.am2.swiftbible.data.Analytics.capture(
+            biz.am2.swiftbible.data.Analytics.Event.SearchPerformed,
+            mapOf("query_length" to query.length, "result_count" to hits.size),
+        )
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -141,7 +150,13 @@ fun SearchScreen(
                                     hit = hit,
                                     query = query,
                                     jesusRed = prefs.jesusRed,
-                                    onClick = { onResultClick(hit.book, hit.chapter) },
+                                    onClick = {
+                                        biz.am2.swiftbible.data.Analytics.capture(
+                                            biz.am2.swiftbible.data.Analytics.Event.SearchResultTapped,
+                                            mapOf("book" to hit.book, "chapter" to hit.chapter, "verse" to hit.verse),
+                                        )
+                                        onResultClick(hit.book, hit.chapter)
+                                    },
                                 )
                             }
                         }

@@ -139,8 +139,19 @@ fun DailyDevotionalScreen(
                 isFavorite = saved,
                 onToggleFavorite = {
                     val current = (state as? DevState.Loaded)?.devotional ?: return@DateBar
-                    if (saved) appVm.unsaveDevotional(current.for_date)
-                    else appVm.saveDevotional(current)
+                    if (saved) {
+                        appVm.unsaveDevotional(current.for_date)
+                        Analytics.capture(
+                            Analytics.Event.DevotionalUnsaved,
+                            mapOf("date" to current.for_date),
+                        )
+                    } else {
+                        appVm.saveDevotional(current)
+                        Analytics.capture(
+                            Analytics.Event.DevotionalSaved,
+                            mapOf("date" to current.for_date),
+                        )
+                    }
                     saved = !saved
                 },
                 favoriteEnabled = state is DevState.Loaded,
@@ -169,7 +180,13 @@ fun DailyDevotionalScreen(
                                 handleVerseLink(url)?.let { (book, chapter, verse) -> onOpenVerse(book, chapter, verse) }
                             },
                             onOpenVerse = onOpenVerse,
-                            onShare = { share(ctx, s.devotional) },
+                            onShare = {
+                                Analytics.capture(
+                                    Analytics.Event.DevotionalCopied,
+                                    mapOf("date" to s.devotional.for_date),
+                                )
+                                share(ctx, s.devotional)
+                            },
                         )
                     }
                     is DevState.None -> NoDevotional(date = selectedDate, message = s.message)

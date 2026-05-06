@@ -61,6 +61,13 @@ fun DonationPromptDialog(
 
     val recurring = totalCents > 0
 
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        biz.am2.swiftbible.data.Analytics.capture(
+            biz.am2.swiftbible.data.Analytics.Event.DonationPromptShown,
+            mapOf("recurring" to recurring, "total_cents" to totalCents),
+        )
+    }
+
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(
             shape = RoundedCornerShape(20.dp),
@@ -137,6 +144,14 @@ fun DonationPromptDialog(
                 Button(
                     onClick = {
                         if (product != null) {
+                            biz.am2.swiftbible.data.Analytics.capture(
+                                biz.am2.swiftbible.data.Analytics.Event.DonationStarted,
+                                mapOf(
+                                    "product_id" to product.productId,
+                                    "amount_cents" to DonationProducts.amountCents(product.productId),
+                                    "recurring" to recurring,
+                                ),
+                            )
                             billing.launchPurchase(activity, product)
                             onDismiss()
                         }
@@ -157,7 +172,16 @@ fun DonationPromptDialog(
                     )
                 }
                 Spacer(Modifier.size(8.dp))
-                TextButton(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
+                TextButton(
+                    onClick = {
+                        biz.am2.swiftbible.data.Analytics.capture(
+                            biz.am2.swiftbible.data.Analytics.Event.DonationPromptDismissed,
+                            mapOf("source" to "not_now"),
+                        )
+                        onDismiss()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
                     Text("Not now")
                 }
 
