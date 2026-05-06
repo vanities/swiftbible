@@ -272,6 +272,12 @@ fun HighlightsScreen(
     }
 }
 
+enum class NoteSort(val label: String) {
+    RECENT("Recent first"),
+    OLDEST("Oldest first"),
+    BOOK("Book order"),
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(
@@ -280,6 +286,37 @@ fun NotesScreen(
     onOpen: (String, Int) -> Unit,
 ) {
     val list by appVm.notes.collectAsState(initial = emptyList())
+    val bookOrder = appVm.bible.collectAsState().value.allBooks.map { it.name }
+    var query by remember { mutableStateOf("") }
+    var sort by remember { mutableStateOf(NoteSort.RECENT) }
+    var bookFilter by remember { mutableStateOf<String?>(null) }
+
+    val books = remember(list) { list.map { it.book }.distinct().sortedBy { bookOrder.indexOf(it) } }
+    val filtered = remember(list, query, sort, bookFilter, bookOrder) {
+        list.asSequence()
+            .filter { bookFilter == null || it.book == bookFilter }
+            .filter {
+                if (query.isBlank()) return@filter true
+                val ref = "${it.book} ${it.chapter}:${it.startingVerse}"
+                ref.contains(query, ignoreCase = true) ||
+                    biz.am2.swiftbible.ui.components.stripJesusTags(it.text).contains(query, ignoreCase = true)
+            }
+            .let { seq ->
+                when (sort) {
+                    NoteSort.RECENT -> seq.sortedByDescending { it.updatedAt }
+                    NoteSort.OLDEST -> seq.sortedBy { it.updatedAt }
+                    NoteSort.BOOK -> seq.sortedWith(
+                        compareBy(
+                            { bookOrder.indexOf(it.book).let { i -> if (i < 0) Int.MAX_VALUE else i } },
+                            { it.chapter },
+                            { it.startingVerse },
+                        )
+                    )
+                }
+            }
+            .toList()
+    }
+
     LibraryFrame(title = "Notes", count = list.size, onBack = onBack) {
         if (list.isEmpty()) {
             BrandedEmpty(
@@ -290,33 +327,62 @@ fun NotesScreen(
                 subtitle = "Long-press any verse, then tap Note to write your reflection.",
             )
         } else EnterAnimation {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(list, key = { it.id }) { n ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onOpen(n.book, n.chapter) }
-                            .padding(horizontal = 20.dp, vertical = 14.dp),
-                    ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                biz.am2.swiftbible.ui.components.LibraryToolbar(
+                    query = query,
+                    onQueryChange = { query = it },
+                    sortOptions = NoteSort.entries,
+                    currentSort = sort,
+                    sortLabel = { it.label },
+                    onSortChange = { sort = it },
+                    placeholder = "Search notes…",
+                )
+                if (books.size > 1) {
+                    biz.am2.swiftbible.ui.components.FilterChipRow(
+                        options = books,
+                        selected = bookFilter,
+                        label = { it },
+                        onSelect = { bookFilter = it },
+                    )
+                }
+                if (filtered.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
                         Text(
-                            text = "${n.book} ${n.chapter}:${n.startingVerse}",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = NoteTint,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                        Spacer(Modifier.size(4.dp))
-                        Text(
-                            text = biz.am2.swiftbible.ui.components.stripJesusTags(n.text),
+                            "No notes match.",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = 4,
-                        )
-                        Spacer(Modifier.size(4.dp))
-                        Text(
-                            text = friendly(n.updatedAt),
-                            style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
+                    }
+                } else {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(filtered, key = { it.id }) { n ->
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onOpen(n.book, n.chapter) }
+                                    .padding(horizontal = 20.dp, vertical = 14.dp),
+                            ) {
+                                Text(
+                                    text = "${n.book} ${n.chapter}:${n.startingVerse}",
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = NoteTint,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                Spacer(Modifier.size(4.dp))
+                                Text(
+                                    text = biz.am2.swiftbible.ui.components.stripJesusTags(n.text),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    maxLines = 4,
+                                )
+                                Spacer(Modifier.size(4.dp))
+                                Text(
+                                    text = friendly(n.updatedAt),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        }
                     }
                 }
             }

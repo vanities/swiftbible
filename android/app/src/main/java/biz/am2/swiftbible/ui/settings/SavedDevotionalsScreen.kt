@@ -42,6 +42,13 @@ import biz.am2.swiftbible.data.SavedDevotionalEntity
 import biz.am2.swiftbible.ui.AppViewModel
 import biz.am2.swiftbible.ui.components.MarkdownText
 
+enum class SavedDevoSort(val label: String) {
+    RECENT("Recent first"),
+    OLDEST("Oldest first"),
+    DATE_DESC("Devotional date ↓"),
+    DATE_ASC("Devotional date ↑"),
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SavedDevotionalsScreen(
@@ -51,6 +58,37 @@ fun SavedDevotionalsScreen(
     val list by appVm.savedDevotionals.collectAsState(initial = emptyList())
     var openDevotional by remember { mutableStateOf<SavedDevotionalEntity?>(null) }
     var confirmDelete by remember { mutableStateOf<SavedDevotionalEntity?>(null) }
+
+    var query by remember { mutableStateOf("") }
+    var sort by remember { mutableStateOf(SavedDevoSort.RECENT) }
+    var seriesFilter by remember { mutableStateOf<String?>(null) }
+
+    val seriesOptions = remember(list) {
+        list.mapNotNull { it.seriesName?.takeIf { name -> name.isNotBlank() } }.distinct().sorted()
+    }
+    val filtered = remember(list, query, sort, seriesFilter) {
+        list.asSequence()
+            .filter { seriesFilter == null || it.seriesName == seriesFilter }
+            .filter {
+                if (query.isBlank()) return@filter true
+                val haystacks = listOfNotNull(
+                    it.forDate,
+                    it.anchorVerse,
+                    it.seriesName,
+                    biz.am2.swiftbible.ui.components.stripJesusTags(it.message),
+                )
+                haystacks.any { h -> h.contains(query, ignoreCase = true) }
+            }
+            .let { seq ->
+                when (sort) {
+                    SavedDevoSort.RECENT -> seq.sortedByDescending { it.createdAt }
+                    SavedDevoSort.OLDEST -> seq.sortedBy { it.createdAt }
+                    SavedDevoSort.DATE_DESC -> seq.sortedByDescending { it.forDate }
+                    SavedDevoSort.DATE_ASC -> seq.sortedBy { it.forDate }
+                }
+            }
+            .toList()
+    }
 
     LibraryFrame(title = "Saved Devotionals", count = list.size, onBack = onBack) {
         if (list.isEmpty()) {
@@ -62,17 +100,46 @@ fun SavedDevotionalsScreen(
                 subtitle = "Tap the heart on any devotional to save it for later.",
             )
         } else EnterAnimation {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(list, key = { it.id }) { d ->
-                    SavedRow(
-                        d = d,
-                        onTap = { openDevotional = d },
-                        onDelete = { confirmDelete = d },
+            Column(modifier = Modifier.fillMaxSize()) {
+                biz.am2.swiftbible.ui.components.LibraryToolbar(
+                    query = query,
+                    onQueryChange = { query = it },
+                    sortOptions = SavedDevoSort.entries,
+                    currentSort = sort,
+                    sortLabel = { it.label },
+                    onSortChange = { sort = it },
+                    placeholder = "Search devotionals…",
+                )
+                if (seriesOptions.isNotEmpty()) {
+                    biz.am2.swiftbible.ui.components.FilterChipRow(
+                        options = seriesOptions,
+                        selected = seriesFilter,
+                        label = { it },
+                        onSelect = { seriesFilter = it },
                     )
+                }
+                if (filtered.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
+                        Text(
+                            "No saved devotionals match.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        items(filtered, key = { it.id }) { d ->
+                            SavedRow(
+                                d = d,
+                                onTap = { openDevotional = d },
+                                onDelete = { confirmDelete = d },
+                            )
+                        }
+                    }
                 }
             }
         }
