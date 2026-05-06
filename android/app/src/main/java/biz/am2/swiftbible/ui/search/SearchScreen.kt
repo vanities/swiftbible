@@ -42,7 +42,15 @@ import biz.am2.swiftbible.ui.settings.EnterAnimation
 import biz.am2.swiftbible.ui.settings.StatsBg
 import biz.am2.swiftbible.ui.settings.StatsTint
 
-private data class Hit(val book: String, val chapter: Int, val verse: Int, val text: String)
+private data class Hit(
+    val book: String,
+    val chapter: Int,
+    val verse: Int,
+    val text: String,
+    val isGospel: Boolean = false,
+)
+
+private val GOSPEL_BOOKS = setOf("Matthew", "Mark", "Luke", "John")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,6 +59,7 @@ fun SearchScreen(
     onResultClick: (book: String, chapter: Int) -> Unit,
 ) {
     val bible by appVm.bible.collectAsState()
+    val prefs by appVm.prefsState.collectAsState()
     var query by remember { mutableStateOf("") }
 
     val hits by remember(bible, query) {
@@ -59,8 +68,9 @@ fun SearchScreen(
             else bible.allBooks.flatMap { book ->
                 book.chapters.flatMap { ch ->
                     ch.paragraphs.mapNotNull { p ->
-                        if (p.text.contains(query, ignoreCase = true)) {
-                            Hit(book.name, ch.number, p.startingVerse, p.text)
+                        val haystack = biz.am2.swiftbible.ui.components.stripJesusTags(p.text)
+                        if (haystack.contains(query, ignoreCase = true)) {
+                            Hit(book.name, ch.number, p.startingVerse, p.text, isGospel = book.name in GOSPEL_BOOKS)
                         } else null
                     }
                 }
@@ -127,7 +137,12 @@ fun SearchScreen(
                         )
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             items(hits, key = { "${it.book}-${it.chapter}-${it.verse}" }) { hit ->
-                                HitRow(hit, query, onClick = { onResultClick(hit.book, hit.chapter) })
+                                HitRow(
+                                    hit = hit,
+                                    query = query,
+                                    jesusRed = prefs.jesusRed,
+                                    onClick = { onResultClick(hit.book, hit.chapter) },
+                                )
                             }
                         }
                     }
@@ -138,7 +153,10 @@ fun SearchScreen(
 }
 
 @Composable
-private fun HitRow(hit: Hit, query: String, onClick: () -> Unit) {
+private fun HitRow(hit: Hit, query: String, jesusRed: Boolean, onClick: () -> Unit) {
+    val highlightBg = MaterialTheme.colorScheme.primaryContainer
+    val highlightFg = MaterialTheme.colorScheme.primary
+    val red = biz.am2.swiftbible.ui.theme.BrandRed
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -153,7 +171,7 @@ private fun HitRow(hit: Hit, query: String, onClick: () -> Unit) {
         )
         Spacer(Modifier.size(4.dp))
         Text(
-            text = highlightedText(hit.text, query),
+            text = renderHit(hit.text, query, jesusRed && hit.isGospel, red, highlightBg, highlightFg),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 5,
@@ -161,27 +179,31 @@ private fun HitRow(hit: Hit, query: String, onClick: () -> Unit) {
     }
 }
 
-@Composable
-private fun highlightedText(text: String, query: String) = buildAnnotatedString {
-    val lower = text.lowercase()
+private fun renderHit(
+    text: String,
+    query: String,
+    jesusRed: Boolean,
+    red: Color,
+    highlightBg: Color,
+    highlightFg: Color,
+): androidx.compose.ui.text.AnnotatedString {
+    // Build the styled JESUS-aware string first, then layer query-highlight spans on top.
+    val base = biz.am2.swiftbible.ui.components.parseJesusText(text, jesusRed, red)
+    if (query.isBlank()) return base
     val q = query.lowercase()
-    var i = 0
-    while (i < text.length) {
-        val idx = lower.indexOf(q, i)
-        if (idx == -1) {
-            append(text.substring(i))
-            return@buildAnnotatedString
-        }
-        append(text.substring(i, idx))
-        withStyle(
-            SpanStyle(
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                background = MaterialTheme.colorScheme.primaryContainer,
+    val lower = base.text.lowercase()
+    return buildAnnotatedString {
+        append(base)
+        var i = 0
+        while (i < base.length) {
+            val idx = lower.indexOf(q, i)
+            if (idx == -1) break
+            addStyle(
+                SpanStyle(color = highlightFg, fontWeight = FontWeight.SemiBold, background = highlightBg),
+                idx,
+                idx + q.length,
             )
-        ) {
-            append(text.substring(idx, idx + q.length))
+            i = idx + q.length
         }
-        i = idx + q.length
     }
 }

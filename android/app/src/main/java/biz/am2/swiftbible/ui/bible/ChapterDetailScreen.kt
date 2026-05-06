@@ -212,7 +212,9 @@ fun ChapterDetailScreen(
     val ctx = androidx.compose.ui.platform.LocalContext.current
     var explainVerse by remember { mutableStateOf<Triple<String, Int, Int>?>(null) }
     highlightVerse?.let { verse ->
-        val verseText = chapter?.paragraphs?.firstOrNull { it.startingVerse == verse }?.text.orEmpty()
+        val verseText = biz.am2.swiftbible.ui.components.stripJesusTags(
+            chapter?.paragraphs?.firstOrNull { it.startingVerse == verse }?.text.orEmpty()
+        )
         VerseActionSheet(
             verseRef = "$bookName $chapterNumber:$verse",
             verseText = verseText,
@@ -266,7 +268,9 @@ fun ChapterDetailScreen(
     }
 
     explainVerse?.let { (b, c, v) ->
-        val verseText = chapter?.paragraphs?.firstOrNull { it.startingVerse == v }?.text.orEmpty()
+        val verseText = biz.am2.swiftbible.ui.components.stripJesusTags(
+            chapter?.paragraphs?.firstOrNull { it.startingVerse == v }?.text.orEmpty()
+        )
         ExplainSheet(
             verseRef = "$b $c:$v",
             verseText = verseText,
@@ -412,8 +416,7 @@ private fun buildVerseText(
     var i = 0
     for (ann in annotations) {
         if (ann.start > i) {
-            val between = text.substring(i, ann.start)
-            if (highlightSpeech) highlightQuotes(between, bodyColor) else append(between)
+            appendJesusAware(text.substring(i, ann.start), highlightSpeech)
         }
         if (ann.isRef) {
             pushStringAnnotation(CROSS_REF_TAG, ann.payload)
@@ -436,9 +439,28 @@ private fun buildVerseText(
         if (!ann.isRef && i < text.length && text[i] == ' ') i++
     }
     if (i < text.length) {
-        val tail = text.substring(i)
-        if (highlightSpeech) highlightQuotes(tail, bodyColor) else append(tail)
+        appendJesusAware(text.substring(i), highlightSpeech)
     }
+}
+
+private val JESUS_REGEX = Regex("<JESUS>(.*?)</JESUS>", RegexOption.DOT_MATCHES_ALL)
+
+private fun androidx.compose.ui.text.AnnotatedString.Builder.appendJesusAware(
+    text: String,
+    highlightSpeech: Boolean,
+) {
+    var cursor = 0
+    for (m in JESUS_REGEX.findAll(text)) {
+        if (m.range.first > cursor) append(text.substring(cursor, m.range.first))
+        val inner = m.groupValues[1]
+        if (highlightSpeech) {
+            withStyle(SpanStyle(color = BrandRed)) { append(inner) }
+        } else {
+            append(inner)
+        }
+        cursor = m.range.last + 1
+    }
+    if (cursor < text.length) append(text.substring(cursor))
 }
 
 private fun androidx.compose.ui.text.AnnotatedString.Builder.appendVerseNumber(num: String, color: Color) {
@@ -451,28 +473,6 @@ private fun androidx.compose.ui.text.AnnotatedString.Builder.appendVerseNumber(n
         )
     ) {
         append(num)
-    }
-}
-
-private fun androidx.compose.ui.text.AnnotatedString.Builder.highlightQuotes(text: String, bodyColor: Color) {
-    var i = 0
-    val openers = setOf('"', '“')
-    val closers = mapOf('“' to '”', '"' to '"')
-    while (i < text.length) {
-        val ch = text[i]
-        if (ch in openers) {
-            val close = closers[ch] ?: '"'
-            val end = text.indexOf(close, i + 1)
-            if (end > i) {
-                withStyle(SpanStyle(color = BrandRed, fontStyle = FontStyle.Normal)) {
-                    append(text.substring(i, end + 1))
-                }
-                i = end + 1
-                continue
-            }
-        }
-        append(ch)
-        i++
     }
 }
 
