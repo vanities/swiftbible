@@ -9,15 +9,40 @@ import SwiftUI
 import SwiftData
 import MarkdownUI
 
+enum SavedDevoSort: String, CaseIterable, Identifiable {
+    case recent = "Recent first"
+    case oldest = "Oldest first"
+    var id: String { rawValue }
+}
+
 struct SavedDevotionalsListView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \SavedDevotional.date, order: .reverse) private var savedDevotionals: [SavedDevotional]
+
+    @State private var query: String = ""
+    @State private var sort: SavedDevoSort = .recent
 
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
         return formatter
     }()
+
+    private var filtered: [SavedDevotional] {
+        var items = savedDevotionals
+        if !query.isEmpty {
+            let q = query.lowercased()
+            items = items.filter {
+                $0.message.lowercased().contains(q) ||
+                dateFormatter.string(from: $0.date).lowercased().contains(q)
+            }
+        }
+        switch sort {
+        case .recent: items.sort { $0.date > $1.date }
+        case .oldest: items.sort { $0.date < $1.date }
+        }
+        return items
+    }
 
     var body: some View {
         Group {
@@ -38,7 +63,7 @@ struct SavedDevotionalsListView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List {
-                    ForEach(savedDevotionals) { devotional in
+                    ForEach(filtered) { devotional in
                         NavigationLink {
                             SavedDevotionalDetailView(devotional: devotional)
                         } label: {
@@ -65,6 +90,18 @@ struct SavedDevotionalsListView: View {
                     .onDelete(perform: delete)
                 }
                 .listStyle(.insetGrouped)
+            }
+        }
+        .searchable(text: $query, prompt: "Search devotionals")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Picker("Sort", selection: $sort) {
+                        ForEach(SavedDevoSort.allCases) { Text($0.rawValue).tag($0) }
+                    }
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                }
             }
         }
         .navigationTitle("Saved Devotionals")
