@@ -73,6 +73,15 @@ cd android && ./gradlew :app:publishBundle --track=production --release-status=c
 
 Use only when you skipped internal entirely.
 
+## Shipping via CI instead of locally
+
+The `release-android.yml` workflow handles the same flow:
+
+- **Push to master** with android changes → auto-publishes to `internal` (with `--release-status=completed`).
+- **Manual**: `gh workflow run release-android.yml -f track=production` (or `track=beta`) to push the next build to a different track. Requires the version to have been bumped (CI skips if the tag `android-v<name>-<code>` already exists).
+
+Use the local skill when you want to inspect the build first; use CI for routine pushes.
+
 ## What this skill does NOT do
 
 - Does not bump version. Run `/bump-version --android-only` first if you need a new versionCode.

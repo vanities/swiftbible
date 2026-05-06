@@ -9,6 +9,16 @@ on:
       - 'android/gradle.properties'
       - '.github/workflows/release-android.yml'
   workflow_dispatch:
+    inputs:
+      track:
+        description: 'Play track'
+        required: false
+        default: internal
+        type: choice
+        options:
+          - internal
+          - beta
+          - production
 
 permissions:
   contents: write
@@ -137,13 +147,16 @@ jobs:
           fi
           ls -lh "$aab"
 
-      - name: Publish to internal track
+      - name: Publish bundle
         if: steps.check.outputs.exists == 'false'
         working-directory: android
+        env:
+          TRACK: ${{ github.event.inputs.track || 'internal' }}
         run: |
           set -euo pipefail
+          echo "Publishing to track=$TRACK"
           ./gradlew :app:publishBundle \
-            --track=internal \
+            --track="$TRACK" \
             --release-status=completed \
             --stacktrace
 
