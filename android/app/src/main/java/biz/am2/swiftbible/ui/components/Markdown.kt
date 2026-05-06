@@ -31,6 +31,14 @@ private val BOLD_REGEX = Regex("""\*\*([^*]+?)\*\*""")
 private val ITALIC_REGEX = Regex("""(?<![*_\w])\*([^*]+?)\*(?![*_\w])""")
 private val UNDERSCORE_ITALIC_REGEX = Regex("""(?<![*_\w])_([^_]+?)_(?![*_\w])""")
 
+// Bible reference: optional ordinal (1/2/3), 1–3 capitalized words possibly with
+// `of/the/to/and` connectors, then `chapter:verse` with optional verse range.
+private val BIBLE_REF_REGEX = Regex(
+    """(?<![A-Za-z])((?:[1-3]\s)?[A-Z][a-zA-Z]+""" +
+        """(?:\s+(?:of|the|to|and)\s+[A-Z][a-zA-Z]+|(?:\s+[A-Z][a-zA-Z]+))*)""" +
+        """\s+(\d+):(\d+)(?:[-–]\d+)?""",
+)
+
 fun parseMarkdown(
     raw: String,
     bodyColor: androidx.compose.ui.graphics.Color,
@@ -83,6 +91,40 @@ fun parseMarkdown(
 }
 
 private fun buildInline(
+    text: String,
+    bodyColor: androidx.compose.ui.graphics.Color,
+    linkColor: androidx.compose.ui.graphics.Color,
+): AnnotatedString {
+    val base = buildBaseInline(text, bodyColor, linkColor)
+    return augmentWithBibleRefs(base, linkColor)
+}
+
+private fun augmentWithBibleRefs(
+    base: AnnotatedString,
+    linkColor: androidx.compose.ui.graphics.Color,
+): AnnotatedString {
+    val matches = BIBLE_REF_REGEX.findAll(base.text).toList()
+    if (matches.isEmpty()) return base
+    return buildAnnotatedString {
+        append(base)
+        matches.forEach { m ->
+            val book = m.groupValues[1].trim()
+            val chapter = m.groupValues[2]
+            val verse = m.groupValues[3]
+            val url = "swiftbible://verse?book=" +
+                java.net.URLEncoder.encode(book, "UTF-8") +
+                "&chapter=$chapter&verse=$verse"
+            addStringAnnotation(MD_LINK_TAG, url, m.range.first, m.range.last + 1)
+            addStyle(
+                SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline),
+                m.range.first,
+                m.range.last + 1,
+            )
+        }
+    }
+}
+
+private fun buildBaseInline(
     text: String,
     bodyColor: androidx.compose.ui.graphics.Color,
     linkColor: androidx.compose.ui.graphics.Color,
