@@ -159,11 +159,15 @@ const VERSE_SELECTION_MODEL =
 // Identifier for the devotional prompt template currently in use. Bumped
 // whenever createPrompt / createMultiVersePrompt change in a way that
 // meaningfully alters voice or structure, so the "Daily Devotional" table's
-// prompt_version column can group rows by template generation. v1 was the
-// numbered-guidelines template with bulleted reflection questions; v2
-// (current) uses the four-beat empathy/Bible/mix/prayer structure with
-// explicit avoid-list constraints to suppress AI/preachy tells.
-const DEVOTIONAL_PROMPT_VERSION = "daily-v2";
+// prompt_version column can group rows by template generation.
+//   v1 — numbered-guidelines template with bulleted reflection questions.
+//   v2 — four-beat empathy/Bible/mix/prayer structure with avoid-list.
+//   v3 — adds a few-shot example to demonstrate varied sentence rhythm
+//        (v2 still produced stacked parallel sentences in the empathy
+//        beat) and softens the Hebrew/Greek rule from "only when meaning
+//        changes" to "one short note when illuminating, never a word
+//        study paragraph."
+const DEVOTIONAL_PROMPT_VERSION = "daily-v3";
 
 // Per-model pricing in USD per million tokens (input, output).
 // Source: OpenAI pricing page, snapshotted 2026-05-02.
@@ -1073,31 +1077,79 @@ const PROMPT_INTRO =
 
 const PROMPT_VOICE_RULES = `VOICE
 - Concrete over abstract. One real image beats three abstract claims.
-- Vary sentence length. Short sentences for emphasis.
+- Vary sentence rhythm. Mix short statements, fragments, longer descriptive sentences, inverted constructions ("There is..."), and different syntactic openings. Do NOT write three subject-verb sentences in a row with the same shape — that is the single most common AI tell in this format.
 - Direct address ("you"), not first-person ("I"). NEVER write fake personal admissions like "I have lied" / "I have grieved" / "I have buried someone" — those belong to a real human author standing behind them. The reader should not have a stranger's biography put in their mouth.
 - When describing a possible reader experience, use conditionals: "If you have ever..." / "Maybe you have..." Open the door without claiming the reader is through it.
 - Acknowledge the cost of obedience honestly. Don't be glib.
 - Quiet warmth, like a pastor who knows the reader. Not seminary lecture; not Sunday confrontation.
 
 STRUCTURE (four beats, in this order)
-1. Empathy — open with a concrete, *observable* scene or recognizable posture, NOT a presumed personal experience. Good: "Someone at dinner mentions their father is failing. The room goes still." / "You read the verse, nod, and forget it by lunch." / "The phone is in your hand again before you noticed picking it up." Bad: "the voicemail you can't delete" (presumes loss), "the addiction you can't kick" (presumes biography). Keep it observable, not autobiographical.
-2. Bible — what the verse(s) actually say. Surrounding scripture as needed, in markdown blockquotes with bolded citations. Include Hebrew/Greek ONLY when the etymology genuinely changes the meaning (e.g., hamartia = "miss the mark"); skip it otherwise.
+1. Empathy — open with a concrete, *observable* scene or recognizable posture, NOT a presumed personal experience. Good: "Someone at dinner mentions their father is failing. The room goes still." / "You read the verse, nod, and forget it by lunch." / "The phone is in your hand again before you noticed picking it up." Bad: "the voicemail you can't delete" (presumes loss), "the addiction you can't kick" (presumes biography). Keep it observable, not autobiographical. Vary sentence shape inside this beat — mix at least one fragment or inverted construction with declarative sentences.
+2. Bible — what the verse(s) actually say. Surrounding scripture as needed, in markdown blockquotes with bolded citations. Include ONE short Hebrew/Greek nuance when an original-language word genuinely opens up the meaning (e.g., *hamartia* = "miss the mark"; *eremos* = "wilderness, stripped down"). Keep the etymology to a sentence or two — never a multi-paragraph word study, never a forced insert when no word in the verse has a meaningful etymology.
 3. Mix — bring beats 1 and 2 together. Show how the verse meets the reader where they actually are. Acknowledge the cost. End on the real difficulty, not a tidy bow.
 4. Prayer — short, open-handed, addressed by appropriate name (Lord / Father / Lord Jesus / Holy Spirit) based on verse content. Anyone reading should be able to pray it honestly. Format with line breaks for breathing room. End with "Amen."
 
 AVOID (these are AI tells / preachy patterns; strict)
 - "In a world where..." / "In our busy lives..."
 - "Let us not forget..." / "We must remember..."
-- Symmetric, parallel sentences stacked in a row
+- Symmetric, parallel sentences stacked in a row. BAD: "A phone screen lights up. A headline shouts. A video plays." That is three subject-verb sentences in a row, identical shape — break the rhythm with a fragment, an inverted clause, or a longer sentence.
 - Bullet lists of abstractions, including reflective journaling questions at the end
 - Generic "may you..." benediction
-- Forced Greek/Hebrew word study when it doesn't change meaning
+- Multi-paragraph Greek/Hebrew word study (a one-sentence etymology note is fine; a paragraph of word-study is not)
 - Moralistic call-out language
 - Doctrinal/seminary tone`;
 
 function holidayPromptSection(holiday: Holiday): string {
   return `\nHOLIDAY\nThis devotional is for ${holiday.name}. ${holiday.themeHint}\n- Reference "${holiday.name}" in the title.\n- Beat 1's empathy can lean on what ${holiday.name} typically evokes for readers, without presuming any reader's experience.\n`;
 }
+
+// One neutral worked example showing the four beats in v3 voice — varied
+// sentence rhythm, observable empathy, one short Greek nuance, conditional
+// in beat 3, open-handed prayer. The model mirrors this far more reliably
+// than it follows abstract rules. Keep this verse (Mark 1:35) different
+// from any common selection so the model doesn't accidentally recycle it.
+const PROMPT_FEW_SHOT = `# May 15 — Mark 1:35: Before the world wakes
+
+**Why does the answer to the busiest day arrive at the quietest hour?**
+
+> *"And in the morning, rising up a great while before day, he went out, and departed into a solitary place, and there prayed."*
+> **Mark 1:35**
+
+## The hour before the work
+
+The first sound is the door clicking shut behind him. Not a slam — careful, as if afraid of waking the world. He stops on the threshold a moment, listening. Around him is the small hum of a town that has not woken up: a distant dog, the wind, nothing else. No crowd. No one needing to be healed. Not yet.
+
+There is, for now, just him, and the cold, and the dark, and the long walk to whatever solitary place he has in mind.
+
+## What he chose
+
+The Greek for "solitary place" is *eremos* — the same word the Gospels use for the wilderness where Jesus was tempted. Not just "alone." Stripped down. Without props.
+
+He has just had what any of us would call a successful day. The whole city pressed at the door (Mark 1:33). Demons cast out. Fevers gone. The kind of day a ministry would build a website around.
+
+And before any of it could harden into an identity, he leaves it.
+
+## Your version of the hour
+
+If you have ever felt like the day's noise starts the moment you open your eyes, you know how thin the margin gets. The hour Jesus chose is not magic. It is just the only hour the world has not yet asked for.
+
+You may not have a hillside. You may have ten minutes in a parked car before walking into the building.
+
+The geography is not the point. The order is.
+
+## A prayer
+
+Father,
+
+Before the day asks me for anything,
+let me ask You first.
+
+Teach me the hour You chose.
+Make me unhurried in it.
+Not because I have time
+but because You are worth it.
+
+Amen.`;
 
 function createPrompt(
   verse: SelectedVerse,
@@ -1114,22 +1166,29 @@ ${formattedDate}
 ${holiday ? holidayPromptSection(holiday) : ""}
 ${PROMPT_VOICE_RULES}
 
-MARKDOWN OUTPUT (use exactly this skeleton)
+EXAMPLE — voice and structure to mirror
+The example below is for a different verse (Mark 1:35). Do NOT reuse this example. Mirror its sentence rhythm, beat structure, and overall voice — then write a new devotional for the actual verse above.
+
+${PROMPT_FEW_SHOT}
+
+END OF EXAMPLE — now write your devotional for the actual verse above, using the same voice and four-beat structure.
+
+MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 # ${formattedDate} — ${verse.book} ${verse.chapter}:${verse.verse}: {Title}
 
-**{One-line bolded subtitle — a question, observation, or thematic line. NOT first-person. Examples: "Why is the verse so easy to nod at and so hard to do?" / "The promise is older than the temple, and quieter."}**
+**{One-line bolded subtitle — a question, observation, or thematic line. NOT first-person.}**
 
 > *"${verse.text}"*
 > **${verse.book} ${verse.chapter}:${verse.verse}**
 
 ## {Section header for beat 1}
 
-{empathy content — concrete, observable, no presumed biography}
+{empathy content — concrete, observable, varied sentence rhythm, no presumed biography}
 
 ## {Section header for beat 2}
 
-{Bible content; additional verses as markdown blockquotes if used}
+{Bible content; one short Hebrew/Greek nuance if a word in this verse genuinely opens up the meaning, otherwise skip}
 
 ## {Section header for beat 3}
 
@@ -1294,24 +1353,31 @@ ${formattedDate}
 ${holiday ? holidayPromptSection(holiday) : ""}
 ${PROMPT_VOICE_RULES}
 
-MULTI-VERSE NOTE
-Beat 2 should present ALL verses together in one markdown blockquote (each on its own line with bolded reference) before unpacking the thread that connects them. Show the cross-reference connection explicitly — how each verse from a different part of Scripture speaks to the same truth.
+EXAMPLE — voice and structure to mirror
+The example below is single-verse (Mark 1:35), but the voice, beat structure, and rhythm apply equally to multi-verse. Do NOT reuse this example. Mirror its rhythm and four-beat shape — then write a new multi-verse devotional for the actual verses above, weaving them into one thread.
 
-MARKDOWN OUTPUT (use exactly this skeleton)
+${PROMPT_FEW_SHOT}
+
+END OF EXAMPLE — now write your multi-verse devotional for the actual verses above, using the same voice.
+
+MULTI-VERSE NOTE
+Present ALL verses together in the opening blockquote (each on its own line with bolded reference). In beat 2, unpack the thread that connects them — show how each verse from a different part of Scripture speaks to the same truth.
+
+MARKDOWN OUTPUT (use exactly this skeleton; copy verse texts verbatim)
 
 # ${formattedDate} — ${titleRef}: {Title}
 
-**{One-line bolded subtitle — a question, observation, or thematic line that captures the unified thread. NOT first-person. Examples: "Two voices, one promise, separated by a thousand years." / "Why does the same answer arrive twice?"}**
+**{One-line bolded subtitle — a question, observation, or thematic line that captures the unified thread. NOT first-person.}**
 
 ${versesBlockquote}
 
 ## {Section header for beat 1}
 
-{empathy content — concrete, observable, no presumed biography}
+{empathy content — concrete, observable, varied sentence rhythm, no presumed biography}
 
 ## {Section header for beat 2}
 
-{Bible content; unpack each verse and show the thematic thread connecting them}
+{Bible content; unpack each verse and the thread connecting them; one short Hebrew/Greek nuance if a word genuinely opens up the meaning, otherwise skip}
 
 ## {Section header for beat 3}
 
