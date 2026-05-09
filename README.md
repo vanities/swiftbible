@@ -41,10 +41,11 @@ Glance at the latest devotional from your iPhone Home Screen or Lock Screen.
 
 <img src="github_assets/widget.png" alt="Home Screen widget showing today's devotional" width="420">
 
-## Testing
+## Download
 
-Use this link to download the latest on the AppStore: <https://apps.apple.com/us/app/swiftbible/id6670373108>
-Use this link to join the TestFlight: <https://testflight.apple.com/join/MHYwBxpQ>
+- **App Store (iOS):** <https://apps.apple.com/us/app/swiftbible/id6670373108>
+- **Google Play (Android):** <https://play.google.com/store/apps/details?id=biz.am2.swiftbible>
+- **TestFlight beta:** <https://testflight.apple.com/join/MHYwBxpQ>
 
 ## Features
 
@@ -67,7 +68,6 @@ Use this link to join the TestFlight: <https://testflight.apple.com/join/MHYwBxp
 ## Upcoming Features
 
 - Additional translations
-- Android
 
 ## Requirements
 
