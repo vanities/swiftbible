@@ -1541,18 +1541,59 @@ function createSupabaseClient() {
   );
 }
 
+// Tracks rotate round-robin alongside (but independent of) the
+// single/multi/testament rotation. Listed in cycle order; the next track
+// is the one immediately after yesterday's in this array (wrapping). Add
+// new tracks to the end and they get picked up automatically. Custom
+// (Sunday) rows have a NULL track and don't advance the cycle — the next
+// AI day picks up where the previous AI day left off.
+const TRACK_CYCLE = ["empathy", "technical"] as const;
+type Track = typeof TRACK_CYCLE[number];
+
+function nextTrack(prev: string | null | undefined): Track {
+  if (!prev) return TRACK_CYCLE[0];
+  const idx = TRACK_CYCLE.indexOf(prev as Track);
+  if (idx === -1) return TRACK_CYCLE[0];
+  return TRACK_CYCLE[(idx + 1) % TRACK_CYCLE.length];
+}
+
 async function determineDevotionalType(
   supabase: ReturnType<typeof createClient>,
   today: Date,
   holiday: Holiday | null
-): Promise<{ type: "single" | "multi"; targetTestament: "old" | "new" }> {
+): Promise<{
+  type: "single" | "multi";
+  targetTestament: "old" | "new";
+  track: Track;
+}> {
+  // Walk back up to 7 days looking for the most recent AI-generated row
+  // (one with a non-null track). Custom Sunday rows don't advance the
+  // track cycle — we resume from the previous AI day's track.
+  let mostRecentTrack: string | null = null;
+  for (let daysBack = 1; daysBack <= 7 && mostRecentTrack === null; daysBack++) {
+    const day = addDays(today, -daysBack);
+    const dayStr = day.toISOString().split("T")[0];
+    try {
+      const { data } = await supabase
+        .from("Daily Devotional")
+        .select("track")
+        .eq("for_date", dayStr)
+        .maybeSingle();
+      if (data?.track) mostRecentTrack = data.track as string;
+    } catch {
+      // ignore lookup errors and keep walking
+    }
+  }
+  const track = nextTrack(mostRecentTrack);
+  console.log(`Track cycle: prev=${mostRecentTrack ?? "none"}, next=${track}`);
+
   // Holidays: pick one curated verse (single-verse devotional)
   if (holiday) {
     const randomVerse = holiday.verses[Math.floor(Math.random() * holiday.verses.length)];
-    return { type: "single", targetTestament: randomVerse.testament };
+    return { type: "single", targetTestament: randomVerse.testament, track };
   }
 
-  // Check yesterday's devotional for rotation: old single → new single → multi → repeat
+  // Check yesterday's devotional for type/testament rotation: old single → new single → multi → repeat
   const yesterday = addDays(today, -1);
   const yesterdayStr = yesterday.toISOString().split("T")[0];
 
@@ -1564,24 +1605,25 @@ async function determineDevotionalType(
       .single();
 
     if (error || !data) {
-      return { type: "single", targetTestament: "old" };
+      return { type: "single", targetTestament: "old", track };
     }
 
     const prevType = data.devotional_type || "single";
     const prevTestament = data.testament as "old" | "new";
 
     if (prevType === "multi") {
-      return { type: "single", targetTestament: "old" };
+      return { type: "single", targetTestament: "old", track };
     } else if (prevTestament === "old") {
-      return { type: "single", targetTestament: "new" };
+      return { type: "single", targetTestament: "new", track };
     } else {
       return {
         type: "multi",
         targetTestament: Math.random() < 0.5 ? "old" : "new",
+        track,
       };
     }
   } catch {
-    return { type: "single", targetTestament: "old" };
+    return { type: "single", targetTestament: "old", track };
   }
 }
 
@@ -1594,6 +1636,7 @@ interface ThemeMetadata {
 interface PromptCapture {
   prompt: string;
   version: string;
+  track: string;
   verseSelectionPrompt: string | null;
 }
 
@@ -1628,6 +1671,7 @@ async function saveDevotional(
         usage,
         prompt: promptCapture.prompt,
         prompt_version: promptCapture.version,
+        track: promptCapture.track,
         verse_selection_prompt: promptCapture.verseSelectionPrompt,
         holiday_name: themeMetadata.holidayName ?? null,
         holiday_url: themeMetadata.holidayUrl ?? null,
@@ -1708,23 +1752,18 @@ Deno.serve(async (req) => {
       console.log(`Holiday detected: ${holiday.name}`);
     }
 
-    // Determine devotional type and target testament
-    // Rotation: old single → new single → multi → old single → ...
-    // Holidays always use multi-verse with all curated verses
-    const { type: devotionalType, targetTestament } =
+    // Determine devotional type, testament, and track for this row.
+    // Three independent cycles run together:
+    //   - type/testament: old single → new single → multi → repeat
+    //   - track:          empathy → technical → repeat (round-robin via TRACK_CYCLE)
+    //   - holidays override type to single, but still advance the track cycle
+    const { type: devotionalType, targetTestament, track } =
       await determineDevotionalType(supabase, today, holiday);
-    console.log(
-      `Devotional type: ${devotionalType}, Target testament: ${targetTestament}`
-    );
-
-    // Pick the prompt track for this generation. Empathy and technical
-    // rotate randomly to vary the daily voice; the prompt_version column
-    // records which track + iteration produced each row.
-    const track: "empathy" | "technical" =
-      Math.random() < 0.5 ? "empathy" : "technical";
     const promptVersion =
       track === "empathy" ? EMPATHY_PROMPT_VERSION : TECHNICAL_PROMPT_VERSION;
-    console.log(`Prompt track: ${track} (${promptVersion})`);
+    console.log(
+      `Devotional type: ${devotionalType}, testament: ${targetTestament}, track: ${track} (${promptVersion})`
+    );
 
     // Select verse(s) and create prompt
     let prompt: string;
@@ -1809,6 +1848,7 @@ Deno.serve(async (req) => {
       {
         prompt,
         version: promptVersion,
+        track,
         verseSelectionPrompt,
       },
       themeMetadata
