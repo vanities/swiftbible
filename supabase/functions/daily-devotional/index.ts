@@ -156,19 +156,28 @@ const DEVOTIONAL_MODEL =
 const VERSE_SELECTION_MODEL =
   Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.4-mini";
 
-// Identifier for the devotional prompt template currently in use. Bumped
-// whenever createPrompt / createMultiVersePrompt change in a way that
-// meaningfully alters voice, structure, or rendering, so the
-// "Daily Devotional" table's prompt_version column can group rows by
-// template generation.
-//   v1 — numbered-guidelines template with bulleted reflection questions.
-//   v2 — four-beat empathy/Bible/mix/prayer structure with avoid-list.
-//   v3 — adds a few-shot example to demonstrate varied sentence rhythm
-//        and softens the Hebrew/Greek rule.
-//   v4 — wraps the closing prayer in markdown blockquote (matches the
-//        verse blockquotes for visual symmetry; iOS rendering pops the
-//        prayer the way it pops the verse).
-const DEVOTIONAL_PROMPT_VERSION = "daily-v4";
+// Two parallel prompt tracks rotate randomly to vary the daily devotional
+// voice. The "Daily Devotional" table's prompt_version column records
+// which track + iteration produced each row.
+//
+//   empathy — four-beat empathy/Bible/mix/prayer structure with avoid-list,
+//             few-shot example, and modern observable scenes. v1–v4 of
+//             this track were originally tagged "daily-vN"; backfilled to
+//             "empathy-vN" in 20260509130000_rename_daily_to_empathy.sql.
+//             v5 is the implicit pre-fix state; v6 (current) reverts the
+//             prayer from blockquote to italics (matches v1 historical
+//             rendering, avoids the iOS verse-link detector mistakenly
+//             treating the prayer as a verse), expands the avoid rule to
+//             cover fragment stacking (v4's new failure mode), tilts the
+//             subtitle toward question form, and softly caps beat 2 length.
+//
+//   technical — restored from the original v1 prompt: numbered guidelines,
+//               Contextual/Historical/Cultural/Linguistic sections,
+//               reflection-question bullet list, italic final meditation.
+//               Heavier on biblical-historical content, lighter on modern
+//               empathy. Mixed in for voice variety and reader range.
+const EMPATHY_PROMPT_VERSION = "empathy-v6";
+const TECHNICAL_PROMPT_VERSION = "technical-v1";
 
 // Per-model pricing in USD per million tokens (input, output).
 // Source: OpenAI pricing page, snapshotted 2026-05-02.
@@ -1086,14 +1095,14 @@ const PROMPT_VOICE_RULES = `VOICE
 
 STRUCTURE (four beats, in this order)
 1. Empathy — open with a concrete, *observable* scene or recognizable posture, NOT a presumed personal experience. Good: "Someone at dinner mentions their father is failing. The room goes still." / "You read the verse, nod, and forget it by lunch." / "The phone is in your hand again before you noticed picking it up." Bad: "the voicemail you can't delete" (presumes loss), "the addiction you can't kick" (presumes biography). Keep it observable, not autobiographical. Vary sentence shape inside this beat — mix at least one fragment or inverted construction with declarative sentences.
-2. Bible — what the verse(s) actually say. Surrounding scripture as needed, in markdown blockquotes with bolded citations. Include ONE short Hebrew/Greek nuance when an original-language word genuinely opens up the meaning (e.g., *hamartia* = "miss the mark"; *eremos* = "wilderness, stripped down"). Keep the etymology to a sentence or two — never a multi-paragraph word study, never a forced insert when no word in the verse has a meaningful etymology.
+2. Bible — what the verse(s) actually say. Surrounding scripture as needed, in markdown blockquotes with bolded citations. Include ONE short Hebrew/Greek nuance when an original-language word genuinely opens up the meaning (e.g., *hamartia* = "miss the mark"; *eremos* = "wilderness, stripped down"). Keep the etymology to a sentence or two — never a multi-paragraph word study, never a forced insert when no word in the verse has a meaningful etymology. Aim for 3–4 paragraphs of unpacking in this beat; do not exceed 6.
 3. Mix — bring beats 1 and 2 together. Show how the verse meets the reader where they actually are. Acknowledge the cost. End on the real difficulty, not a tidy bow.
-4. Prayer — short, open-handed, addressed by appropriate name (Lord / Father / Lord Jesus / Holy Spirit) based on verse content. Anyone reading should be able to pray it honestly. Format with line breaks for breathing room. End with "Amen."
+4. Prayer — short, open-handed, addressed by appropriate name (Lord / Father / Lord Jesus / Holy Spirit) based on verse content. Anyone reading should be able to pray it honestly. Format as a single italic paragraph using *single asterisks* (NOT markdown blockquote — the iOS app's verse-link detector treats blockquotes as verse references). Flowing prose, no internal line breaks. End with "Amen."
 
 AVOID (these are AI tells / preachy patterns; strict)
 - "In a world where..." / "In our busy lives..."
 - "Let us not forget..." / "We must remember..."
-- Symmetric, parallel sentences stacked in a row. BAD: "A phone screen lights up. A headline shouts. A video plays." That is three subject-verb sentences in a row, identical shape — break the rhythm with a fragment, an inverted clause, or a longer sentence.
+- Symmetric, parallel sentences OR fragments stacked in a row. BAD (subject-verb): "A phone screen lights up. A headline shouts. A video plays." BAD (fragments): "Not heroic. Not public. Just a small good." Three of anything in a row with the same shape is the pattern to break — alternate sentence shapes, mix in a longer sentence, or condense to two.
 - Bullet lists of abstractions, including reflective journaling questions at the end
 - Generic "may you..." benediction
 - Multi-paragraph Greek/Hebrew word study (a one-sentence etymology note is fine; a paragraph of word-study is not)
@@ -1140,17 +1149,7 @@ The geography is not the point. The order is.
 
 ## A prayer
 
-> Father,
->
-> Before the day asks me for anything,
-> let me ask You first.
->
-> Teach me the hour You chose.
-> Make me unhurried in it.
-> Not because I have time
-> but because You are worth it.
->
-> Amen.`;
+*Father, before the day asks me for anything, let me ask You first. Teach me the hour You chose. Make me unhurried in it — not because I have time, but because You are worth it. Amen.*`;
 
 function createPrompt(
   verse: SelectedVerse,
@@ -1178,7 +1177,7 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 # ${formattedDate} — ${verse.book} ${verse.chapter}:${verse.verse}: {Title}
 
-**{One-line bolded subtitle — a question, observation, or thematic line. NOT first-person.}**
+**{One-line bolded subtitle — prefer a question; observation or thematic line are acceptable. NOT first-person. Avoid claims that go beyond what the verse itself says (e.g., don't add "He notices" when the verse only asks rhetorical questions).}**
 
 > *"${verse.text}"*
 > **${verse.book} ${verse.chapter}:${verse.verse}**
@@ -1197,11 +1196,7 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 ## A prayer
 
-> {Address — Lord / Father / Lord Jesus / Holy Spirit, comma},
->
-> {short open-handed prayer body — every line prefixed with "> ", blank lines as ">". Line breaks for breathing room.}
->
-> Amen.
+*{Address — Lord / Father / Lord Jesus / Holy Spirit}, {short open-handed prayer body in flowing prose — single paragraph, italic, no blockquote, no line breaks. Anyone reading should be able to pray it honestly.} Amen.*
 `;
 }
 
@@ -1372,7 +1367,7 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy verse texts verbatim)
 
 # ${formattedDate} — ${titleRef}: {Title}
 
-**{One-line bolded subtitle — a question, observation, or thematic line that captures the unified thread. NOT first-person.}**
+**{One-line bolded subtitle — prefer a question; observation or thematic line are acceptable. NOT first-person. Should capture the unified thread without adding interpretive claims that go beyond what the verses themselves say.}**
 
 ${versesBlockquote}
 
@@ -1390,11 +1385,92 @@ ${versesBlockquote}
 
 ## A prayer
 
-> {Address — Lord / Father / Lord Jesus / Holy Spirit, comma},
->
-> {short open-handed prayer drawing from all the verses together — every line prefixed with "> ", blank lines as ">". Line breaks for breathing room.}
->
-> Amen.
+*{Address — Lord / Father / Lord Jesus / Holy Spirit}, {short open-handed prayer drawing from all the verses together — single paragraph in flowing prose, italic, no blockquote, no line breaks. Anyone reading should be able to pray it honestly.} Amen.*
+`;
+}
+
+// ─── Technical track: prompts ───────────────────────────────────────
+// Restored from the original v1 prompt — numbered guidelines, heavier on
+// historical/cultural/linguistic context, lighter on modern empathy.
+// Mixed in alongside the empathy track for voice variety.
+
+function createTechnicalPrompt(
+  verse: SelectedVerse,
+  formattedDate: string,
+  holiday: Holiday | null
+): string {
+  const holidaySection = holiday
+    ? `\n\nHoliday Context:\n${holiday.themeHint}\n`
+    : "";
+
+  return `Create a daily devotional for a Bible app based on the following Bible verse from the King James Version (KJV):
+
+${verse.book} ${verse.chapter}:${verse.verse} - "${verse.text}"
+
+Date: ${formattedDate}
+${holidaySection}
+Devotional Guidelines:
+
+1. Title: Use # for the title at the top. Include the date and passage reference.${holiday ? ` Reference the holiday "${holiday.name}".` : ""}
+
+2. Subtitle: A **bolded thematic summary** line immediately below the title. DO NOT include the date or passage reference in the subtitle.
+
+3. Verse Block: Place the verse text in a Markdown blockquote directly beneath the title and subtitle:
+   > "${verse.text}"
+   > **${verse.book} ${verse.chapter}:${verse.verse}**
+
+4. Devotional Content (use ## section headers for each major movement):
+   - Contextual Background — the verse's place in the surrounding narrative and the broader biblical story.
+   - Historical and Cultural Insights — customs, geography, political setting, and traditions relevant to the original audience.
+   - Linguistic and Translational Insights — key Hebrew or Greek words, embedded in the prose with their meanings and any nuances. Use these freely; this track leans into language.
+
+5. Modern Relevance: Connect the passage to contemporary themes${holiday ? ` and to the significance of ${holiday.name}` : ""}. Encourage application without reducing the verse to self-help.
+
+6. Personal Reflection and Application: Include 4–6 reflective questions formatted as a Markdown bulleted list.
+
+7. Final Meditation: Close with a short prayerful reflection formatted as a single paragraph in italics using *single asterisks* (NOT markdown blockquote — the iOS app's verse-link detector treats blockquotes as verse references). End with "Amen."
+`;
+}
+
+function createTechnicalMultiVersePrompt(
+  verses: SelectedVerse[],
+  formattedDate: string,
+  holiday: Holiday | null
+): string {
+  const versesList = verses
+    .map((v) => `${v.book} ${v.chapter}:${v.verse} — "${v.text}"`)
+    .join("\n- ");
+  const holidaySection = holiday
+    ? `\n\nHoliday Context:\n${holiday.themeHint}\n`
+    : "";
+
+  return `Create a daily devotional for a Bible app that weaves together the following ${verses.length} thematically connected Bible verses from the King James Version (KJV)${holiday ? ` for ${holiday.name}` : ""}:
+
+- ${versesList}
+
+Date: ${formattedDate}
+${holidaySection}
+Devotional Guidelines:
+
+1. Title: Use # for the title at the top. Include the date and the primary passage reference${holiday ? `, plus "${holiday.name}"` : ""}.
+
+2. Subtitle: A **bolded thematic summary** line that captures the unified theme connecting all the verses. DO NOT include the date or passage references.
+
+3. Verse Block: Present ALL verses together in a single Markdown blockquote — each verse on its own line with its bolded reference beneath it.
+
+4. Thematic Thread: Explain the thread that connects the passages. Show how each verse illuminates and builds upon the others, creating a richer understanding than any single verse alone.
+
+5. Devotional Content (use ## section headers):
+   - Contextual Background — each verse's place in its surrounding narrative.
+   - Historical and Cultural Insights — relevant customs, settings, and traditions.
+   - Linguistic and Translational Insights — key Hebrew or Greek words embedded in the prose with their meanings.
+   - Cross-Reference Connection — explicitly show how these verses from different parts of Scripture speak to the same truth.
+
+6. Modern Relevance: Show how the combined message applies to contemporary life${holiday ? ` and the significance of ${holiday.name}` : ""}.
+
+7. Personal Reflection and Application: Include 4–6 reflective questions formatted as a Markdown bulleted list. At least one question should ask the reader to consider what the verses together reveal that no single verse alone does.
+
+8. Final Meditation: Close with a short prayerful reflection drawing from all the verses, formatted as a single paragraph in italics using *single asterisks* (NOT markdown blockquote). End with "Amen."
 `;
 }
 
@@ -1641,6 +1717,15 @@ Deno.serve(async (req) => {
       `Devotional type: ${devotionalType}, Target testament: ${targetTestament}`
     );
 
+    // Pick the prompt track for this generation. Empathy and technical
+    // rotate randomly to vary the daily voice; the prompt_version column
+    // records which track + iteration produced each row.
+    const track: "empathy" | "technical" =
+      Math.random() < 0.5 ? "empathy" : "technical";
+    const promptVersion =
+      track === "empathy" ? EMPATHY_PROMPT_VERSION : TECHNICAL_PROMPT_VERSION;
+    console.log(`Prompt track: ${track} (${promptVersion})`);
+
     // Select verse(s) and create prompt
     let prompt: string;
     let verseSelectionPrompt: string | null = null;
@@ -1666,7 +1751,10 @@ Deno.serve(async (req) => {
         };
       });
 
-      prompt = createMultiVersePrompt(versesUsed, formatted, holiday);
+      prompt =
+        track === "empathy"
+          ? createMultiVersePrompt(versesUsed, formatted, holiday)
+          : createTechnicalMultiVersePrompt(versesUsed, formatted, holiday);
     } else {
       const verse = selectVerse(targetTestament, holiday);
       // Resolve exact text from bible.json for holiday verses
@@ -1679,7 +1767,10 @@ Deno.serve(async (req) => {
         if (resolvedText) verse.text = resolvedText;
       }
       versesUsed = [verse];
-      prompt = createPrompt(verse, formatted, holiday);
+      prompt =
+        track === "empathy"
+          ? createPrompt(verse, formatted, holiday)
+          : createTechnicalPrompt(verse, formatted, holiday);
     }
 
     console.log(
@@ -1717,7 +1808,7 @@ Deno.serve(async (req) => {
       devotionalUsage,
       {
         prompt,
-        version: DEVOTIONAL_PROMPT_VERSION,
+        version: promptVersion,
         verseSelectionPrompt,
       },
       themeMetadata

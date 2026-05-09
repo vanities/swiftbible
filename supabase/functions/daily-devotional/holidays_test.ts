@@ -930,24 +930,27 @@ Deno.test("multi-verse prompt references holiday context", () => {
   }
 });
 
-Deno.test("devotional prompt v2 four-beat structure", () => {
+Deno.test("empathy track structure markers present", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
 
-  // v2 contract: voice rules forbid AI tells and presumed biography, and
-  // the markdown skeleton closes with "## A prayer" instead of the v1
-  // bullet-list reflection questions + italics meditation.
+  // Empathy track contract: voice rules forbid AI tells and presumed
+  // biography; markdown skeleton closes with "## A prayer"; constants
+  // for both tracks exist so the random router can route either way.
   const required = [
-    "DEVOTIONAL_PROMPT_VERSION",
+    "EMPATHY_PROMPT_VERSION",
+    "TECHNICAL_PROMPT_VERSION",
     "PROMPT_VOICE_RULES",
     "## A prayer",
     "Don't presume their biography",
     "NEVER write fake personal admissions",
+    "createTechnicalPrompt",
+    "createTechnicalMultiVersePrompt",
   ];
   for (const marker of required) {
     if (!source.includes(marker)) {
-      throw new Error(`v2 prompt missing required marker: ${marker}`);
+      throw new Error(`prompt source missing required marker: ${marker}`);
     }
   }
 });
