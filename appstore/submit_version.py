@@ -76,12 +76,33 @@ def api(method, path, token, **kwargs):
 
 
 def get_editable_version(token, app_id):
-    r = api("GET", f"/apps/{app_id}/appStoreVersions?limit=20", token)
+    r = api("GET", f"/apps/{app_id}/appStoreVersions?limit=20&include=build", token)
     for state in EDITABLE_VERSION_STATES:
         for v in r["data"]:
             if v["attributes"]["appStoreState"] == state:
-                return v["id"], v["attributes"]["versionString"], state
+                attached = (v.get("relationships", {}).get("build", {}).get("data") or {}).get("id")
+                return v["id"], v["attributes"]["versionString"], state, attached
     sys.exit("ERROR: no editable AppStoreVersion found.")
+
+
+def find_build_for_version(token, app_id, vstr):
+    """Return the most recent VALID build whose preReleaseVersion matches vstr, or None."""
+    r = api(
+        "GET",
+        f"/builds?filter[app]={app_id}&filter[processingState]=VALID&filter[preReleaseVersion.version]={vstr}"
+        "&sort=-uploadedDate&limit=1&fields[builds]=version,uploadedDate",
+        token,
+    )
+    data = r.get("data", [])
+    return data[0]["id"] if data else None
+
+
+def attach_build(token, version_id, build_id, dry_run):
+    print(f"  PATCH /appStoreVersions/{version_id}/relationships/build (build {build_id})")
+    if dry_run:
+        return
+    body = {"data": {"type": "builds", "id": build_id}}
+    api("PATCH", f"/appStoreVersions/{version_id}/relationships/build", token, json=body)
 
 
 def find_inflight_review_submission(token, app_id):
@@ -156,8 +177,14 @@ def main():
     print(f"Authenticating to App Store Connect (key {env['key_id']})...")
     token = make_token(env)
 
-    version_id, vstr, vstate = get_editable_version(token, env["app_id"])
-    print(f"Version: {vstr} (id {version_id}, state {vstate})")
+    version_id, vstr, vstate, attached_build = get_editable_version(token, env["app_id"])
+    print(f"Version: {vstr} (id {version_id}, state {vstate}, attached_build={attached_build or 'none'})")
+
+    if not attached_build:
+        build_id = find_build_for_version(token, env["app_id"], vstr)
+        if not build_id:
+            sys.exit(f"ERROR: no VALID build found for version {vstr}. Run `make release` and wait for processing.")
+        attach_build(token, version_id, build_id, args.dry_run)
 
     existing = find_inflight_review_submission(token, env["app_id"])
     if existing:

@@ -152,14 +152,17 @@ archive:
 
 upload:
 	@echo "Exporting and uploading to App Store Connect..."
-	xcodebuild -exportArchive \
+	@# /usr/bin first → Apple's rsync (Homebrew rsync 3.4+ rejects Xcode's --extended-attributes flag).
+	@# Sources appstore/.env so callers don't need to export ASC_KEY_ID / ASC_ISSUER_ID manually.
+	@set -a; . appstore/.env; set +a; \
+	PATH=/usr/bin:$$PATH xcodebuild -exportArchive \
 		-archivePath $(ARCHIVE_PATH) \
 		-exportOptionsPlist $(EXPORT_OPTIONS) \
 		-exportPath $(EXPORT_PATH) \
 		-allowProvisioningUpdates \
-		-authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_$(APP_STORE_API_KEY).p8 \
-		-authenticationKeyID $(APP_STORE_API_KEY) \
-		-authenticationKeyIssuerID $(APP_STORE_API_ISSUER)
+		-authenticationKeyPath $$HOME/.appstoreconnect/private_keys/AuthKey_$$ASC_KEY_ID.p8 \
+		-authenticationKeyID $$ASC_KEY_ID \
+		-authenticationKeyIssuerID $$ASC_ISSUER_ID
 	@echo "Upload complete!"
 
 release: archive upload
