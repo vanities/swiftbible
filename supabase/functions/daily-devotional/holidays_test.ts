@@ -914,30 +914,55 @@ Deno.test("holidays always override to single", () => {
 
 // ─── Multi-verse prompt structure ───────────────────────────────────
 
-Deno.test("multi-verse prompt has both holiday and non-holiday branches", () => {
+Deno.test("multi-verse prompt references holiday context", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
 
-  // Holiday branch should reference holiday.name and themeHint
-  if (!source.includes('holiday.themeHint')) {
-    throw new Error("Holiday multi-verse prompt missing themeHint reference");
+  // Holiday context is injected via holidayPromptSection() — must reference
+  // holiday.name and holiday.themeHint so the model knows which holiday it
+  // is writing for and what the editorial angle should be.
+  if (!source.includes("holiday.themeHint")) {
+    throw new Error("Multi-verse prompt missing themeHint reference");
   }
-  if (!source.includes('${holiday.name}')) {
-    throw new Error("Holiday multi-verse prompt missing holiday.name reference");
+  if (!source.includes("${holiday.name}")) {
+    throw new Error("Multi-verse prompt missing holiday.name reference");
   }
+});
 
-  // Both branches should have all 8 devotional guidelines
-  const promptSection = source.substring(
-    source.indexOf("function createMultiVersePrompt"),
-    source.indexOf("// ─── Devotional generation")
+Deno.test("devotional prompt v2 four-beat structure", () => {
+  const source = Deno.readTextFileSync(
+    new URL("./index.ts", import.meta.url).pathname
   );
 
-  const guidelineCount = (promptSection.match(/Final Meditation/g) || []).length;
-  if (guidelineCount < 2) {
-    throw new Error(
-      `Expected 2 "Final Meditation" sections (holiday + non-holiday), found ${guidelineCount}`
-    );
+  // v2 contract: voice rules forbid AI tells and presumed biography, and
+  // the markdown skeleton closes with "## A prayer" instead of the v1
+  // bullet-list reflection questions + italics meditation.
+  const required = [
+    "DEVOTIONAL_PROMPT_VERSION",
+    "PROMPT_VOICE_RULES",
+    "## A prayer",
+    "Don't presume their biography",
+    "NEVER write fake personal admissions",
+  ];
+  for (const marker of required) {
+    if (!source.includes(marker)) {
+      throw new Error(`v2 prompt missing required marker: ${marker}`);
+    }
+  }
+});
+
+Deno.test("saveDevotional persists prompt capture columns", () => {
+  const source = Deno.readTextFileSync(
+    new URL("./index.ts", import.meta.url).pathname
+  );
+
+  // Every new row should populate the three prompt-capture columns added
+  // in 20260509120000_add_devotional_prompt_capture.sql.
+  for (const col of ["prompt:", "prompt_version:", "verse_selection_prompt:"]) {
+    if (!source.includes(col)) {
+      throw new Error(`saveDevotional missing upsert key: ${col}`);
+    }
   }
 });
 

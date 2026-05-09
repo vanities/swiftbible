@@ -156,6 +156,15 @@ const DEVOTIONAL_MODEL =
 const VERSE_SELECTION_MODEL =
   Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.4-mini";
 
+// Identifier for the devotional prompt template currently in use. Bumped
+// whenever createPrompt / createMultiVersePrompt change in a way that
+// meaningfully alters voice or structure, so the "Daily Devotional" table's
+// prompt_version column can group rows by template generation. v1 was the
+// numbered-guidelines template with bulleted reflection questions; v2
+// (current) uses the four-beat empathy/Bible/mix/prayer structure with
+// explicit avoid-list constraints to suppress AI/preachy tells.
+const DEVOTIONAL_PROMPT_VERSION = "daily-v2";
+
 // Per-model pricing in USD per million tokens (input, output).
 // Source: OpenAI pricing page, snapshotted 2026-05-02.
 // Update when pricing changes; cost is locked-in at generation time so
@@ -1056,57 +1065,79 @@ function getFormattedDate(
 
 // ─── Prompt creation ────────────────────────────────────────────────
 
+// Shared blocks injected into both single-verse and multi-verse prompts.
+// Kept as module-level constants so v2 → v3 is one edit and the test can
+// assert structure by reading the source.
+const PROMPT_INTRO =
+  "You are writing a daily devotional for SwiftBible, a Bible iOS app. The reader could be anyone — a long-time Christian, a returning seeker, someone reading scripture for the first time. Don't presume their biography.";
+
+const PROMPT_VOICE_RULES = `VOICE
+- Concrete over abstract. One real image beats three abstract claims.
+- Vary sentence length. Short sentences for emphasis.
+- Direct address ("you"), not first-person ("I"). NEVER write fake personal admissions like "I have lied" / "I have grieved" / "I have buried someone" — those belong to a real human author standing behind them. The reader should not have a stranger's biography put in their mouth.
+- When describing a possible reader experience, use conditionals: "If you have ever..." / "Maybe you have..." Open the door without claiming the reader is through it.
+- Acknowledge the cost of obedience honestly. Don't be glib.
+- Quiet warmth, like a pastor who knows the reader. Not seminary lecture; not Sunday confrontation.
+
+STRUCTURE (four beats, in this order)
+1. Empathy — open with a concrete, *observable* scene or recognizable posture, NOT a presumed personal experience. Good: "Someone at dinner mentions their father is failing. The room goes still." / "You read the verse, nod, and forget it by lunch." / "The phone is in your hand again before you noticed picking it up." Bad: "the voicemail you can't delete" (presumes loss), "the addiction you can't kick" (presumes biography). Keep it observable, not autobiographical.
+2. Bible — what the verse(s) actually say. Surrounding scripture as needed, in markdown blockquotes with bolded citations. Include Hebrew/Greek ONLY when the etymology genuinely changes the meaning (e.g., hamartia = "miss the mark"); skip it otherwise.
+3. Mix — bring beats 1 and 2 together. Show how the verse meets the reader where they actually are. Acknowledge the cost. End on the real difficulty, not a tidy bow.
+4. Prayer — short, open-handed, addressed by appropriate name (Lord / Father / Lord Jesus / Holy Spirit) based on verse content. Anyone reading should be able to pray it honestly. Format with line breaks for breathing room. End with "Amen."
+
+AVOID (these are AI tells / preachy patterns; strict)
+- "In a world where..." / "In our busy lives..."
+- "Let us not forget..." / "We must remember..."
+- Symmetric, parallel sentences stacked in a row
+- Bullet lists of abstractions, including reflective journaling questions at the end
+- Generic "may you..." benediction
+- Forced Greek/Hebrew word study when it doesn't change meaning
+- Moralistic call-out language
+- Doctrinal/seminary tone`;
+
+function holidayPromptSection(holiday: Holiday): string {
+  return `\nHOLIDAY\nThis devotional is for ${holiday.name}. ${holiday.themeHint}\n- Reference "${holiday.name}" in the title.\n- Beat 1's empathy can lean on what ${holiday.name} typically evokes for readers, without presuming any reader's experience.\n`;
+}
+
 function createPrompt(
   verse: SelectedVerse,
   formattedDate: string,
   holiday: Holiday | null
 ): string {
-  const holidaySection = holiday
-    ? `\n\nHoliday Context:\n${holiday.themeHint}\n`
-    : "";
+  return `${PROMPT_INTRO}
 
-  return `
-Create a daily devotional for a Bible app based on the following Bible verse from the King James Version (KJV):
+VERSE
+${verse.book} ${verse.chapter}:${verse.verse} — "${verse.text}"
 
-${verse.book} ${verse.chapter}:${verse.verse} - "${verse.text}"
+DATE
+${formattedDate}
+${holiday ? holidayPromptSection(holiday) : ""}
+${PROMPT_VOICE_RULES}
 
-Date: ${formattedDate}
-${holidaySection}
-Devotional Guidelines:
+MARKDOWN OUTPUT (use exactly this skeleton)
 
-1. Title as a Heading: Use # for the title at the very top. Include the date and passage reference in this title.${holiday ? ` Reference the holiday "${holiday.name}" in the title.` : ""}
+# ${formattedDate} — ${verse.book} ${verse.chapter}:${verse.verse}: {Title}
 
-2. Subtitle (Context Summary Only): Provide a **bolded thematic summary** line immediately below the title that captures the main theme. DO NOT include the date or passage reference in this subtitle - only the theological/spiritual theme.
+**{One-line bolded subtitle — a question, observation, or thematic line. NOT first-person. Examples: "Why is the verse so easy to nod at and so hard to do?" / "The promise is older than the temple, and quieter."}**
 
-Example Markdown Structure
+> *"${verse.text}"*
+> **${verse.book} ${verse.chapter}:${verse.verse}**
 
-# October 5 - 2 Kings 2:3: A Season of Transition and Readiness
+## {Section header for beat 1}
 
-**Elijah's departure and Elisha's readiness to assume responsibility**
+{empathy content — concrete, observable, no presumed biography}
 
-> "And the sons of the prophets that were at Bethel came forth to Elisha, and said unto him, Knowest thou that the LORD will take away thy master from thy head to day? And he said, Yea, I know it; hold ye your peace."
-> **2 Kings 2:3**
+## {Section header for beat 2}
 
-2. Verse Block Formatting:
-   - Place the verse text directly beneath the title and summary in a Markdown blockquote (using >) for emphasis, like this:
-     > "${verse.text}"
-     > **${verse.book} ${verse.chapter}:${verse.verse}**
+{Bible content; additional verses as markdown blockquotes if used}
 
-3. Devotional Content Formatting:
-   - Contextual Background: Begin the devotional with a natural flow, integrating the verse's background, add explicit section headers with ##.
-   - Historical and Cultural Insights: Incorporate historical or cultural context within the devotional narrative, providing any relevant customs, events, or traditions to enrich understanding.
-   - Linguistic and Translational Insights: Include key Hebrew or Greek words with their meanings and any nuances, seamlessly embedded in the text, to deepen the reader's understanding of the verse's original intent.
+## {Section header for beat 3}
 
-4. Modern Relevance: Guide the reader to relate the passage to contemporary themes or challenges. Encourage them to see how the verse can be applied in their own lives, reflecting on universal themes like change, courage, or faithfulness.${holiday ? ` Connect the verse to the significance of ${holiday.name} in modern life.` : ""}
+{closing argument; acknowledge cost; end on the real difficulty}
 
-5. Personal Reflection and Application:
-   - Include reflective questions or journaling prompts at the end of the devotional, formatted in Markdown as a list for easy reading.
-   - Example:
-     - How does this verse resonate with a current season of transition in your life?
-     - In what ways can you embody the faith or courage exemplified in this passage today?
+## A prayer
 
-6. Final Meditation:
-   - Close with a short meditation or prayerful reflection to invite the reader into a moment of contemplation. Format this as a final paragraph in italics.
+{short open-handed prayer; line breaks for breathing room; ends with "Amen."}
 `;
 }
 
@@ -1118,6 +1149,7 @@ async function selectMultiVerses(
 ): Promise<{
   verses: Array<{ book: string; chapter: number; verse: number }>;
   usage: TokenUsage;
+  prompt: string;
 }> {
   const apiKey = Deno.env.get("OPENAI_API_KEY");
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
@@ -1231,7 +1263,7 @@ Return ONLY a JSON object in this exact format:
     `Verse selection: ${allVerses.map((v: { book: string; chapter: number; verse: number }) => `${v.book} ${v.chapter}:${v.verse}`).join(", ")}`
   );
 
-  return { verses: allVerses, usage };
+  return { verses: allVerses, usage, prompt };
 }
 
 // ─── Multi-verse prompt creation ────────────────────────────────────
@@ -1241,82 +1273,53 @@ function createMultiVersePrompt(
   formattedDate: string,
   holiday: Holiday | null
 ): string {
-  const versesBlock = verses
+  const versesList = verses
     .map((v) => `- ${v.book} ${v.chapter}:${v.verse} — "${v.text}"`)
     .join("\n");
+  const versesBlockquote = verses
+    .map((v) => `> *"${v.text}"*\n> **${v.book} ${v.chapter}:${v.verse}**`)
+    .join("\n>\n");
+  const primary = verses[0];
+  const titleRef = holiday
+    ? `${holiday.name}`
+    : `${primary.book} ${primary.chapter}:${primary.verse}`;
 
-  if (holiday) {
-    return `
-Create a daily devotional for a Bible app that weaves together the following ${verses.length} thematically connected Bible verses from the King James Version (KJV) for ${holiday.name}:
+  return `${PROMPT_INTRO}
 
-${versesBlock}
+VERSES (weave these together — show how each illuminates the others, not just three echoes of one idea)
+${versesList}
 
-Date: ${formattedDate}
+DATE
+${formattedDate}
+${holiday ? holidayPromptSection(holiday) : ""}
+${PROMPT_VOICE_RULES}
 
-Holiday Context:
-${holiday.themeHint}
+MULTI-VERSE NOTE
+Beat 2 should present ALL verses together in one markdown blockquote (each on its own line with bolded reference) before unpacking the thread that connects them. Show the cross-reference connection explicitly — how each verse from a different part of Scripture speaks to the same truth.
 
-Devotional Guidelines:
+MARKDOWN OUTPUT (use exactly this skeleton)
 
-1. Title as a Heading: Use # for the title at the very top. Include the date and "${holiday.name}" in this title.
+# ${formattedDate} — ${titleRef}: {Title}
 
-2. Subtitle (Context Summary Only): Provide a **bolded thematic summary** line that captures the main theme connecting all the verses. DO NOT include the date or passage references in this subtitle.
+**{One-line bolded subtitle — a question, observation, or thematic line that captures the unified thread. NOT first-person. Examples: "Two voices, one promise, separated by a thousand years." / "Why does the same answer arrive twice?"}**
 
-3. Verse Block Formatting:
-   - Present ALL verses together in a Markdown blockquote (using >). List each verse on its own line within the blockquote with its reference bolded beneath it.
+${versesBlockquote}
 
-4. Thematic Thread: After the verses, explain the thematic thread that connects these passages. Show how each verse illuminates and builds upon the others, creating a richer understanding than any single verse alone.
+## {Section header for beat 1}
 
-5. Devotional Content:
-   - Contextual Background: Integrate the verses' background naturally, using ## section headers.
-   - Historical and Cultural Insights: Incorporate relevant historical or cultural context.
-   - Linguistic and Translational Insights: Include key Hebrew or Greek words with their meanings.
-   - Cross-Reference Connection: Explicitly show how these verses from different parts of Scripture speak to the same truth.
+{empathy content — concrete, observable, no presumed biography}
 
-6. Modern Relevance: Guide the reader to relate the connected passages to contemporary themes. Connect the verses to the significance of ${holiday.name} in modern life.
+## {Section header for beat 2}
 
-7. Personal Reflection and Application:
-   - Include reflective questions formatted as a Markdown list.
-   - At least one question should ask the reader to consider how the verses together reveal something they wouldn't see from one verse alone.
+{Bible content; unpack each verse and show the thematic thread connecting them}
 
-8. Final Meditation:
-   - Close with a short meditation or prayerful reflection in italics that draws from all the verses together.
-`;
-  }
+## {Section header for beat 3}
 
-  // Non-holiday multi-verse
-  return `
-Create a daily devotional for a Bible app that weaves together the following ${verses.length} thematically connected Bible verses from the King James Version (KJV):
+{closing argument bringing the verses together; acknowledge cost; end on the real difficulty}
 
-${versesBlock}
+## A prayer
 
-Date: ${formattedDate}
-
-Devotional Guidelines:
-
-1. Title as a Heading: Use # for the title at the very top. Include the date and the primary passage reference in this title.
-
-2. Subtitle (Context Summary Only): Provide a **bolded thematic summary** line that captures the unified theme connecting all the verses. DO NOT include the date or passage references in this subtitle.
-
-3. Verse Block Formatting:
-   - Present ALL verses together in a Markdown blockquote (using >). List each verse on its own line within the blockquote with its reference bolded beneath it.
-
-4. Thematic Thread: After the verses, explain the thematic thread that connects these passages. Show how each verse illuminates and builds upon the others, creating a richer understanding than any single verse alone.
-
-5. Devotional Content:
-   - Contextual Background: Integrate the verses' background naturally, using ## section headers.
-   - Historical and Cultural Insights: Incorporate relevant historical or cultural context.
-   - Linguistic and Translational Insights: Include key Hebrew or Greek words with their meanings.
-   - Cross-Reference Connection: Explicitly show how these verses from different parts of Scripture speak to the same truth.
-
-6. Modern Relevance: Guide the reader to relate the connected passages to contemporary themes or challenges. Show how the combined message applies to daily life.
-
-7. Personal Reflection and Application:
-   - Include reflective questions formatted as a Markdown list.
-   - At least one question should ask the reader to consider how the verses together reveal something they wouldn't see from one verse alone.
-
-8. Final Meditation:
-   - Close with a short meditation or prayerful reflection in italics that draws from all the verses together.
+{short open-handed prayer drawing from all the verses together; line breaks for breathing room; ends with "Amen."}
 `;
 }
 
@@ -1437,6 +1440,12 @@ interface ThemeMetadata {
   anchorVerse?: string | null;
 }
 
+interface PromptCapture {
+  prompt: string;
+  version: string;
+  verseSelectionPrompt: string | null;
+}
+
 async function saveDevotional(
   supabase: ReturnType<typeof createClient>,
   message: string,
@@ -1446,6 +1455,7 @@ async function saveDevotional(
   verses: SelectedVerse[],
   model: string,
   usage: DevotionalUsage,
+  promptCapture: PromptCapture,
   themeMetadata: ThemeMetadata = {}
 ): Promise<void> {
   const versesJson = verses.map((v) => ({
@@ -1465,6 +1475,9 @@ async function saveDevotional(
         verses: versesJson,
         model,
         usage,
+        prompt: promptCapture.prompt,
+        prompt_version: promptCapture.version,
+        verse_selection_prompt: promptCapture.verseSelectionPrompt,
         holiday_name: themeMetadata.holidayName ?? null,
         holiday_url: themeMetadata.holidayUrl ?? null,
         anchor_verse: themeMetadata.anchorVerse ?? null,
@@ -1555,13 +1568,16 @@ Deno.serve(async (req) => {
 
     // Select verse(s) and create prompt
     let prompt: string;
+    let verseSelectionPrompt: string | null = null;
     let versesUsed: SelectedVerse[];
     let selectionUsage: TokenUsage | undefined;
 
     if (devotionalType === "multi") {
       // Non-holiday multi-verse: random seed + GPT companion
-      const { verses: verseRefs, usage } = await selectMultiVerses(2, null);
+      const { verses: verseRefs, usage, prompt: selPrompt } =
+        await selectMultiVerses(2, null);
       selectionUsage = usage;
+      verseSelectionPrompt = selPrompt;
 
       versesUsed = verseRefs.map((ref) => {
         const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
@@ -1624,6 +1640,11 @@ Deno.serve(async (req) => {
       versesUsed,
       DEVOTIONAL_MODEL,
       devotionalUsage,
+      {
+        prompt,
+        version: DEVOTIONAL_PROMPT_VERSION,
+        verseSelectionPrompt,
+      },
       themeMetadata
     );
 
