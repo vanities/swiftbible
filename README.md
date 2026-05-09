@@ -25,9 +25,15 @@ SwiftBible is an iOS application that provides users with multiple Bible transla
 
 ![Streaming explanation powered by Apple Intelligence](github_assets/apple-intel-commentary.gif)
 
-## Screenshots
+## Screenshots (iOS)
 
 <img src="github_assets/bible.png" alt="screenshot" width="300"> <img src="github_assets/verse.png" alt="screenshot" width="300"> <img src="github_assets/select_verse.png" alt="screenshot" width="300"> <img src="github_assets/add_note.png" alt="screenshot" width="300"> <img src="github_assets/devo.png" alt="screenshot" width="300"> <img src="github_assets/settings.png" alt="screenshot" width="300">
+
+## Screenshots (Android)
+
+Built with Jetpack Compose.
+
+<img src="github_assets/android/01_bible_books.png" alt="Android — books list" width="220"> <img src="github_assets/android/02_chapter_reading.png" alt="Android — chapter reading" width="220"> <img src="github_assets/android/03_daily_devotional.png" alt="Android — daily devotional" width="220"> <img src="github_assets/android/04_search.png" alt="Android — search" width="220"> <img src="github_assets/android/05_more_overview.png" alt="Android — more menu" width="220"> <img src="github_assets/android/07_settings.png" alt="Android — settings" width="220">
 
 ## Apple Watch
 
