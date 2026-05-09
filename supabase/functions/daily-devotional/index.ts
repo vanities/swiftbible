@@ -158,16 +158,17 @@ const VERSE_SELECTION_MODEL =
 
 // Identifier for the devotional prompt template currently in use. Bumped
 // whenever createPrompt / createMultiVersePrompt change in a way that
-// meaningfully alters voice or structure, so the "Daily Devotional" table's
-// prompt_version column can group rows by template generation.
+// meaningfully alters voice, structure, or rendering, so the
+// "Daily Devotional" table's prompt_version column can group rows by
+// template generation.
 //   v1 — numbered-guidelines template with bulleted reflection questions.
 //   v2 — four-beat empathy/Bible/mix/prayer structure with avoid-list.
 //   v3 — adds a few-shot example to demonstrate varied sentence rhythm
-//        (v2 still produced stacked parallel sentences in the empathy
-//        beat) and softens the Hebrew/Greek rule from "only when meaning
-//        changes" to "one short note when illuminating, never a word
-//        study paragraph."
-const DEVOTIONAL_PROMPT_VERSION = "daily-v3";
+//        and softens the Hebrew/Greek rule.
+//   v4 — wraps the closing prayer in markdown blockquote (matches the
+//        verse blockquotes for visual symmetry; iOS rendering pops the
+//        prayer the way it pops the verse).
+const DEVOTIONAL_PROMPT_VERSION = "daily-v4";
 
 // Per-model pricing in USD per million tokens (input, output).
 // Source: OpenAI pricing page, snapshotted 2026-05-02.
@@ -1139,17 +1140,17 @@ The geography is not the point. The order is.
 
 ## A prayer
 
-Father,
-
-Before the day asks me for anything,
-let me ask You first.
-
-Teach me the hour You chose.
-Make me unhurried in it.
-Not because I have time
-but because You are worth it.
-
-Amen.`;
+> Father,
+>
+> Before the day asks me for anything,
+> let me ask You first.
+>
+> Teach me the hour You chose.
+> Make me unhurried in it.
+> Not because I have time
+> but because You are worth it.
+>
+> Amen.`;
 
 function createPrompt(
   verse: SelectedVerse,
@@ -1196,7 +1197,11 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 ## A prayer
 
-{short open-handed prayer; line breaks for breathing room; ends with "Amen."}
+> {Address — Lord / Father / Lord Jesus / Holy Spirit, comma},
+>
+> {short open-handed prayer body — every line prefixed with "> ", blank lines as ">". Line breaks for breathing room.}
+>
+> Amen.
 `;
 }
 
@@ -1385,7 +1390,11 @@ ${versesBlockquote}
 
 ## A prayer
 
-{short open-handed prayer drawing from all the verses together; line breaks for breathing room; ends with "Amen."}
+> {Address — Lord / Father / Lord Jesus / Holy Spirit, comma},
+>
+> {short open-handed prayer drawing from all the verses together — every line prefixed with "> ", blank lines as ">". Line breaks for breathing room.}
+>
+> Amen.
 `;
 }
 
