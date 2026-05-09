@@ -122,7 +122,7 @@ Each entry contrasts the **comfortable middle** (where most Christians actually 
 |---|---|---|---|---|---|
 | 1 | **2026-05-03** ✅ | **Maranatha** | "Jesus will come back — *eventually*." | Pray for him to come back **tonight**, even before your kids grow up. | Rev 22:20, 2 Pet 3:9, Phil 3:20 |
 | 2 | **2026-05-31** ✅ | **Mourn in the present tense** | "Mourn the loss but hold onto hope." | Mourn AND speak of them in the present tense. Carry the wound for forty years AND know it's not the whole story. | 1 Thess 4:13, John 11:35, Phil 1:21-23, 1 Cor 15:55 |
-| 3 | 2026-06-28 | Bless the one who hurt you | "Forgive them, but keep your distance." | Pray for your abuser **by name**. Do good to them concretely. While still bleeding. | Matt 5:43-48, Luke 6:27-36, Rom 12:14-21 |
+| 3 | 2026-06-28 | Miss the mark | "I'm not a bad person — I haven't broken any big rules." | The Greek for sin is *hamartia* — to miss the mark. The bullseye is the glory of God, and the rule-keeper falls short of it just like the rule-breaker. | Rom 3:23, Heb 4:15, Matt 5:48, Luke 18:9-14 |
 | 4 | 2026-07-26 | Sell what you have | "Be a generous giver out of your surplus." | Sell everything. Hold all things in common with the church. The rich young ruler walked away — the early church didn't. | Mark 10:17-31, Acts 2:44-45, Acts 4:32-37 |
 | 5 | 2026-08-23 | Take no thought for tomorrow | "Plan wisely but don't worry." | Stop storing up. Stop planning for tomorrow. Trust God for today's bread the way Israel ate manna. | Matt 6:25-34, Ex 16:4-21, Phil 4:6-7 |
 | 6 | 2026-09-20 | Seventy times seven | "Forgive when they apologize." | Forgive while still being wronged. Forgive the unrepentant. Pray for them by name today. | Matt 18:21-35, Luke 23:34, Eph 4:32 |
@@ -136,6 +136,7 @@ Each entry contrasts the **comfortable middle** (where most Christians actually 
 Order is not fixed — Adam may handpick the next Faith topic each cycle based on what he's been thinking and praying about.
 
 **Strong runner-ups** (swap in if a theme hits):
+- Bless the one who hurt you (Matt 5:43-48, Luke 6:27-36, Rom 12:14-21) — *originally Week 3; swapped out for "Miss the mark" on 2026-05-07. Still strong — pray for your abuser by name, do good while still bleeding.*
 - Lust as adultery / pluck out your eye (Matt 5:27-30)
 - Turn the other cheek, give to everyone who asks (Matt 5:38-42)
 - Let your yes be yes — no oaths, no white lies (Matt 5:33-37)
@@ -201,6 +202,26 @@ End the empathy+Bible mix on: the Christian doesn't choose between weeping and r
 
 Prayer: short, specific. Returns to the bold subtitle as a refrain — *"I have been told to be over it. Some part of me has agreed."*
 
+### Week 3 — Miss the mark (2026-06-28)
+
+The reframe: most Christians treat sin as a moralistic checklist — "I haven't murdered, stolen, or committed adultery, so I'm fine." The Greek word *hamartia* (ἁμαρτία) is an archery word — *to miss the mark.* Paul stacks two archery words in Rom 3:23: *all have sinned* (hamartia) *and come short* (hystereō) *of the glory of God.* The bullseye is not "don't do the bad stuff" — it's the glory of God, and Christ is the only one who hit it (Heb 4:15).
+
+Lead with: the comfortable Christian's daily ledger — didn't murder, didn't steal, didn't lie (much), didn't commit adultery, didn't get drunk. The internal scoreboard that grades you against the murderer on the news. The respectable Christian who passes the rules-tally and never notices the arrow is in the dirt.
+
+The pivot via the Pharisee and the tax collector (Luke 18:9-14): the Pharisee aimed at *being better than the tax collector* and hit it every time. The tax collector knew his arrow was nowhere near the gold. Only one went home justified. The Pharisee was hitting the wrong target — one he had drawn on the wall himself.
+
+**I anchor possibilities:** *"I am not a bad person. I have used this sentence as a defense."* / *"I have spent my life not breaking the big rules. I have called that holiness."* / *"I have been winning the wrong game."*
+
+Anchor verses: Rom 3:23 (*hamartia* + *hystereō* — both archery), Heb 4:15 (Christ tempted, yet without sin — the only arrow that found the gold), Matt 5:48 (*teleios* — complete/hitting-the-goal), Luke 18:9-14 (Pharisee/tax collector). Closing: 1 Pet 3:18 (the just for the unjust), Rom 8:1 (no condemnation in Christ).
+
+End the empathy+Bible mix on: *"I'm not a bad person"* is a sentence from another religion — the religion of comparison. The Christian sentence is the tax collector's: *God be merciful to me a sinner.* Saying it once, and meaning it, is the door into a different scoring system entirely — Christ's arrow is the one God measures.
+
+**CoC framing:** close with "in him, in the obedience of faith" — keep grace + obedience as two halves of the whole (Matt Bassford's phrasing). Don't collapse into "just believe" or "just call." The arrow keeps falling short *after* you come into him; daily repentance is part of walking with Christ.
+
+**Matt Bassford research (TODO before final edit):** likely-rich themes — "Grace despite disgust" (theme #3), self-righteousness, his unflinching seriousness about the gospel as wound-then-heal. Search the archive for posts on Romans 3:23, the Pharisee/tax collector, and "good person." Borrow phrasing if anything fits.
+
+Prayer: returns to the bold subtitle as refrain — *"I am not a bad person. I have used this sentence as a defense for as long as I can remember."* Closes with re-aim, walking in him, his score not mine.
+
 ---
 
 ## Drafting workflow
@@ -239,6 +260,7 @@ devotionals/extreme-faith/
 ├── RUNBOOK.md                          # this file
 ├── 01-maranatha.md                     # week 1 (published 2026-05-03)
 ├── 02-mourn-in-the-present-tense.md    # week 2 (drafted, scheduled 2026-05-31)
+├── 03-miss-the-mark.md                 # week 3 (drafted, scheduled 2026-06-28)
 ├── ...
 └── archive/                            # published markdown after edits, for reference
 ```
