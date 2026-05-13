@@ -178,6 +178,8 @@ const VERSE_SELECTION_MODEL =
 //               empathy. Mixed in for voice variety and reader range.
 const EMPATHY_PROMPT_VERSION = "empathy-v6";
 const TECHNICAL_PROMPT_VERSION = "technical-v1";
+const NARRATIVE_PROMPT_VERSION = "narrative-v1";
+const PRACTICAL_PROMPT_VERSION = "practical-v1";
 
 // Per-model pricing in USD per million tokens (input, output).
 // Source: OpenAI pricing page, snapshotted 2026-05-02.
@@ -1109,6 +1111,22 @@ AVOID (these are AI tells / preachy patterns; strict)
 - Moralistic call-out language
 - Doctrinal/seminary tone`;
 
+// Shared theological guardrails for the narrative + practical tracks. Keeps
+// the new tracks aligned with the non-denominational / non-institutional
+// Church of Christ sensibility that this app's audience leans on. Not added
+// to the empathy/technical tracks because their behavior is already tuned;
+// these guardrails are explicit because narrative and practical are easier
+// to drift into eisegesis (invented scenes) or moralistic therapeutic deism
+// (action-as-self-improvement) without them.
+const PROMPT_THEOLOGY_GUARDRAILS = `THEOLOGICAL GROUNDING (non-denominational; non-institutional CoC sensibility)
+- Stay close to what the text actually says. Don't invent dialogue, motivations, or scenes that scripture doesn't supply.
+- Grace and obedience are two halves of the same whole. No feelings-only piety. No works-based earning of grace.
+- Refuse moralistic therapeutic deism — "live your truth," "be your best self," "you've got this," "everything happens for a reason" are out of bounds.
+- The world is broken and Christ remakes it. Avoid utopian or world-improvement framing.
+- "Kingdom" refers to Christ's present reign over His church and over hearts — not a future earthly millennial reign.
+- Don't soften hell. Don't drift toward universalism.
+- Self-righteousness is the great religious-people sin. Apply any rebuke to writer/reader first, never to outsiders.`;
+
 function holidayPromptSection(holiday: Holiday): string {
   return `\nHOLIDAY\nThis devotional is for ${holiday.name}. ${holiday.themeHint}\n- Reference "${holiday.name}" in the title.\n- Beat 1's empathy can lean on what ${holiday.name} typically evokes for readers, without presuming any reader's experience.\n`;
 }
@@ -1474,6 +1492,340 @@ Devotional Guidelines:
 `;
 }
 
+// ─── Narrative track: prompts ───────────────────────────────────────
+// Drops the reader inside the biblical scene — present tense, sensory,
+// observational. No invented dialogue or internal monologue. CoC concern:
+// staying close to the inspired text. No Ignatian "place yourself in the
+// scene with Jesus" framings — kept observational, not invocational.
+
+const PROMPT_NARRATIVE_RULES = `VOICE — narrative track
+- Drop the reader inside the biblical scene. Sensory, observational, alive.
+- Present tense, third-person observer ("Peter sees the door swing shut...") or limited second-person ("You're standing at the edge of the crowd...").
+- Anchor concretely in 1st-century reality: heat, dust, lamp oil, crowd noise, the smell of fish, the sound of sandals on stone. Geographical and cultural inference is allowed.
+- DO NOT invent dialogue, internal monologue, or character motivations that scripture doesn't supply. If a character doesn't say it in the text, don't put words in their mouth. If we don't know what someone thought or felt, don't tell us they thought or felt it.
+- One scene, not a montage. Hold the camera in one place.
+- No anachronisms. No phones, no traffic, no "in our 21st-century lives."
+- Avoid Ignatian "place yourself in the scene with Jesus and ask Him a question" framings — keep it observational, not invocational.
+
+STRUCTURE (four beats)
+1. Scene — open inside the moment. Describe what a careful observer would have seen and heard. Build the room with specific, grounded detail (the rope coiled by the boat, the sweat on a forehead, the shadow of a tree). Vary sentence rhythm.
+2. The moment the verse lands — quote the verse in a blockquote with bolded reference. Place it in the action. Why these specific words, in this specific moment. One short Hebrew/Greek nuance is allowed if a word genuinely opens the scene; otherwise skip.
+3. And now — short bridge that pulls the scene into the reader's life. Honor that the cost back then echoes the cost now. Don't preach; observe. End on the real difficulty, not a tidy bow.
+4. Prayer — short open-handed italic paragraph using *single asterisks* (NOT a blockquote — the iOS verse-link detector treats blockquotes as verse references). End with "Amen."
+
+AVOID
+- Invented dialogue or internal thoughts that scripture doesn't supply
+- "Imagine you are..." framings — drop the reader in directly
+- Multi-scene montages or time-jumps
+- Modern anachronisms
+- Long historical exposition — this is a story, not a Wikipedia article
+- Putting words in Jesus' mouth or guessing what He was feeling
+- Closing flourish; the prayer is the close`;
+
+// Few-shot example for the narrative track. Luke 19:5 (Zacchaeus) — picked
+// because the scripture supplies enough scene material (sycamore, crowd,
+// "looked up") that the example can be vivid without inventing anything.
+const PROMPT_NARRATIVE_FEW_SHOT = `# October 12 — Luke 19:5: Under the sycamore
+
+**The tree is the only place left.**
+
+> *"And when Jesus came to the place, he looked up, and saw him, and said unto him, Zacchaeus, make haste, and come down; for to day I must abide at thy house."*
+> **Luke 19:5**
+
+## The tree
+
+The road into Jericho is dust and sandals. The crowd ahead is thick — shoulders, robes, voices climbing over each other. Somewhere in the middle of it, the rabbi is moving slowly toward the city gate.
+
+Behind the crowd, a short man has run ahead. His tunic is hiked up. His sandals slap the stones. He is not used to running like this.
+
+A sycamore stands beside the road, ancient and wide, the branches starting low. He climbs. The bark scrapes his palms.
+
+From up here he can see the road. He can see the back of the rabbi's head moving through the press. He cannot, from up here, be seen. That's the point. A tax collector is not loved in Jericho. A short, rich tax collector is the kind of man who watches from above.
+
+## The moment
+
+The crowd reaches the tree. The rabbi stops walking. He looks up.
+
+The Greek behind "must" is *dei* — necessity, not preference. Not "if you have time." Today. Your house.
+
+The words are said publicly. Anyone in the crowd could have heard them. The branches above Jericho stop being a hiding place. They become a name spoken out loud in front of everyone who hates him.
+
+## And now
+
+You may know the version of climbing into a tree. The corner of a room where the conversation can't reach. The polite distance from the people who would not be glad to see you. The carefully arranged life where you are not, exactly, available.
+
+Christ has a habit of stopping under exactly that tree.
+
+## A prayer
+
+*Lord Jesus, You found Zacchaeus in a hiding place and called him out of it by name. Find the tree I am in. Look up. Speak. And give me the strength to come down. Amen.*`;
+
+function createNarrativePrompt(
+  verse: SelectedVerse,
+  formattedDate: string,
+  holiday: Holiday | null
+): string {
+  return `${PROMPT_INTRO}
+
+VERSE
+${verse.book} ${verse.chapter}:${verse.verse} — "${verse.text}"
+
+DATE
+${formattedDate}
+${holiday ? holidayPromptSection(holiday) : ""}
+${PROMPT_THEOLOGY_GUARDRAILS}
+
+${PROMPT_NARRATIVE_RULES}
+
+EXAMPLE — voice and structure to mirror
+The example below is for a different verse (Luke 19:5). Do NOT reuse this example. Mirror its present-tense observational voice, its four-beat scene→moment→now→prayer structure, and its commitment to staying inside what scripture actually supplies. Then write a new devotional for the actual verse above.
+
+${PROMPT_NARRATIVE_FEW_SHOT}
+
+END OF EXAMPLE — now write your narrative devotional for the actual verse above.
+
+MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
+
+# ${formattedDate} — ${verse.book} ${verse.chapter}:${verse.verse}: {Title — a phrase from the scene, not a sermon topic}
+
+**{One-line bolded subtitle — observational, not first-person. A line that captures the moment.}**
+
+> *"${verse.text}"*
+> **${verse.book} ${verse.chapter}:${verse.verse}**
+
+## {Section header naming the scene}
+
+{The scene in concrete, sensory detail. Where are we? Who is present? What can be seen and heard? Hold the camera in one place. No invented dialogue or interior thoughts.}
+
+## {Section header — the moment the verse lands}
+
+{Let the verse arrive in the scene. Why these specific words, in this specific moment. One short Hebrew/Greek nuance only if a word genuinely opens the meaning.}
+
+## {Section header — and now}
+
+{Bridge to the reader. The scene then; the same kind of weight now. Acknowledge the cost. End on the real difficulty.}
+
+## A prayer
+
+*{Address — Lord / Father / Lord Jesus / Holy Spirit}, {short open-handed prayer in flowing prose, single italic paragraph, no line breaks.} Amen.*
+`;
+}
+
+function createNarrativeMultiVersePrompt(
+  verses: SelectedVerse[],
+  formattedDate: string,
+  holiday: Holiday | null
+): string {
+  const versesList = verses
+    .map((v) => `- ${v.book} ${v.chapter}:${v.verse} — "${v.text}"`)
+    .join("\n");
+  const versesBlockquote = verses
+    .map((v) => `> *"${v.text}"*\n> **${v.book} ${v.chapter}:${v.verse}**`)
+    .join("\n>\n");
+  const primary = verses[0];
+  const titleRef = holiday
+    ? `${holiday.name}`
+    : `${primary.book} ${primary.chapter}:${primary.verse}`;
+
+  return `${PROMPT_INTRO}
+
+VERSES (weave these together through a single scene — the primary verse anchors the moment; the companion verse(s) illuminate it without breaking the camera)
+${versesList}
+
+DATE
+${formattedDate}
+${holiday ? holidayPromptSection(holiday) : ""}
+${PROMPT_THEOLOGY_GUARDRAILS}
+
+${PROMPT_NARRATIVE_RULES}
+
+MULTI-VERSE NOTE
+The primary verse anchors a single scene. The companion verse(s) should appear naturally — quoted in beat 2 as a counterpoint or amplification — without pulling the camera to a second scene. Resist the urge to do two scenes; do one scene that the second verse helps explain.
+
+MARKDOWN OUTPUT (use exactly this skeleton; copy the verse texts verbatim)
+
+# ${formattedDate} — ${titleRef}: {Title — a phrase from the primary scene}
+
+**{One-line bolded subtitle — observational, not first-person.}**
+
+${versesBlockquote}
+
+## {Section header naming the scene}
+
+{The primary scene in concrete, sensory detail. One camera, one place.}
+
+## {Section header — the moment the verse lands}
+
+{The primary verse arriving in the scene. Then bring in the companion verse(s) as illumination — quoted again inline or referenced — showing the same truth from a different angle. No second scene.}
+
+## {Section header — and now}
+
+{Bridge to the reader. Acknowledge the cost. End on the real difficulty.}
+
+## A prayer
+
+*{Address}, {short open-handed prayer drawing from the unified thread, single italic paragraph, no line breaks.} Amen.*
+`;
+}
+
+// ─── Practical track: prompts ───────────────────────────────────────
+// One concrete action for today. Short, direct, honest about the cost.
+// CoC guardrail: action is response to grace, not earning. No moralistic
+// therapeutic deism; no productivity-blog framing; no "5 ways to..."
+
+const PROMPT_PRACTICAL_RULES = `VOICE — practical track
+- Direct. Concrete. The reader has 90 seconds. Give them one thing to do today.
+- Second person OK. Conversational, not coach-speak. No pep-talk.
+- Acknowledge the cost. Don't say obedience is easy when it isn't.
+- One action, not three. Resist the "five ways to..." impulse. One concrete, specific, doable thing.
+- Action is response to grace, not earning. Don't promise outcomes ("if you do X, God will give you Y") — obedience is not a transaction.
+
+STRUCTURE (four beats — aim for ~250-350 words total; shorter is better)
+1. Verse — quote in blockquote with bolded reference. Below the title, one bolded sentence that names what this devotional is asking the reader to do today.
+2. What it says — one short paragraph. What is this verse actually telling us, in plain language? No theology jargon. No "the Greek word here is..." — that's another track's job.
+3. Today — header should be "## Today" (or a one-word variant like "## Do this"). One concrete action in the imperative. Specific enough that the reader knows exactly what it looks like today. Then a sentence or two on why this is hard — name the cost honestly. Don't moralize.
+4. Prayer — single italic paragraph using *single asterisks* (NOT blockquote). Brief. Asks for help with the actual thing the reader is being asked to do. End with "Amen."
+
+ACTION EXAMPLES (seeds for the kind of specificity to aim for — do not reuse verbatim)
+- "Text someone you owe an apology. Don't pad it with explanations or conditions."
+- "Set aside the next ten dollars you'd spend on yourself. Give it away anonymously today."
+- "Sit through one conversation today without preparing your reply while the other person is still talking."
+- "Open your Bible to the chapter the verse comes from and read the next ten verses. No agenda. No notes."
+- "Pick one person you keep meaning to call. Call them today, not tomorrow."
+- "Take an unwon argument from yesterday and let it stay unwon. Don't bring it back up."
+
+AVOID
+- "Be your best self" / "live your truth" / "you've got this" — moralistic therapeutic deism is out
+- "Five ways to..." / "Three things you can do..." — one action only
+- Productivity-blog framing (no "habit stacking," no morning-routine talk, no "build a 30-day streak")
+- Generic "spend time with God today" or "read your Bible more" — too abstract to act on
+- Promising outcomes ("if you do this, God will bless you with X") — obedience is response to grace, not transaction
+- Long theological exposition — keep it tight`;
+
+// Few-shot example for the practical track. Matthew 5:24 — picked because
+// the verse itself names a concrete action ("first be reconciled"), making
+// it a natural template for the one-action structure.
+const PROMPT_PRACTICAL_FEW_SHOT = `# October 14 — Matthew 5:24: First
+
+**Don't bring the worship until the apology is sent.**
+
+> *"Leave there thy gift before the altar, and go thy way; first be reconciled to thy brother, and then come and offer thy gift."*
+> **Matthew 5:24**
+
+## What it says
+
+Jesus interrupts worship to send you on an errand. The altar is not the priority; the relationship is. He doesn't say "after you finish singing" — He says leave the gift right there. Go fix what's broken first.
+
+## Today
+
+Text the one person you owe an apology to. Don't pad it with explanations. Don't make it conditional ("I'm sorry you took it that way…"). Just: "I was wrong about X. I'm sorry."
+
+This is hard because you were probably right about something else, and the apology will feel one-sided. It will feel unfair. The verse doesn't say "first be reconciled if it's deserved." It says first.
+
+## A prayer
+
+*Father, You sent me on an errand before You will accept my worship. Help me go now, even though it costs my pride. Help me name what I did without softening it. Amen.*`;
+
+function createPracticalPrompt(
+  verse: SelectedVerse,
+  formattedDate: string,
+  holiday: Holiday | null
+): string {
+  return `${PROMPT_INTRO}
+
+VERSE
+${verse.book} ${verse.chapter}:${verse.verse} — "${verse.text}"
+
+DATE
+${formattedDate}
+${holiday ? holidayPromptSection(holiday) : ""}
+${PROMPT_THEOLOGY_GUARDRAILS}
+
+${PROMPT_PRACTICAL_RULES}
+
+EXAMPLE — voice and structure to mirror
+The example below is for a different verse (Matthew 5:24). Do NOT reuse this example. Mirror its tight three-section shape, the one-concrete-action discipline, and the honest naming of cost. Then write a new devotional for the actual verse above.
+
+${PROMPT_PRACTICAL_FEW_SHOT}
+
+END OF EXAMPLE — now write your practical devotional for the actual verse above.
+
+MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
+
+# ${formattedDate} — ${verse.book} ${verse.chapter}:${verse.verse}: {Title — a verb or a short imperative phrase}
+
+**{One-line bolded subtitle — names the action the reader is being asked to do today.}**
+
+> *"${verse.text}"*
+> **${verse.book} ${verse.chapter}:${verse.verse}**
+
+## What it says
+
+{One short paragraph. Plain language. What the verse actually says, no jargon.}
+
+## Today
+
+{One concrete action in the imperative. Specific enough that the reader knows exactly what it looks like today. Then a sentence or two on why this is hard — name the cost honestly, no moralizing.}
+
+## A prayer
+
+*{Address — Lord / Father / Lord Jesus / Holy Spirit}, {brief open-handed prayer asking for help with the actual action.} Amen.*
+`;
+}
+
+function createPracticalMultiVersePrompt(
+  verses: SelectedVerse[],
+  formattedDate: string,
+  holiday: Holiday | null
+): string {
+  const versesList = verses
+    .map((v) => `- ${v.book} ${v.chapter}:${v.verse} — "${v.text}"`)
+    .join("\n");
+  const versesBlockquote = verses
+    .map((v) => `> *"${v.text}"*\n> **${v.book} ${v.chapter}:${v.verse}**`)
+    .join("\n>\n");
+  const primary = verses[0];
+  const titleRef = holiday
+    ? `${holiday.name}`
+    : `${primary.book} ${primary.chapter}:${primary.verse}`;
+
+  return `${PROMPT_INTRO}
+
+VERSES (these verses together point at one concrete action — find what they jointly ask of the reader)
+${versesList}
+
+DATE
+${formattedDate}
+${holiday ? holidayPromptSection(holiday) : ""}
+${PROMPT_THEOLOGY_GUARDRAILS}
+
+${PROMPT_PRACTICAL_RULES}
+
+MULTI-VERSE NOTE
+Both verses should jointly identify the one action. Quote them together in the opening blockquote, then in "What it says" name the thread that connects them — but don't unpack each verse separately. The action in "## Today" should be the natural intersection of what they're both asking for.
+
+MARKDOWN OUTPUT (use exactly this skeleton; copy the verse texts verbatim)
+
+# ${formattedDate} — ${titleRef}: {Title — a verb or short imperative phrase}
+
+**{One-line bolded subtitle — names the action the reader is being asked to do today.}**
+
+${versesBlockquote}
+
+## What they say
+
+{One short paragraph. Plain language. The shared thread these verses point at.}
+
+## Today
+
+{One concrete action in the imperative. Then the cost.}
+
+## A prayer
+
+*{Address}, {brief open-handed prayer for the action.} Amen.*
+`;
+}
+
 // ─── Devotional generation (OpenAI) ─────────────────────────────────
 
 async function generateDevotional(
@@ -1547,8 +1899,43 @@ function createSupabaseClient() {
 // new tracks to the end and they get picked up automatically. Custom
 // (Sunday) rows have a NULL track and don't advance the cycle — the next
 // AI day picks up where the previous AI day left off.
-const TRACK_CYCLE = ["empathy", "technical"] as const;
+const TRACK_CYCLE = ["empathy", "technical", "narrative", "practical"] as const;
 type Track = typeof TRACK_CYCLE[number];
+
+const PROMPT_VERSION_BY_TRACK: Record<Track, string> = {
+  empathy: EMPATHY_PROMPT_VERSION,
+  technical: TECHNICAL_PROMPT_VERSION,
+  narrative: NARRATIVE_PROMPT_VERSION,
+  practical: PRACTICAL_PROMPT_VERSION,
+};
+
+function buildSinglePrompt(
+  track: Track,
+  verse: SelectedVerse,
+  formattedDate: string,
+  holiday: Holiday | null,
+): string {
+  switch (track) {
+    case "empathy": return createPrompt(verse, formattedDate, holiday);
+    case "technical": return createTechnicalPrompt(verse, formattedDate, holiday);
+    case "narrative": return createNarrativePrompt(verse, formattedDate, holiday);
+    case "practical": return createPracticalPrompt(verse, formattedDate, holiday);
+  }
+}
+
+function buildMultiPrompt(
+  track: Track,
+  verses: SelectedVerse[],
+  formattedDate: string,
+  holiday: Holiday | null,
+): string {
+  switch (track) {
+    case "empathy": return createMultiVersePrompt(verses, formattedDate, holiday);
+    case "technical": return createTechnicalMultiVersePrompt(verses, formattedDate, holiday);
+    case "narrative": return createNarrativeMultiVersePrompt(verses, formattedDate, holiday);
+    case "practical": return createPracticalMultiVersePrompt(verses, formattedDate, holiday);
+  }
+}
 
 function nextTrack(prev: string | null | undefined): Track {
   if (!prev) return TRACK_CYCLE[0];
@@ -1755,12 +2142,11 @@ Deno.serve(async (req) => {
     // Determine devotional type, testament, and track for this row.
     // Three independent cycles run together:
     //   - type/testament: old single → new single → multi → repeat
-    //   - track:          empathy → technical → repeat (round-robin via TRACK_CYCLE)
+    //   - track:          empathy → technical → narrative → practical → repeat (round-robin via TRACK_CYCLE)
     //   - holidays override type to single, but still advance the track cycle
     const { type: devotionalType, targetTestament, track } =
       await determineDevotionalType(supabase, today, holiday);
-    const promptVersion =
-      track === "empathy" ? EMPATHY_PROMPT_VERSION : TECHNICAL_PROMPT_VERSION;
+    const promptVersion = PROMPT_VERSION_BY_TRACK[track];
     console.log(
       `Devotional type: ${devotionalType}, testament: ${targetTestament}, track: ${track} (${promptVersion})`
     );
@@ -1790,10 +2176,7 @@ Deno.serve(async (req) => {
         };
       });
 
-      prompt =
-        track === "empathy"
-          ? createMultiVersePrompt(versesUsed, formatted, holiday)
-          : createTechnicalMultiVersePrompt(versesUsed, formatted, holiday);
+      prompt = buildMultiPrompt(track, versesUsed, formatted, holiday);
     } else {
       const verse = selectVerse(targetTestament, holiday);
       // Resolve exact text from bible.json for holiday verses
@@ -1806,10 +2189,7 @@ Deno.serve(async (req) => {
         if (resolvedText) verse.text = resolvedText;
       }
       versesUsed = [verse];
-      prompt =
-        track === "empathy"
-          ? createPrompt(verse, formatted, holiday)
-          : createTechnicalPrompt(verse, formatted, holiday);
+      prompt = buildSinglePrompt(track, verse, formatted, holiday);
     }
 
     console.log(

@@ -36,6 +36,7 @@ data class DailyDevotional(
     val anchor_verse: String? = null,
     val verses: List<DevotionalVerse>? = null,
     val model: String? = null,
+    val track: String? = null,
 )
 
 private val Context.devotionalCache by preferencesDataStore(name = "devotional_cache")

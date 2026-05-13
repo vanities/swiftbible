@@ -44,6 +44,7 @@ struct DailyDevotionalView: View {
     @State private var anchorVerse: String?
     @State private var verses: [DevotionalVerse]?
     @State private var model: String?
+    @State private var track: String?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -308,13 +309,44 @@ struct DailyDevotionalView: View {
         anchorVerse = devotional.anchor_verse
         verses = devotional.verses
         model = devotional.model
+        track = devotional.track
         hasDevotional = true
     }
 
     @ViewBuilder
     private var themeContextRow: some View {
+        let chipTrack: String? = {
+            switch track {
+            case "empathy", "technical", "narrative", "practical": return track
+            default: return nil
+            }
+        }()
+        if chipTrack != nil || hasThemeContext {
+            HStack(spacing: 8) {
+                if let chipTrack {
+                    DevotionalStyleChip(track: chipTrack)
+                }
+                themeContextLabel
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.top, 6)
+        }
+    }
+
+    private var hasThemeContext: Bool {
+        if holidayName != nil { return true }
+        if seriesName != nil && seriesPart != nil { return true }
+        if let anchorVerse, devotionalType == "single",
+           parseVerseReference(anchorVerse) != nil { return true }
+        if devotionalType == "multi", let verses, !verses.isEmpty { return true }
+        return false
+    }
+
+    @ViewBuilder
+    private var themeContextLabel: some View {
         if let holidayName {
-            themeContextLabel(
+            themeContextLabelContent(
                 icon: "sparkles",
                 text: "Created for \(holidayName)",
                 showsExternalLink: holidayUrl != nil
@@ -324,14 +356,14 @@ struct DailyDevotionalView: View {
                 UIApplication.shared.open(url)
             }
         } else if let seriesName, let seriesPart {
-            themeContextLabel(
+            themeContextLabelContent(
                 icon: "books.vertical",
                 text: "\(seriesName) · Week \(seriesPart)",
                 showsExternalLink: false
             )
         } else if let anchorVerse, devotionalType == "single",
                   let parsed = parseVerseReference(anchorVerse) {
-            themeContextLabel(
+            themeContextLabelContent(
                 icon: "text.book.closed",
                 text: "Inspired by \(anchorVerse)",
                 showsExternalLink: false
@@ -345,7 +377,7 @@ struct DailyDevotionalView: View {
                 )
             }
         } else if devotionalType == "multi", let verses, !verses.isEmpty {
-            themeContextLabel(
+            themeContextLabelContent(
                 icon: "books.vertical",
                 text: "Inspired by \(uniqueBooks(in: verses).formatted(.list(type: .and, width: .standard)))",
                 showsExternalLink: false
@@ -358,7 +390,7 @@ struct DailyDevotionalView: View {
         return verses.compactMap { seen.insert($0.book).inserted ? $0.book : nil }
     }
 
-    private func themeContextLabel(icon: String, text: String, showsExternalLink: Bool) -> some View {
+    private func themeContextLabelContent(icon: String, text: String, showsExternalLink: Bool) -> some View {
         HStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.caption)
@@ -369,11 +401,8 @@ struct DailyDevotionalView: View {
                 Image(systemName: "arrow.up.forward.square")
                     .font(.caption2)
             }
-            Spacer()
         }
         .foregroundStyle(.secondary)
-        .padding(.horizontal)
-        .padding(.top, 6)
     }
 
     private func parseVerseReference(_ ref: String) -> (book: String, chapter: Int, verse: Int)? {
@@ -403,6 +432,7 @@ struct DailyDevotionalView: View {
         holidayName = nil
         holidayUrl = nil
         anchorVerse = nil
+        track = nil
 
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
