@@ -179,7 +179,7 @@ const VERSE_SELECTION_MODEL =
 const EMPATHY_PROMPT_VERSION = "empathy-v6";
 const TECHNICAL_PROMPT_VERSION = "technical-v1";
 const NARRATIVE_PROMPT_VERSION = "narrative-v1";
-const PRACTICAL_PROMPT_VERSION = "practical-v1";
+const PRACTICAL_PROMPT_VERSION = "practical-v2";
 
 // Per-model pricing in USD per million tokens (input, output).
 // Source: OpenAI pricing page, snapshotted 2026-05-02.
@@ -1674,17 +1674,18 @@ ${versesBlockquote}
 // therapeutic deism; no productivity-blog framing; no "5 ways to..."
 
 const PROMPT_PRACTICAL_RULES = `VOICE — practical track
-- Direct. Concrete. The reader has 90 seconds. Give them one thing to do today.
+- Direct. Concrete. The reader has a few minutes. Give them one thing to do today.
 - Second person OK. Conversational, not coach-speak. No pep-talk.
 - Acknowledge the cost. Don't say obedience is easy when it isn't.
 - One action, not three. Resist the "five ways to..." impulse. One concrete, specific, doable thing.
 - Action is response to grace, not earning. Don't promise outcomes ("if you do X, God will give you Y") — obedience is not a transaction.
 
-STRUCTURE (four beats — aim for ~250-350 words total; shorter is better)
+STRUCTURE (five beats — aim for ~350-450 words total)
 1. Verse — quote in blockquote with bolded reference. Below the title, one bolded sentence that names what this devotional is asking the reader to do today.
-2. What it says — one short paragraph. What is this verse actually telling us, in plain language? No theology jargon. No "the Greek word here is..." — that's another track's job.
-3. Today — header should be "## Today" (or a one-word variant like "## Do this"). One concrete action in the imperative. Specific enough that the reader knows exactly what it looks like today. Then a sentence or two on why this is hard — name the cost honestly. Don't moralize.
-4. Prayer — single italic paragraph using *single asterisks* (NOT blockquote). Brief. Asks for help with the actual thing the reader is being asked to do. End with "Amen."
+2. What it says — one paragraph (3-5 sentences). What is this verse actually telling us, in plain language? No theology jargon. No "the Greek word here is..." — that's another track's job.
+3. Today — header "## Today" (or one-word variant like "## Do this"). One concrete action in the imperative. Specific enough that the reader knows exactly what it looks like today. Then a sentence or two on why this is hard — name the cost honestly. Don't moralize.
+4. When you try — header "## When you try" (or "## Where it gets hard"). Short honest paragraph naming the specific failure mode for THIS action: how it tends to go sideways in the actual doing of it. What the verse says to do when it falls apart mid-attempt. Don't moralize the failure. Be specific — not "you might find it hard" but "you will draft the message and then add a 'but'."
+5. Prayer — single italic paragraph using *single asterisks* (NOT blockquote). Brief. Asks for help with the actual thing the reader is being asked to do. End with "Amen."
 
 ACTION EXAMPLES (seeds for the kind of specificity to aim for — do not reuse verbatim)
 - "Text someone you owe an apology. Don't pad it with explanations or conditions."
@@ -1722,9 +1723,13 @@ Text the one person you owe an apology to. Don't pad it with explanations. Don't
 
 This is hard because you were probably right about something else, and the apology will feel one-sided. It will feel unfair. The verse doesn't say "first be reconciled if it's deserved." It says first.
 
+## When you try
+
+You will draft the message and then add a "but." You will want to be fair to your side of the story. Notice that Jesus does not say "first be reconciled if it's mutually equitable." He says first. Send the apology without the second half. The conversation about who else was wrong can happen tomorrow, in person, or never. Today's job is the first half.
+
 ## A prayer
 
-*Father, You sent me on an errand before You will accept my worship. Help me go now, even though it costs my pride. Help me name what I did without softening it. Amen.*`;
+*Father, You sent me on an errand before You will accept my worship. Help me go now, even though it costs my pride. Help me name what I did without softening it, and keep me from adding the "but." Amen.*`;
 
 function createPracticalPrompt(
   verse: SelectedVerse,
@@ -1761,11 +1766,15 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 ## What it says
 
-{One short paragraph. Plain language. What the verse actually says, no jargon.}
+{One paragraph, 3-5 sentences. Plain language. What the verse actually says, no jargon.}
 
 ## Today
 
 {One concrete action in the imperative. Specific enough that the reader knows exactly what it looks like today. Then a sentence or two on why this is hard — name the cost honestly, no moralizing.}
+
+## When you try
+
+{Short honest paragraph naming the specific failure mode for this action — how it tends to go sideways in the actual doing of it. What the verse says to do when it falls apart mid-attempt. Be specific, not abstract.}
 
 ## A prayer
 
@@ -1814,11 +1823,15 @@ ${versesBlockquote}
 
 ## What they say
 
-{One short paragraph. Plain language. The shared thread these verses point at.}
+{One paragraph, 3-5 sentences. Plain language. The shared thread these verses point at.}
 
 ## Today
 
 {One concrete action in the imperative. Then the cost.}
+
+## When you try
+
+{Short honest paragraph naming the specific failure mode for this action and what the verses say to do when it goes sideways. Be specific.}
 
 ## A prayer
 
@@ -2101,10 +2114,15 @@ Deno.serve(async (req) => {
   try {
     const supabase = createSupabaseClient();
 
-    // Optional `forDate` (YYYY-MM-DD) request body param lets callers
-    // generate a devotional for a specific date — useful for testing
-    // or backfilling. Falls back to current date if absent or empty.
+    // Optional body params:
+    //   forDate (YYYY-MM-DD) — generate for a specific date; useful for
+    //     testing or backfilling. Falls back to current date if absent.
+    //   force (boolean) — when true, skip the existing-row check and
+    //     regenerate even if a devotional already exists for the date.
+    //     The upsert (onConflict: for_date) replaces the prior row.
+    //     Useful when iterating on prompts.
     let targetDate = new Date();
+    let force = false;
     try {
       const body = await req.json();
       if (typeof body?.forDate === "string" && body.forDate.length > 0) {
@@ -2118,6 +2136,10 @@ Deno.serve(async (req) => {
         targetDate = parsed;
         console.log(`forDate override: ${body.forDate}`);
       }
+      if (body?.force === true) {
+        force = true;
+        console.log("force=true: regenerating even if row exists");
+      }
     } catch (_) {
       // Empty body or non-JSON is fine — fall back to current date.
     }
@@ -2125,12 +2147,14 @@ Deno.serve(async (req) => {
     const today = targetDate;
     const { formatted, isoDate } = getFormattedDate(targetDate);
 
-    const existingDevotional = await fetchExistingDevotional(supabase, isoDate);
-    if (existingDevotional) {
-      console.log(`Devotional already exists for ${isoDate}; returning cached content.`);
-      return new Response(existingDevotional, {
-        headers: { "Content-Type": "text/plain" },
-      });
+    if (!force) {
+      const existingDevotional = await fetchExistingDevotional(supabase, isoDate);
+      if (existingDevotional) {
+        console.log(`Devotional already exists for ${isoDate}; returning cached content.`);
+        return new Response(existingDevotional, {
+          headers: { "Content-Type": "text/plain" },
+        });
+      }
     }
 
     // Check for holiday
