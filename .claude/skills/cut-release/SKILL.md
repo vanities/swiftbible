@@ -25,6 +25,8 @@ This runbook calls those in the right order with the right gotchas baked in.
 | `xcodebuild: error: The -authenticationKeyPath flag must be an absolute path to an existing file` | Makefile referenced `$(APP_STORE_API_KEY)` which is empty unless caller exports it | `make upload` now sources `appstore/.env` and uses `$ASC_KEY_ID` / `$ASC_ISSUER_ID` directly |
 | `rsync: --extended-attributes: unknown option` (during exportArchive) | Homebrew rsync 3.4+ on PATH; Xcode invokes it for IPA packaging | `make upload` prepends `/usr/bin` to PATH so Apple's rsync wins |
 | `submit-version` succeeds but Apple shows "no build attached" | `submit_version.py` didn't attach builds | Script now auto-finds the latest VALID build for the version's marketing string and PATCHes the relationship before submitting |
+| `make release` log says `Upload complete!` and `EXPORT SUCCEEDED`, but submit-version errors with `no VALID build found` | Apple's `/v1/builds` endpoint can lag the upload pipeline by 30-60+ min — sometimes the build is in the preReleaseVersions relation before it surfaces in the `/builds` index. Not a real failure | Wait it out. If still missing after an hour, query `GET /v1/preReleaseVersions?filter[app]=...&filter[version]=1.43&include=builds` directly — that endpoint surfaces in-flight builds earlier than `/builds` does |
+| `warning: exportArchive Upload Symbols Failed. The archive did not include a dSYM for the Sentry.framework` | Sentry SDK frameworks ship without dSYMs in the xcarchive; Xcode's upload-symbols step can't ship them to Apple | Not fatal — upload still succeeds. But until Sentry's own dSYMs are uploaded via `sentry-cli upload-dif` against `build/swiftbible.xcarchive/dSYMs`, Sentry crash reports for this build won't symbolicate. TODO: add a sentry-cli step to `make release` after upload succeeds |
 
 ## Workflow
 
@@ -91,7 +93,15 @@ $EDITOR android/app/src/main/play/release-notes/en-US/default.txt   # 500-char P
 make release    # archive + exportArchive + upload to ASC
 ```
 
-Takes ~5-15 min depending on machine. Watch for `** EXPORT SUCCEEDED **` and `Upload complete!`. The build needs ~1-5 min after upload to flip to `VALID` in ASC.
+Takes ~5-15 min depending on machine. Watch for `** EXPORT SUCCEEDED **` and `Upload complete!`. The build then needs Apple-side processing before `make submit-version` can attach it — historically this was 1-5 min, but **has been observed to take up to ~1 hour** during busy Apple-side periods. The `/v1/builds` endpoint specifically can lag; `/v1/preReleaseVersions?include=builds` often surfaces the build earlier.
+
+Expect a non-fatal warning at the end of upload:
+
+```
+warning: exportArchive Upload Symbols Failed. The archive did not include a dSYM for the Sentry.framework...
+```
+
+This doesn't block the build. It does mean Sentry crash reports for this build won't be symbolicated until `sentry-cli upload-dif build/swiftbible.xcarchive/dSYMs` is run separately. See the gotchas table; eventually fold this into `make release`.
 
 ### 7. Submit iOS for review
 
@@ -100,7 +110,7 @@ make submit-version DRY=1     # preview — shows the build it found, the attach
 make submit-version           # actual submit
 ```
 
-`submit_version.py` now auto-attaches the latest VALID build for the version. If the build hasn't finished processing, it errors with "no VALID build found" — wait a minute and retry.
+`submit_version.py` now auto-attaches the latest VALID build for the version. If the build hasn't finished processing, it errors with "no VALID build found" — wait and retry. **Plan for ~30-60 min of Apple-side processing** on top of the upload time (the historical "1-5 min" estimate has not held lately). Any retry loop should cap at 60+ min, not under 10. To check progress without retrying the submit, hit `/v1/preReleaseVersions?filter[app]=$ASC_APP_ID&filter[version]=1.43&include=builds` directly — it surfaces in-flight builds earlier than `/v1/builds` does.
 
 ### 8. Promote Android internal → production
 
