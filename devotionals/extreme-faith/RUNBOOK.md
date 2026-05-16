@@ -93,7 +93,7 @@ These devotionals are written from a (non-institutional) Church of Christ lens. 
 - **Grace and obedience are inseparable.** Salvation by grace through faith, with obedience as the response. Not antinomianism; not works-righteousness. (Matt Bassford: *"two halves of the same whole."*)
 - **Anti-premillennial.** Kingdom = Christ's present reign over hearts and the church, not a future earthly millennium.
 
-When using the Matt Bassford research skill (`.claude/skills/matt-bassford/`), Matt's positions match this framework — see `references/theology.md` for anchor posts on each.
+When using the Matt Bassford research skill (`skills/matt-bassford/`), Matt's positions match this framework — see `references/theology.md` for anchor posts on each.
 
 ### Topics flagged for extra CoC care
 
@@ -269,7 +269,7 @@ devotionals/extreme-faith/
 
 ## Reference
 
-- Skill: `skills/custom-devotional-crafter/` (also symlinked to `.claude/skills/`)
+- Skill: `skills/custom-devotional-crafter/` (Claude Code also sees it through `.claude/skills/`)
 - Format guide: `skills/custom-devotional-crafter/references/format-guide.md`
-- Matt Bassford research skill: `.claude/skills/matt-bassford/` (use for theme research, voice borrows, theological pushback flags)
+- Matt Bassford research skill: `skills/matt-bassford/` (use for theme research, voice borrows, theological pushback flags)
 - Engagement dashboard: https://us.posthog.com/project/335021/dashboard/1512720

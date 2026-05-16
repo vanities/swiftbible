@@ -102,5 +102,5 @@ devotionals/extreme-rest/
 - Shared boilerplate: [extreme-faith/RUNBOOK.md](../extreme-faith/RUNBOOK.md)
 - Skill: `skills/custom-devotional-crafter/`
 - Format guide: `skills/custom-devotional-crafter/references/format-guide.md`
-- Matt Bassford research skill: `.claude/skills/matt-bassford/` — Matt's writing on usefulness and self-reliance ("Self-reliance/strength as spiritual blindspot" is theme #6 in `themes.md`) is rich. Essential reading: `2022-08-16-uselessness.md`. Note: Matt rarely wrote *directly* on rest as discipline; expect the Matt skill to surface adjacent material rather than direct hits.
+- Matt Bassford research skill: `skills/matt-bassford/` — Matt's writing on usefulness and self-reliance ("Self-reliance/strength as spiritual blindspot" is theme #6 in `themes.md`) is rich. Essential reading: `2022-08-16-uselessness.md`. Note: Matt rarely wrote *directly* on rest as discipline; expect the Matt skill to surface adjacent material rather than direct hits.
 - Engagement dashboard: https://us.posthog.com/project/335021/dashboard/1512720

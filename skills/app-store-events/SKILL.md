@@ -27,7 +27,7 @@ Both sides are needed for a complete event. Don't ship one without the other.
 | `appstore/EVENTS.md` | 12-month rolling calendar with submit-by dates per event |
 | `appstore/.env` | ASC credentials (shared with `push_listing.py`). See [Credentials reference](#credentials-reference). |
 | `Makefile` (`pull-events`, `push-event`, `submit-event` targets) | One-liner wrappers around `push_event.py` |
-| `.claude/skills/app-store-events/gen_reading_plan.py` | Shared Swift array generator — verse extraction, partial-`<JESUS>` splitting, markdown/Swift rendering. Invoke with `--event <slug>`. |
+| `skills/app-store-events/gen_reading_plan.py` | Shared Swift array generator — verse extraction, partial-`<JESUS>` splitting, markdown/Swift rendering. Invoke with `--event <slug>`. |
 
 > `appstore/submit_version.py` is **not** part of this skill — it submits an app *version* for review (see `/app-store-listing`). For events, use `make submit-event` (which calls `push_event.py --submit`).
 
@@ -145,7 +145,7 @@ Then list it in `allEvents`. The MoreView card auto-shows during the date window
 
 #### Generator pattern (always use this)
 
-The generator is a single shared script at `.claude/skills/app-store-events/gen_reading_plan.py`. Per-event data lives at `appstore/events/<slug>/days.py` — the script handles verse extraction, partial-verse `<JESUS>` tag splitting, markdown formatting, and Swift escaping; `days.py` only contains content (intros, per-verse commentary, conclusions).
+The generator is a single shared script at `skills/app-store-events/gen_reading_plan.py`. Per-event data lives at `appstore/events/<slug>/days.py` — the script handles verse extraction, partial-verse `<JESUS>` tag splitting, markdown formatting, and Swift escaping; `days.py` only contains content (intros, per-verse commentary, conclusions).
 
 For a new event:
 
@@ -153,7 +153,7 @@ For a new event:
 2. Run the generator and splice it into `AppEvent.swift`:
 
 ```bash
-uv run --quiet python3 .claude/skills/app-store-events/gen_reading_plan.py --event <slug> > /tmp/new_plan.swift
+uv run --quiet python3 skills/app-store-events/gen_reading_plan.py --event <slug> > /tmp/new_plan.swift
 uv run --quiet python3 -c "
 from pathlib import Path
 src = Path('swiftbible/Models/AppEvent.swift')

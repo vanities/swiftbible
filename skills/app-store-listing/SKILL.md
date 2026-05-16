@@ -251,7 +251,7 @@ The `.p8` lives at the repo root (gitignored via `*.p8`). Apple's centralized lo
 - `/app-store-events` — adjacent skill for In-App Events (Pentecost, Advent, Lent, etc.)
 - `appstore/README.md` — extended setup docs and screenshot pipeline
 - `appstore/EVENTS.md` — 12-month event calendar
-- `CLAUDE.md` — repo overview and deployment policy
+- `AGENTS.md` — repo overview and deployment policy
 
 ## Don't
 

@@ -101,5 +101,5 @@ devotionals/extreme-grace/
 - Shared boilerplate: [extreme-faith/RUNBOOK.md](../extreme-faith/RUNBOOK.md)
 - Skill: `skills/custom-devotional-crafter/`
 - Format guide: `skills/custom-devotional-crafter/references/format-guide.md`
-- Matt Bassford research skill: `.claude/skills/matt-bassford/` — Matt's late writing on grace ("Grace despite disgust" is theme #3 in `themes.md`) is unusually rich. Essential reading: `2022-12-07-disgusting.md` and `2022-09-14-salvation-by-grace.md`.
+- Matt Bassford research skill: `skills/matt-bassford/` — Matt's late writing on grace ("Grace despite disgust" is theme #3 in `themes.md`) is unusually rich. Essential reading: `2022-12-07-disgusting.md` and `2022-09-14-salvation-by-grace.md`.
 - Engagement dashboard: https://us.posthog.com/project/335021/dashboard/1512720

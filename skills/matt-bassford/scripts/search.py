@@ -22,7 +22,7 @@ from pathlib import Path
 
 
 # Resolve archive path: this script lives at
-# .claude/skills/matt-bassford/scripts/search.py — walk up four parents to
+# skills/matt-bassford/scripts/search.py — walk up four parents to
 # the repo root, then descend into speakers/matt-bassford/posts.
 ARCHIVE = (
     Path(__file__).resolve().parent.parent.parent.parent.parent

@@ -1,7 +1,7 @@
 """Generate a Swift `[EventReadingDay]` block from a per-event days.py spec.
 
 Usage (from repo root):
-    uv run --quiet python3 .claude/skills/app-store-events/gen_reading_plan.py --event pentecost > /tmp/plan.swift
+    uv run --quiet python3 skills/app-store-events/gen_reading_plan.py --event pentecost > /tmp/plan.swift
 
 Each event provides its own data at `appstore/events/<slug>/days.py`:
     PLAN_NAME = "<slug>ReadingPlan"   # Swift identifier, e.g. "pentecostReadingPlan"

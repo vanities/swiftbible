@@ -105,5 +105,5 @@ devotionals/extreme-delight/
 - Shared boilerplate: [extreme-faith/RUNBOOK.md](../extreme-faith/RUNBOOK.md)
 - Skill: `skills/custom-devotional-crafter/`
 - Format guide: `skills/custom-devotional-crafter/references/format-guide.md`
-- Matt Bassford research skill: `.claude/skills/matt-bassford/` — Matt's writing on heaven-as-relational-fulfillment is the closest match (theme #1 in `themes.md`). Essential reading: `2018-12-03-heaven-the-eternal-party.md`. See the Matt note above for his pushback on present-tense joy.
+- Matt Bassford research skill: `skills/matt-bassford/` — Matt's writing on heaven-as-relational-fulfillment is the closest match (theme #1 in `themes.md`). Essential reading: `2018-12-03-heaven-the-eternal-party.md`. See the Matt note above for his pushback on present-tense joy.
 - Engagement dashboard: https://us.posthog.com/project/335021/dashboard/1512720

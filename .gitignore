@@ -73,7 +73,7 @@ supabase/.env
 *.md
 !devotionals/**/*.md
 !speakers/**/*.md
-!.claude/skills/**/*.md
+!skills/**/*.md
 !android/docs/**/*.md
 .claude/settings.local.json
 .mcp.json

@@ -1,6 +1,6 @@
 """Per-day spec for the Pentecost 2026 reading plan.
 
-Consumed by .claude/skills/app-store-events/gen_reading_plan.py — that script
+Consumed by skills/app-store-events/gen_reading_plan.py — that script
 handles verse extraction, partial-verse <JESUS> tag splitting, markdown
 formatting, and Swift escaping. Edit per-event content here; edit shared
 rendering in the skill script.

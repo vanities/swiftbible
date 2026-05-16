@@ -168,7 +168,7 @@ upload:
 release: archive upload
 
 # --- App Store Listings ---
-# See .claude/skills/app-store-listing/SKILL.md for the full workflow.
+# See skills/app-store-listing/SKILL.md for the full workflow.
 
 pull-listings:
 	@uv run --with PyJWT --with cryptography --with requests --with python-dotenv --with PyYAML \
