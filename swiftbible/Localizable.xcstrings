@@ -91,6 +91,12 @@
         }
       }
     },
+    "%@ style" : {
+
+    },
+    "%@ style. Tap to learn more." : {
+
+    },
     "%@, %@" : {
       "localizations" : {
         "en" : {

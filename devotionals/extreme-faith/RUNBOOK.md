@@ -62,6 +62,8 @@ Beats 1–3 can span 2–3 `##` sections depending on how the argument unfolds; 
 - Bullet lists of abstractions
 - Moralistic call-out language
 - Generic "may you..." benediction at the end
+- Em dashes (—) in prose. Use commas, periods, semicolons, or parentheses. The em dash is a strong AI tell. Exception: structural title format `# Date — Reference: Title` is fine; nowhere else.
+- Antithesis constructions of the form "It's not X, it's Y" / "Not X, but Y" / "X is not the point. Y is." Reads as ChatGPT cadence. Rephrase positively or rebuild the sentence so the contrast isn't the structure carrying the meaning.
 
 **Do:**
 - **Anchor with "I" first.** The bold subtitle is a personal admission. The prayer returns to first-person. The body of the devotional can universalize to "you" / "we", but the frame is **I → we → I**.
@@ -122,7 +124,7 @@ Each entry contrasts the **comfortable middle** (where most Christians actually 
 |---|---|---|---|---|---|
 | 1 | **2026-05-03** ✅ | **Maranatha** | "Jesus will come back — *eventually*." | Pray for him to come back **tonight**, even before your kids grow up. | Rev 22:20, 2 Pet 3:9, Phil 3:20 |
 | 2 | **2026-05-31** ✅ | **Mourn in the present tense** | "Mourn the loss but hold onto hope." | Mourn AND speak of them in the present tense. Carry the wound for forty years AND know it's not the whole story. | 1 Thess 4:13, John 11:35, Phil 1:21-23, 1 Cor 15:55 |
-| 3 | 2026-06-28 | Miss the mark | "I'm not a bad person — I haven't broken any big rules." | The Greek for sin is *hamartia* — to miss the mark. The bullseye is the glory of God, and the rule-keeper falls short of it just like the rule-breaker. | Rom 3:23, Heb 4:15, Matt 5:48, Luke 18:9-14 |
+| 3 | **2026-06-28** ✅ | **Miss the mark** | "I'm not a bad person — I haven't broken any big rules." | The Greek for sin is *hamartia* — to miss the mark. The bullseye is the glory of God, and the rule-keeper falls short of it just like the rule-breaker. | Rom 3:23, Heb 4:15, Matt 5:48, Luke 18:9-14 |
 | 4 | 2026-07-26 | Sell what you have | "Be a generous giver out of your surplus." | Sell everything. Hold all things in common with the church. The rich young ruler walked away — the early church didn't. | Mark 10:17-31, Acts 2:44-45, Acts 4:32-37 |
 | 5 | 2026-08-23 | Take no thought for tomorrow | "Plan wisely but don't worry." | Stop storing up. Stop planning for tomorrow. Trust God for today's bread the way Israel ate manna. | Matt 6:25-34, Ex 16:4-21, Phil 4:6-7 |
 | 6 | 2026-09-20 | Seventy times seven | "Forgive when they apologize." | Forgive while still being wronged. Forgive the unrepentant. Pray for them by name today. | Matt 18:21-35, Luke 23:34, Eph 4:32 |
@@ -132,11 +134,14 @@ Each entry contrasts the **comfortable middle** (where most Christians actually 
 | 10 | 2027-01-10 | Confess me before men | "Live a quiet Christian life." | Lose your job for the gospel. Lose your friends. Be ready to be martyred. Being ashamed of Christ is being denied by him. | Mark 8:38, Matt 10:32-33, Rom 1:16, Acts 5:41 |
 | 11 | 2027-02-07 | Anger is murder | "Anger isn't a sin if I don't act on it." | Jesus equates anger in the heart with murder. Hatred for a brother is killing him in your heart. | Matt 5:21-26, 1 John 3:15, James 1:19-20 |
 | 12 | 2027-03-07 | Take up your cross daily | "I committed to Christ years ago." | Discipleship is *daily.* The cross isn't a moment of conversion — it's the habit of choosing Christ over the self that wants the easier path, every day, until you die. | Luke 9:23, 1 Cor 15:31, Gal 2:20, Rom 6:6 |
+| 13 | 2027-04-04 | That's someone's son | "He died for my sins" — as flat doctrine. | A son. A mother watched him be tortured to death. The Father sent him *knowing.* Stop and feel what you have stopped feeling. | John 19:25-27, Luke 2:35, John 3:16, Isa 53 |
+| 14 | 2027-05-02 | Be fruitful and multiply | "Christianity is private. I don't push it on anyone." | God's first command was *multiply.* The modern Christian has settled into sterility — few disciples, often few kids, no investment. Your faith should reproduce. | Gen 1:28, Ps 127:3-5, Matt 28:19-20, John 15:8, 2 Tim 2:2 |
 
 Order is not fixed — Adam may handpick the next Faith topic each cycle based on what he's been thinking and praying about.
 
 **Strong runner-ups** (swap in if a theme hits):
 - Bless the one who hurt you (Matt 5:43-48, Luke 6:27-36, Rom 12:14-21) — *originally Week 3; swapped out for "Miss the mark" on 2026-05-07. Still strong — pray for your abuser by name, do good while still bleeding.*
+- Ice cream before every meal (Mark 12:31, Heb 12:5-11, 1 Cor 9:27, Prov 13:24) — *parental empathy as a self-discipline lens. You wouldn't let your kid eat ice cream before every meal — you love him too much. But you let yourself binge on whatever your version of ice cream is. You'd discipline your kid out of love; you won't discipline yourself. Faith-extreme: "love your neighbor as yourself" assumes you actually love yourself well — most of us love our kids well and ourselves badly. Title preference confirmed; sister-piece in spirit to W13 ("That's someone's son") — that one uses parental love to measure the Father's grief; this one uses it to measure your self-neglect.*
 - Lust as adultery / pluck out your eye (Matt 5:27-30)
 - Turn the other cheek, give to everyone who asks (Matt 5:38-42)
 - Let your yes be yes — no oaths, no white lies (Matt 5:33-37)
@@ -156,13 +161,13 @@ Order is not fixed — Adam may handpick the next Faith topic each cycle based o
 |---|---|
 | 2026-05-03 | Faith #1 (Maranatha) ✅ |
 | 2026-05-10 | Grace #1 |
-| 2026-05-17 | Rest #1 |
+| 2026-05-17 | Rest #1 (The bread that breeds worms) ✅ published |
 | 2026-05-24 | Delight #1 |
 | 2026-05-31 | Faith #2 (Mourn in the present tense) ✅ drafted |
 | 2026-06-07 | Grace #2 |
 | 2026-06-14 | Rest #2 |
 | 2026-06-21 | Delight #2 |
-| 2026-06-28 | Faith #3 |
+| 2026-06-28 | Faith #3 (Miss the mark) ✅ published |
 | 2026-07-05 | Grace #3 |
 | ... | (continues rotating) |
 
@@ -222,6 +227,52 @@ End the empathy+Bible mix on: *"I'm not a bad person"* is a sentence from anothe
 
 Prayer: returns to the bold subtitle as refrain — *"I am not a bad person. I have used this sentence as a defense for as long as I can remember."* Closes with re-aim, walking in him, his score not mine.
 
+### Week 13 — That's someone's son (2027-04-04, week after Easter)
+
+The reframe: most Christians have abstracted the cross into theology. *"He died for my sins."* Said often enough, it stops landing. The pivot: Jesus had a mother. Mary stood at the foot of the cross (John 19:25-27) and watched her son be tortured to death — fulfilling Simeon's prophecy from 33 years earlier that a sword would pierce through her own soul (Luke 2:35). The Father sent him *knowing.* Whatever you can imagine about watching your own son die, that is what the Father chose. John 3:16: *"For God so loved the world that he gave his only begotten Son."* The verb is *gave.* He handed his son over.
+
+The "week after Easter" slot is intentional — most Easter services skip from the empty tomb to brunch reservations. This devotional sits in what got skipped: the cost on the way to the resurrection.
+
+Lead with: the comfortable Christian who can say *"Christ died for our sins"* without flinching. The flat way the crucifixion lives in your head — a doctrinal coordinate, not a scene. The Sunday school flannelgraph. The Easter service that resolves too quickly.
+
+Concrete sensory pivots: imagine your son. The soldiers stripping him. The nails. His mother in the crowd. Don't theologize past it — sit in it.
+
+**Parental-imagination beat (load-bearing for this draft):** use the universal parental impulse to measure what the Father actually did. *"You wouldn't let your kid skin his knee if you could prevent it. You'd take the fall instead of him. You'd run into traffic. You'd bleed first. Now imagine handing your kid over to soldiers. Choosing the nails. Choosing not to intervene when he cried out."* The reader's own parental love — real, imagined, or remembered from their own father — becomes the measuring rod for the Father's love and the gravity of sin. *That* is what John 3:16 means by *gave.* Adam heard this angle from a sermon; keep the empathic logic load-bearing in the draft, not decorative.
+
+**I anchor possibilities:** *"I have learned to say 'He died for my sins' without flinching. I have forgotten that's someone's son."* / *"I have read the crucifixion as theology. I have not read it as grief."* / *"I have not let it cost me what it cost her."*
+
+Anchor verses: John 19:25-27 (*"Now there stood by the cross of Jesus his mother"* — three sentences in scripture; sit with them), Luke 2:35 (*"a sword shall pierce through thy own soul"* — Simeon to Mary in the temple, 33 years before the sword arrived), John 3:16 (the Father *gave* — the cost is in the verb), Isaiah 53:3-5 (the suffering servant), Matt 27:46 (*"My God, my God, why hast thou forsaken me?"* — the Father turning).
+
+**CoC framing:** Mary is biblical, not Marian. She was the mother of Jesus and she watched him die — that's narrative, not Mariology. Don't pray to her. Don't elevate her. *Do* let yourself feel the sword Simeon promised. Her grief is a window into the Father's grief.
+
+End the empathy+Bible mix on: the cost on the *Father's* side. The triune God grieving the death of the Son. The hidden weight of *"he gave his only begotten."* That is what your sin cost — not an abstract debt, but a son.
+
+**Matt Bassford research (TODO before final edit):** Matt wrote often on the cross and on the cost of discipleship. Search for posts on the crucifixion narrative, John 3:16 specifically, and Mary at the cross. His eschatological frame (world-broken / hope-elsewhere) likely pairs well here — the cross is the wound through which the hope arrives.
+
+Prayer: returns to the bold subtitle as refrain. Specific request for the heart to feel what it has stopped feeling. End softer than usual — this devotional has done its wounding in the body; the prayer should let the reader sit, not strive.
+
+### Week 14 — Be fruitful and multiply (2027-05-02)
+
+The reframe: God's first command, given to humanity in the garden before sin, was *be fruitful and multiply* (Gen 1:28). Repeated to Noah after the flood. Echoed in the Great Commission (Matt 28:19) — make disciples of all nations. The biblical posture is *multiplication.* The modern Christian has quietly settled into sterility in every direction — few disciples, often few children, no spiritual investment in the next generation. Christianity has become a private consumption good. The first command says it was never supposed to be.
+
+Lead with: the church member who's been faithful for 20 years and never led anyone to Christ. The couple who decided two was enough and never thought hard about it. The Bible app read alone in bed. The faith that has nowhere to go because you never planted it anywhere. The quiet assumption that your salvation is a private possession.
+
+**The squeeze** (both halves carry weight, but spiritual fruit does the heavier lifting):
+- **Spiritual sterility**: when did you last share the gospel? When did you last disciple someone? When did you last cause faith to multiply? Paul to Timothy: *"the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also"* (2 Tim 2:2) — four generations in one verse.
+- **Physical fruitlessness**: not a guilt trip, not a contraception screed — a question. Are children, in your imagination, a *blessing* (Ps 127:3-5) or a *cost*? The Christian view is the former. The cultural default is the latter. Which one is shaping your decisions?
+
+**I anchor possibilities:** *"I have been a Christian for years and made no Christians."* / *"My faith has reproduced in no one."* / *"I have called my faith private. The first command called it multiplication."*
+
+Anchor verses: Gen 1:28 (the first command — be fruitful, multiply, fill, subdue), Ps 127:3-5 (children are an heritage of the LORD), Matt 28:19-20 (Great Commission as spiritual multiplication), John 15:8 (*"herein is my Father glorified, that ye bear much fruit"*), 2 Tim 2:2 (four generations of discipling in one verse).
+
+**CoC framing:** stay clear of advocating against contraception — CoC has no official teaching here, and this is personal-conviction territory. The strongest indictment is the spiritual sterility side. The physical side opens the question without prescribing the answer. Frame: *"the cultural default has shaped you more than you noticed."* Don't shame the infertile, the single, or those with smaller families — *fruit* in scripture is broader than offspring (Phil 1:22, Rom 1:13).
+
+**Matt Bassford research (TODO before final draft):** Matt wrote extensively on personal evangelism, discipleship, and the church as a multiplying body. Search the archive for posts on evangelism reluctance, "private faith," and the Great Commission. Likely rich anchor material; his late-voice work on the church's mission is the place to start.
+
+End the empathy+Bible mix on: the question is not *am I a good Christian.* The question is *has my faith reproduced.* The first command and the last both say *multiply.*
+
+Prayer: short, specific. Names the sterility honestly. Asks for fruitfulness in whatever direction God appoints — children, disciples, both, or fruit in unexpected forms.
+
 ---
 
 ## Drafting workflow
@@ -260,7 +311,7 @@ devotionals/extreme-faith/
 ├── RUNBOOK.md                          # this file
 ├── 01-maranatha.md                     # week 1 (published 2026-05-03)
 ├── 02-mourn-in-the-present-tense.md    # week 2 (drafted, scheduled 2026-05-31)
-├── 03-miss-the-mark.md                 # week 3 (drafted, scheduled 2026-06-28)
+├── 03-miss-the-mark.md                 # week 3 (published 2026-06-28)
 ├── ...
 └── archive/                            # published markdown after edits, for reference
 ```

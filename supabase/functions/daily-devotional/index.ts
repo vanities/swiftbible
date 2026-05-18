@@ -176,10 +176,10 @@ const VERSE_SELECTION_MODEL =
 //               reflection-question bullet list, italic final meditation.
 //               Heavier on biblical-historical content, lighter on modern
 //               empathy. Mixed in for voice variety and reader range.
-const EMPATHY_PROMPT_VERSION = "empathy-v6";
-const TECHNICAL_PROMPT_VERSION = "technical-v1";
-const NARRATIVE_PROMPT_VERSION = "narrative-v1";
-const PRACTICAL_PROMPT_VERSION = "practical-v2";
+const EMPATHY_PROMPT_VERSION = "empathy-v7";
+const TECHNICAL_PROMPT_VERSION = "technical-v2";
+const NARRATIVE_PROMPT_VERSION = "narrative-v2";
+const PRACTICAL_PROMPT_VERSION = "practical-v3";
 
 // Per-model pricing in USD per million tokens (input, output).
 // Source: OpenAI pricing page, snapshotted 2026-05-02.
@@ -1104,12 +1104,14 @@ STRUCTURE (four beats, in this order)
 AVOID (these are AI tells / preachy patterns; strict)
 - "In a world where..." / "In our busy lives..."
 - "Let us not forget..." / "We must remember..."
-- Symmetric, parallel sentences OR fragments stacked in a row. BAD (subject-verb): "A phone screen lights up. A headline shouts. A video plays." BAD (fragments): "Not heroic. Not public. Just a small good." Three of anything in a row with the same shape is the pattern to break — alternate sentence shapes, mix in a longer sentence, or condense to two.
+- Symmetric, parallel sentences OR fragments stacked in a row. BAD (subject-verb): "A phone screen lights up. A headline shouts. A video plays." BAD (fragments): "Not heroic. Not public. Just a small good." Three of anything in a row with the same shape is the pattern to break. Alternate sentence shapes, mix in a longer sentence, or condense to two.
 - Bullet lists of abstractions, including reflective journaling questions at the end
 - Generic "may you..." benediction
 - Multi-paragraph Greek/Hebrew word study (a one-sentence etymology note is fine; a paragraph of word-study is not)
 - Moralistic call-out language
-- Doctrinal/seminary tone`;
+- Doctrinal/seminary tone
+- Em dashes (—) in prose. Use commas, periods, semicolons, or parentheses instead. The em dash is a strong AI tell in this format. Exception: structural title format "# Date — Reference: Title" is fine, as are em dashes in directly quoted scripture; nowhere else.
+- Antithesis constructions of the form "It's not X, it's Y" / "Not X, but Y" / "X is not the point. Y is." This rhetorical pivot reads as ChatGPT cadence. Rephrase positively ("Y is the point.") or rebuild the sentence so the contrast isn't the structure carrying the meaning.`;
 
 // Shared theological guardrails for the narrative + practical tracks. Keeps
 // the new tracks aligned with the non-denominational / non-institutional
@@ -1145,13 +1147,13 @@ const PROMPT_FEW_SHOT = `# May 15 — Mark 1:35: Before the world wakes
 
 ## The hour before the work
 
-The first sound is the door clicking shut behind him. Not a slam — careful, as if afraid of waking the world. He stops on the threshold a moment, listening. Around him is the small hum of a town that has not woken up: a distant dog, the wind, nothing else. No crowd. No one needing to be healed. Not yet.
+The first sound is the door clicking shut behind him. Not a slam. Careful, as if afraid of waking the world. He stops on the threshold a moment, listening. Around him is the small hum of a town that has not woken up: a distant dog, the wind, nothing else. No crowd. No one needing to be healed. Not yet.
 
 There is, for now, just him, and the cold, and the dark, and the long walk to whatever solitary place he has in mind.
 
 ## What he chose
 
-The Greek for "solitary place" is *eremos* — the same word the Gospels use for the wilderness where Jesus was tempted. Not just "alone." Stripped down. Without props.
+The Greek for "solitary place" is *eremos*, the same word the Gospels use for the wilderness where Jesus was tempted. Not just "alone." Stripped down. Without props.
 
 He has just had what any of us would call a successful day. The whole city pressed at the door (Mark 1:33). Demons cast out. Fevers gone. The kind of day a ministry would build a website around.
 
@@ -1167,7 +1169,7 @@ The geography is not the point. The order is.
 
 ## A prayer
 
-*Father, before the day asks me for anything, let me ask You first. Teach me the hour You chose. Make me unhurried in it — not because I have time, but because You are worth it. Amen.*`;
+*Father, before the day asks me for anything, let me ask You first. Teach me the hour You chose. Make me unhurried in it. You are worth the full attention, even when I have none to spare. Amen.*`;
 
 function createPrompt(
   verse: SelectedVerse,
@@ -1515,12 +1517,14 @@ STRUCTURE (four beats)
 
 AVOID
 - Invented dialogue or internal thoughts that scripture doesn't supply
-- "Imagine you are..." framings — drop the reader in directly
+- "Imagine you are..." framings; drop the reader in directly
 - Multi-scene montages or time-jumps
 - Modern anachronisms
-- Long historical exposition — this is a story, not a Wikipedia article
+- Long historical exposition; this is a story, not a Wikipedia article
 - Putting words in Jesus' mouth or guessing what He was feeling
-- Closing flourish; the prayer is the close`;
+- Closing flourish; the prayer is the close
+- Em dashes (—) in prose. Use commas, periods, semicolons, or parentheses. Strong AI tell. Exception: structural title format and directly quoted scripture only.
+- Antithesis constructions of the form "It's not X, it's Y" / "Not X, but Y" / "X is not the point. Y is." Rephrase positively or rebuild the sentence so the contrast isn't the structure carrying the meaning.`;
 
 // Few-shot example for the narrative track. Luke 19:5 (Zacchaeus) — picked
 // because the scripture supplies enough scene material (sycamore, crowd,
@@ -1534,7 +1538,7 @@ const PROMPT_NARRATIVE_FEW_SHOT = `# October 12 — Luke 19:5: Under the sycamor
 
 ## The tree
 
-The road into Jericho is dust and sandals. The crowd ahead is thick — shoulders, robes, voices climbing over each other. Somewhere in the middle of it, the rabbi is moving slowly toward the city gate.
+The road into Jericho is dust and sandals. The crowd ahead is thick. Shoulders, robes, voices climbing over each other. Somewhere in the middle of it, the rabbi is moving slowly toward the city gate.
 
 Behind the crowd, a short man has run ahead. His tunic is hiked up. His sandals slap the stones. He is not used to running like this.
 
@@ -1546,7 +1550,7 @@ From up here he can see the road. He can see the back of the rabbi's head moving
 
 The crowd reaches the tree. The rabbi stops walking. He looks up.
 
-The Greek behind "must" is *dei* — necessity, not preference. Not "if you have time." Today. Your house.
+The Greek behind "must" is *dei*, which carries the weight of necessity. Today. Your house.
 
 The words are said publicly. Anyone in the crowd could have heard them. The branches above Jericho stop being a hiding place. They become a name spoken out loud in front of everyone who hates him.
 
@@ -1696,12 +1700,14 @@ ACTION EXAMPLES (seeds for the kind of specificity to aim for — do not reuse v
 - "Take an unwon argument from yesterday and let it stay unwon. Don't bring it back up."
 
 AVOID
-- "Be your best self" / "live your truth" / "you've got this" — moralistic therapeutic deism is out
-- "Five ways to..." / "Three things you can do..." — one action only
+- "Be your best self" / "live your truth" / "you've got this" (moralistic therapeutic deism is out)
+- "Five ways to..." / "Three things you can do..." (one action only)
 - Productivity-blog framing (no "habit stacking," no morning-routine talk, no "build a 30-day streak")
-- Generic "spend time with God today" or "read your Bible more" — too abstract to act on
-- Promising outcomes ("if you do this, God will bless you with X") — obedience is response to grace, not transaction
-- Long theological exposition — keep it tight`;
+- Generic "spend time with God today" or "read your Bible more" (too abstract to act on)
+- Promising outcomes ("if you do this, God will bless you with X"); obedience is response to grace, not transaction
+- Long theological exposition; keep it tight
+- Em dashes (—) in prose. Use commas, periods, semicolons, or parentheses. Strong AI tell. Exception: structural title format and directly quoted scripture only.
+- Antithesis constructions of the form "It's not X, it's Y" / "Not X, but Y" / "X is not the point. Y is." Rephrase positively or rebuild the sentence so the contrast isn't the structure carrying the meaning.`;
 
 // Few-shot example for the practical track. Matthew 5:24 — picked because
 // the verse itself names a concrete action ("first be reconciled"), making
@@ -1715,7 +1721,7 @@ const PROMPT_PRACTICAL_FEW_SHOT = `# October 14 — Matthew 5:24: First
 
 ## What it says
 
-Jesus interrupts worship to send you on an errand. The altar is not the priority; the relationship is. He doesn't say "after you finish singing" — He says leave the gift right there. Go fix what's broken first.
+Jesus interrupts worship to send you on an errand. Reconciliation comes first, then the gift on the altar. He doesn't say "after you finish singing." He says leave the gift right there. Go fix what's broken first.
 
 ## Today
 

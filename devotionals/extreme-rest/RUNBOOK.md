@@ -26,7 +26,7 @@ Each entry contrasts the **comfortable middle** with the **extreme claim** about
 
 | # | Sunday | Title | Comfortable middle | Extreme claim | Anchor verses |
 |---|---|---|---|---|---|
-| 1 | 2026-05-17 | The bread that breeds worms | "Save for tomorrow." | Israel was forbidden to store manna. Daily trust over weekly storage. | Ex 16:13-21 |
+| 1 | **2026-05-17** ✅ | **The bread that breeds worms** | "Save for tomorrow." | Israel was forbidden to store manna. Daily trust over weekly storage. | Ex 16:13-21 |
 | 2 | 2026-06-14 | A 24-hour confession | "Take a rest day." | Practice 24-hour cessation as confession of trust — *the world doesn't depend on me.* Sabbath is fulfilled in Christ, but the cessation principle remains. | Heb 4:1-11, Mark 2:27, Matt 11:28-30 |
 | 3 | 2026-07-12 | Mary chose the better part | "Serve faithfully." | Religious service can be a sin if it crowds out being still. | Luke 10:38-42 |
 | 4 | 2026-08-09 | God's prescription for the prophet | "Trust through trial." | After Elijah's greatest victory, God's first command was: nap and eat. | 1 Kings 19:1-9 |
@@ -89,7 +89,7 @@ Same as the Faith series. Substitute these in the compose script:
 ```
 devotionals/extreme-rest/
 ├── RUNBOOK.md                              # this file
-├── 01-the-bread-that-breeds-worms.md       # week 1 (2026-05-17)
+├── 01-the-bread-that-breeds-worms.md       # week 1 (published 2026-05-17)
 ├── 02-a-24-hour-confession.md              # week 2 (2026-06-14)
 ├── ...
 └── archive/                                # published markdown after edits

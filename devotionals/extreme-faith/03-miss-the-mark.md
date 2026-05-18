@@ -15,6 +15,8 @@ By the metric you have been quietly using your whole life — the comparison to 
 
 This is the metric most Christians actually live by. Not the catechism's metric. The neighborhood's. The internal scoreboard that grades you against the murderer on the news, the addict who can't get sober, the family member who blew up his life.
 
+Looks like you're a pretty good person after all, doesn't it?
+
 You always pass.
 
 It has not occurred to you, in years, to fail.
@@ -60,7 +62,7 @@ The tax collector — a man who has, in fact, broken the rules — beats his che
 
 Jesus's verdict: *"This man went down to his house justified rather than the other."* Luke 18:14.
 
-Read that again. The man who kept all the rules went home unforgiven. The man who knew he was off-target went home justified.
+The man who kept all the rules went home unforgiven. The man who knew he was off-target went home justified.
 
 What was the difference? Both prayed. Both came to the temple. Both used the right words.
 
@@ -76,7 +78,7 @@ Here is what *miss the mark* does to the comfortable middle: it levels it.
 
 You and the murderer on the news are not, biblically, on different sides of a line. You are at different distances from the same bullseye. Maybe — maybe — your arrow is closer to the gold than his. But neither of you hit it. Neither of you got within ten feet of it. *All have sinned and come short.* The "all" is doing work in that sentence. It does not mean "all the obvious bad people." It means *all.*
 
-This is the part that is supposed to wound. If you have spent your life feeling fine because you are a decent person, the gospel has to wound you here, or it cannot get any further. The gospel cannot enter through the door of *I'm doing okay.* That door is locked from the inside.
+If you have spent your life feeling fine because you are a decent person, the gospel has to wound you here, or it cannot get any further. The gospel cannot enter through the door of *I'm doing okay.* That door is locked from the inside.
 
 But once it wounds you, it does not leave you bleeding.
 
@@ -96,7 +98,7 @@ It cost something to walk to the temple and say that. It costs something now to 
 
 *In Christ.* Not *as good as Christ.* Not *trying to be Christ.* In him.
 
-You will keep missing the mark, even after you come into him. That is why repentance is daily and not once. The arrow keeps falling short. The grace keeps reaching it. Both halves of the same whole.
+You will keep missing the mark, even after you come into him. That is why repentance is daily and not once. The arrow keeps falling short. The grace keeps reaching it. Grace and obedience — two halves of the same whole.
 
 ## A prayer
 

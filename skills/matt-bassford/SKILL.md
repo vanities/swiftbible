@@ -98,10 +98,12 @@ The archive is at `speakers/matt-bassford/posts/`. Filenames are `YYYY-MM-DD-slu
 ### Browse curated material
 
 - [references/essential-reads.md](references/essential-reads.md) — 20 most representative posts, categorized by use case
-- [references/themes.md](references/themes.md) — themes with anchor posts and quotes
+- [references/themes.md](references/themes.md) — themes with anchor posts and quotes (top 10 + extended themes 11–18)
 - [references/biography.md](references/biography.md) — life timeline (essential for understanding the ALS arc)
-- [references/theology.md](references/theology.md) — 12 theological positions with anchor posts
-- [references/voice.md](references/voice.md) — full voice analysis with more tells and examples
+- [references/theology.md](references/theology.md) — 12 theological positions with anchor posts (and additional anchors per position)
+- [references/voice.md](references/voice.md) — full voice analysis with tells, sentence rhythm, transitions, humor texture
+- [references/late-voice.md](references/late-voice.md) — the post-ALS voice in isolation (8 concentrated late-voice anchors)
+- [references/few-shot-anchors.md](references/few-shot-anchors.md) — 9 ready-to-use few-shot anchors with full excerpts and "use for" / "do NOT use for" tags. **Start here when building an AI prompt that needs to write in Matt's voice.**
 
 ## When to use this skill
 
