@@ -33,6 +33,8 @@
 		952F39CD2C8B58A0009A412D /* ParagraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39CC2C8B58A0009A412D /* ParagraphView.swift */; };
 		952F39CF2C8BA7F3009A412D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39CE2C8BA7F3009A412D /* ContentView.swift */; };
 		952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */; };
+		PROG00020002PROGRESS0002 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PROG00030003PROGRESS0003 /* ProgressView.swift */; };
+		PROG00040004PROGRESS0004 /* CanonicalBibleBooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = PROG00050005PROGRESS0005 /* CanonicalBibleBooks.swift */; };
 		952F39DA2C8BBD3C009A412D /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 952F39D92C8BBD3C009A412D /* MarkdownUI */; };
 		952F39DD2C8E36A7009A412D /* AuthenticateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39DC2C8E36A7009A412D /* AuthenticateView.swift */; };
 		952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39DE2C8E36E5009A412D /* FontOptionsView.swift */; };
@@ -229,6 +231,8 @@
 		952F39CC2C8B58A0009A412D /* ParagraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphView.swift; sourceTree = "<group>"; };
 		952F39CE2C8BA7F3009A412D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDevotionalView.swift; sourceTree = "<group>"; };
+		PROG00030003PROGRESS0003 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
+		PROG00050005PROGRESS0005 /* CanonicalBibleBooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanonicalBibleBooks.swift; sourceTree = "<group>"; };
 		952F39DC2C8E36A7009A412D /* AuthenticateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateView.swift; sourceTree = "<group>"; };
 		952F39DE2C8E36E5009A412D /* FontOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontOptionsView.swift; sourceTree = "<group>"; };
 		952F39E22C8F4874009A412D /* ParagraphParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphParser.swift; sourceTree = "<group>"; };
@@ -469,6 +473,15 @@
 			path = "Daily Devotional";
 			sourceTree = "<group>";
 		};
+		PROG00010001PROGRESS0001 /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				PROG00030003PROGRESS0003 /* ProgressView.swift */,
+				PROG00050005PROGRESS0005 /* CanonicalBibleBooks.swift */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
 		9537E25C2C893FBD00FD56B9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -628,6 +641,7 @@
 				952F39CE2C8BA7F3009A412D /* ContentView.swift */,
 				952F39E02C8E383B009A412D /* Bible */,
 				952F39E12C8E3852009A412D /* Daily Devotional */,
+				PROG00010001PROGRESS0001 /* Progress */,
 				HHVWSHISTGRP000002HISTRY /* History */,
 				HHVWSMOREGRP000003HISTRY /* More */,
 				95978F1B2CA88B7200C520EF /* Search */,
@@ -988,6 +1002,8 @@
 				95186D102C893E7500C0949D /* SettingsView.swift in Sources */,
 				952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */,
 				95F8A0042F1A2B3400ABCDEF /* SavedDevotionalsListView.swift in Sources */,
+				PROG00020002PROGRESS0002 /* ProgressView.swift in Sources */,
+				PROG00040004PROGRESS0004 /* CanonicalBibleBooks.swift in Sources */,
 				952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */,
 				95CC66082E899D560065E7AD /* URLHandler.swift in Sources */,
 				95CC65202E830DD70065E7AD /* DonationPreferences.swift in Sources */,

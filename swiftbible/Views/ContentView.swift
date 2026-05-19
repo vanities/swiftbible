@@ -61,6 +61,10 @@ struct ContentView: View {
                 DailyDevotionalView(selectedTab: $selectedTab)
             }
 
+            Tab("Progress", systemImage: "flame.fill", value: .progress) {
+                ProgressTabView()
+            }
+
             Tab("Search", systemImage: "magnifyingglass", value: .search, role: .search) {
                 SearchDetailView(selectedTab: $selectedTab)
             }

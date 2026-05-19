@@ -98,6 +98,9 @@ enum AnalyticsEvent: String {
     case appIconChanged = "app_icon_changed"
     case readingStatsViewed = "reading_stats_viewed"
 
+    // Progress / gamification
+    case progressViewed = "progress_viewed"
+
     // Onboarding
     case onboardingStarted = "onboarding_started"
     case onboardingFeatureViewed = "onboarding_feature_viewed"

@@ -323,6 +323,13 @@ struct DailyDevotionalView: View {
         model = devotional.model
         track = devotional.track
         hasDevotional = true
+
+        // Today's devotional opens count toward the daily reading streak.
+        // Past-date browsing (selectedDate < today) is excluded so people can
+        // catch up without retroactively patching old days.
+        if Calendar.current.isDateInToday(selectedDate) {
+            ReadingStatsService.shared.logDevotionalRead(for: Date(), in: context)
+        }
     }
 
     @ViewBuilder
