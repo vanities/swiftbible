@@ -40,6 +40,16 @@
     "%@" : {
       "shouldTranslate" : false
     },
+    "%@ — %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ — %2$@"
+          }
+        }
+      }
+    },
     "%@ %@ %lld:%lld" : {
       "localizations" : {
         "en" : {
@@ -150,6 +160,16 @@
         }
       }
     },
+    "%@: %lld of %lld chapters read" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@: %2$lld of %3$lld chapters read"
+          }
+        }
+      }
+    },
     "%@%@" : {
       "localizations" : {
         "en" : {
@@ -197,6 +217,16 @@
     },
     "%lld." : {
       "shouldTranslate" : false
+    },
+    "%lld/%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld/%2$lld"
+          }
+        }
+      }
     },
     "•" : {
 
@@ -246,6 +276,19 @@
     "Accent Color" : {
 
     },
+    "Achievements" : {
+
+    },
+    "Achievements: %lld of %lld earned. Tap to view all." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Achievements: %1$lld of %2$lld earned. Tap to view all."
+          }
+        }
+      }
+    },
     "Add Note" : {
 
     },
@@ -285,6 +328,9 @@
     "Authenticate" : {
 
     },
+    "Badge earned" : {
+
+    },
     "Bible" : {
 
     },
@@ -295,6 +341,9 @@
 
     },
     "BIBLE BOOKMARK" : {
+
+    },
+    "Bible Books" : {
 
     },
     "Bible translation: %@" : {
@@ -480,6 +529,9 @@
     "Early Christian Writings (Didache)" : {
 
     },
+    "EARNED" : {
+
+    },
     "Edit Note" : {
 
     },
@@ -603,6 +655,9 @@
     "Keeps the lights on" : {
 
     },
+    "Last %lld weeks" : {
+
+    },
     "Later" : {
 
     },
@@ -610,6 +665,9 @@
 
     },
     "Learn More" : {
+
+    },
+    "Less" : {
 
     },
     "Loading explanation" : {
@@ -748,6 +806,9 @@
 
     },
     "Preparing donation..." : {
+
+    },
+    "Progress" : {
 
     },
     "Protect Free Access — %@" : {

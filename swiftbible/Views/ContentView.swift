@@ -49,7 +49,6 @@ struct ContentView: View {
     private var donationVariant: DonationPromptVariant { appViewModel.donationVariant }
 
     @AppStorage("lastCelebratedDonationSessionID") private var lastCelebratedDonationSessionID: String = ""
-    @AppStorage("readingStatsResetV1Done") private var readingStatsResetV1Done = false
 
     @ViewBuilder
     private var mainTabView: some View {
@@ -175,10 +174,6 @@ struct ContentView: View {
         .onAppear {
             ensureDonationAnonIdentifier()
             evaluateOnboarding()
-            if !readingStatsResetV1Done {
-                ReadingStatsService.shared.resetAllSessions(in: modelContext)
-                readingStatsResetV1Done = true
-            }
             if let localeCurrency = Locale.current.currency?.identifier {
                 donationCurrency = localeCurrency.uppercased()
             }

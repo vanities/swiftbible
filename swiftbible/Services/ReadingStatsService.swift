@@ -302,20 +302,4 @@ final class ReadingStatsService {
         return (try? context.fetch(descriptor)) ?? []
     }
 
-    // MARK: - Maintenance
-
-    /// Deletes every recorded reading session. Also clears any in-memory tracking
-    /// so a session in progress when this is called doesn't immediately re-insert.
-    func resetAllSessions(in context: ModelContext) {
-        resetTrackingState()
-        do {
-            try context.delete(model: ReadingSession.self)
-            try context.save()
-        } catch {
-            SentryService.shared.capture(error, context: [
-                "service": "ReadingStatsService",
-                "operation": "reset_all_sessions"
-            ])
-        }
-    }
 }
