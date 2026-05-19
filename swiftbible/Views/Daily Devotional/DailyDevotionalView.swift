@@ -151,7 +151,7 @@ struct DailyDevotionalView: View {
                     .frame(maxWidth: .infinity)
                     .contextMenu {
                         Button(action: {
-                            AnalyticsService.shared.capture(.devotionalCopied)
+                            AnalyticsService.shared.capture(.devotionalCopied, properties: devotionalAnalyticsProperties())
                             UIPasteboard.general.string = markdownToPlainText(message)
                             withAnimation {
                                 showToast = true
@@ -298,6 +298,18 @@ struct DailyDevotionalView: View {
         }
     }
 
+    private func devotionalAnalyticsProperties(extra: [String: Any] = [:]) -> [String: Any] {
+        var properties: [String: Any] = ["devotional_type": devotionalType]
+        if let track { properties["track"] = track }
+        if let seriesName { properties["series_name"] = seriesName }
+        if let holidayName { properties["holiday_name"] = holidayName }
+        if let model { properties["model"] = model }
+        for (key, value) in extra {
+            properties[key] = value
+        }
+        return properties
+    }
+
     @MainActor
     private func applyDevotional(_ devotional: DailyDevotional) {
         message = devotional.message
@@ -441,10 +453,13 @@ struct DailyDevotionalView: View {
         // Check cache first
         if let cachedDevotional = CacheService.shared.loadDevotional(for: date) {
             applyDevotional(cachedDevotional)
-            AnalyticsService.shared.capture(.devotionalViewed, properties: [
-                "date": dateString,
-                "source": "cache"
-            ])
+            AnalyticsService.shared.capture(
+                .devotionalViewed,
+                properties: devotionalAnalyticsProperties(extra: [
+                    "date": dateString,
+                    "source": "cache"
+                ])
+            )
             updateSavedState(for: date)
             isLoading = false
             return
@@ -462,10 +477,13 @@ struct DailyDevotionalView: View {
 
             applyDevotional(devotional)
 
-            AnalyticsService.shared.capture(.devotionalViewed, properties: [
-                "date": dateString,
-                "source": "network"
-            ])
+            AnalyticsService.shared.capture(
+                .devotionalViewed,
+                properties: devotionalAnalyticsProperties(extra: [
+                    "date": dateString,
+                    "source": "network"
+                ])
+            )
 
             // Save to cache
             CacheService.shared.saveDevotional(devotional, for: date)
@@ -527,7 +545,7 @@ struct DailyDevotionalView: View {
         if let savedDevotional {
             context.delete(savedDevotional)
             try? context.save()
-            AnalyticsService.shared.capture(.devotionalUnsaved)
+            AnalyticsService.shared.capture(.devotionalUnsaved, properties: devotionalAnalyticsProperties())
             withAnimation(.spring(response: 0.4, dampingFraction: 0.5, blendDuration: 0.2)) {
                 heartBounce = true
                 isFavorite = false
@@ -536,7 +554,7 @@ struct DailyDevotionalView: View {
             let devotional = SavedDevotional(date: selectedDate, message: message)
             context.insert(devotional)
             try? context.save()
-            AnalyticsService.shared.capture(.devotionalSaved)
+            AnalyticsService.shared.capture(.devotionalSaved, properties: devotionalAnalyticsProperties())
             withAnimation(.spring(response: 0.4, dampingFraction: 0.5, blendDuration: 0.2)) {
                 heartBounce = true
                 isFavorite = true
