@@ -43,6 +43,7 @@ struct MoreView: View {
                         bibleBookmarkCard
                     }
                     librarySection
+                    progressCard
                     statsCard
                     settingsCard
                     aboutFooter
@@ -454,6 +455,27 @@ struct MoreView: View {
             )
         }
         .buttonStyle(.plain)
+    }
+
+    // MARK: - Progress card (streak + heatmap + 66-book grid)
+
+    private var progressCard: some View {
+        NavigationLink(destination: ProgressTabView()) {
+            cardRow(
+                icon: "flame.fill",
+                tint: .orange,
+                title: "Progress",
+                subtitle: progressSubtitle
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var progressSubtitle: String {
+        if streakDays == 0 {
+            return "Streak, heatmap, and book completion"
+        }
+        return "\u{1F525} \(streakDays)-day streak · books read"
     }
 
     // MARK: - Reading stats card (live numbers — Endowed Progress)

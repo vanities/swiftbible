@@ -10,7 +10,6 @@ import SwiftUI
 enum Tabs: Equatable, Hashable {
     case bible
     case dailyDevotional
-    case progress
     case search
     case settings
 }
