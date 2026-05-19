@@ -4,10 +4,12 @@
 //
 
 import SwiftUI
+import UIKit
 
-/// Banner shown at the top of ProgressView when a new badge is earned.
-/// Auto-dismisses after 3 seconds, or on tap. Caller wires up
-/// `onDismiss` to advance through any queued toasts.
+/// Banner shown at the top of the screen when a new badge is earned.
+/// Auto-dismisses after 3 seconds, or on tap. Fires a success haptic
+/// on appear. Confetti is triggered separately by ContentView so it
+/// uses the same canon the donation flow does.
 struct BadgeEarnedToast: View {
     let badge: BadgeDefinition
     let onDismiss: () -> Void
@@ -57,6 +59,7 @@ struct BadgeEarnedToast: View {
         }
         .onAppear {
             bounce = true
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 onDismiss()
             }

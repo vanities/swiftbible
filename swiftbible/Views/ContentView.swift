@@ -30,6 +30,7 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
 
+    @State private var toastService = ToastService.shared
     @State private var transactionListenerTask: Task<Void, Error>?
     @State private var onboardingPresentation: OnboardingPresentation?
     @State private var pendingOnboardingPresentation: OnboardingPresentation?
@@ -312,6 +313,10 @@ struct ContentView: View {
                 }
             }
         }
+        .modifier(BadgeToastModifier(
+            toastService: toastService,
+            confettiTrigger: $confettiTrigger
+        ))
         .environment(appViewModel)
         .environment(userViewModel)
         .confettiCannon(
@@ -752,6 +757,33 @@ private struct EventSheetModifier: ViewModifier {
             EventDetailView(event: event)
                 .environment(appViewModel)
         }
+    }
+}
+
+/// Renders the global badge-earned toast at the top of the screen and
+/// fires confetti whenever a new toast lands. Extracted from ContentView.body
+/// to keep the type-checker happy.
+private struct BadgeToastModifier: ViewModifier {
+    let toastService: ToastService
+    @Binding var confettiTrigger: Int
+
+    func body(content: Content) -> some View {
+        content
+            .overlay(alignment: .top) {
+                if let badge = toastService.queue.first {
+                    BadgeEarnedToast(badge: badge) {
+                        withAnimation { toastService.dismissFirst() }
+                    }
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .zIndex(100)
+                }
+            }
+            .onChange(of: toastService.queue.count) { _, newCount in
+                if newCount > 0 {
+                    confettiTrigger += 1
+                }
+            }
     }
 }
 

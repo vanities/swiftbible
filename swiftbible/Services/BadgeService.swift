@@ -27,9 +27,15 @@ final class BadgeService {
             guard !earnedIds.contains(definition.id) else { continue }
             guard evaluate(definition, in: context, on: triggerDate) else { continue }
 
-            let badge = EarnedBadge(badgeId: definition.id, earnedAt: Date(), notified: false)
+            // notified=true because we immediately enqueue a live toast
+            // via ToastService; the Progress-tab "missed notifications"
+            // path is only a fallback for badges earned before the
+            // ToastService observer is mounted (rare on cold launch).
+            let badge = EarnedBadge(badgeId: definition.id, earnedAt: Date(), notified: true)
             context.insert(badge)
             newlyEarned.append(definition)
+
+            ToastService.shared.enqueue(definition)
 
             AnalyticsService.shared.capture(.badgeEarned, properties: [
                 "badge_id": definition.id,

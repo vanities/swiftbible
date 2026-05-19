@@ -19,7 +19,6 @@ struct ProgressTabView: View {
     @State private var earnedCount: Int = 0
     @State private var tierByTrack: [BadgeTrack: BadgeTier] = [:]
     @State private var showingGallery: Bool = false
-    @State private var pendingToasts: [BadgeDefinition] = []
 
     var body: some View {
         NavigationStack {
@@ -30,7 +29,18 @@ struct ProgressTabView: View {
                 .sheet(isPresented: $showingGallery) {
                     BadgeGallerySheet()
                 }
-                .overlay(alignment: .top) { toastOverlay }
+                #if DEBUG
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            ToastService.shared.enqueueDebugSample()
+                        } label: {
+                            Image(systemName: "party.popper.fill")
+                        }
+                        .accessibilityLabel("Trigger test badge toast")
+                    }
+                }
+                #endif
         }
     }
 
@@ -47,24 +57,12 @@ struct ProgressTabView: View {
         }
     }
 
-    @ViewBuilder
-    private var toastOverlay: some View {
-        if let toast = pendingToasts.first {
-            BadgeEarnedToast(badge: toast) {
-                withAnimation {
-                    _ = pendingToasts.removeFirst()
-                }
-            }
-            .padding(.top, 8)
-            .transition(.move(edge: .top).combined(with: .opacity))
-            .zIndex(10)
-        }
-    }
-
     private func handleAppear() {
+        // BadgeService now enqueues toasts via ToastService, displayed by
+        // ContentView's overlay. The Progress tab only needs to refresh
+        // its own counters.
         BadgeService.shared.checkBadges(in: context)
         loadStats()
-        pendingToasts = BadgeService.shared.consumePendingNotifications(in: context)
         AnalyticsService.shared.capture(.progressViewed, properties: [
             "current_streak": currentStreak,
             "longest_streak": longestStreak,
