@@ -222,7 +222,6 @@ private struct HeatmapCalendar: View {
     let weeks: Int
 
     private let calendar = Calendar.current
-    private let cellSize: CGFloat = 14
     private let spacing: CGFloat = 3
 
     var body: some View {
@@ -237,6 +236,7 @@ private struct HeatmapCalendar: View {
                             cellForDate(weekIndex: weekIndex, dayIndex: dayIndex)
                         }
                     }
+                    .frame(maxWidth: .infinity)
                 }
             }
 
@@ -247,7 +247,7 @@ private struct HeatmapCalendar: View {
                 ForEach(0..<5, id: \.self) { level in
                     RoundedRectangle(cornerRadius: 3)
                         .fill(color(for: level))
-                        .frame(width: cellSize - 4, height: cellSize - 4)
+                        .frame(width: 10, height: 10)
                 }
                 Text("More")
                     .font(.caption2)
@@ -255,6 +255,7 @@ private struct HeatmapCalendar: View {
             }
         }
         .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(12)
     }
@@ -274,10 +275,13 @@ private struct HeatmapCalendar: View {
             let isFuture = date > today
             RoundedRectangle(cornerRadius: 3)
                 .fill(isFuture ? Color.gray.opacity(0.08) : color(for: level))
-                .frame(width: cellSize, height: cellSize)
+                .aspectRatio(1, contentMode: .fit)
+                .frame(maxWidth: .infinity)
                 .accessibilityLabel(accessibilityLabel(for: date, count: count, isFuture: isFuture))
         } else {
-            Color.clear.frame(width: cellSize, height: cellSize)
+            Color.clear
+                .aspectRatio(1, contentMode: .fit)
+                .frame(maxWidth: .infinity)
         }
     }
 
