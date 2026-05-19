@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
@@ -68,6 +69,7 @@ fun MoreScreen(
     val saved by appVm.savedDevotionals.collectAsState(initial = emptyList())
     val history by appVm.history.collectAsState(initial = emptyList())
     val chaptersRead by appVm.chaptersRead.collectAsState(initial = 0)
+    val badgesEarned by appVm.badgesEarnedCount.collectAsState(initial = 0)
 
     val events = AppEventRegistry.visible(
         forceAll = biz.am2.swiftbible.BuildConfig.DEBUG && prefs.forceShowEvents,
@@ -155,6 +157,11 @@ fun MoreScreen(
             HistoryRow(
                 count = history.size,
                 onClick = { onOpen("history") },
+            )
+
+            ProgressCard(
+                badgesEarned = badgesEarned,
+                onClick = { onOpen("progress") },
             )
 
             ReadingStatsCard(
@@ -464,6 +471,47 @@ private fun HistoryRow(count: Int, onClick: () -> Unit) {
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+    }
+}
+
+@Composable
+private fun ProgressCard(badgesEarned: Int, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(14.dp)),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFFFFE0B2)),
+                contentAlignment = Alignment.Center,
+            ) {
+                androidx.compose.material3.Icon(
+                    Icons.Filled.LocalFireDepartment,
+                    contentDescription = null,
+                    tint = Color(0xFFFF9800),
+                )
+            }
+            Spacer(Modifier.size(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Progress", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = if (badgesEarned == 0) "Streak, heatmap, and 35 achievements"
+                    else "$badgesEarned badge${if (badgesEarned == 1) "" else "s"} earned",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }

@@ -92,6 +92,11 @@ object Analytics {
         ReadingThemeChanged("reading_theme_changed"),
         ReadingStatsViewed("reading_stats_viewed"),
 
+        // Progress / gamification
+        ProgressViewed("progress_viewed"),
+        BadgeEarned("badge_earned"),
+        BadgeGalleryViewed("badge_gallery_viewed"),
+
         // Onboarding
         OnboardingStarted("onboarding_started"),
         OnboardingFeatureViewed("onboarding_feature_viewed"),

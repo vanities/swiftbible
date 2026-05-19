@@ -54,6 +54,9 @@ import biz.am2.swiftbible.ui.donations.DonorPerksScreen
 import biz.am2.swiftbible.ui.history.ChurchHistoryScreen
 import biz.am2.swiftbible.ui.history.HistoryArticleScreen
 import biz.am2.swiftbible.ui.history.HistorySectionScreen
+import biz.am2.swiftbible.ui.progress.BadgeGalleryScreen
+import biz.am2.swiftbible.ui.progress.BadgeToastHost
+import biz.am2.swiftbible.ui.progress.ProgressScreen
 import biz.am2.swiftbible.ui.settings.BookmarksScreen
 import biz.am2.swiftbible.ui.settings.DevotionalReminderScreen
 import biz.am2.swiftbible.ui.settings.HighlightsScreen
@@ -301,6 +304,19 @@ private fun SwiftBibleAppContent(appVm: AppViewModel) {
             composable("stats") {
                 StatsScreen(appVm = appVm, onBack = { navController.popBackStack() })
             }
+            composable("progress") {
+                ProgressScreen(
+                    appVm = appVm,
+                    onBack = { navController.popBackStack() },
+                    onOpenGallery = { navController.navigate("achievements") },
+                )
+            }
+            composable("achievements") {
+                BadgeGalleryScreen(
+                    appVm = appVm,
+                    onBack = { navController.popBackStack() },
+                )
+            }
             composable("translations") {
                 TranslationInfoScreen(onBack = { navController.popBackStack() })
             }
@@ -366,6 +382,10 @@ private fun SwiftBibleAppContent(appVm: AppViewModel) {
             onDismiss = { appVm.dismissDonationCelebration() },
         )
     }
+
+    // Global badge-earned toast banner — surfaces immediately wherever the
+    // user is, not just on Progress. Rendered last so it overlays everything.
+    BadgeToastHost()
 }
 
 private fun encode(s: String): String = java.net.URLEncoder.encode(s, "UTF-8")

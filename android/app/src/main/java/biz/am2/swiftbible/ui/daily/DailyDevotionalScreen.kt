@@ -94,8 +94,22 @@ fun DailyDevotionalScreen(
                     state = DevState.Loaded(r.devotional)
                     Analytics.capture(
                         Analytics.Event.DevotionalViewed,
-                        mapOf("date" to r.devotional.for_date, "source" to "network")
+                        mapOf(
+                            "date" to r.devotional.for_date,
+                            "source" to "network",
+                            "devotional_type" to (r.devotional.devotional_type ?: "single"),
+                            "track" to (r.devotional.track ?: ""),
+                            "series_name" to (r.devotional.series_name ?: ""),
+                            "model" to (r.devotional.model ?: ""),
+                        ),
                     )
+                    if (date == LocalDate.now()) {
+                        appVm.logDevotionalRead(
+                            track = r.devotional.track,
+                            seriesName = r.devotional.series_name,
+                            seriesPart = r.devotional.series_part,
+                        )
+                    }
                 }
                 is DevotionalRepository.Result.NotFound -> state = DevState.None()
                 is DevotionalRepository.Result.Failure -> state = DevState.None(r.message)

@@ -109,6 +109,16 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     val donations: Flow<List<biz.am2.swiftbible.data.DonationRecord>> = db.donationDao().all()
     val totalDonatedCents: Flow<Int> = db.donationDao().totalPaidCents()
 
+    // Progress / gamification
+    val readingStats = biz.am2.swiftbible.data.ReadingStatsRepository(db.readingSessionDao())
+    val badgeService = biz.am2.swiftbible.data.BadgeService(
+        context = application,
+        stats = readingStats,
+        sessionDao = db.readingSessionDao(),
+        earnedDao = db.earnedBadgeDao(),
+    )
+    val badgesEarnedCount: Flow<Int> = db.earnedBadgeDao().count()
+
     private val _showDonationPrompt = MutableStateFlow(false)
     val showDonationPrompt: StateFlow<Boolean> = _showDonationPrompt.asStateFlow()
     private val _donationCelebration = MutableStateFlow<biz.am2.swiftbible.data.DonationRecord?>(null)
@@ -290,6 +300,53 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun visitChapter(book: String, chapter: Int) = viewModelScope.launch {
         db.historyDao().visit(book, chapter)
         prefs.setLast(book, chapter)
+        readingStats.recordChapterRead(book, chapter, bible.value.version.shortName)
+        badgeService.checkBadges()
+    }
+
+    fun logDevotionalRead(track: String?, seriesName: String?, seriesPart: Int?) = viewModelScope.launch {
+        readingStats.logDevotionalRead()
+        biz.am2.swiftbible.data.DevotionalHistory.record(
+            context = getApplication(),
+            track = track,
+            seriesName = seriesName,
+            seriesPart = seriesPart,
+        )
+        badgeService.checkBadges()
+    }
+
+    /** Snapshot used by [biz.am2.swiftbible.ui.progress.ProgressScreen]. */
+    suspend fun progressSnapshot(): biz.am2.swiftbible.ui.progress.ProgressSnapshot {
+        val streakInfo = readingStats.currentStreakWithFreeze()
+        val longest = readingStats.longestStreak()
+        val sessions = db.readingSessionDao().allBookSessions()
+        val chaptersRead = sessions.map { "${it.bookName}-${it.chapterNumber}" }.toSet().size
+        val heatmap = readingStats.dailyReadingCounts(weeks = 12)
+        val bookProgress = biz.am2.swiftbible.data.CanonicalBibleBooks.all.map { entry ->
+            val read = readingStats.chaptersReadInBook(entry.name).size
+            biz.am2.swiftbible.ui.progress.BookProgressEntry(
+                name = entry.name,
+                totalChapters = entry.totalChapters,
+                readChapters = read,
+            )
+        }
+        val booksCompleted = bookProgress.count { it.isComplete }
+        val earnedCount = db.earnedBadgeDao().earnedIds().size
+        val tierByTrack = biz.am2.swiftbible.data.BadgeTrack.values().associateWith { track ->
+            badgeService.currentTier(track)
+        }
+        return biz.am2.swiftbible.ui.progress.ProgressSnapshot(
+            currentStreak = streakInfo.streak,
+            longestStreak = longest,
+            freezeActive = streakInfo.freezeActive,
+            chaptersRead = chaptersRead,
+            booksCompleted = booksCompleted,
+            totalBooks = bookProgress.size,
+            heatmap = heatmap,
+            bookProgress = bookProgress,
+            earnedCount = earnedCount,
+            tierByTrack = tierByTrack,
+        )
     }
 
     fun recordHappyMoment() = viewModelScope.launch {

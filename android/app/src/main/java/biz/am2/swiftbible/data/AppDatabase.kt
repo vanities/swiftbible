@@ -95,6 +95,32 @@ data class DonationRecord(
     val status: String = "completed",
 )
 
+@Entity(
+    tableName = "reading_sessions",
+    indices = [
+        Index(value = ["bookName", "chapterNumber"]),
+        Index(value = ["dayEpoch"]),
+    ],
+)
+data class ReadingSession(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val bookName: String,
+    val chapterNumber: Int,
+    val version: String,
+    val startedAt: Long = System.currentTimeMillis(),
+    val durationMs: Long = 0,
+    // Truncated to midnight in the local calendar so streak/heatmap queries
+    // are cheap. Devotional opens use bookName == "__devotional__" so they
+    // count toward streak without polluting chapter aggregates.
+    val dayEpoch: Long = System.currentTimeMillis(),
+)
+
+@Entity(tableName = "earned_badges")
+data class EarnedBadge(
+    @PrimaryKey val badgeId: String,
+    val earnedAt: Long = System.currentTimeMillis(),
+)
+
 @Dao
 interface HighlightDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -188,6 +214,51 @@ interface DonationDao {
     fun donationCount(): Flow<Int>
 }
 
+@Dao
+interface ReadingSessionDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(session: ReadingSession): Long
+
+    @Query("SELECT * FROM reading_sessions ORDER BY startedAt DESC LIMIT :limit")
+    fun recent(limit: Int = 20): Flow<List<ReadingSession>>
+
+    @Query("SELECT * FROM reading_sessions WHERE bookName != '__devotional__'")
+    suspend fun allBookSessions(): List<ReadingSession>
+
+    @Query("SELECT * FROM reading_sessions WHERE bookName=:book")
+    suspend fun forBook(book: String): List<ReadingSession>
+
+    @Query("SELECT * FROM reading_sessions ORDER BY dayEpoch DESC")
+    suspend fun allByDay(): List<ReadingSession>
+
+    @Query("SELECT * FROM reading_sessions WHERE dayEpoch >= :sinceEpoch")
+    suspend fun since(sinceEpoch: Long): List<ReadingSession>
+
+    @Query("SELECT * FROM reading_sessions WHERE bookName=:book AND chapterNumber=:chapter AND dayEpoch=:day LIMIT 1")
+    suspend fun forBookChapterOnDay(book: String, chapter: Int, day: Long): ReadingSession?
+
+    @Query("SELECT COUNT(*) FROM reading_sessions WHERE bookName='__devotional__'")
+    suspend fun devotionalCount(): Int
+
+    @Query("SELECT COUNT(DISTINCT bookName || '-' || chapterNumber) FROM reading_sessions WHERE bookName != '__devotional__'")
+    fun distinctChaptersRead(): Flow<Int>
+}
+
+@Dao
+interface EarnedBadgeDao {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(badge: EarnedBadge): Long
+
+    @Query("SELECT * FROM earned_badges")
+    fun all(): Flow<List<EarnedBadge>>
+
+    @Query("SELECT badgeId FROM earned_badges")
+    suspend fun earnedIds(): List<String>
+
+    @Query("SELECT COUNT(*) FROM earned_badges")
+    fun count(): Flow<Int>
+}
+
 @Database(
     entities = [
         Highlight::class,
@@ -196,8 +267,10 @@ interface DonationDao {
         BookmarkEntity::class,
         SavedDevotionalEntity::class,
         DonationRecord::class,
+        ReadingSession::class,
+        EarnedBadge::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -207,6 +280,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun bookmarkDao(): BookmarkDao
     abstract fun savedDevotionalDao(): SavedDevotionalDao
     abstract fun donationDao(): DonationDao
+    abstract fun readingSessionDao(): ReadingSessionDao
+    abstract fun earnedBadgeDao(): EarnedBadgeDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null
