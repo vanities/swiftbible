@@ -100,6 +100,8 @@ enum AnalyticsEvent: String {
 
     // Progress / gamification
     case progressViewed = "progress_viewed"
+    case badgeEarned = "badge_earned"
+    case badgeGalleryViewed = "badge_gallery_viewed"
 
     // Onboarding
     case onboardingStarted = "onboarding_started"

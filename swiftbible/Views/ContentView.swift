@@ -244,6 +244,7 @@ struct ContentView: View {
                 Task {
                     await refreshDevotionalReminders()
                 }
+                BadgeService.shared.checkBadges(in: modelContext)
             }
         }
         .onChange(of: donationPromptOptOut) { _, newValue in

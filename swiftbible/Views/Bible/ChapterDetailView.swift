@@ -601,6 +601,7 @@ struct ChapterDetailView: View {
                 "version": appViewModel.selectedVersion.rawValue,
                 "testament": "\(currentBook.testament ?? .old)"
             ])
+            BadgeService.shared.checkBadges(in: context)
         }
         .onDisappear {
             ReadingStatsService.shared.stopReading()

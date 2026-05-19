@@ -329,6 +329,12 @@ struct DailyDevotionalView: View {
         // catch up without retroactively patching old days.
         if Calendar.current.isDateInToday(selectedDate) {
             ReadingStatsService.shared.logDevotionalRead(for: Date(), in: context)
+            DevotionalHistory.record(
+                track: devotional.track,
+                seriesName: devotional.series_name,
+                seriesPart: devotional.series_part
+            )
+            BadgeService.shared.checkBadges(in: context)
         }
     }
 

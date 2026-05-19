@@ -16,34 +16,96 @@ struct ProgressTabView: View {
     @State private var booksCompleted: Int = 0
     @State private var heatmap: [Date: Int] = [:]
     @State private var bookProgress: [BookProgress] = []
+    @State private var earnedCount: Int = 0
+    @State private var tierByTrack: [BadgeTrack: BadgeTier] = [:]
+    @State private var showingGallery: Bool = false
+    @State private var pendingToasts: [BadgeDefinition] = []
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 24) {
-                    statsGrid
-
-                    HeatmapCalendar(counts: heatmap, weeks: 12)
-                        .padding(.horizontal)
-
-                    BookCompletionGrid(books: bookProgress)
-                        .padding(.horizontal)
+            scrollContent
+                .navigationTitle("Progress")
+                .background(Color(.systemGroupedBackground))
+                .onAppear(perform: handleAppear)
+                .sheet(isPresented: $showingGallery) {
+                    BadgeGallerySheet()
                 }
-                .padding(.vertical)
-            }
-            .navigationTitle("Progress")
-            .background(Color(.systemGroupedBackground))
-            .onAppear {
-                loadStats()
-                AnalyticsService.shared.capture(.progressViewed, properties: [
-                    "current_streak": currentStreak,
-                    "longest_streak": longestStreak,
-                    "chapters_read": chaptersRead,
-                    "books_completed": booksCompleted,
-                    "freeze_active": freezeActive
-                ])
-            }
+                .overlay(alignment: .top) { toastOverlay }
         }
+    }
+
+    @ViewBuilder
+    private var scrollContent: some View {
+        ScrollView {
+            VStack(spacing: 24) {
+                statsGrid
+                achievementsCard.padding(.horizontal)
+                HeatmapCalendar(counts: heatmap, weeks: 12).padding(.horizontal)
+                BookCompletionGrid(books: bookProgress).padding(.horizontal)
+            }
+            .padding(.vertical)
+        }
+    }
+
+    @ViewBuilder
+    private var toastOverlay: some View {
+        if let toast = pendingToasts.first {
+            BadgeEarnedToast(badge: toast) {
+                withAnimation {
+                    _ = pendingToasts.removeFirst()
+                }
+            }
+            .padding(.top, 8)
+            .transition(.move(edge: .top).combined(with: .opacity))
+            .zIndex(10)
+        }
+    }
+
+    private func handleAppear() {
+        BadgeService.shared.checkBadges(in: context)
+        loadStats()
+        pendingToasts = BadgeService.shared.consumePendingNotifications(in: context)
+        AnalyticsService.shared.capture(.progressViewed, properties: [
+            "current_streak": currentStreak,
+            "longest_streak": longestStreak,
+            "chapters_read": chaptersRead,
+            "books_completed": booksCompleted,
+            "freeze_active": freezeActive,
+            "badges_earned": earnedCount
+        ])
+    }
+
+    private var achievementsCard: some View {
+        Button { showingGallery = true } label: {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text("Achievements")
+                        .font(.headline)
+                    Spacer()
+                    Text("\(earnedCount)/\(BadgeRegistry.all.count)")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                }
+
+                HStack(spacing: 12) {
+                    ForEach(BadgeTrack.allCases, id: \.self) { track in
+                        TierMedal(
+                            track: track,
+                            tier: tierByTrack[track]
+                        )
+                    }
+                }
+            }
+            .padding()
+            .background(Color(.secondarySystemGroupedBackground))
+            .cornerRadius(12)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Achievements: \(earnedCount) of \(BadgeRegistry.all.count) earned. Tap to view all.")
     }
 
     private var statsGrid: some View {
@@ -94,6 +156,14 @@ struct ProgressTabView: View {
         heatmap = service.dailyReadingCounts(forWeeks: 12, in: context)
         bookProgress = computeBookProgress()
         booksCompleted = bookProgress.filter { $0.isComplete }.count
+
+        let badgeService = BadgeService.shared
+        earnedCount = badgeService.earnedDefinitions(in: context).count
+        var tiers: [BadgeTrack: BadgeTier] = [:]
+        for track in BadgeTrack.allCases {
+            tiers[track] = badgeService.currentTier(track: track, in: context)
+        }
+        tierByTrack = tiers
     }
 
     private func computeBookProgress() -> [BookProgress] {
@@ -322,7 +392,40 @@ private struct BookProgressCell: View {
     }
 }
 
+// MARK: - Tier Medal
+
+struct TierMedal: View {
+    let track: BadgeTrack
+    let tier: BadgeTier?
+
+    var body: some View {
+        VStack(spacing: 4) {
+            ZStack {
+                Circle()
+                    .fill(tier?.color ?? Color.gray.opacity(0.2))
+                    .overlay(
+                        Circle()
+                            .stroke(tier?.accent ?? .clear, lineWidth: 1.5)
+                    )
+                Image(systemName: track.icon)
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(tier == nil ? Color.secondary : Color.white)
+            }
+            .frame(width: 44, height: 44)
+            Text(tier?.displayName ?? "—")
+                .font(.caption2.weight(.medium))
+                .foregroundStyle(tier == nil ? .secondary : .primary)
+            Text(track.displayName)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(track.displayName) — \(tier?.displayName ?? "Not yet earned")")
+    }
+}
+
 #Preview {
     ProgressTabView()
-        .modelContainer(for: ReadingSession.self, inMemory: true)
+        .modelContainer(for: [ReadingSession.self, EarnedBadge.self], inMemory: true)
 }

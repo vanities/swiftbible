@@ -35,6 +35,13 @@
 		952F39D72C8BAD75009A412D /* DailyDevotionalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */; };
 		PROG00020002PROGRESS0002 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = PROG00030003PROGRESS0003 /* ProgressView.swift */; };
 		PROG00040004PROGRESS0004 /* CanonicalBibleBooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = PROG00050005PROGRESS0005 /* CanonicalBibleBooks.swift */; };
+		BADGE0002BADGE0002BADGE2 /* EarnedBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = BADGE0001BADGE0001BADGE1 /* EarnedBadge.swift */; };
+		BADGE0004BADGE0004BADGE4 /* BadgeRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BADGE0003BADGE0003BADGE3 /* BadgeRegistry.swift */; };
+		BADGE0006BADGE0006BADGE6 /* LiturgicalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BADGE0005BADGE0005BADGE5 /* LiturgicalCalendar.swift */; };
+		BADGE0008BADGE0008BADGE8 /* DevotionalHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BADGE0007BADGE0007BADGE7 /* DevotionalHistory.swift */; };
+		BADGE0010BADGE0010BADG10 /* BadgeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BADGE0009BADGE0009BADGE9 /* BadgeService.swift */; };
+		BADGE0012BADGE0012BADG12 /* BadgeGallerySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BADGE0011BADGE0011BADG11 /* BadgeGallerySheet.swift */; };
+		BADGE0014BADGE0014BADG14 /* BadgeEarnedToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = BADGE0013BADGE0013BADG13 /* BadgeEarnedToast.swift */; };
 		952F39DA2C8BBD3C009A412D /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 952F39D92C8BBD3C009A412D /* MarkdownUI */; };
 		952F39DD2C8E36A7009A412D /* AuthenticateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39DC2C8E36A7009A412D /* AuthenticateView.swift */; };
 		952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952F39DE2C8E36E5009A412D /* FontOptionsView.swift */; };
@@ -233,6 +240,13 @@
 		952F39D62C8BAD75009A412D /* DailyDevotionalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDevotionalView.swift; sourceTree = "<group>"; };
 		PROG00030003PROGRESS0003 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		PROG00050005PROGRESS0005 /* CanonicalBibleBooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanonicalBibleBooks.swift; sourceTree = "<group>"; };
+		BADGE0001BADGE0001BADGE1 /* EarnedBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarnedBadge.swift; sourceTree = "<group>"; };
+		BADGE0003BADGE0003BADGE3 /* BadgeRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeRegistry.swift; sourceTree = "<group>"; };
+		BADGE0005BADGE0005BADGE5 /* LiturgicalCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiturgicalCalendar.swift; sourceTree = "<group>"; };
+		BADGE0007BADGE0007BADGE7 /* DevotionalHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevotionalHistory.swift; sourceTree = "<group>"; };
+		BADGE0009BADGE0009BADGE9 /* BadgeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeService.swift; sourceTree = "<group>"; };
+		BADGE0011BADGE0011BADG11 /* BadgeGallerySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeGallerySheet.swift; sourceTree = "<group>"; };
+		BADGE0013BADGE0013BADG13 /* BadgeEarnedToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeEarnedToast.swift; sourceTree = "<group>"; };
 		952F39DC2C8E36A7009A412D /* AuthenticateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateView.swift; sourceTree = "<group>"; };
 		952F39DE2C8E36E5009A412D /* FontOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontOptionsView.swift; sourceTree = "<group>"; };
 		952F39E22C8F4874009A412D /* ParagraphParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphParser.swift; sourceTree = "<group>"; };
@@ -478,6 +492,11 @@
 			children = (
 				PROG00030003PROGRESS0003 /* ProgressView.swift */,
 				PROG00050005PROGRESS0005 /* CanonicalBibleBooks.swift */,
+				BADGE0003BADGE0003BADGE3 /* BadgeRegistry.swift */,
+				BADGE0005BADGE0005BADGE5 /* LiturgicalCalendar.swift */,
+				BADGE0007BADGE0007BADGE7 /* DevotionalHistory.swift */,
+				BADGE0011BADGE0011BADG11 /* BadgeGallerySheet.swift */,
+				BADGE0013BADGE0013BADG13 /* BadgeEarnedToast.swift */,
 			);
 			path = Progress;
 			sourceTree = "<group>";
@@ -601,6 +620,7 @@
 				E03C9505B4D5E972B90582E3 /* ReadingTheme.swift */,
 				70803BE8C452F513C60AFF8C /* AppIconOption.swift */,
 				D1436A3087B4D420B1C9E6BE /* ReadingSession.swift */,
+				BADGE0001BADGE0001BADGE1 /* EarnedBadge.swift */,
 				HH01HISTFR00000001HISTRY /* HistoryModels.swift */,
 			);
 			path = Models;
@@ -623,6 +643,7 @@
 				952F39E22C8F4874009A412D /* ParagraphParser.swift */,
 				956026C52DA85464006A9CFC /* MarkdownParser.swift */,
 				15F3B1712A28409C5CA1370A /* CacheService.swift */,
+				BADGE0009BADGE0009BADGE9 /* BadgeService.swift */,
 				AA0000072F140001000ANALYT /* AnalyticsService.swift */,
 				95AE12052F7AB300001A2B05 /* SentryService.swift */,
 				CC0000022F640001000NOTIF /* NotificationService.swift */,
@@ -1004,6 +1025,13 @@
 				95F8A0042F1A2B3400ABCDEF /* SavedDevotionalsListView.swift in Sources */,
 				PROG00020002PROGRESS0002 /* ProgressView.swift in Sources */,
 				PROG00040004PROGRESS0004 /* CanonicalBibleBooks.swift in Sources */,
+				BADGE0002BADGE0002BADGE2 /* EarnedBadge.swift in Sources */,
+				BADGE0004BADGE0004BADGE4 /* BadgeRegistry.swift in Sources */,
+				BADGE0006BADGE0006BADGE6 /* LiturgicalCalendar.swift in Sources */,
+				BADGE0008BADGE0008BADGE8 /* DevotionalHistory.swift in Sources */,
+				BADGE0010BADGE0010BADG10 /* BadgeService.swift in Sources */,
+				BADGE0012BADGE0012BADG12 /* BadgeGallerySheet.swift in Sources */,
+				BADGE0014BADGE0014BADG14 /* BadgeEarnedToast.swift in Sources */,
 				952F39DF2C8E36E5009A412D /* FontOptionsView.swift in Sources */,
 				95CC66082E899D560065E7AD /* URLHandler.swift in Sources */,
 				95CC65202E830DD70065E7AD /* DonationPreferences.swift in Sources */,
