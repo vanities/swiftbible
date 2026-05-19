@@ -72,7 +72,12 @@ struct BadgeGallerySheet: View {
             HStack(spacing: 10) {
                 ForEach(BadgeTier.allCases, id: \.self) { tier in
                     let def = BadgeRegistry.tier(track: track, tier: tier)
-                    BadgeCell(definition: def, earned: earnedIds.contains(def.id), revealed: true)
+                    BadgeCell(
+                        definition: def,
+                        earned: earnedIds.contains(def.id),
+                        revealed: true,
+                        nameOverride: tier.displayName
+                    )
                 }
             }
         }
@@ -134,6 +139,10 @@ private struct BadgeCell: View {
     let earned: Bool
     /// For hidden badges, false until earned. Shows silhouette + "?"
     let revealed: Bool
+    /// Optional shorter label — used by the tier ladder where the
+    /// section header already names the track (e.g. "DEVOTIONALS"), so
+    /// the cell only needs the tier ("Bronze").
+    var nameOverride: String?
 
     var body: some View {
         VStack(spacing: 8) {
@@ -153,11 +162,11 @@ private struct BadgeCell: View {
                 }
             }
 
-            Text(revealed ? definition.name : "Hidden")
+            Text(displayedName)
                 .font(.system(size: 13, weight: .semibold))
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
-                .minimumScaleFactor(0.85)
+                .minimumScaleFactor(0.8)
                 .foregroundStyle(revealed ? .primary : .secondary)
 
             Text(revealed ? definition.description : "Keep reading to discover")
@@ -187,6 +196,11 @@ private struct BadgeCell: View {
         .opacity(earned ? 1.0 : 0.85)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
+    }
+
+    private var displayedName: String {
+        if !revealed { return "Hidden" }
+        return nameOverride ?? definition.name
     }
 
     private var circleFill: Color {
