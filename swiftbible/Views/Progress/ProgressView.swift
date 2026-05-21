@@ -39,6 +39,14 @@ struct ProgressTabView: View {
                         }
                         .accessibilityLabel("Trigger test badge toast")
                     }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            grantFreeBadge()
+                        } label: {
+                            Image(systemName: "gift.fill")
+                        }
+                        .accessibilityLabel("DEBUG: grant next badge (persists an EarnedBadge so CD_EarnedBadge syncs to CloudKit)")
+                    }
                 }
                 #endif
         }
@@ -175,6 +183,20 @@ struct ProgressTabView: View {
             )
         }
     }
+
+    #if DEBUG
+    /// DEBUG-only: grants the next not-yet-earned badge and persists it, so the
+    /// EarnedBadge record syncs to CloudKit (creating CD_EarnedBadge in the
+    /// Development schema). Excluded from release builds.
+    private func grantFreeBadge() {
+        let earnedIds = Set(BadgeService.shared.earnedDefinitions(in: context).map { $0.id })
+        guard let next = BadgeRegistry.all.first(where: { !earnedIds.contains($0.id) }) else { return }
+        context.insert(EarnedBadge(badgeId: next.id, earnedAt: Date(), notified: true))
+        try? context.save()
+        ToastService.shared.enqueue(next)
+        loadStats()
+    }
+    #endif
 }
 
 // MARK: - Stat Card
