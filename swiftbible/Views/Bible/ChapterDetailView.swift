@@ -385,6 +385,11 @@ struct ChapterDetailView: View {
                     ) { paragraph in
                         paragraphRow(for: paragraph)
                     }
+                    // Scroll-to-end sentinel: once the last verse is visible the
+                    // chapter is flagged reached-end (with ≥30s dwell → "read").
+                    Color.clear
+                        .frame(height: 1)
+                        .onAppear { ReadingStatsService.shared.markReachedEnd() }
                 }
                 .id(currentChapterNumber)
                 .transition(.asymmetric(

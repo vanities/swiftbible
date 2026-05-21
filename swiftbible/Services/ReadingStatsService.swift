@@ -85,6 +85,14 @@ final class ReadingStatsService {
         persistCurrentSession(operation: "flush_session")
     }
 
+    /// Marks that the reader scrolled to the last verse of the current chapter,
+    /// then persists. Combined with a ≥30s dwell this makes the chapter "read".
+    func markReachedEnd() {
+        guard let session = currentSession else { return }
+        session.reachedEnd = true
+        flush()
+    }
+
     @discardableResult
     private func persistCurrentSession(operation: String) -> Bool {
         guard let session = currentSession, let context = modelContext else { return false }
@@ -199,6 +207,26 @@ final class ReadingStatsService {
         let descriptor = FetchDescriptor<ReadingSession>(predicate: predicate)
         let sessions = (try? context.fetch(descriptor)) ?? []
         return Set(sessions.map { $0.chapterNumber })
+    }
+
+    /// Minimum cumulative foreground time before a scrolled-through chapter
+    /// counts as "read" for the chapter-list indicator.
+    static let readSecondsThreshold: TimeInterval = 30
+
+    /// Chapter numbers considered "read": the reader reached the last verse at
+    /// least once AND accumulated >= readSecondsThreshold of foreground time in
+    /// that chapter (summed across sessions). Drives the dimmed chapter rows.
+    func readChapterNumbers(forBook bookName: String, in context: ModelContext) -> Set<Int> {
+        let predicate = #Predicate<ReadingSession> { $0.bookName == bookName }
+        let descriptor = FetchDescriptor<ReadingSession>(predicate: predicate)
+        let sessions = (try? context.fetch(descriptor)) ?? []
+        var reachedEndChapters: Set<Int> = []
+        var totalByChapter: [Int: TimeInterval] = [:]
+        for session in sessions {
+            if session.reachedEnd { reachedEndChapters.insert(session.chapterNumber) }
+            totalByChapter[session.chapterNumber, default: 0] += session.duration
+        }
+        return reachedEndChapters.filter { (totalByChapter[$0] ?? 0) >= Self.readSecondsThreshold }
     }
 
     /// Number of distinct reading events per day for the heatmap. Includes
