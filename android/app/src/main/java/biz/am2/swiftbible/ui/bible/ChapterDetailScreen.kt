@@ -39,12 +39,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,6 +66,7 @@ import biz.am2.swiftbible.data.UserPreferences
 import biz.am2.swiftbible.model.Paragraph
 import biz.am2.swiftbible.ui.AppViewModel
 import biz.am2.swiftbible.ui.theme.BrandRed
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import androidx.compose.ui.text.TextStyle
 
@@ -179,6 +182,23 @@ fun ChapterDetailScreen(
 
         val passageByVerse = remember(passages) { passages.associateBy { it.startVerse } }
         val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+        // Mark "reached end" once the trailing item (spacer) scrolls into view.
+        LaunchedEffect(listState, bookName, chapterNumber) {
+            snapshotFlow {
+                val info = listState.layoutInfo
+                info.totalItemsCount > 0 &&
+                    (info.visibleItemsInfo.lastOrNull()?.index ?: -1) >= info.totalItemsCount - 1
+            }
+                .distinctUntilChanged()
+                .collect { atEnd -> if (atEnd) appVm.markChapterReachedEnd(bookName, chapterNumber) }
+        }
+        // Accumulate foreground dwell; flush to the session when leaving the chapter.
+        DisposableEffect(bookName, chapterNumber) {
+            val start = System.currentTimeMillis()
+            onDispose {
+                appVm.addChapterReadingTime(bookName, chapterNumber, System.currentTimeMillis() - start)
+            }
+        }
         LaunchedEffect(targetVerse, chapter.paragraphs.size) {
             if (targetVerse != null) {
                 val index = chapter.paragraphs.indexOfFirst { it.startingVerse <= targetVerse &&

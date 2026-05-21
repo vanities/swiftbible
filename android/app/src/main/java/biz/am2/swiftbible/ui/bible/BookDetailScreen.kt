@@ -23,6 +23,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +45,10 @@ fun BookDetailScreen(
 ) {
     val book = appVm.bookByName(bookName)
     var titles by remember(bookName) { mutableStateOf<Map<Int, String>>(emptyMap()) }
+    // Reactive set of chapters the user has read (scrolled to end + >=30s);
+    // updates live as the reading_sessions table changes.
+    val readChapters by remember(bookName) { appVm.readChaptersForBook(bookName) }
+        .collectAsState(initial = emptySet())
 
     LaunchedEffect(bookName) {
         biz.am2.swiftbible.data.Analytics.capture(
@@ -114,6 +119,7 @@ fun BookDetailScreen(
                 ChapterRow(
                     number = chapter.number,
                     title = titles[chapter.number],
+                    isRead = chapter.number in readChapters,
                     onClick = { onChapterClick(chapter.number) },
                 )
             }
@@ -125,6 +131,7 @@ fun BookDetailScreen(
 private fun ChapterRow(
     number: Int,
     title: String?,
+    isRead: Boolean,
     onClick: () -> Unit,
 ) {
     Row(
@@ -138,7 +145,8 @@ private fun ChapterRow(
             Text(
                 text = "Chapter $number",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground,
+                // Read chapters tint their title in the accent color (mirrors iOS).
+                color = if (isRead) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
             )
             if (!title.isNullOrBlank()) {
                 Text(

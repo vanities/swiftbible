@@ -12,6 +12,9 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.Update
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 
 @Entity(
@@ -109,6 +112,10 @@ data class ReadingSession(
     val version: String,
     val startedAt: Long = System.currentTimeMillis(),
     val durationMs: Long = 0,
+    // True once the reader scrolled to the last verse; with >=30s dwell the
+    // chapter counts as "read" (mirrors iOS). @ColumnInfo default matches the
+    // v4->v5 migration's NOT NULL DEFAULT 0.
+    @ColumnInfo(defaultValue = "0") val reachedEnd: Boolean = false,
     // Truncated to midnight in the local calendar so streak/heatmap queries
     // are cheap. Devotional opens use bookName == "__devotional__" so they
     // count toward streak without polluting chapter aggregates.
@@ -242,6 +249,13 @@ interface ReadingSessionDao {
 
     @Query("SELECT COUNT(DISTINCT bookName || '-' || chapterNumber) FROM reading_sessions WHERE bookName != '__devotional__'")
     fun distinctChaptersRead(): Flow<Int>
+
+    @Update
+    suspend fun update(session: ReadingSession)
+
+    /** Chapters considered "read": reached the last verse AND >= minMs dwell. */
+    @Query("SELECT DISTINCT chapterNumber FROM reading_sessions WHERE bookName=:book AND reachedEnd=1 AND durationMs >= :minMs")
+    fun readChaptersFlow(book: String, minMs: Long): Flow<List<Int>>
 }
 
 @Dao
@@ -270,7 +284,7 @@ interface EarnedBadgeDao {
         ReadingSession::class,
         EarnedBadge::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = false,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -284,9 +298,17 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun earnedBadgeDao(): EarnedBadgeDao
 
     companion object {
+        // v4 -> v5: add reading_sessions.reachedEnd for the read indicator.
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE reading_sessions ADD COLUMN reachedEnd INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
         @Volatile private var instance: AppDatabase? = null
         fun get(context: Context): AppDatabase = instance ?: synchronized(this) {
             instance ?: Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "swiftbible.db")
+                .addMigrations(MIGRATION_4_5)
                 .fallbackToDestructiveMigration()
                 .build().also { instance = it }
         }

@@ -304,6 +304,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         badgeService.checkBadges()
     }
 
+    fun markChapterReachedEnd(book: String, chapter: Int) = viewModelScope.launch {
+        readingStats.markReachedEnd(book, chapter, bible.value.version.shortName)
+    }
+
+    fun addChapterReadingTime(book: String, chapter: Int, ms: Long) = viewModelScope.launch {
+        readingStats.addReadingTime(book, chapter, bible.value.version.shortName, ms)
+    }
+
+    fun readChaptersForBook(book: String): kotlinx.coroutines.flow.Flow<Set<Int>> =
+        readingStats.readChapterNumbersFlow(book)
+
     fun logDevotionalRead(track: String?, seriesName: String?, seriesPart: Int?) = viewModelScope.launch {
         readingStats.logDevotionalRead()
         biz.am2.swiftbible.data.DevotionalHistory.record(

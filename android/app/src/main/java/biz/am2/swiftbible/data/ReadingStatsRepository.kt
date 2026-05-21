@@ -53,6 +53,25 @@ class ReadingStatsRepository(private val dao: ReadingSessionDao) {
     suspend fun chaptersReadInBook(book: String): Set<Int> =
         dao.forBook(book).map { it.chapterNumber }.toSet()
 
+    /** Marks today's session for this chapter as having reached the last verse. */
+    suspend fun markReachedEnd(book: String, chapter: Int, version: String) {
+        recordChapterRead(book, chapter, version)
+        val s = dao.forBookChapterOnDay(book, chapter, startOfDay(System.currentTimeMillis())) ?: return
+        if (!s.reachedEnd) dao.update(s.copy(reachedEnd = true))
+    }
+
+    /** Adds foreground dwell time to today's session for this chapter. */
+    suspend fun addReadingTime(book: String, chapter: Int, version: String, ms: Long) {
+        if (ms <= 0L) return
+        recordChapterRead(book, chapter, version)
+        val s = dao.forBookChapterOnDay(book, chapter, startOfDay(System.currentTimeMillis())) ?: return
+        dao.update(s.copy(durationMs = s.durationMs + ms))
+    }
+
+    /** Reactive set of chapters considered "read": reached the last verse AND >=30s dwell. */
+    fun readChapterNumbersFlow(book: String): Flow<Set<Int>> =
+        dao.readChaptersFlow(book, READ_THRESHOLD_MS).map { it.toSet() }
+
     /** Total distinct (book, chapter) pairs read, excluding devotional marker. */
     fun totalChaptersReadFlow(): Flow<Int> = dao.distinctChaptersRead()
 
@@ -129,6 +148,7 @@ class ReadingStatsRepository(private val dao: ReadingSessionDao) {
     companion object {
         const val DEVOTIONAL_BOOK = "__devotional__"
         const val DEVOTIONAL_VERSION = "devotional"
+        const val READ_THRESHOLD_MS = 30_000L
 
         fun startOfDay(epochMs: Long): Long {
             val cal = Calendar.getInstance()
