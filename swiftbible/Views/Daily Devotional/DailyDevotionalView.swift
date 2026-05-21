@@ -233,6 +233,9 @@ struct DailyDevotionalView: View {
             selectedDate = Date()
         }
         .accessibilityIdentifier("DailyDevotionalView")
+        #if DEBUG
+        .overlay(alignment: .bottom) { DevotionalReadDebugBadge(context: context) }
+        #endif
     }
 
     @ViewBuilder
@@ -721,6 +724,34 @@ struct DailyDevotionalView: View {
         return result
     }
 }
+
+#if DEBUG
+/// DEBUG-only badge for the devotional. Unlike chapters, the devotional has no
+/// running timer — opening today's devotional records a single marker session
+/// (`logDevotionalRead`), idempotent per day. This shows whether that marker
+/// exists for today.
+private struct DevotionalReadDebugBadge: View {
+    let context: ModelContext
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 1.0)) { _ in
+            let logged = ReadingStatsService.shared.debugDevotionalLoggedToday(in: context)
+            HStack(spacing: 6) {
+                Image(systemName: logged ? "checkmark.seal.fill" : "seal")
+                    .foregroundStyle(logged ? .green : .secondary)
+                Text(logged ? "devotional logged today" : "not logged today")
+            }
+            .font(.caption2.monospaced())
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(.ultraThinMaterial, in: Capsule())
+            .overlay(Capsule().stroke(Color.white.opacity(0.15), lineWidth: 0.5))
+            .padding(.bottom, 8)
+            .allowsHitTesting(false)
+        }
+    }
+}
+#endif
 
 #Preview {
     DailyDevotionalView(selectedTab: .constant(.dailyDevotional))

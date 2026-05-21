@@ -74,28 +74,40 @@ final class ReadingStatsService {
     }
 
     func stopReading() {
-        guard let session = currentSession else {
-            resetTrackingState()
-            return
-        }
+        persistCurrentSession(operation: "save_session")
+        resetTrackingState()
+    }
+
+    /// Persists the in-flight session's progress so far without ending it, so
+    /// leaving the reader — backgrounding or switching tabs — can't lose a read.
+    /// Tracking continues into the same row; a later stop just updates duration.
+    func flush() {
+        persistCurrentSession(operation: "flush_session")
+    }
+
+    @discardableResult
+    private func persistCurrentSession(operation: String) -> Bool {
+        guard let session = currentSession, let context = modelContext else { return false }
         let total = currentForegroundDuration()
         // Only record sessions longer than 5 seconds (skip navigation bounces and tab switches)
-        if total >= 5, let context = modelContext {
-            session.duration = total
+        guard total >= 5 else { return false }
+        session.duration = total
+        if session.modelContext == nil {
             context.insert(session)
-            do {
-                try context.save()
-            } catch {
-                SentryService.shared.capture(error, context: [
-                    "service": "ReadingStatsService",
-                    "operation": "save_session",
-                    "book": session.bookName,
-                    "chapter": session.chapterNumber,
-                    "version": session.version
-                ])
-            }
         }
-        resetTrackingState()
+        do {
+            try context.save()
+            return true
+        } catch {
+            SentryService.shared.capture(error, context: [
+                "service": "ReadingStatsService",
+                "operation": operation,
+                "book": session.bookName,
+                "chapter": session.chapterNumber,
+                "version": session.version
+            ])
+            return false
+        }
     }
 
     private func currentForegroundDuration() -> TimeInterval {
@@ -113,9 +125,13 @@ final class ReadingStatsService {
     }
 
     private func handleEnteredBackground() {
-        guard let segmentStart = segmentStartedAt else { return }
-        accumulatedDuration += Date().timeIntervalSince(segmentStart)
-        segmentStartedAt = nil
+        if let segmentStart = segmentStartedAt {
+            accumulatedDuration += Date().timeIntervalSince(segmentStart)
+            segmentStartedAt = nil
+        }
+        // Persist progress so far — iOS may kill a suspended app without ever
+        // calling willTerminate, and the read would otherwise be lost.
+        flush()
     }
 
     private func handleEnteredForeground() {
@@ -223,11 +239,13 @@ final class ReadingStatsService {
         var lookback = daySet.contains(today) ? 0 : 1
         var streak = 0
         var lastFreezeLookback = -8 // far enough back to allow first freeze
+        var lastReadLookback = -1   // deepest day we actually read
 
         while true {
             guard let day = calendar.date(byAdding: .day, value: -lookback, to: today) else { break }
             if daySet.contains(day) {
                 streak += 1
+                lastReadLookback = lookback
                 lookback += 1
             } else if (lookback - lastFreezeLookback) >= 7 {
                 lastFreezeLookback = lookback
@@ -237,7 +255,12 @@ final class ReadingStatsService {
             }
         }
 
-        let freezeActive = lastFreezeLookback >= 0 && lastFreezeLookback < 7
+        // A freeze is only "in use" when it actually bridges two read days — i.e.
+        // there's a read day deeper than the frozen gap. A brand-new user who
+        // only read today reads a clean "1d" with no misleading "Freeze in use".
+        let freezeActive = lastFreezeLookback >= 0
+            && lastFreezeLookback < 7
+            && lastReadLookback > lastFreezeLookback
         return (streak, freezeActive)
     }
 
@@ -303,3 +326,33 @@ final class ReadingStatsService {
     }
 
 }
+
+#if DEBUG
+// Live read-tracking state surfaced to the in-app DEBUG overlay so we can
+// watch a session accumulate foreground time and cross the 5s save threshold.
+extension ReadingStatsService {
+    var debugIsTracking: Bool { currentSession != nil }
+
+    var debugTrackingLabel: String? {
+        guard let session = currentSession else { return nil }
+        if session.bookName == Self.devotionalBookName { return "Devotional marker" }
+        return "\(session.bookName) \(session.chapterNumber) · \(session.version.uppercased())"
+    }
+
+    var debugElapsedSeconds: TimeInterval { currentForegroundDuration() }
+
+    var debugMeetsSaveThreshold: Bool { currentForegroundDuration() >= 5 }
+
+    /// Whether today's devotional open has already been recorded as a marker session.
+    func debugDevotionalLoggedToday(in context: ModelContext) -> Bool {
+        let day = Calendar.current.startOfDay(for: Date())
+        let marker = Self.devotionalBookName
+        let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: day) ?? day
+        let predicate = #Predicate<ReadingSession> { session in
+            session.bookName == marker && session.date >= day && session.date < nextDay
+        }
+        let descriptor = FetchDescriptor<ReadingSession>(predicate: predicate)
+        return ((try? context.fetch(descriptor))?.isEmpty == false)
+    }
+}
+#endif

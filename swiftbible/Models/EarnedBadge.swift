@@ -11,7 +11,12 @@ import SwiftData
 /// flips to true so it doesn't re-trigger.
 @Model
 final class EarnedBadge {
-    @Attribute(.unique) var badgeId: String = ""
+    // No @Attribute(.unique): the app's SwiftData store is CloudKit-backed
+    // (iCloud entitlement → automatic CloudKit), and CloudKit forbids unique
+    // constraints — a unique attribute makes the entire store fail to load,
+    // silently breaking ALL local persistence. Uniqueness is enforced in code:
+    // BadgeService.checkBadges skips badgeIds already present before inserting.
+    var badgeId: String = ""
     var earnedAt: Date = Date()
     var notified: Bool = false
 

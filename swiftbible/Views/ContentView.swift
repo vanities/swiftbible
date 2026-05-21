@@ -78,6 +78,9 @@ struct ContentView: View {
 
         mainTabView
         .onChange(of: selectedTab) { _, newTab in
+            // Switching tabs doesn't reliably fire the reader's onDisappear, so
+            // persist any in-flight reading session before leaving the Bible tab.
+            ReadingStatsService.shared.flush()
             AnalyticsService.shared.capture(.tabSwitched, properties: [
                 "tab": String(describing: newTab)
             ])
