@@ -45,7 +45,7 @@ struct BookDetailView: View {
                             source: summarySource
                         )
                     )
-                    .opacity(readChapters.contains(chapter.number) ? 0.4 : 1)
+                    .opacity(readChapters.contains(chapter.number) ? 0.6 : 1)
                 }
             }
         }
