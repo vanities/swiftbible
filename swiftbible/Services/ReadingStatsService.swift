@@ -371,6 +371,14 @@ extension ReadingStatsService {
 
     var debugMeetsSaveThreshold: Bool { currentForegroundDuration() >= 5 }
 
+    var debugReachedEnd: Bool { currentSession?.reachedEnd ?? false }
+
+    /// Whether the current chapter has crossed the "read" bar: scrolled to the
+    /// last verse AND >= readSecondsThreshold of foreground time.
+    var debugMeetsReadThreshold: Bool {
+        (currentSession?.reachedEnd ?? false) && currentForegroundDuration() >= Self.readSecondsThreshold
+    }
+
     /// Whether today's devotional open has already been recorded as a marker session.
     func debugDevotionalLoggedToday(in context: ModelContext) -> Bool {
         let day = Calendar.current.startOfDay(for: Date())

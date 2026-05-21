@@ -43,9 +43,9 @@ struct BookDetailView: View {
                             book: currentBook.name,
                             chapter: chapter.number,
                             source: summarySource
-                        )
+                        ),
+                        tint: readChapters.contains(chapter.number) ? .accentColor : nil
                     )
-                    .opacity(readChapters.contains(chapter.number) ? 0.6 : 1)
                 }
             }
         }

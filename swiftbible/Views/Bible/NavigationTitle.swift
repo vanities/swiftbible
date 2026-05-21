@@ -13,10 +13,13 @@ struct NavigationTitle: View {
 
     let name: String
     let description: String?
+    // Optional title tint — used to mark a read chapter in the app accent color.
+    var tint: Color?
 
     var body: some View {
         VStack(alignment: .leading) {
             Text(name)
+                .foregroundStyle(tint ?? .primary)
             if let description {
                 Text(description)
                     .font(.footnote)

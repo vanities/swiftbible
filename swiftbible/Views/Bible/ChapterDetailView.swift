@@ -865,6 +865,8 @@ private struct ReadTrackerDebugBadge: View {
     var body: some View {
         TimelineView(.periodic(from: .now, by: 0.5)) { _ in
             let service = ReadingStatsService.shared
+            let elapsed = Int(service.debugElapsedSeconds.rounded())
+            let needSecs = Int(ReadingStatsService.readSecondsThreshold)
             HStack(spacing: 6) {
                 Image(systemName: service.debugIsTracking ? "record.circle.fill" : "pause.circle")
                     .foregroundStyle(service.debugIsTracking ? .red : .secondary)
@@ -872,10 +874,18 @@ private struct ReadTrackerDebugBadge: View {
                     Text(label)
                         .lineLimit(1)
                     Text("·").foregroundStyle(.secondary)
-                    Text("\(Int(service.debugElapsedSeconds.rounded()))s")
+                    // seconds — green once past the 30s read threshold
+                    Text("\(elapsed)s")
                         .monospacedDigit()
-                    Text(service.debugMeetsSaveThreshold ? "✓ saves" : "<5s")
-                        .foregroundStyle(service.debugMeetsSaveThreshold ? .green : .orange)
+                        .foregroundStyle(elapsed >= needSecs ? .green : .orange)
+                    // scrolled to last verse?
+                    Text(service.debugReachedEnd ? "end✓" : "end✗")
+                        .foregroundStyle(service.debugReachedEnd ? .green : .orange)
+                    // both met → chapter counts as read
+                    if service.debugMeetsReadThreshold {
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundStyle(.green)
+                    }
                 } else {
                     Text("not tracking").foregroundStyle(.secondary)
                 }
