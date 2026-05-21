@@ -17,10 +17,9 @@ en-US:
   keywords: "asv,web,scripture,gospel,prayer,jesus,christian,faith,study,notes,jubilees,enoch,hebrew,catholic,god"
   promo_text: "Read the Bible in KJV, ASV, WEB & Original Hebrew/Greek. Includes Apocrypha, Enoch, Jubilees, and more. Highlight, take notes, and get AI explanations."
   whats_new: |-
-    - New Progress card in More: daily reading streak, 12-week heatmap, and a 66-book completion grid that fills as you read
-    - 35 achievements to earn — Bronze→Diamond tiers, collectibles like All Four Gospels and Enoch Complete, plus 10 hidden ones to discover
-    - Streaks have a built-in freeze so missing one day a week won't break your chain
-    - A badge-earned banner pops in with a satisfying haptic the moment you unlock something
+    - Fixed a problem that could stop your reading progress from saving — streaks, chapters read, and your 12-week heatmap now update reliably
+    - Your highlights, notes, and saved devotionals are kept safe
+    - New readers now start with an accurate 1-day streak
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -58,10 +57,9 @@ es-ES:
 
     SwiftBible es totalmente de código abierto. Lee y contribuye al código en GitHub.
   whats_new: |-
-    - Nueva tarjeta de Progreso en Más: racha diaria de lectura, mapa de calor de 12 semanas y una cuadrícula de 66 libros que se va llenando mientras lees
-    - 35 logros para conseguir — niveles de Bronce a Diamante, colecciones como Los Cuatro Evangelios y Enoc Completo, más 10 ocultos por descubrir
-    - Las rachas incluyen un día de gracia: perder un día a la semana no rompe tu cadena
-    - Un banner con vibración háptica aparece en el momento exacto en que desbloqueas un nuevo logro
+    - Corregimos un problema que podía impedir que se guardara tu progreso de lectura: las rachas, los capítulos leídos y tu mapa de actividad de 12 semanas ahora se actualizan de forma fiable
+    - Tus subrayados, notas y devocionales guardados se mantienen a salvo
+    - Los nuevos lectores empiezan ahora con una racha correcta de 1 día
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -99,10 +97,9 @@ es-MX:
 
     SwiftBible es 100% de código abierto. Lee y contribuye en GitHub.
   whats_new: |-
-    - Nueva tarjeta de Progreso en Más: racha diaria de lectura, mapa de calor de 12 semanas y una cuadrícula de 66 libros que se va llenando conforme lees
-    - 35 logros para obtener — niveles de Bronce a Diamante, colecciones como Los Cuatro Evangelios y Enoc Completo, más 10 ocultos por descubrir
-    - Las rachas incluyen un día de gracia: perder un día a la semana no rompe tu cadena
-    - Un banner con vibración aparece justo en el momento en que desbloqueas un nuevo logro
+    - Corregimos un problema que podía impedir que se guardara tu progreso de lectura: las rachas, los capítulos leídos y tu mapa de actividad de 12 semanas ahora se actualizan de forma confiable
+    - Tus resaltados, notas y devocionales guardados se mantienen seguros
+    - Los lectores nuevos ahora comienzan con una racha correcta de 1 día
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -140,10 +137,9 @@ pt-BR:
 
     SwiftBible é totalmente de código aberto. Veja e contribua no GitHub.
   whats_new: |-
-    - Novo card de Progresso em Mais: sequência diária de leitura, mapa de calor de 12 semanas e uma grade de 66 livros que se preenche conforme você lê
-    - 35 conquistas para ganhar — níveis Bronze a Diamante, coletáveis como Os Quatro Evangelhos e Enoque Completo, mais 10 ocultas para descobrir
-    - As sequências têm um dia de folga embutido: perder um dia por semana não quebra sua corrente
-    - Um banner com vibração aparece no momento em que você desbloqueia uma nova conquista
+    - Corrigimos um problema que podia impedir o salvamento do seu progresso de leitura — sequências, capítulos lidos e seu mapa de atividade de 12 semanas agora são atualizados de forma confiável
+    - Seus destaques, anotações e devocionais salvos ficam protegidos
+    - Novos leitores agora começam com uma sequência correta de 1 dia
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -181,10 +177,9 @@ pt-PT:
 
     SwiftBible é totalmente de código aberto. Vê e contribui no GitHub.
   whats_new: |-
-    - Novo cartão de Progresso em Mais: sequência diária de leitura, mapa de calor de 12 semanas e uma grelha de 66 livros que se preenche enquanto lês
-    - 35 conquistas para ganhar — níveis Bronze a Diamante, coleções como Os Quatro Evangelhos e Enoque Completo, mais 10 ocultas para descobrir
-    - As sequências têm um dia de folga incluído: falhar um dia por semana não quebra a tua corrente
-    - Um banner com vibração aparece no momento em que desbloqueias uma nova conquista
+    - Corrigimos um problema que podia impedir que o seu progresso de leitura fosse guardado — as sequências, os capítulos lidos e o seu mapa de atividade de 12 semanas são agora atualizados de forma fiável
+    - Os seus destaques, notas e devocionais guardados ficam protegidos
+    - Os novos leitores começam agora com uma sequência correta de 1 dia
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -222,10 +217,9 @@ fr-FR:
 
     SwiftBible est entièrement open-source. Consultez et contribuez sur GitHub.
   whats_new: |-
-    - Nouvelle carte Progrès dans Plus : série de lecture quotidienne, carte thermique sur 12 semaines, et une grille de 66 livres qui se remplit au fil de votre lecture
-    - 35 succès à débloquer — niveaux Bronze à Diamant, collections comme Les Quatre Évangiles et Hénoch Complet, plus 10 succès cachés à découvrir
-    - Les séries incluent un jour de grâce : manquer un jour par semaine ne casse pas votre chaîne
-    - Une bannière vibre légèrement à l'instant où vous décrochez un nouveau succès
+    - Correction d'un problème qui pouvait empêcher l'enregistrement de votre progression de lecture — les séries, les chapitres lus et votre carte d'activité sur 12 semaines se mettent désormais à jour de façon fiable
+    - Vos surlignages, notes et dévotionnels enregistrés sont conservés en sécurité
+    - Les nouveaux lecteurs démarrent désormais avec une série exacte d'un jour
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -263,10 +257,9 @@ de-DE:
 
     SwiftBible ist vollständig Open Source. Code ansehen und beitragen auf GitHub.
   whats_new: |-
-    - Neue Fortschrittskarte unter Mehr: tägliche Lese-Serie, 12-Wochen-Heatmap und ein 66-Bücher-Raster, das sich beim Lesen füllt
-    - 35 Erfolge zum Freischalten — Bronze bis Diamant, Sammlerstücke wie Alle Vier Evangelien und Henoch Komplett, plus 10 versteckte zum Entdecken
-    - Serien haben einen eingebauten Joker: ein verpasster Tag pro Woche bricht die Kette nicht
-    - Ein Banner mit haptischem Feedback erscheint genau in dem Moment, in dem Sie einen Erfolg freischalten
+    - Ein Problem behoben, durch das dein Lesefortschritt möglicherweise nicht gespeichert wurde – Serien, gelesene Kapitel und deine 12-Wochen-Aktivitätsübersicht werden jetzt zuverlässig aktualisiert
+    - Deine Markierungen, Notizen und gespeicherten Andachten bleiben erhalten
+    - Neue Leser starten jetzt mit einer korrekten 1-Tages-Serie
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -304,10 +297,9 @@ it:
 
     SwiftBible è completamente open source. Codice e contributi su GitHub.
   whats_new: |-
-    - Nuova scheda Progressi in Altro: serie di lettura giornaliera, mappa termica di 12 settimane e una griglia di 66 libri che si riempie mentre leggi
-    - 35 obiettivi da sbloccare — livelli da Bronzo a Diamante, collezioni come Tutti e Quattro i Vangeli ed Enoch Completo, più 10 nascosti da scoprire
-    - Le serie includono un giorno di grazia: saltare un giorno a settimana non rompe la catena
-    - Un banner con vibrazione appare nell'esatto momento in cui sblocchi un nuovo obiettivo
+    - Risolto un problema che poteva impedire il salvataggio dei tuoi progressi di lettura: serie, capitoli letti e la mappa delle attività di 12 settimane ora si aggiornano in modo affidabile
+    - Le tue evidenziazioni, note e devozionali salvati restano al sicuro
+    - I nuovi lettori ora iniziano con una serie corretta di 1 giorno
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -345,10 +337,9 @@ nl-NL:
 
     SwiftBible is volledig open source. Bekijk en draag bij op GitHub.
   whats_new: |-
-    - Nieuwe Voortgang-kaart in Meer: dagelijkse leesreeks, 12-weken-heatmap en een 66-boeken-rooster dat zich vult terwijl je leest
-    - 35 prestaties om te verdienen — Brons tot Diamant, verzamelobjecten zoals Alle Vier Evangeliën en Henoch Compleet, plus 10 verborgen om te ontdekken
-    - Reeksen hebben een ingebouwde vrije dag: één dag per week missen breekt je keten niet
-    - Een banner met trilling verschijnt op het moment dat je een nieuwe prestatie ontgrendelt
+    - Een probleem opgelost waardoor je leesvoortgang mogelijk niet werd opgeslagen — reeksen, gelezen hoofdstukken en je activiteitenoverzicht van 12 weken worden nu betrouwbaar bijgewerkt
+    - Je markeringen, notities en opgeslagen overdenkingen blijven bewaard
+    - Nieuwe lezers beginnen nu met een correcte reeks van 1 dag
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -386,10 +377,9 @@ pl:
 
     SwiftBible jest w pełni otwartoźródłowa. Kod i wkład w GitHubie.
   whats_new: |-
-    - Nowa karta Postęp w Więcej: codzienna passa czytania, mapa cieplna z 12 tygodni i siatka 66 ksiąg, która wypełnia się w miarę czytania
-    - 35 osiągnięć do zdobycia — poziomy od Brązu po Diament, kolekcje jak Wszystkie Cztery Ewangelie i Pełna Księga Henocha, plus 10 ukrytych do odkrycia
-    - Passy mają wbudowany dzień łaski: opuszczenie jednego dnia w tygodniu nie zrywa łańcucha
-    - Baner z wibracją pojawia się dokładnie w chwili odblokowania nowego osiągnięcia
+    - Naprawiono problem, który mógł uniemożliwiać zapisywanie postępów czytania — passy, przeczytane rozdziały i 12-tygodniowa mapa aktywności są teraz aktualizowane niezawodnie
+    - Twoje zaznaczenia, notatki i zapisane rozważania są bezpieczne
+    - Nowi czytelnicy zaczynają teraz z poprawną passą 1-dniową
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -427,10 +417,9 @@ ru:
 
     SwiftBible полностью с открытым исходным кодом. Код и вклад на GitHub.
   whats_new: |-
-    - Новая карточка Прогресс в Ещё: ежедневная серия чтения, тепловая карта за 12 недель и сетка из 66 книг, заполняющаяся по мере чтения
-    - 35 достижений — уровни от Бронзы до Бриллианта, коллекции вроде Четырёх Евангелий и Книги Еноха целиком, плюс 10 скрытых для открытия
-    - Серии включают день льготы: пропуск одного дня в неделю не прерывает цепочку
-    - Баннер с вибрацией появляется в момент получения новой награды
+    - Исправлена проблема, из-за которой ваш прогресс чтения мог не сохраняться — серии, прочитанные главы и карта активности за 12 недель теперь обновляются надёжно
+    - Ваши выделения, заметки и сохранённые размышления остаются в сохранности
+    - Новые читатели теперь начинают с правильной серии в 1 день
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -468,10 +457,9 @@ ko:
 
     SwiftBible은 완전한 오픈소스입니다. GitHub에서 코드를 보고 기여할 수 있습니다.
   whats_new: |-
-    - 더보기에 새로운 진행 카드: 매일 읽기 연속, 12주 활동 히트맵, 그리고 읽을수록 채워지는 66권 완료 그리드
-    - 35개의 성취 — 브론즈부터 다이아몬드까지의 등급, 사복음서와 에녹서 완독 같은 수집형, 그리고 발견을 기다리는 10개의 숨겨진 성취
-    - 연속 기록에는 자동 동결 기능이 있어 일주일에 하루 빠져도 끊기지 않습니다
-    - 새 배지를 획득하는 순간 진동과 함께 배너가 나타납니다
+    - 읽기 진행 상황이 저장되지 않을 수 있는 문제를 해결했습니다 — 연속 기록, 읽은 장, 12주 활동 히트맵이 이제 안정적으로 업데이트됩니다
+    - 하이라이트, 메모, 저장한 묵상이 안전하게 보관됩니다
+    - 새 사용자는 이제 정확한 1일 연속 기록으로 시작합니다
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -509,10 +497,9 @@ ja:
 
     SwiftBibleは完全にオープンソースです。GitHubでコードの閲覧・貢献ができます。
   whats_new: |-
-    - 「その他」に新しい進捗カード:毎日の読書ストリーク、12週間ヒートマップ、読むほど埋まる66冊の達成グリッド
-    - 35の実績 — ブロンズからダイヤモンドの階級、四福音書やエノク書完読などの収集系、そして発見を待つ10の隠し実績
-    - ストリークには自動フリーズが組み込まれていて、週に1日休んでもチェーンは途切れません
-    - 新しいバッジを獲得した瞬間に触覚フィードバック付きのバナーが表示されます
+    - 読書の記録が保存されないことがある問題を修正しました。連続記録、読んだ章、12週間のアクティビティマップが確実に更新されるようになりました
+    - ハイライト、メモ、保存したデボーションは安全に保たれます
+    - 新しい読者は正しい1日連続記録から始まります
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -550,10 +537,9 @@ zh-Hans:
 
     SwiftBible 完全开源。可在 GitHub 查看代码并贡献。
   whats_new: |-
-    - "更多"中新增进度卡片:每日阅读连续天数、12周热力图,以及阅读后逐渐填满的 66 卷完成网格
-    - 35 项成就 — 从青铜到钻石的等级,四福音和以诺书全本等收藏成就,以及 10 项等待发现的隐藏成就
-    - 连续天数内置宽限日:每周缺勤一天也不会中断
-    - 解锁新成就的瞬间,带触觉反馈的横幅会立即弹出
+    - 修复了可能导致阅读进度无法保存的问题——连续天数、已读章节和 12 周活动热图现在都能可靠更新
+    - 你的高亮、笔记和已保存的灵修内容会被妥善保存
+    - 新读者现在会以正确的 1 天连续记录开始
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -591,10 +577,9 @@ zh-Hant:
 
     SwiftBible 完全開源。可在 GitHub 查看程式碼並貢獻。
   whats_new: |-
-    - 「更多」中新增進度卡:每日閱讀連續天數、12 週熱力圖,以及隨閱讀逐漸填滿的 66 卷完成網格
-    - 35 項成就 — 從青銅到鑽石的等級,四福音和以諾書全本等收藏成就,加上 10 項等待發現的隱藏成就
-    - 連續天數內建寬限日:每週缺一天也不會中斷
-    - 解鎖新成就的瞬間,帶觸覺回饋的橫幅會立即彈出
+    - 修正了可能導致閱讀進度無法儲存的問題——連續天數、已讀章節和 12 週活動熱圖現在都能可靠更新
+    - 你的標示、筆記和已儲存的靈修內容會被妥善保存
+    - 新讀者現在會以正確的 1 天連續記錄開始
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -632,10 +617,9 @@ id:
 
     SwiftBible sepenuhnya sumber terbuka. Lihat kode dan berkontribusi di GitHub.
   whats_new: |-
-    - Kartu Kemajuan baru di Lainnya: streak baca harian, peta panas 12 minggu, dan grid 66 kitab yang terisi seiring Anda membaca
-    - 35 pencapaian untuk diraih — tingkat Perunggu sampai Berlian, koleksi seperti Empat Injil Lengkap dan Henokh Lengkap, plus 10 pencapaian tersembunyi
-    - Streak punya hari maaf bawaan: melewatkan satu hari dalam seminggu tidak memutus rantai
-    - Banner dengan getaran muncul saat Anda membuka pencapaian baru
+    - Memperbaiki masalah yang dapat membuat progres bacaan Anda tidak tersimpan — rangkaian (streak), pasal yang dibaca, dan peta aktivitas 12 minggu kini diperbarui dengan andal
+    - Sorotan, catatan, dan renungan tersimpan Anda tetap aman
+    - Pembaca baru kini memulai dengan rangkaian 1 hari yang akurat
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -673,10 +657,9 @@ el:
 
     Το SwiftBible είναι πλήρως ανοιχτού κώδικα. Δες τον κώδικα και συνεισέφερε στο GitHub.
   whats_new: |-
-    - Νέα κάρτα Προόδου στο Περισσότερα: καθημερινό σερί ανάγνωσης, θερμικός χάρτης 12 εβδομάδων και ένα πλέγμα 66 βιβλίων που γεμίζει καθώς διαβάζεις
-    - 35 επιτεύγματα προς απόκτηση — επίπεδα από Χάλκινο έως Διαμάντι, συλλογές όπως Και τα Τέσσερα Ευαγγέλια και Πλήρης Ενώχ, και 10 κρυφά προς ανακάλυψη
-    - Τα σερί έχουν ενσωματωμένη μέρα-δώρο: αν χάσεις μία μέρα τη βδομάδα δεν σπάει η αλυσίδα
-    - Ένα μπάνερ με δόνηση εμφανίζεται τη στιγμή που ξεκλειδώνεις νέο επίτευγμα
+    - Διορθώθηκε ένα πρόβλημα που μπορούσε να εμποδίσει την αποθήκευση της προόδου ανάγνωσής σας — τα σερί, τα κεφάλαια που διαβάσατε και ο χάρτης δραστηριότητας 12 εβδομάδων ενημερώνονται πλέον αξιόπιστα
+    - Οι επισημάνσεις, οι σημειώσεις και οι αποθηκευμένοι στοχασμοί σας παραμένουν ασφαλείς
+    - Οι νέοι αναγνώστες ξεκινούν τώρα με σωστό σερί 1 ημέρας
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -714,10 +697,9 @@ ro:
 
     SwiftBible este complet open-source. Cod și contribuții pe GitHub.
   whats_new: |-
-    - Card nou de Progres în Mai mult: serie zilnică de citire, hartă termică de 12 săptămâni și o grilă cu 66 de cărți care se umple pe măsură ce citești
-    - 35 de realizări de obținut — niveluri Bronz până la Diamant, colecții ca Toate Cele Patru Evanghelii și Enoh Complet, plus 10 ascunse de descoperit
-    - Seriile au o zi liberă încorporată: pierderea unei zile pe săptămână nu rupe lanțul
-    - Un banner cu vibrație apare exact când deblochezi o nouă realizare
+    - Am remediat o problemă care putea împiedica salvarea progresului tău de citire — seriile, capitolele citite și harta de activitate pe 12 săptămâni se actualizează acum în mod fiabil
+    - Evidențierile, notițele și devoționalele salvate rămân în siguranță
+    - Cititorii noi încep acum cu o serie corectă de 1 zi
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -755,10 +737,9 @@ tr:
 
     SwiftBible tamamen açık kaynaktır. Kodu görüntüleyin ve GitHub'da katkıda bulunun.
   whats_new: |-
-    - Daha Fazla bölümünde yeni İlerleme kartı: günlük okuma serisi, 12 haftalık ısı haritası ve okudukça dolan 66 kitaplık tamamlama ızgarası
-    - Kazanılacak 35 başarım — Bronz'dan Elmas'a kademeler, Dört İncil ve Tam Enok gibi koleksiyonlar, ayrıca keşfedilmeyi bekleyen 10 gizli başarım
-    - Serilerde dahili tolerans günü var: haftada bir gün kaçırmak zinciri kırmaz
-    - Yeni rozet kazandığın anda titreşimli bir bildirim açılır
+    - Okuma ilerlemenizin kaydedilmesini engelleyebilecek bir sorun giderildi — seriler, okunan bölümler ve 12 haftalık etkinlik haritanız artık güvenilir şekilde güncelleniyor
+    - Vurgularınız, notlarınız ve kaydedilen ibadetleriniz güvende kalır
+    - Yeni okuyucular artık doğru bir 1 günlük seriyle başlıyor
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -796,10 +777,9 @@ hi:
 
     SwiftBible पूरी तरह ओपन-सोर्स है। GitHub पर कोड देखें और योगदान करें।
   whats_new: |-
-    - More में नया Progress कार्ड: रोज़ाना पढ़ने की स्ट्रीक, 12-सप्ताह की हीटमैप, और 66-पुस्तकों का ग्रिड जो पढ़ते-पढ़ते भरता जाता है
-    - 35 उपलब्धियाँ — Bronze से Diamond तक के स्तर, All Four Gospels और Enoch Complete जैसे संग्रह, और खोजने के लिए 10 छिपी हुई उपलब्धियाँ
-    - स्ट्रीक में बिल्ट-इन छूट है: हफ़्ते में एक दिन छूट जाए तो श्रृंखला नहीं टूटती
-    - नया बैज मिलते ही वाइब्रेशन के साथ एक बैनर ऊपर से आता है
+    - एक समस्या ठीक की गई जिससे आपकी पठन प्रगति सहेजी नहीं जा पाती थी — स्ट्रीक, पढ़े गए अध्याय और आपका 12-सप्ताह का गतिविधि मानचित्र अब विश्वसनीय रूप से अपडेट होते हैं
+    - आपके हाइलाइट, नोट्स और सहेजे गए भक्ति-लेख सुरक्षित रहते हैं
+    - नए पाठक अब सही 1-दिन की स्ट्रीक से शुरू करते हैं
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
