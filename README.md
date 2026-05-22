@@ -110,6 +110,12 @@ Bookmark your favorite verses by tapping the bookmark icon next to the verse. To
 
 Share verses with others by tapping the share icon next to the verse, then selecting your preferred sharing method (social media, email, or text message).
 
+## Support
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/vanities)
+
+I pay the $100/year Apple developer fee to keep this app on the App Store, so if you find it useful, please consider helping out. :)
+
 ## Contributing
 
 We welcome contributions to the SwiftBible project. If you would like to contribute, please fork the repository and submit a pull request with your changes.
