@@ -607,27 +607,96 @@ struct DailyDevotionalView: View {
         }
     }
 
-    private static let bookNames: [String] = [
-        "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
-        "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
-        "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles",
-        "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Psalm", "Proverbs",
-        "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah",
-        "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos",
-        "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah",
-        "Haggai", "Zechariah", "Malachi",
-        "Matthew", "Mark", "Luke", "John", "Acts", "Romans",
-        "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians",
-        "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
-        "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews",
-        "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John",
-        "Jude", "Revelation"
-    ].sorted { $0.count > $1.count }
+    /// Common abbreviations for each canonical book, keyed by the canonical
+    /// name used for verse navigation. Lets devotional prose link references
+    /// written in shortened form (e.g. "1 Tim 4:4" → 1 Timothy 4:4). A trailing
+    /// period on an abbreviation is optional and handled by the matching regex.
+    private static let bookAbbreviations: [String: [String]] = [
+        "Genesis": ["Gen", "Gn"],
+        "Exodus": ["Exod", "Exo", "Ex"],
+        "Leviticus": ["Lev", "Lv"],
+        "Numbers": ["Num", "Nm", "Nb"],
+        "Deuteronomy": ["Deut", "Deu", "Dt"],
+        "Joshua": ["Josh", "Jos"],
+        "Judges": ["Judg", "Jdg", "Jgs"],
+        "Ruth": ["Rth", "Ru"],
+        "1 Samuel": ["1 Sam", "1 Sm", "1 Sa"],
+        "2 Samuel": ["2 Sam", "2 Sm", "2 Sa"],
+        "1 Kings": ["1 Kgs", "1 Kin", "1 Ki"],
+        "2 Kings": ["2 Kgs", "2 Kin", "2 Ki"],
+        "1 Chronicles": ["1 Chron", "1 Chr", "1 Ch"],
+        "2 Chronicles": ["2 Chron", "2 Chr", "2 Ch"],
+        "Ezra": ["Ezr"],
+        "Nehemiah": ["Neh"],
+        "Esther": ["Esth", "Est"],
+        "Job": ["Jb"],
+        "Psalms": ["Psalm", "Pslm", "Pss", "Psa", "Ps"],
+        "Proverbs": ["Prov", "Prv", "Pro"],
+        "Ecclesiastes": ["Eccles", "Eccl", "Ecc", "Qoh"],
+        "Song of Solomon": ["Song of Songs", "Canticles", "Song", "Sng"],
+        "Isaiah": ["Isa", "Is"],
+        "Jeremiah": ["Jer"],
+        "Lamentations": ["Lam"],
+        "Ezekiel": ["Ezek", "Ezk", "Eze"],
+        "Daniel": ["Dan", "Dn"],
+        "Hosea": ["Hos"],
+        "Joel": ["Jl"],
+        "Obadiah": ["Obad", "Oba", "Ob"],
+        "Jonah": ["Jon", "Jnh"],
+        "Micah": ["Mic", "Mc"],
+        "Nahum": ["Nah", "Na"],
+        "Habakkuk": ["Hab", "Hb"],
+        "Zephaniah": ["Zeph", "Zep"],
+        "Haggai": ["Hag", "Hg"],
+        "Zechariah": ["Zech", "Zec"],
+        "Malachi": ["Mal"],
+        "Matthew": ["Matt", "Mt"],
+        "Mark": ["Mrk", "Mk"],
+        "Luke": ["Luk", "Lk"],
+        "John": ["Jhn", "Jn"],
+        "Acts": ["Act"],
+        "Romans": ["Rom", "Rm"],
+        "1 Corinthians": ["1 Cor", "1 Co"],
+        "2 Corinthians": ["2 Cor", "2 Co"],
+        "Galatians": ["Gal", "Ga"],
+        "Ephesians": ["Eph"],
+        "Philippians": ["Phil", "Php", "Phlp"],
+        "Colossians": ["Col"],
+        "1 Thessalonians": ["1 Thess", "1 Thes", "1 Th"],
+        "2 Thessalonians": ["2 Thess", "2 Thes", "2 Th"],
+        "1 Timothy": ["1 Tim", "1 Tm"],
+        "2 Timothy": ["2 Tim", "2 Tm"],
+        "Titus": ["Tit"],
+        "Philemon": ["Philem", "Phlm", "Phm"],
+        "Hebrews": ["Heb"],
+        "James": ["Jas", "Jms"],
+        "1 Peter": ["1 Pet", "1 Pt"],
+        "2 Peter": ["2 Pet", "2 Pt"],
+        "1 John": ["1 Jhn", "1 Jn"],
+        "2 John": ["2 Jhn", "2 Jn"],
+        "3 John": ["3 Jhn", "3 Jn"],
+        "Jude": ["Jud"],
+        "Revelation": ["Revelations", "Rev", "Rv"]
+    ]
+
+    /// Every recognized way to write a book (full names + abbreviations) paired
+    /// with the canonical name to link to, sorted longest-first so that e.g.
+    /// "1 John" matches before "John" and "Song of Songs" before "Song".
+    private static let bookNameVariants: [(name: String, canonical: String)] = {
+        var variants: [(name: String, canonical: String)] = []
+        for canonical in CanonicalBibleBooks.all.map(\.name) {
+            variants.append((canonical, canonical))
+            for abbreviation in bookAbbreviations[canonical] ?? [] {
+                variants.append((abbreviation, canonical))
+            }
+        }
+        return variants.sorted { $0.name.count > $1.name.count }
+    }()
 
     private func findVerseURL(in text: String) -> String? {
-        for bookName in Self.bookNames {
-            let escaped = NSRegularExpression.escapedPattern(for: bookName)
-            let pattern = escaped + #"\s+(\d+):(\d+)"#
+        for variant in Self.bookNameVariants {
+            let escaped = NSRegularExpression.escapedPattern(for: variant.name)
+            let pattern = #"(?<![\[\w])"# + escaped + #"\.?\s+(\d+):(\d+)"#
             guard let regex = try? NSRegularExpression(pattern: pattern) else { continue }
             let range = NSRange(text.startIndex..., in: text)
             if let match = regex.firstMatch(in: text, range: range),
@@ -635,8 +704,7 @@ struct DailyDevotionalView: View {
                let verseRange = Range(match.range(at: 2), in: text),
                let chapter = Int(text[chapterRange]),
                let verse = Int(text[verseRange]) {
-                let normalizedName = bookName == "Psalm" ? "Psalms" : bookName
-                let encodedBook = normalizedName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? normalizedName
+                let encodedBook = variant.canonical.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? variant.canonical
                 return "swiftbible://verse?book=\(encodedBook)&chapter=\(chapter)&verse=\(verse)"
             }
         }
@@ -695,9 +763,9 @@ struct DailyDevotionalView: View {
 
     private func linkVerseRefsInLine(_ line: String) -> String {
         var result = line
-        for bookName in Self.bookNames {
-            let escaped = NSRegularExpression.escapedPattern(for: bookName)
-            let pattern = #"(?<!\[)"# + escaped + #"\s+(\d+):(\d+)(?:-\d+)?(?!\])"#
+        for variant in Self.bookNameVariants {
+            let escaped = NSRegularExpression.escapedPattern(for: variant.name)
+            let pattern = #"(?<![\[\w])"# + escaped + #"\.?\s+(\d+):(\d+)(?:-\d+)?(?!\])"#
             guard let regex = try? NSRegularExpression(pattern: pattern) else { continue }
             let matches = regex.matches(in: result, range: NSRange(result.startIndex..., in: result))
             guard !matches.isEmpty else { continue }
@@ -711,8 +779,7 @@ struct DailyDevotionalView: View {
                       let verse = Int(result[verseRange]) else { continue }
 
                 let displayText = String(result[fullRange])
-                let normalizedName = bookName == "Psalm" ? "Psalms" : bookName
-                let encodedBook = normalizedName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? normalizedName
+                let encodedBook = variant.canonical.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? variant.canonical
                 let link = "[\(displayText)](swiftbible://verse?book=\(encodedBook)&chapter=\(chapter)&verse=\(verse))"
                 mutableResult.replaceCharacters(in: match.range, with: link)
             }
