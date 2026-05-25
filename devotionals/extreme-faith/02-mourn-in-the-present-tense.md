@@ -15,7 +15,7 @@ But the voicemail is still on your phone. The empty chair at Thanksgiving is sti
 
 You aren't over it. You aren't going to be over it.
 
-Somewhere along the way, a well-meaning person told you *"they wouldn't want you to be sad,"* or *"they're in a better place,"* or — in a quieter Christian register — *"where's your faith?"* And what they meant, even if they didn't know it, was: *grieve more conveniently. Put it away where I can't see it.*
+Somewhere along the way, a well-meaning person told you *"they wouldn't want you to be sad,"* or *"they're in a better place,"* or, in a quieter Christian register, *"where's your faith?"* And what they meant, even if they didn't know it, was: *grieve more conveniently. Put it away where I can't see it.*
 
 So you did. Or you tried.
 
@@ -25,14 +25,14 @@ Read 1 Thessalonians 4:13 again. Slowly.
 
 Paul does not say *sorrow not.* He says *sorrow not, even as others which have no hope.* The "as" is doing all the work in that sentence.
 
-The Christians at Thessalonica had been burying friends. Paul isn't telling them to stop weeping. He's telling them their weeping has a different shape — because the people in the ground aren't gone the way the world thinks they're gone.
+The Christians at Thessalonica had been burying friends. Paul isn't telling them to stop weeping. He's telling them their weeping has a different shape, because the people in the ground aren't gone the way the world thinks they're gone.
 
-Even Jesus weeps at the tomb of his friend — and he is about to raise him from the dead. He knows the resurrection is two minutes away. The miracle is *coming.* He weeps anyway.
+Even Jesus weeps at the tomb of his friend, and he is about to raise him from the dead. He knows the resurrection is two minutes away. The miracle is *coming.* He weeps anyway.
 
 > *"Jesus wept. Then said the Jews, Behold how he loved him."*
 > **John 11:35-36**
 
-If the Son of God can stand at the tomb of someone he is about to bring back, and weep — actually weep — then the Christian who is still weeping forty years later has nothing to apologize for. Grief is not a failure of faith. It is a function of love.
+If the Son of God can stand at the tomb of someone he is about to bring back, and weep (actually weep), then the Christian who is still weeping forty years later has nothing to apologize for. Grief is not a failure of faith. It is a function of love.
 
 ## Far better
 
@@ -43,9 +43,9 @@ Then there is Paul in prison, doing some of the strangest math in scripture:
 
 *Far better.* Not equally good. Not okay-once-you-process-it. *Far better.*
 
-The dead in Christ aren't gone. They are with him. And being with him is — Paul's word — *far better* than being here.
+The dead in Christ aren't gone. They are with him. And being with him is (Paul's word) *far better* than being here.
 
-This is the thing the world cannot say at a funeral. The world can say *they would have wanted you to be happy.* The world can say *they live on in our memories.* The world cannot say *right now, they are more themselves than they ever were.* The world cannot say *right now, they know things we don't.* The world cannot say *they are not gone — they are home.*
+This is the thing the world cannot say at a funeral. The world can say *they would have wanted you to be happy.* The world can say *they live on in our memories.* The world cannot say *right now, they are more themselves than they ever were.* The world cannot say *right now, they know things we don't.* The world cannot say *they are not gone, they are home.*
 
 Christians can.
 
@@ -53,11 +53,11 @@ Why don't we?
 
 ## In the present tense
 
-The faith-extreme position is not *stop mourning.* That is the world's evasion of grief — wear black for a respectable interval, then put it away.
+The faith-extreme position is not *stop mourning.* That is the world's evasion of grief. Wear black for a respectable interval, then put it away.
 
 The faith-extreme position is not *throw a party,* either. That is the same evasion in cheerier clothes.
 
-The faith-extreme position is harder than both. Mourn — and speak of them in the present tense.
+The faith-extreme position is harder than both. Mourn, and speak of them in the present tense.
 
 Talk about your dead friend the way you talk about a friend who moved across the country. Not in the past tense, as though they ended, but in the present tense, because they didn't end. *Right now my mother knows things I don't. Right now my daughter is more herself than she ever was here. Right now my friend is sitting at a table I cannot see.* That is not denial. That is not sentiment. That is what Paul actually thought, and he was right.
 
@@ -68,9 +68,9 @@ We have lost most of what made it strange. But we can have it back, if we want i
 > *"O death, where is thy sting? O grave, where is thy victory?"*
 > **1 Corinthians 15:55**
 
-Paul is *taunting death* in that verse. Like a boxer over a downed opponent. He thinks death has been humiliated. He thinks the grave has been defeated — and he says so out loud, where Death can hear him.
+Paul is *taunting death* in that verse. Like a boxer over a downed opponent. He thinks death has been humiliated. He thinks the grave has been defeated, and he says so out loud, where Death can hear him.
 
-That kind of confidence isn't what most of us bring to funerals. We bring quieter, sadder, more respectable confidence. Some of that quieter posture is right and good — grief is real. But part of it is not. Part of it is just unbelief, dressed up to look pious.
+That kind of confidence isn't what most of us bring to funerals. We bring quieter, sadder, more respectable confidence. Some of that quieter posture is right and good. Grief is real. But part of it is not. Part of it is just unbelief, dressed up to look pious.
 
 The Christian doesn't have to choose between weeping and rejoicing. The Christian gets to do both. Often at the same time.
 
@@ -95,7 +95,7 @@ they are more themselves than they ever were.
 ***Maranatha.***
 
 Until you come for me too,
-let me carry both — the grief and the hope —
+let me carry both, the grief and the hope,
 without ever choosing.
 
 Amen.

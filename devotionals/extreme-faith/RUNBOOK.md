@@ -101,11 +101,11 @@ When using the Matt Bassford research skill (`skills/matt-bassford/`), Matt's po
 
 | Series | Week | Topic | Care needed |
 |---|---|---|---|
-| Grace | 2 | Five minutes is enough (thief) | Thief was under the Old Covenant (pre-Pentecost). Don't let this collapse into "baptism isn't necessary." |
-| Grace | 4 | The persecutor becomes the apostle (Saul) | Saul was baptized after Damascus (Acts 22:16). Frame extreme as God choosing the persecutor, not as conversion-without-baptism. |
-| Grace | 8 | The five-times-divorced theologian | Keep both halves of grace + repent. CoC reads divorce/remarriage strictly (Matt 19:9). |
-| Grace | 9 | The death penalty refused | *"Go and sin no more"* is part of the grace, not a footnote. |
-| Grace | 11 | Anyone who calls | Acts 22:16 ties calling to baptism. Verses include Acts 22:16 to remind the drafter. |
+| Grace | 3 | Five minutes is enough (thief) | Thief was under the Old Covenant (pre-Pentecost). Don't let this collapse into "baptism isn't necessary." |
+| Grace | 5 | The persecutor becomes the apostle (Saul) | Saul was baptized after Damascus (Acts 22:16). Frame extreme as God choosing the persecutor, not as conversion-without-baptism. |
+| Grace | 9 | The five-times-divorced theologian | Keep both halves of grace + repent. CoC reads divorce/remarriage strictly (Matt 19:9). |
+| Grace | 10 | The death penalty refused | *"Go and sin no more"* is part of the grace, not a footnote. |
+| Grace | 12 | Anyone who calls | Acts 22:16 ties calling to baptism. Verses include Acts 22:16 to remind the drafter. |
 | Rest | 2 | A 24-hour confession | Frame as cessation principle (Sabbath fulfilled in Christ), not binding Sabbath command. Use Heb 4, not Ex 20. |
 | Delight | 2 | More wine for the party | Joy in good gifts, within moderation. Not glorifying drunkenness. |
 | Delight | 9 | Mandatory feasts | OT festivals are Old Covenant. Draw the principle (commanded celebration), don't bind the festival. |
