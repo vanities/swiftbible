@@ -54,7 +54,9 @@ object AppEventRegistry {
         iconEmoji = "🔥",
         accent = EventAccent.GOLD,
         startDate = LocalDate.of(2026, 5, 25),
-        endDate = LocalDate.of(2026, 6, 7),
+        // Card lingers ~a week past the App Store event_end (Jun 7) so the
+        // finished plan stays reachable for stragglers, then drops off More.
+        endDate = LocalDate.of(2026, 6, 14),
         action = EventAction.OpenEvent,
         bannerRes = biz.am2.swiftbible.R.drawable.pentecost_event,
         readingPlan = pentecostReadingPlan,
