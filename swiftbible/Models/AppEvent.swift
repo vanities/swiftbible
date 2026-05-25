@@ -52,12 +52,10 @@ struct AppEvent: Identifiable, Equatable {
     /// if today is before the event, or the last day if today is past it.
     var todayReadingIndex: Int {
         guard !readingPlan.isEmpty else { return 0 }
-        let now = Date()
-        let cal = Calendar.current
-        if let idx = readingPlan.firstIndex(where: { cal.isDate($0.date, inSameDayAs: now) }) {
+        if let idx = readingPlan.firstIndex(where: { $0.isToday }) {
             return idx
         }
-        if let idx = readingPlan.firstIndex(where: { $0.date >= now }) {
+        if let idx = readingPlan.firstIndex(where: { !$0.hasArrived }) {
             return idx
         }
         return readingPlan.count - 1
@@ -94,8 +92,44 @@ struct EventReadingDay: Identifiable, Equatable {
     let passage: ScriptureRef
     let reflection: String
 
+    // Reading-plan dates are authored as civil dates at UTC midnight
+    // (2026-05-25T00:00:00Z means "May 25"). Reading that instant in the
+    // device's local zone shifts it to the previous evening for anyone west
+    // of UTC, which unlocked days early and labeled them a day behind. So the
+    // UTC calendar day is the canonical date, gated against the user's own
+    // local calendar day.
+    private static let utcCalendar: Calendar = {
+        var c = Calendar(identifier: .gregorian)
+        if let utc = TimeZone(identifier: "UTC") { c.timeZone = utc }
+        return c
+    }()
+
+    /// Local midnight on this reading's civil (UTC-authored) date.
+    private var localStart: Date {
+        let ymd = Self.utcCalendar.dateComponents([.year, .month, .day], from: date)
+        return Calendar.current.date(from: ymd) ?? date
+    }
+
+    /// True once the user's local day has reached this reading's date.
+    var hasArrived: Bool {
+        Calendar.current.startOfDay(for: Date()) >= localStart
+    }
+
+    /// True when this reading's date is the user's current local day.
+    var isToday: Bool {
+        Calendar.current.isDate(localStart, inSameDayAs: Date())
+    }
+
+    /// Whole days from today (local) until this reading unlocks.
+    var daysUntil: Int {
+        Calendar.current.dateComponents([.day],
+                                        from: Calendar.current.startOfDay(for: Date()),
+                                        to: localStart).day ?? 0
+    }
+
     var dateLabel: String {
         let f = DateFormatter()
+        f.timeZone = TimeZone(identifier: "UTC")
         f.dateFormat = "EEEE, MMMM d"
         return f.string(from: date)
     }
@@ -127,7 +161,9 @@ enum AppEventRegistry {
         iconName: "flame.fill",
         accent: .gold,
         startDate: parseISO("2026-05-25T00:00:00Z"),
-        endDate: parseISO("2026-06-07T23:59:59Z"),
+        // Card lingers ~a week past the App Store event_end (Jun 7) so the
+        // finished plan stays reachable for stragglers, then drops off More.
+        endDate: parseISO("2026-06-14T23:59:59Z"),
         action: .openEvent,
         bannerImageName: "PentecostEventBanner",
         readingPlan: pentecostReadingPlan

@@ -29,7 +29,7 @@ struct EventDetailView: View {
         #if DEBUG
         if debugForceShowEvents { return true }
         #endif
-        return Calendar.current.startOfDay(for: day.date) <= Calendar.current.startOfDay(for: Date())
+        return day.hasArrived
     }
 
     var body: some View {
@@ -266,21 +266,14 @@ private struct EventDayPage: View {
     }
 
     private var unlocksLabel: String {
-        let cal = Calendar.current
-        let now = cal.startOfDay(for: Date())
-        let target = cal.startOfDay(for: day.date)
-        let days = cal.dateComponents([.day], from: now, to: target).day ?? 0
+        let days = day.daysUntil
         if days == 1 { return "Unlocks tomorrow" }
         if days <= 7 { return "Unlocks in \(days) days" }
         return "Unlocks \(day.dateLabel)"
     }
 
     private var comeBackLabel: String {
-        let cal = Calendar.current
-        let days = cal.dateComponents([.day],
-                                       from: cal.startOfDay(for: Date()),
-                                       to: cal.startOfDay(for: day.date)).day ?? 0
-        return days == 1 ? "tomorrow" : "on \(day.dateLabel)"
+        day.daysUntil == 1 ? "tomorrow" : "on \(day.dateLabel)"
     }
 }
 
