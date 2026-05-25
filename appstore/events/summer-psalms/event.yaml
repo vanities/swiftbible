@@ -1,0 +1,106 @@
+# Summer in the Psalms 2026 — In-App Event copy
+# ----------------------------------------------------------------
+# Paste into App Store Connect → SwiftBible → In-App Events (or push via
+# `make push-event EVENT=summer-psalms`).
+# Field limits: name 30, short 50, long 120 (per Apple's IAE spec).
+# ----------------------------------------------------------------
+
+reference_name: "Summer in the Psalms 2026"   # private, ASC-only
+event_type: "Challenge"                        # 30-day reading goal → CHALLENGE badge
+priority: "HIGH"
+purpose: "Appropriate for All Users"
+purchase_requirement: "FREE"
+primary_locale: "en-US"
+
+# Schedule: a 30-day plan, one psalm a day, July 1–30. Card visible a few days
+# early. event_start = day 1 so the store's "opens" date matches the in-app
+# unlock (unlike Pentecost, whose event_start trailed the plan by a week).
+schedule:
+  start: "2026-06-28 00:00 UTC"
+  end:   "2026-07-30 23:59 UTC"
+  publish_start: "2026-06-28 00:00 UTC"   # when the IAE card becomes visible
+  event_start: "2026-07-01 00:00 UTC"      # day 1 unlocks
+  event_end: "2026-07-30 23:59 UTC"
+
+deep_link: "swiftbible://event/summer-psalms"
+
+notification_opt_in: |
+  Get a daily psalm and a short reflection, all July long.
+
+# ----------------------------------------------------------------
+# Localized copy (paste into ASC per-locale tab).
+# Limits: name 30, short 50, long 120.
+# ----------------------------------------------------------------
+
+locales:
+
+  en-US:
+    name: "Summer in the Psalms"                          # 20
+    short: "A psalm a day — refuge, lament, praise"        # 38
+    long: "Thirty days through the heart of the Psalter — one psalm a day for rest, honesty, and praise."  # 95
+
+  es-ES:
+    name: "Verano en los Salmos"                           # 20
+    short: "Un salmo al día: refugio, lamento, alabanza"   # 44
+    long: "Treinta días por el corazón del Salterio: un salmo al día para descanso, sinceridad y alabanza."  # 99
+
+  es-MX:
+    name: "Verano en los Salmos"                           # 20
+    short: "Un salmo al día: refugio, lamento, alabanza"   # 44
+    long: "Treinta días por el corazón del Salterio: un salmo al día para descanso, sinceridad y alabanza."  # 99
+
+  pt-BR:
+    name: "Verão nos Salmos"                               # 16
+    short: "Um salmo por dia: refúgio, lamento, louvor"    # 44
+    long: "Trinta dias pelo coração do Saltério — um salmo por dia para descanso, sinceridade e louvor."  # 95
+
+  pt-PT:
+    name: "Verão nos Salmos"                               # 16
+    short: "Um salmo por dia: refúgio, lamento, louvor"    # 44
+    long: "Trinta dias pelo coração do Saltério — um salmo por dia para descanso, sinceridade e louvor."  # 95
+
+  fr-FR:
+    name: "L'été dans les Psaumes"                         # 22
+    short: "Un psaume par jour : refuge, plainte, louange" # 47
+    long: "Trente jours au cœur du Psautier — un psaume par jour pour le repos, la franchise et la louange."  # 99
+
+  de-DE:
+    name: "Sommer in den Psalmen"                          # 21
+    short: "Ein Psalm pro Tag: Zuflucht, Klage, Lob"       # 40
+    long: "Dreißig Tage durch das Herz des Psalters — ein Psalm pro Tag für Ruhe, Ehrlichkeit und Lob."  # 92
+
+  it:
+    name: "Estate nei Salmi"                               # 16
+    short: "Un salmo al giorno: rifugio, lamento, lode"    # 43
+    long: "Trenta giorni nel cuore del Salterio — un salmo al giorno per riposo, sincerità e lode."  # 88
+
+  nl-NL:
+    name: "Zomer in de Psalmen"                            # 19
+    short: "Elke dag een psalm: rust, klacht, lof"         # 42
+    long: "Dertig dagen door het hart van het psalter — elke dag een psalm voor rust, eerlijkheid en lof."  # 99
+
+  # Below: drafted by Claude — get a native pass before relying on them.
+  pl:
+    name: "Lato w Psalmach"                                # 15
+    short: "Psalm dziennie: schronienie, lament, chwała"   # 45
+    long: "Trzydzieści dni przez serce Psałterza — jeden psalm dziennie: odpoczynek, szczerość i chwała."  # 95
+
+  ru:
+    name: "Лето в Псалмах"                                 # 14
+    short: "Псалом в день: убежище, плач, хвала"           # 35
+    long: "Тридцать дней через сердце Псалтири — один псалом в день: покой, честность и хвала."  # 85
+
+  ko:
+    name: "시편과 함께하는 여름"                              # 12
+    short: "하루 한 편의 시편: 피난처, 탄식, 찬양"           # 23
+    long: "시편의 중심을 지나는 30일 — 하루 한 편으로 쉼과 정직과 찬양을."  # 34
+
+  el:
+    name: "Καλοκαίρι στους Ψαλμούς"                         # 23
+    short: "Ένας ψαλμός τη μέρα: καταφύγιο, θρήνος, αίνος"  # 45
+    long: "Τριάντα μέρες στην καρδιά του Ψαλτηρίου — ένας ψαλμός τη μέρα για ανάπαυση, ειλικρίνεια και αίνο."  # 97
+
+  ro:
+    name: "Vara în Psalmi"                                 # 14
+    short: "Un psalm pe zi: refugiu, plâns, laudă"         # 38
+    long: "Treizeci de zile prin inima Psaltirii — un psalm pe zi pentru odihnă, sinceritate și laudă."  # 92

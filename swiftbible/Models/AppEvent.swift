@@ -169,9 +169,24 @@ enum AppEventRegistry {
         readingPlan: pentecostReadingPlan
     )
 
+    static let summerPsalms2026 = AppEvent(
+        id: "summer-psalms-2026",
+        name: "Summer in the Psalms",
+        subtitle: "A psalm a day — through July",
+        iconName: "sun.max.fill",
+        accent: .accent,
+        startDate: parseISO("2026-07-01T00:00:00Z"),
+        // Card lingers ~a week past the App Store event_end (Jul 30).
+        endDate: parseISO("2026-08-06T23:59:59Z"),
+        action: .openEvent,
+        bannerImageName: "SummerPsalmsEventBanner",
+        readingPlan: summerPsalmsReadingPlan
+    )
+
     /// All known events. Add new ones here.
     static let allEvents: [AppEvent] = [
-        pentecost2026
+        pentecost2026,
+        summerPsalms2026
     ]
 
     /// Events currently within their date window.
@@ -202,6 +217,221 @@ enum AppEventRegistry {
         f.formatOptions = [.withInternetDateTime]
         return f.date(from: s) ?? .distantFuture
     }
+
+    // SUMMER-PSALMS-PLAN START (generated from appstore/events/summer-psalms/days.py — do not edit by hand)
+    private static let summerPsalmsReadingPlan: [EventReadingDay] = [
+        EventReadingDay(
+            id: "summer-psalms-2026-day-1",
+            date: parseISO("2026-07-01T00:00:00Z"),
+            theme: "The Two Ways",
+            passage: ScriptureRef(book: "Psalms", chapter: 1, startVerse: 1, endVerse: 6),
+            reflection: "The Psalter opens with a fork in the road, not a prayer.\n\n> \"Blessed is the man that walketh not in the counsel of the ungodly, nor standeth in the way of sinners, nor sitteth in the seat of the scornful.\" (1:1)\n\nWatch the verbs — walk, stand, sit. Nobody sits down in the scorner's seat on day one; you drift there a degree at a time.\n\n> \"And he shall be like a tree planted by the rivers of water, that bringeth forth his fruit in his season; his leaf also shall not wither; and whatsoever he doeth shall prosper.\" (1:3)\n\nThe blessed life isn't gritted willpower. It's being planted by water — rooted, fed, fruitful in its season.\n\n> \"For the LORD knoweth the way of the righteous: but the way of the ungodly shall perish.\" (1:6)\n\nTwo ways, two endings. One path the LORD knows; the other blows off like chaff.\n\nThirty days in the Psalms is thirty days of sinking roots. Start here."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-2",
+            date: parseISO("2026-07-02T00:00:00Z"),
+            theme: "The Shepherd",
+            passage: ScriptureRef(book: "Psalms", chapter: 23, startVerse: 1, endVerse: 6),
+            reflection: "Six verses you think you already know. Read them slow anyway.\n\n> \"The LORD is my shepherd; I shall not want.\" (23:1)\n\nIf the LORD is the shepherd, \"shall not want\" follows. The restless wanting quiets when he's the one leading.\n\n> \"Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me.\" (23:4)\n\nHe never promises a way around the valley — only company through it. The rod and staff don't pave the road; they walk it with you.\n\n> \"Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the LORD for ever.\" (23:6)\n\nGoodness and mercy don't just meet you. They follow you, all the way home.\n\nThe promise was never an easy way. It was Someone on the way with you."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-3",
+            date: parseISO("2026-07-03T00:00:00Z"),
+            theme: "I Lift My Eyes",
+            passage: ScriptureRef(book: "Psalms", chapter: 121, startVerse: 1, endVerse: 8),
+            reflection: "A pilgrim song, sung on the climb up to Jerusalem — eyeing the hills where the road turned dangerous.\n\n> \"I will lift up mine eyes unto the hills, from whence cometh my help.\" (121:1)\n\nEyes go up to the hills, where bandits hid and help felt far off.\n\n> \"Behold, he that keepeth Israel shall neither slumber nor sleep.\" (121:4)\n\nThe God who built those hills doesn't doze off halfway up yours.\n\n> \"The LORD shall preserve thy going out and thy coming in from this time forth, and even for evermore.\" (121:8)\n\nYour going out and your coming in — the whole trip, both directions, kept.\n\nWhatever you're climbing toward this summer, you are kept. Keep climbing."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-4",
+            date: parseISO("2026-07-04T00:00:00Z"),
+            theme: "The Shelter",
+            passage: ScriptureRef(book: "Psalms", chapter: 91, startVerse: 1, endVerse: 16),
+            reflection: "Dwell, not visit. This psalm is for the one who lives in God, not the one who drops by when the weather turns.\n\n> \"He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty.\" (91:1)\n\nThe secret place isn't a hideout you find in a panic. It's an address you already live at.\n\n> \"He shall cover thee with his feathers, and under his wings shalt thou trust: his truth shall be thy shield and buckler.\" (91:4)\n\nHe doesn't promise no arrows — he promises cover in the middle of them. A wing isn't armor; it's nearness.\n\n> \"For he shall give his angels charge over thee, to keep thee in all thy ways.\" (91:11)\n\nAngels under orders, charged to keep you. You are not walking unguarded.\n\nDwelling is a daily address, not an emergency exit. Move in."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-5",
+            date: parseISO("2026-07-05T00:00:00Z"),
+            theme: "Light and Salvation",
+            passage: ScriptureRef(book: "Psalms", chapter: 27, startVerse: 1, endVerse: 14),
+            reflection: "Fear asks \"what if.\" David asks back: whom?\n\n> \"The LORD is my light and my salvation; whom shall I fear? the LORD is the strength of my life; of whom shall I be afraid?\" (27:1)\n\nIf the LORD is your light, the dark loses its vote. If he's your salvation, the threat loses its teeth.\n\n> \"One thing have I desired of the LORD, that will I seek after; that I may dwell in the house of the LORD all the days of my life, to behold the beauty of the LORD, and to enquire in his temple.\" (27:4)\n\nOut of everything he could ask, he asks one thing — to be where God is, and to look at him.\n\n> \"Wait on the LORD: be of good courage, and he shall strengthen thine heart: wait, I say, on the LORD.\" (27:14)\n\nThe hardest command in the psalm: wait. And when you're done waiting, wait again.\n\nCourage here isn't the absence of enemies. It's knowing whose house you're headed to."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-6",
+            date: parseISO("2026-07-06T00:00:00Z"),
+            theme: "Be Still",
+            passage: ScriptureRef(book: "Psalms", chapter: 46, startVerse: 1, endVerse: 11),
+            reflection: "Not a distant help — a present one, already in the room before the trouble started.\n\n> \"God is our refuge and strength, a very present help in trouble.\" (46:1)\n\nRefuge and strength: a place to hide and the power to stand. He is both.\n\n> \"Therefore will not we fear, though the earth be removed, and though the mountains be carried into the midst of the sea;\" (46:2)\n\nLet the worst happen — earth gone, mountains in the sea — and the psalm still won't panic.\n\n> \"Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth.\" (46:10)\n\n\"Be still\" isn't a mood; it's a command. Stop scrambling long enough to remember who outranks the storm.\n\nStillness isn't the absence of the storm. It's knowing God is God in the middle of it."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-7",
+            date: parseISO("2026-07-07T00:00:00Z"),
+            theme: "Wait in Silence",
+            passage: ScriptureRef(book: "Psalms", chapter: 62, startVerse: 1, endVerse: 12),
+            reflection: "Twice David says it: God only. Not God-plus-a-backup-plan.\n\n> \"Truly my soul waiteth upon God: from him cometh my salvation.\" (62:1)\n\nThe soul that waits in silence isn't passive. It's done auditioning other saviors.\n\n> \"My soul, wait thou only upon God; for my expectation is from him.\" (62:5)\n\nHe has to tell his own soul to wait — because the soul keeps drifting back to lesser hopes.\n\n> \"Trust in him at all times; ye people, pour out your heart before him: God is a refuge for us. Selah.\" (62:8)\n\nPour it all out, every hour, in front of him. He can take the whole weight; he is the refuge.\n\nWait in silence. And mean the \"only.\""
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-8",
+            date: parseISO("2026-07-08T00:00:00Z"),
+            theme: "You Will Not Abandon",
+            passage: ScriptureRef(book: "Psalms", chapter: 16, startVerse: 1, endVerse: 11),
+            reflection: "A simple discipline runs under this whole psalm: keep the LORD in front of you.\n\n> \"I have set the LORD always before me: because he is at my right hand, I shall not be moved.\" (16:8)\n\nNot behind, for emergencies — in front, always. Set there on purpose, you will not be moved.\n\n> \"For thou wilt not leave my soul in hell; neither wilt thou suffer thine Holy One to see corruption.\" (16:10)\n\nDavid's hope outruns the grave. Peter preached this very line over the empty tomb.\n\n> \"Thou wilt shew me the path of life: in thy presence is fulness of joy; at thy right hand there are pleasures for evermore.\" (16:11)\n\nThe path of life leads somewhere specific: his presence, where joy is full and the pleasures don't run out.\n\nSet him before you, and start the day there."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-9",
+            date: parseISO("2026-07-09T00:00:00Z"),
+            theme: "How Majestic",
+            passage: ScriptureRef(book: "Psalms", chapter: 8, startVerse: 1, endVerse: 9),
+            reflection: "Stand under a real night sky and this psalm writes itself.\n\n> \"O LORD, our Lord, how excellent is thy name in all the earth! who hast set thy glory above the heavens.\" (8:1)\n\nHis name fills the earth and the heavens at once — bigness you can't get under or around.\n\n> \"What is man, that thou art mindful of him? and the son of man, that thou visitest him?\" (8:4)\n\nAll of that, and he bothers with us. The wonder isn't that we're small; it's that he's mindful.\n\n> \"For thou hast made him a little lower than the angels, and hast crowned him with glory and honour.\" (8:5)\n\nNot crushed by the cosmos but crowned. Hebrews reads this as the Son of Man who took the low place to lift ours.\n\nLook up tonight. Let it be worship."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-10",
+            date: parseISO("2026-07-10T00:00:00Z"),
+            theme: "The Heavens Declare",
+            passage: ScriptureRef(book: "Psalms", chapter: 19, startVerse: 1, endVerse: 14),
+            reflection: "Two sermons in one psalm, and neither needs translating.\n\n> \"The heavens declare the glory of God; and the firmament sheweth his handywork.\" (19:1)\n\nThe sky preaches without a word — and there's no language where its voice isn't heard.\n\n> \"The law of the LORD is perfect, converting the soul: the testimony of the LORD is sure, making wise the simple.\" (19:7)\n\nThen the second sermon: the law of the LORD, perfect, actually able to convert a soul.\n\n> \"Let the words of my mouth, and the meditation of my heart, be acceptable in thy sight, O LORD, my strength, and my redeemer.\" (19:14)\n\nSo the prayer turns inward — let even my words and my thoughts be acceptable to him.\n\nCreation tells you there's a God. The Word tells you his name. Let the last verse be your prayer."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-11",
+            date: parseISO("2026-07-11T00:00:00Z"),
+            theme: "Bless the LORD (Creation)",
+            passage: ScriptureRef(book: "Psalms", chapter: 104, startVerse: 1, endVerse: 35),
+            reflection: "A tour of creation with the Maker named on every page.\n\n> \"Bless the LORD, O my soul. O LORD my God, thou art very great; thou art clothed with honour and majesty.\" (104:1)\n\nHe wears light like a robe. Majesty isn't decoration on God; it's what he's clothed in.\n\n> \"O LORD, how manifold are thy works! in wisdom hast thou made them all: the earth is full of thy riches.\" (104:24)\n\nLook closely and the count overwhelms you — every wild and ordinary thing made in wisdom.\n\n> \"I will sing unto the LORD as long as I live: I will sing praise to my God while I have my being.\" (104:33)\n\nNothing here runs itself; it's all held. The only fitting response is to sing while you've got breath.\n\nWorship isn't analysis. It's the song creation has been singing all along."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-12",
+            date: parseISO("2026-07-12T00:00:00Z"),
+            theme: "Bless the LORD, O My Soul",
+            passage: ScriptureRef(book: "Psalms", chapter: 103, startVerse: 1, endVerse: 22),
+            reflection: "David preaches to himself here. Sometimes the soul needs telling, not asking.\n\n> \"Bless the LORD, O my soul, and forget not all his benefits:\" (103:2)\n\n\"Forget not\" — because we do. The benefits stack up and we stop counting them.\n\n> \"As far as the east is from the west, so far hath he removed our transgressions from us.\" (103:12)\n\nEast and west never meet; the distance has no middle. That's how far he's carried your sin.\n\n> \"For he knoweth our frame; he remembereth that we are dust.\" (103:14)\n\nHe isn't surprised by your weakness. He remembers the dust you're made of, and loves you anyway.\n\nForget not all his benefits. Bless the LORD, O my soul."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-13",
+            date: parseISO("2026-07-13T00:00:00Z"),
+            theme: "Make a Joyful Noise",
+            passage: ScriptureRef(book: "Psalms", chapter: 100, startVerse: 1, endVerse: 5),
+            reflection: "Five verses, almost all command. Praise isn't a feeling you wait for; it's a thing you do until the feeling catches up.\n\n> \"Make a joyful noise unto the LORD, all ye lands.\" (100:1)\n\nA joyful noise — not necessarily a tuneful one. He's after gladness, not performance.\n\n> \"Know ye that the LORD he is God: it is he that hath made us, and not we ourselves; we are his people, and the sheep of his pasture.\" (100:3)\n\nKnow it: he made us, not the other way around. We're the sheep, not the shepherd.\n\n> \"For the LORD is good; his mercy is everlasting; and his truth endureth to all generations.\" (100:5)\n\nAnd the ground under all the noise — his goodness, his mercy, his truth, with no expiration date.\n\nEnter his gates with thanksgiving. Make some noise."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-14",
+            date: parseISO("2026-07-14T00:00:00Z"),
+            theme: "I Will Extol Thee",
+            passage: ScriptureRef(book: "Psalms", chapter: 145, startVerse: 1, endVerse: 21),
+            reflection: "David walks the alphabet to praise God — like he's using every letter he has and still coming up short.\n\n> \"Every day will I bless thee; and I will praise thy name for ever and ever.\" (145:2)\n\nEvery day, not the good ones only. Praise as a daily habit, not a mood that visits.\n\n> \"The LORD is gracious, and full of compassion; slow to anger, and of great mercy.\" (145:8)\n\nHere's the God he's praising: gracious, full of compassion, slow to anger, great in mercy.\n\n> \"The LORD is nigh unto all them that call upon him, to all that call upon him in truth.\" (145:18)\n\nAnd near — near to everyone who calls. Not far off for the worthy; near for the asking.\n\nGreat is the LORD, and greatly to be praised. Every day. Start with this one."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-15",
+            date: parseISO("2026-07-15T00:00:00Z"),
+            theme: "Sing a New Song",
+            passage: ScriptureRef(book: "Psalms", chapter: 96, startVerse: 1, endVerse: 13),
+            reflection: "A new song, because the mercies aren't yesterday's. Old gratitude goes stale.\n\n> \"O sing unto the LORD a new song: sing unto the LORD, all the earth.\" (96:1)\n\nSing something new — and not just you. \"All the earth\" is invited into the chorus.\n\n> \"Declare his glory among the heathen, his wonders among all people.\" (96:3)\n\nPraise that's real wants witnesses; it declares his glory instead of keeping it private.\n\n> \"O worship the LORD in the beauty of holiness: fear before him, all the earth.\" (96:9)\n\nWorship him in the beauty of holiness. Awe, not just enthusiasm.\n\nFind a fresh song today. Then sing it where someone can hear."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-16",
+            date: parseISO("2026-07-16T00:00:00Z"),
+            theme: "How Long?",
+            passage: ScriptureRef(book: "Psalms", chapter: 13, startVerse: 1, endVerse: 6),
+            reflection: "Four \"how longs\" in two verses. The Bible lets you talk to God like this.\n\n> \"How long wilt thou forget me, O LORD? for ever? how long wilt thou hide thy face from me?\" (13:1)\n\nHonesty isn't the opposite of faith — it's faith refusing to leave the room.\n\n> \"But I have trusted in thy mercy; my heart shall rejoice in thy salvation.\" (13:5)\n\nThen the hinge the whole psalm turns on: but. He trusted in mercy before the feelings changed.\n\n> \"I will sing unto the LORD, because he hath dealt bountifully with me.\" (13:6)\n\nFrom \"how long\" to \"I will sing\" in six verses. The complaint didn't get the last word.\n\nLament is allowed. So is the turn. Don't stop before verse 5."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-17",
+            date: parseISO("2026-07-17T00:00:00Z"),
+            theme: "As the Hart Panteth",
+            passage: ScriptureRef(book: "Psalms", chapter: 42, startVerse: 1, endVerse: 11),
+            reflection: "A thirst, not a preference. The deer isn't browsing; it's desperate.\n\n> \"As the hart panteth after the water brooks, so panteth my soul after thee, O God.\" (42:1)\n\nSome seasons that's exactly how God feels — necessary and absent at once.\n\n> \"My tears have been my meat day and night, while they continually say unto me, Where is thy God?\" (42:3)\n\nTears for food, day and night, while people ask where your God is. The psalm doesn't pretend otherwise.\n\n> \"Why art thou cast down, O my soul? and why art thou disquieted in me? hope thou in God: for I shall yet praise him for the help of his countenance.\" (42:5)\n\nSo he turns and talks to himself — names the despair, then preaches hope back at it.\n\nPreach to the soul that won't sing yet. Tell it where to put its hope."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-18",
+            date: parseISO("2026-07-18T00:00:00Z"),
+            theme: "My Soul Thirsteth",
+            passage: ScriptureRef(book: "Psalms", chapter: 63, startVerse: 1, endVerse: 11),
+            reflection: "David wrote this in a wilderness — \"a dry and thirsty land, where no water is.\"\n\n> \"O God, thou art my God; early will I seek thee: my soul thirsteth for thee, my flesh longeth for thee in a dry and thirsty land, where no water is;\" (63:1)\n\nThe driest place became the clearest prayer. He seeks God early, before anything else gets in.\n\n> \"Because thy lovingkindness is better than life, my lips shall praise thee.\" (63:3)\n\nHe doesn't ask to leave the desert. He says what the desert taught him: God's love beats life itself.\n\n> \"Because thou hast been my help, therefore in the shadow of thy wings will I rejoice.\" (63:7)\n\nEven there, in the dark, he finds the shadow of God's wings — and sings.\n\nThirst isn't your enemy. It's the thing pointing you home. Seek him early."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-19",
+            date: parseISO("2026-07-19T00:00:00Z"),
+            theme: "Have Mercy",
+            passage: ScriptureRef(book: "Psalms", chapter: 51, startVerse: 1, endVerse: 19),
+            reflection: "David after Bathsheba. No spin, no blaming the circumstances.\n\n> \"Have mercy upon me, O God, according to thy lovingkindness: according unto the multitude of thy tender mercies blot out my transgressions.\" (51:1)\n\nHe throws himself entirely on mercy — according to God's lovingkindness, not his own record.\n\n> \"Create in me a clean heart, O God; and renew a right spirit within me.\" (51:10)\n\nHe doesn't ask for a touch-up. He asks to be remade. Create — only God does that verb.\n\n> \"The sacrifices of God are a broken spirit: a broken and a contrite heart, O God, thou wilt not despise.\" (51:17)\n\nAnd here's what God won't turn away: not performance, but a broken and a contrite heart.\n\nReal repentance stops managing the story and tells the truth. Bring him the broken heart."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-20",
+            date: parseISO("2026-07-20T00:00:00Z"),
+            theme: "Out of the Depths",
+            passage: ScriptureRef(book: "Psalms", chapter: 130, startVerse: 1, endVerse: 8),
+            reflection: "The depths — not the shallows. This prayer comes from the bottom, and still expects to be heard.\n\n> \"Out of the depths have I cried unto thee, O LORD.\" (130:1)\n\nHe doesn't clean himself up before crying out. He cries out from where he actually is.\n\n> \"But there is forgiveness with thee, that thou mayest be feared.\" (130:4)\n\nWhy expect mercy? Because there is forgiveness with him. If he marked every sin, who could stand?\n\n> \"Let Israel hope in the LORD: for with the LORD there is mercy, and with him is plenteous redemption.\" (130:7)\n\nSo he waits like a watchman waits for morning — and morning, with him, is plenteous redemption.\n\nOut of the depths is a fine place to start praying. He's listening there too."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-21",
+            date: parseISO("2026-07-21T00:00:00Z"),
+            theme: "Blessed Is Forgiven",
+            passage: ScriptureRef(book: "Psalms", chapter: 32, startVerse: 1, endVerse: 11),
+            reflection: "Two days ago was the confession. This is the morning after — the plain relief of a clean conscience.\n\n> \"Blessed is he whose transgression is forgiven, whose sin is covered.\" (32:1)\n\nNot erased from history; covered by God, and counted gone. That's the blessing.\n\n> \"When I kept silence, my bones waxed old through my roaring all the day long.\" (32:3)\n\nDavid remembers the cost of hiding: silence aged his bones. Buried sin doesn't go quiet; it goes inward.\n\n> \"I acknowledge my sin unto thee, and mine iniquity have I not hid. I said, I will confess my transgressions unto the LORD; and thou forgavest the iniquity of my sin. Selah.\" (32:5)\n\nThen he came clean — and forgiveness was already waiting on the other side of honesty.\n\nDon't be dragged like a stubborn horse. Come freely. Be glad."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-22",
+            date: parseISO("2026-07-22T00:00:00Z"),
+            theme: "My God, Why?",
+            passage: ScriptureRef(book: "Psalms", chapter: 22, startVerse: 1, endVerse: 31),
+            reflection: "Jesus said the first line of this psalm from the cross. He reached for the loudest complaint in the Psalter.\n\n> \"My God, my God, why hast thou forsaken me? why art thou so far from helping me, and from the words of my roaring?\" (22:1)\n\nForsaken — and he prayed it out loud. Even that cry was addressed to \"my God.\"\n\n> \"For dogs have compassed me: the assembly of the wicked have inclosed me: they pierced my hands and my feet.\" (22:16)\n\nThen it turns eerie: pierced hands and feet, written a thousand years before a Roman nail.\n\n> \"I will declare thy name unto my brethren: in the midst of the congregation will I praise thee.\" (22:22)\n\nAnd it turns again — from forsaken to declaring God's name among his brethren. The song doesn't end at the cross.\n\nThe most abandoned-sounding psalm is the most exactly fulfilled. Read it to the end."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-23",
+            date: parseISO("2026-07-23T00:00:00Z"),
+            theme: "He Brought Me Up",
+            passage: ScriptureRef(book: "Psalms", chapter: 40, startVerse: 1, endVerse: 17),
+            reflection: "First, the waiting. \"Patiently\" — the rescue was real, and it wasn't instant.\n\n> \"I waited patiently for the LORD; and he inclined unto me, and heard my cry.\" (40:1)\n\nHe waited, and he was heard. Both halves are true; one just takes longer.\n\n> \"He brought me up also out of an horrible pit, out of the miry clay, and set my feet upon a rock, and established my goings.\" (40:2)\n\nUp out of the pit and the miry clay, feet set on a rock. Stable ground after a long sink.\n\n> \"And he hath put a new song in my mouth, even praise unto our God: many shall see it, and fear, and shall trust in the LORD.\" (40:3)\n\nAnd a new song in his mouth — deliverance hands you something to sing you didn't have before.\n\nWait. Then, when he's set your feet down, don't keep the song to yourself."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-24",
+            date: parseISO("2026-07-24T00:00:00Z"),
+            theme: "Mourning into Dancing",
+            passage: ScriptureRef(book: "Psalms", chapter: 30, startVerse: 1, endVerse: 12),
+            reflection: "David had been low. He isn't theorizing about pain; he'd been in it.\n\n> \"O LORD, thou hast brought up my soul from the grave: thou hast kept me alive, that I should not go down to the pit.\" (30:3)\n\nBrought up from the grave itself. He's writing as someone who got a morning he didn't expect.\n\n> \"For his anger endureth but a moment; in his favour is life: weeping may endure for a night, but joy cometh in the morning.\" (30:5)\n\nWeeping may last a night — but a night, not forever. His anger is a moment; his favour is a lifetime.\n\n> \"Thou hast turned for me my mourning into dancing: thou hast put off my sackcloth, and girded me with gladness;\" (30:11)\n\nMourning turned to dancing. He doesn't explain the turn so much as testify to it.\n\nNight is real, and it has an end. Hold on till morning."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-25",
+            date: parseISO("2026-07-25T00:00:00Z"),
+            theme: "Taste and See",
+            passage: ScriptureRef(book: "Psalms", chapter: 34, startVerse: 1, endVerse: 22),
+            reflection: "Taste — not read about, not hear secondhand. Some things about God you only learn by trying him.\n\n> \"I sought the LORD, and he heard me, and delivered me from all my fears.\" (34:4)\n\nDavid's testimony is specific: he sought, God heard, the fears went. Not theory — experience.\n\n> \"O taste and see that the LORD is good: blessed is the man that trusteth in him.\" (34:8)\n\nSo he hands you the dare: taste and see. Find out for yourself that he's good.\n\n> \"The LORD is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.\" (34:18)\n\nAnd for the days that don't feel good — he's near the broken-hearted, close to the crushed.\n\nHe's near the crushed, not the impressive. Taste and see."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-26",
+            date: parseISO("2026-07-26T00:00:00Z"),
+            theme: "How Amiable",
+            passage: ScriptureRef(book: "Psalms", chapter: 84, startVerse: 1, endVerse: 12),
+            reflection: "Homesick for the house of God. The psalmist even envies the sparrow that gets to nest by the altar.\n\n> \"How amiable are thy tabernacles, O LORD of hosts!\" (84:1)\n\nHow lovely, how worth-longing-for, are the places where God meets his people.\n\n> \"My soul longeth, yea, even fainteth for the courts of the LORD: my heart and my flesh crieth out for the living God.\" (84:2)\n\nNot polite interest. His soul faints with longing for the courts of the LORD.\n\n> \"For a day in thy courts is better than a thousand. I had rather be a doorkeeper in the house of my God, than to dwell in the tents of wickedness.\" (84:10)\n\nA single day there beats a thousand anywhere else. He'd rather hold the door than live easy elsewhere.\n\nAnd the road counts too — passing through the dry valley, they make it a place of springs."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-27",
+            date: parseISO("2026-07-27T00:00:00Z"),
+            theme: "Searched and Known",
+            passage: ScriptureRef(book: "Psalms", chapter: 139, startVerse: 1, endVerse: 24),
+            reflection: "Fully known — which is more terrifying and more comforting than being half-known and liked.\n\n> \"O lord, thou hast searched me, and known me.\" (139:1)\n\nHe knows your sitting down and your rising up, your words before you say them. All of it.\n\n> \"Whither shall I go from thy spirit? or whither shall I flee from thy presence?\" (139:7)\n\nAnd there's nowhere his presence isn't — not heaven, not the grave, not the far side of the sea.\n\n> \"Search me, O God, and know my heart: try me, and know my thoughts:\" (139:23)\n\nSo the brave prayer: ask the One who already sees to show you what he sees.\n\nYou are completely known and not turned away. Let him search you."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-28",
+            date: parseISO("2026-07-28T00:00:00Z"),
+            theme: "Number Our Days",
+            passage: ScriptureRef(book: "Psalms", chapter: 90, startVerse: 1, endVerse: 17),
+            reflection: "Moses wrote this one. He isn't being morbid about our short years — he's being accurate.\n\n> \"Lord, thou hast been our dwelling place in all generations.\" (90:1)\n\nGenerations come and go; God has been the dwelling place through every one of them.\n\n> \"So teach us to number our days, that we may apply our hearts unto wisdom.\" (90:12)\n\nThe prayer isn't for more days. It's to count the ones we have, and spend them on what lasts.\n\n> \"And let the beauty of the LORD our God be upon us: and establish thou the work of our hands upon us; yea, the work of our hands establish thou it.\" (90:17)\n\nAnd then the ask that redeems a short life: establish the work of our hands. Make it count.\n\nA brief life, made to matter by an eternal God. Number your days."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-29",
+            date: parseISO("2026-07-29T00:00:00Z"),
+            theme: "I Love the LORD",
+            passage: ScriptureRef(book: "Psalms", chapter: 116, startVerse: 1, endVerse: 19),
+            reflection: "Love with a reason attached. He prayed in real trouble, and God heard — so now he loves.\n\n> \"I love the LORD, because he hath heard my voice and my supplications.\" (116:1)\n\nNot abstract devotion. He loves the LORD because the LORD bent down and listened.\n\n> \"What shall I render unto the LORD for all his benefits toward me?\" (116:12)\n\nThe honest question of the rescued: what do you give back for grace like that?\n\n> \"Precious in the sight of the LORD is the death of his saints.\" (116:15)\n\nAnd a line for the grieving: the death of his saints isn't cheap to him. It's precious in his sight.\n\nYou can't repay grace. You can receive it and say so. He has heard you too."
+        ),
+        EventReadingDay(
+            id: "summer-psalms-2026-day-30",
+            date: parseISO("2026-07-30T00:00:00Z"),
+            theme: "Let Everything Praise",
+            passage: ScriptureRef(book: "Psalms", chapter: 150, startVerse: 1, endVerse: 6),
+            reflection: "The Psalter ends with no request left. After all the lament and waiting, it lands on pure praise.\n\n> \"Praise ye the LORD. Praise God in his sanctuary: praise him in the firmament of his power.\" (150:1)\n\nPraise him where he is — in his sanctuary, in the heights. Start with the place he's promised to be.\n\n> \"Praise him for his mighty acts: praise him according to his excellent greatness.\" (150:2)\n\nPraise him for what he's done — his mighty acts — and for who he is — his excellent greatness.\n\n> \"Let every thing that hath breath praise the LORD. Praise ye the LORD.\" (150:6)\n\nAnd the last instrument is you. If you have breath, you're in the orchestra.\n\nThirty days, from \"blessed is the man\" to \"praise ye the LORD.\" Take a breath. Use it."
+        )
+    ]
+    // SUMMER-PSALMS-PLAN END
 
     // MARK: - Pentecost 8-day reading plan (KJV)
 

@@ -62,6 +62,20 @@ object AppEventRegistry {
         readingPlan = pentecostReadingPlan,
     )
 
+    val summerPsalms2026 = AppEvent(
+        id = "summer-psalms-2026",
+        name = "Summer in the Psalms",
+        subtitle = "A psalm a day — through July",
+        iconEmoji = "☀️",
+        accent = EventAccent.ACCENT,
+        startDate = LocalDate.of(2026, 7, 1),
+        // Card lingers ~a week past the App Store event_end (Jul 30).
+        endDate = LocalDate.of(2026, 8, 6),
+        action = EventAction.OpenEvent,
+        bannerRes = biz.am2.swiftbible.R.drawable.summer_psalms_event,
+        readingPlan = summerPsalmsReadingPlan,
+    )
+
     fun todayReadingIndex(event: AppEvent, today: LocalDate = LocalDate.now()): Int {
         if (event.readingPlan.isEmpty()) return 0
         val match = event.readingPlan.indexOfFirst { it.date == today }
@@ -71,7 +85,7 @@ object AppEventRegistry {
         return event.readingPlan.size - 1
     }
 
-    val all: List<AppEvent> = listOf(pentecost2026)
+    val all: List<AppEvent> = listOf(pentecost2026, summerPsalms2026)
 
     fun visible(today: LocalDate = LocalDate.now(), forceAll: Boolean = false): List<AppEvent> =
         if (forceAll) all else all.filter { it.isActive(today) }

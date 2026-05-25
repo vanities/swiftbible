@@ -21,15 +21,20 @@ import sys
 from pathlib import Path
 
 
-# Resolve archive path: this script lives at
-# skills/matt-bassford/scripts/search.py — walk up four parents to
-# the repo root, then descend into speakers/matt-bassford/posts.
-ARCHIVE = (
-    Path(__file__).resolve().parent.parent.parent.parent.parent
-    / "speakers"
-    / "matt-bassford"
-    / "posts"
-)
+# Resolve archive path robustly: walk up from this script (following symlinks
+# via resolve()) until we find a directory containing
+# speakers/matt-bassford/posts. Resilient to the skill being symlinked into
+# .claude/skills or moved to a different depth.
+def _resolve_archive() -> Path:
+    here = Path(__file__).resolve()
+    rel = Path("speakers") / "matt-bassford" / "posts"
+    for base in (here, *here.parents):
+        if (base / rel).is_dir():
+            return base / rel
+    return here.parents[3] / rel  # best-effort fallback
+
+
+ARCHIVE = _resolve_archive()
 
 
 def score_post(content: str, terms: list[str]) -> int:
