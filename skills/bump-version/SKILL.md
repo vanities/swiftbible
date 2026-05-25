@@ -1,6 +1,5 @@
 ---
 description: Bump SwiftBible's marketing version + build number on iOS and Android in lockstep. Default bumps both platforms; `--ios-only` / `--android-only` scopes to one. Use when shipping a release.
-disable-model-invocation: true
 argument-hint: [<explicit-version> | --build | --major] [--ios-only | --android-only]
 allowed-tools: Bash(grep:*) Bash(sed:*) Read Edit
 ---

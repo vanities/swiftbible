@@ -1,6 +1,5 @@
 ---
 description: Build the SwiftBible Android release AAB and upload it to Google Play. Defaults to the internal track. Use `--production` to promote the latest internal build to production with status COMPLETED (kicks off Google's automated review). Use when shipping an Android release locally.
-disable-model-invocation: true
 argument-hint: [--internal | --beta | --production | --rebuild-production]
 allowed-tools: Bash(test:*) Bash(git status:*) Bash(grep:*) Bash(./gradlew clean*) Bash(./gradlew :app:bundleRelease*) Bash(./gradlew :app:publishBundle*) Bash(./gradlew :app:promoteArtifact*)
 ---

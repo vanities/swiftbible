@@ -1,6 +1,5 @@
 ---
 description: End-to-end runbook for cutting a SwiftBible release on both iOS and Android — bump version, push, push localized release notes, build and submit iOS, promote Android to production. Orchestrates the atomic skills (bump-version, app-store-listing, ship-android) into one ordered flow.
-disable-model-invocation: true
 argument-hint: [<explicit-version> | --build | --major]
 allowed-tools: Bash Read Edit Write
 ---
