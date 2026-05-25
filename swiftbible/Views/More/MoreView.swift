@@ -24,6 +24,7 @@ struct MoreView: View {
     @AppStorage(BookmarkPreferences.bookKey) private var bookmarkedBookName: String = ""
     @AppStorage(BookmarkPreferences.chapterKey) private var bookmarkedChapterNumber: Int = 0
     @AppStorage(BookmarkPreferences.verseKey) private var bookmarkedVerseNumber: Int = 0
+    @AppStorage("seenEventIDs") private var seenEventIDsRaw: String = ""
 
     @State private var streakDays: Int = 0
     @State private var chaptersThisWeek: Int = 0
@@ -54,7 +55,20 @@ struct MoreView: View {
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
             .navigationTitle("More")
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear { refreshStats() }
+            .onAppear {
+                refreshStats()
+                markEventsSeen()
+            }
+        }
+    }
+
+    /// Mark every currently-visible event as seen, clearing the More-tab badge.
+    private func markEventsSeen() {
+        var seen = Set(seenEventIDsRaw.split(separator: ",").map(String.init))
+        let before = seen.count
+        seen.formUnion(AppEventRegistry.visibleEvents.map(\.id))
+        if seen.count != before {
+            seenEventIDsRaw = seen.sorted().joined(separator: ",")
         }
     }
 

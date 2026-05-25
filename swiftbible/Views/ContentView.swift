@@ -26,6 +26,7 @@ struct ContentView: View {
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
     @AppStorage(DonationPreferences.anonIdentifierKey) private var donationAnonIdentifier: String = ""
     @AppStorage("customAccentColor") private var customAccentHex: String = ""
+    @AppStorage("seenEventIDs") private var seenEventIDsRaw: String = ""
 
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
@@ -50,6 +51,13 @@ struct ContentView: View {
 
     @AppStorage("lastCelebratedDonationSessionID") private var lastCelebratedDonationSessionID: String = ""
 
+    /// Visible events the user hasn't opened in More yet — drives the More-tab
+    /// badge. Cleared when MoreView appears (see MoreView.markEventsSeen).
+    private var unseenEventCount: Int {
+        let seen = Set(seenEventIDsRaw.split(separator: ",").map(String.init))
+        return AppEventRegistry.visibleEvents.filter { !seen.contains($0.id) }.count
+    }
+
     @ViewBuilder
     private var mainTabView: some View {
         TabView(selection: $selectedTab) {
@@ -68,6 +76,7 @@ struct ContentView: View {
             Tab("More", systemImage: "square.grid.2x2.fill", value: .settings) {
                 MoreView(selectedTab: $selectedTab)
             }
+            .badge(unseenEventCount)
         }
         .tint(customAccentHex.isEmpty ? nil : Color(hex: customAccentHex))
         .tabViewStyle(.sidebarAdaptable)
