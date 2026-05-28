@@ -8,10 +8,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.net.URLEncoder
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
@@ -39,6 +41,9 @@ data class DailyDevotional(
     val track: String? = null,
 )
 
+@Serializable
+private data class DailyDevotionalRequest(val forDate: String)
+
 private val Context.devotionalCache by preferencesDataStore(name = "devotional_cache")
 
 class DevotionalRepository(private val context: Context) {
@@ -60,24 +65,34 @@ class DevotionalRepository(private val context: Context) {
         // Check cache first
         cached(key)?.let { return@withContext Result.Success(it) }
 
-        // PostgREST table path needs %20 (not + which URLEncoder produces)
-        val encoded = URLEncoder.encode("Daily Devotional", "UTF-8").replace("+", "%20")
-        val url = "${SupabaseConfig.URL}/rest/v1/$encoded?for_date=eq.$key&select=*&limit=1"
+        val requestBody = json
+            .encodeToString(DailyDevotionalRequest(forDate = key))
+            .toRequestBody("application/json".toMediaType())
+        val url = "${SupabaseConfig.URL}/functions/v1/get-daily-devotional"
         val req = Request.Builder()
             .url(url)
+            .post(requestBody)
             .header("apikey", SupabaseConfig.ANON_KEY)
             .header("Authorization", "Bearer ${SupabaseConfig.ANON_KEY}")
             .header("Accept", "application/json")
+            .header("Content-Type", "application/json")
+            .header("x-swiftbible-platform", "android")
+            .header("x-swiftbible-package-name", biz.am2.swiftbible.BuildConfig.APPLICATION_ID)
+            .apply {
+                if (SupabaseConfig.DEVOTIONAL_READ_SECRET.isNotBlank()) {
+                    header("x-swiftbible-client-key", SupabaseConfig.DEVOTIONAL_READ_SECRET)
+                }
+            }
             .build()
 
         try {
             client.newCall(req).execute().use { response ->
-                if (!response.isSuccessful) {
-                    return@withContext Result.Failure("HTTP ${response.code}")
-                }
                 val body = response.body?.string().orEmpty()
-                val list = json.decodeFromString<List<DailyDevotional>>(body)
-                val devotional = list.firstOrNull() ?: return@withContext Result.NotFound
+                if (!response.isSuccessful) {
+                    if (response.code == 404) return@withContext Result.NotFound
+                    return@withContext Result.Failure("HTTP ${response.code}: $body")
+                }
+                val devotional = json.decodeFromString<DailyDevotional>(body)
                 cache(key, devotional)
                 Result.Success(devotional)
             }
