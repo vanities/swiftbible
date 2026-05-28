@@ -15,7 +15,7 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ??
 const DEVOTIONAL_READ_SECRET = Deno.env.get("DEVOTIONAL_READ_SECRET") ?? "";
 
 const DEFAULT_IOS_BUNDLE_IDS = ["com.vanities.swiftbible"];
-const DEFAULT_ANDROID_PACKAGE_IDS = ["com.vanities.swiftbible"];
+const DEFAULT_ANDROID_PACKAGE_IDS = ["biz.am2.swiftbible"];
 
 const ALLOWED_IOS_BUNDLE_IDS = parseCsvEnv(
   "ALLOWED_IOS_BUNDLE_IDS",
