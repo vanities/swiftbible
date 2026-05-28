@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension String {
     func fixToBrowserString() -> String {
         self.replacingOccurrences(of: ";", with: "%3B")
@@ -19,6 +18,6 @@ extension String {
             .replacingOccurrences(of: "/", with: "%2F")
             .replacingOccurrences(of: "‘", with: "%91")
             .replacingOccurrences(of: ",", with: "%2C")
-            //more symbols fixes here: https://mykindred.com/htmlspecialchars.php
+            // more symbols fixes here: https://mykindred.com/htmlspecialchars.php
     }
 }

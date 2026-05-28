@@ -34,7 +34,7 @@ object Analytics {
         PostHog.screen(name)
     }
 
-    /** Mirrors iOS [`AnalyticsEvent`] in `swiftbible/Services/AnalyticsService.swift`. Keep in sync. */
+    /** Mirrors iOS [`AnalyticsEvent`] in `ios/swiftbible/Services/AnalyticsService.swift`. Keep in sync. */
     enum class Event(val id: String) {
         // Navigation
         TabSwitched("tab_switched"),

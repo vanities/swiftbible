@@ -168,7 +168,7 @@ def extract_verse_types(web_json_file, red_letter_map):
 
 def main():
     usfx_file = "eng-web.usfx.xml"
-    web_json_file = "../swiftbible/Text/web.json"
+    web_json_file = "../ios/swiftbible/Text/web.json"
     refs_output = "red_letter_verses.json"
     types_output = "red_letter_verse_types.json"
 

@@ -1,5 +1,5 @@
 """
-Generate swiftbible/Text/summaries_jfb.json from the parsed JFB outline data.
+Generate ios/swiftbible/Text/summaries_jfb.json from the parsed JFB outline data.
 
 Mirrors generate_mhcc_summaries.py but for Jamieson-Fausset-Brown. Produces
 the same JSON schema so SummariesService can load it through the same code

@@ -90,7 +90,7 @@ struct Book: Codable, Equatable {
                   .init(startingVerse: 10, text: "And a river went out of Eden to water the garden; and from thence it was parted, and became into four heads."),
                   .init(startingVerse: 11, text: "The name of the first is Pison: that is it which compasseth the whole land of Havilah, where there is gold;"),
                   .init(startingVerse: 12, text: "And the gold of that land is good: there is bdellium and the")
-                  ]),
+                  ])
               ])
 
     var testament: Testament? = .old

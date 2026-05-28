@@ -114,5 +114,5 @@ def convert_2enoch_to_json(input_file, output_file):
 
 if __name__ == "__main__":
     input_txt_file = "sources/2enoch.txt"
-    output_json_file = "../swiftbible/Text/2enoch.json"
+    output_json_file = "../ios/swiftbible/Text/2enoch.json"
     convert_2enoch_to_json(input_txt_file, output_json_file)

@@ -89,5 +89,5 @@ def convert_didache_to_json(input_file, output_file):
 
 if __name__ == "__main__":
     input_txt_file = "sources/didache.txt"
-    output_json_file = "../swiftbible/Text/didache.json"
+    output_json_file = "../ios/swiftbible/Text/didache.json"
     convert_didache_to_json(input_txt_file, output_json_file)

@@ -1,11 +1,11 @@
 //
 //  ScreenshotTests.swift
-//  swiftbibleUITests
+//  ios/swiftbibleUITests
 //
 //  Screenshot capture for App Store marketing assets.
-//  Run with: xcodebuild test -project swiftbible.xcodeproj -scheme swiftbible
+//  Run with: xcodebuild test -project ios/swiftbible.xcodeproj -scheme swiftbible
 //            -destination 'platform=iOS Simulator,name=<device>'
-//            -only-testing:swiftbibleUITests/ScreenshotTests
+//            -only-testing:ios/swiftbibleUITests/ScreenshotTests
 //
 
 import XCTest

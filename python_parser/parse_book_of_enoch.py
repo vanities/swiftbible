@@ -292,5 +292,5 @@ def convert_enoch_to_json(input_file, output_file):
 
 if __name__ == "__main__":
     input_txt_file = "book_of_enoch.txt"
-    output_json_file = "../swiftbible/Text/enoch.json"
+    output_json_file = "../ios/swiftbible/Text/enoch.json"
     convert_enoch_to_json(input_txt_file, output_json_file)

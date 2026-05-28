@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct FontOptionsView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage("fontName") private var fontName: String = "Helvetica"
@@ -20,7 +19,6 @@ struct FontOptionsView: View {
         "Verdana",
         "Georgia"
     ]
-
 
     var body: some View {
         Form {
@@ -75,4 +73,3 @@ struct FontOptionsView: View {
     FontOptionsView()
         .environment(UserViewModel())
 }
-

@@ -91,4 +91,4 @@ python_parser/summary_quality_report.json
 # Local/Xcode Cloud client config. Official CI injects these via Xcode Cloud
 # workflow environment variables; local copies must stay out of git.
 ci_scripts/.env.local
-swiftbible/GeneratedSecrets.xcconfig
+ios/swiftbible/GeneratedSecrets.xcconfig

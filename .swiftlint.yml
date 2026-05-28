@@ -15,8 +15,8 @@ included:
 excluded:
   - Carthage
   - Pods
-  - swiftbible.xcodeproj
-  - swiftbibleUITests
+  - ios/swiftbible.xcodeproj
+  - ios/swiftbibleUITests
 
 line_length: 120
 

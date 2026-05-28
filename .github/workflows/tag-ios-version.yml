@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
     paths:
-      - "swiftbible.xcodeproj/project.pbxproj"
+      - "ios/swiftbible.xcodeproj/project.pbxproj"
       - ".github/workflows/tag-ios-version.yml"
   workflow_dispatch:
 
@@ -25,7 +25,7 @@ jobs:
         id: version
         run: |
           set -euo pipefail
-          pbxproj="swiftbible.xcodeproj/project.pbxproj"
+          pbxproj="ios/swiftbible.xcodeproj/project.pbxproj"
 
           marketing=$(grep -E "^[[:space:]]*MARKETING_VERSION = " "$pbxproj" \
             | sed -E 's/.*MARKETING_VERSION = ([^;]+);.*/\1/' \

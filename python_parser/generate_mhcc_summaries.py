@@ -1,11 +1,11 @@
 """
-Generate swiftbible/Text/Summaries/mhcc.json from the parsed MHCC outline data.
+Generate ios/swiftbible/Text/Summaries/mhcc.json from the parsed MHCC outline data.
 
 Inputs:
   python_parser/sources/mhcc/mhcc_parsed.json  (produced by parse_mhcc.py)
 
 Output:
-  swiftbible/Text/Summaries/mhcc.json
+  ios/swiftbible/Text/Summaries/mhcc.json
 
 Rules:
 - Chapter title = first outline entry's title, verbatim.

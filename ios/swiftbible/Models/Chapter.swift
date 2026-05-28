@@ -5,7 +5,6 @@
 //  Created on 9/10/24.
 //
 
-
 struct Chapter: Codable, Equatable, Hashable {
     static func == (lhs: Chapter, rhs: Chapter) -> Bool {
         lhs.number == rhs.number

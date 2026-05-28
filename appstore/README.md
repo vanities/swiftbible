@@ -118,17 +118,17 @@ Run the `ScreenshotTests` UI test to regenerate all raw captures:
 
 ```bash
 # All three devices
-xcodebuild test -project swiftbible.xcodeproj -scheme swiftbible \
+xcodebuild test -project ios/swiftbible.xcodeproj -scheme swiftbible \
   -destination 'platform=iOS Simulator,name=iPhone 16 Pro Max' \
-  -only-testing:swiftbibleUITests/ScreenshotTests
+  -only-testing:ios/swiftbibleUITests/ScreenshotTests
 
-xcodebuild test -project swiftbible.xcodeproj -scheme swiftbible \
+xcodebuild test -project ios/swiftbible.xcodeproj -scheme swiftbible \
   -destination 'platform=iOS Simulator,name=iPhone 16 Plus' \
-  -only-testing:swiftbibleUITests/ScreenshotTests
+  -only-testing:ios/swiftbibleUITests/ScreenshotTests
 
-xcodebuild test -project swiftbible.xcodeproj -scheme swiftbible \
+xcodebuild test -project ios/swiftbible.xcodeproj -scheme swiftbible \
   -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4)' \
-  -only-testing:swiftbibleUITests/ScreenshotTests
+  -only-testing:ios/swiftbibleUITests/ScreenshotTests
 ```
 
 Then extract screenshots from the `.xcresult` bundle using `xcresulttool`.

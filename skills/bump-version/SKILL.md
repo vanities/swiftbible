@@ -12,7 +12,7 @@ Updates marketing version and build number in **both** the iOS Xcode project and
 
 | Platform | File | Marketing field | Build field |
 |---|---|---|---|
-| iOS | `swiftbible.xcodeproj/project.pbxproj` | `MARKETING_VERSION` | `CURRENT_PROJECT_VERSION` |
+| iOS | `ios/swiftbible.xcodeproj/project.pbxproj` | `MARKETING_VERSION` | `CURRENT_PROJECT_VERSION` |
 | Android | `android/app/build.gradle.kts` | `versionName` | `versionCode` |
 
 iOS fields appear 8 times each in pbxproj (one per build configuration × target) — always update with `replace_all`. Android fields appear once each.
@@ -49,7 +49,7 @@ Bump major (e.g. 1.40 → 2.0), increment build by 1.
 
 1. Read both files' current values:
    ```bash
-   grep -E "MARKETING_VERSION|CURRENT_PROJECT_VERSION" swiftbible.xcodeproj/project.pbxproj | sort -u
+   grep -E "MARKETING_VERSION|CURRENT_PROJECT_VERSION" ios/swiftbible.xcodeproj/project.pbxproj | sort -u
    grep -E 'versionCode|versionName' android/app/build.gradle.kts
    ```
 2. If the two platforms' marketing versions disagree, **stop and ask** which to use as the basis (or whether the user wants to resync them). Don't auto-pick.

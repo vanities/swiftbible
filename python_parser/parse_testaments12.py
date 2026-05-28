@@ -137,5 +137,5 @@ def convert_testaments_to_json(input_file, output_file):
 
 if __name__ == "__main__":
     input_txt_file = "sources/testaments12.txt"
-    output_json_file = "../swiftbible/Text/testaments12.json"
+    output_json_file = "../ios/swiftbible/Text/testaments12.json"
     convert_testaments_to_json(input_txt_file, output_json_file)

@@ -1,13 +1,13 @@
 """
 One-shot migration: read the existing Swift-dict summary files and emit a single
-JSON file under swiftbible/Text/Summaries/swiftbible.json in the new schema.
+JSON file under ios/swiftbible/Text/Summaries/swiftbible.json in the new schema.
 
 Inputs (read-only, not modified):
-  swiftbible/Text/summaries.swift         - passage summaries keyed by "C:V"
-  swiftbible/Text/ChapterSummaries.swift  - chapter titles keyed by chapter
+  ios/swiftbible/Text/summaries.swift         - passage summaries keyed by "C:V"
+  ios/swiftbible/Text/ChapterSummaries.swift  - chapter titles keyed by chapter
 
 Output:
-  swiftbible/Text/Summaries/swiftbible.json
+  ios/swiftbible/Text/Summaries/swiftbible.json
 
 The migration is lossless — after running, every entry in the Swift files is
 present in the JSON. The script prints a per-book count summary so you can

@@ -1,5 +1,5 @@
 """
-One-shot editor for swiftbible.xcodeproj/project.pbxproj that registers the
+One-shot editor for ios/swiftbible.xcodeproj/project.pbxproj that registers the
 new summaries files as first-class Xcode project members:
 
   - SummariesService.swift  (Services group → Sources build phase)
@@ -23,7 +23,7 @@ from pathlib import Path
 
 PBXPROJ = (
     Path(__file__).resolve().parents[1]
-    / "swiftbible.xcodeproj"
+    / "ios/swiftbible.xcodeproj"
     / "project.pbxproj"
 )
 

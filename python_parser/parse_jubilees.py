@@ -123,5 +123,5 @@ def convert_jubilees_to_json(input_file, output_file):
 
 if __name__ == "__main__":
     input_txt_file = "sources/jubilees.txt"
-    output_json_file = "../swiftbible/Text/jubilees.json"
+    output_json_file = "../ios/swiftbible/Text/jubilees.json"
     convert_jubilees_to_json(input_txt_file, output_json_file)

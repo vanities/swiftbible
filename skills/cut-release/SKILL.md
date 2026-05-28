@@ -48,7 +48,7 @@ Single commit message, both platforms. Push triggers:
 - `release-android.yml` → uploads AAB to Play **internal** track via gradle-play-publisher
 
 ```bash
-git add swiftbible.xcodeproj/project.pbxproj android/app/build.gradle.kts
+git add ios/swiftbible.xcodeproj/project.pbxproj android/app/build.gradle.kts
 git commit -m "Bump to <version> (iOS build N, Android build M)"
 git push
 ```
@@ -148,7 +148,7 @@ Use `git log <last-release-tag>..HEAD` to find user-facing changes. iOS-tagged c
 
 ```bash
 /bump-version 1.42
-git add swiftbible.xcodeproj/project.pbxproj android/app/build.gradle.kts
+git add ios/swiftbible.xcodeproj/project.pbxproj android/app/build.gradle.kts
 git commit -m "Bump to 1.42 (iOS build N, Android build M)"
 git push
 # wait for CI

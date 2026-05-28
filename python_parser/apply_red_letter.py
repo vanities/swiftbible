@@ -10,8 +10,8 @@ narrative from Jesus's spoken words. Handles KJV's multi-verse paragraphs by
 parsing inline chapter:verse references.
 
 Usage:
-    python3 apply_red_letter.py ../swiftbible/Text/bible.json
-    python3 apply_red_letter.py ../swiftbible/Text/asv.json
+    python3 apply_red_letter.py ../ios/swiftbible/Text/bible.json
+    python3 apply_red_letter.py ../ios/swiftbible/Text/asv.json
 """
 
 import json

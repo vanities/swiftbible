@@ -3,7 +3,7 @@
 This project feeds generated scriptures into the Swift client living one level up in `../swiftbible`. A couple of traps surfaced while stitching the Book of Enoch parser to the app—captured here so the next agent (or future-me) can move faster.
 
 ## Core Flow
-- `parse_book_of_enoch.py` ingests `book_of_enoch.txt`, builds a chapter → verse structure, and dumps JSON to `../swiftbible/Text/enoch.json`.
+- `parse_book_of_enoch.py` ingests `book_of_enoch.txt`, builds a chapter → verse structure, and dumps JSON to `../ios/swiftbible/Text/enoch.json`.
 - The Swift client relies on that JSON at runtime. Regenerate it with `python3 parse_book_of_enoch.py`. Because the output path is outside this workspace, the CLI usually prompts for elevated sandbox permissions—expect to rerun with `with_escalated_permissions`.
 - Swift’s `ParagraphParser` searches paragraph strings for markers shaped like `chapter:verse[suffix]` and then promotes them into superscript labels at render time.
 
@@ -11,10 +11,10 @@ This project feeds generated scriptures into the Swift client living one level u
 - `parse_kjv.py`
   - Reads `kjv.txt` and walks the canonical book headings in order. Each line shaped `CHAPTER:VERSE text...` starts a new paragraph block, while subsequent lines are appended until the next verse marker.
   - Injects Jesus quotations by loading `jesus.json` and wrapping matched phrases in `<JESUS>…</JESUS>` using a case-insensitive regex (the script depends on the third-party `regex` module).
-  - Outputs to `../swiftbible/Text/bible.json`. Expect console spam such as `book The Gospel According to Saint Matthew Matthew` while it processes.
+  - Outputs to `../ios/swiftbible/Text/bible.json`. Expect console spam such as `book The Gospel According to Saint Matthew Matthew` while it processes.
 - `parse_apocrypha.py`
   - Consumes `apocrypha.txt`, expecting each line as `ABBR CHAPTER:VERSE text` where `ABBR` is defined in `ABBREVIATIONS`.
-  - Builds the same chapter/paragraph schema, ensures book ordering via `BOOK_ORDER`, and writes to `../swiftbible/Text/apocrypha.json`.
+  - Builds the same chapter/paragraph schema, ensures book ordering via `BOOK_ORDER`, and writes to `../ios/swiftbible/Text/apocrypha.json`.
   - Any unknown abbreviation or malformed line is logged to stdout with its line number—handy when the source text drifts.
 - Shared data contract
   - Every parser feeds a list of books, each with `name`, `description`, and a `chapters` array of `{ number, paragraphs }`.
@@ -39,7 +39,7 @@ This project feeds generated scriptures into the Swift client living one level u
   - `Verse.number` (optional main verse integer)
   - `Verse.suffix` (new optional letter suffix)
   - `Verse.segments` (text and JESUS-tag segments)
-  Updating either the JSON format or the Swift parser means touching `swiftbible/Models/Verse.swift`, `swiftbible/Services/ParagraphParser.swift`, and `swiftbible/Views/Bible/ParagraphView.swift` together.
+  Updating either the JSON format or the Swift parser means touching `ios/swiftbible/Models/Verse.swift`, `ios/swiftbible/Services/ParagraphParser.swift`, and `ios/swiftbible/Views/Bible/ParagraphView.swift` together.
 
 ## Swift Rendering Contract
 - `ParagraphParser` uses regex `\b(\d+:\d+[a-z]?)\b`; if we change the JSON token format, adjust this too.
@@ -52,7 +52,7 @@ This project feeds generated scriptures into the Swift client living one level u
   python3 - <<'PY'
   import json
   from pathlib import Path
-  data = json.loads(Path('../swiftbible/Text/enoch.json').read_text())
+  data = json.loads(Path('../ios/swiftbible/Text/enoch.json').read_text())
   for book in data:
       for chapter in book['chapters']:
           if chapter['number'] == 39:

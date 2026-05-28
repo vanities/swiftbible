@@ -178,7 +178,7 @@ def save_to_json(bible_data, output_file):
 
 def main():
     source_dir = "sources/hebrew/morphhb/wlc"
-    output_file = "../swiftbible/Text/hebrew.json"
+    output_file = "../ios/swiftbible/Text/hebrew.json"
 
     print("Parsing Hebrew Old Testament from morphhb OSIS XML...")
     bible_data = parse_hebrew_ot(source_dir)

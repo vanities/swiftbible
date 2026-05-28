@@ -1,7 +1,7 @@
 """Per-day content for the "Summer in the Psalms" In-App Event (30 days).
 
 Single source of truth. `gen_plan.py` builds each reflection by pulling the
-verbatim KJV text of the chosen `verses` from swiftbible/Text/bible.json and
+verbatim KJV text of the chosen `verses` from ios/swiftbible/Text/bible.json and
 weaving it with the commentary here, then emits the iOS Swift plan (spliced
 into AppEvent.swift) and the Android Kotlin list.
 

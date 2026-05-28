@@ -2,7 +2,7 @@
 set -eu
 
 # Xcode Cloud exposes custom workflow environment variables to this script and
-# to xcodebuild. swiftbible/Info.plist references these via $(VARIABLE_NAME),
+# to xcodebuild. ios/swiftbible/Info.plist references these via $(VARIABLE_NAME),
 # which keeps production service keys out of git while still embedding the
 # public client config in official app builds.
 

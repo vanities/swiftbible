@@ -9,7 +9,7 @@ from pathlib import Path
 
 PBXPROJ = (
     Path(__file__).resolve().parents[1]
-    / "swiftbible.xcodeproj"
+    / "ios/swiftbible.xcodeproj"
     / "project.pbxproj"
 )
 

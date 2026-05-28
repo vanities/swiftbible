@@ -35,12 +35,12 @@ Both sides are needed for a complete event. Don't ship one without the other.
 
 | File | Purpose |
 |---|---|
-| `swiftbible/Models/AppEvent.swift` | `AppEventRegistry` — register events here so they appear in MoreView during their window |
-| `swiftbible/Views/More/EventDetailView.swift` | The curated event view (TabView day pagination, locked future days, "Read in Bible" CTA) — generic; works for any event with a `readingPlan` |
-| `swiftbible/Views/More/MoreView.swift` | Renders the "HAPPENING NOW" event card with optional banner image |
-| `swiftbible/Views/ContentView.swift` | URL scheme handler — `swiftbible://event/<slug>` auto-routes to any event in the registry |
-| `swiftbible/Views/Settings/SettingsView.swift` | Debug section: `Force-Show Events` toggle + "Open <event> Event View" buttons |
-| `swiftbible/Assets.xcassets/<EventName>EventBanner.imageset/` | Asset catalog imageset for the MoreView card banner (same image as EVENT_CARD) |
+| `ios/swiftbible/Models/AppEvent.swift` | `AppEventRegistry` — register events here so they appear in MoreView during their window |
+| `ios/swiftbible/Views/More/EventDetailView.swift` | The curated event view (TabView day pagination, locked future days, "Read in Bible" CTA) — generic; works for any event with a `readingPlan` |
+| `ios/swiftbible/Views/More/MoreView.swift` | Renders the "HAPPENING NOW" event card with optional banner image |
+| `ios/swiftbible/Views/ContentView.swift` | URL scheme handler — `swiftbible://event/<slug>` auto-routes to any event in the registry |
+| `ios/swiftbible/Views/Settings/SettingsView.swift` | Debug section: `Force-Show Events` toggle + "Open <event> Event View" buttons |
+| `ios/swiftbible/Assets.xcassets/<EventName>EventBanner.imageset/` | Asset catalog imageset for the MoreView card banner (same image as EVENT_CARD) |
 
 ## Quick command reference
 
@@ -93,11 +93,11 @@ Use `appstore/events/pentecost/event.yaml` as the template. Field limits: name 3
 **Convert PNG → HEIC before copying.** The 1920×1080 source PNG is ~2MB; HEIC at quality 80 is ~150–300KB. Xcode's PNG compression doesn't re-encode, so the full PNG would otherwise ship in every install. ASC uploads (step 7) stay PNG — Apple requires it — but the in-app banner does not.
 
 ```bash
-mkdir -p swiftbible/Assets.xcassets/<EventName>EventBanner.imageset
+mkdir -p ios/swiftbible/Assets.xcassets/<EventName>EventBanner.imageset
 sips -s format heic -s formatOptions 80 \
   appstore/events/<slug>/<slug>_event.png \
-  --out swiftbible/Assets.xcassets/<EventName>EventBanner.imageset/<slug>_event.heic
-cat > swiftbible/Assets.xcassets/<EventName>EventBanner.imageset/Contents.json <<'EOF'
+  --out ios/swiftbible/Assets.xcassets/<EventName>EventBanner.imageset/<slug>_event.heic
+cat > ios/swiftbible/Assets.xcassets/<EventName>EventBanner.imageset/Contents.json <<'EOF'
 {
   "images" : [
     { "filename" : "<slug>_event.heic", "idiom" : "universal" }
@@ -113,7 +113,7 @@ Xcode auto-discovers `.imageset` folders inside `Assets.xcassets` — no `.pbxpr
 
 ### 5. Add the AppEvent registry entry
 
-In `swiftbible/Models/AppEvent.swift`, add to `AppEventRegistry.allEvents`:
+In `ios/swiftbible/Models/AppEvent.swift`, add to `AppEventRegistry.allEvents`:
 
 ```swift
 static let advent2026 = AppEvent(
@@ -138,7 +138,7 @@ Then list it in `allEvents`. The MoreView card auto-shows during the date window
 
 - Concrete > abstract; acknowledge cost; no preachy/AI tells
 - Walk-through format: opening intro paragraph → each verse printed as a blockquote with a brief commentary (one or two sentences) → closing reflection paragraph
-- KJV passages — pulled directly from `swiftbible/Text/bible.json` for accuracy
+- KJV passages — pulled directly from `ios/swiftbible/Text/bible.json` for accuracy
 - **Markdown blockquotes for scripture quotes** — the EventDetailView's MarkdownUI theme renders them with a gold left bar, italic, secondary color
 - **`[J]` marker for Jesus's words** — red-letter convention. `> [J] "..."` blockquotes render in red (or normal if user has `Settings → Show Jesus's words in red` off). The generator script auto-splits this from the `<JESUS>...</JESUS>` tags in `bible.json` — **don't mark by hand**.
 - **Mixed-content verses** (narrator framing + Jesus speech, e.g. Acts 1:7 *"And he said unto them, <JESUS>It is not for you to know...</JESUS>"*) emit two adjacent blockquotes — one normal, one `[J]` — so only the actual Jesus speech turns red. The generator handles this; if you ever hand-edit, preserve the split (don't put the speaker tag inside the `[J]` line).
@@ -156,7 +156,7 @@ For a new event:
 uv run --quiet python3 skills/app-store-events/gen_reading_plan.py --event <slug> > /tmp/new_plan.swift
 uv run --quiet python3 -c "
 from pathlib import Path
-src = Path('swiftbible/Models/AppEvent.swift')
+src = Path('ios/swiftbible/Models/AppEvent.swift')
 text = src.read_text()
 new_block = Path('/tmp/new_plan.swift').read_text().rstrip() + '\\n'
 i = text.index('    private static let <slug>ReadingPlan: [EventReadingDay] = [')

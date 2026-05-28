@@ -1,13 +1,13 @@
 //
-//  swiftbibleUITestsLaunchTests.swift
-//  swiftbibleUITests
+//  ios/swiftbibleUITestsLaunchTests.swift
+//  ios/swiftbibleUITests
 //
 //  Created on 9/30/24.
 //
 
 import XCTest
 
-final class swiftbibleUITestsLaunchTests: XCTestCase {
+final class ios/swiftbibleUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

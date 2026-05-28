@@ -40,7 +40,7 @@ OUTPUT = Path(__file__).parent / "sources" / "jfb" / "jfb_parsed.json"
 
 # Map JFB book abbreviations to canonical book names. JFB uses idiosyncratic
 # short forms (Mr for Mark, Joh for John, Re for Revelation, etc.). The
-# canonical names here match what the rest of swiftbible/Text/*.json uses.
+# canonical names here match what the rest of ios/swiftbible/Text/*.json uses.
 ABBREV_MAP: dict[str, str] = {
     # Pentateuch
     "Ge": "Genesis", "Ex": "Exodus", "Le": "Leviticus", "Nu": "Numbers",

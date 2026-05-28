@@ -5,7 +5,7 @@
 //  Created on 2026-04-14.
 //
 //  Loads chapter titles and passage summaries from per-source JSON files
-//  bundled under swiftbible/Text/. Each source (SwiftBible Curated, Matthew
+//  bundled under ios/swiftbible/Text/. Each source (SwiftBible Curated, Matthew
 //  Henry's Concise Commentary) lives in its own file and is cached on first
 //  access. Users select a source via the `summarySource` AppStorage key.
 //

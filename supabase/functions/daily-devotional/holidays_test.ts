@@ -1002,7 +1002,7 @@ Deno.test("all holiday verse books are in the iOS bookNames list", () => {
   // The iOS app has a static list of book names for verse link detection
   // Resolve path relative to this test file, handling spaces in "Daily Devotional"
   const testDir = new URL(".", import.meta.url).pathname;
-  const swiftPath = testDir + "../../../swiftbible/Views/Daily Devotional/DailyDevotionalView.swift";
+  const swiftPath = testDir + "../../../ios/swiftbible/Views/Daily Devotional/DailyDevotionalView.swift";
   const swiftSource = Deno.readTextFileSync(swiftPath);
 
   const bookNamesMatch = swiftSource.match(

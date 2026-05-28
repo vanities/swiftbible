@@ -346,7 +346,7 @@ def save_to_json(bible_data, output_file):
 
 def main():
     input_file = "eng-web.usfx.xml"
-    output_file = "../swiftbible/Text/web.json"
+    output_file = "../ios/swiftbible/Text/web.json"
 
     print("Parsing WEB Bible from USFX XML...")
     bible_data = parse_usfx_xml(input_file)

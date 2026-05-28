@@ -208,7 +208,7 @@ def save_to_json(bible_data, output_file):
 
 def main():
     input_file = "eng-asv.zefania.xml"
-    output_file = "../swiftbible/Text/asv.json"
+    output_file = "../ios/swiftbible/Text/asv.json"
 
     print("Parsing ASV Bible from Zefania XML...")
     bible_data = parse_zefania_xml(input_file)

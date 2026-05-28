@@ -17,7 +17,7 @@ from tqdm import tqdm
 from mirascope import Messages, llm
 
 # ─────────────────────────  CONFIG  ──────────────────────────
-BIBLE_JSON = Path("../swiftbible/Text/bible.json")
+BIBLE_JSON = Path("../ios/swiftbible/Text/bible.json")
 LOG_PATH = Path("verse_info.log")
 CSV_OK = Path("verse_info.csv")
 CSV_FAIL = Path("verse_info_failed.csv")

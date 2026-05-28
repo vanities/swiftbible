@@ -1,6 +1,6 @@
 """
 Inject hand-written chapter titles and passage summaries for the pseudepigrapha
-and other non-canonical books into swiftbible/Text/summaries_swiftbible.json.
+and other non-canonical books into ios/swiftbible/Text/summaries_swiftbible.json.
 
 Background
 ----------

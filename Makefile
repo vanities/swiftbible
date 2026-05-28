@@ -75,7 +75,7 @@ test_daily_devotional:
 	-d '{}';
 
 test_slowness:
-	xcodebuild clean build -project swiftbible.xcodeproj/ OTHER_SWIFT_FLAGS="-Xfrontend -debug-time-expression-type-checking" | grep -Ei '^\d+\.\d+ms\t/.+$' | sort -r
+	xcodebuild clean build -project ios/swiftbible.xcodeproj/ OTHER_SWIFT_FLAGS="-Xfrontend -debug-time-expression-type-checking" | grep -Ei '^\d+\.\d+ms\t/.+$' | sort -r
 
 supabase-start:
 	@echo "🚀 Starting local Supabase..."
@@ -137,9 +137,9 @@ fresh:
 
 ARCHIVE_PATH = build/swiftbible.xcarchive
 EXPORT_PATH = build/export
-EXPORT_OPTIONS = ExportOptions.plist
+EXPORT_OPTIONS = ios/ExportOptions.plist
 SCHEME = swiftbible
-PROJECT = swiftbible.xcodeproj
+PROJECT = ios/swiftbible.xcodeproj
 
 archive:
 	@echo "Archiving $(SCHEME)..."

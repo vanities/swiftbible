@@ -86,5 +86,5 @@ def convert_1clement_to_json(input_file, output_file):
 
 if __name__ == "__main__":
     input_txt_file = "sources/1clement.txt"
-    output_json_file = "../swiftbible/Text/1clement.json"
+    output_json_file = "../ios/swiftbible/Text/1clement.json"
     convert_1clement_to_json(input_txt_file, output_json_file)

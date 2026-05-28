@@ -234,4 +234,4 @@ def save_to_json(bible_data, output_file):
 
 bible_file = "kjv.txt"
 bible_data = parse_bible_file(bible_file)
-save_to_json(bible_data, "../swiftbible/Text/bible.json")
+save_to_json(bible_data, "../ios/swiftbible/Text/bible.json")

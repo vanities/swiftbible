@@ -1,6 +1,6 @@
 //
 //  AppIconPickerUITests.swift
-//  swiftbibleUITests
+//  ios/swiftbibleUITests
 //
 
 import XCTest

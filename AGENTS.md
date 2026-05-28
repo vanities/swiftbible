@@ -229,7 +229,7 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 
 **Source of truth:** `scripts/generate_palette.py` → outputs `scripts/brand-palette.png`
 
-The palette derives from the app icon's peridot (August birthstone) gradient. All colors use `brand{Color}{Variant}` naming in `swiftbible/Extensions/Color.swift`.
+The palette derives from the app icon's peridot (August birthstone) gradient. All colors use `brand{Color}{Variant}` naming in `ios/swiftbible/Extensions/Color.swift`.
 
 | Group | Name | Hex | Usage |
 |-------|------|-----|-------|
@@ -269,7 +269,7 @@ The project has a `Makefile` with common commands. Run `make help` to see all ta
 ```bash
 cd python_parser
 python3 parse_book_of_enoch.py
-# Outputs: ../swiftbible/Text/enoch.json
+# Outputs: ../ios/swiftbible/Text/enoch.json
 ```
 
 ### Validation Scripts
@@ -524,7 +524,7 @@ python3 parse_book_of_enoch.py
 swiftlint lint --config .swiftlint.yml
 
 # Build and test
-xcodebuild -project swiftbible.xcodeproj -scheme swiftbible test
+xcodebuild -project ios/swiftbible.xcodeproj -scheme swiftbible test
 ```
 
 #### Text Addition Process

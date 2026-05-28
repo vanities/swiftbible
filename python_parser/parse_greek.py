@@ -143,7 +143,7 @@ def save_to_json(bible_data, output_file):
 
 def main():
     source_dir = "sources/greek/byzantine-majority-text/csv-unicode/ccat/no-variants"
-    output_file = "../swiftbible/Text/greek.json"
+    output_file = "../ios/swiftbible/Text/greek.json"
 
     print("Parsing Greek New Testament from Byzantine Majority Text CSV...")
     bible_data = parse_greek_nt(source_dir)
