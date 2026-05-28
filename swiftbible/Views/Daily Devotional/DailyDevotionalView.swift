@@ -478,15 +478,9 @@ struct DailyDevotionalView: View {
             return
         }
 
-        // Cache miss - fetch from Supabase
+        // Cache miss - fetch from Supabase Edge Function
         do {
-            let devotional: DailyDevotional = try await SupabaseService.shared.client
-                .from("Daily Devotional")
-                .select()
-                .eq("for_date", value: dateString)
-                .single()
-                .execute()
-                .value
+            let devotional = try await DevotionalService.shared.fetchDailyDevotional(forDate: dateString)
 
             applyDevotional(devotional)
 

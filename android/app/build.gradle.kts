@@ -22,8 +22,8 @@ android {
         applicationId = "biz.am2.swiftbible"
         minSdk = 26
         targetSdk = 35
-        versionCode = 13
-        versionName = "1.49"
+        versionCode = 14
+        versionName = "1.50"
         vectorDrawables { useSupportLibrary = true }
     }
 

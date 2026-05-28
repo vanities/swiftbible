@@ -305,7 +305,8 @@ extension SupabaseService {
         _ name: String,
         payload: Payload,
         responseType: Response.Type = Response.self,
-        method: String = "POST"
+        method: String = "POST",
+        headers: [String: String] = [:]
     ) async throws -> Response {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -315,23 +316,26 @@ extension SupabaseService {
             name,
             httpBody: body,
             responseType: responseType,
-            method: method
+            method: method,
+            headers: headers
         )
         return data
     }
 
     func invokeFunction<Response: Decodable>(
         _ name: String,
-        responseType: Response.Type = Response.self
+        responseType: Response.Type = Response.self,
+        headers: [String: String] = [:]
     ) async throws -> Response {
-        try await invokeFunction(name, httpBody: nil, responseType: responseType, method: "GET")
+        try await invokeFunction(name, httpBody: nil, responseType: responseType, method: "GET", headers: headers)
     }
 
     private func invokeFunction<Response: Decodable>(
         _ name: String,
         httpBody: Data?,
         responseType: Response.Type,
-        method: String
+        method: String,
+        headers: [String: String]
     ) async throws -> Response {
         let functionURL = supabaseURL.appendingPathComponent("functions/v1/\(name)")
         var request = URLRequest(url: functionURL)
@@ -340,6 +344,9 @@ extension SupabaseService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(supabaseKey, forHTTPHeaderField: "apikey")
+        for (field, value) in headers {
+            request.setValue(value, forHTTPHeaderField: field)
+        }
         if let token = supabaseAccessToken, !token.isEmpty {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
@@ -384,5 +391,37 @@ extension SupabaseService {
             }
         }
         return String(data: data, encoding: .utf8)
+    }
+}
+
+struct DailyDevotionalRequest: Encodable {
+    let forDate: String
+}
+
+final class DevotionalService {
+    static let shared = DevotionalService()
+
+    private init() {}
+
+    func fetchDailyDevotional(forDate dateString: String) async throws -> DailyDevotional {
+        try await SupabaseService.shared.invokeFunction(
+            "get-daily-devotional",
+            payload: DailyDevotionalRequest(forDate: dateString),
+            headers: appHeaders()
+        )
+    }
+
+    private func appHeaders() -> [String: String] {
+        var headers = [
+            "x-swiftbible-platform": "ios",
+            "x-swiftbible-bundle-id": Bundle.main.bundleIdentifier ?? ""
+        ]
+
+        if let clientKey = Bundle.main.infoDictionary?["DEVOTIONAL_READ_SECRET"] as? String,
+           !clientKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            headers["x-swiftbible-client-key"] = clientKey
+        }
+
+        return headers
     }
 }

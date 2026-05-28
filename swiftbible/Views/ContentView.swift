@@ -720,13 +720,7 @@ struct ContentView: View {
             let dateString = formatter.string(from: today)
 
             do {
-                let devotional: DailyDevotional = try await SupabaseService.shared.client
-                    .from("Daily Devotional")
-                    .select()
-                    .eq("for_date", value: dateString)
-                    .single()
-                    .execute()
-                    .value
+                let devotional = try await DevotionalService.shared.fetchDailyDevotional(forDate: dateString)
                 CacheService.shared.saveDevotional(devotional, for: today)
             } catch {
                 // No devotional for today yet — notification will use generic message

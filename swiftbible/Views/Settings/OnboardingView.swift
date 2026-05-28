@@ -513,13 +513,7 @@ private struct OnboardingPage: View {
         let dateString = dateFormatter.string(from: Date())
 
         do {
-            let devotional: DailyDevotional = try await SupabaseService.shared.client
-                .from("Daily Devotional")
-                .select()
-                .eq("for_date", value: dateString)
-                .single()
-                .execute()
-                .value
+            let devotional = try await DevotionalService.shared.fetchDailyDevotional(forDate: dateString)
             CacheService.shared.saveDevotional(devotional, for: Date())
             if let snippet = OnboardingFeature.todaysDevotionalSnippet() {
                 await MainActor.run {
