@@ -10,7 +10,7 @@ object Analytics {
     private var initialized = false
 
     fun init(context: Context) {
-        if (initialized) return
+        if (initialized || SupabaseConfig.POSTHOG_API_KEY.isBlank()) return
         val cfg = PostHogAndroidConfig(
             apiKey = SupabaseConfig.POSTHOG_API_KEY,
             host = SupabaseConfig.POSTHOG_HOST,

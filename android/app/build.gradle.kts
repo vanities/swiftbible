@@ -13,6 +13,18 @@ val keystorePropsFile = rootProject.file("keystore.properties")
 val keystoreProps = Properties().apply {
     if (keystorePropsFile.exists()) keystorePropsFile.inputStream().use { load(it) }
 }
+val localPropsFile = rootProject.file("local.properties")
+val localProps = Properties().apply {
+    if (localPropsFile.exists()) localPropsFile.inputStream().use { load(it) }
+}
+
+fun clientConfig(name: String, defaultValue: String = ""): String =
+    (findProperty(name) as? String)
+        ?: System.getenv(name)
+        ?: localProps.getProperty(name)
+        ?: defaultValue
+
+fun quotedBuildConfig(value: String): String = "\"${value.replace("\\", "\\\\").replace("\"", "\\\"")}\""
 
 android {
     namespace = "biz.am2.swiftbible"
@@ -24,6 +36,7 @@ android {
         targetSdk = 35
         versionCode = 14
         versionName = "1.50"
+        buildConfigField("String", "POSTHOG_API_KEY", quotedBuildConfig(clientConfig("POSTHOG_API_KEY")))
         vectorDrawables { useSupportLibrary = true }
     }
 
