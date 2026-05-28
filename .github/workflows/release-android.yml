@@ -138,11 +138,13 @@ jobs:
         if: steps.check.outputs.exists == 'false'
         working-directory: android
         env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
           DEVOTIONAL_READ_SECRET: ${{ secrets.DEVOTIONAL_READ_SECRET }}
         run: |
           set -euo pipefail
-          for var in POSTHOG_API_KEY DEVOTIONAL_READ_SECRET; do
+          for var in SUPABASE_URL SUPABASE_KEY POSTHOG_API_KEY DEVOTIONAL_READ_SECRET; do
             if [ -z "${!var:-}" ]; then
               echo "::error::Repo secret $var is missing"
               exit 1
@@ -161,6 +163,8 @@ jobs:
         working-directory: android
         env:
           TRACK: ${{ github.event.inputs.track || 'internal' }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
           DEVOTIONAL_READ_SECRET: ${{ secrets.DEVOTIONAL_READ_SECRET }}
         run: |

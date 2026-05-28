@@ -36,6 +36,8 @@ android {
         targetSdk = 35
         versionCode = 15
         versionName = "1.51"
+        buildConfigField("String", "SUPABASE_URL", quotedBuildConfig(clientConfig("SUPABASE_URL")))
+        buildConfigField("String", "SUPABASE_KEY", quotedBuildConfig(clientConfig("SUPABASE_KEY")))
         buildConfigField("String", "POSTHOG_API_KEY", quotedBuildConfig(clientConfig("POSTHOG_API_KEY")))
         buildConfigField("String", "DEVOTIONAL_READ_SECRET", quotedBuildConfig(clientConfig("DEVOTIONAL_READ_SECRET")))
         vectorDrawables { useSupportLibrary = true }
