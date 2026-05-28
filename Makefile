@@ -60,6 +60,7 @@ help:
 
 functions-deploy:
 	supabase functions deploy daily-devotional --project-ref yvanxjoayoiocwzfpkfm
+	supabase functions deploy get-daily-devotional --project-ref yvanxjoayoiocwzfpkfm
 	supabase functions deploy user-self-deletion --project-ref yvanxjoayoiocwzfpkfm
 	supabase functions deploy create-donation-session --project-ref yvanxjoayoiocwzfpkfm
 	supabase functions deploy donation-status --project-ref yvanxjoayoiocwzfpkfm
