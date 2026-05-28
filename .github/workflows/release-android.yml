@@ -137,8 +137,17 @@ jobs:
       - name: Build release bundle
         if: steps.check.outputs.exists == 'false'
         working-directory: android
+        env:
+          POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
+          DEVOTIONAL_READ_SECRET: ${{ secrets.DEVOTIONAL_READ_SECRET }}
         run: |
           set -euo pipefail
+          for var in POSTHOG_API_KEY DEVOTIONAL_READ_SECRET; do
+            if [ -z "${!var:-}" ]; then
+              echo "::error::Repo secret $var is missing"
+              exit 1
+            fi
+          done
           ./gradlew clean :app:bundleRelease --stacktrace
           aab="app/build/outputs/bundle/release/app-release.aab"
           if [ ! -f "$aab" ]; then
@@ -152,6 +161,8 @@ jobs:
         working-directory: android
         env:
           TRACK: ${{ github.event.inputs.track || 'internal' }}
+          POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
+          DEVOTIONAL_READ_SECRET: ${{ secrets.DEVOTIONAL_READ_SECRET }}
         run: |
           set -euo pipefail
           echo "Publishing to track=$TRACK"
