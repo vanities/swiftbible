@@ -2113,8 +2113,14 @@ async function fetchExistingDevotional(
 initSentry("daily-devotional");
 
 Deno.serve(async (req) => {
-  if (Deno.env.get("SUPABASE_URL") == req.headers.get("SuperSecret")) {
-    return { statusCode: 403, body: "External calls are not allowed" };
+  const configuredSecret = Deno.env.get("SWIFTBIBLE_SUPERSECRET_KEY") ?? "";
+  const providedSecret = req.headers.get("SuperSecret") ?? "";
+
+  if (!configuredSecret || providedSecret !== configuredSecret) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   try {
