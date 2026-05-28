@@ -9,45 +9,98 @@ enum AppEnvironment: String {
     case local
     case production
 
+    private static let localSupabaseURL = URL(string: "http://127.0.0.1:54321")!
+
     var supabaseURL: URL {
         switch self {
         case .local:
-            if let urlString = Bundle.main.infoDictionary?["SUPABASE_URL_DEBUG"] as? String,
-               let url = URL(string: urlString),
-               !urlString.isEmpty {
+            if let urlString = AppConfig.infoPlistString("SUPABASE_URL_DEBUG"),
+               let url = URL(string: urlString) {
                 return url
             }
-            return URL(string: "http://127.0.0.1:54321")!
+            return Self.localSupabaseURL
         case .production:
-            guard let urlString = Bundle.main.infoDictionary?["SUPABASE_URL"] as? String,
-                  let url = URL(string: urlString) else {
-                fatalError("Missing SUPABASE_URL in Info.plist")
+            if let urlString = AppConfig.infoPlistString("SUPABASE_URL"),
+               let url = URL(string: urlString) {
+                return url
             }
-            return url
+            #if DEBUG
+            return Self.localSupabaseURL
+            #else
+            fatalError("Missing SUPABASE_URL in Info.plist")
+            #endif
         }
     }
 
     var supabaseKey: String {
         switch self {
         case .local:
-            if let key = Bundle.main.infoDictionary?["SUPABASE_KEY_DEBUG"] as? String {
-                let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines)
-                if !trimmed.isEmpty {
-                    return trimmed
-                }
+            if let key = AppConfig.infoPlistString("SUPABASE_KEY_DEBUG") {
+                return key
             }
-            // Default Supabase local dev anon key
+            // Default Supabase local dev anon key.
             return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0"
         case .production:
-            guard let key = Bundle.main.infoDictionary?["SUPABASE_KEY"] as? String else {
-                fatalError("Missing SUPABASE_KEY in Info.plist")
+            if let key = AppConfig.infoPlistString("SUPABASE_KEY") {
+                return key
             }
-            return key.trimmingCharacters(in: .whitespacesAndNewlines)
+            #if DEBUG
+            return AppEnvironment.local.supabaseKey
+            #else
+            fatalError("Missing SUPABASE_KEY in Info.plist")
+            #endif
         }
     }
 }
 
 enum AppConfig {
+    static func infoPlistString(_ key: String) -> String? {
+        guard let rawValue = Bundle.main.infoDictionary?[key] as? String else { return nil }
+        let value = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !value.isEmpty, !value.hasPrefix("$(") else { return nil }
+        return value
+    }
+
+    #if DEBUG
+    static func debugLogClientConfiguration(context: String) {
+        let keys = [
+            "SUPABASE_URL",
+            "SUPABASE_KEY",
+            "SUPABASE_URL_DEBUG",
+            "SUPABASE_KEY_DEBUG",
+            "POSTHOG_API_KEY",
+            "SENTRY_DSN",
+            "DEVOTIONAL_READ_SECRET"
+        ]
+
+        print("[Config] \(context): resolved environment=\(environment.rawValue)")
+        print("[Config] \(context): resolved SUPABASE_URL=\(supabaseURL.absoluteString)")
+        print("[Config] \(context): resolved SUPABASE_KEY=\(redacted(supabaseKey))")
+        for key in keys {
+            let rawValue = Bundle.main.infoDictionary?[key] as? String
+            let resolvedValue = infoPlistString(key)
+            print("[Config] \(context): Info.plist \(key) raw=\(debugDescription(rawValue)) resolved=\(debugDescription(resolvedValue))")
+        }
+    }
+
+    private static func debugDescription(_ value: String?) -> String {
+        guard let value else { return "<missing>" }
+        if value.hasPrefix("$(") { return "<unresolved:\(value)>" }
+        return redacted(value)
+    }
+
+    private static func redacted(_ value: String) -> String {
+        guard !value.isEmpty else { return "<empty>" }
+        if value.hasPrefix("http://") || value.hasPrefix("https://") {
+            return value
+        }
+        if value.count <= 10 {
+            return "<set:length=\(value.count)>"
+        }
+        return "\(value.prefix(6))…\(value.suffix(4)) (length=\(value.count))"
+    }
+    #endif
+
     // Toggle this to switch between local and production Supabase
     static let environment: AppEnvironment = .production
 
@@ -55,8 +108,7 @@ enum AppConfig {
     static var supabaseKey: String { environment.supabaseKey }
 
     static var sentryDSN: String {
-        guard let dsn = Bundle.main.infoDictionary?["SENTRY_DSN"] as? String,
-              !dsn.isEmpty else {
+        guard let dsn = infoPlistString("SENTRY_DSN") else {
             #if DEBUG
             return ""
             #else
@@ -67,8 +119,7 @@ enum AppConfig {
     }
 
     static var posthogAPIKey: String {
-        guard let key = Bundle.main.infoDictionary?["POSTHOG_API_KEY"] as? String,
-              !key.isEmpty else {
+        guard let key = infoPlistString("POSTHOG_API_KEY") else {
             #if DEBUG
             return ""
             #else

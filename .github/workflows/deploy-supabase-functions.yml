@@ -50,3 +50,7 @@ jobs:
       # Deploy daily-devotional WITH JWT verification (called by cron job with service role)
       - name: Deploy daily-devotional function
         run: supabase functions deploy daily-devotional --project-ref "$PROJECT_ID"
+
+      # Deploy get-daily-devotional WITHOUT JWT verification (called by mobile clients)
+      - name: Deploy get-daily-devotional function
+        run: supabase functions deploy get-daily-devotional --project-ref "$PROJECT_ID" --no-verify-jwt

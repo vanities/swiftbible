@@ -338,6 +338,19 @@ extension SupabaseService {
         headers: [String: String]
     ) async throws -> Response {
         let functionURL = supabaseURL.appendingPathComponent("functions/v1/\(name)")
+        #if DEBUG
+        if name == "get-daily-devotional" {
+            AppConfig.debugLogClientConfiguration(context: "get-daily-devotional")
+            print("[Devotional] request method=\(method) url=\(functionURL.absoluteString)")
+            print("[Devotional] request headers=\(debugHeaderSummary(headers))")
+            if let httpBody,
+               let bodyString = String(data: httpBody, encoding: .utf8) {
+                print("[Devotional] request body=\(bodyString)")
+            } else {
+                print("[Devotional] request body=<empty>")
+            }
+        }
+        #endif
         var request = URLRequest(url: functionURL)
         request.httpMethod = method
         request.timeoutInterval = 30
@@ -359,10 +372,24 @@ extension SupabaseService {
 
         guard (200...299).contains(httpResponse.statusCode) else {
             let message = parseErrorMessage(from: data)
+            #if DEBUG
+            if name == "get-daily-devotional" {
+                print("[Devotional] response status=\(httpResponse.statusCode) error=\(message ?? "<none>")")
+                if let responseBody = String(data: data, encoding: .utf8) {
+                    print("[Devotional] response body=\(responseBody)")
+                }
+            }
+            #endif
             let error = SupabaseFunctionError(statusCode: httpResponse.statusCode, message: message)
             SentryService.shared.capture(error, context: ["function": name, "statusCode": "\(httpResponse.statusCode)"])
             throw error
         }
+
+        #if DEBUG
+        if name == "get-daily-devotional" {
+            print("[Devotional] response status=\(httpResponse.statusCode) bytes=\(data.count)")
+        }
+        #endif
 
         if data.isEmpty {
             throw SupabaseFunctionError(statusCode: httpResponse.statusCode, message: "Empty response body.")
@@ -392,6 +419,26 @@ extension SupabaseService {
         }
         return String(data: data, encoding: .utf8)
     }
+
+    #if DEBUG
+    private func debugHeaderSummary(_ headers: [String: String]) -> String {
+        headers
+            .sorted { $0.key < $1.key }
+            .map { key, value in
+                let displayValue = key == "x-swiftbible-client-key" ? debugRedacted(value) : value
+                return "\(key)=\(displayValue)"
+            }
+            .joined(separator: ", ")
+    }
+
+    private func debugRedacted(_ value: String) -> String {
+        guard !value.isEmpty else { return "<empty>" }
+        if value.count <= 10 {
+            return "<set:length=\(value.count)>"
+        }
+        return "\(value.prefix(6))…\(value.suffix(4)) (length=\(value.count))"
+    }
+    #endif
 }
 
 struct DailyDevotionalRequest: Encodable {
@@ -417,8 +464,7 @@ final class DevotionalService {
             "x-swiftbible-bundle-id": Bundle.main.bundleIdentifier ?? ""
         ]
 
-        if let clientKey = Bundle.main.infoDictionary?["DEVOTIONAL_READ_SECRET"] as? String,
-           !clientKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if let clientKey = AppConfig.infoPlistString("DEVOTIONAL_READ_SECRET") {
             headers["x-swiftbible-client-key"] = clientKey
         }
 
