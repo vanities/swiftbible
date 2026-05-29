@@ -351,6 +351,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val tierByTrack = biz.am2.swiftbible.data.BadgeTrack.values().associateWith { track ->
             badgeService.currentTier(track)
         }
+        val readingTimeMs = readingStats.totalReadingMs()
+        val recentSessions = sessions.sortedByDescending { it.startedAt }.take(10)
         return biz.am2.swiftbible.ui.progress.ProgressSnapshot(
             currentStreak = streakInfo.streak,
             longestStreak = longest,
@@ -362,6 +364,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             bookProgress = bookProgress,
             earnedCount = earnedCount,
             tierByTrack = tierByTrack,
+            readingTimeMs = readingTimeMs,
+            recentSessions = recentSessions,
         )
     }
 

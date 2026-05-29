@@ -63,7 +63,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import biz.am2.swiftbible.ui.AppViewModel
-import biz.am2.swiftbible.ui.components.StatCard
 import biz.am2.swiftbible.ui.theme.BrandAccent
 import biz.am2.swiftbible.ui.theme.BrandCyan
 import biz.am2.swiftbible.ui.theme.BrandGold
@@ -523,32 +522,6 @@ fun HistoryScreen(
                         }
                     }
                 }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun StatsScreen(appVm: AppViewModel, onBack: () -> Unit) {
-    val chaptersRead by appVm.chaptersRead.collectAsState(initial = 0)
-    val totalVisits by appVm.totalVisits.collectAsState(initial = 0)
-    val notes by appVm.notes.collectAsState(initial = emptyList())
-    val highlights by appVm.highlights.collectAsState(initial = emptyList())
-    val bookmarks by appVm.bookmarks.collectAsState(initial = emptyList())
-
-    LibraryFrame(title = "Reading stats", count = null, onBack = onBack) {
-        EnterAnimation {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    StatCard("Chapters read", chaptersRead.toString(), modifier = Modifier.weight(1f))
-                    StatCard("Total reads", (totalVisits ?: 0).toString(), modifier = Modifier.weight(1f))
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    StatCard("Highlights", highlights.size.toString(), modifier = Modifier.weight(1f))
-                    StatCard("Notes", notes.size.toString(), modifier = Modifier.weight(1f))
-                }
-                StatCard("Bookmarks", bookmarks.size.toString(), modifier = Modifier.fillMaxWidth())
             }
         }
     }

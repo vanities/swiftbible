@@ -64,7 +64,6 @@ import biz.am2.swiftbible.ui.settings.HistoryScreen
 import biz.am2.swiftbible.ui.settings.NotesScreen
 import biz.am2.swiftbible.ui.settings.SavedDevotionalsScreen
 import biz.am2.swiftbible.ui.settings.SettingsScreen
-import biz.am2.swiftbible.ui.settings.StatsScreen
 import biz.am2.swiftbible.ui.settings.TextSourcesScreen
 import biz.am2.swiftbible.ui.settings.TranslationInfoScreen
 
@@ -300,9 +299,6 @@ private fun SwiftBibleAppContent(appVm: AppViewModel) {
                     onBack = { navController.popBackStack() },
                     onOpen = { book, chapter -> navController.navigate("chapter/${encode(book)}/$chapter") },
                 )
-            }
-            composable("stats") {
-                StatsScreen(appVm = appVm, onBack = { navController.popBackStack() })
             }
             composable("progress") {
                 ProgressScreen(

@@ -68,7 +68,6 @@ fun MoreScreen(
     val notes by appVm.notes.collectAsState(initial = emptyList())
     val saved by appVm.savedDevotionals.collectAsState(initial = emptyList())
     val history by appVm.history.collectAsState(initial = emptyList())
-    val chaptersRead by appVm.chaptersRead.collectAsState(initial = 0)
     val badgesEarned by appVm.badgesEarnedCount.collectAsState(initial = 0)
 
     val events = AppEventRegistry.visible(
@@ -162,11 +161,6 @@ fun MoreScreen(
             ProgressCard(
                 badgesEarned = badgesEarned,
                 onClick = { onOpen("progress") },
-            )
-
-            ReadingStatsCard(
-                chaptersRead = chaptersRead,
-                onClick = { onOpen("stats") },
             )
 
             SettingsCard(onClick = { onOpen("settings_detail") })
@@ -508,42 +502,6 @@ private fun ProgressCard(badgesEarned: Int, onClick: () -> Unit) {
                 Text(
                     text = if (badgesEarned == 0) "Streak, heatmap, and 35 achievements"
                     else "$badgesEarned badge${if (badgesEarned == 1) "" else "s"} earned",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun ReadingStatsCard(chaptersRead: Int, onClick: () -> Unit) {
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surface,
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(14.dp)),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFFCFEEEA)),
-                contentAlignment = Alignment.Center,
-            ) {
-                androidx.compose.material3.Icon(Icons.Filled.BarChart, contentDescription = null, tint = BrandAccent)
-            }
-            Spacer(Modifier.size(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Reading Stats", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text(
-                    text = "🔥 $chaptersRead chapter${if (chaptersRead == 1) "" else "s"} read",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

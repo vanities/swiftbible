@@ -63,7 +63,10 @@ import biz.am2.swiftbible.data.CanonicalBibleBooks
 import biz.am2.swiftbible.ui.AppViewModel
 import biz.am2.swiftbible.ui.ToastCoordinator
 import biz.am2.swiftbible.ui.theme.BrandAccent
+import androidx.compose.material.icons.filled.Schedule
+import biz.am2.swiftbible.data.ReadingSession
 import biz.am2.swiftbible.ui.theme.BrandGold
+import biz.am2.swiftbible.ui.theme.BrandGreen
 import biz.am2.swiftbible.ui.theme.BrandPeridot
 import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
@@ -80,6 +83,8 @@ data class ProgressSnapshot(
     val bookProgress: List<BookProgressEntry> = emptyList(),
     val earnedCount: Int = 0,
     val tierByTrack: Map<BadgeTrack, BadgeTier?> = emptyMap(),
+    val readingTimeMs: Long = 0,
+    val recentSessions: List<ReadingSession> = emptyList(),
 )
 
 data class BookProgressEntry(
@@ -155,6 +160,7 @@ fun ProgressScreen(
             AchievementsCard(snapshot = snapshot, onClick = onOpenGallery)
             HeatmapCard(snapshot.heatmap, weeks = 12)
             BookCompletionCard(snapshot.bookProgress)
+            RecentReadingCard(snapshot.recentSessions)
             Spacer(Modifier.size(48.dp))
         }
     }
@@ -262,6 +268,16 @@ private fun StatsGrid(snapshot: ProgressSnapshot) {
             value = "${snapshot.booksCompleted}/${snapshot.totalBooks}",
         )
     }
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        StatCard(
+            modifier = Modifier.weight(1f),
+            icon = Icons.Filled.Schedule,
+            tint = BrandGreen,
+            label = "Time in the Word",
+            value = formatReadingDuration(snapshot.readingTimeMs),
+        )
+        Spacer(Modifier.weight(1f))
+    }
 }
 
 @Composable
@@ -292,6 +308,66 @@ private fun StatCard(
         }
     }
 }
+
+@Composable
+private fun RecentReadingCard(sessions: List<ReadingSession>) {
+    Surface(
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(14.dp)),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text("Recent Reading", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Spacer(Modifier.size(12.dp))
+            if (sessions.isEmpty()) {
+                Text(
+                    "Start reading to see your history",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                sessions.forEachIndexed { idx, s ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("${s.bookName} ${s.chapterNumber}", style = MaterialTheme.typography.bodyMedium)
+                            Text(
+                                relativeTime(s.startedAt),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        Text(
+                            formatReadingDuration(s.durationMs),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    if (idx < sessions.lastIndex) Spacer(Modifier.size(10.dp))
+                }
+            }
+        }
+    }
+}
+
+private fun formatReadingDuration(ms: Long): String {
+    val totalMinutes = ms / 60000
+    val hours = totalMinutes / 60
+    val minutes = totalMinutes % 60
+    return when {
+        hours > 0 -> "${hours}h ${minutes}m"
+        minutes > 0 -> "${minutes}m"
+        else -> "<1m"
+    }
+}
+
+private fun relativeTime(epochMs: Long): String =
+    android.text.format.DateUtils.getRelativeTimeSpanString(
+        epochMs,
+        System.currentTimeMillis(),
+        android.text.format.DateUtils.MINUTE_IN_MILLIS,
+    ).toString()
 
 @Composable
 private fun AchievementsCard(snapshot: ProgressSnapshot, onClick: () -> Unit) {
