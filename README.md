@@ -122,4 +122,4 @@ We welcome contributions to the SwiftBible project. If you would like to contrib
 
 ## License
 
-SwiftBible is released under the [MIT License](LICENSE).
+SwiftBible is released under the [GNU General Public License v3.0](LICENSE).
