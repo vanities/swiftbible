@@ -63,4 +63,54 @@ enum LiturgicalCalendar {
         let comps = Calendar.current.dateComponents([.month, .day], from: date)
         return comps.month == 12 && comps.day == 25
     }
+
+    /// Good Friday — two days before Easter Sunday.
+    static func goodFriday(year: Int) -> Date? {
+        guard let easter = easterSunday(year: year) else { return nil }
+        return Calendar.current.date(byAdding: .day, value: -2, to: easter)
+    }
+
+    static func isGoodFriday(_ date: Date) -> Bool {
+        let year = Calendar.current.component(.year, from: date)
+        guard let gf = goodFriday(year: year) else { return false }
+        return Calendar.current.isDate(date, inSameDayAs: gf)
+    }
+
+    /// Ash Wednesday — 46 days before Easter (40 fasting days plus six Sundays).
+    static func ashWednesday(year: Int) -> Date? {
+        guard let easter = easterSunday(year: year) else { return nil }
+        return Calendar.current.date(byAdding: .day, value: -46, to: easter)
+    }
+
+    static func isAshWednesday(_ date: Date) -> Bool {
+        let year = Calendar.current.component(.year, from: date)
+        guard let aw = ashWednesday(year: year) else { return false }
+        return Calendar.current.isDate(date, inSameDayAs: aw)
+    }
+
+    /// The four Sundays of Advent, earliest first. The fourth (last) Advent
+    /// Sunday is the Sunday falling in Dec 18–24; the rest are the preceding
+    /// Sundays at one-week intervals.
+    static func adventSundays(year: Int) -> [Date] {
+        let cal = Calendar.current
+        for day in 18...24 {
+            var comps = DateComponents()
+            comps.year = year
+            comps.month = 12
+            comps.day = day
+            guard let date = cal.date(from: comps) else { continue }
+            guard cal.component(.weekday, from: date) == 1 else { continue } // Sunday == 1
+            let fourth = cal.startOfDay(for: date)
+            return [3, 2, 1, 0].compactMap { cal.date(byAdding: .day, value: -7 * $0, to: fourth) }
+        }
+        return []
+    }
+
+    /// The hours straddling midnight on New Year's — late on Dec 31 or the
+    /// small hours of Jan 1, mirroring a watchnight service.
+    static func isWatchnight(_ date: Date) -> Bool {
+        let comps = Calendar.current.dateComponents([.month, .day, .hour], from: date)
+        guard let month = comps.month, let day = comps.day, let hour = comps.hour else { return false }
+        return (month == 12 && day == 31 && hour >= 22) || (month == 1 && day == 1 && hour < 4)
+    }
 }

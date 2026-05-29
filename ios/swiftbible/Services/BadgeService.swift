@@ -115,6 +115,12 @@ final class BadgeService {
             return completedBookCount(in: context) >= threshold
         case .devotionals:
             return devotionalReadCount(in: context) >= threshold
+        case .time:
+            return Int(stats.totalReadingTime(in: context) / 3600) >= threshold
+        case .versions:
+            return stats.chaptersReadInAllVersions(in: context) >= threshold
+        case .scribe:
+            return annotationCount(in: context) >= threshold
         }
     }
 
@@ -150,8 +156,54 @@ final class BadgeService {
             return Testament.apocryphaNames.allSatisfy { stats.chaptersReadInBook($0, in: context).isEmpty == false }
         case "collect.whole.counsel":
             return completedBookCount(in: context) >= 66
+        case "collect.ot":
+            return allComplete(CanonicalBibleBooks.oldTestament.map { $0.name }, in: context, stats: stats)
+        case "collect.nt":
+            return allComplete(CanonicalBibleBooks.newTestament.map { $0.name }, in: context, stats: stats)
+        case "collect.synoptics":
+            return allComplete(["Matthew", "Mark", "Luke"], in: context, stats: stats)
+        case "collect.general.epistles":
+            let books = ["James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude"]
+            return allComplete(books, in: context, stats: stats)
+        case "collect.luke.acts":
+            return allComplete(["Luke", "Acts"], in: context, stats: stats)
+        case "collect.historical":
+            let books = ["Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings",
+                         "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther"]
+            return allComplete(books, in: context, stats: stats)
+        case "collect.solomon":
+            return allComplete(["Proverbs", "Ecclesiastes", "Song of Solomon"], in: context, stats: stats)
+        case "collect.megillot":
+            return allComplete(["Ruth", "Esther", "Ecclesiastes", "Song of Solomon", "Lamentations"],
+                               in: context, stats: stats)
+        case "collect.event.pentecost":
+            return Self.isEventPlanComplete(idPrefix: "pentecost-")
+        case "collect.event.summer.psalms":
+            return Self.isEventPlanComplete(idPrefix: "summer-psalms-")
         default:
             return false
+        }
+    }
+
+    // MARK: - Seasonal event reading plans
+
+    /// Completed event reading-day IDs. Mirrors the `seenEventIDs` AppStorage
+    /// format (comma-separated); EventDetailView appends a day's id once the
+    /// user views it unlocked.
+    static func completedEventDayIDs() -> Set<String> {
+        let raw = UserDefaults.standard.string(forKey: "completedEventDayIDs") ?? ""
+        return Set(raw.split(separator: ",").map(String.init))
+    }
+
+    /// True when any event whose id starts with `idPrefix` has every day of
+    /// its reading plan completed. The prefix lets a yearly event reuse one
+    /// badge (pentecost-2026, pentecost-2027, …).
+    static func isEventPlanComplete(idPrefix: String) -> Bool {
+        let completed = completedEventDayIDs()
+        let events = AppEventRegistry.allEvents.filter { $0.id.hasPrefix(idPrefix) && !$0.readingPlan.isEmpty }
+        guard !events.isEmpty else { return false }
+        return events.contains { event in
+            event.readingPlan.allSatisfy { completed.contains($0.id) }
         }
     }
 
@@ -192,6 +244,36 @@ final class BadgeService {
         case "hidden.late.wisdom":
             guard hour >= 22 else { return false }
             return readChapterToday(book: "Proverbs", in: context)
+        case "hidden.alpha.omega":
+            return stats.chaptersReadInBook("Genesis", in: context).contains(1)
+                && stats.chaptersReadInBook("Revelation", in: context).contains(22)
+        case "hidden.in.the.beginning":
+            return stats.chaptersReadInBook("Genesis", in: context).contains(1)
+                && stats.chaptersReadInBook("John", in: context).contains(1)
+        case "hidden.forty.days":
+            return stats.currentStreakWithFreeze(in: context).streak >= 40
+        case "hidden.jubilee":
+            return stats.currentStreakWithFreeze(in: context).streak >= 50
+        case "hidden.sermon.mount":
+            return readChapter(book: "Matthew", chapter: 5, on: date, in: context)
+                && readChapter(book: "Matthew", chapter: 6, on: date, in: context)
+                && readChapter(book: "Matthew", chapter: 7, on: date, in: context)
+        case "hidden.longest.mile":
+            return stats.chaptersReadInBook("Psalms", in: context).contains(119)
+        case "hidden.hall.of.faith":
+            return stats.chaptersReadInBook("Hebrews", in: context).contains(11)
+        case "hidden.watchnight":
+            return LiturgicalCalendar.isWatchnight(date) && chaptersReadOn(date, in: context) > 0
+        case "hidden.good.friday":
+            return LiturgicalCalendar.isGoodFriday(date) && chaptersReadOn(date, in: context) > 0
+        case "hidden.ash.wednesday":
+            return LiturgicalCalendar.isAshWednesday(date) && chaptersReadOn(date, in: context) > 0
+        case "hidden.advent":
+            let year = calendar.component(.year, from: date)
+            let sundays = LiturgicalCalendar.adventSundays(year: year)
+            return sundays.count == 4 && sundays.allSatisfy { hasAnySessionOn($0, in: context) }
+        case "hidden.watchers":
+            return stats.chaptersReadInBook("The Book of the Watchers", in: context).count >= 36
         default:
             return false
         }
@@ -212,6 +294,14 @@ final class BadgeService {
             predicate: #Predicate { $0.bookName == marker }
         )
         return (try? context.fetch(descriptor).count) ?? 0
+    }
+
+    /// Total personal annotations — notes plus highlighted verses. Powers the
+    /// "Notes" tier track, rewarding engagement with the study features.
+    private func annotationCount(in context: ModelContext) -> Int {
+        let notes = (try? context.fetchCount(FetchDescriptor<Note>())) ?? 0
+        let highlights = (try? context.fetchCount(FetchDescriptor<HighlightedVerse>())) ?? 0
+        return notes + highlights
     }
 
     private func allComplete(_ books: [String], in context: ModelContext, stats: ReadingStatsService) -> Bool {
@@ -240,6 +330,21 @@ final class BadgeService {
         let sessions = (try? context.fetch(descriptor)) ?? []
         let unique = Set(sessions.map { "\($0.bookName)-\($0.chapterNumber)" })
         return unique.count
+    }
+
+    /// Whether any reading session (chapter or devotional) was recorded on the
+    /// given calendar day. Used by liturgical-season badges that count showing
+    /// up rather than a specific chapter (e.g. all four Sundays of Advent).
+    private func hasAnySessionOn(_ date: Date, in context: ModelContext) -> Bool {
+        let calendar = Calendar.current
+        let day = calendar.startOfDay(for: date)
+        let nextDay = calendar.date(byAdding: .day, value: 1, to: day) ?? day
+        let predicate = #Predicate<ReadingSession> { session in
+            session.date >= day && session.date < nextDay
+        }
+        var descriptor = FetchDescriptor<ReadingSession>(predicate: predicate)
+        descriptor.fetchLimit = 1
+        return ((try? context.fetch(descriptor))?.isEmpty == false)
     }
 
     private func readChapter(book: String, chapter: Int, on date: Date, in context: ModelContext) -> Bool {

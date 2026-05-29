@@ -56,6 +56,7 @@ struct ProgressTabView: View {
     private var scrollContent: some View {
         ScrollView {
             VStack(spacing: 24) {
+                canonRingCard.padding(.horizontal)
                 statsGrid
                 achievementsCard.padding(.horizontal)
                 HeatmapCalendar(counts: heatmap, weeks: 12).padding(.horizontal)
@@ -81,6 +82,54 @@ struct ProgressTabView: View {
         ])
     }
 
+    /// Canonical (OT + NT) chapters read, capped per book. Excludes
+    /// apocrypha/Enoch so the ring is a true "% of the 66-book canon".
+    private var canonicalChaptersRead: Int {
+        bookProgress.reduce(0) { $0 + min($1.readChapters, $1.totalChapters) }
+    }
+
+    private var canonPercent: Int {
+        Int((Double(canonicalChaptersRead) / 1189.0 * 100).rounded())
+    }
+
+    private var canonRingCard: some View {
+        VStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .stroke(Color.gray.opacity(0.15), lineWidth: 12)
+                Circle()
+                    .trim(from: 0, to: min(1, CGFloat(canonicalChaptersRead) / 1189))
+                    .stroke(
+                        AngularGradient(
+                            colors: [.brandPeridot, .brandGreen, .brandCyan, .brandPeridot],
+                            center: .center
+                        ),
+                        style: StrokeStyle(lineWidth: 12, lineCap: .round)
+                    )
+                    .rotationEffect(.degrees(-90))
+                VStack(spacing: 2) {
+                    Text("\(canonPercent)%")
+                        .font(.system(size: 34, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                    Text("of the Bible")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .frame(width: 150, height: 150)
+            Text("\(canonicalChaptersRead) of 1,189 chapters read")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .monospacedDigit()
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(12)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(canonPercent) percent of the Bible read, \(canonicalChaptersRead) of 1189 chapters")
+    }
+
     private var achievementsCard: some View {
         Button { showingGallery = true } label: {
             VStack(alignment: .leading, spacing: 12) {
@@ -97,7 +146,10 @@ struct ProgressTabView: View {
                         .foregroundStyle(.tertiary)
                 }
 
-                HStack(spacing: 12) {
+                LazyVGrid(
+                    columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4),
+                    spacing: 12
+                ) {
                     ForEach(BadgeTrack.allCases, id: \.self) { track in
                         TierMedal(
                             track: track,

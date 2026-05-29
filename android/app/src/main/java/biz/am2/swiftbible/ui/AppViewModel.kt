@@ -116,8 +116,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         stats = readingStats,
         sessionDao = db.readingSessionDao(),
         earnedDao = db.earnedBadgeDao(),
+        noteDao = db.noteDao(),
+        highlightDao = db.highlightDao(),
     )
     val badgesEarnedCount: Flow<Int> = db.earnedBadgeDao().count()
+
+    /** Re-evaluate badges (e.g. after completing an event reading-plan day). */
+    fun recheckBadges() = badgeService.checkBadgesAsync(viewModelScope)
 
     private val _showDonationPrompt = MutableStateFlow(false)
     val showDonationPrompt: StateFlow<Boolean> = _showDonationPrompt.asStateFlow()

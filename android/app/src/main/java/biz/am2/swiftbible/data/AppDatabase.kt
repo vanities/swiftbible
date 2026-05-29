@@ -141,6 +141,9 @@ interface HighlightDao {
 
     @Query("SELECT * FROM highlights WHERE book=:b AND chapter=:c")
     fun forChapter(b: String, c: Int): Flow<List<Highlight>>
+
+    @Query("SELECT COUNT(*) FROM highlights")
+    suspend fun count(): Int
 }
 
 @Dao
@@ -159,6 +162,9 @@ interface NoteDao {
 
     @Query("SELECT * FROM notes WHERE version=:v AND book=:b AND chapter=:c AND startingVerse=:sv LIMIT 1")
     suspend fun forVerse(v: String, b: String, c: Int, sv: Int): NoteEntity?
+
+    @Query("SELECT COUNT(*) FROM notes")
+    suspend fun count(): Int
 }
 
 @Dao
@@ -256,6 +262,18 @@ interface ReadingSessionDao {
     /** Chapters considered "read": reached the last verse AND >= minMs dwell. */
     @Query("SELECT DISTINCT chapterNumber FROM reading_sessions WHERE bookName=:book AND reachedEnd=1 AND durationMs >= :minMs")
     fun readChaptersFlow(book: String, minMs: Long): Flow<List<Int>>
+
+    /** Total foreground reading time across all chapters, excluding devotionals. */
+    @Query("SELECT COALESCE(SUM(durationMs), 0) FROM reading_sessions WHERE bookName != '__devotional__'")
+    suspend fun totalDurationMs(): Long
+
+    /** Distinct chapters read in all three translations (>= 3 distinct versions). */
+    @Query(
+        "SELECT COUNT(*) FROM (SELECT bookName, chapterNumber FROM reading_sessions " +
+            "WHERE bookName != '__devotional__' GROUP BY bookName, chapterNumber " +
+            "HAVING COUNT(DISTINCT version) >= 3)",
+    )
+    suspend fun chaptersInAllVersions(): Int
 }
 
 @Dao

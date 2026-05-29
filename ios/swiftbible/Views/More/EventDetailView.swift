@@ -18,7 +18,9 @@ struct EventDetailView: View {
     let event: AppEvent
     @Environment(\.dismiss) private var dismiss
     @Environment(AppViewModel.self) private var appViewModel
+    @Environment(\.modelContext) private var modelContext
     @State private var currentIndex: Int = 0
+    @AppStorage("completedEventDayIDs") private var completedEventDayIDsRaw: String = ""
     /// In DEBUG, the Settings → Force-Show Events toggle also unlocks every
     /// day for testing. In production, only past + today's days are unlocked.
     @AppStorage("debug_forceShowEvents") private var debugForceShowEvents: Bool = false
@@ -38,7 +40,13 @@ struct EventDetailView: View {
                 .navigationTitle(event.name)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar { toolbarContent }
-                .onAppear { currentIndex = event.todayReadingIndex }
+                .onAppear {
+                    currentIndex = event.todayReadingIndex
+                    markRead(at: currentIndex)
+                }
+                .onChange(of: currentIndex) { _, newValue in
+                    markRead(at: newValue)
+                }
         }
     }
 
@@ -105,6 +113,20 @@ struct EventDetailView: View {
                 verseNumber: day.passage.startVerse
             )
         }
+    }
+
+    /// Marks a reading day complete once the user lands on it (if unlocked),
+    /// then re-checks badges so finishing every day unlocks the event
+    /// collectible. Idempotent — a day is only recorded once.
+    private func markRead(at index: Int) {
+        guard event.readingPlan.indices.contains(index) else { return }
+        let day = event.readingPlan[index]
+        guard isUnlocked(day) else { return }
+        var ids = Set(completedEventDayIDsRaw.split(separator: ",").map(String.init))
+        guard !ids.contains(day.id) else { return }
+        ids.insert(day.id)
+        completedEventDayIDsRaw = ids.sorted().joined(separator: ",")
+        BadgeService.shared.checkBadges(in: modelContext)
     }
 }
 

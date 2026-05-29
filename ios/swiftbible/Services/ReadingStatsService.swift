@@ -201,6 +201,19 @@ final class ReadingStatsService {
         return sessions.reduce(0) { $0 + $1.duration }
     }
 
+    /// Count of distinct chapters the user has read in all three translations
+    /// (KJV, ASV, WEB). Powers the "Versions" tier track. The devotional marker
+    /// is excluded by the shared descriptor, so only real versions are counted.
+    func chaptersReadInAllVersions(in context: ModelContext) -> Int {
+        let descriptor = Self.bookChapterReadsDescriptor()
+        let sessions = (try? context.fetch(descriptor)) ?? []
+        var versionsByChapter: [String: Set<String>] = [:]
+        for session in sessions {
+            versionsByChapter["\(session.bookName)-\(session.chapterNumber)", default: []].insert(session.version)
+        }
+        return versionsByChapter.values.filter { $0.count >= 3 }.count
+    }
+
     /// Unique chapter numbers the user has read in a given book.
     func chaptersReadInBook(_ bookName: String, in context: ModelContext) -> Set<Int> {
         let predicate = #Predicate<ReadingSession> { $0.bookName == bookName }
@@ -274,6 +287,12 @@ final class ReadingStatsService {
             if daySet.contains(day) {
                 streak += 1
                 lastReadLookback = lookback
+                lookback += 1
+            } else if calendar.component(.weekday, from: day) == 1 {
+                // Sabbath rest: a missed Sunday never breaks the streak, and it
+                // doesn't consume the weekly freeze. Strictly more lenient — no
+                // existing streak is shortened by this, and a read Sunday still
+                // counts normally (handled by the daySet branch above).
                 lookback += 1
             } else if (lookback - lastFreezeLookback) >= 7 {
                 lastFreezeLookback = lookback

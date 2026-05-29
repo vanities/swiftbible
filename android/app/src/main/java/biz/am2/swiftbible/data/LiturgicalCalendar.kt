@@ -54,6 +54,57 @@ object LiturgicalCalendar {
         return cal.get(Calendar.MONTH) == Calendar.DECEMBER && cal.get(Calendar.DAY_OF_MONTH) == 25
     }
 
+    /** Good Friday — two days before Easter Sunday. */
+    fun goodFriday(year: Int): Calendar? = easterSunday(year)?.apply {
+        add(Calendar.DAY_OF_YEAR, -2)
+    }
+
+    /** Ash Wednesday — 46 days before Easter (40 fasting days plus six Sundays). */
+    fun ashWednesday(year: Int): Calendar? = easterSunday(year)?.apply {
+        add(Calendar.DAY_OF_YEAR, -46)
+    }
+
+    fun isGoodFriday(epochMs: Long): Boolean {
+        val cal = Calendar.getInstance().apply { timeInMillis = epochMs }
+        val gf = goodFriday(cal.get(Calendar.YEAR)) ?: return false
+        return sameDay(cal, gf)
+    }
+
+    fun isAshWednesday(epochMs: Long): Boolean {
+        val cal = Calendar.getInstance().apply { timeInMillis = epochMs }
+        val aw = ashWednesday(cal.get(Calendar.YEAR)) ?: return false
+        return sameDay(cal, aw)
+    }
+
+    /**
+     * The four Sundays of Advent as start-of-day epoch millis, earliest first.
+     * The last Advent Sunday is the Sunday falling in Dec 18–24; the rest
+     * precede it at one-week intervals.
+     */
+    fun adventSundays(year: Int): List<Long> {
+        for (day in 18..24) {
+            val cal = Calendar.getInstance().apply {
+                set(year, Calendar.DECEMBER, day, 0, 0, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+            if (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) continue
+            val fourth = cal.timeInMillis
+            val oneWeekMs = 7L * 24 * 60 * 60 * 1000
+            return listOf(3, 2, 1, 0).map { fourth - it * oneWeekMs }
+        }
+        return emptyList()
+    }
+
+    /** Late on Dec 31 or the small hours of Jan 1 — a watchnight window. */
+    fun isWatchnight(epochMs: Long): Boolean {
+        val cal = Calendar.getInstance().apply { timeInMillis = epochMs }
+        val month = cal.get(Calendar.MONTH)
+        val day = cal.get(Calendar.DAY_OF_MONTH)
+        val hour = cal.get(Calendar.HOUR_OF_DAY)
+        return (month == Calendar.DECEMBER && day == 31 && hour >= 22) ||
+            (month == Calendar.JANUARY && day == 1 && hour < 4)
+    }
+
     private fun sameDay(a: Calendar, b: Calendar): Boolean =
         a.get(Calendar.YEAR) == b.get(Calendar.YEAR) &&
         a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR)

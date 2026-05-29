@@ -1,5 +1,6 @@
 package biz.am2.swiftbible.data
 
+import android.content.Context
 import biz.am2.swiftbible.ui.theme.BrandAccent
 import biz.am2.swiftbible.ui.theme.BrandGold
 import biz.am2.swiftbible.ui.theme.BrandRedDark
@@ -91,4 +92,27 @@ object AppEventRegistry {
         if (forceAll) all else all.filter { it.isActive(today) }
 
     fun byId(id: String): AppEvent? = all.firstOrNull { it.id == id }
+}
+
+/**
+ * Tracks which event reading-plan days the user has completed (viewed while
+ * unlocked). Backed by a dedicated SharedPreferences key, mirroring the iOS
+ * `completedEventDayIDs` AppStorage. BadgeService reads this to award the
+ * per-event "finished the plan" collectibles.
+ */
+object EventProgress {
+    private const val PREFS = "event_progress"
+    private const val KEY = "completedDayIds"
+
+    fun completedDayIds(context: Context): Set<String> =
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .getStringSet(KEY, emptySet()) ?: emptySet()
+
+    fun markCompleted(context: Context, dayId: String) {
+        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val current = prefs.getStringSet(KEY, emptySet())?.toMutableSet() ?: mutableSetOf()
+        if (current.add(dayId)) {
+            prefs.edit().putStringSet(KEY, current).apply()
+        }
+    }
 }

@@ -19,7 +19,30 @@ import androidx.compose.material.icons.filled.MilitaryTech
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.icons.filled.WbTwilight
+import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.AllInclusive
+import androidx.compose.material.icons.filled.AutoStories
+import androidx.compose.material.icons.filled.Brightness3
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Celebration
+import androidx.compose.material.icons.filled.CollectionsBookmark
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Drafts
+import androidx.compose.material.icons.filled.EditNote
+import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.Flag
+import androidx.compose.material.icons.filled.Grain
+import androidx.compose.material.icons.filled.HistoryEdu
+import androidx.compose.material.icons.filled.Landscape
+import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Nightlight
+import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Stars
+import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.Whatshot
+import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -35,6 +58,9 @@ enum class BadgeTrack(val displayName: String, val icon: ImageVector) {
     CHAPTERS("Chapters", Icons.AutoMirrored.Filled.MenuBook),
     BOOKS("Books", Icons.Filled.Book),
     DEVOTIONALS("Devotionals", Icons.Filled.WbTwilight),
+    TIME("Hours", Icons.Filled.Schedule),
+    VERSIONS("Versions", Icons.Filled.Translate),
+    SCRIBE("Notes", Icons.Filled.EditNote),
 }
 
 enum class BadgeTier(val displayName: String, val color: Color, val accent: Color, val order: Int) {
@@ -149,6 +175,86 @@ object BadgeRegistry {
             icon = Icons.Filled.Check,
             tint = BrandPeridot,
         ),
+        BadgeDefinition(
+            id = "collect.ot",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "Old Testament Complete",
+            description = "Read all 39 books of the Old Testament",
+            icon = Icons.Filled.HistoryEdu,
+            tint = BrandGold,
+        ),
+        BadgeDefinition(
+            id = "collect.nt",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "New Testament Complete",
+            description = "Read all 27 books of the New Testament",
+            icon = Icons.Filled.AutoStories,
+            tint = BrandRed,
+        ),
+        BadgeDefinition(
+            id = "collect.synoptics",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "The Synoptic Gospels",
+            description = "Matthew, Mark, and Luke — the gospels seen together",
+            icon = Icons.Filled.Visibility,
+            tint = BrandRedDark,
+        ),
+        BadgeDefinition(
+            id = "collect.general.epistles",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "General Epistles",
+            description = "James, 1–2 Peter, 1–3 John, and Jude",
+            icon = Icons.Filled.Drafts,
+            tint = BrandAccent,
+        ),
+        BadgeDefinition(
+            id = "collect.luke.acts",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "Luke–Acts",
+            description = "Luke's two-volume work: his gospel and Acts",
+            icon = Icons.Filled.CollectionsBookmark,
+            tint = Color(0xFF45B8C7),
+        ),
+        BadgeDefinition(
+            id = "collect.historical",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "Historical Books",
+            description = "Joshua through Esther",
+            icon = Icons.Filled.AccountBalance,
+            tint = BrandPeridot,
+        ),
+        BadgeDefinition(
+            id = "collect.solomon",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "Books of Solomon",
+            description = "Proverbs, Ecclesiastes, and Song of Solomon",
+            icon = Icons.Filled.WorkspacePremium,
+            tint = BrandGold,
+        ),
+        BadgeDefinition(
+            id = "collect.megillot",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "The Five Scrolls",
+            description = "Ruth, Esther, Ecclesiastes, Song of Solomon, Lamentations",
+            icon = Icons.Filled.Description,
+            tint = BrandGoldLight,
+        ),
+        BadgeDefinition(
+            id = "collect.event.pentecost",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "Pentecost Pilgrim",
+            description = "Complete the Pentecost reading plan",
+            icon = Icons.Filled.LocalFireDepartment,
+            tint = BrandGold,
+        ),
+        BadgeDefinition(
+            id = "collect.event.summer.psalms",
+            category = BadgeCategory.COLLECTIBLE,
+            name = "Summer in the Psalms",
+            description = "Complete the Summer in the Psalms reading plan",
+            icon = Icons.Filled.WbSunny,
+            tint = BrandAccent,
+        ),
     )
 
     val hidden: List<BadgeDefinition> = listOf(
@@ -232,6 +338,102 @@ object BadgeRegistry {
             icon = Icons.Filled.Brightness4,
             tint = Color(0xFF8E24AA),
         ),
+        BadgeDefinition(
+            id = "hidden.alpha.omega",
+            category = BadgeCategory.HIDDEN,
+            name = "Alpha and Omega",
+            description = "Read Genesis 1 and Revelation 22 — the first and last chapters",
+            icon = Icons.Filled.AllInclusive,
+            tint = BrandGold,
+        ),
+        BadgeDefinition(
+            id = "hidden.in.the.beginning",
+            category = BadgeCategory.HIDDEN,
+            name = "In the Beginning",
+            description = "Read Genesis 1 and John 1",
+            icon = Icons.Filled.LightMode,
+            tint = Color(0xFF33CC66),
+        ),
+        BadgeDefinition(
+            id = "hidden.forty.days",
+            category = BadgeCategory.HIDDEN,
+            name = "Forty Days",
+            description = "Reach a 40-day reading streak",
+            icon = Icons.Filled.CalendarMonth,
+            tint = BrandAccent,
+        ),
+        BadgeDefinition(
+            id = "hidden.jubilee",
+            category = BadgeCategory.HIDDEN,
+            name = "Jubilee",
+            description = "Reach a 50-day reading streak",
+            icon = Icons.Filled.Celebration,
+            tint = BrandGold,
+        ),
+        BadgeDefinition(
+            id = "hidden.sermon.mount",
+            category = BadgeCategory.HIDDEN,
+            name = "Sermon on the Mount",
+            description = "Read Matthew 5, 6, and 7 in a single day",
+            icon = Icons.Filled.Landscape,
+            tint = BrandPeridot,
+        ),
+        BadgeDefinition(
+            id = "hidden.longest.mile",
+            category = BadgeCategory.HIDDEN,
+            name = "The Longest Mile",
+            description = "Read Psalm 119, the longest chapter in the Bible",
+            icon = Icons.Filled.Flag,
+            tint = Color(0xFF009688),
+        ),
+        BadgeDefinition(
+            id = "hidden.hall.of.faith",
+            category = BadgeCategory.HIDDEN,
+            name = "Hall of Faith",
+            description = "Read Hebrews 11",
+            icon = Icons.Filled.Stars,
+            tint = BrandGoldLight,
+        ),
+        BadgeDefinition(
+            id = "hidden.watchnight",
+            category = BadgeCategory.HIDDEN,
+            name = "Watchnight",
+            description = "Read as one year turns into the next",
+            icon = Icons.Filled.Nightlight,
+            tint = Color(0xFF5C6BC0),
+        ),
+        BadgeDefinition(
+            id = "hidden.good.friday",
+            category = BadgeCategory.HIDDEN,
+            name = "Good Friday",
+            description = "Read on Good Friday",
+            icon = Icons.Filled.Brightness3,
+            tint = BrandRedDark,
+        ),
+        BadgeDefinition(
+            id = "hidden.ash.wednesday",
+            category = BadgeCategory.HIDDEN,
+            name = "Ash Wednesday",
+            description = "Begin Lent in the Word",
+            icon = Icons.Filled.Grain,
+            tint = Color(0xFF9E9E9E),
+        ),
+        BadgeDefinition(
+            id = "hidden.advent",
+            category = BadgeCategory.HIDDEN,
+            name = "Advent",
+            description = "Read on all four Sundays of Advent",
+            icon = Icons.Filled.Event,
+            tint = BrandGold,
+        ),
+        BadgeDefinition(
+            id = "hidden.watchers",
+            category = BadgeCategory.HIDDEN,
+            name = "The Watchers",
+            description = "Read the Book of the Watchers, Enoch 1–36",
+            icon = Icons.Filled.RemoveRedEye,
+            tint = Color(0xFF45B8C7),
+        ),
     )
 
     val all: List<BadgeDefinition> = tiers + collectibles + hidden
@@ -261,6 +463,21 @@ object BadgeRegistry {
         BadgeTrack.DEVOTIONALS to BadgeTier.SILVER -> 100
         BadgeTrack.DEVOTIONALS to BadgeTier.GOLD -> 365
         BadgeTrack.DEVOTIONALS to BadgeTier.DIAMOND -> 1000
+
+        BadgeTrack.TIME to BadgeTier.BRONZE -> 10
+        BadgeTrack.TIME to BadgeTier.SILVER -> 50
+        BadgeTrack.TIME to BadgeTier.GOLD -> 100
+        BadgeTrack.TIME to BadgeTier.DIAMOND -> 500
+
+        BadgeTrack.VERSIONS to BadgeTier.BRONZE -> 1
+        BadgeTrack.VERSIONS to BadgeTier.SILVER -> 10
+        BadgeTrack.VERSIONS to BadgeTier.GOLD -> 50
+        BadgeTrack.VERSIONS to BadgeTier.DIAMOND -> 150
+
+        BadgeTrack.SCRIBE to BadgeTier.BRONZE -> 5
+        BadgeTrack.SCRIBE to BadgeTier.SILVER -> 25
+        BadgeTrack.SCRIBE to BadgeTier.GOLD -> 100
+        BadgeTrack.SCRIBE to BadgeTier.DIAMOND -> 300
         else -> 0
     }
 
@@ -271,6 +488,9 @@ object BadgeRegistry {
             BadgeTrack.CHAPTERS -> "Read $value chapters"
             BadgeTrack.BOOKS -> "Complete $value books"
             BadgeTrack.DEVOTIONALS -> "View $value devotionals"
+            BadgeTrack.TIME -> "Spend $value hours in the Word"
+            BadgeTrack.VERSIONS -> "Read $value chapters in all three translations"
+            BadgeTrack.SCRIBE -> "Save $value notes and highlights"
         }
     }
 }

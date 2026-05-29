@@ -78,6 +78,12 @@ class ReadingStatsRepository(private val dao: ReadingSessionDao) {
     /** Total devotional opens (rows where bookName == DEVOTIONAL_BOOK). */
     suspend fun devotionalReadCount(): Int = dao.devotionalCount()
 
+    /** Total foreground reading time in milliseconds, excluding devotionals. */
+    suspend fun totalReadingMs(): Long = dao.totalDurationMs()
+
+    /** Distinct chapters read in all three translations (KJV, ASV, WEB). */
+    suspend fun chaptersReadInAllVersions(): Int = dao.chaptersInAllVersions()
+
     /**
      * Current streak in days. Allows one missed day per rolling 7-day window
      * — matches iOS [currentStreakWithFreeze]. Streak must include today or
@@ -102,6 +108,13 @@ class ReadingStatsRepository(private val dao: ReadingSessionDao) {
             when {
                 targetDay in daySet -> {
                     streak += 1
+                    lookback += 1
+                }
+                isSunday(targetDay) -> {
+                    // Sabbath rest: a missed Sunday never breaks the streak and
+                    // doesn't consume the weekly freeze. Strictly more lenient —
+                    // no existing streak is shortened; a read Sunday still counts
+                    // (handled by the daySet branch above).
                     lookback += 1
                 }
                 (lookback - lastFreezeLookback) >= 7 -> {
@@ -158,6 +171,12 @@ class ReadingStatsRepository(private val dao: ReadingSessionDao) {
             cal.set(Calendar.SECOND, 0)
             cal.set(Calendar.MILLISECOND, 0)
             return cal.timeInMillis
+        }
+
+        fun isSunday(epochMs: Long): Boolean {
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = epochMs
+            return cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
         }
     }
 }

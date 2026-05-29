@@ -57,12 +57,24 @@ fun EventDetailScreen(
     event: AppEvent,
     onBack: () -> Unit,
     onOpenInBible: (book: String, chapter: Int, verse: Int) -> Unit,
+    onDayCompleted: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
         initialPage = AppEventRegistry.todayReadingIndex(event),
         pageCount = { event.readingPlan.size },
     )
     val accent = event.accent.color
+    val context = androidx.compose.ui.platform.LocalContext.current
+
+    // Mark the visible day complete (when unlocked) so finishing every day of
+    // the plan unlocks the per-event collectible. Mirrors iOS markRead.
+    LaunchedEffect(pagerState.currentPage) {
+        val day = event.readingPlan.getOrNull(pagerState.currentPage)
+        if (day != null && isUnlocked(day)) {
+            biz.am2.swiftbible.data.EventProgress.markCompleted(context, day.id)
+            onDayCompleted()
+        }
+    }
 
     LaunchedEffect(event.id) {
         biz.am2.swiftbible.data.Analytics.capture(

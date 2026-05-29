@@ -18,6 +18,8 @@ class BadgeService(
     private val stats: ReadingStatsRepository,
     private val sessionDao: ReadingSessionDao,
     private val earnedDao: EarnedBadgeDao,
+    private val noteDao: NoteDao,
+    private val highlightDao: HighlightDao,
 ) {
     /**
      * Walks every BadgeDefinition, checks the condition, and emits newly
@@ -70,6 +72,9 @@ class BadgeService(
             BadgeTrack.CHAPTERS -> totalChapters() >= threshold
             BadgeTrack.BOOKS -> completedBookCount() >= threshold
             BadgeTrack.DEVOTIONALS -> stats.devotionalReadCount() >= threshold
+            BadgeTrack.TIME -> (stats.totalReadingMs() / 3_600_000L) >= threshold
+            BadgeTrack.VERSIONS -> stats.chaptersReadInAllVersions() >= threshold
+            BadgeTrack.SCRIBE -> (noteDao.count() + highlightDao.count()) >= threshold
         }
     }
 
@@ -94,6 +99,25 @@ class BadgeService(
         "collect.enoch" -> CanonicalBibleBooks.enochSections.all { stats.chaptersReadInBook(it).isNotEmpty() }
         "collect.apocrypha" -> CanonicalBibleBooks.apocryphaNames.all { stats.chaptersReadInBook(it).isNotEmpty() }
         "collect.whole.counsel" -> completedBookCount() >= 66
+        "collect.event.pentecost" -> isEventPlanComplete("pentecost-")
+        "collect.event.summer.psalms" -> isEventPlanComplete("summer-psalms-")
+        "collect.ot" -> allComplete(CanonicalBibleBooks.oldTestament.map { it.name })
+        "collect.nt" -> allComplete(CanonicalBibleBooks.newTestament.map { it.name })
+        "collect.synoptics" -> allComplete(listOf("Matthew", "Mark", "Luke"))
+        "collect.general.epistles" -> allComplete(
+            listOf("James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude"),
+        )
+        "collect.luke.acts" -> allComplete(listOf("Luke", "Acts"))
+        "collect.historical" -> allComplete(
+            listOf(
+                "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings",
+                "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther",
+            ),
+        )
+        "collect.solomon" -> allComplete(listOf("Proverbs", "Ecclesiastes", "Song of Solomon"))
+        "collect.megillot" -> allComplete(
+            listOf("Ruth", "Esther", "Ecclesiastes", "Song of Solomon", "Lamentations"),
+        )
         else -> false
     }
 
@@ -120,6 +144,28 @@ class BadgeService(
                 info.freezeActive && info.streak > 0
             }
             "hidden.late.wisdom" -> hour >= 22 && readChapterToday("Proverbs", chapter = null)
+            "hidden.alpha.omega" ->
+                stats.chaptersReadInBook("Genesis").contains(1) &&
+                    stats.chaptersReadInBook("Revelation").contains(22)
+            "hidden.in.the.beginning" ->
+                stats.chaptersReadInBook("Genesis").contains(1) &&
+                    stats.chaptersReadInBook("John").contains(1)
+            "hidden.forty.days" -> stats.currentStreakWithFreeze().streak >= 40
+            "hidden.jubilee" -> stats.currentStreakWithFreeze().streak >= 50
+            "hidden.sermon.mount" ->
+                readChapterToday("Matthew", 5) &&
+                    readChapterToday("Matthew", 6) &&
+                    readChapterToday("Matthew", 7)
+            "hidden.longest.mile" -> stats.chaptersReadInBook("Psalms").contains(119)
+            "hidden.hall.of.faith" -> stats.chaptersReadInBook("Hebrews").contains(11)
+            "hidden.watchnight" -> LiturgicalCalendar.isWatchnight(now) && chaptersReadOn(now) > 0
+            "hidden.good.friday" -> LiturgicalCalendar.isGoodFriday(now) && chaptersReadOn(now) > 0
+            "hidden.ash.wednesday" -> LiturgicalCalendar.isAshWednesday(now) && chaptersReadOn(now) > 0
+            "hidden.advent" -> {
+                val sundays = LiturgicalCalendar.adventSundays(cal.get(Calendar.YEAR))
+                sundays.size == 4 && sundays.all { hasAnySessionOn(it) }
+            }
+            "hidden.watchers" -> stats.chaptersReadInBook("The Book of the Watchers").size >= 36
             else -> false
         }
     }
@@ -135,6 +181,18 @@ class BadgeService(
         CanonicalBibleBooks.all.count { entry ->
             stats.chaptersReadInBook(entry.name).size >= entry.totalChapters
         }
+
+    /**
+     * True when any event whose id starts with [idPrefix] has every day of its
+     * reading plan completed. The prefix lets a yearly event reuse one badge
+     * (pentecost-2026, pentecost-2027, …).
+     */
+    private fun isEventPlanComplete(idPrefix: String): Boolean {
+        val completed = EventProgress.completedDayIds(context)
+        val events = AppEventRegistry.all.filter { it.id.startsWith(idPrefix) && it.readingPlan.isNotEmpty() }
+        if (events.isEmpty()) return false
+        return events.any { event -> event.readingPlan.all { it.id in completed } }
+    }
 
     private suspend fun allComplete(books: List<String>): Boolean {
         for (book in books) {
@@ -157,6 +215,16 @@ class BadgeService(
             it.dayEpoch == day && it.bookName != ReadingStatsRepository.DEVOTIONAL_BOOK
         }
         return sessions.map { "${it.bookName}-${it.chapterNumber}" }.toSet().size
+    }
+
+    /**
+     * Whether any reading session (chapter or devotional) was recorded on the
+     * given calendar day. Used by liturgical-season badges that count showing
+     * up rather than a specific chapter (e.g. all four Sundays of Advent).
+     */
+    private suspend fun hasAnySessionOn(epochMs: Long): Boolean {
+        val day = ReadingStatsRepository.startOfDay(epochMs)
+        return sessionDao.since(day).any { it.dayEpoch == day }
     }
 
     private suspend fun readChapterToday(book: String, chapter: Int?): Boolean {

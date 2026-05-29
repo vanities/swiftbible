@@ -50,7 +50,7 @@ struct BadgeGallerySheet: View {
 
     private var tierLadder: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Tiers", subtitle: "Bronze → Diamond across four tracks")
+            sectionHeader(title: "Tiers", subtitle: "Bronze → Diamond across \(BadgeTrack.allCases.count) tracks")
 
             ForEach(BadgeTrack.allCases, id: \.self) { track in
                 tierRow(track: track)

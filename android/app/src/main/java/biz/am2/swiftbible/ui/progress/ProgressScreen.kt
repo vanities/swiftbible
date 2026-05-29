@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -48,6 +49,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -62,6 +65,7 @@ import biz.am2.swiftbible.ui.ToastCoordinator
 import biz.am2.swiftbible.ui.theme.BrandAccent
 import biz.am2.swiftbible.ui.theme.BrandGold
 import biz.am2.swiftbible.ui.theme.BrandPeridot
+import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -146,11 +150,79 @@ fun ProgressScreen(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            CanonRingCard(snapshot)
             StatsGrid(snapshot)
             AchievementsCard(snapshot = snapshot, onClick = onOpenGallery)
             HeatmapCard(snapshot.heatmap, weeks = 12)
             BookCompletionCard(snapshot.bookProgress)
             Spacer(Modifier.size(48.dp))
+        }
+    }
+}
+
+@Composable
+private fun CanonRingCard(snapshot: ProgressSnapshot) {
+    // Canonical (OT + NT) chapters read, capped per book — a true "% of the
+    // 66-book canon", excluding apocrypha/Enoch.
+    val canonicalRead = snapshot.bookProgress.sumOf { minOf(it.readChapters, it.totalChapters) }
+    val total = 1189
+    val fraction = (canonicalRead.toFloat() / total).coerceIn(0f, 1f)
+    val percent = (fraction * 100).roundToInt()
+    val trackColor = MaterialTheme.colorScheme.surfaceVariant
+    Surface(
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(14.dp)),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box(modifier = Modifier.size(150.dp), contentAlignment = Alignment.Center) {
+                Canvas(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(6.dp),
+                ) {
+                    val stroke = 12.dp.toPx()
+                    drawArc(
+                        color = trackColor,
+                        startAngle = 0f,
+                        sweepAngle = 360f,
+                        useCenter = false,
+                        style = Stroke(width = stroke),
+                    )
+                    drawArc(
+                        color = BrandPeridot,
+                        startAngle = -90f,
+                        sweepAngle = 360f * fraction,
+                        useCenter = false,
+                        style = Stroke(width = stroke, cap = StrokeCap.Round),
+                    )
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        "$percent%",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        "of the Bible",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            Spacer(Modifier.size(8.dp))
+            Text(
+                "$canonicalRead of 1,189 chapters read",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }
@@ -248,13 +320,22 @@ private fun AchievementsCard(snapshot: ProgressSnapshot, onClick: () -> Unit) {
                 )
             }
             Spacer(Modifier.size(12.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-                BadgeTrack.values().forEach { track ->
-                    TierMedal(
-                        track = track,
-                        tier = snapshot.tierByTrack[track],
-                        modifier = Modifier.weight(1f),
-                    )
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                BadgeTrack.values().toList().chunked(4).forEach { rowTracks ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        rowTracks.forEach { track ->
+                            TierMedal(
+                                track = track,
+                                tier = snapshot.tierByTrack[track],
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                        // Keep medals at a consistent 1/4 width when the last row is short.
+                        repeat(4 - rowTracks.size) { Spacer(Modifier.weight(1f)) }
+                    }
                 }
             }
         }

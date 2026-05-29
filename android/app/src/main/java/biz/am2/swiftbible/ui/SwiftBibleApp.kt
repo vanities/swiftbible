@@ -334,6 +334,7 @@ private fun SwiftBibleAppContent(appVm: AppViewModel) {
                             navController.popBackStack()
                             navController.navigate("chapter/${encode(book)}/$ch")
                         },
+                        onDayCompleted = { appVm.recheckBadges() },
                     )
                 }
             }

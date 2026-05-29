@@ -8,7 +8,7 @@ import SwiftUI
 // MARK: - Domain types
 
 enum BadgeTrack: String, CaseIterable, Codable {
-    case streak, chapters, books, devotionals
+    case streak, chapters, books, devotionals, time, versions, scribe
 
     var displayName: String {
         switch self {
@@ -16,6 +16,9 @@ enum BadgeTrack: String, CaseIterable, Codable {
         case .chapters: return "Chapters"
         case .books: return "Books"
         case .devotionals: return "Devotionals"
+        case .time: return "Hours"
+        case .versions: return "Versions"
+        case .scribe: return "Notes"
         }
     }
 
@@ -25,6 +28,9 @@ enum BadgeTrack: String, CaseIterable, Codable {
         case .chapters: return "book.fill"
         case .books: return "books.vertical.fill"
         case .devotionals: return "sun.horizon.fill"
+        case .time: return "clock.fill"
+        case .versions: return "character.book.closed.fill"
+        case .scribe: return "highlighter"
         }
     }
 }
@@ -151,6 +157,21 @@ enum BadgeRegistry {
         case (.devotionals, .silver): return 100
         case (.devotionals, .gold): return 365
         case (.devotionals, .diamond): return 1000
+
+        case (.time, .bronze): return 10
+        case (.time, .silver): return 50
+        case (.time, .gold): return 100
+        case (.time, .diamond): return 500
+
+        case (.versions, .bronze): return 1
+        case (.versions, .silver): return 10
+        case (.versions, .gold): return 50
+        case (.versions, .diamond): return 150
+
+        case (.scribe, .bronze): return 5
+        case (.scribe, .silver): return 25
+        case (.scribe, .gold): return 100
+        case (.scribe, .diamond): return 300
         }
     }
 
@@ -161,10 +182,13 @@ enum BadgeRegistry {
         case .chapters: return "Read \(value) chapters"
         case .books: return "Complete \(value) books"
         case .devotionals: return "View \(value) devotionals"
+        case .time: return "Spend \(value) hours in the Word"
+        case .versions: return "Read \(value) chapters in all three translations"
+        case .scribe: return "Save \(value) notes and highlights"
         }
     }
 
-    // MARK: Visible collectibles (9)
+    // MARK: Visible collectibles (19)
 
     static let collectibles: [BadgeDefinition] = [
         BadgeDefinition(
@@ -247,10 +271,100 @@ enum BadgeRegistry {
             icon: "checkmark.seal.fill",
             tint: .brandPeridot,
             track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.ot",
+            category: .collectible,
+            name: "Old Testament Complete",
+            description: "Read all 39 books of the Old Testament",
+            icon: "text.book.closed.fill",
+            tint: .brandGold,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.nt",
+            category: .collectible,
+            name: "New Testament Complete",
+            description: "Read all 27 books of the New Testament",
+            icon: "book.closed.fill",
+            tint: .brandRed,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.synoptics",
+            category: .collectible,
+            name: "The Synoptic Gospels",
+            description: "Matthew, Mark, and Luke — the gospels seen together",
+            icon: "eye.fill",
+            tint: .brandRedDark,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.general.epistles",
+            category: .collectible,
+            name: "General Epistles",
+            description: "James, 1–2 Peter, 1–3 John, and Jude",
+            icon: "envelope.open.fill",
+            tint: .brandAccent,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.luke.acts",
+            category: .collectible,
+            name: "Luke–Acts",
+            description: "Luke's two-volume work: his gospel and Acts",
+            icon: "books.vertical.fill",
+            tint: .brandCyan,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.historical",
+            category: .collectible,
+            name: "Historical Books",
+            description: "Joshua through Esther",
+            icon: "building.columns.fill",
+            tint: .brandPeridot,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.solomon",
+            category: .collectible,
+            name: "Books of Solomon",
+            description: "Proverbs, Ecclesiastes, and Song of Solomon",
+            icon: "crown.fill",
+            tint: .brandGold,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.megillot",
+            category: .collectible,
+            name: "The Five Scrolls",
+            description: "Ruth, Esther, Ecclesiastes, Song of Solomon, Lamentations",
+            icon: "scroll",
+            tint: .brandGoldLight,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.event.pentecost",
+            category: .collectible,
+            name: "Pentecost Pilgrim",
+            description: "Complete the Pentecost reading plan",
+            icon: "flame.fill",
+            tint: .brandGold,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "collect.event.summer.psalms",
+            category: .collectible,
+            name: "Summer in the Psalms",
+            description: "Complete the Summer in the Psalms reading plan",
+            icon: "sun.max.fill",
+            tint: .brandAccent,
+            track: nil, tier: nil, threshold: nil
         )
     ]
 
-    // MARK: Hidden achievements (10)
+    // MARK: Hidden achievements (22)
 
     static let hidden: [BadgeDefinition] = [
         BadgeDefinition(
@@ -341,6 +455,114 @@ enum BadgeRegistry {
             description: "Read Proverbs after 10 p.m.",
             icon: "owl",
             tint: .purple,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.alpha.omega",
+            category: .hidden,
+            name: "Alpha and Omega",
+            description: "Read Genesis 1 and Revelation 22 — the first and last chapters",
+            icon: "infinity",
+            tint: .brandGold,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.in.the.beginning",
+            category: .hidden,
+            name: "In the Beginning",
+            description: "Read Genesis 1 and John 1",
+            icon: "sparkle",
+            tint: .brandGreen,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.forty.days",
+            category: .hidden,
+            name: "Forty Days",
+            description: "Reach a 40-day reading streak",
+            icon: "calendar",
+            tint: .brandAccent,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.jubilee",
+            category: .hidden,
+            name: "Jubilee",
+            description: "Reach a 50-day reading streak",
+            icon: "trophy.fill",
+            tint: .brandGold,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.sermon.mount",
+            category: .hidden,
+            name: "Sermon on the Mount",
+            description: "Read Matthew 5, 6, and 7 in a single day",
+            icon: "mountain.2.fill",
+            tint: .brandPeridot,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.longest.mile",
+            category: .hidden,
+            name: "The Longest Mile",
+            description: "Read Psalm 119, the longest chapter in the Bible",
+            icon: "figure.walk",
+            tint: .teal,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.hall.of.faith",
+            category: .hidden,
+            name: "Hall of Faith",
+            description: "Read Hebrews 11",
+            icon: "star.circle.fill",
+            tint: .brandGoldLight,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.watchnight",
+            category: .hidden,
+            name: "Watchnight",
+            description: "Read as one year turns into the next",
+            icon: "fireworks",
+            tint: .indigo,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.good.friday",
+            category: .hidden,
+            name: "Good Friday",
+            description: "Read on Good Friday",
+            icon: "cross.fill",
+            tint: .brandRedDark,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.ash.wednesday",
+            category: .hidden,
+            name: "Ash Wednesday",
+            description: "Begin Lent in the Word",
+            icon: "flame",
+            tint: .gray,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.advent",
+            category: .hidden,
+            name: "Advent",
+            description: "Read on all four Sundays of Advent",
+            icon: "calendar.badge.clock",
+            tint: .brandGold,
+            track: nil, tier: nil, threshold: nil
+        ),
+        BadgeDefinition(
+            id: "hidden.watchers",
+            category: .hidden,
+            name: "The Watchers",
+            description: "Read the Book of the Watchers, Enoch 1–36",
+            icon: "binoculars.fill",
+            tint: .cyan,
             track: nil, tier: nil, threshold: nil
         )
     ]

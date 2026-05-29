@@ -94,7 +94,7 @@ fun BadgeGalleryScreen(appVm: AppViewModel, onBack: () -> Unit) {
 
 @Composable
 private fun TierLadder(earnedIds: Set<String>) {
-    SectionHeader("Tiers", "Bronze → Diamond across four tracks")
+    SectionHeader("Tiers", "Bronze → Diamond across ${BadgeTrack.values().size} tracks")
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         for (track in BadgeTrack.values()) {
             Column {
