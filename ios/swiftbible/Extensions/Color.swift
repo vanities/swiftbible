@@ -9,11 +9,22 @@ import SwiftUI
 
 extension Color {
     init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
-        let rgbValue = UInt32(hex, radix: 16)
-        let r = Double((rgbValue! & 0xFF0000) >> 16) / 255
-        let g = Double((rgbValue! & 0x00FF00) >> 8) / 255
-        let b = Double(rgbValue! & 0x0000FF) / 255
+        let hex = hex
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+        // A malformed or empty hex string (e.g. a legacy or iCloud-synced
+        // highlight/note color) must not crash the UI. Color(hex:) renders
+        // stored colors all over the app, and force-unwrapping `UInt32(hex,
+        // radix: 16)` trapped — "unexpectedly found nil" — on the Highlights
+        // page when a saved color wasn't valid hex (SWIFTBIBLE-K). Fall back
+        // to a neutral color instead of crashing.
+        guard let rgbValue = UInt32(hex, radix: 16) else {
+            self = .gray
+            return
+        }
+        let r = Double((rgbValue & 0xFF0000) >> 16) / 255
+        let g = Double((rgbValue & 0x00FF00) >> 8) / 255
+        let b = Double(rgbValue & 0x0000FF) / 255
         self.init(red: r, green: g, blue: b)
     }
 
