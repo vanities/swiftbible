@@ -491,9 +491,13 @@ struct TierMedal: View {
             Text(tier?.displayName ?? "—")
                 .font(.caption2.weight(.medium))
                 .foregroundStyle(tier == nil ? .secondary : .primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
             Text(track.displayName)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
