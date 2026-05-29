@@ -2113,7 +2113,10 @@ async function fetchExistingDevotional(
 initSentry("daily-devotional");
 
 Deno.serve(async (req) => {
-  const configuredSecret = Deno.env.get("SWIFTBIBLE_SUPERSECRET_KEY") ?? "";
+  // The shared secret is stored on the function as `SUPER_SECRET`. The caller
+  // (daily cron) sends it in the `SuperSecret` header. Reading any other env
+  // name leaves configuredSecret empty and 403s every request.
+  const configuredSecret = Deno.env.get("SUPER_SECRET") ?? "";
   const providedSecret = req.headers.get("SuperSecret") ?? "";
 
   if (!configuredSecret || providedSecret !== configuredSecret) {
