@@ -129,6 +129,7 @@
       }
     },
     "%@: %lld minutes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -212,8 +213,21 @@
     "%lld min read" : {
 
     },
+    "%lld of 1,189 chapters read" : {
+
+    },
     "%lld on" : {
 
+    },
+    "%lld percent of the Bible read, %lld of 1189 chapters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld percent of the Bible read, %2$lld of 1189 chapters"
+          }
+        }
+      }
     },
     "%lld." : {
       "shouldTranslate" : false
@@ -227,6 +241,9 @@
           }
         }
       }
+    },
+    "%lld%%" : {
+
     },
     "•" : {
 
@@ -721,9 +738,6 @@
     "No Reading Plan" : {
 
     },
-    "No reading this week yet" : {
-
-    },
     "No results found." : {
 
     },
@@ -752,6 +766,9 @@
 
     },
     "Notifications Disabled" : {
+
+    },
+    "of the Bible" : {
 
     },
     "OK" : {
@@ -827,9 +844,6 @@
 
     },
     "Readers just like you chip in to keep swiftbible free for everyone. Join the community that makes it possible." : {
-
-    },
-    "Reading Stats" : {
 
     },
     "Reading Theme" : {
@@ -1033,9 +1047,6 @@
 
     },
     "This event doesn't have a daily reading plan yet." : {
-
-    },
-    "This Week" : {
 
     },
     "This will clear all cached devotionals and free up %@ of storage. You can always re-download devotionals when you view them." : {

@@ -14,6 +14,8 @@ struct ProgressTabView: View {
     @State private var freezeActive: Bool = false
     @State private var chaptersRead: Int = 0
     @State private var booksCompleted: Int = 0
+    @State private var readingTime: TimeInterval = 0
+    @State private var recentSessions: [ReadingSession] = []
     @State private var heatmap: [Date: Int] = [:]
     @State private var bookProgress: [BookProgress] = []
     @State private var earnedCount: Int = 0
@@ -61,6 +63,7 @@ struct ProgressTabView: View {
                 achievementsCard.padding(.horizontal)
                 HeatmapCalendar(counts: heatmap, weeks: 12).padding(.horizontal)
                 BookCompletionGrid(books: bookProgress).padding(.horizontal)
+                recentReadingCard.padding(.horizontal)
             }
             .padding(.vertical)
         }
@@ -128,6 +131,47 @@ struct ProgressTabView: View {
         .cornerRadius(12)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(canonPercent) percent of the Bible read, \(canonicalChaptersRead) of 1189 chapters")
+    }
+
+    private var recentReadingCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Recent Reading")
+                .font(.headline)
+            if recentSessions.isEmpty {
+                Text("Start reading to see your history")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(recentSessions, id: \.startedAt) { session in
+                    HStack(alignment: .firstTextBaseline) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("\(session.bookName) \(session.chapterNumber)")
+                                .font(.subheadline)
+                            Text(session.startedAt.formatted(.relative(presentation: .named)))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Text(formatDuration(session.duration))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .monospacedDigit()
+                    }
+                }
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(12)
+    }
+
+    private func formatDuration(_ seconds: TimeInterval) -> String {
+        let hours = Int(seconds) / 3600
+        let minutes = (Int(seconds) % 3600) / 60
+        if hours > 0 { return "\(hours)h \(minutes)m" }
+        if minutes > 0 { return "\(minutes)m" }
+        return "<1m"
     }
 
     private var achievementsCard: some View {
@@ -200,6 +244,14 @@ struct ProgressTabView: View {
                 color: .brandGold,
                 animated: false
             )
+            ProgressStatCard(
+                title: "Time in the Word",
+                value: formatDuration(readingTime),
+                subtitle: nil,
+                icon: "clock.fill",
+                color: .brandGreen,
+                animated: false
+            )
         }
         .padding(.horizontal)
     }
@@ -211,6 +263,8 @@ struct ProgressTabView: View {
         freezeActive = streakInfo.freezeActive
         longestStreak = service.longestStreak(in: context)
         chaptersRead = service.totalChaptersRead(in: context)
+        readingTime = service.totalReadingTime(in: context)
+        recentSessions = service.recentSessions(in: context, limit: 10)
         heatmap = service.dailyReadingCounts(forWeeks: 12, in: context)
         bookProgress = computeBookProgress()
         booksCompleted = bookProgress.filter { $0.isComplete }.count

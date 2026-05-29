@@ -120,7 +120,6 @@
 		AA0000052F130001000SPLASH /* ParticleCrossSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000A2F130001000SPLASH /* ParticleCrossSplashView.swift */; };
 		AA0000062F140001000ANALYT /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000072F140001000ANALYT /* AnalyticsService.swift */; };
 		AA00000F2F130001000LNCHSB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA00000E2F130001000LNCHSB /* LaunchScreen.storyboard */; };
-		ACF0FA995E1B31913CE9B775 /* ReadingStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D2814EC3F3451C2EB42D8E /* ReadingStatsView.swift */; };
 		BB0000012F4D0001000TXTPK /* jubilees.json in Resources */ = {isa = PBXBuildFile; fileRef = BB0000072F4D0001000TXTPK /* jubilees.json */; };
 		BB0000022F4D0001000TXTPK /* testaments12.json in Resources */ = {isa = PBXBuildFile; fileRef = BB0000082F4D0001000TXTPK /* testaments12.json */; };
 		BB0000032F4D0001000TXTPK /* 2enoch.json in Resources */ = {isa = PBXBuildFile; fileRef = BB0000092F4D0001000TXTPK /* 2enoch.json */; };
@@ -331,7 +330,6 @@
 		BB00000A2F4D0001000TXTPK /* didache.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = didache.json; sourceTree = "<group>"; };
 		BB00000B2F4D0001000TXTPK /* 1clement.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 1clement.json; sourceTree = "<group>"; };
 		BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSourcesView.swift; sourceTree = "<group>"; };
-		C9D2814EC3F3451C2EB42D8E /* ReadingStatsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReadingStatsView.swift; sourceTree = "<group>"; };
 		CC0000022F640001000NOTIF /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		CC0000032F5D0001000ORGTX /* hebrew.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = hebrew.json; sourceTree = "<group>"; };
 		CC0000042F5D0001000ORGTX /* greek.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = greek.json; sourceTree = "<group>"; };
@@ -460,7 +458,6 @@
 				BB00000C2F4D0001000TXTPK /* TextSourcesView.swift */,
 				CC0000042F640001000NOTIF /* NotificationSettingsView.swift */,
 				CC0000062F850001ONBRD01 /* OnboardingView.swift */,
-				C9D2814EC3F3451C2EB42D8E /* ReadingStatsView.swift */,
 				9F2CE7334B0BFCB9BCC9CFD5 /* AppIconPickerView.swift */,
 			);
 			path = Settings;
@@ -1098,7 +1095,6 @@
 				EE766E32F77570D9062D00CB /* AppIconOption.swift in Sources */,
 				9C07E36A91DA85834225D6F3 /* ReadingSession.swift in Sources */,
 				97B103699321A6A2D9DFFA8D /* ReadingStatsService.swift in Sources */,
-				ACF0FA995E1B31913CE9B775 /* ReadingStatsView.swift in Sources */,
 				E383E9966C655D2C252F97C3 /* AppIconPickerView.swift in Sources */,
 				DD0000072F8A0001000APPNT /* AppIntentNavigator.swift in Sources */,
 				DD0000082F8A0001000APPNT /* AppShortcuts.swift in Sources */,

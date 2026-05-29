@@ -45,7 +45,6 @@ struct MoreView: View {
                     }
                     librarySection
                     progressCard
-                    statsCard
                     settingsCard
                     aboutFooter
                 }
@@ -490,34 +489,6 @@ struct MoreView: View {
             return "Streak, heatmap, and book completion"
         }
         return "\u{1F525} \(streakDays)-day streak · books read"
-    }
-
-    // MARK: - Reading stats card (live numbers — Endowed Progress)
-
-    private var statsCard: some View {
-        NavigationLink(destination: ReadingStatsView()) {
-            cardRow(
-                icon: "chart.bar.fill",
-                tint: .brandGreen,
-                title: "Reading Stats",
-                subtitle: statsSubtitle
-            )
-        }
-        .buttonStyle(.plain)
-    }
-
-    private var statsSubtitle: String {
-        if streakDays == 0 && chaptersThisWeek == 0 {
-            return "Streaks, verses, and time spent reading"
-        }
-        var parts: [String] = []
-        if streakDays > 0 {
-            parts.append("\u{1F525} \(streakDays)-day streak")
-        }
-        if chaptersThisWeek > 0 {
-            parts.append("\(chaptersThisWeek) chapter\(chaptersThisWeek == 1 ? "" : "s") this week")
-        }
-        return parts.joined(separator: " · ")
     }
 
     private func refreshStats() {
