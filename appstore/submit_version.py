@@ -143,11 +143,23 @@ def add_version_item(token, submission_id, version_id, dry_run):
     print(f"  POST /reviewSubmissionItems (version {version_id} → submission {submission_id})")
     if dry_run:
         return
-    api("POST", "/reviewSubmissionItems", token, json=body)
+    try:
+        api("POST", "/reviewSubmissionItems", token, json=body)
+    except requests.exceptions.HTTPError as e:
+        # 409 = this version is already an item on the submission. Safe on a
+        # retry after a transient failure — treat as already present.
+        if e.response is not None and e.response.status_code == 409:
+            print(f"  Version {version_id} already on submission {submission_id} (409 — treating as present)")
+        else:
+            raise
 
 
 def list_submission_items(token, submission_id):
-    r = api("GET", f"/reviewSubmissions/{submission_id}/items?limit=20", token)
+    # include=appStoreVersion so each item carries its appStoreVersion relationship
+    # linkage (data.id). Without include, Apple omits the linkage, so the
+    # "already on submission" check in main() can't recognize an item it already
+    # created — and re-adding it returns 409 Conflict on a retry.
+    r = api("GET", f"/reviewSubmissions/{submission_id}/items?limit=20&include=appStoreVersion", token)
     return r.get("data", [])
 
 
