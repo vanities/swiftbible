@@ -17,10 +17,8 @@ en-US:
   keywords: "asv,web,scripture,gospel,prayer,jesus,christian,faith,study,notes,jubilees,enoch,hebrew,catholic,god"
   promo_text: "Read the Bible in KJV, ASV, WEB & Original Hebrew/Greek. Includes Apocrypha, Enoch, Jubilees, and more. Highlight, take notes, and get AI explanations."
   whats_new: |-
-    - Dozens of new badges to earn — finish a Gospel, a whole testament, or the entire canon, keep a streak going, read across all three translations, and more
-    - A new progress ring shows how much of the Bible you've read at a glance
-    - Rest on Sundays — a missed Sunday no longer breaks your reading streak
-    - Your reading time, recent chapters, and stats now live together on a cleaner Progress tab
+    - Fixed a crash that could occur when opening your saved Highlights
+    - The Achievements screen now shows each badge's full description without cutting it off
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -58,10 +56,8 @@ es-ES:
 
     SwiftBible es totalmente de código abierto. Lee y contribuye al código en GitHub.
   whats_new: |-
-    - Decenas de insignias nuevas por conseguir: termina un Evangelio, un testamento entero o todo el canon, mantén una racha, lee en las tres traducciones y mucho más
-    - Un nuevo anillo de progreso muestra de un vistazo cuánto de la Biblia has leído
-    - Descansa los domingos: saltarte un domingo ya no rompe tu racha de lectura
-    - Tu tiempo de lectura, los capítulos recientes y las estadísticas ahora están juntos en una pestaña de Progreso más clara
+    - Se corrigió un fallo que podía ocurrir al abrir tus Destacados guardados
+    - La pantalla de Logros ahora muestra la descripción completa de cada insignia sin recortarla
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -99,10 +95,8 @@ es-MX:
 
     SwiftBible es 100% de código abierto. Lee y contribuye en GitHub.
   whats_new: |-
-    - Decenas de insignias nuevas por conseguir: termina un Evangelio, un testamento entero o todo el canon, mantén una racha, lee en las tres traducciones y mucho más
-    - Un nuevo anillo de progreso muestra de un vistazo cuánto de la Biblia has leído
-    - Descansa los domingos: saltarte un domingo ya no rompe tu racha de lectura
-    - Tu tiempo de lectura, los capítulos recientes y las estadísticas ahora están juntos en una pestaña de Progreso más clara
+    - Se corrigió un fallo que podía ocurrir al abrir tus Destacados guardados
+    - La pantalla de Logros ahora muestra la descripción completa de cada insignia sin recortarla
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -140,10 +134,8 @@ pt-BR:
 
     SwiftBible é totalmente de código aberto. Veja e contribua no GitHub.
   whats_new: |-
-    - Dezenas de novas medalhas para conquistar: termine um Evangelho, um testamento inteiro ou todo o cânon, mantenha uma sequência, leia nas três traduções e muito mais
-    - Um novo anel de progresso mostra de relance quanto da Bíblia você já leu
-    - Descanse aos domingos: faltar em um domingo não quebra mais sua sequência de leitura
-    - Seu tempo de leitura, os capítulos recentes e as estatísticas agora ficam juntos em uma aba de Progresso mais organizada
+    - Corrigido um travamento que podia ocorrer ao abrir seus Destaques salvos
+    - A tela de Conquistas agora mostra a descrição completa de cada medalha sem cortar o texto
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -181,10 +173,8 @@ pt-PT:
 
     SwiftBible é totalmente de código aberto. Vê e contribui no GitHub.
   whats_new: |-
-    - Dezenas de novas medalhas para conquistar: termine um Evangelho, um testamento inteiro ou todo o cânone, mantenha uma sequência, leia nas três traduções e muito mais
-    - Um novo anel de progresso mostra num relance quanto da Bíblia já leu
-    - Descanse aos domingos: falhar um domingo já não quebra a sua sequência de leitura
-    - O seu tempo de leitura, os capítulos recentes e as estatísticas estão agora juntos num separador de Progresso mais organizado
+    - Corrigida uma falha que podia ocorrer ao abrir os seus Destaques guardados
+    - O ecrã de Conquistas mostra agora a descrição completa de cada distintivo sem cortar o texto
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -222,10 +212,8 @@ fr-FR:
 
     SwiftBible est entièrement open-source. Consultez et contribuez sur GitHub.
   whats_new: |-
-    - Des dizaines de nouveaux badges à débloquer : terminez un Évangile, un testament entier ou tout le canon, gardez une série, lisez dans les trois traductions et plus encore
-    - Un nouvel anneau de progression montre d'un coup d'œil quelle part de la Bible vous avez lue
-    - Reposez-vous le dimanche : un dimanche manqué ne brise plus votre série de lecture
-    - Votre temps de lecture, vos chapitres récents et vos statistiques sont désormais réunis dans un onglet Progression plus clair
+    - Correction d'un plantage qui pouvait survenir à l'ouverture de vos surlignages enregistrés
+    - L'écran des Réalisations affiche désormais la description complète de chaque badge sans la tronquer
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -263,10 +251,8 @@ de-DE:
 
     SwiftBible ist vollständig Open Source. Code ansehen und beitragen auf GitHub.
   whats_new: |-
-    - Dutzende neue Abzeichen zu verdienen: Lies ein Evangelium, ein ganzes Testament oder den gesamten Kanon zu Ende, halte eine Serie, lies in allen drei Übersetzungen und mehr
-    - Ein neuer Fortschrittsring zeigt auf einen Blick, wie viel der Bibel du gelesen hast
-    - Ruh dich sonntags aus: Ein verpasster Sonntag unterbricht deine Leseserie nicht mehr
-    - Deine Lesezeit, die letzten Kapitel und Statistiken sind jetzt zusammen in einem übersichtlicheren Fortschritt-Tab
+    - Ein Absturz beim Öffnen deiner gespeicherten Markierungen wurde behoben
+    - Der Erfolge-Bildschirm zeigt jetzt die vollständige Beschreibung jedes Abzeichens, ohne sie abzuschneiden
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -304,10 +290,8 @@ it:
 
     SwiftBible è completamente open source. Codice e contributi su GitHub.
   whats_new: |-
-    - Decine di nuovi distintivi da ottenere: completa un Vangelo, un intero testamento o l'intero canone, mantieni una serie, leggi in tutte e tre le traduzioni e altro ancora
-    - Un nuovo anello di progresso mostra a colpo d'occhio quanta Bibbia hai letto
-    - Riposati la domenica: saltare una domenica non interrompe più la tua serie di lettura
-    - Il tuo tempo di lettura, i capitoli recenti e le statistiche ora sono insieme in una scheda Progresso più ordinata
+    - Corretto un arresto anomalo che poteva verificarsi all'apertura delle Evidenziazioni salvate
+    - La schermata Obiettivi ora mostra la descrizione completa di ogni distintivo senza troncarla
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -345,10 +329,8 @@ nl-NL:
 
     SwiftBible is volledig open source. Bekijk en draag bij op GitHub.
   whats_new: |-
-    - Tientallen nieuwe badges om te verdienen: lees een Evangelie, een heel testament of de hele canon uit, houd een reeks vol, lees in alle drie de vertalingen en meer
-    - Een nieuwe voortgangsring laat in één oogopslag zien hoeveel van de Bijbel je hebt gelezen
-    - Rust op zondag: een gemiste zondag verbreekt je leesreeks niet meer
-    - Je leestijd, recente hoofdstukken en statistieken staan nu samen op een overzichtelijker Voortgang-tabblad
+    - Een crash opgelost die kon optreden bij het openen van je opgeslagen markeringen
+    - Het scherm Prestaties toont nu de volledige beschrijving van elke badge zonder afkapping
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -386,10 +368,8 @@ pl:
 
     SwiftBible jest w pełni otwartoźródłowa. Kod i wkład w GitHubie.
   whats_new: |-
-    - Dziesiątki nowych odznak do zdobycia: przeczytaj w całości Ewangelię, cały testament lub cały kanon, utrzymuj passę, czytaj we wszystkich trzech przekładach i więcej
-    - Nowy pierścień postępu pokazuje na pierwszy rzut oka, ile Biblii już przeczytałeś
-    - Odpoczywaj w niedziele: pominięta niedziela nie przerywa już Twojej passy czytania
-    - Twój czas czytania, ostatnie rozdziały i statystyki są teraz razem na czytelniejszej karcie Postępu
+    - Naprawiono awarię, która mogła wystąpić podczas otwierania zapisanych zaznaczeń
+    - Ekran Osiągnięć pokazuje teraz pełny opis każdej odznaki bez ucinania tekstu
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -427,10 +407,8 @@ ru:
 
     SwiftBible полностью с открытым исходным кодом. Код и вклад на GitHub.
   whats_new: |-
-    - Десятки новых значков: прочитайте Евангелие, целый завет или весь канон, держите серию, читайте во всех трёх переводах и многое другое
-    - Новое кольцо прогресса показывает с первого взгляда, какую часть Библии вы прочитали
-    - Отдыхайте по воскресеньям: пропущенное воскресенье больше не прерывает серию чтения
-    - Время чтения, недавние главы и статистика теперь вместе на более удобной вкладке «Прогресс»
+    - Исправлен сбой, который мог возникать при открытии сохранённых выделений
+    - На экране достижений теперь полностью отображается описание каждого значка без обрезки
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -468,10 +446,8 @@ ko:
 
     SwiftBible은 완전한 오픈소스입니다. GitHub에서 코드를 보고 기여할 수 있습니다.
   whats_new: |-
-    - 얻을 수 있는 새 배지가 수십 개: 복음서 한 권, 구약·신약 전체, 또는 정경 전체를 끝까지 읽기, 연속 읽기 유지, 세 가지 번역본으로 읽기 등
-    - 새 진행률 링으로 성경을 얼마나 읽었는지 한눈에 확인하세요
-    - 주일에는 쉬세요: 일요일을 건너뛰어도 더 이상 읽기 연속 기록이 끊기지 않습니다
-    - 읽은 시간, 최근에 읽은 장, 통계가 이제 더 깔끔한 '진행' 탭에 함께 모였습니다
+    - 저장한 하이라이트를 열 때 발생할 수 있던 충돌을 수정했습니다
+    - 업적 화면에서 각 배지 설명이 잘리지 않고 전체가 표시됩니다
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -509,10 +485,8 @@ ja:
 
     SwiftBibleは完全にオープンソースです。GitHubでコードの閲覧・貢献ができます。
   whats_new: |-
-    - 獲得できる新しいバッジが多数：福音書を1巻、旧約・新約のいずれか全体、または聖書全体を読み通す、連続記録を続ける、3つの翻訳で読む、ほか
-    - 新しい進捗リングで、聖書をどれだけ読んだかひと目で確認できます
-    - 日曜は休んでOK：日曜を逃しても読書の連続記録は途切れなくなりました
-    - 読書時間、最近読んだ章、統計が、より見やすい「進捗」タブにまとまりました
+    - 保存したハイライトを開く際に発生することがあったクラッシュを修正しました
+    - 実績画面で各バッジの説明が途切れずに全文表示されるようになりました
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -550,10 +524,8 @@ zh-Hans:
 
     SwiftBible 完全开源。可在 GitHub 查看代码并贡献。
   whats_new: |-
-    - 数十枚全新徽章等你解锁：读完一卷福音书、整本旧约或新约，乃至整部正典，保持连续阅读，跨三种译本阅读等
-    - 全新进度环，一眼看清你已读了多少圣经
-    - 周日可休息：漏掉一个周日不再中断你的连续阅读
-    - 阅读时间、最近章节和统计数据如今集中在更简洁的“进度”标签页
+    - 修复了打开已保存的高亮时可能发生的崩溃
+    - 成就页面现在会完整显示每个徽章的说明，不再被截断
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -591,10 +563,8 @@ zh-Hant:
 
     SwiftBible 完全開源。可在 GitHub 查看程式碼並貢獻。
   whats_new: |-
-    - 數十枚全新徽章等你解鎖：讀完一卷福音書、整本舊約或新約，乃至整部正典，保持連續閱讀，跨三種譯本閱讀等
-    - 全新進度環，一眼看清你已讀了多少聖經
-    - 週日可休息：漏掉一個週日不再中斷你的連續閱讀
-    - 閱讀時間、最近章節和統計資料如今集中在更簡潔的「進度」分頁
+    - 修正了開啟已儲存的螢光標示時可能發生的當機
+    - 成就頁面現在會完整顯示每個徽章的說明，不再被截斷
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -632,10 +602,8 @@ id:
 
     SwiftBible sepenuhnya sumber terbuka. Lihat kode dan berkontribusi di GitHub.
   whats_new: |-
-    - Puluhan lencana baru untuk diraih: selesaikan satu Injil, satu perjanjian penuh, atau seluruh kanon, jaga rentetan, baca dalam ketiga terjemahan, dan lainnya
-    - Cincin progres baru menunjukkan sekilas seberapa banyak Alkitab yang sudah kamu baca
-    - Istirahat di hari Minggu: melewatkan satu Minggu tidak lagi memutus rentetan bacaanmu
-    - Waktu membaca, bab-bab terakhir, dan statistikmu kini menyatu di tab Progres yang lebih rapi
+    - Memperbaiki crash yang dapat terjadi saat membuka Sorotan tersimpan
+    - Layar Pencapaian kini menampilkan deskripsi lengkap setiap lencana tanpa terpotong
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -673,10 +641,8 @@ el:
 
     Το SwiftBible είναι πλήρως ανοιχτού κώδικα. Δες τον κώδικα και συνεισέφερε στο GitHub.
   whats_new: |-
-    - Δεκάδες νέα σήματα για να κερδίσετε: ολοκληρώστε ένα Ευαγγέλιο, μια ολόκληρη διαθήκη ή ολόκληρο τον κανόνα, κρατήστε σερί, διαβάστε και στις τρεις μεταφράσεις και άλλα
-    - Ένας νέος δακτύλιος προόδου δείχνει με μια ματιά πόση Βίβλο έχετε διαβάσει
-    - Ξεκουραστείτε τις Κυριακές: μια χαμένη Κυριακή δεν διακόπτει πλέον το σερί ανάγνωσής σας
-    - Ο χρόνος ανάγνωσης, τα πρόσφατα κεφάλαια και τα στατιστικά σας βρίσκονται τώρα μαζί σε μια πιο καθαρή καρτέλα Προόδου
+    - Διορθώθηκε μια κατάρρευση που μπορούσε να συμβεί κατά το άνοιγμα των αποθηκευμένων επισημάνσεών σας
+    - Η οθόνη Επιτευγμάτων εμφανίζει πλέον ολόκληρη την περιγραφή κάθε σήματος χωρίς περικοπή
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -714,10 +680,8 @@ ro:
 
     SwiftBible este complet open-source. Cod și contribuții pe GitHub.
   whats_new: |-
-    - Zeci de insigne noi de obținut: termină o Evanghelie, un testament întreg sau întregul canon, menține o serie, citește în toate cele trei traduceri și altele
-    - Un nou inel de progres arată dintr-o privire cât din Biblie ai citit
-    - Odihnește-te duminica: o duminică pierdută nu îți mai întrerupe seria de lectură
-    - Timpul de lectură, capitolele recente și statisticile tale sunt acum împreună într-o filă Progres mai clară
+    - S-a remediat o blocare care putea apărea la deschiderea evidențierilor salvate
+    - Ecranul Realizări afișează acum descrierea completă a fiecărei insigne, fără a o trunchia
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -755,10 +719,8 @@ tr:
 
     SwiftBible tamamen açık kaynaktır. Kodu görüntüleyin ve GitHub'da katkıda bulunun.
   whats_new: |-
-    - Kazanılacak düzinelerce yeni rozet: bir İncil'i, koca bir ahdi ya da tüm kanonu baştan sona oku, seriyi sürdür, üç çevirinin üçünde de oku ve daha fazlası
-    - Yeni ilerleme halkası, Kutsal Kitap'ın ne kadarını okuduğunu bir bakışta gösterir
-    - Pazarları dinlen: kaçırılan bir Pazar artık okuma serini bozmuyor
-    - Okuma süren, son okuduğun bölümler ve istatistiklerin artık daha derli toplu bir İlerleme sekmesinde bir arada
+    - Kaydedilen Vurguları açarken oluşabilen bir çökme giderildi
+    - Başarılar ekranı artık her rozetin açıklamasını kesmeden tam olarak gösteriyor
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -796,10 +758,8 @@ hi:
 
     SwiftBible पूरी तरह ओपन-सोर्स है। GitHub पर कोड देखें और योगदान करें।
   whats_new: |-
-    - दर्जनों नए बैज पाएँ: कोई एक सुसमाचार, पूरा एक नियम, या पूरी बाइबल पढ़ें, सिलसिला बनाए रखें, तीनों अनुवादों में पढ़ें, और भी बहुत कुछ
-    - नया प्रगति वलय एक नज़र में दिखाता है कि आपने बाइबल का कितना हिस्सा पढ़ा है
-    - रविवार को विश्राम करें: कोई रविवार छूट जाए तो भी आपका पढ़ने का सिलसिला नहीं टूटेगा
-    - आपका पढ़ने का समय, हाल के अध्याय और आँकड़े अब एक साफ़-सुथरे 'प्रगति' टैब में एक साथ हैं
+    - सहेजे गए हाइलाइट्स खोलते समय होने वाला एक क्रैश ठीक किया गया
+    - उपलब्धियाँ स्क्रीन अब हर बैज का पूरा विवरण बिना काटे दिखाती है
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
