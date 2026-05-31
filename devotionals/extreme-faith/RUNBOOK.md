@@ -125,7 +125,8 @@ Each entry contrasts the **comfortable middle** (where most Christians actually 
 | 1 | **2026-05-03** ✅ | **Maranatha** | "Jesus will come back — *eventually*." | Pray for him to come back **tonight**, even before your kids grow up. | Rev 22:20, 2 Pet 3:9, Phil 3:20 |
 | 2 | **2026-05-31** ✅ | **Mourn in the present tense** | "Mourn the loss but hold onto hope." | Mourn AND speak of them in the present tense. Carry the wound for forty years AND know it's not the whole story. | 1 Thess 4:13, John 11:35, Phil 1:21-23, 1 Cor 15:55 |
 | 3 | **2026-06-28** ✅ | **Miss the mark** | "I'm not a bad person — I haven't broken any big rules." | The Greek for sin is *hamartia* — to miss the mark. The bullseye is the glory of God, and the rule-keeper falls short of it just like the rule-breaker. | Rom 3:23, Heb 4:15, Matt 5:48, Luke 18:9-14 |
-| 4 | 2026-07-26 | Sell what you have | "Be a generous giver out of your surplus." | Sell everything. Hold all things in common with the church. The rich young ruler walked away — the early church didn't. | Mark 10:17-31, Acts 2:44-45, Acts 4:32-37 |
+| ★ | **2026-07-26** ✅ | **The Day Christ Came** | "I'll get right with God — *someday soon*." | Handpicked memorial built from grandfather James Edgar Green's sermon. The respectable man is judged for *neglect*, not scandal; the word *later* is what damns him. Obey **today** — now is the day of salvation. | James 4:14, 1 Thess 4:16, 1 Thess 5:3, 2 Cor 5:10, 2 Cor 6:2 |
+| 4 | TBD¹ | Sell what you have | "Be a generous giver out of your surplus." | Sell everything. Hold all things in common with the church. The rich young ruler walked away — the early church didn't. | Mark 10:17-31, Acts 2:44-45, Acts 4:32-37 |
 | 5 | 2026-08-23 | Take no thought for tomorrow | "Plan wisely but don't worry." | Stop storing up. Stop planning for tomorrow. Trust God for today's bread the way Israel ate manna. | Matt 6:25-34, Ex 16:4-21, Phil 4:6-7 |
 | 6 | 2026-09-20 | Seventy times seven | "Forgive when they apologize." | Forgive while still being wronged. Forgive the unrepentant. Pray for them by name today. | Matt 18:21-35, Luke 23:34, Eph 4:32 |
 | 7 | 2026-10-18 | Glory in tribulation | "Endure suffering with hope." | **Thank God for the suffering.** Sing in the prison cell. Treat trials as gift, not enemy. | James 1:2-4, Acts 16:25, Rom 5:3-5, Acts 5:41 |
@@ -136,6 +137,8 @@ Each entry contrasts the **comfortable middle** (where most Christians actually 
 | 12 | 2027-03-07 | Take up your cross daily | "I committed to Christ years ago." | Discipleship is *daily.* The cross isn't a moment of conversion — it's the habit of choosing Christ over the self that wants the easier path, every day, until you die. | Luke 9:23, 1 Cor 15:31, Gal 2:20, Rom 6:6 |
 | 13 | 2027-04-04 | That's someone's son | "He died for my sins" — as flat doctrine. | A son. A mother watched him be tortured to death. The Father sent him *knowing.* Stop and feel what you have stopped feeling. | John 19:25-27, Luke 2:35, John 3:16, Isa 53 |
 | 14 | 2027-05-02 | Be fruitful and multiply | "Christianity is private. I don't push it on anyone." | God's first command was *multiply.* The modern Christian has settled into sterility — few disciples, often few kids, no investment. Your faith should reproduce. | Gen 1:28, Ps 127:3-5, Matt 28:19-20, John 15:8, 2 Tim 2:2 |
+
+★ **The Day Christ Came** is a handpicked memorial entry (added 2026-05-30) slotted for **2026-07-26**, the next open Faith Sunday after *Mourn in the present tense* (05-31) and *Miss the mark* (06-28). It becomes **Faith #4** (`--series-part 4`). ¹The numbered backlog keeps its order and slides: *Sell what you have* moves to the next open Faith Sunday, with seasonal entries (e.g. #13, the week after Easter) holding their dates. Built from grandfather James Edgar Green's sermon — see `speakers/james-edgar-green/` and the [james-edgar-green skill](../../.claude/skills/james-edgar-green/SKILL.md), sibling to matt-bassford.
 
 Order is not fixed — Adam may handpick the next Faith topic each cycle based on what he's been thinking and praying about.
 
@@ -169,6 +172,9 @@ Order is not fixed — Adam may handpick the next Faith topic each cycle based o
 | 2026-06-21 | Delight #2 |
 | 2026-06-28 | Faith #3 (Miss the mark) ✅ published |
 | 2026-07-05 | Grace #3 |
+| 2026-07-12 | Rest #3 |
+| 2026-07-19 | Delight #3 |
+| 2026-07-26 | **Faith #4 (The Day Christ Came)** ✅ drafted — memorial, handpicked |
 | ... | (continues rotating) |
 
 The rotation prevents the audience from getting only hard demands every Sunday. Each series has its own RUNBOOK with full schedule and per-devotional notes:
@@ -226,6 +232,22 @@ End the empathy+Bible mix on: *"I'm not a bad person"* is a sentence from anothe
 **Matt Bassford research (TODO before final edit):** likely-rich themes — "Grace despite disgust" (theme #3), self-righteousness, his unflinching seriousness about the gospel as wound-then-heal. Search the archive for posts on Romans 3:23, the Pharisee/tax collector, and "good person." Borrow phrasing if anything fits.
 
 Prayer: returns to the bold subtitle as refrain — *"I am not a bad person. I have used this sentence as a defense for as long as I can remember."* Closes with re-aim, walking in him, his score not mine.
+
+### The Day Christ Came — memorial (2026-07-26, Faith #4)
+
+Handpicked into the rotation on 2026-05-30. **Built from a sermon by Adam's grandfather, James Edgar Green ("Brother Jim")** — a Church of Christ gospel preacher (R.I.P.). His one surviving recording, a narrative judgment sermon (preached at the Greensburg Church of Christ, 1986), is archived at `speakers/james-edgar-green/sermons/the-day-christ-came.md`; his voice profile is the [james-edgar-green skill](../../.claude/skills/james-edgar-green/SKILL.md), sibling to matt-bassford. (First of more tapes to come — the profile is honestly built from this one sermon for now.)
+
+The reframe: the comfortable Christian fully *intends* to get right with God — later. *Someday soon.* Grandpa's "John Jones" is the picture: a good, grateful man on an ordinary Monday walk, mid-thought about obeying "the next Sunday or the Sunday after that," when the trumpet sounds (1 Thess 4:16). At the great white throne he is found guilty — *"not guilty of murder, not guilty of adultery, not guilty of drunkenness, but guilty of neglect… for he had stolen all the grace and the goodness that God had given him, and had given nothing in return."* The faith-extreme claim: the most dangerous word you own is *later*; obedience has a tense, and the tense is **now**.
+
+Lead with: the I-anchor admission — *"I have always meant to get right with God. I just keep meaning to."* The list of "afters" (after the wedding, after the kids are grown, after this season settles). The intention that feels almost as good as the act.
+
+Anchor verses: James 4:14 (life is a vapour — lead verse), 1 Thess 4:16 (the shout and the trump), 1 Thess 5:3 (peace and safety, then sudden destruction — mirrors the radio news inside the sermon), 2 Cor 5:10 (we must all appear), 2 Cor 6:2 (*now* is the day of salvation — the hinge), Rom 6:3-4 (the baptism John never came around to).
+
+**CoC framing:** keep grace + obedience together — John's guilt is receiving grace and returning nothing. His specific neglect is concrete: he *"never came around to putting him on,"* never let himself be buried with Christ in baptism. Don't collapse "obey now" into "just believe / just pray." Hell is literal and conscious (the sermon refuses John even the annihilation he begs for). Non-premillennial: the return goes straight to resurrection and the great white throne.
+
+**Dedication:** the draft closes with an *"In memory"* note that mirrors how Brother Jim opened his own sermon — crediting brother David Roper and keeping the blame for himself. **Adam confirmed (2026-05-30): keep it published to all readers, as written.** Don't strip it on future passes.
+
+Prayer: short, first person, returns to the subtitle as a refrain — *"I have always meant to."* Lands on *"Not someday soon. Today."*
 
 ### Week 13 — That's someone's son (2027-04-04, week after Easter)
 
@@ -312,6 +334,7 @@ devotionals/extreme-faith/
 ├── 01-maranatha.md                     # week 1 (published 2026-05-03)
 ├── 02-mourn-in-the-present-tense.md    # week 2 (drafted, scheduled 2026-05-31)
 ├── 03-miss-the-mark.md                 # week 3 (published 2026-06-28)
+├── the-day-christ-came.md              # Faith #4 — memorial, scheduled 2026-07-26 (from grandfather's sermon)
 ├── ...
 └── archive/                            # published markdown after edits, for reference
 ```
