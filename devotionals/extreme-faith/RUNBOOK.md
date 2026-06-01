@@ -126,6 +126,7 @@ Each entry contrasts the **comfortable middle** (where most Christians actually 
 | 2 | **2026-05-31** ✅ | **Mourn in the present tense** | "Mourn the loss but hold onto hope." | Mourn AND speak of them in the present tense. Carry the wound for forty years AND know it's not the whole story. | 1 Thess 4:13, John 11:35, Phil 1:21-23, 1 Cor 15:55 |
 | 3 | **2026-06-28** ✅ | **Miss the mark** | "I'm not a bad person — I haven't broken any big rules." | The Greek for sin is *hamartia* — to miss the mark. The bullseye is the glory of God, and the rule-keeper falls short of it just like the rule-breaker. | Rom 3:23, Heb 4:15, Matt 5:48, Luke 18:9-14 |
 | ★ | **2026-07-26** ✅ | **The Day Christ Came** | "I'll get right with God — *someday soon*." | Handpicked memorial built from grandfather James Edgar Green's sermon. The respectable man is judged for *neglect*, not scandal; the word *later* is what damns him. Obey **today** — now is the day of salvation. | James 4:14, 1 Thess 4:16, 1 Thess 5:3, 2 Cor 5:10, 2 Cor 6:2 |
+| ★ | **2026-08-23** ✅ | **The Mystery of Miracles** | "I believe in God, but I'm too smart to call a coincidence a miracle." | Adam's testimony — God healed Zeke's heart in the womb; the *post hoc* skeptic mind hunts for the natural out. Faith-extreme: name the answer as God and refuse to take it back by morning. Attention collapses possibility (double-slit / *Attention Is All You Need* / prayer). | Mark 9:24, Matt 21:22, John 12:37 |
 | 4 | TBD¹ | Sell what you have | "Be a generous giver out of your surplus." | Sell everything. Hold all things in common with the church. The rich young ruler walked away — the early church didn't. | Mark 10:17-31, Acts 2:44-45, Acts 4:32-37 |
 | 5 | 2026-08-23 | Take no thought for tomorrow | "Plan wisely but don't worry." | Stop storing up. Stop planning for tomorrow. Trust God for today's bread the way Israel ate manna. | Matt 6:25-34, Ex 16:4-21, Phil 4:6-7 |
 | 6 | 2026-09-20 | Seventy times seven | "Forgive when they apologize." | Forgive while still being wronged. Forgive the unrepentant. Pray for them by name today. | Matt 18:21-35, Luke 23:34, Eph 4:32 |
@@ -139,6 +140,8 @@ Each entry contrasts the **comfortable middle** (where most Christians actually 
 | 14 | 2027-05-02 | Be fruitful and multiply | "Christianity is private. I don't push it on anyone." | God's first command was *multiply.* The modern Christian has settled into sterility — few disciples, often few kids, no investment. Your faith should reproduce. | Gen 1:28, Ps 127:3-5, Matt 28:19-20, John 15:8, 2 Tim 2:2 |
 
 ★ **The Day Christ Came** is a handpicked memorial entry (added 2026-05-30) slotted for **2026-07-26**, the next open Faith Sunday after *Mourn in the present tense* (05-31) and *Miss the mark* (06-28). It becomes **Faith #4** (`--series-part 4`). ¹The numbered backlog keeps its order and slides: *Sell what you have* moves to the next open Faith Sunday, with seasonal entries (e.g. #13, the week after Easter) holding their dates. Built from grandfather James Edgar Green's sermon — see `speakers/james-edgar-green/` and the [james-edgar-green skill](../../.claude/skills/james-edgar-green/SKILL.md), sibling to matt-bassford.
+
+★ **The Mystery of Miracles** is the second handpick (added 2026-05-31), slotted for **2026-08-23** as **Faith #5** (`--series-part 5`). Adam's own testimony of his son Ezekiel's healing in the womb, written in his voice (see the [adam-voice skill](../../.claude/skills/adam-voice/SKILL.md) and his essay *Attention Was All You Ever Needed*). *Sell what you have* and the rest of the numbered backlog slide one Faith-Sunday further.
 
 Order is not fixed — Adam may handpick the next Faith topic each cycle based on what he's been thinking and praying about.
 
@@ -174,7 +177,11 @@ Order is not fixed — Adam may handpick the next Faith topic each cycle based o
 | 2026-07-05 | Grace #3 |
 | 2026-07-12 | Rest #3 |
 | 2026-07-19 | Delight #3 |
-| 2026-07-26 | **Faith #4 (The Day Christ Came)** ✅ drafted — memorial, handpicked |
+| 2026-07-26 | **Faith #4 (The Day Christ Came)** ✅ published — memorial, handpicked |
+| 2026-08-02 | Grace #4 |
+| 2026-08-09 | Rest #4 |
+| 2026-08-16 | Delight #4 |
+| 2026-08-23 | **Faith #5 (The Mystery of Miracles)** ✅ published — handpicked |
 | ... | (continues rotating) |
 
 The rotation prevents the audience from getting only hard demands every Sunday. Each series has its own RUNBOOK with full schedule and per-devotional notes:
@@ -248,6 +255,18 @@ Anchor verses: James 4:14 (life is a vapour — lead verse), 1 Thess 4:16 (the s
 **Dedication:** the draft closes with an *"In memory"* note that mirrors how Brother Jim opened his own sermon — crediting brother David Roper and keeping the blame for himself. **Adam confirmed (2026-05-30): keep it published to all readers, as written.** Don't strip it on future passes.
 
 Prayer: short, first person, returns to the subtitle as a refrain — *"I have always meant to."* Lands on *"Not someday soon. Today."*
+
+### The Mystery of Miracles — (2026-08-23, Faith #5)
+
+Handpicked 2026-05-31. **Adam's own testimony**, in his voice ([adam-voice](../../.claude/skills/adam-voice/SKILL.md), Mode D). The miracle: his second son **Ezekiel ("Zeke")** was watched for months at Vanderbilt for a heart defect (suspected AVSD) and a possible Down syndrome diagnosis; Adam prayed his way back into faith, felt a settled certainty, and Zeke was born with a whole heart and no explanation. The reframe: the *post hoc* skeptic mind (Adam and his friend David are "the science bus") can always build the after-the-fact natural story — misread scans, lucky outcomes, faulty instruments — and that is the devil's trick: he is happy to let you keep the miracle as long as you set it down somewhere other than God.
+
+The spine is Adam's own essay framing, *Attention Was All You Ever Needed*: attention collapses possibility into actuality (the double-slit observer effect; *Attention Is All You Need*; prayer as attention — Matt 21:22, *"ask… believing, ye shall receive"*). You can name the wiring; the Master Craftsman made the wiring. The faith-extreme move: name the answer as God, out loud, and refuse to take it back by morning. Closes on the post-hoc apostle (John 12:37) — *"How could you not believe? It was right there in your arms."*
+
+Lead verse: Mark 9:24 (the father of the sick child, believing and doubting at once — *"Lord, I believe; help thou mine unbelief"*). Anchors: Matt 21:22, John 12:37, Mark 9:23.
+
+**CoC framing:** answered prayer and providence (Matt 21:22; the father in Mark 9), the God who still hears — not a claim to modern sign-gifts. Adam explicitly disavows prophecy in the draft ("I was not trying to predict it or prophesy it"). Matt Bassford backs the lane: *The Birth of Samuel* (God answers a longed-for-child prayer) and *Resurrection Objections* (the skeptic prefers a naturalistic out that never actually suffices). Source memo + canon page live in the Artist-Vault-Kit (Ezekiel Mischke page + the `2026-05-31 - Source - The Mystery of Miracles` memo).
+
+Prayer: returns to the subtitle refrain — *"Lord, I believe. Help my unbelief."*
 
 ### Week 13 — That's someone's son (2027-04-04, week after Easter)
 
@@ -335,6 +354,7 @@ devotionals/extreme-faith/
 ├── 02-mourn-in-the-present-tense.md    # week 2 (drafted, scheduled 2026-05-31)
 ├── 03-miss-the-mark.md                 # week 3 (published 2026-06-28)
 ├── the-day-christ-came.md              # Faith #4 — memorial, scheduled 2026-07-26 (from grandfather's sermon)
+├── the-mystery-of-miracles.md          # Faith #5 — handpicked, scheduled 2026-08-23 (Adam's testimony of Zeke's healing)
 ├── ...
 └── archive/                            # published markdown after edits, for reference
 ```
