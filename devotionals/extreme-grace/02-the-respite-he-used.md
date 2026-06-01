@@ -34,9 +34,9 @@ This is where people get nervous, because the text really does say, more than on
 
 But read the order. For the first five plagues, every hardening belongs to Pharaoh. *He* hardened his heart. *His* heart was hard. God is not yet said to be doing anything at all. The first time the text says the LORD hardened Pharaoh's heart is in the sixth plague, at chapter nine, verse twelve. And Pharaoh is never once said to harden his own heart after chapter nine. The phrases are not scattered at random. They are stacked. First it is all Pharaoh. Then, only after Pharaoh has made himself unmistakably clear, it is God.
 
-You do not have to imagine God hijacking a mind to make sense of that. I know how to start a fight with my wife in under five minutes if I want to. I do not need a miracle for it. I just need to know her and choose the wrong words on purpose. God knew Pharaoh. After enough refusals, God stopped pleading and started confirming. He gave Pharaoh fully over to the man Pharaoh had already decided to be. Paul has a phrase for it. God gave them up. The hardening was a sentence God finally passed, not a switch God flipped.
+You do not have to imagine God hijacking a mind to make sense of that. I know how to start a fight with my wife in under five minutes if I want to. I do not need a miracle for it. I just need to know her and choose the wrong words on purpose. God knew Pharaoh. After enough refusals, God stopped pleading and started confirming. He gave Pharaoh fully over to the man Pharaoh had already decided to be. Paul has a phrase for it. God gave them up. The hardening was a sentence, finally handed down on a man who had spent ten plagues earning it.
 
-It was not God's fault that Pharaoh ended up his punching bag. It was Pharaoh's. He drew the line himself, one respite at a time, and then God honored it.
+Pharaoh ended up God's punching bag by his own doing. He drew the line himself, one respite at a time, and then God honored it.
 
 ## What the patience was for
 
@@ -45,20 +45,20 @@ So what was all that patience for? Paul says it straight.
 > *"Or despisest thou the riches of his goodness and forbearance and longsuffering; not knowing that the goodness of God leadeth thee to repentance? But after thy hardness and impenitent heart treasurest up unto thyself wrath."*
 > **Romans 2:4-5**
 
-The patience was never permission. It was an invitation with your name on it. Every respite Pharaoh got was God saying, one more time, *come home.* He heard *take your time.* And notice the word Paul reaches for. Hardness. The very same word. A goodness meant to lead you to repentance, treated instead as a reason to put repentance off, slowly turns your own heart to stone. You do the hardening. God just stops stopping you.
+The patience was an invitation with your name on it. Every respite Pharaoh got was God saying, one more time, *come home.* He heard *take your time,* and treated the mercy as permission. And notice the word Paul reaches for. Hardness. The very same word. A goodness meant to lead you to repentance, treated instead as a reason to put repentance off, slowly turns your own heart to stone. You do the hardening. God just stops stopping you.
 
 The writer of Hebrews knew exactly which story to reach for when he wanted to warn people, and he put it in the present tense:
 
 > *"But exhort one another daily, while it is called To day; lest any of you be hardened through the deceitfulness of sin."*
 > **Hebrews 3:13**
 
-The deceit is not some exotic temptation. It is the oldest lie you tell yourself. *There will be a tomorrow for this.* Proverbs puts the whole tragedy in a single line: *he, that being often reproved hardeneth his neck, shall suddenly be destroyed, and that without remedy.*
+The deceit is the plainest, oldest lie you tell yourself. *There will be a tomorrow for this.* Proverbs puts the whole tragedy in a single line: *he, that being often reproved hardeneth his neck, shall suddenly be destroyed, and that without remedy.*
 
-I can open Exodus and put my finger on the verse where Pharaoh passed the point of no return. I cannot do that with my own life. I do not know where my line is. I do not know where yours is. That is not meant to terrify you. It is meant to take the word *later* out of your mouth.
+I can open Exodus and put my finger on the verse where Pharaoh passed the point of no return. I cannot do that with my own life. I do not know where my line is. I do not know where yours is. Let that take the word *later* out of your mouth.
 
 ## It is still called Today
 
-Here is the grace, and it is bigger than you have been treating it. The patience you are standing in right this second is not God forgetting about your sin. It is God refusing to be finished with you.
+Here is the grace, and it is bigger than you have been treating it. The patience you are standing in right this second is God refusing to be finished with you. He remembers the sin exactly, and he is holding the door open anyway.
 
 > *"The Lord is not slack concerning his promise, as some men count slackness; but is longsuffering to us-ward, not willing that any should perish, but that all should come to repentance."*
 > **2 Peter 3:9**

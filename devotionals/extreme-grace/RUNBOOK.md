@@ -74,6 +74,8 @@ Prayer: short, specific. Returns to the I-anchor as refrain — *"I have rehears
 
 ### Week 2 — The respite he used (2026-06-07)
 
+**✅ Published 2026-05-31 to Supabase (id 665) for for_date 2026-06-07.** Voice-checked: matt-bassford (strong pass — the draft tracks Matt's `2018-05-07-pharaohs-hard-heart.md` reading, including the bunched-phrases sequence and the "harden someone you know without removing their free will" analogy) and adam-voice (reconfigured the "not X, it's Y" cadence per Adam's 2026 rule; kept "my wife").
+
 The shadow entry in the Grace series. The other twelve topics are luminous mercy; this one is the back of the same coin. The "surprising grace" is how *lavish and long* God's patience with Pharaoh was — ten plagues, and God relents the moment Pharaoh begs, every single time. The "wince" is that patience despised has a terminus.
 
 Lead verse Exodus 8:15 — *"when Pharaoh saw that there was respite, he hardened his heart."* The keystone: Pharaoh used the mercy itself as the occasion to harden. He spent the respite.

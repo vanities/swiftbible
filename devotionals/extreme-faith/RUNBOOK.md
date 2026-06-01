@@ -170,7 +170,7 @@ Order is not fixed — Adam may handpick the next Faith topic each cycle based o
 | 2026-05-17 | Rest #1 (The bread that breeds worms) ✅ published |
 | 2026-05-24 | Delight #1 |
 | 2026-05-31 | Faith #2 (Mourn in the present tense) ✅ drafted |
-| 2026-06-07 | Grace #2 |
+| 2026-06-07 | **Grace #2 (The respite he used)** ✅ published |
 | 2026-06-14 | Rest #2 |
 | 2026-06-21 | Delight #2 |
 | 2026-06-28 | Faith #3 (Miss the mark) ✅ published |
