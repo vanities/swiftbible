@@ -94,6 +94,18 @@ enum ReadingTheme: String, CaseIterable, Identifiable {
     var isCustom: Bool {
         self != .system
     }
+
+    /// The color scheme this theme must render in, or `nil` to follow the system.
+    /// True Black forces a black background even in light mode, so it has to run
+    /// in dark mode — otherwise default `.primary`/`.secondary` text stays dark and
+    /// disappears against the black. Sepia and High Contrast already adapt their
+    /// background to the system scheme, so they follow it.
+    var forcedColorScheme: ColorScheme? {
+        switch self {
+        case .trueBlack: return .dark
+        default: return nil
+        }
+    }
 }
 
 // MARK: - Reading presentation helpers

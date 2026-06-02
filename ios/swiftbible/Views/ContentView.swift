@@ -88,6 +88,7 @@ struct ContentView: View {
         @Bindable var appViewModel = appViewModel
 
         mainTabView
+        .preferredColorScheme((ReadingTheme(rawValue: readingThemeRaw) ?? .system).forcedColorScheme)
         .onAppear { applyNavBarAppearance() }
         .onChange(of: readingThemeRaw) { applyNavBarAppearance() }
         .onChange(of: colorScheme) { applyNavBarAppearance() }
