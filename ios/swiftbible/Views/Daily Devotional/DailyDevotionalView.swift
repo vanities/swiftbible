@@ -13,6 +13,8 @@ import MarkdownUI
 struct DailyDevotionalView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
@@ -46,8 +48,16 @@ struct DailyDevotionalView: View {
     @State private var model: String?
     @State private var track: String?
 
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
+
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack {
+            if readingTheme.isCustom {
+                readingTheme.backgroundColor(for: colorScheme).ignoresSafeArea()
+            }
+            VStack(spacing: 0) {
             HStack(spacing: 12) {
                 DatePicker("", selection: $selectedDate, displayedComponents: .date)
                     .datePickerStyle(.compact)
@@ -118,14 +128,12 @@ struct DailyDevotionalView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
                         Markdown(addVerseLinks(to: message))
-                            .markdownBlockStyle(\.heading1) { configuration in
-                                configuration.label
-                                    .markdownMargin(top: .em(1), bottom: .em(1))
-                                    .markdownTextStyle {
-                                        FontWeight(.bold)
-                                        FontSize(.em(1))
-                                    }
-                            }
+                            .markdownTheme(.swiftBibleReading(
+                                fontName: fontName,
+                                fontSize: fontSize,
+                                reading: readingTheme,
+                                colorScheme: colorScheme
+                            ))
                             .environment(\.openURL, OpenURLAction { url in
                                 guard url.scheme == "swiftbible",
                                       url.host == "verse",
@@ -224,6 +232,8 @@ struct DailyDevotionalView: View {
             alignment: .top
         )
         .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
         .onAppear {
             // Clean expired cache on view appearance
             CacheService.shared.cleanExpiredCache()

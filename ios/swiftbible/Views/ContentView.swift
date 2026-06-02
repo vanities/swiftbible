@@ -102,6 +102,10 @@ struct ContentView: View {
                 switch url.host {
                 case "devotional":
                     selectedTab = .dailyDevotional
+                case "more", "settings":
+                    selectedTab = .settings
+                case "search":
+                    selectedTab = .search
                 case "verse":
                     if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
                        let bookName = components.queryItems?.first(where: { $0.name == "book" })?.value,

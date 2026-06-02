@@ -21,6 +21,12 @@ struct BibleView: View {
     @AppStorage("showDidache") var showDidache = false
     @AppStorage("showFirstClement") var showFirstClement = false
     @AppStorage("showThematicGrouping") var showThematicGrouping = false
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
 
     var filteredOldTestament: [Book] {
         if searchText.isEmpty {
@@ -179,6 +185,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
+                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
                             }
                         }
                     }
@@ -190,6 +197,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
+                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
                             }
                         }
                     }
@@ -201,6 +209,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
+                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
                             }
                         }
                     }
@@ -212,6 +221,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
+                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
                             }
                         }
                     }
@@ -223,6 +233,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
+                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
                             }
                         }
                     }
@@ -233,12 +244,15 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
+                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
                             }
                         }
                     }
                 }
                 .listStyle(InsetGroupedListStyle())
+                .scrollContentBackground(readingTheme.isCustom ? .hidden : .automatic)
         }
+        .background((readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color.clear).ignoresSafeArea())
         .onAppear {
             fetchBibleData()
             fetchApocryphaData()
@@ -288,6 +302,7 @@ struct BibleView: View {
                 fetchBibleData()
             }
             .navigationTitle("Bible (\(appViewModel.selectedVersion.shortName))")
+            .readingThemeNavBar(readingTheme, colorScheme: colorScheme)
             .navigationDestination(isPresented: $appViewModel.showSelectedVerse) {
                 if let book = appViewModel.selectedVerse?.book,
                    let chapter = appViewModel.selectedVerse?.chapter {
@@ -324,6 +339,7 @@ struct BibleView: View {
                 NavigationLink(destination: BookDetailView(book: book)) {
                     NavigationTitle(name: book.name, description: book.description)
                 }
+                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
             }
         }
     }
@@ -337,6 +353,7 @@ struct BibleView: View {
                 NavigationLink(destination: BookDetailView(book: book)) {
                     NavigationTitle(name: book.name, description: book.description)
                 }
+                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
             }
         }
     }
@@ -348,6 +365,7 @@ struct BibleView: View {
             NavigationLink(destination: BookDetailView(book: book)) {
                 NavigationTitle(name: book.name, description: book.description)
             }
+            .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
         }
     }
 

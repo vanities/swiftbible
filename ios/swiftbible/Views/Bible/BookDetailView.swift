@@ -12,6 +12,8 @@ struct BookDetailView: View {
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
     @AppStorage("summarySource") private var summarySourceRaw: String = defaultSummarySource.rawValue
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
 
     // Store only the book name - actual data derived from current version
     let bookName: String
@@ -33,6 +35,10 @@ struct BookDetailView: View {
         SummarySource(rawValue: summarySourceRaw) ?? defaultSummarySource
     }
 
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             List(currentBook.chapters, id: \.self) { chapter in
@@ -47,7 +53,9 @@ struct BookDetailView: View {
                         tint: readChapters.contains(chapter.number) ? .accentColor : nil
                     )
                 }
+                .readingThemeRow(readingTheme)
             }
+            .readingThemeScreen(readingTheme, colorScheme: colorScheme)
         }
         .navigationTitle(currentBook.name)
         .navigationBarTitleDisplayMode(.inline)

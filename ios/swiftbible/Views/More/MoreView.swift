@@ -25,9 +25,22 @@ struct MoreView: View {
     @AppStorage(BookmarkPreferences.chapterKey) private var bookmarkedChapterNumber: Int = 0
     @AppStorage(BookmarkPreferences.verseKey) private var bookmarkedVerseNumber: Int = 0
     @AppStorage("seenEventIDs") private var seenEventIDsRaw: String = ""
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
 
     @State private var streakDays: Int = 0
     @State private var chaptersThisWeek: Int = 0
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
+
+    /// Card fill that tints to the active ReadingTheme so cards read as subtly
+    /// raised surfaces on the themed background instead of system grey.
+    private var cardFill: Color {
+        readingTheme.isCustom
+            ? readingTheme.secondaryTextColor(for: colorScheme).opacity(0.12)
+            : Color(.secondarySystemGroupedBackground)
+    }
 
     var body: some View {
         NavigationStack {
@@ -51,9 +64,10 @@ struct MoreView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
             }
-            .background(Color(.systemGroupedBackground).ignoresSafeArea())
+            .background((readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color(.systemGroupedBackground)).ignoresSafeArea())
             .navigationTitle("More")
             .navigationBarTitleDisplayMode(.inline)
+            .readingThemeNavBar(readingTheme, colorScheme: colorScheme)
             .onAppear {
                 refreshStats()
                 markEventsSeen()
@@ -85,7 +99,7 @@ struct MoreView: View {
             }
             .background(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color(.secondarySystemGroupedBackground))
+                    .fill(cardFill)
             )
             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
             .overlay(
@@ -194,7 +208,7 @@ struct MoreView: View {
             // Match the other cards in MoreView (Highlights/Notes/Stats/Settings).
             // Lets the card sit naturally in the dark grouped list instead of
             // competing with its own theme.
-            ? Color(.secondarySystemGroupedBackground)
+            ? cardFill
             : Color(red: 0.965, green: 0.94, blue: 0.88)
     }
 
@@ -327,7 +341,7 @@ struct MoreView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color(.secondarySystemGroupedBackground))
+                    .fill(cardFill)
                     .overlay(alignment: .leading) {
                         Rectangle()
                             .fill(Color.brandGold)
@@ -394,7 +408,7 @@ struct MoreView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color(.secondarySystemGroupedBackground))
+                    .fill(cardFill)
                     .overlay(alignment: .leading) {
                         Rectangle()
                             .fill(Color.brandRedDark)
@@ -464,7 +478,7 @@ struct MoreView: View {
             .padding(.vertical, 18)
             .background(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color(.secondarySystemGroupedBackground))
+                    .fill(cardFill)
             )
         }
         .buttonStyle(.plain)
@@ -542,7 +556,7 @@ struct MoreView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(.secondarySystemGroupedBackground))
+                .fill(cardFill)
         )
     }
 

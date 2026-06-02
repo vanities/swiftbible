@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import MarkdownUI
 
 enum ReadingTheme: String, CaseIterable, Identifiable {
     case system
@@ -92,5 +93,114 @@ enum ReadingTheme: String, CaseIterable, Identifiable {
 
     var isCustom: Bool {
         self != .system
+    }
+}
+
+// MARK: - Reading presentation helpers
+//
+// Shared so every *reading* surface (Bible chapters, daily + saved
+// devotionals, the book list) honors the same font + ReadingTheme, instead of
+// the theme/font only reaching chapter reading. Lives here (not a standalone
+// file) because the main app target uses explicit file references, not a
+// filesystem-synchronized group — a new file would need a project.pbxproj edit.
+
+extension MarkdownUI.Theme {
+    /// MarkdownUI theme for devotional content: applies the user's chosen font
+    /// and the active ReadingTheme's text color while keeping `Theme.basic`'s
+    /// block structure. Headings stay body-size + bold to match the existing
+    /// daily devotional look.
+    static func swiftBibleReading(
+        fontName: String,
+        fontSize: Int,
+        reading: ReadingTheme,
+        colorScheme: ColorScheme
+    ) -> MarkdownUI.Theme {
+        let textColor: Color = reading.isCustom ? reading.textColor(for: colorScheme) : .primary
+        let secondaryColor: Color = reading.isCustom ? reading.secondaryTextColor(for: colorScheme) : .secondary
+
+        return Theme.basic
+            .text {
+                FontFamily(.custom(fontName))
+                FontSize(CGFloat(fontSize))
+                ForegroundColor(textColor)
+            }
+            .heading1 { configuration in
+                configuration.label
+                    .markdownMargin(top: .em(1), bottom: .em(1))
+                    .markdownTextStyle {
+                        FontFamily(.custom(fontName))
+                        FontWeight(.bold)
+                        FontSize(.em(1))
+                        ForegroundColor(textColor)
+                    }
+            }
+            .blockquote { configuration in
+                configuration.label
+                    .markdownTextStyle {
+                        FontFamily(.custom(fontName))
+                        ForegroundColor(secondaryColor)
+                    }
+            }
+    }
+}
+
+extension View {
+    /// Paints a reading surface with the active ReadingTheme's background.
+    /// A no-op (clear) for the default `.system` theme, so the default
+    /// appearance is unchanged.
+    @ViewBuilder
+    func readingThemeBackground(_ reading: ReadingTheme, colorScheme: ColorScheme) -> some View {
+        background(reading.isCustom ? reading.backgroundColor(for: colorScheme) : Color.clear)
+    }
+
+    /// Full reading-theme treatment for a scrollable screen (List / ScrollView /
+    /// Form) inside a NavigationStack: hides the default scroll background,
+    /// paints the theme color under the safe areas, and tints the navigation bar
+    /// to match (so the title/search area at the top isn't left un-themed).
+    /// No-op for the default `.system` theme.
+    @ViewBuilder
+    func readingThemeScreen(_ reading: ReadingTheme, colorScheme: ColorScheme) -> some View {
+        if reading.isCustom {
+            let bg = reading.backgroundColor(for: colorScheme)
+            self
+                .scrollContentBackground(.hidden)
+                .background(bg.ignoresSafeArea())
+                .toolbarBackground(bg, for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+        } else {
+            self
+        }
+    }
+
+    /// Clears a List row's background so the themed surface shows through.
+    /// Apply to each row (or Section) — `.listRowBackground` on the List itself
+    /// does not propagate. No-op (default background) for the `.system` theme.
+    /// Single-type (passes `Color?`) to keep large List bodies type-checkable.
+    func readingThemeRow(_ reading: ReadingTheme) -> some View {
+        listRowBackground(reading.isCustom ? Color.clear : nil)
+    }
+
+    /// Tints a List Section's rows to a subtle raised "card" surface on the
+    /// themed background (instead of standard white grouped cells). Apply to each
+    /// Section. No-op for the default `.system` theme.
+    func readingThemeCardRow(_ reading: ReadingTheme, colorScheme: ColorScheme) -> some View {
+        listRowBackground(
+            reading.isCustom ? reading.secondaryTextColor(for: colorScheme).opacity(0.12) : nil
+        )
+    }
+
+    /// Tints just the navigation bar to the theme color. For screens that
+    /// already manage their own content background (e.g. a ScrollView with an
+    /// explicit grouped background) so only the top bar needs matching.
+    /// No-op for the default `.system` theme.
+    @ViewBuilder
+    func readingThemeNavBar(_ reading: ReadingTheme, colorScheme: ColorScheme) -> some View {
+        if reading.isCustom {
+            let bg = reading.backgroundColor(for: colorScheme)
+            toolbarBackground(bg, for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+        } else {
+            self
+        }
     }
 }

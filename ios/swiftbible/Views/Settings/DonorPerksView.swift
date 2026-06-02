@@ -34,6 +34,7 @@ struct DonorPerksView: View {
                 }
                 .padding(.vertical, 4)
             }
+            .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
 
             Section(
                 header: Text("Custom Accent Color"),
@@ -49,6 +50,7 @@ struct DonorPerksView: View {
                     .foregroundStyle(.red)
                 }
             }
+            .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
 
             Section(
                 header: Text("Reading Theme"),
@@ -88,6 +90,7 @@ struct DonorPerksView: View {
                     }
                 }
             }
+            .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
 
             Section(
                 header: Text("App Icon"),
@@ -104,8 +107,10 @@ struct DonorPerksView: View {
                     }
                 }
             }
+            .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
 
         }
+        .readingThemeScreen(readingTheme, colorScheme: colorScheme)
         .navigationTitle("Donor Perks")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {

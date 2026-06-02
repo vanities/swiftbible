@@ -20,7 +20,20 @@ final class ToastService {
 
     private init() {}
 
+    /// User opt-out for badge-earned celebration toasts (and the confetti that
+    /// rides on the queue growing). Defaults to on. Read from UserDefaults so
+    /// this non-View service honors the @AppStorage("showAchievementToasts")
+    /// toggle; a missing key means the user hasn't opted out → enabled.
+    static let achievementToastsKey = "showAchievementToasts"
+
+    private var achievementToastsEnabled: Bool {
+        UserDefaults.standard.object(forKey: Self.achievementToastsKey) as? Bool ?? true
+    }
+
     func enqueue(_ badge: BadgeDefinition) {
+        // Badges are still earned + recorded when toasts are off; we just skip
+        // the celebration. The badge remains visible in the badge gallery.
+        guard achievementToastsEnabled else { return }
         // Avoid duplicates if BadgeService fires twice in quick succession
         // (e.g. scenePhase + chapter onAppear back to back).
         guard !queue.contains(where: { $0.id == badge.id }) else { return }

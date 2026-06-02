@@ -124,6 +124,14 @@ struct SavedDevotionalDetailView: View {
     let devotional: SavedDevotional
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("fontSize") private var fontSize: Int = 20
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
 
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -139,12 +147,16 @@ struct SavedDevotionalDetailView: View {
                     .fontWeight(.bold)
 
                 Markdown(devotional.message)
-                    .markdownTextStyle(\.text) {
-                        FontSize(17)
-                    }
+                    .markdownTheme(.swiftBibleReading(
+                        fontName: fontName,
+                        fontSize: fontSize,
+                        reading: readingTheme,
+                        colorScheme: colorScheme
+                    ))
             }
             .padding()
         }
+        .readingThemeBackground(readingTheme, colorScheme: colorScheme)
         .navigationTitle("Devotional")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

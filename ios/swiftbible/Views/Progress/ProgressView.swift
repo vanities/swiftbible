@@ -21,12 +21,27 @@ struct ProgressTabView: View {
     @State private var earnedCount: Int = 0
     @State private var tierByTrack: [BadgeTrack: BadgeTier] = [:]
     @State private var showingGallery: Bool = false
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
+
+    /// Card fill that tints to the active ReadingTheme so cards read as subtly
+    /// raised surfaces on the themed background instead of system grey.
+    private var cardFill: Color {
+        readingTheme.isCustom
+            ? readingTheme.secondaryTextColor(for: colorScheme).opacity(0.12)
+            : Color(.secondarySystemGroupedBackground)
+    }
 
     var body: some View {
         NavigationStack {
             scrollContent
                 .navigationTitle("Progress")
-                .background(Color(.systemGroupedBackground))
+                .background((readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color(.systemGroupedBackground)).ignoresSafeArea())
+                .readingThemeNavBar(readingTheme, colorScheme: colorScheme)
                 .onAppear(perform: handleAppear)
                 .sheet(isPresented: $showingGallery) {
                     BadgeGallerySheet()
@@ -127,7 +142,7 @@ struct ProgressTabView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(cardFill)
         .cornerRadius(12)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(canonPercent) percent of the Bible read, \(canonicalChaptersRead) of 1189 chapters")
@@ -162,7 +177,7 @@ struct ProgressTabView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(cardFill)
         .cornerRadius(12)
     }
 
@@ -203,7 +218,7 @@ struct ProgressTabView: View {
                 }
             }
             .padding()
-            .background(Color(.secondarySystemGroupedBackground))
+            .background(cardFill)
             .cornerRadius(12)
         }
         .buttonStyle(.plain)
@@ -349,6 +364,14 @@ private struct HeatmapCalendar: View {
 
     private let calendar = Calendar.current
     private let spacing: CGFloat = 3
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+    private var cardFill: Color {
+        let theme = ReadingTheme(rawValue: readingThemeRaw) ?? .system
+        return theme.isCustom
+            ? theme.secondaryTextColor(for: colorScheme).opacity(0.12)
+            : Color(.secondarySystemGroupedBackground)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -382,7 +405,7 @@ private struct HeatmapCalendar: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(cardFill)
         .cornerRadius(12)
     }
 
@@ -458,6 +481,14 @@ private struct BookCompletionGrid: View {
     let books: [BookProgress]
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 6)
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+    private var cardFill: Color {
+        let theme = ReadingTheme(rawValue: readingThemeRaw) ?? .system
+        return theme.isCustom
+            ? theme.secondaryTextColor(for: colorScheme).opacity(0.12)
+            : Color(.secondarySystemGroupedBackground)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -478,7 +509,7 @@ private struct BookCompletionGrid: View {
             }
         }
         .padding()
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(cardFill)
         .cornerRadius(12)
     }
 }

@@ -14,6 +14,8 @@ struct SettingsView: View {
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("showJesusWordsInRed") var showJesusWordsInRed = true
     @AppStorage("hideNavAndTab") var hideNavAndTab = false
+    @AppStorage(ToastService.achievementToastsKey) var showAchievementToasts = true
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
     @AppStorage("showApocrypha") var showApocrypha = false
     @AppStorage("showJewishPseudepigraphaEnoch") var showJewishPseudepigraphaEnoch = false
     @AppStorage("showJubilees") var showJubilees = false
@@ -46,6 +48,10 @@ struct SettingsView: View {
     @State private var showOnboardingResetToast = false
     @State private var versionTapCount = 0
     @State private var showCopiedToast = false
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
 
     var body: some View {
         @Bindable var userViewModel = userViewModel
@@ -97,7 +103,7 @@ struct SettingsView: View {
                 } header: {
                     sectionHeader("Reading", systemImage: "book.fill")
                 }
-
+                .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
                 Section {
                     Picker(selection: $appViewModel.selectedVersion) {
                         ForEach(Version.allCases, id: \.rawValue) { version in
@@ -123,7 +129,7 @@ struct SettingsView: View {
                 } header: {
                     sectionHeader("Bible Translation", systemImage: "globe.americas.fill")
                 }
-
+                .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
                 Section {
                     DisclosureGroup {
                         Toggle("Apocrypha", isOn: $showApocrypha)
@@ -168,7 +174,7 @@ struct SettingsView: View {
                 } footer: {
                     Text("Apocrypha, Jewish pseudepigrapha, and early Christian writings — valued by some traditions outside the standard biblical canon.")
                 }
-
+                .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
                 Section {
                     NavigationLink {
                         NotificationSettingsView()
@@ -181,10 +187,15 @@ struct SettingsView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    Toggle(isOn: $showAchievementToasts) {
+                        accentLabel("Achievement Celebrations", systemImage: "trophy.fill", tint: .brandGold)
+                    }
                 } header: {
                     sectionHeader("Notifications", systemImage: "bell.badge.fill")
+                } footer: {
+                    Text("Show a banner and confetti when you earn a badge. Badges are still recorded in your collection.")
                 }
-
+                .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
                 Section {
                     HStack {
                         accentLabel("Cache Size", systemImage: "internaldrive.fill")
@@ -200,7 +211,7 @@ struct SettingsView: View {
                 } header: {
                     sectionHeader("Storage", systemImage: "externaldrive.fill")
                 }
-
+                .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
                 Section {
                     supportCard
 
@@ -244,7 +255,7 @@ struct SettingsView: View {
                 } header: {
                     sectionHeader("Support swiftbible", systemImage: "heart.fill")
                 }
-
+                .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
                 Section {
                     Button {
                         openMail(subject: "swiftbible - Contact Us")
@@ -299,7 +310,7 @@ struct SettingsView: View {
                 } header: {
                     sectionHeader("About", systemImage: "info.circle.fill")
                 }
-
+                .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
                 if showDebugSection {
                     Section {
                         Toggle(isOn: $debugForceShowEvents) {
@@ -347,7 +358,6 @@ struct SettingsView: View {
                         sectionHeader("Debug", systemImage: "hammer.fill")
                     }
                 }
-
                 Section {
                     VStack(spacing: 4) {
                         Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
@@ -399,8 +409,8 @@ struct SettingsView: View {
                         }
                     }
                 }
-
             }
+            .readingThemeScreen(readingTheme, colorScheme: colorScheme)
             .navigationBarTitle("Settings")
             .navigationDestination(isPresented: $userViewModel.showSignInFlow) {
                 AuthenticateView()
