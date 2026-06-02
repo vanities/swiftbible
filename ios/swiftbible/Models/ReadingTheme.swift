@@ -236,12 +236,15 @@ extension View {
 
 /// An outlined "card" for High Contrast rows: transparent center (max text
 /// contrast) with a `.primary` border that adapts (black on white / white on
-/// black). Padded so adjacent rows read as separate boxes.
+/// black). Inset on all sides so the rounded corners clear the grouped list's
+/// own corner clipping (which would otherwise cut the first/last row's corners)
+/// and adjacent rows read as separate boxes.
 private func highContrastRowOutline() -> AnyView {
     AnyView(
-        RoundedRectangle(cornerRadius: 8, style: .continuous)
+        RoundedRectangle(cornerRadius: 7, style: .continuous)
             .strokeBorder(Color.primary, lineWidth: 1.5)
-            .padding(.vertical, 3)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 4)
     )
 }
 
