@@ -15,6 +15,11 @@ struct TextSourceInfo: Identifiable {
 }
 
 struct TextSourcesView: View {
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
     @AppStorage("fontName") private var fontName: String = "Helvetica"
     @AppStorage("fontSize") private var fontSize: Int = 20
 
@@ -155,6 +160,7 @@ struct TextSourcesView: View {
                 }
             }
         }
+        .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
         .navigationTitle("Text Sources")
     }
 }

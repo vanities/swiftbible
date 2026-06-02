@@ -10,6 +10,12 @@ import SwiftUI
 struct FontOptionsView: View {
     @AppStorage("fontSize") private var fontSize: Int = 20
     @AppStorage("fontName") private var fontName: String = "Helvetica"
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
 
     let fontNames = [
         "Helvetica",
@@ -65,6 +71,7 @@ struct FontOptionsView: View {
                 .padding(.horizontal, 5)
             }
         }
+        .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
         .navigationBarTitle("Font Options")
     }
 }

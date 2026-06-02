@@ -172,6 +172,19 @@ extension View {
         }
     }
 
+    /// Background-only theming for a List / Form / ScrollView whose navigation
+    /// bar is already tinted globally (ContentView.applyNavBarAppearance): hides
+    /// the default scroll background and paints the theme color under the safe
+    /// areas. Single-type so it's cheap to type-check. No-op for `.system`.
+    func readingThemeContentBackground(_ reading: ReadingTheme, colorScheme: ColorScheme) -> some View {
+        self
+            .scrollContentBackground(reading.isCustom ? .hidden : .automatic)
+            .background(
+                (reading.isCustom ? reading.backgroundColor(for: colorScheme) : Color.clear)
+                    .ignoresSafeArea()
+            )
+    }
+
     /// Clears a List row's background so the themed surface shows through.
     /// Apply to each row (or Section) — `.listRowBackground` on the List itself
     /// does not propagate. No-op (default background) for the `.system` theme.

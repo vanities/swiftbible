@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct ColorOptionsView: View {
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
     @AppStorage("highlightedColor") private var highlightedColor: String = "FFFFE0"
     @AppStorage("notedColor") private var notedColor: String = "00ff04"
     @State private var highlightColor = Color.yellow
@@ -22,6 +27,7 @@ struct ColorOptionsView: View {
                 ColorPicker("Highlight Color", selection: $highlightColor)
             }
         }
+        .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
         .navigationBarTitle("Color Options")
         .onAppear {
             highlightColor = Color(hex: highlightedColor)

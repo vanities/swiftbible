@@ -26,6 +26,8 @@ struct ContentView: View {
     @AppStorage(DonationPreferences.donationCompletedKey) private var hasCompletedDonation = false
     @AppStorage(DonationPreferences.anonIdentifierKey) private var donationAnonIdentifier: String = ""
     @AppStorage("customAccentColor") private var customAccentHex: String = ""
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
     @AppStorage("seenEventIDs") private var seenEventIDsRaw: String = ""
 
     @Environment(\.scenePhase) private var scenePhase
@@ -86,6 +88,9 @@ struct ContentView: View {
         @Bindable var appViewModel = appViewModel
 
         mainTabView
+        .onAppear { applyNavBarAppearance() }
+        .onChange(of: readingThemeRaw) { applyNavBarAppearance() }
+        .onChange(of: colorScheme) { applyNavBarAppearance() }
         .onChange(of: selectedTab) { _, newTab in
             // Switching tabs doesn't reliably fire the reader's onDisappear, so
             // persist any in-flight reading session before leaving the Bible tab.
@@ -339,6 +344,27 @@ struct ContentView: View {
             repetitions: 2,
             repetitionInterval: 0.3
         )
+    }
+
+    /// Globally tints every navigation bar to the active ReadingTheme, so all
+    /// pushed/sub-pages match without per-view toolbar modifiers. Re-applied on
+    /// theme / color-scheme change. No-op (system default) for `.system`.
+    private func applyNavBarAppearance() {
+        let theme = ReadingTheme(rawValue: readingThemeRaw) ?? .system
+        let appearance = UINavigationBarAppearance()
+        if theme.isCustom {
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = UIColor(theme.backgroundColor(for: colorScheme))
+            appearance.shadowColor = .clear
+            let textColor = UIColor(theme.textColor(for: colorScheme))
+            appearance.titleTextAttributes = [.foregroundColor: textColor]
+            appearance.largeTitleTextAttributes = [.foregroundColor: textColor]
+        } else {
+            appearance.configureWithDefaultBackground()
+        }
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
     }
 
     private func evaluateOnboarding() {

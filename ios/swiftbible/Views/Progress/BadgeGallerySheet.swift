@@ -7,6 +7,11 @@ import SwiftUI
 import SwiftData
 
 struct BadgeGallerySheet: View {
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
 
@@ -25,6 +30,7 @@ struct BadgeGallerySheet: View {
                 .padding()
             }
             .background(Color(.systemGroupedBackground))
+            .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
             .navigationTitle("Achievements")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

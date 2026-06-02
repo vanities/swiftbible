@@ -1,6 +1,11 @@
 import SwiftUI
 
 struct DonationHistoryView: View {
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
     @Environment(AppViewModel.self) private var appViewModel
 
     var body: some View {
@@ -34,6 +39,7 @@ struct DonationHistoryView: View {
                 }
             }
         }
+        .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
         .navigationTitle("Donation History")
     }
 

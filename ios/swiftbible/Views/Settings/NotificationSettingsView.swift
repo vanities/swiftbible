@@ -7,6 +7,11 @@ import SwiftUI
 import UserNotifications
 
 struct NotificationSettingsView: View {
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
     @AppStorage("devotionalReminderEnabled") private var reminderEnabled = false
     @AppStorage("devotionalReminderHour") private var reminderHour: Int = 21
     @AppStorage("devotionalReminderMinute") private var reminderMinute: Int = 0
@@ -204,6 +209,7 @@ struct NotificationSettingsView: View {
             }
             #endif
         }
+        .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
         .navigationTitle("Devotional Reminder")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {

@@ -6,6 +6,11 @@
 import SwiftUI
 
 struct AppIconPickerView: View {
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
     @AppStorage("selectedAppIcon") private var selectedIconRaw: String = AppIconOption.automatic.rawValue
 
     private let iconOptions: [AppIconOption] = AppIconOption.allCases.map { $0 }
@@ -46,6 +51,7 @@ struct AppIconPickerView: View {
                 .accessibilityAddTraits(selectedIcon == option ? .isSelected : [])
             }
         }
+        .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
         .navigationTitle("App Icon")
         .navigationBarTitleDisplayMode(.inline)
     }

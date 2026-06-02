@@ -24,6 +24,12 @@ struct SeeSavedNotesView: View {
     @Query private var notes: [Note] = []
 
     @Binding var selectedTab: Tabs
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
 
     @State private var query: String = ""
     @State private var sort: NoteSort = .recent
@@ -115,9 +121,11 @@ struct SeeSavedNotesView: View {
                         }
                     }
                     .listStyle(.insetGrouped)
+                    .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
                 }
             }
         }
+        .readingThemeBackground(readingTheme, colorScheme: colorScheme)
         .searchable(text: $query, prompt: "Search notes")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
