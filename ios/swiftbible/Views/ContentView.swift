@@ -366,15 +366,40 @@ struct ContentView: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
 
-        // Clear grouped List/Form cell + section-header backgrounds so the themed
-        // surface shows through (sepia-on-sepia) instead of system-white cells and
-        // muddy tinted header bands. Views that want raised "card" rows set their
-        // own .listRowBackground (e.g. Settings via .readingThemeCardRow), which
-        // wins over this; section headers have no such override, so they stay clear.
+        // Appearance-proxy changes only affect nav bars created afterwards, so a
+        // theme switch while a pushed screen is visible would leave the current bar
+        // on the old color until you pop back. Apply to already-visible bars too.
+        for scene in UIApplication.shared.connectedScenes {
+            guard let windowScene = scene as? UIWindowScene else { continue }
+            for window in windowScene.windows {
+                refreshNavigationBars(in: window, appearance: appearance)
+            }
+        }
+
+        // Under a custom theme, clear grouped List/Form cell + section-header
+        // backgrounds so the themed surface shows through (sepia-on-sepia) instead
+        // of system-white cells and muddy tinted header bands. Views that want
+        // raised "card" rows set their own .listRowBackground (e.g. Settings via
+        // .readingThemeCardRow), which wins over this; headers have no such
+        // override, so they stay clear. For the default theme, restore `nil` so
+        // SwiftUI's own per-cell config applies (filled cells, transparent headers)
+        // — forcing a uniform config there wrongly fills section headers white.
         let cell = UICollectionViewListCell.appearance()
-        cell.backgroundConfiguration = theme.isCustom
-            ? .clear()
-            : .listGroupedCell()
+        cell.backgroundConfiguration = theme.isCustom ? .clear() : nil
+    }
+
+    /// Walks a view tree and applies the appearance to every live UINavigationBar,
+    /// so a theme change updates bars already on screen (the appearance proxy alone
+    /// only affects bars created later).
+    private func refreshNavigationBars(in view: UIView, appearance: UINavigationBarAppearance) {
+        if let bar = view as? UINavigationBar {
+            bar.standardAppearance = appearance
+            bar.scrollEdgeAppearance = appearance
+            bar.compactAppearance = appearance
+        }
+        for subview in view.subviews {
+            refreshNavigationBars(in: subview, appearance: appearance)
+        }
     }
 
     private func evaluateOnboarding() {

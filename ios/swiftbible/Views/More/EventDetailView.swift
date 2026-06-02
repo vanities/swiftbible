@@ -24,6 +24,12 @@ struct EventDetailView: View {
     /// In DEBUG, the Settings → Force-Show Events toggle also unlocks every
     /// day for testing. In production, only past + today's days are unlocked.
     @AppStorage("debug_forceShowEvents") private var debugForceShowEvents: Bool = false
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
 
     /// A day is unlocked if its date has arrived (today or earlier).
     /// Future days are locked to encourage daily return engagement.
@@ -37,6 +43,7 @@ struct EventDetailView: View {
     var body: some View {
         NavigationStack {
             content
+                .background(themedBackground)
                 .navigationTitle(event.name)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar { toolbarContent }
@@ -48,6 +55,14 @@ struct EventDetailView: View {
                     markRead(at: newValue)
                 }
         }
+    }
+
+    /// Fills the sheet with the active ReadingTheme's surface (the paged
+    /// ScrollViews are transparent, so this shows through). Defaults to the
+    /// system background for the `.system` theme.
+    private var themedBackground: some View {
+        (readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color(.systemBackground))
+            .ignoresSafeArea()
     }
 
     @ViewBuilder
@@ -132,6 +147,8 @@ struct EventDetailView: View {
 
 private struct EventDayPage: View {
     @AppStorage("showJesusWordsInRed") private var showJesusWordsInRed: Bool = true
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
     let day: EventReadingDay
     let dayNumber: Int
     let totalDays: Int
@@ -139,6 +156,16 @@ private struct EventDayPage: View {
     let iconName: String
     let isUnlocked: Bool
     let onOpenInBible: () -> Void
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
+    private var themedTextColor: Color {
+        readingTheme.isCustom ? readingTheme.textColor(for: colorScheme) : .primary
+    }
+    private var themedSecondaryColor: Color {
+        readingTheme.isCustom ? readingTheme.secondaryTextColor(for: colorScheme) : .secondary
+    }
 
     var body: some View {
         ScrollView {
@@ -182,7 +209,7 @@ private struct EventDayPage: View {
     private var title: some View {
         Text(day.theme)
             .font(.system(size: 28, weight: .black, design: .serif))
-            .foregroundStyle(.primary)
+            .foregroundStyle(themedTextColor)
             .fixedSize(horizontal: false, vertical: true)
     }
 
@@ -222,7 +249,10 @@ private struct EventDayPage: View {
         switch segment.kind {
         case .markdown:
             Markdown(segment.text)
-                .markdownTheme(.eventReflection)
+                .markdownTheme(.eventReflection(
+                    textColor: themedTextColor,
+                    secondaryColor: themedSecondaryColor
+                ))
         case .jesusBlockquote:
             HStack(alignment: .top, spacing: 12) {
                 Rectangle()
@@ -272,7 +302,7 @@ private struct EventDayPage: View {
 
             Text(unlocksLabel)
                 .font(.system(size: 15, weight: .semibold, design: .serif))
-                .foregroundStyle(.primary)
+                .foregroundStyle(themedTextColor)
                 .multilineTextAlignment(.center)
 
             Text("Each day's reading unlocks on its date — come back \(comeBackLabel) to continue the plan.")
@@ -352,12 +382,13 @@ private struct ReflectionSegment: Identifiable {
 private extension MarkdownUI.Theme {
     /// Reading-friendly theme for the EventDetailView reflection block.
     /// Slightly larger body text + serif italics for KJV quotes work well
-    /// when the reflection uses *...* around scripture lines.
-    static var eventReflection: MarkdownUI.Theme {
+    /// when the reflection uses *...* around scripture lines. Takes the active
+    /// ReadingTheme's text colors so reflections match the rest of the app.
+    static func eventReflection(textColor: Color, secondaryColor: Color) -> MarkdownUI.Theme {
         Theme()
             .text {
                 FontSize(16)
-                ForegroundColor(.primary)
+                ForegroundColor(textColor)
             }
             .paragraph { configuration in
                 configuration.label
@@ -375,7 +406,7 @@ private extension MarkdownUI.Theme {
                     }
                     .markdownTextStyle {
                         FontStyle(.italic)
-                        ForegroundColor(.secondary)
+                        ForegroundColor(secondaryColor)
                     }
             }
             .strong {
