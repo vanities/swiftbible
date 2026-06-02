@@ -11,6 +11,11 @@ import SwiftUI
 
 struct ParchmentBackground: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
 
     func body(content: Content) -> some View {
         content.background {
@@ -23,9 +28,14 @@ struct ParchmentBackground: ViewModifier {
         }
     }
 
+    /// Under a custom reading theme, paint the theme's surface (so History
+    /// matches Sepia/True Black/High Contrast) while the gold glow + vignette
+    /// keep the manuscript feel. The default theme keeps the warm parchment.
     private var base: some View {
         Group {
-            if colorScheme == .dark {
+            if readingTheme.isCustom {
+                readingTheme.backgroundColor(for: colorScheme)
+            } else if colorScheme == .dark {
                 Color.brandCoverDark
             } else {
                 Color(red: 0.965, green: 0.94, blue: 0.88)
