@@ -185,7 +185,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
-                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
+                                .readingThemeRow(readingTheme)
                             }
                         }
                     }
@@ -197,7 +197,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
-                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
+                                .readingThemeRow(readingTheme)
                             }
                         }
                     }
@@ -209,7 +209,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
-                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
+                                .readingThemeRow(readingTheme)
                             }
                         }
                     }
@@ -221,7 +221,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
-                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
+                                .readingThemeRow(readingTheme)
                             }
                         }
                     }
@@ -233,7 +233,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
-                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
+                                .readingThemeRow(readingTheme)
                             }
                         }
                     }
@@ -244,7 +244,7 @@ struct BibleView: View {
                                 NavigationLink(destination: BookDetailView(book: book)) {
                                     NavigationTitle(name: book.name, description: book.description)
                                 }
-                                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
+                                .readingThemeRow(readingTheme)
                             }
                         }
                     }
@@ -339,7 +339,7 @@ struct BibleView: View {
                 NavigationLink(destination: BookDetailView(book: book)) {
                     NavigationTitle(name: book.name, description: book.description)
                 }
-                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
+                .readingThemeRow(readingTheme)
             }
         }
     }
@@ -353,7 +353,7 @@ struct BibleView: View {
                 NavigationLink(destination: BookDetailView(book: book)) {
                     NavigationTitle(name: book.name, description: book.description)
                 }
-                .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
+                .readingThemeRow(readingTheme)
             }
         }
     }
@@ -365,7 +365,7 @@ struct BibleView: View {
             NavigationLink(destination: BookDetailView(book: book)) {
                 NavigationTitle(name: book.name, description: book.description)
             }
-            .listRowBackground(readingTheme.isCustom ? Color.clear : nil)
+            .readingThemeRow(readingTheme)
         }
     }
 

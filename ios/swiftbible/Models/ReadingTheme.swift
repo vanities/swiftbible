@@ -200,18 +200,17 @@ extension View {
     /// Clears a List row's background so the themed surface shows through.
     /// Apply to each row (or Section) — `.listRowBackground` on the List itself
     /// does not propagate. No-op (default background) for the `.system` theme.
-    /// Single-type (passes `Color?`) to keep large List bodies type-checkable.
+    /// High Contrast instead outlines each row so structure stays defined.
+    /// Single-type (`AnyView?`) to keep large List bodies type-checkable.
     func readingThemeRow(_ reading: ReadingTheme) -> some View {
-        listRowBackground(reading.isCustom ? Color.clear : nil)
+        listRowBackground(readingThemeRowBackground(reading))
     }
 
     /// Tints a List Section's rows to a subtle raised "card" surface on the
-    /// themed background (instead of standard white grouped cells). Apply to each
-    /// Section. No-op for the default `.system` theme.
+    /// themed background (instead of standard white grouped cells). High Contrast
+    /// outlines each row instead. Apply to each Section. No-op for `.system`.
     func readingThemeCardRow(_ reading: ReadingTheme, colorScheme: ColorScheme) -> some View {
-        listRowBackground(
-            reading.isCustom ? reading.secondaryTextColor(for: colorScheme).opacity(0.12) : nil
-        )
+        listRowBackground(readingThemeCardRowBackground(reading, colorScheme: colorScheme))
     }
 
     /// Tints just the navigation bar to the theme color. For screens that
@@ -227,5 +226,41 @@ extension View {
         } else {
             self
         }
+    }
+}
+
+// MARK: - Row background resolution
+//
+// Returned as `AnyView?` so `listRowBackground` sees one concrete type
+// (nil → default cell), keeping large List bodies cheap to type-check.
+
+/// An outlined "card" for High Contrast rows: transparent center (max text
+/// contrast) with a `.primary` border that adapts (black on white / white on
+/// black). Padded so adjacent rows read as separate boxes.
+private func highContrastRowOutline() -> AnyView {
+    AnyView(
+        RoundedRectangle(cornerRadius: 8, style: .continuous)
+            .strokeBorder(Color.primary, lineWidth: 1.5)
+            .padding(.vertical, 3)
+    )
+}
+
+private func readingThemeRowBackground(_ reading: ReadingTheme) -> AnyView? {
+    if reading == .highContrast {
+        return highContrastRowOutline()
+    } else if reading.isCustom {
+        return AnyView(Color.clear)
+    } else {
+        return nil
+    }
+}
+
+private func readingThemeCardRowBackground(_ reading: ReadingTheme, colorScheme: ColorScheme) -> AnyView? {
+    if reading == .highContrast {
+        return highContrastRowOutline()
+    } else if reading.isCustom {
+        return AnyView(reading.secondaryTextColor(for: colorScheme).opacity(0.12))
+    } else {
+        return nil
     }
 }

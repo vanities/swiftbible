@@ -28,6 +28,7 @@ struct ContentView: View {
     @AppStorage("customAccentColor") private var customAccentHex: String = ""
     @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.legibilityWeight) private var systemLegibilityWeight
     @AppStorage("seenEventIDs") private var seenEventIDsRaw: String = ""
 
     @Environment(\.scenePhase) private var scenePhase
@@ -84,11 +85,22 @@ struct ContentView: View {
         .tabViewStyle(.sidebarAdaptable)
     }
 
+    private var activeReadingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
+
+    /// High Contrast renders text bolder for legibility; other themes follow the
+    /// system's Bold Text setting.
+    private var effectiveLegibilityWeight: LegibilityWeight? {
+        activeReadingTheme == .highContrast ? .bold : systemLegibilityWeight
+    }
+
     var body: some View {
         @Bindable var appViewModel = appViewModel
 
         mainTabView
-        .preferredColorScheme((ReadingTheme(rawValue: readingThemeRaw) ?? .system).forcedColorScheme)
+        .preferredColorScheme(activeReadingTheme.forcedColorScheme)
+        .environment(\.legibilityWeight, effectiveLegibilityWeight)
         .onAppear { applyNavBarAppearance() }
         .onChange(of: readingThemeRaw) { applyNavBarAppearance() }
         .onChange(of: colorScheme) { applyNavBarAppearance() }
