@@ -366,18 +366,15 @@ struct ContentView: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
 
-        // Grouped List/Form cells: tint to the theme so the "cards" on a themed
-        // background read as subtly-raised surfaces instead of system white.
-        // Applies wherever the surface also hides its scroll background.
+        // Clear grouped List/Form cell + section-header backgrounds so the themed
+        // surface shows through (sepia-on-sepia) instead of system-white cells and
+        // muddy tinted header bands. Views that want raised "card" rows set their
+        // own .listRowBackground (e.g. Settings via .readingThemeCardRow), which
+        // wins over this; section headers have no such override, so they stay clear.
         let cell = UICollectionViewListCell.appearance()
-        if theme.isCustom {
-            var config = UIBackgroundConfiguration.listGroupedCell()
-            config.backgroundColor = UIColor(theme.secondaryTextColor(for: colorScheme))
-                .withAlphaComponent(0.12)
-            cell.backgroundConfiguration = config
-        } else {
-            cell.backgroundConfiguration = UIBackgroundConfiguration.listGroupedCell()
-        }
+        cell.backgroundConfiguration = theme.isCustom
+            ? .clear()
+            : .listGroupedCell()
     }
 
     private func evaluateOnboarding() {
