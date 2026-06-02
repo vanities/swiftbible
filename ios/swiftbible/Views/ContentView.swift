@@ -365,6 +365,19 @@ struct ContentView: View {
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
+
+        // Grouped List/Form cells: tint to the theme so the "cards" on a themed
+        // background read as subtly-raised surfaces instead of system white.
+        // Applies wherever the surface also hides its scroll background.
+        let cell = UICollectionViewListCell.appearance()
+        if theme.isCustom {
+            var config = UIBackgroundConfiguration.listGroupedCell()
+            config.backgroundColor = UIColor(theme.secondaryTextColor(for: colorScheme))
+                .withAlphaComponent(0.12)
+            cell.backgroundConfiguration = config
+        } else {
+            cell.backgroundConfiguration = UIBackgroundConfiguration.listGroupedCell()
+        }
     }
 
     private func evaluateOnboarding() {

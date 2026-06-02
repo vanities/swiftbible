@@ -12,6 +12,11 @@ struct BadgeGallerySheet: View {
     private var readingTheme: ReadingTheme {
         ReadingTheme(rawValue: readingThemeRaw) ?? .system
     }
+    private var screenBackground: Color {
+        readingTheme.isCustom
+            ? readingTheme.backgroundColor(for: colorScheme)
+            : Color(.systemGroupedBackground)
+    }
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
 
@@ -29,8 +34,7 @@ struct BadgeGallerySheet: View {
                 }
                 .padding()
             }
-            .background(Color(.systemGroupedBackground))
-            .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
+            .background(screenBackground.ignoresSafeArea())
             .navigationTitle("Achievements")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -150,6 +154,17 @@ private struct BadgeCell: View {
     /// the cell only needs the tier ("Bronze").
     var nameOverride: String?
 
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
+    private var cardFill: Color {
+        readingTheme.isCustom
+            ? readingTheme.secondaryTextColor(for: colorScheme).opacity(0.12)
+            : Color(.secondarySystemGroupedBackground)
+    }
+
     var body: some View {
         VStack(spacing: 8) {
             ZStack {
@@ -194,7 +209,7 @@ private struct BadgeCell: View {
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color(.secondarySystemGroupedBackground))
+                .fill(cardFill)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12, style: .continuous)

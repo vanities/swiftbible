@@ -21,6 +21,12 @@ struct SavedDevotionalsListView: View {
 
     @State private var query: String = ""
     @State private var sort: SavedDevoSort = .recent
+    @AppStorage("readingTheme") private var readingThemeRaw: String = ReadingTheme.system.rawValue
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var readingTheme: ReadingTheme {
+        ReadingTheme(rawValue: readingThemeRaw) ?? .system
+    }
 
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -90,8 +96,10 @@ struct SavedDevotionalsListView: View {
                     .onDelete(perform: delete)
                 }
                 .listStyle(.insetGrouped)
+                .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
             }
         }
+        .readingThemeBackground(readingTheme, colorScheme: colorScheme)
         .searchable(text: $query, prompt: "Search devotionals")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
