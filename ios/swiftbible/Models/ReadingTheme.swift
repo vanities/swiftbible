@@ -243,7 +243,7 @@ private func highContrastRowOutline() -> AnyView {
     AnyView(
         RoundedRectangle(cornerRadius: 7, style: .continuous)
             .strokeBorder(Color.primary, lineWidth: 1.5)
-            .padding(.horizontal, 9)
+            .padding(.horizontal, 5)
             .padding(.vertical, 4)
     )
 }
