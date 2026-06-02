@@ -377,12 +377,19 @@
 			);
 			target = 95F7C7CE2F7B2E2D00B478E6 /* swiftbibleWidgetExtension */;
 		};
+		95F7F6AA2F8C3D1300B478E6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 95F7F6332F8C3D1200B478E6 /* swiftbibleWatch Watch App */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		95AB8B902CAB768000533AA5 /* swiftbibleUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = swiftbibleUITests; sourceTree = "<group>"; };
 		95F7C7D42F7B2E2D00B478E6 /* swiftbibleWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (95F7C7E42F7B2E2E00B478E6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = swiftbibleWidget; sourceTree = "<group>"; };
-		95F7F6352F8C3D1200B478E6 /* swiftbibleWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "swiftbibleWatch Watch App"; sourceTree = "<group>"; };
+		95F7F6352F8C3D1200B478E6 /* swiftbibleWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (95F7F6AA2F8C3D1300B478E6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "swiftbibleWatch Watch App"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1423,6 +1430,7 @@
 		};
 		95F7C7E22F7B2E2E00B478E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = SBSECRETS2F910001000XCCFG /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
@@ -1456,6 +1464,7 @@
 		};
 		95F7C7E32F7B2E2E00B478E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = SBSECRETS2F910001000XCCFG /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
@@ -1490,6 +1499,7 @@
 		};
 		95F7F63C2F8C3D1300B478E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = SBSECRETS2F910001000XCCFG /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1499,6 +1509,7 @@
 				DEVELOPMENT_TEAM = 8Q3RG3ULSU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "swiftbibleWatch Watch App/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = swiftbibleWatch;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.vanities.swiftbible;
@@ -1524,6 +1535,7 @@
 		};
 		95F7F63D2F8C3D1300B478E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = SBSECRETS2F910001000XCCFG /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1533,6 +1545,7 @@
 				DEVELOPMENT_TEAM = 8Q3RG3ULSU;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "swiftbibleWatch Watch App/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = swiftbibleWatch;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.vanities.swiftbible;

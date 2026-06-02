@@ -11,6 +11,37 @@ let appGroupID = "group.com.am2.swiftbible"
 let supabaseURL = "https://yvanxjoayoiocwzfpkfm.supabase.co"
 let supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2YW54am9heW9pb2N3emZwa2ZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU0OTQ5NTcsImV4cCI6MjA0MTA3MDk1N30.gG7dCHItgIBQhjA4EK38FJ6ju-I7mSJlvJRzVLaPuOs"
 
+/// The "Daily Devotional" table no longer allows direct anon/authenticated
+/// PostgREST reads — devotionals are served by the get-daily-devotional Edge
+/// Function, which allowlists the *app's* bundle id and validates
+/// DEVOTIONAL_READ_SECRET. The widget extension's own bundle id
+/// (…swiftbibleWidget) is rejected by the allowlist, so it sends the app id.
+let appBundleIdentifier = "com.vanities.swiftbible"
+
+/// Headers required by the get-daily-devotional Edge Function.
+func devotionalAppHeaders() -> [String: String] {
+    var headers = [
+        "x-swiftbible-platform": "ios",
+        "x-swiftbible-bundle-id": appBundleIdentifier
+    ]
+    if let secret = devotionalReadSecret() {
+        headers["x-swiftbible-client-key"] = secret
+    }
+    return headers
+}
+
+/// Reads DEVOTIONAL_READ_SECRET injected into the extension's Info.plist at
+/// build time (Secrets.xcconfig locally / Xcode Cloud env vars in CI). Returns
+/// nil when unresolved so we never send a literal "$(…)" placeholder.
+func devotionalReadSecret() -> String? {
+    guard let raw = Bundle.main.infoDictionary?["DEVOTIONAL_READ_SECRET"] as? String else {
+        return nil
+    }
+    let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !value.isEmpty, !value.hasPrefix("$(") else { return nil }
+    return value
+}
+
 // MARK: - Entry
 
 struct DevotionalEntry: TimelineEntry {
@@ -71,19 +102,21 @@ struct DailyDevotionalProvider: TimelineProvider {
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: Date())
 
-        // Supabase REST API: GET /rest/v1/Daily Devotional?select=message&for_date=eq.{date}
-        var components = URLComponents(string: "\(supabaseURL)/rest/v1/Daily Devotional")!
-        components.queryItems = [
-            URLQueryItem(name: "select", value: "message"),
-            URLQueryItem(name: "for_date", value: "eq.\(dateString)")
-        ]
-
-        guard let url = components.url else { return nil }
+        // Direct PostgREST reads of "Daily Devotional" are locked out, so go
+        // through the get-daily-devotional Edge Function (same path the app uses).
+        guard let url = URL(string: "\(supabaseURL)/functions/v1/get-daily-devotional") else {
+            return nil
+        }
 
         var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
-        // Return single object instead of array
-        request.setValue("application/vnd.pgrst.object+json", forHTTPHeaderField: "Accept")
+        for (field, value) in devotionalAppHeaders() {
+            request.setValue(value, forHTTPHeaderField: field)
+        }
+        request.httpBody = try? JSONSerialization.data(withJSONObject: ["forDate": dateString])
 
         guard let (data, response) = try? await URLSession.shared.data(for: request),
               let httpResponse = response as? HTTPURLResponse,

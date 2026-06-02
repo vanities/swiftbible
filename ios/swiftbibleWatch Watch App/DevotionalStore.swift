@@ -14,6 +14,35 @@ struct SharedDevotional: Codable {
     let message: String
 }
 
+/// The "Daily Devotional" table no longer allows direct anon/authenticated
+/// PostgREST reads — devotionals are served by the get-daily-devotional Edge
+/// Function, which allowlists the *app's* bundle id (com.vanities.swiftbible)
+/// and validates DEVOTIONAL_READ_SECRET. The watch sends the app id and the
+/// "ios" platform because that is what the Edge Function allowlists.
+private let appBundleIdentifier = "com.vanities.swiftbible"
+
+private func devotionalAppHeaders() -> [String: String] {
+    var headers = [
+        "x-swiftbible-platform": "ios",
+        "x-swiftbible-bundle-id": appBundleIdentifier
+    ]
+    if let secret = devotionalReadSecret() {
+        headers["x-swiftbible-client-key"] = secret
+    }
+    return headers
+}
+
+/// Reads DEVOTIONAL_READ_SECRET injected into the watch app's Info.plist at
+/// build time. Returns nil when unresolved so we never send a literal "$(…)".
+private func devotionalReadSecret() -> String? {
+    guard let raw = Bundle.main.infoDictionary?["DEVOTIONAL_READ_SECRET"] as? String else {
+        return nil
+    }
+    let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !value.isEmpty, !value.hasPrefix("$(") else { return nil }
+    return value
+}
+
 @MainActor
 final class DevotionalStore: ObservableObject {
     @Published var markdown: String = ""
@@ -65,17 +94,18 @@ final class DevotionalStore: ObservableObject {
 
     private static func fetchFromSupabase(date: Date) async throws -> SharedDevotional {
         let dateString = isoDate(date)
-        var components = URLComponents(string: "\(supabaseURL)/rest/v1/Daily Devotional")!
-        components.queryItems = [
-            URLQueryItem(name: "select", value: "message"),
-            URLQueryItem(name: "for_date", value: "eq.\(dateString)")
-        ]
-        guard let url = components.url else {
+        guard let url = URL(string: "\(supabaseURL)/functions/v1/get-daily-devotional") else {
             throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(supabaseAnonKey, forHTTPHeaderField: "apikey")
-        request.setValue("application/vnd.pgrst.object+json", forHTTPHeaderField: "Accept")
+        for (field, value) in devotionalAppHeaders() {
+            request.setValue(value, forHTTPHeaderField: field)
+        }
+        request.httpBody = try JSONSerialization.data(withJSONObject: ["forDate": dateString])
 
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
