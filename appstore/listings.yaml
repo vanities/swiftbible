@@ -17,8 +17,7 @@ en-US:
   keywords: "asv,web,scripture,gospel,prayer,jesus,christian,faith,study,notes,jubilees,enoch,hebrew,catholic,god"
   promo_text: "Read the Bible in KJV, ASV, WEB & Original Hebrew/Greek. Includes Apocrypha, Enoch, Jubilees, and more. Highlight, take notes, and get AI explanations."
   whats_new: |-
-    - Fixed a crash that could occur when opening your saved Highlights
-    - The Achievements screen now shows each badge's full description without cutting it off
+    - Fixed the Daily Devotional widget and Apple Watch app, which had stopped loading today's devotional
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -56,8 +55,7 @@ es-ES:
 
     SwiftBible es totalmente de código abierto. Lee y contribuye al código en GitHub.
   whats_new: |-
-    - Se corrigió un fallo que podía ocurrir al abrir tus Destacados guardados
-    - La pantalla de Logros ahora muestra la descripción completa de cada insignia sin recortarla
+    - Se corrigió el widget del Devocional diario y la app de Apple Watch, que habían dejado de cargar el devocional de hoy
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -95,8 +93,7 @@ es-MX:
 
     SwiftBible es 100% de código abierto. Lee y contribuye en GitHub.
   whats_new: |-
-    - Se corrigió un fallo que podía ocurrir al abrir tus Destacados guardados
-    - La pantalla de Logros ahora muestra la descripción completa de cada insignia sin recortarla
+    - Se corrigió el widget del Devocional diario y la app de Apple Watch, que habían dejado de cargar el devocional de hoy
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -134,8 +131,7 @@ pt-BR:
 
     SwiftBible é totalmente de código aberto. Veja e contribua no GitHub.
   whats_new: |-
-    - Corrigido um travamento que podia ocorrer ao abrir seus Destaques salvos
-    - A tela de Conquistas agora mostra a descrição completa de cada medalha sem cortar o texto
+    - Corrigido o widget do Devocional diário e o app do Apple Watch, que haviam parado de carregar o devocional de hoje
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -173,8 +169,7 @@ pt-PT:
 
     SwiftBible é totalmente de código aberto. Vê e contribui no GitHub.
   whats_new: |-
-    - Corrigida uma falha que podia ocorrer ao abrir os seus Destaques guardados
-    - O ecrã de Conquistas mostra agora a descrição completa de cada distintivo sem cortar o texto
+    - Corrigido o widget do Devocional diário e a app do Apple Watch, que tinham deixado de carregar o devocional de hoje
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -212,8 +207,7 @@ fr-FR:
 
     SwiftBible est entièrement open-source. Consultez et contribuez sur GitHub.
   whats_new: |-
-    - Correction d'un plantage qui pouvait survenir à l'ouverture de vos surlignages enregistrés
-    - L'écran des Réalisations affiche désormais la description complète de chaque badge sans la tronquer
+    - Correction du widget Méditation quotidienne et de l'app Apple Watch, qui ne chargeaient plus la méditation du jour
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -251,8 +245,7 @@ de-DE:
 
     SwiftBible ist vollständig Open Source. Code ansehen und beitragen auf GitHub.
   whats_new: |-
-    - Ein Absturz beim Öffnen deiner gespeicherten Markierungen wurde behoben
-    - Der Erfolge-Bildschirm zeigt jetzt die vollständige Beschreibung jedes Abzeichens, ohne sie abzuschneiden
+    - Das Widget „Tägliche Andacht“ und die Apple-Watch-App luden die heutige Andacht nicht mehr – behoben
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -290,8 +283,7 @@ it:
 
     SwiftBible è completamente open source. Codice e contributi su GitHub.
   whats_new: |-
-    - Corretto un arresto anomalo che poteva verificarsi all'apertura delle Evidenziazioni salvate
-    - La schermata Obiettivi ora mostra la descrizione completa di ogni distintivo senza troncarla
+    - Risolto il widget del Devozionale quotidiano e l'app per Apple Watch, che avevano smesso di caricare il devozionale di oggi
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -329,8 +321,7 @@ nl-NL:
 
     SwiftBible is volledig open source. Bekijk en draag bij op GitHub.
   whats_new: |-
-    - Een crash opgelost die kon optreden bij het openen van je opgeslagen markeringen
-    - Het scherm Prestaties toont nu de volledige beschrijving van elke badge zonder afkapping
+    - Het widget voor de Dagelijkse meditatie en de Apple Watch-app laadden de meditatie van vandaag niet meer – opgelost
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -368,8 +359,7 @@ pl:
 
     SwiftBible jest w pełni otwartoźródłowa. Kod i wkład w GitHubie.
   whats_new: |-
-    - Naprawiono awarię, która mogła wystąpić podczas otwierania zapisanych zaznaczeń
-    - Ekran Osiągnięć pokazuje teraz pełny opis każdej odznaki bez ucinania tekstu
+    - Naprawiono widżet Codziennego rozważania oraz aplikację Apple Watch, które przestały wczytywać dzisiejsze rozważanie
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -407,8 +397,7 @@ ru:
 
     SwiftBible полностью с открытым исходным кодом. Код и вклад на GitHub.
   whats_new: |-
-    - Исправлен сбой, который мог возникать при открытии сохранённых выделений
-    - На экране достижений теперь полностью отображается описание каждого значка без обрезки
+    - Исправлены виджет «Ежедневное размышление» и приложение для Apple Watch, которые перестали загружать сегодняшнее размышление
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -446,8 +435,7 @@ ko:
 
     SwiftBible은 완전한 오픈소스입니다. GitHub에서 코드를 보고 기여할 수 있습니다.
   whats_new: |-
-    - 저장한 하이라이트를 열 때 발생할 수 있던 충돌을 수정했습니다
-    - 업적 화면에서 각 배지 설명이 잘리지 않고 전체가 표시됩니다
+    - 오늘의 묵상을 불러오지 못하던 매일 묵상 위젯과 Apple Watch 앱 문제를 수정했습니다
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -485,8 +473,7 @@ ja:
 
     SwiftBibleは完全にオープンソースです。GitHubでコードの閲覧・貢献ができます。
   whats_new: |-
-    - 保存したハイライトを開く際に発生することがあったクラッシュを修正しました
-    - 実績画面で各バッジの説明が途切れずに全文表示されるようになりました
+    - 本日の黙想を読み込めなくなっていた「毎日の黙想」ウィジェットとApple Watchアプリを修正しました
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -524,8 +511,7 @@ zh-Hans:
 
     SwiftBible 完全开源。可在 GitHub 查看代码并贡献。
   whats_new: |-
-    - 修复了打开已保存的高亮时可能发生的崩溃
-    - 成就页面现在会完整显示每个徽章的说明，不再被截断
+    - 修复了每日灵修小组件和 Apple Watch 应用无法加载当天灵修的问题
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -563,8 +549,7 @@ zh-Hant:
 
     SwiftBible 完全開源。可在 GitHub 查看程式碼並貢獻。
   whats_new: |-
-    - 修正了開啟已儲存的螢光標示時可能發生的當機
-    - 成就頁面現在會完整顯示每個徽章的說明，不再被截斷
+    - 修正了每日靈修小工具與 Apple Watch App 無法載入當日靈修的問題
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -602,8 +587,7 @@ id:
 
     SwiftBible sepenuhnya sumber terbuka. Lihat kode dan berkontribusi di GitHub.
   whats_new: |-
-    - Memperbaiki crash yang dapat terjadi saat membuka Sorotan tersimpan
-    - Layar Pencapaian kini menampilkan deskripsi lengkap setiap lencana tanpa terpotong
+    - Memperbaiki widget Renungan Harian dan aplikasi Apple Watch yang berhenti memuat renungan hari ini
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -641,8 +625,7 @@ el:
 
     Το SwiftBible είναι πλήρως ανοιχτού κώδικα. Δες τον κώδικα και συνεισέφερε στο GitHub.
   whats_new: |-
-    - Διορθώθηκε μια κατάρρευση που μπορούσε να συμβεί κατά το άνοιγμα των αποθηκευμένων επισημάνσεών σας
-    - Η οθόνη Επιτευγμάτων εμφανίζει πλέον ολόκληρη την περιγραφή κάθε σήματος χωρίς περικοπή
+    - Διορθώθηκε το widget «Καθημερινός στοχασμός» και η εφαρμογή Apple Watch, που είχαν σταματήσει να φορτώνουν τον σημερινό στοχασμό
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -680,8 +663,7 @@ ro:
 
     SwiftBible este complet open-source. Cod și contribuții pe GitHub.
   whats_new: |-
-    - S-a remediat o blocare care putea apărea la deschiderea evidențierilor salvate
-    - Ecranul Realizări afișează acum descrierea completă a fiecărei insigne, fără a o trunchia
+    - S-a remediat widgetul Devoțional zilnic și aplicația Apple Watch, care nu mai încărcau devoționalul de azi
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -719,8 +701,7 @@ tr:
 
     SwiftBible tamamen açık kaynaktır. Kodu görüntüleyin ve GitHub'da katkıda bulunun.
   whats_new: |-
-    - Kaydedilen Vurguları açarken oluşabilen bir çökme giderildi
-    - Başarılar ekranı artık her rozetin açıklamasını kesmeden tam olarak gösteriyor
+    - Günün tefekkürünü yüklemeyi durduran Günlük tefekkür widget'ı ve Apple Watch uygulaması düzeltildi
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -758,8 +739,7 @@ hi:
 
     SwiftBible पूरी तरह ओपन-सोर्स है। GitHub पर कोड देखें और योगदान करें।
   whats_new: |-
-    - सहेजे गए हाइलाइट्स खोलते समय होने वाला एक क्रैश ठीक किया गया
-    - उपलब्धियाँ स्क्रीन अब हर बैज का पूरा विवरण बिना काटे दिखाती है
+    - डेली डिवोशनल विजेट और Apple Watch ऐप ठीक किया गया, जो आज का ध्यान लोड करना बंद कर चुके थे
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
