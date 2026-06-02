@@ -53,6 +53,110 @@ struct SettingsView: View {
         ReadingTheme(rawValue: readingThemeRaw) ?? .system
     }
 
+    @ViewBuilder
+    private var debugAndVersionSections: some View {
+                if showDebugSection {
+                    Section {
+                        Toggle(isOn: $debugForceShowEvents) {
+                            accentLabel(
+                                "Force-Show Events (ignore date)",
+                                systemImage: "flame.fill",
+                                tint: .brandGold
+                            )
+                        }
+                        Button {
+                            // Open the Pentecost EventDetailView immediately for testing.
+                            if let event = AppEventRegistry.event(forId: "pentecost-2026") {
+                                appViewModel.presentedEvent = event
+                            }
+                        } label: {
+                            accentLabel("Open Pentecost Event View", systemImage: "calendar.badge.clock", tint: .brandGold)
+                        }
+                        Button {
+                            appViewModel.testConfetti()
+                        } label: {
+                            accentLabel("Test Confetti 🎉", systemImage: "sparkles", tint: .brandGold)
+                        }
+                        Button {
+                            // Wipe both onboarding flags so the next cold
+                            // launch behaves exactly like a brand-new install.
+                            // We deliberately do NOT present the tour now —
+                            // the goal is to test the actual launch path.
+                            OnboardingPreferences.resetCompletely()
+                            withAnimation { showOnboardingResetToast = true }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                withAnimation { showOnboardingResetToast = false }
+                            }
+                        } label: {
+                            accentLabel("Reset Onboarding (restart to see)", systemImage: "arrow.counterclockwise.circle.fill")
+                        }
+                        ForEach(DonationPromptVariant.allCases, id: \.rawValue) { variant in
+                            Button {
+                                appViewModel.donationVariant = variant
+                                showDonationSheet = true
+                            } label: {
+                                accentLabel("Donation: \(variant.rawValue)", systemImage: "rectangle.portrait.and.arrow.right")
+                            }
+                        }
+                    } header: {
+                        sectionHeader("Debug", systemImage: "hammer.fill")
+                    }
+                    .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
+                }
+                Section {
+                    VStack(spacing: 4) {
+                        Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
+                            .foregroundColor(.gray)
+                            .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
+
+                        switch updateService.updateStatus {
+                        case .upToDate:
+                            HStack(spacing: 4) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                Text("Up to date")
+                                    .foregroundColor(.secondary)
+                            }
+                            .font(.caption)
+                        case .updateAvailable(let version):
+                            HStack(spacing: 4) {
+                                Image(systemName: "exclamationmark.circle.fill")
+                                    .foregroundColor(.orange)
+                                Text("v\(version) available")
+                                    .foregroundColor(.orange)
+                            }
+                            .font(.caption)
+                        case .unknown:
+                            EmptyView()
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        versionTapCount += 1
+                        if versionTapCount >= 5 {
+                            versionTapCount = 0
+                            let idString: String
+                            if let userId = userViewModel.user?.id {
+                                idString = userId.uuidString
+                            } else {
+                                idString = UserDefaults.standard.string(forKey: "donationAnonymousIdentifier") ?? "no-id"
+                            }
+                            UIPasteboard.general.string = idString
+                            withAnimation {
+                                showCopiedToast = true
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    showCopiedToast = false
+                                }
+                            }
+                        }
+                    }
+                }
+                .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
+    }
+
     var body: some View {
         @Bindable var userViewModel = userViewModel
         @Bindable var appViewModel = appViewModel
@@ -311,106 +415,9 @@ struct SettingsView: View {
                     sectionHeader("About", systemImage: "info.circle.fill")
                 }
                 .readingThemeCardRow(readingTheme, colorScheme: colorScheme)
-                if showDebugSection {
-                    Section {
-                        Toggle(isOn: $debugForceShowEvents) {
-                            accentLabel(
-                                "Force-Show Events (ignore date)",
-                                systemImage: "flame.fill",
-                                tint: .brandGold
-                            )
-                        }
-                        Button {
-                            // Open the Pentecost EventDetailView immediately for testing.
-                            if let event = AppEventRegistry.event(forId: "pentecost-2026") {
-                                appViewModel.presentedEvent = event
-                            }
-                        } label: {
-                            accentLabel("Open Pentecost Event View", systemImage: "calendar.badge.clock", tint: .brandGold)
-                        }
-                        Button {
-                            appViewModel.testConfetti()
-                        } label: {
-                            accentLabel("Test Confetti 🎉", systemImage: "sparkles", tint: .brandGold)
-                        }
-                        Button {
-                            // Wipe both onboarding flags so the next cold
-                            // launch behaves exactly like a brand-new install.
-                            // We deliberately do NOT present the tour now —
-                            // the goal is to test the actual launch path.
-                            OnboardingPreferences.resetCompletely()
-                            withAnimation { showOnboardingResetToast = true }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                withAnimation { showOnboardingResetToast = false }
-                            }
-                        } label: {
-                            accentLabel("Reset Onboarding (restart to see)", systemImage: "arrow.counterclockwise.circle.fill")
-                        }
-                        ForEach(DonationPromptVariant.allCases, id: \.rawValue) { variant in
-                            Button {
-                                appViewModel.donationVariant = variant
-                                showDonationSheet = true
-                            } label: {
-                                accentLabel("Donation: \(variant.rawValue)", systemImage: "rectangle.portrait.and.arrow.right")
-                            }
-                        }
-                    } header: {
-                        sectionHeader("Debug", systemImage: "hammer.fill")
-                    }
-                }
-                Section {
-                    VStack(spacing: 4) {
-                        Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "")")
-                            .foregroundColor(.gray)
-                            .font(Font.custom(fontName, size: CGFloat(fontSize - 4), relativeTo: .footnote))
-
-                        switch updateService.updateStatus {
-                        case .upToDate:
-                            HStack(spacing: 4) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
-                                Text("Up to date")
-                                    .foregroundColor(.secondary)
-                            }
-                            .font(.caption)
-                        case .updateAvailable(let version):
-                            HStack(spacing: 4) {
-                                Image(systemName: "exclamationmark.circle.fill")
-                                    .foregroundColor(.orange)
-                                Text("v\(version) available")
-                                    .foregroundColor(.orange)
-                            }
-                            .font(.caption)
-                        case .unknown:
-                            EmptyView()
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        versionTapCount += 1
-                        if versionTapCount >= 5 {
-                            versionTapCount = 0
-                            let idString: String
-                            if let userId = userViewModel.user?.id {
-                                idString = userId.uuidString
-                            } else {
-                                idString = UserDefaults.standard.string(forKey: "donationAnonymousIdentifier") ?? "no-id"
-                            }
-                            UIPasteboard.general.string = idString
-                            withAnimation {
-                                showCopiedToast = true
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                withAnimation {
-                                    showCopiedToast = false
-                                }
-                            }
-                        }
-                    }
-                }
+                debugAndVersionSections
             }
-            .readingThemeScreen(readingTheme, colorScheme: colorScheme)
+            .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
             .navigationBarTitle("Settings")
             .navigationDestination(isPresented: $userViewModel.showSignInFlow) {
                 AuthenticateView()
