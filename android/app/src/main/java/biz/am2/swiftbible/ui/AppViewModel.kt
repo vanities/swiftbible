@@ -253,6 +253,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     fun setShowSummaries(b: Boolean) = viewModelScope.launch { prefs.setShowSummaries(b) }
     fun setHideBars(b: Boolean) = viewModelScope.launch { prefs.setHideBars(b) }
     fun setForceShowEvents(b: Boolean) = viewModelScope.launch { prefs.setForceShowEvents(b) }
+    fun setShowAchievementToasts(b: Boolean) = viewModelScope.launch { prefs.setShowAchievementToasts(b) }
     fun setLast(book: String, chapter: Int) = viewModelScope.launch { prefs.setLast(book, chapter) }
 
     fun setReminderEnabled(b: Boolean) = viewModelScope.launch {

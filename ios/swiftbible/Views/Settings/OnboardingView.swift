@@ -30,6 +30,7 @@ import UIKit
 enum OnboardingFeature: String, CaseIterable, Identifiable {
     case welcome
     case dailyReminder
+    case achievements
     case watchApp
     case widget
     case explain
@@ -70,6 +71,7 @@ enum OnboardingFeature: String, CaseIterable, Identifiable {
         switch self {
         case .welcome: return String(localized: "Make Scripture part of your day")
         case .dailyReminder: return String(localized: "A gentle nudge, on your schedule")
+        case .achievements: return String(localized: "Celebrate your progress")
         case .watchApp: return String(localized: "Scripture on your wrist")
         case .widget: return String(localized: "Today's verse, every unlock")
         case .explain: return String(localized: "Ask the text. Go deeper.")
@@ -84,6 +86,8 @@ enum OnboardingFeature: String, CaseIterable, Identifiable {
             return String(localized: "A quiet space to read, reflect, and return — designed to keep you in the Word.")
         case .dailyReminder:
             return String(localized: "Pick a time that fits your day — morning coffee, evening wind-down — and we'll send a gentle reminder to open today's devotional.")
+        case .achievements:
+            return String(localized: "As you read, you'll build streaks and unlock badges for milestones along the way. We celebrate each one with a little banner — switch those off anytime in Settings.")
         case .watchApp:
             return String(localized: "After you check the time, glance at today's devotional. A tiny moment, every day.")
         case .widget:
@@ -97,6 +101,7 @@ enum OnboardingFeature: String, CaseIterable, Identifiable {
         switch self {
         case .welcome: return "Icon-Classic-Preview" // Halo Effect — strong brand impression
         case .dailyReminder: return nil // animated SF Symbol hero
+        case .achievements: return nil // layered SF Symbol hero
         case .watchApp: return "OnboardingWatch"
         case .widget: return "OnboardingWidget"
         case .explain: return nil // video hero
@@ -205,7 +210,7 @@ enum OnboardingFeature: String, CaseIterable, Identifiable {
 
     var howToSteps: [String] {
         switch self {
-        case .welcome, .dailyReminder, .explain:
+        case .welcome, .dailyReminder, .achievements, .explain:
             return []
         case .watchApp:
             return [
@@ -470,6 +475,9 @@ private struct OnboardingPage: View {
     /// Toggles the repeating bounce on the `dailyReminder` bell hero.
     @State private var bellBounce = false
 
+    /// Toggles the repeating bounce on the `achievements` trophy hero.
+    @State private var trophyBounce = false
+
     /// Presents `NotificationSettingsView` from the `dailyReminder` page CTA.
     @State private var showingReminderSettings = false
 
@@ -534,6 +542,8 @@ private struct OnboardingPage: View {
             welcomeIcon
         case .dailyReminder:
             dailyReminderBell
+        case .achievements:
+            achievementsHero
         case .watchApp:
             watchFramedImage
         case .widget:
@@ -578,6 +588,128 @@ private struct OnboardingPage: View {
             bellBounce.toggle()
         }
     }
+
+    /// A celebratory "podium" of badge medallions — a raised gold trophy
+    /// flanked by a streak flame and a books medal — sitting in the same
+    /// gold halo as the banner the user sees when they actually earn a
+    /// badge, so the visual language is continuous.
+    @ViewBuilder
+    private var achievementsHero: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [Color.brandGold.opacity(0.25), Color.brandGold.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: 168, height: 168)
+                .shadow(color: Color.brandGold.opacity(0.35), radius: 24, y: 10)
+
+            HStack(alignment: .center, spacing: -14) {
+                medallion(systemImage: "flame.fill", tint: .brandRed, size: 64)
+                    .rotationEffect(.degrees(-8))
+                    .offset(y: 22)
+                medallion(systemImage: "trophy.fill", tint: .brandGold, size: 94)
+                    .offset(y: -16)
+                    .symbolEffect(.bounce, options: .repeat(.continuous), value: trophyBounce)
+                    .zIndex(1)
+                medallion(systemImage: "book.fill", tint: .brandAccent, size: 64)
+                    .rotationEffect(.degrees(8))
+                    .offset(y: 22)
+            }
+        }
+        .frame(height: 200)
+        .accessibilityHidden(true)
+        .onAppear {
+            // Flip once so the repeating symbolEffect has a trigger value.
+            trophyBounce.toggle()
+        }
+    }
+
+    /// A single circular badge medallion: a glossy two-stop fill, a soft
+    /// white rim, a coloured drop shadow, and a white glyph.
+    private func medallion(systemImage: String, tint: Color, size: CGFloat) -> some View {
+        ZStack {
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [tint, tint.opacity(0.6)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .frame(width: size, height: size)
+                .overlay(
+                    Circle().strokeBorder(Color.white.opacity(0.55), lineWidth: 2)
+                )
+                .shadow(color: tint.opacity(0.45), radius: 10, y: 6)
+
+            Image(systemName: systemImage)
+                .font(.system(size: size * 0.42, weight: .bold))
+                .foregroundStyle(.white)
+        }
+    }
+
+    /// Supporting card for the achievements page: a Bronze → Diamond tier
+    /// strip (shows the climb has depth) plus the "you can turn off the
+    /// celebration banners" reassurance the page is really about.
+    private var achievementsShelf: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 8) {
+                tierDot(Self.bronze)
+                tierConnector
+                tierDot(Self.silver)
+                tierConnector
+                tierDot(.brandGold)
+                tierConnector
+                tierDot(.brandCyan)
+            }
+            Text("Climb every track from Bronze to Diamond.")
+                .font(.footnote.weight(.medium))
+                .foregroundStyle(.secondary)
+
+            Divider().opacity(0.4)
+
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Image(systemName: "bell.slash.fill")
+                    .foregroundStyle(Color.brandGold)
+                Text("Prefer calm? Turn the celebration banners off anytime in Settings.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity)
+        .background(Color.brandGold.opacity(0.10))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+
+    private func tierDot(_ color: Color) -> some View {
+        Circle()
+            .fill(
+                LinearGradient(
+                    colors: [color, color.opacity(0.6)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .frame(width: 18, height: 18)
+            .overlay(Circle().strokeBorder(Color.white.opacity(0.5), lineWidth: 1))
+            .shadow(color: color.opacity(0.4), radius: 3, y: 1)
+    }
+
+    private var tierConnector: some View {
+        Rectangle()
+            .fill(Color.secondary.opacity(0.3))
+            .frame(width: 16, height: 2)
+    }
+
+    /// Metallic tier accents that don't exist in the brand palette.
+    private static let bronze = Color(red: 0.80, green: 0.50, blue: 0.20)
+    private static let silver = Color(red: 0.74, green: 0.76, blue: 0.80)
 
     /// Looping muted preview of the Explain flow (tap → stream → follow-up).
     /// Falls back to a stylized sparkles hero if the bundled mp4 is missing
@@ -688,6 +820,8 @@ private struct OnboardingPage: View {
                 verseCard(text: verse.text, reference: verse.reference)
                 openSourceBadge
             }
+        } else if feature == .achievements {
+            achievementsShelf
         } else if !feature.howToSteps.isEmpty {
             stepsCard
         }
@@ -865,4 +999,8 @@ struct OnboardingHost: ViewModifier {
 
 #Preview("What's New") {
     OnboardingView(features: [.watchApp, .widget], source: "preview_whats_new") { }
+}
+
+#Preview("Achievements") {
+    OnboardingView(features: [.achievements], source: "preview_whats_new") { }
 }

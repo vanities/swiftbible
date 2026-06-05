@@ -160,6 +160,11 @@ fun SettingsScreen(
 
             SectionHeader("Notifications")
             NavRow(Icons.Filled.Notifications, "Devotional Reminder") { onOpen("reminder") }
+            ToggleRow(
+                label = "Achievement celebrations",
+                checked = prefs.showAchievementToasts,
+                onChange = { appVm.setShowAchievementToasts(it) },
+            )
 
             SectionHeader("Storage")
             StorageSection(appVm = appVm)

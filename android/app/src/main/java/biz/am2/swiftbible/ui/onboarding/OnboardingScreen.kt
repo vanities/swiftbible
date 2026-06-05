@@ -13,6 +13,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,8 +33,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -58,11 +63,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import biz.am2.swiftbible.R
 import biz.am2.swiftbible.ui.theme.BrandAccent
+import biz.am2.swiftbible.ui.theme.BrandCyan
 import biz.am2.swiftbible.ui.theme.BrandDeepNavy
 import biz.am2.swiftbible.ui.theme.BrandGold
+import biz.am2.swiftbible.ui.theme.BrandRed
 import kotlinx.coroutines.launch
 
 /**
@@ -227,6 +235,7 @@ private fun FeaturePage(
         when (feature) {
             OnboardingFeature.WELCOME -> WelcomeHero(pageIndex = pageIndex)
             OnboardingFeature.DAILY_REMINDER -> ReminderBellHero(pageIndex = pageIndex)
+            OnboardingFeature.ACHIEVEMENTS -> AchievementsHero(pageIndex = pageIndex)
             OnboardingFeature.EXPLAIN -> ExplainHero(pageIndex = pageIndex)
         }
 
@@ -277,6 +286,7 @@ private fun FeaturePage(
             when (feature) {
                 OnboardingFeature.WELCOME -> WelcomeExtras()
                 OnboardingFeature.DAILY_REMINDER -> ReminderCta(onSetReminder = onSetReminder)
+                OnboardingFeature.ACHIEVEMENTS -> AchievementsExtras()
                 OnboardingFeature.EXPLAIN -> ExplainBadge()
             }
         }
@@ -522,4 +532,170 @@ private fun ReminderCta(onSetReminder: () -> Unit) {
             )
         }
     }
+}
+
+/**
+ * Celebratory podium of badge medallions — a raised, bouncing gold trophy
+ * flanked by a streak flame and a books medal, sitting in the same gold halo
+ * as the badge-earned banner. Mirrors iOS `achievementsHero`.
+ */
+@Composable
+private fun AchievementsHero(pageIndex: Int) {
+    val transition = rememberInfiniteTransition(label = "achievements-$pageIndex")
+    val bounce by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1300, easing = EaseInOut),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "trophy-bounce",
+    )
+    Box(
+        modifier = Modifier.size(180.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        // Gold halo.
+        Box(
+            modifier = Modifier
+                .size(168.dp)
+                .clip(CircleShape)
+                .background(
+                    Brush.linearGradient(
+                        listOf(
+                            BrandGold.copy(alpha = 0.32f),
+                            BrandGold.copy(alpha = 0.08f),
+                        ),
+                    ),
+                ),
+        )
+        // Side medallions first so the raised trophy overlaps them.
+        Medallion(
+            icon = Icons.Filled.LocalFireDepartment,
+            tint = BrandRed,
+            size = 58.dp,
+            modifier = Modifier.offset(x = (-46).dp, y = 18.dp).rotate(-8f),
+        )
+        Medallion(
+            icon = Icons.Filled.MenuBook,
+            tint = BrandAccent,
+            size = 58.dp,
+            modifier = Modifier.offset(x = 46.dp, y = 18.dp).rotate(8f),
+        )
+        Medallion(
+            icon = Icons.Filled.EmojiEvents,
+            tint = BrandGold,
+            size = 88.dp,
+            modifier = Modifier.offset(y = (-10f - bounce * 6f).dp),
+        )
+    }
+}
+
+/** A single circular badge medallion: a glossy fill, a white rim, a white glyph. */
+@Composable
+private fun Medallion(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    tint: Color,
+    size: Dp,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .clip(CircleShape)
+            .background(Brush.verticalGradient(listOf(tint, tint.copy(alpha = 0.6f))))
+            .border(2.dp, Color.White.copy(alpha = 0.55f), CircleShape),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(size * 0.46f),
+        )
+    }
+}
+
+private val BronzeTier = Color(0xFFCC8033)
+private val SilverTier = Color(0xFFBFC2CC)
+
+/**
+ * Supporting card: a Bronze → Diamond tier strip (the climb has depth) plus
+ * the "turn the celebration banners off in Settings" reassurance the page is
+ * really about. Mirrors iOS `achievementsShelf`.
+ */
+@Composable
+private fun AchievementsExtras() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .background(BrandGold.copy(alpha = 0.10f))
+            .padding(16.dp),
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                TierDot(BronzeTier)
+                TierConnector()
+                TierDot(SilverTier)
+                TierConnector()
+                TierDot(BrandGold)
+                TierConnector()
+                TierDot(BrandCyan)
+            }
+            Spacer(Modifier.size(10.dp))
+            Text(
+                text = "Climb every track from Bronze to Diamond.",
+                style = MaterialTheme.typography.labelMedium,
+                color = Color.White.copy(alpha = 0.85f),
+                textAlign = TextAlign.Center,
+            )
+            Spacer(Modifier.size(12.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Color.White.copy(alpha = 0.12f)),
+            )
+            Spacer(Modifier.size(12.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.NotificationsOff,
+                    contentDescription = null,
+                    tint = BrandGold,
+                    modifier = Modifier.size(16.dp),
+                )
+                Spacer(Modifier.size(8.dp))
+                Text(
+                    text = "Prefer calm? Turn the celebration banners off anytime in Settings.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.White.copy(alpha = 0.7f),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TierDot(color: Color) {
+    Box(
+        modifier = Modifier
+            .size(16.dp)
+            .clip(CircleShape)
+            .background(Brush.verticalGradient(listOf(color, color.copy(alpha = 0.6f))))
+            .border(1.dp, Color.White.copy(alpha = 0.5f), CircleShape),
+    )
+}
+
+@Composable
+private fun TierConnector() {
+    Box(
+        modifier = Modifier
+            .size(width = 14.dp, height = 2.dp)
+            .background(Color.White.copy(alpha = 0.25f)),
+    )
 }

@@ -45,6 +45,7 @@ class UserPreferences(private val context: Context) {
         val SEEN_ONBOARDING_FEATURES = stringPreferencesKey("onboarding_seen_features")
         val SUMMARY_SOURCE = stringPreferencesKey("summary_source")
         val CUSTOM_ACCENT_HEX = stringPreferencesKey("custom_accent_hex")
+        val SHOW_ACHIEVEMENT_TOASTS = booleanPreferencesKey("show_achievement_toasts")
     }
 
     data class Snapshot(
@@ -76,6 +77,7 @@ class UserPreferences(private val context: Context) {
         val seenOnboardingFeatures: Set<String> = emptySet(),
         val summarySource: SummarySource = SummarySource.Default,
         val customAccentHex: String = "",
+        val showAchievementToasts: Boolean = true,
     )
 
     val snapshot: Flow<Snapshot> = context.dataStore.data.map { p ->
@@ -111,6 +113,7 @@ class UserPreferences(private val context: Context) {
                 .toSet(),
             summarySource = SummarySource.fromId(p[Keys.SUMMARY_SOURCE]),
             customAccentHex = p[Keys.CUSTOM_ACCENT_HEX] ?: "",
+            showAchievementToasts = p[Keys.SHOW_ACHIEVEMENT_TOASTS] ?: true,
         )
     }
 
@@ -162,6 +165,7 @@ class UserPreferences(private val context: Context) {
     suspend fun setDonationOptOut(b: Boolean) = update { it[Keys.DONATION_OPT_OUT] = b }
     suspend fun setLastReviewPromptedAt(count: Int) = update { it[Keys.LAST_REVIEW_PROMPTED_AT] = count }
     suspend fun setForceShowEvents(b: Boolean) = update { it[Keys.FORCE_SHOW_EVENTS] = b }
+    suspend fun setShowAchievementToasts(b: Boolean) = update { it[Keys.SHOW_ACHIEVEMENT_TOASTS] = b }
 
     suspend fun incrementHappyMomentCount(): Int {
         var next = 0

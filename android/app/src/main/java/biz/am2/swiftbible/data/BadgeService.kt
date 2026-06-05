@@ -5,6 +5,7 @@ import biz.am2.swiftbible.ui.ToastCoordinator
 import java.util.Calendar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -27,6 +28,9 @@ class BadgeService(
      * earned IDs are deduped via the [EarnedBadge.badgeId] primary key.
      */
     suspend fun checkBadges(now: Long = System.currentTimeMillis()): List<BadgeDefinition> {
+        // Celebration toasts are opt-out (Settings ▸ Notifications). Badges are
+        // always earned and recorded; only the banner is suppressed when off.
+        val toastsEnabled = UserPreferences(context).snapshot.first().showAchievementToasts
         val earnedIds = earnedDao.earnedIds().toMutableSet()
         val newlyEarned = mutableListOf<BadgeDefinition>()
         for (def in BadgeRegistry.all) {
@@ -35,7 +39,7 @@ class BadgeService(
             earnedDao.insert(EarnedBadge(badgeId = def.id, earnedAt = now))
             earnedIds += def.id
             newlyEarned += def
-            ToastCoordinator.enqueue(def)
+            if (toastsEnabled) ToastCoordinator.enqueue(def)
             Analytics.capture(
                 Analytics.Event.BadgeEarned,
                 mapOf("badge_id" to def.id, "category" to def.category.name.lowercase(), "name" to def.name),

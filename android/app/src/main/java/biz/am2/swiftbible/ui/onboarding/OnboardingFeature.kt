@@ -17,6 +17,7 @@ import java.time.temporal.ChronoField
 enum class OnboardingFeature(val id: String) {
     WELCOME("welcome"),
     DAILY_REMINDER("dailyReminder"),
+    ACHIEVEMENTS("achievements"),
     EXPLAIN("explain"),
     ;
 
@@ -25,6 +26,7 @@ enum class OnboardingFeature(val id: String) {
         get() = when (this) {
             WELCOME -> "Make Scripture part of your day"
             DAILY_REMINDER -> "A gentle nudge, on your schedule"
+            ACHIEVEMENTS -> "Celebrate your progress"
             EXPLAIN -> "Ask the text. Go deeper."
         }
 
@@ -36,6 +38,7 @@ enum class OnboardingFeature(val id: String) {
         get() = when (this) {
             WELCOME -> "A quiet space to read, reflect, and return — designed to keep you in the Word."
             DAILY_REMINDER -> "Pick a time that fits your day — morning coffee, evening wind-down — and we'll send a gentle reminder to open today's devotional."
+            ACHIEVEMENTS -> "As you read, you'll build streaks and unlock badges for milestones along the way. We celebrate each one with a little banner — switch those off anytime in Settings."
             EXPLAIN -> "Long-press any verse for an AI explanation. Powered by on-device Gemini Nano — your reading stays on your phone."
         }
 
