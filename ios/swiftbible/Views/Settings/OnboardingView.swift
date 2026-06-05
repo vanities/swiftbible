@@ -478,6 +478,11 @@ private struct OnboardingPage: View {
     /// Toggles the repeating bounce on the `achievements` trophy hero.
     @State private var trophyBounce = false
 
+    /// Live binding to the achievement-celebration toast preference, so the
+    /// onboarding page offers the same switch as Settings ▸ Notifications
+    /// instead of only pointing at it.
+    @AppStorage(ToastService.achievementToastsKey) private var showAchievementToasts = true
+
     /// Presents `NotificationSettingsView` from the `dailyReminder` page CTA.
     @State private var showingReminderSettings = false
 
@@ -672,14 +677,21 @@ private struct OnboardingPage: View {
 
             Divider().opacity(0.4)
 
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Image(systemName: "bell.slash.fill")
-                    .foregroundStyle(Color.brandGold)
-                Text("Prefer calm? Turn the celebration banners off anytime in Settings.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+            Toggle(isOn: $showAchievementToasts) {
+                HStack(spacing: 8) {
+                    Image(systemName: showAchievementToasts ? "bell.badge.fill" : "bell.slash.fill")
+                        .foregroundStyle(Color.brandGold)
+                    Text("Celebration banners")
+                        .font(.subheadline.weight(.semibold))
+                }
             }
+            .tint(Color.brandAccent)
+
+            Text("Your badges are recorded either way — change this anytime in Settings.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
         .frame(maxWidth: .infinity)

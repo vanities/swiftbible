@@ -130,6 +130,8 @@ private fun SwiftBibleAppContent(appVm: AppViewModel) {
                 appVm.completeOnboarding(pendingFeatures)
                 navController.navigate("reminder")
             },
+            achievementToastsEnabled = prefs.showAchievementToasts,
+            onToggleAchievementToasts = { appVm.setShowAchievementToasts(it) },
         )
     }
     if (showOnboarding) return

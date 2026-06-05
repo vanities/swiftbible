@@ -46,6 +46,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -87,6 +89,8 @@ fun OnboardingScreen(
     features: List<OnboardingFeature>,
     onDone: () -> Unit,
     onSetReminder: () -> Unit = {},
+    achievementToastsEnabled: Boolean = true,
+    onToggleAchievementToasts: (Boolean) -> Unit = {},
 ) {
     if (features.isEmpty()) {
         onDone()
@@ -155,6 +159,8 @@ fun OnboardingScreen(
                     pageIndex = page,
                     isActive = pagerState.currentPage == page,
                     onSetReminder = onSetReminder,
+                    achievementToastsEnabled = achievementToastsEnabled,
+                    onToggleAchievementToasts = onToggleAchievementToasts,
                 )
             }
 
@@ -226,6 +232,8 @@ private fun FeaturePage(
     pageIndex: Int,
     isActive: Boolean,
     onSetReminder: () -> Unit,
+    achievementToastsEnabled: Boolean,
+    onToggleAchievementToasts: (Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(top = 24.dp),
@@ -286,7 +294,10 @@ private fun FeaturePage(
             when (feature) {
                 OnboardingFeature.WELCOME -> WelcomeExtras()
                 OnboardingFeature.DAILY_REMINDER -> ReminderCta(onSetReminder = onSetReminder)
-                OnboardingFeature.ACHIEVEMENTS -> AchievementsExtras()
+                OnboardingFeature.ACHIEVEMENTS -> AchievementsExtras(
+                    enabled = achievementToastsEnabled,
+                    onToggle = onToggleAchievementToasts,
+                )
                 OnboardingFeature.EXPLAIN -> ExplainBadge()
             }
         }
@@ -625,7 +636,7 @@ private val SilverTier = Color(0xFFBFC2CC)
  * really about. Mirrors iOS `achievementsShelf`.
  */
 @Composable
-private fun AchievementsExtras() {
+private fun AchievementsExtras(enabled: Boolean, onToggle: (Boolean) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -661,21 +672,43 @@ private fun AchievementsExtras() {
                     .height(1.dp)
                     .background(Color.White.copy(alpha = 0.12f)),
             )
-            Spacer(Modifier.size(12.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Spacer(Modifier.size(8.dp))
+            // Same switch as Settings ▸ Notifications, offered inline so the
+            // user can set their preference without leaving onboarding.
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 Icon(
-                    imageVector = Icons.Filled.NotificationsOff,
+                    imageVector = if (enabled) Icons.Filled.Notifications else Icons.Filled.NotificationsOff,
                     contentDescription = null,
                     tint = BrandGold,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(18.dp),
                 )
                 Spacer(Modifier.size(8.dp))
                 Text(
-                    text = "Prefer calm? Turn the celebration banners off anytime in Settings.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White.copy(alpha = 0.7f),
+                    text = "Celebration banners",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.weight(1f),
+                )
+                Switch(
+                    checked = enabled,
+                    onCheckedChange = onToggle,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = BrandAccent,
+                    ),
                 )
             }
+            Spacer(Modifier.size(4.dp))
+            Text(
+                text = "Your badges are recorded either way — change this anytime in Settings.",
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.White.copy(alpha = 0.7f),
+                textAlign = TextAlign.Center,
+            )
         }
     }
 }
