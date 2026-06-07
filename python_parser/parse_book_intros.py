@@ -94,6 +94,84 @@ JFB_BODY_STOP = (
 # against a stray "INTRODUCTION" header with no body slipping through.
 MIN_INTRO_CHARS = 120
 
+# Readability re-flow. The CCEL intros arrive either as a single very long
+# paragraph (MHCC keeps each book's intro as one block) or as a handful of
+# enormous ones (JFB has individual paragraphs of 5,000–8,000 chars). Rendered
+# verbatim in BookIntroView they're an unbroken wall of text, so we split any
+# paragraph longer than SOFT_MAX_CHARS into sentence-aligned chunks of roughly
+# TARGET_CHARS, never breaking mid-sentence. Shorter paragraphs pass through
+# untouched (e.g. the ~530-char Genesis intro stays a single paragraph).
+SOFT_MAX_CHARS = 700
+TARGET_CHARS = 480
+# Don't leave a runt final chunk; fold it back into the previous one.
+MIN_TAIL_CHARS = 160
+
+# Lowercased words that end in a period without ending a sentence. Single
+# letters (initials like "A. D.", "A. R. Fausset", "i. e.") are handled
+# separately by length, so they're not listed here.
+_ABBREVIATIONS = {
+    "ad", "bc", "am", "ch", "chap", "cf", "viz", "cir", "ver", "vers",
+    "vs", "st", "mr", "mrs", "dr", "rev", "vol", "no", "etc", "ie", "eg",
+    "messrs", "jun", "sen", "pp",
+}
+
+# A sentence-ending punctuation mark (optionally followed by a closing quote)
+# then whitespace then the start of the next sentence (a capital, optionally
+# behind an opening quote/paren). Restricting the next char to a capital avoids
+# false splits before digits, e.g. "about A. D. 97," and "ch. 21:22".
+_BOUNDARY_RE = re.compile(r'[.!?]["”\')\]]?\s+(?=["“\'(]?[A-Z])')
+
+
+def _ends_sentence(text: str, dot: int) -> bool:
+    """Whether the punctuation char at index `dot` actually ends a sentence
+    (vs. trailing an abbreviation or an initial)."""
+    if text[dot] != ".":
+        return True  # "!" and "?" are unambiguous
+    k = dot - 1
+    while k >= 0 and text[k].isalpha():
+        k -= 1
+    token = text[k + 1:dot]
+    if len(token) == 1 and token.isupper():
+        return False  # initial: "A.", "D.", "R."
+    return token.lower() not in _ABBREVIATIONS
+
+
+def split_sentences(text: str) -> list[str]:
+    cuts = [0]
+    for m in _BOUNDARY_RE.finditer(text):
+        if _ends_sentence(text, m.start()):
+            cuts.append(m.end())
+    cuts.append(len(text))
+    return [text[a:b].strip() for a, b in zip(cuts, cuts[1:]) if text[a:b].strip()]
+
+
+def soft_wrap(text: str) -> list[str]:
+    """Split an over-long paragraph into sentence-aligned chunks ~TARGET_CHARS."""
+    if len(text) <= SOFT_MAX_CHARS:
+        return [text]
+    chunks: list[str] = []
+    current = ""
+    for sentence in split_sentences(text):
+        if current and len(current) + 1 + len(sentence) > TARGET_CHARS:
+            chunks.append(current)
+            current = sentence
+        else:
+            current = f"{current} {sentence}".strip()
+    if current:
+        chunks.append(current)
+    # Fold a too-short tail back into the prior chunk.
+    if len(chunks) > 1 and len(chunks[-1]) < MIN_TAIL_CHARS:
+        chunks[-2] = f"{chunks[-2]} {chunks.pop()}"
+    return chunks
+
+
+def readable_paragraphs(paragraphs: list[str]) -> list[str]:
+    """Flatten blank-line paragraphs into reader-friendly, length-bounded ones."""
+    out: list[str] = []
+    for paragraph in paragraphs:
+        out.extend(soft_wrap(paragraph))
+    return out
+
 # A "Commentary by ..." byline sits directly under every JFB book-title header.
 # If one appears between an INTRODUCTION and the chapter anchor, the
 # INTRODUCTION belongs to an earlier book (or to the front matter, as with
@@ -149,7 +227,7 @@ def parse_mhcc_intros() -> dict[str, dict]:
             continue
         intros[book] = {
             "title": f"Introduction to {book}",
-            "paragraphs": paragraphs,
+            "paragraphs": readable_paragraphs(paragraphs),
         }
     return intros
 
@@ -211,7 +289,7 @@ def parse_jfb_intros() -> dict[str, dict]:
             continue
         intros[book] = {
             "title": f"Introduction to {book}",
-            "paragraphs": paragraphs,
+            "paragraphs": readable_paragraphs(paragraphs),
         }
 
     # Single-chapter books (Philemon, Jude, 2 John, 3 John) have no CHAPTER/
@@ -269,7 +347,7 @@ def extract_jfb_single_chapter(lines: list[str], title_token: str, book: str) ->
     paragraphs = collect_paragraphs(lines, intro_line + 1, end)
     if sum(len(p) for p in paragraphs) < MIN_INTRO_CHARS:
         return None
-    return {"title": f"Introduction to {book}", "paragraphs": paragraphs}
+    return {"title": f"Introduction to {book}", "paragraphs": readable_paragraphs(paragraphs)}
 
 
 # ---------------------------------------------------------------------------

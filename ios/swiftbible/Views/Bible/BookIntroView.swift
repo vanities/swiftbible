@@ -56,7 +56,10 @@ struct BookIntroView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .readingThemeScreen(readingTheme, colorScheme: colorScheme)
-        .navigationTitle("About \(bookName)")
+        // No nav-bar title here: the themed in-content "Introduction to <book>"
+        // header is the screen's title (and respects the reader's font/theme,
+        // which a system nav title can't), while the back button already reads
+        // the book name. A nav title would just duplicate one of the two.
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             AnalyticsService.shared.capture(.bookIntroViewed, properties: [
