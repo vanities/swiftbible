@@ -46,6 +46,16 @@ enum SummarySource: String, CaseIterable, Identifiable {
         case .off: return nil
         }
     }
+
+    /// Book-introduction resource filename (without extension), or nil for off.
+    fileprivate var introResourceName: String? {
+        switch self {
+        case .matthewHenry: return "book_intros_mhcc"
+        case .jamiesonFaussetBrown: return "book_intros_jfb"
+        case .swiftBible: return "book_intros_swiftbible"
+        case .off: return nil
+        }
+    }
 }
 
 // MARK: - Codable types matching the JSON schema
@@ -70,12 +80,41 @@ struct PassageSummaryEntry: Codable {
     let title: String
 }
 
+// MARK: - Book introduction types
+
+/// The longer-form "About this book" essay shown above the chapter list:
+/// authorship, date, historical setting, and the occasion/purpose of the book.
+struct BookIntro: Codable, Equatable {
+    let title: String
+    let paragraphs: [String]
+}
+
+struct BookIntrosFile: Codable {
+    let source: SummariesSourceInfo
+    let bookIntros: [String: BookIntro]
+}
+
+/// A resolved introduction together with the attribution of whichever source
+/// actually supplied it (which may differ from the user's selection when the
+/// chosen source doesn't cover that book and the fallback chain kicks in).
+struct ResolvedBookIntro: Equatable {
+    let intro: BookIntro
+    let attribution: SummariesSourceInfo
+}
+
+extension SummariesSourceInfo: Equatable {
+    static func == (lhs: SummariesSourceInfo, rhs: SummariesSourceInfo) -> Bool {
+        lhs.name == rhs.name && lhs.year == rhs.year
+    }
+}
+
 // MARK: - Service
 
 final class SummariesService {
     static let shared = SummariesService()
 
     private var cache: [SummarySource: SummariesFile] = [:]
+    private var introCache: [SummarySource: BookIntrosFile] = [:]
 
     private init() {}
 
@@ -93,6 +132,25 @@ final class SummariesService {
             let data = try Data(contentsOf: url)
             let decoded = try JSONDecoder().decode(SummariesFile.self, from: data)
             cache[source] = decoded
+            return decoded
+        } catch {
+            print("SummariesService: failed to decode \(resource).json — \(error)")
+            return nil
+        }
+    }
+
+    @discardableResult
+    func loadIntros(_ source: SummarySource) -> BookIntrosFile? {
+        if let cached = introCache[source] { return cached }
+        guard let resource = source.introResourceName else { return nil }
+        guard let url = Bundle.main.url(forResource: resource, withExtension: "json") else {
+            print("SummariesService: missing bundle resource \(resource).json")
+            return nil
+        }
+        do {
+            let data = try Data(contentsOf: url)
+            let decoded = try JSONDecoder().decode(BookIntrosFile.self, from: data)
+            introCache[source] = decoded
             return decoded
         } catch {
             print("SummariesService: failed to decode \(resource).json — \(error)")
@@ -159,6 +217,33 @@ final class SummariesService {
             return match.title
         }
 
+        return nil
+    }
+
+    /// Returns the "About this book" introduction for a book under the selected
+    /// source, falling back through the other sources so the row is populated
+    /// whenever any source covers the book. The returned attribution reflects
+    /// whichever source actually supplied the text.
+    ///
+    /// Returns nil only when the source is .off, or when no source has an entry.
+    func bookIntroduction(
+        book: String,
+        source: SummarySource
+    ) -> ResolvedBookIntro? {
+        guard source != .off else { return nil }
+
+        // Try the chosen source first, then the rest in a sensible order:
+        // SwiftBible (only home of the apocrypha/pseudepigrapha intros), then
+        // the two public-domain commentaries for any canonical gaps.
+        let order: [SummarySource] = [source, .swiftBible, .matthewHenry, .jamiesonFaussetBrown]
+        var seen: Set<SummarySource> = []
+        for candidate in order where seen.insert(candidate).inserted {
+            if let file = loadIntros(candidate),
+               let intro = file.bookIntros[book],
+               !intro.paragraphs.isEmpty {
+                return ResolvedBookIntro(intro: intro, attribution: file.source)
+            }
+        }
         return nil
     }
 

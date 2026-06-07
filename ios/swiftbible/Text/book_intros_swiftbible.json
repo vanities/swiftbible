@@ -1,0 +1,256 @@
+{
+  "source": {
+    "name": "SwiftBible Curated",
+    "shortName": "SwiftBible",
+    "year": 2024,
+    "license": "Original — SwiftBible",
+    "attribution": "Hand-written book introductions curated by the SwiftBible authors, covering the apocryphal and pseudepigraphic texts not treated by the public-domain commentaries."
+  },
+  "bookIntros": {
+    "Tobit": {
+      "title": "Introduction to Tobit",
+      "paragraphs": [
+        "Tobit is a Jewish novella written most likely in the third or early second century BCE, set among the exiles of the northern tribes deported to Nineveh by the Assyrians. It tells the intertwined stories of Tobit, a devout and charitable Israelite struck blind, and Sarah, a young woman tormented by the demon Asmodeus, whose prayers are answered through the angel Raphael and the journey of Tobit's son Tobias.",
+        "The book is a tale of providence, almsgiving, honoring the dead, and faithful marriage rather than a historical chronicle; its geography and chronology are loose by design. Tobit is part of the Deuterocanon, received as Scripture in the Catholic and Eastern Orthodox traditions and placed among the Apocrypha by Protestants. It survives in Greek, with Aramaic and Hebrew fragments found at Qumran confirming its antiquity."
+      ]
+    },
+    "Judith": {
+      "title": "Introduction to Judith",
+      "paragraphs": [
+        "Judith is a theological novella, probably composed in the second century BCE during or after the Maccabean struggle. It recounts how a pious and beautiful widow of the besieged town of Bethulia delivers her people by entering the camp of the Assyrian general Holofernes and beheading him, turning back the army of \"Nebuchadnezzar.\"",
+        "The book deliberately mixes historical names and impossible details — Nebuchadnezzar is called king of the Assyrians ruling from Nineveh — signalling that it is a parable of faith rather than history. Its themes are trust in God, the weak overcoming the strong, and fidelity to the covenant. Judith belongs to the Deuterocanon (Scripture for Catholics and Orthodox; Apocrypha for Protestants) and is preserved in Greek."
+      ]
+    },
+    "Esther": {
+      "title": "Introduction to the Additions to Esther",
+      "paragraphs": [
+        "This is the Greek form of Esther, which expands the shorter Hebrew book with six additional sections: the dream of Mordecai and its interpretation, the royal edicts of Haman and of the king, and the prayers of Mordecai and Esther. These additions supply the explicit religious content — prayer, providence, and the name of God — that is famously absent from the Hebrew text.",
+        "The additions were likely composed in Greek in the second or first century BCE and circulated as an integral part of the Septuagint Esther. Catholic and Orthodox Bibles include them within Esther; Protestant Bibles separate them as part of the Apocrypha."
+      ]
+    },
+    "Wisdom of Solomon": {
+      "title": "Introduction to the Wisdom of Solomon",
+      "paragraphs": [
+        "The Wisdom of Solomon is a work of Hellenistic Jewish philosophy, written in elegant Greek at Alexandria in the first century BCE. Though it speaks in the voice of King Solomon, this is a literary device; the real author addresses Jews tempted to abandon their faith amid Greek culture, commending the pursuit of divine Wisdom.",
+        "The book personifies Wisdom as a radiant figure proceeding from God, defends the immortality of the righteous soul, and contrasts the destiny of the just with that of idolaters and oppressors. Its blend of Hebrew piety and Greek thought made it influential on early Christian writers. It is part of the Deuterocanon for Catholics and Orthodox and among the Apocrypha for Protestants."
+      ]
+    },
+    "Sirach": {
+      "title": "Introduction to Sirach (Ecclesiasticus)",
+      "paragraphs": [
+        "Sirach, also called Ecclesiasticus (\"the Church's book\"), is the longest of the wisdom writings, composed in Hebrew at Jerusalem around 180 BCE by Jeshua ben Sira, a teacher and scribe. His grandson translated the work into Greek in Egypt and added a prologue explaining the task — a rare window onto how Jewish texts were rendered for the diaspora.",
+        "The book gathers practical and theological wisdom on the fear of the Lord, friendship, speech, family, humility, and the law, culminating in a famous hymn praising the great figures of Israel's history (\"Let us now praise famous men\"). Sirach is Deuterocanonical for Catholics and Orthodox and is counted among the Apocrypha by Protestants."
+      ]
+    },
+    "Baruch": {
+      "title": "Introduction to Baruch",
+      "paragraphs": [
+        "Baruch is attributed to Baruch son of Neriah, the scribe and companion of the prophet Jeremiah, and is set among the Judean exiles in Babylon. It combines a communal confession of sin, a poem in praise of Wisdom identified with the Law, and words of consolation and hope for Jerusalem.",
+        "Most scholars regard it as a composite work assembled in the later Second Temple period rather than a writing of the historical Baruch. It is preserved in Greek and is Deuterocanonical in the Catholic and Orthodox traditions; in some Bibles the Letter of Jeremiah forms its sixth chapter. Protestants place it among the Apocrypha."
+      ]
+    },
+    "Prayer of Azariah": {
+      "title": "Introduction to the Prayer of Azariah",
+      "paragraphs": [
+        "The Prayer of Azariah and the Song of the Three Young Men is one of the Greek additions to the book of Daniel, inserted into the account of the fiery furnace (Daniel 3). It gives voice to Azariah (Abednego) as he prays a penitential confession on behalf of Israel, followed by the jubilant hymn the three companions sing as the angel preserves them from the flames.",
+        "Composed in the Second Temple period, the addition turns a narrative of deliverance into an act of worship. It is Deuterocanonical for Catholics and Orthodox and is counted among the Apocrypha by Protestants."
+      ]
+    },
+    "Susanna": {
+      "title": "Introduction to Susanna",
+      "paragraphs": [
+        "Susanna is one of the Greek additions to Daniel, a short and vivid tale in which a virtuous wife is falsely accused of adultery by two lecherous elders whose advances she had refused. Condemned to death on their testimony, she is vindicated when the young Daniel cross-examines the elders separately and exposes their contradiction.",
+        "The story celebrates innocence, the cry of the righteous to God, and the triumph of true justice over corrupt authority. It is Deuterocanonical in the Catholic and Orthodox Bibles and part of the Apocrypha for Protestants; in the Septuagint and Vulgate it appears at the beginning or end of Daniel."
+      ]
+    },
+    "Bel and the Dragon": {
+      "title": "Introduction to Bel and the Dragon",
+      "paragraphs": [
+        "Bel and the Dragon is a pair of satirical tales appended to the Greek Daniel that ridicule idolatry. In the first, Daniel proves that the idol Bel does not really consume the offerings left for it by scattering ashes to reveal the footprints of the priests who sneak in to eat them. In the second, he destroys a venerated living serpent, is thrown to the lions, and is miraculously fed by the prophet Habakkuk.",
+        "The stories sharpen the book's polemic against the worship of lifeless or merely natural things in contrast to the living God. They are Deuterocanonical for Catholics and Orthodox and among the Apocrypha for Protestants."
+      ]
+    },
+    "1 Maccabees": {
+      "title": "Introduction to 1 Maccabees",
+      "paragraphs": [
+        "1 Maccabees is a sober historical narrative, written in Hebrew around 100 BCE (and surviving in Greek), recounting the Jewish struggle for independence against the Seleucid king Antiochus IV Epiphanes and his successors. It traces the revolt begun by the priest Mattathias and carried on by his sons — especially Judas Maccabeus, Jonathan, and Simon — including the cleansing and rededication of the Temple commemorated at Hanukkah.",
+        "Written from a pro-Hasmonean viewpoint, it is widely regarded as among the most reliable historical sources for the period. 1 Maccabees is Deuterocanonical for Catholics and Orthodox and part of the Apocrypha for Protestants."
+      ]
+    },
+    "2 Maccabees": {
+      "title": "Introduction to 2 Maccabees",
+      "paragraphs": [
+        "2 Maccabees is not a sequel to 1 Maccabees but an independent account, presented as a condensation of a longer five-volume work by Jason of Cyrene. Written in Greek in the later second or first century BCE, it covers a shorter span focused on the desecration of the Temple, the martyrdoms of Eleazar and the mother with her seven sons, and the victories of Judas Maccabeus.",
+        "More overtly theological than 1 Maccabees, it affirms the resurrection of the dead, the value of prayer for the dead, and creation out of nothing. 2 Maccabees is Deuterocanonical in the Catholic and Orthodox traditions and counted among the Apocrypha by Protestants."
+      ]
+    },
+    "1 Esdras": {
+      "title": "Introduction to 1 Esdras",
+      "paragraphs": [
+        "1 Esdras is a Greek retelling that parallels material from 2 Chronicles, Ezra, and Nehemiah, covering Josiah's Passover, the destruction and rebuilding of the Temple, and the reforms of Ezra. Its most distinctive section is the famous \"Debate of the Three Guardsmen,\" in which Zerubbabel wins the right to rebuild Jerusalem by arguing that truth is the strongest power of all.",
+        "It likely dates to the second century BCE and preserves an alternative arrangement of the post-exilic history. 1 Esdras is canonical in the Eastern Orthodox tradition, placed in an appendix in the Latin Vulgate, and grouped with the Apocrypha by Protestants."
+      ]
+    },
+    "Prayer of Manasseh": {
+      "title": "Introduction to the Prayer of Manasseh",
+      "paragraphs": [
+        "The Prayer of Manasseh is a brief and moving penitential psalm placed on the lips of King Manasseh of Judah, whose long and idolatrous reign is condemned in 2 Kings but who, according to 2 Chronicles 33, repented during his captivity in Babylon. The prayer supplies the words of that repentance, confessing sin and appealing to the boundless mercy of God.",
+        "Composed in the Second Temple period, it became a treasured model of contrition in both Jewish and Christian devotion. It appears in an appendix in some Bibles, is received liturgically in the Orthodox Church, and is counted among the Apocrypha by Protestants."
+      ]
+    },
+    "2 Esdras": {
+      "title": "Introduction to 2 Esdras",
+      "paragraphs": [
+        "2 Esdras is primarily a Jewish apocalypse — its core (chapters 3–14, often called 4 Ezra) was written near the end of the first century CE in the wake of the destruction of Jerusalem in 70 CE. In a series of visions and searching dialogues with the angel Uriel, \"Ezra\" wrestles with the problem of suffering, divine justice, and the fate of the world, and receives revelations of the coming age and the restoration of the Scriptures.",
+        "Christian editors later framed the work with additional opening and closing chapters. Preserved chiefly in Latin, 2 Esdras stands in an appendix in the Vulgate and among the Apocrypha for Protestants; it is not part of the Catholic or Hebrew canons."
+      ]
+    },
+    "The Book of the Watchers": {
+      "title": "Introduction to the Book of the Watchers",
+      "paragraphs": [
+        "The Book of the Watchers (1 Enoch 1–36) is the oldest section of 1 Enoch, dating to the third century BCE, with Aramaic fragments among the Dead Sea Scrolls. It expands the cryptic note of Genesis 6 into a full myth of the \"Watchers\" — angels who descend, take human wives, and father the violent Nephilim, while teaching humanity forbidden arts. Their corruption brings the judgment of the Flood.",
+        "The book then follows Enoch as an intercessor who is taken on heavenly journeys, shown the places of punishment and reward and the secrets of the cosmos. Its imagery of fallen angels and final judgment deeply shaped later Jewish and Christian thought; the New Testament Letter of Jude quotes Enoch directly. 1 Enoch is canonical in the Ethiopian Orthodox Church and survives complete in Ge'ez."
+      ]
+    },
+    "The Book of Parables": {
+      "title": "Introduction to the Book of Parables",
+      "paragraphs": [
+        "The Book of Parables, or Similitudes (1 Enoch 37–71), is the most theologically striking section of 1 Enoch, generally dated to around the turn of the era. Through three \"parables\" it unveils visions of the heavenly throne room and, above all, a pre-existent heavenly redeemer repeatedly called the \"Son of Man,\" the \"Elect One,\" and the \"Righteous One,\" who will sit in judgment and vindicate the oppressed righteous.",
+        "Its portrait of a transcendent, enthroned Son of Man has long interested students of the Gospels. Notably, this section alone is absent from the Aramaic Enoch fragments at Qumran, fueling debate about its date. Like the rest of 1 Enoch, it is Scripture in the Ethiopian Orthodox tradition."
+      ]
+    },
+    "The Astronomical Book": {
+      "title": "Introduction to the Astronomical Book",
+      "paragraphs": [
+        "The Astronomical Book (1 Enoch 72–82), sometimes called the Book of the Luminaries, is among the earliest parts of 1 Enoch, with Aramaic copies at Qumran. The angel Uriel guides Enoch through the laws governing the sun, moon, stars, winds, and gates of heaven, presenting a detailed 364-day solar calendar.",
+        "Far from idle speculation, this calendar carried a polemical edge: it argued for an orderly, divinely fixed reckoning of time so that festivals would fall on their proper days, in contrast with rival lunar calendars. The section reflects the deep concern with sacred time shared by some Second Temple Jewish communities."
+      ]
+    },
+    "The Book of Dream Visions": {
+      "title": "Introduction to the Book of Dream Visions",
+      "paragraphs": [
+        "The Book of Dream Visions (1 Enoch 83–90) records two visions Enoch recounts to his son Methuselah. The first foresees the judgment of the Flood; the second, the celebrated \"Animal Apocalypse,\" retells the whole history of Israel from Adam to the author's own day using animals as symbols — the patriarchs and people appear as sheep, their enemies as beasts and birds of prey.",
+        "The vision climaxes in a final judgment and the dawn of a renewed age, and its closing details point to composition during the Maccabean crisis of the second century BCE. It is a vivid example of early apocalyptic writing and forms part of the Ethiopian Orthodox canon within 1 Enoch."
+      ]
+    },
+    "The Epistle of Enoch": {
+      "title": "Introduction to the Epistle of Enoch",
+      "paragraphs": [
+        "The Epistle of Enoch (1 Enoch 91–108) is the closing section of the book, cast as Enoch's final exhortation to his children and to future generations. At its heart lies the \"Apocalypse of Weeks,\" which divides all of history into ten symbolic \"weeks\" running from creation to the final judgment and the new heaven.",
+        "The section pronounces a series of woes against the rich and the wicked while comforting the righteous poor with the promise of vindication and reward beyond death. It also preserves a narrative of the miraculous birth of Noah. Dating to the second or first century BCE, it completes 1 Enoch as received in the Ethiopian Orthodox Church."
+      ]
+    },
+    "Book of Jubilees": {
+      "title": "Introduction to the Book of Jubilees",
+      "paragraphs": [
+        "The Book of Jubilees, sometimes called \"Lesser Genesis,\" is a second-century BCE retelling of Genesis and the first part of Exodus, presented as a revelation given to Moses on Mount Sinai by an \"angel of the presence.\" It recasts the biblical narrative within a precise chronological framework of \"jubilees\" — periods of forty-nine years — and promotes a 364-day solar calendar.",
+        "Jubilees stresses strict observance of the law, the Sabbath, and the festivals, often tracing their origins back to the patriarchs and even to heaven itself. Multiple copies were found among the Dead Sea Scrolls, showing its importance to the Qumran community. The book survives in full in Ge'ez and is canonical in the Ethiopian Orthodox Church."
+      ]
+    },
+    "Testament of Reuben": {
+      "title": "Introduction to the Testament of Reuben",
+      "paragraphs": [
+        "The Testaments of the Twelve Patriarchs present the farewell speeches of the twelve sons of Jacob, each gathering his descendants to confess his life, draw moral lessons from it, and foretell the future. The collection rests on a Jewish foundation from the Second Temple period and reached its present form through later Christian editing, which added passages anticipating Christ.",
+        "In his testament, Reuben reflects on his sin with Bilhah, his father's concubine, and warns his children above all against fornication and the wandering of the eyes, urging purity of mind and the guarding of the senses."
+      ]
+    },
+    "Testament of Simeon": {
+      "title": "Introduction to the Testament of Simeon",
+      "paragraphs": [
+        "Part of the Testaments of the Twelve Patriarchs, the deathbed addresses of Jacob's sons, this testament gives Simeon's final counsel to his descendants. Recalling his envy and hatred of his brother Joseph, Simeon makes his life a warning against the spirit of envy, which he describes as a poison that masters the mind and consumes the body.",
+        "He commends instead simplicity of heart and goodwill, foreseeing reconciliation among the tribes. Like the other testaments, it combines Jewish ethical teaching with later Christian additions."
+      ]
+    },
+    "Testament of Levi": {
+      "title": "Introduction to the Testament of Levi",
+      "paragraphs": [
+        "Among the Testaments of the Twelve Patriarchs, the Testament of Levi is one of the richest, drawing on older priestly traditions also attested at Qumran. Levi recounts visions in which he ascends through the heavens and is consecrated to the priesthood, and he speaks of the dignity and the corruption that would mark the priestly line.",
+        "The testament looks forward to a coming priestly redeemer and exalts the knowledge of the law. It blends Second Temple Jewish material with the Christian editing characteristic of the collection."
+      ]
+    },
+    "Testament of Judah": {
+      "title": "Introduction to the Testament of Judah",
+      "paragraphs": [
+        "In this part of the Testaments of the Twelve Patriarchs, Judah recounts his exploits and his failures, candidly confessing how drunkenness and lust led him into sin. He warns his children against wine and sexual immorality and against the love of money.",
+        "Judah also speaks of the kingship promised to his line and, in the collection's edited form, points beyond himself to a coming ruler from his tribe. The testament joins Jewish ethical teaching with later Christian messianic expectation."
+      ]
+    },
+    "Testament of Issachar": {
+      "title": "Introduction to the Testament of Issachar",
+      "paragraphs": [
+        "One of the Testaments of the Twelve Patriarchs, the Testament of Issachar praises the virtue of \"singleness\" or simplicity of heart — sincerity, integrity, and contentment with the honest labor of the land. Issachar presents himself as a model of the upright farmer who walks blamelessly before God and neighbor.",
+        "He exhorts his children to keep the law, love the Lord and their neighbor, and avoid the scheming and greed that divide the heart. The testament reflects the collection's blend of Jewish wisdom and later Christian editing."
+      ]
+    },
+    "Testament of Zebulun": {
+      "title": "Introduction to the Testament of Zebulun",
+      "paragraphs": [
+        "Part of the Testaments of the Twelve Patriarchs, the Testament of Zebulun centers on compassion and mercy. Zebulun recalls his pity for his brother Joseph and presents himself as the first among the brothers to show kindness, urging his descendants to have mercy on everyone in need without distinction.",
+        "He teaches that those who show compassion to others receive compassion from God. The testament unites Second Temple Jewish ethics with the Christian additions found throughout the collection."
+      ]
+    },
+    "Testament of Dan": {
+      "title": "Introduction to the Testament of Dan",
+      "paragraphs": [
+        "In the Testaments of the Twelve Patriarchs, Dan confesses that anger and falsehood ruled his heart, especially his rage against Joseph, and he makes his testament a sustained warning against the twin evils of wrath and lying.",
+        "He urges his children to speak the truth and to guard themselves from the spirit of anger, which he says blinds the soul, and he looks ahead to deliverance and the defeat of evil. The testament reflects the collection's characteristic mixture of Jewish moral teaching and later Christian editing."
+      ]
+    },
+    "Testament of Naphtali": {
+      "title": "Introduction to the Testament of Naphtali",
+      "paragraphs": [
+        "One of the Testaments of the Twelve Patriarchs, the Testament of Naphtali teaches that God has set all things in good order and that human beings should live according to that order rather than against it. Naphtali recounts symbolic dreams concerning the future of his brothers and the people of Israel.",
+        "He calls his children to natural goodness, unity, and the fear of the Lord. Like the rest of the collection, it builds on a Jewish base reworked by later Christian hands."
+      ]
+    },
+    "Testament of Gad": {
+      "title": "Introduction to the Testament of Gad",
+      "paragraphs": [
+        "Part of the Testaments of the Twelve Patriarchs, the Testament of Gad is an extended warning against hatred. Gad confesses the hatred he bore toward Joseph and describes how it corrupts judgment, breeds injustice, and destroys the one who harbors it.",
+        "He sets against it the love that \"covers a multitude of sins,\" urging his children to forgive from the heart and to love one another. The testament combines Jewish ethical instruction with the Christian editing typical of the collection."
+      ]
+    },
+    "Testament of Asher": {
+      "title": "Introduction to the Testament of Asher",
+      "paragraphs": [
+        "Among the Testaments of the Twelve Patriarchs, the Testament of Asher is built around the image of the \"two faces\" or two ways — good and evil, virtue and vice — that lie before every person. Asher warns against the double-minded life that mixes the two and only appears righteous.",
+        "He calls his children to single-minded goodness and sincerity before God. The testament reflects the collection's union of Second Temple Jewish moral teaching with later Christian additions."
+      ]
+    },
+    "Testament of Joseph": {
+      "title": "Introduction to the Testament of Joseph",
+      "paragraphs": [
+        "One of the most admired of the Testaments of the Twelve Patriarchs, the Testament of Joseph celebrates chastity and patient endurance. Joseph recounts at length his steadfast resistance to the advances of his Egyptian master's wife and the long trials he bore — slavery, slander, and imprisonment — through which God preserved and exalted him.",
+        "He commends self-control, forgiveness toward his brothers, and unwavering trust in God. The testament joins Jewish narrative and ethics with the Christian editing found across the collection."
+      ]
+    },
+    "Testament of Benjamin": {
+      "title": "Introduction to the Testament of Benjamin",
+      "paragraphs": [
+        "The closing piece of the Testaments of the Twelve Patriarchs, the Testament of Benjamin holds up the ideal of the \"good man\" with a pure mind, who sees goodness in all things and is untouched by the schemes of evil. Benjamin draws on the example of his brother Joseph's mercy.",
+        "He exhorts his children to keep a single, undivided heart, to love the Lord and their neighbor, and to flee envy and malice. Like the rest of the collection, it rests on a Jewish foundation shaped by later Christian hands."
+      ]
+    },
+    "2 Enoch (Secrets of Enoch)": {
+      "title": "Introduction to 2 Enoch",
+      "paragraphs": [
+        "2 Enoch, also known as the Slavonic Enoch or the Secrets of Enoch, is a separate work from the better-known 1 Enoch, preserved chiefly in Old Church Slavonic manuscripts. It narrates Enoch's ascent through the heavens, where he beholds the orders of angels, the storehouses of snow and dew, and paradise and the place of torment, before being brought into the presence of God and instructed in the secrets of creation.",
+        "Returning briefly to earth, Enoch passes on heavenly wisdom and ethical exhortation to his sons, after which the book recounts his successors and the marvelous birth of Melchizedek. Its date and original language are debated, with many scholars placing its core in the late Second Temple period. It is regarded as pseudepigraphic and is not part of any major biblical canon."
+      ]
+    },
+    "Didache": {
+      "title": "Introduction to the Didache",
+      "paragraphs": [
+        "The Didache, or \"Teaching of the Twelve Apostles,\" is one of the earliest Christian writings outside the New Testament, generally dated to the late first or early second century. It is a brief church manual rather than a narrative: it opens with the \"Two Ways\" of life and death, then gives practical instructions on baptism, fasting, prayer (including a form of the Lord's Prayer), and the Eucharist, and on receiving traveling apostles and prophets.",
+        "Long known only by title, the full text was rediscovered in 1873 in a manuscript at Constantinople. The Didache offers a remarkable glimpse into the worship and order of the earliest churches. It is counted among the writings of the Apostolic Fathers and is not part of the biblical canon."
+      ]
+    },
+    "1 Clement": {
+      "title": "Introduction to 1 Clement",
+      "paragraphs": [
+        "1 Clement is a letter sent from the church at Rome to the church at Corinth around 96 CE, traditionally attributed to Clement, an early leader of the Roman church. It was written to heal a serious division in which the Corinthians had deposed their presbyters, and it appeals at length for humility, repentance, order, and concord, grounding its plea in the Scriptures and the example of Christ.",
+        "One of the oldest Christian documents outside the New Testament, it was so esteemed that some early churches read it publicly alongside apostolic writings. 1 Clement is numbered among the Apostolic Fathers and, while highly valued, is not part of the biblical canon."
+      ]
+    }
+  }
+}
