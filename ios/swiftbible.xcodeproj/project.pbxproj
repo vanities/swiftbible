@@ -141,6 +141,10 @@
 		DD0001SUMMARIES0000000003 /* summaries_swiftbible.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0001SUMMARIES0000000004 /* summaries_swiftbible.json */; };
 		DD0001SUMMARIES0000000005 /* summaries_mhcc.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0001SUMMARIES0000000006 /* summaries_mhcc.json */; };
 		DD0002JFB000000000000001 /* summaries_jfb.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0002JFB000000000000002 /* summaries_jfb.json */; };
+		DD0003INTROS000000000001 /* BookIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0003INTROS000000000002 /* BookIntroView.swift */; };
+		DD0003INTROS000000000003 /* book_intros_swiftbible.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0003INTROS000000000004 /* book_intros_swiftbible.json */; };
+		DD0003INTROS000000000005 /* book_intros_mhcc.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0003INTROS000000000006 /* book_intros_mhcc.json */; };
+		DD0003INTROS000000000007 /* book_intros_jfb.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0003INTROS000000000008 /* book_intros_jfb.json */; };
 		E383E9966C655D2C252F97C3 /* AppIconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2CE7334B0BFCB9BCC9CFD5 /* AppIconPickerView.swift */; };
 		EE766E32F77570D9062D00CB /* AppIconOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70803BE8C452F513C60AFF8C /* AppIconOption.swift */; };
 		F4EC694D6427EB2F5F6A6AE5 /* DailyDevotional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BDE39A9EDC261732D39C9 /* DailyDevotional.swift */; };
@@ -346,6 +350,10 @@
 		DD0001SUMMARIES0000000004 /* summaries_swiftbible.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = summaries_swiftbible.json; sourceTree = "<group>"; };
 		DD0001SUMMARIES0000000006 /* summaries_mhcc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = summaries_mhcc.json; sourceTree = "<group>"; };
 		DD0002JFB000000000000002 /* summaries_jfb.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = summaries_jfb.json; sourceTree = "<group>"; };
+		DD0003INTROS000000000002 /* BookIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookIntroView.swift; sourceTree = "<group>"; };
+		DD0003INTROS000000000004 /* book_intros_swiftbible.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = book_intros_swiftbible.json; sourceTree = "<group>"; };
+		DD0003INTROS000000000006 /* book_intros_mhcc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = book_intros_mhcc.json; sourceTree = "<group>"; };
+		DD0003INTROS000000000008 /* book_intros_jfb.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = book_intros_jfb.json; sourceTree = "<group>"; };
 		E03C9505B4D5E972B90582E3 /* ReadingTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReadingTheme.swift; sourceTree = "<group>"; };
 		EC3E4DFF77174F609B079B15 /* DonorPerksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonorPerksView.swift; sourceTree = "<group>"; };
 		EDF1104E4373CE709AC642F4 /* DonationPromptReciprocityView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DonationPromptReciprocityView.swift; sourceTree = "<group>"; };
@@ -476,6 +484,7 @@
 				95D6F64F2E808D8300042F87 /* VerseExplanationSheet.swift */,
 				954BC9D52C84EDBE00FFCFA6 /* BibleView.swift */,
 				954BC9EC2C85012200FFCFA6 /* BookDetailView.swift */,
+				DD0003INTROS000000000002 /* BookIntroView.swift */,
 				954BC9EF2C8501C900FFCFA6 /* ChapterDetailView.swift */,
 				952F39CC2C8B58A0009A412D /* ParagraphView.swift */,
 				954BC9F12C85112D00FFCFA6 /* SearchBar.swift */,
@@ -601,6 +610,9 @@
 				DD0001SUMMARIES0000000004 /* summaries_swiftbible.json */,
 				DD0001SUMMARIES0000000006 /* summaries_mhcc.json */,
 				DD0002JFB000000000000002 /* summaries_jfb.json */,
+				DD0003INTROS000000000004 /* book_intros_swiftbible.json */,
+				DD0003INTROS000000000006 /* book_intros_mhcc.json */,
+				DD0003INTROS000000000008 /* book_intros_jfb.json */,
 				95DEADBEEF44444400042F87 /* OnboardingExplain.mp4 */,
 			);
 			path = Text;
@@ -950,6 +962,9 @@
 				DD0001SUMMARIES0000000003 /* summaries_swiftbible.json in Resources */,
 				DD0001SUMMARIES0000000005 /* summaries_mhcc.json in Resources */,
 				DD0002JFB000000000000001 /* summaries_jfb.json in Resources */,
+				DD0003INTROS000000000003 /* book_intros_swiftbible.json in Resources */,
+				DD0003INTROS000000000005 /* book_intros_mhcc.json in Resources */,
+				DD0003INTROS000000000007 /* book_intros_jfb.json in Resources */,
 				95DEADBEEF33333300042F87 /* OnboardingExplain.mp4 in Resources */,
 				954BC9D82C84EDBF00FFCFA6 /* Assets.xcassets in Resources */,
 				LC0000022F8C3D00LOCAL002 /* Localizable.xcstrings in Resources */,
@@ -1071,6 +1086,7 @@
 				95D6F6522E808D9E00042F87 /* VerseExplanationRequest.swift in Sources */,
 				952F39CF2C8BA7F3009A412D /* ContentView.swift in Sources */,
 				954BC9ED2C85012200FFCFA6 /* BookDetailView.swift in Sources */,
+				DD0003INTROS000000000001 /* BookIntroView.swift in Sources */,
 				951009802C92824A0040B21A /* SeeHighlightsView.swift in Sources */,
 				95F3A0062F040001000A1B2C /* TranslationInfoView.swift in Sources */,
 				952F39F72C920666009A412D /* Note.swift in Sources */,

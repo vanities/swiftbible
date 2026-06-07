@@ -44,6 +44,7 @@ enum AnalyticsEvent: String {
     // Navigation
     case tabSwitched = "tab_switched"
     case bookOpened = "book_opened"
+    case bookIntroViewed = "book_intro_viewed"
     case chapterViewed = "chapter_viewed"
     case chapterNavigated = "chapter_navigated"
 
