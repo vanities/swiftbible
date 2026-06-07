@@ -50,6 +50,16 @@
         }
       }
     },
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
     "%@ %@ %lld:%lld" : {
       "localizations" : {
         "en" : {
@@ -281,10 +291,19 @@
     "A Word for Today" : {
 
     },
+    "About %@" : {
+
+    },
     "About Our Sources" : {
 
     },
     "About Public Domain" : {
+
+    },
+    "About this book" : {
+
+    },
+    "About this book — author, history and purpose" : {
 
     },
     "About Translations" : {
@@ -336,6 +355,9 @@
     "Are you sure you want to delete your account? This action cannot be undone." : {
 
     },
+    "As you read, you'll build streaks and unlock badges for milestones along the way. We celebrate each one with a little banner — switch those off anytime in Settings." : {
+
+    },
     "Ask a follow-up question…" : {
 
     },
@@ -343,6 +365,9 @@
 
     },
     "Authenticate" : {
+
+    },
+    "Author, history & purpose" : {
 
     },
     "Badge earned" : {
@@ -384,6 +409,12 @@
     "Cancel" : {
 
     },
+    "Celebrate your progress" : {
+
+    },
+    "Celebration banners" : {
+
+    },
     "Changes the color of toggles, links, and active tabs throughout the app." : {
 
     },
@@ -406,6 +437,9 @@
 
     },
     "Clear search" : {
+
+    },
+    "Climb every track from Bronze to Diamond." : {
 
     },
     "Close" : {
@@ -1152,6 +1186,9 @@
 
     },
     "You've been reading Scripture for free — a small gift back helps keep swiftbible running for everyone." : {
+
+    },
+    "Your badges are recorded either way — change this anytime in Settings." : {
 
     },
     "Your contributions sustain free access for readers around the world. Thank you for investing in what matters." : {
