@@ -27,7 +27,7 @@ Each entry contrasts the **comfortable middle** with the **extreme claim** about
 | # | Sunday | Title | Comfortable middle | Extreme claim | Anchor verses |
 |---|---|---|---|---|---|
 | 1 | **2026-05-17** ✅ | **The bread that breeds worms** | "Save for tomorrow." | Israel was forbidden to store manna. Daily trust over weekly storage. | Ex 16:13-21 |
-| 2 | 2026-06-14 | A 24-hour confession | "Take a rest day." | Practice 24-hour cessation as confession of trust — *the world doesn't depend on me.* Sabbath is fulfilled in Christ, but the cessation principle remains. | Heb 4:1-11, Mark 2:27, Matt 11:28-30 |
+| 2 | **2026-06-14** ✅ | **A 24-hour confession** | "Take a rest day." | Practice 24-hour cessation as confession of trust — *the world doesn't depend on me.* Sabbath is fulfilled in Christ, but the cessation principle remains. | Heb 4:1-11, Mark 2:27, Matt 11:28-30 |
 | 3 | 2026-07-12 | Mary chose the better part | "Serve faithfully." | Religious service can be a sin if it crowds out being still. | Luke 10:38-42 |
 | 4 | 2026-08-09 | God's prescription for the prophet | "Trust through trial." | After Elijah's greatest victory, God's first command was: nap and eat. | 1 Kings 19:1-9 |
 | 5 | 2026-09-06 | Lay it down | "Trust God with your burden." | Actually stop carrying it. His yoke is easy. | Matt 11:28-30 |
@@ -73,6 +73,20 @@ The pivot: God isn't asking you to be foolish. He's asking you to remember the s
 End the empathy+Bible mix on: most of us are too far from hunger to feel manna's lesson in our bodies. The discipline of cessation (Sabbath, fasting, giving away large) is partly how Christians stay close enough to remember.
 
 Prayer: short, specific. Returns to the I-anchor — *"I have built a small fortress against tomorrow. Teach me to eat today's bread without saving the leftovers."*
+
+### Week 2 — A 24-hour confession (2026-06-14)
+
+**✅ Published 2026-06-09 to Supabase (id 674) for for_date 2026-06-14.** Adam approved the draft as written (anchor kept). Picked over the alternates (Ps 127 runner-up, Mary/Martha, Elijah — Elijah was flagged as overlapping Jonah 4's death-wish-prophet arc, which runs 07-05).
+
+Lead verse Heb 4:9. Structure beats: busyness-as-rank empathy open ("Rest answers to output. Output answers to nothing.") → Gen 2:3, the first thing scripture calls sanctified is a day → Mark 2:27 gift-framing → Deut 5:15, rest as freedom-sermon (Egypt never had a day off; "you keep Pharaoh's schedule as a free man") → manna callback to Week 1 (Ex 16:27 *"and they found none"* — provision does not come from refusing to stop) → the CoC hinge: Col 2:16-17 explicitly unbinds the day (shadow/body), then Heb 4:10-11 keeps the rest alive (gospel-rest = ceasing from your own works; restlessness and unbelief are one condition per Heb 3:19; the labour-to-rest paradox) → Matt 11:28, rest is a person → the confession claim: a freely-chosen 24-hour stop as acted creed ("the world does not depend on me") → cost beat (the itch; the smoker's pocket-pat reflex; "an appetite that never takes no is called a master") → legalism/scale guard (newborns, night shifts, animals; "Zero is a confession too.") → Ps 127:2 watchman close ("Catch God holding the world without your help").
+
+**CoC framing (load-bearing):** Sabbath fulfilled in Christ stated outright with Col 2:16-17 before any practice talk; the 24 hours is confession, never command ("this devotional is not trying to install one"). Grace+obedience kept: "Obedience keeps its whole place in the Christian life. Earning loses its place forever."
+
+**Matt Bassford:** no direct rest/sabbath material in the archive (confirmed via search 2026-06-09; the runbook's prediction held). Adjacent theme #6 (usefulness/self-reliance as blindspot, `2022-08-16-uselessness.md`) informs the identity-equals-output beat; draft is otherwise scripture-driven.
+
+**I-anchor:** mild, non-biographical ("I cannot remember the last time I stopped for a whole day on purpose..."). Adam removed the Jonah entry's anchor as "too much" — this one is intentionally lighter; he may still strike it.
+
+Prayer: returns to Pharaoh's-schedule image — refrain *"You hold the world without me. Let me stop long enough to see it."*
 
 ---
 

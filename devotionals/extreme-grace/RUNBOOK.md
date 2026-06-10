@@ -28,17 +28,20 @@ Each entry contrasts the **comfortable middle** (where Christians have settled) 
 |---|---|---|---|---|---|
 | 1 | 2026-05-10 | The Father runs | "God forgives." | The wronged Father runs to the rebel, makes a fool of himself, throws a party. | Luke 15:11-32 |
 | 2 | 2026-06-07 | The respite he used | "There's always time; God will take me back whenever." | God relents ten times; Pharaoh spends each respite hardening himself. Despised mercy has a terminus. | Ex 8:15, Rom 2:4-5, Heb 3:13, 2 Pet 3:9 |
-| 3 | 2026-07-05 | Five minutes is enough | "Repent now while you can." | The thief gets paradise five minutes before he dies. | Luke 23:39-43 |
-| 4 | 2026-08-02 | A man after God's own heart | "David repented." | God calls a murderer-adulterer *beloved* and uses his bloodline to bring the Messiah. | 2 Sam 11-12, Acts 13:22 |
-| 5 | 2026-08-30 | The persecutor becomes the apostle | "God can change anyone." | God *hand-picks* his fiercest enemy for the most important job. | Acts 9, 1 Tim 1:13-15 |
-| 6 | 2026-09-27 | The denier gets the church | "Peter was forgiven." | Three denials → "feed my sheep." Betrayal is not disqualifying. | John 21:15-17 |
-| 7 | 2026-10-25 | The worst king repents | "Manasseh turned." | The single worst king of Judah was forgiven *and* recorded as forgiven. | 2 Chr 33:1-13 |
-| 8 | 2026-11-22 | Marry the prostitute | "Hosea is a metaphor." | God commands an enacted scandal — and does it himself with us. | Hosea 1-3 |
-| 9 | 2026-12-20 | The five-times-divorced theologian | "Jesus was kind to outsiders." | Jesus's longest recorded conversation is with a Samaritan adulteress. | John 4:1-30 |
-| 10 | 2027-01-17 | The death penalty refused | "Forgive sin." | Caught in the act. Stones in hand. Jesus refuses. | John 8:1-11 |
-| 11 | 2027-02-14 | While we were yet | "God forgave repenters." | God didn't wait for us to clean up. | Rom 5:6-11 |
-| 12 | 2027-03-14 | Anyone who calls | "Trust in Christ." | Any sin, any moment, any time. No exceptions. | Joel 2:32, Rom 10:13, Acts 22:16 |
-| 13 | 2027-04-11 | But forgive others | "Receive forgiveness." | Extreme grace received requires extreme grace given. The unforgiving servant. | Matt 18:21-35 |
+| 3★ | **2026-07-05** ✅ | **The chapter after the happy ending** | "God is merciful, and I'm glad." | Jonah 4 — the chapter nobody reads. The prophet recites God's mercy-creed as an accusation and would rather die than watch grace land on his enemies. You have a Nineveh. | Jonah 4:1-11, Jonah 3:10, Ps 145:8, Matt 12:41 |
+| 4 | 2026-08-02 | Five minutes is enough | "Repent now while you can." | The thief gets paradise five minutes before he dies. | Luke 23:39-43 |
+| 5 | 2026-08-30 | A man after God's own heart | "David repented." | God calls a murderer-adulterer *beloved* and uses his bloodline to bring the Messiah. | 2 Sam 11-12, Acts 13:22 |
+| 6 | 2026-09-27 | The persecutor becomes the apostle | "God can change anyone." | God *hand-picks* his fiercest enemy for the most important job. | Acts 9, 1 Tim 1:13-15 |
+| 7 | 2026-10-25 | The denier gets the church | "Peter was forgiven." | Three denials → "feed my sheep." Betrayal is not disqualifying. | John 21:15-17 |
+| 8 | 2026-11-22 | The worst king repents | "Manasseh turned." | The single worst king of Judah was forgiven *and* recorded as forgiven. | 2 Chr 33:1-13 |
+| 9 | 2026-12-20 | Marry the prostitute | "Hosea is a metaphor." | God commands an enacted scandal — and does it himself with us. | Hosea 1-3 |
+| 10 | 2027-01-17 | The five-times-divorced theologian | "Jesus was kind to outsiders." | Jesus's longest recorded conversation is with a Samaritan adulteress. | John 4:1-30 |
+| 11 | 2027-02-14 | While we were yet | "God forgave repenters." | God didn't wait for us to clean up. *Pinned to Valentine's Day 2027.* | Rom 5:6-11 |
+| 12 | 2027-03-14 | The death penalty refused | "Forgive sin." | Caught in the act. Stones in hand. Jesus refuses. | John 8:1-11 |
+| 13 | 2027-04-11 | Anyone who calls | "Trust in Christ." | Any sin, any moment, any time. No exceptions. | Joel 2:32, Rom 10:13, Acts 22:16 |
+| 14 | 2027-05-09 | But forgive others | "Receive forgiveness." | Extreme grace received requires extreme grace given. The unforgiving servant. | Matt 18:21-35 |
+
+After the Jonah handpick the backlog slid one Grace Sunday. *While we were yet* holds Valentine's Day 2027 (already pinned there); *The death penalty refused* and *Anyone who calls* land after it.
 
 **Strong runner-ups:**
 - The lost coin / the lost sheep — God *searches* (Luke 15:1-10)
@@ -90,6 +93,28 @@ Matt's `2018-10-01-reforming-too-late.md` ("tomorrow-itis"; Josiah; windows that
 
 Prayer: returns to the anchor as refrain — *"Lord, I have heard your patience as permission. Soften me before I finish the job myself."*
 
+### ★ The chapter after the happy ending (2026-06-14) — handpicked
+
+**✅ Published 2026-06-09 to Supabase (id 675) for for_date 2026-07-05** (`03-the-chapter-after-the-happy-ending.md`). Handpicked by Adam: *"most people know the story about Jonah, but I don't think they know about chapter 4."* Scheduled for **2026-07-05, the natural Grace #3 Sunday** (`--series-part 3`) — Adam chose to keep the rotation clean (2026-06-09) rather than run Grace twice in a row, so Rest #2 keeps 06-14 and the numbered Grace backlog slides one slot (*Five minutes is enough* → 08-02, and so on).
+
+**⚠️ Adam's constraint (2026-06-09): the fish gets one line in the opening recap, nothing more.** ("The prophet runs, the fish eats him, the fish spits him out" — that's it.) The rest of the draft lives inside chapter 4. Chapter 3 appears only as the one-verse hinge (3:10, the happy ending the famous version stops at); the flight to Tarshish appears only because Jonah himself retells it in 4:2. No storm, no chapters 1–2 narration, no belly-of-the-fish beats. The hook: everyone stops at the happy ending; the book was written for the chapter after it.
+
+Lead verse Jonah 4:2 — Jonah finally explains the running: *"I knew that thou art a gracious God..."* He recites the Sinai mercy-creed (Ex 34:6, sung in Ps 145:8) as an accusation. The wince: his theology was perfect; he hated where the grace was pointed. Nineveh = Assyria, the empire that would erase Israel within a generation (2 Kings 14:25 places Jonah under Jeroboam II).
+
+Structure beats: 3:10→4:1 whiplash cold open (city saved, preacher furious) → angry at the best day any prophet ever had (8-word sermon) → 4:2 creed-as-accusation → "Why make him go?" (Adam's angle, 2026-06-09: nothing in the chapter surprises Jonah; the errand felt like an insult since grace was coming with or without him; the king repented on a maybe while the prophet held a guarantee; God sends him because the prophet is the second patient — carrying grace is the cure) → the gourd sequence (the *prepared* motif: gourd/worm/east wind; "exceeding glad" of a plant, "displeased exceedingly" by a saved city; Abraham haggled for Sodom, Jonah found a seat with a view) → 4:10-11 full quote + the ḥûs note → the book ends mid-conversation on God's unanswered question ("and also much cattle") → "you have a Nineveh" → grudge-under-right-conduct beat → the grudge sinks (death wishes in vv. 3, 8, 9; anger at grace turns on its keeper; the grief of being right — Adam: "he became depressed about it") → God's gentleness with the man at the bottom (the gourd was grown "to deliver him from his grief"; shade first, then company, then a question) → older-brother echo (one-paragraph callback to Grace #1, the Father out in the yard) → Jesus the greater Jonah (Matt 12:41, Luke 19:41, Luke 23:34 — walked out of a city gate to die for sinners, prayed the prayer Jonah refused).
+
+**Hebrew note (verified):** in 4:10-11 KJV's "had pity" and "spare" translate the same verb, ḥûs (חוּס) — God answers Jonah with Jonah's own word. The app's on-device commentary for 4:10 claims the lemmas are ḥāmāh/šāmar; both are wrong (ḥāmāh = heat/wrath, šāmar = keep/guard).
+
+**Matt Bassford sources:** `2019-02-08-compassion-in-jonah.md` (the book's theme is God teaching his wayward prophet compassion "right up to the last sentence"; the Abraham/Sodom inversion; "the conflict is Jonah's, the compassion all God's"), `2023-01-02-grudges.md` (the grudge that survives kind conduct; "affronted self-righteousness"; carried the grudge-under-obedience beat), `2016-11-08-evangelism-and-compassion.md` (Assyria political context; "the plant belonged to him, but the people didn't"), `2014-07-29-loving-our-enemies.md`. Reasoning borrowed, not text.
+
+**Voice-checked (2026-06-09):** adam-voice (Mode D; zero em dashes in prose; no negation-as-setup hooks) and matt-bassford (inverted aphorism "ran from God's mercy the way other men run from God's wrath", grudge-under-conduct insight, conflict/compassion verdict pair).
+
+**No I-anchor on this entry (Adam, 2026-06-09):** the grudge-confession subtitle was "too much" — removed, not replaced. This entry runs title → lead verse with no bold subtitle. Don't add one back on future passes. The first-person admission lives only in the prayer.
+
+**CoC framing:** mercy followed concrete repentance — quote Jonah 3:10 *"God saw their works, that they turned"* (grace + turning, two halves). Free will throughout: Nineveh chose, Jonah chose. No soteriology-mechanics landmines in this topic.
+
+Prayer: returns to God's question as refrain — *"Doest thou well to be angry? Stay with me until I can say no."*
+
 ---
 
 ## Drafting workflow
@@ -107,9 +132,10 @@ The publisher script and dry-run flow are unchanged. Series part is the row numb
 ```
 devotionals/extreme-grace/
 ├── RUNBOOK.md                       # this file
-├── 01-the-father-runs.md            # week 1 (2026-05-10)
-├── 02-the-respite-he-used.md        # week 2 (2026-06-07)
-├── 03-five-minutes-is-enough.md     # week 3 (2026-07-05)
+├── 01-the-father-runs.md                       # week 1 (2026-05-10)
+├── 02-the-respite-he-used.md                   # week 2 (2026-06-07)
+├── 03-the-chapter-after-the-happy-ending.md    # week 3 (2026-07-05) — Jonah 4, handpicked
+├── 04-five-minutes-is-enough.md                # week 4 (2026-08-02)
 ├── ...
 └── archive/                         # published markdown after edits
 ```

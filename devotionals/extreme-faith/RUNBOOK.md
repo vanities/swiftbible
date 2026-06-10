@@ -101,16 +101,16 @@ When using the Matt Bassford research skill (`skills/matt-bassford/`), Matt's po
 
 | Series | Week | Topic | Care needed |
 |---|---|---|---|
-| Grace | 3 | Five minutes is enough (thief) | Thief was under the Old Covenant (pre-Pentecost). Don't let this collapse into "baptism isn't necessary." |
-| Grace | 5 | The persecutor becomes the apostle (Saul) | Saul was baptized after Damascus (Acts 22:16). Frame extreme as God choosing the persecutor, not as conversion-without-baptism. |
-| Grace | 9 | The five-times-divorced theologian | Keep both halves of grace + repent. CoC reads divorce/remarriage strictly (Matt 19:9). |
-| Grace | 10 | The death penalty refused | *"Go and sin no more"* is part of the grace, not a footnote. |
-| Grace | 12 | Anyone who calls | Acts 22:16 ties calling to baptism. Verses include Acts 22:16 to remind the drafter. |
+| Grace | 4 | Five minutes is enough (thief) | Thief was under the Old Covenant (pre-Pentecost). Don't let this collapse into "baptism isn't necessary." |
+| Grace | 6 | The persecutor becomes the apostle (Saul) | Saul was baptized after Damascus (Acts 22:16). Frame extreme as God choosing the persecutor, not as conversion-without-baptism. |
+| Grace | 10 | The five-times-divorced theologian | Keep both halves of grace + repent. CoC reads divorce/remarriage strictly (Matt 19:9). |
+| Grace | 12 | The death penalty refused | *"Go and sin no more"* is part of the grace, not a footnote. |
+| Grace | 13 | Anyone who calls | Acts 22:16 ties calling to baptism. Verses include Acts 22:16 to remind the drafter. |
 | Rest | 2 | A 24-hour confession | Frame as cessation principle (Sabbath fulfilled in Christ), not binding Sabbath command. Use Heb 4, not Ex 20. |
-| Delight | 2 | More wine for the party | Joy in good gifts, within moderation. Not glorifying drunkenness. |
-| Delight | 9 | Mandatory feasts | OT festivals are Old Covenant. Draw the principle (commanded celebration), don't bind the festival. |
-| Delight | 10 | David danced | Personal worship before God. Not a precedent for instrumental or dance worship in congregational assembly. |
-| Delight | 11 | When the room sings | A cappella reframe — congregation as instrument. Don't use Ps 150 as precedent for instrumental church music. |
+| Delight | 3 | More wine for the party | Joy in good gifts, within moderation. Not glorifying drunkenness. |
+| Delight | 10 | Mandatory feasts | OT festivals are Old Covenant. Draw the principle (commanded celebration), don't bind the festival. |
+| Delight | 11 | David danced | Personal worship before God. Not a precedent for instrumental or dance worship in congregational assembly. |
+| Delight | 13 | When the room sings | A cappella reframe — congregation as instrument. Don't use Ps 150 as precedent for instrumental church music. |
 
 ---
 
@@ -171,10 +171,10 @@ Order is not fixed — Adam may handpick the next Faith topic each cycle based o
 | 2026-05-24 | Delight #1 |
 | 2026-05-31 | Faith #2 (Mourn in the present tense) ✅ drafted |
 | 2026-06-07 | **Grace #2 (The respite he used)** ✅ published |
-| 2026-06-14 | Rest #2 |
-| 2026-06-21 | Delight #2 |
+| 2026-06-14 | Rest #2 (A 24-hour confession) ✅ published |
+| 2026-06-21 | **Delight #2 ★ (He sings over you)** ✅ published — Father's Day handpick |
 | 2026-06-28 | Faith #3 (Miss the mark) ✅ published |
-| 2026-07-05 | Grace #3 |
+| 2026-07-05 | **Grace #3 ★ (The chapter after the happy ending — Jonah 4)** ✅ published — handpicked |
 | 2026-07-12 | Rest #3 |
 | 2026-07-19 | Delight #3 |
 | 2026-07-26 | **Faith #4 (The Day Christ Came)** ✅ published — memorial, handpicked |

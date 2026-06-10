@@ -27,17 +27,20 @@ Each entry contrasts the **comfortable middle** with the **extreme claim** about
 | # | Sunday | Title | Comfortable middle | Extreme claim | Anchor verses |
 |---|---|---|---|---|---|
 | 1 | 2026-05-24 | Eat with joy | "Be grateful for food." | God *commands* you to enjoy food and wine. | Eccl 9:7-10 |
-| 2 | 2026-06-21 | More wine for the party | "Jesus is generous." | Jesus's first miracle was making 150 gallons more wine for a party that already had enough. | John 2:1-11 |
-| 3 | 2026-07-19 | The Song of Solomon | "Marriage is sacred." | Erotic love is inspired scripture. Read it. | Song 1-8 |
-| 4 | 2026-08-16 | The Father's banquet | "Heaven is wonderful." | Heaven is a feast, not a contemplation. | Luke 15:22-24, Isa 25:6 |
-| 5 | 2026-09-13 | The beauty God commanded | "Worship in spirit and truth." | God specified gold, silk, embroidery, blue, scarlet, purple. Aesthetic excellence is commanded. | Ex 25-31, 35-40 |
-| 6 | 2026-10-11 | Taste and see | "God is good." | God is *sensorily* delicious. Eat him. Drink him. Enjoy him. | Psalm 34:8 |
-| 7 | 2026-11-08 | Delight in the Lord | "Love God." | Delight is its own command, with a promise attached. | Psalm 37:4 |
-| 8 | 2026-12-06 | Always | "Sometimes joyful." | Not "rejoice when life is good." Always. Including now. | Phil 4:4 |
-| 9 | 2027-01-03 | Mandatory feasts | "Worship is solemn." | God scheduled three annual celebrations. Mandatory party attendance. | Lev 23, Deut 16:13-15 |
-| 10 | 2027-01-31 | David danced | "Worship reverently." | David danced naked with abandon. Michal mocked him. She was wrong. | 2 Sam 6:14-22 |
-| 11 | 2027-02-28 | When the room sings | "Mouth the words." | Sing audibly. With your whole body. The congregation is the instrument; let the room shake. | Eph 5:19, Col 3:16, Heb 13:15, Ps 95:1-2 |
-| 12 | 2027-03-28 | The party never ends | "Heaven is peace." | The new earth is a wedding feast that doesn't end. | Rev 21-22, Isa 65:17-25 |
+| 2★ | **2026-06-21** ✅ | **He sings over you** | "God loves me (on principle)." | The series flip: God's delight in YOU. He rejoices over his people with singing. You believe he loves you; you don't believe he likes you. Father's Day handpick. | Zeph 3:17, Luke 12:32, Matt 7:11, Isa 62:5 |
+| 3 | 2026-07-19 | More wine for the party | "Jesus is generous." | Jesus's first miracle was making 150 gallons more wine for a party that already had enough. | John 2:1-11 |
+| 4 | 2026-08-16 | The Song of Solomon | "Marriage is sacred." | Erotic love is inspired scripture. Read it. | Song 1-8 |
+| 5 | 2026-09-13 | The Father's banquet | "Heaven is wonderful." | Heaven is a feast, not a contemplation. | Luke 15:22-24, Isa 25:6 |
+| 6 | 2026-10-11 | The beauty God commanded | "Worship in spirit and truth." | God specified gold, silk, embroidery, blue, scarlet, purple. Aesthetic excellence is commanded. | Ex 25-31, 35-40 |
+| 7 | 2026-11-08 | Taste and see | "God is good." | God is *sensorily* delicious. Eat him. Drink him. Enjoy him. | Psalm 34:8 |
+| 8 | 2026-12-06 | Delight in the Lord | "Love God." | Delight is its own command, with a promise attached. | Psalm 37:4 |
+| 9 | 2027-01-03 | Always | "Sometimes joyful." | Not "rejoice when life is good." Always. Including now. | Phil 4:4 |
+| 10 | 2027-01-31 | Mandatory feasts | "Worship is solemn." | God scheduled three annual celebrations. Mandatory party attendance. | Lev 23, Deut 16:13-15 |
+| 11 | 2027-02-28 | David danced | "Worship reverently." | David danced naked with abandon. Michal mocked him. She was wrong. | 2 Sam 6:14-22 |
+| 12 | 2027-03-28 | The party never ends | "Heaven is peace." | The new earth is a wedding feast that doesn't end. *Pinned to Easter Sunday 2027.* | Rev 21-22, Isa 65:17-25 |
+| 13 | 2027-04-25 | When the room sings | "Mouth the words." | Sing audibly. With your whole body. The congregation is the instrument; let the room shake. | Eph 5:19, Col 3:16, Heb 13:15, Ps 95:1-2 |
+
+After the He-sings-over-you handpick (2026-06-10), the backlog slid one Delight Sunday. *The party never ends* holds Easter 2027 (it was already pinned there); *When the room sings* takes the slot after it.
 
 **Strong runner-ups:**
 - "Joy unspeakable and full of glory" (1 Pet 1:8)
@@ -53,7 +56,7 @@ Each entry contrasts the **comfortable middle** with the **extreme claim** about
 
 **⚠️ Matt Bassford note:** Matt's worldview was *world-is-broken / hope-is-elsewhere.* He'd push back on a too-celebratory present-tense Delight series — he'd want joy anchored eschatologically (the *coming* feast, the *promised* delight). When using the Matt skill on a Delight devotional, expect his pushback to lean toward "the world is groaning, but the feast is coming." Borrow his eschatological frame; resist his earthly pessimism if a particular delight is meant to be present-tense.
 
-**⚠️ Song of Solomon (Week 3):** This will push some of the audience harder than any Faith hardship. Watch PostHog. If churn spikes, consider treating it as an optional/runner-up rather than a scheduled main entry.
+**⚠️ Song of Solomon (Week 4):** This will push some of the audience harder than any Faith hardship. Watch PostHog. If churn spikes, consider treating it as an optional/runner-up rather than a scheduled main entry.
 
 ---
 
@@ -77,6 +80,22 @@ End the empathy+Bible mix on: the quiet Christian suspicion that joy is for afte
 
 Prayer: short, specific. Returns to the I-anchor — *"I have eaten meals I did not taste. Teach me to enjoy what you have given without apology."*
 
+### ★ He sings over you (2026-06-21) — Father's Day handpick
+
+**✅ Published 2026-06-10 to Supabase (id 676) for for_date 2026-06-21.** Adam approved as written (anchor kept). Chosen over the scheduled Cana entry because 06-21 is Father's Day; Adam picked it from four options (vs. More wine, Father's banquet pulled forward, Neh 8:10).
+
+The series flip: every other Delight entry commands the reader's joy; this one claims God's joy in the reader. Comfortable middle: "God loves me" as doctrine, love-as-policy, the patient and tired face we imagine. Extreme claim: God *likes* you. He rejoices over you with singing (Zeph 3:17). The wince hits the dutiful Christian who believes in committed love and has never once imagined being enjoyed.
+
+Structure beats: loved-on-file empathy open ("we pray like tenants and obey like employees, and we call the distance reverence") → Zephaniah context made load-bearing (one of the darkest books; the song comes after the fire; 3:15 judgments taken away; "the joy is not a performance review") → what singing is (nobody sings from duty; the workbench hum, the crib) → the scale-model argument: Matt 7:11 points at human fathers (bread/stone, "how much more"), one-line Father's Day nod, Luke 12:32 "good pleasure," Isa 62:5 bridegroom face, Ps 149:4 inline → cost beat: "he has seen me"; being enjoyed is harder to receive than being corrected; useful feels earned, delight cannot be → 3:14's commanded singing as the echo of his ("the command comes with a reason attached, and the reason is his singing") → assignment: stand still and be sung over.
+
+**CoC framing:** the delight is grounded in-Christ (judgments taken away, record carried off), aimed at his people — no universalism. God's own singing is the text's image, no congregational-music implications. Present-tense delight kept deliberately despite Matt's eschatological lean (the runbook's standing note); Zeph 3:17's future tense lets now-and-coming sit together.
+
+**Matt Bassford:** no direct God's-delight post in the archive (searched 2026-06-10); nearest is his assurance writing (`2017-05-23-every-spiritual-blessing.md` — Christians with "no confidence" toward God are "miserable and Scripturally unjustified"), which backs the wince. Draft is scripture-driven.
+
+**I-anchor:** mild, imagination-based ("the face is patient, and a little tired... never once imagined him singing") — removable per Adam's standing preference.
+
+Prayer: ends "Sing anyway." Refrain: *"You sing over me. Let me stand still long enough to hear it."*
+
 ---
 
 ## Drafting workflow
@@ -93,7 +112,8 @@ Same as the Faith series. Substitute these in the compose script:
 devotionals/extreme-delight/
 ├── RUNBOOK.md                       # this file
 ├── 01-eat-with-joy.md               # week 1 (2026-05-24)
-├── 02-more-wine-for-the-party.md    # week 2 (2026-06-21)
+├── 02-he-sings-over-you.md          # week 2 (2026-06-21) — Father's Day handpick
+├── 03-more-wine-for-the-party.md    # week 3 (2026-07-19)
 ├── ...
 └── archive/                         # published markdown after edits
 ```
