@@ -7,7 +7,7 @@ SwiftBible is an iOS application written in Swift that provides access to biblic
 
 ## Project Structure
 
-### Core iOS App (`/swiftbible/`)
+### Core iOS App (`ios/swiftbible/`)
 ```
 swiftbible/
 ├── Models/

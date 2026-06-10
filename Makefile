@@ -14,7 +14,7 @@ help:
 	@echo ""
 	@echo "Quick Start:"
 	@echo "  make dev            – Start Supabase, Edge Functions, and ngrok"
-	@echo "  make stop           – Stop everything"
+	@echo "  make down           – Stop everything"
 	@echo ""
 	@echo "Individual Services:"
 	@echo "  make supabase-start – Start local Supabase stack"
@@ -126,7 +126,7 @@ logs:
 
 clean:
 	@echo "🧹 Cleaning up local environment..."
-	@make stop
+	@make down
 	@echo "✅ Cleanup complete"
 
 fresh:

@@ -1,0 +1,6 @@
+[submodule "python_parser/sources/hebrew/morphhb"]
+	path = python_parser/sources/hebrew/morphhb
+	url = https://github.com/openscriptures/morphhb.git
+[submodule "python_parser/sources/greek/byzantine-majority-text"]
+	path = python_parser/sources/greek/byzantine-majority-text
+	url = https://github.com/byztxt/byzantine-majority-text.git
