@@ -34,8 +34,8 @@ android {
         applicationId = "biz.am2.swiftbible"
         minSdk = 26
         targetSdk = 35
-        versionCode = 21
-        versionName = "1.56"
+        versionCode = 22
+        versionName = "1.57"
         buildConfigField("String", "SUPABASE_URL", quotedBuildConfig(clientConfig("SUPABASE_URL")))
         buildConfigField("String", "SUPABASE_KEY", quotedBuildConfig(clientConfig("SUPABASE_KEY")))
         buildConfigField("String", "POSTHOG_API_KEY", quotedBuildConfig(clientConfig("POSTHOG_API_KEY")))
@@ -124,6 +124,8 @@ dependencies {
     implementation("androidx.compose.animation:animation")
     implementation("androidx.navigation:navigation-compose:2.8.3")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("androidx.glance:glance-appwidget:1.1.1")
+    implementation("androidx.glance:glance-material3:1.1.1")
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")

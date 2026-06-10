@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sun-on-horizon (Material wb_twilight) — the widget mirror of the iOS
+     sun.horizon.fill symbol and the app's Devotional tab icon. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M16.955,8.662l2.514,-2.514 1.414,1.414 -2.514,2.514zM2,18h20v2L2,20zM11,4h2v4h-2zM4.527,7.566l1.414,-1.414 2.514,2.514 -1.414,1.414zM12,9c-3.31,0 -6,2.69 -6,6h12c0,-3.31 -2.69,-6 -6,-6z" />
+</vector>

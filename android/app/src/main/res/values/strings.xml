@@ -29,4 +29,6 @@
     <string name="section_1clement">1 Clement</string>
     <string name="empty_search">Type to search across all loaded books</string>
     <string name="no_results">No results</string>
+    <string name="widget_daily_devotional_label">Daily Devotional</string>
+    <string name="widget_daily_devotional_description">Today\'s devotional from SwiftBible.</string>
 </resources>

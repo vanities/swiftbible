@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.glance.appwidget.updateAll
+import biz.am2.swiftbible.widget.DailyDevotionalWidget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -94,6 +96,8 @@ class DevotionalRepository(private val context: Context) {
                 }
                 val devotional = json.decodeFromString<DailyDevotional>(body)
                 cache(key, devotional)
+                // Today's devotional just landed — refresh the home-screen widget.
+                if (date == LocalDate.now()) runCatching { DailyDevotionalWidget().updateAll(context) }
                 Result.Success(devotional)
             }
         } catch (t: Throwable) {

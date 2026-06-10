@@ -23,7 +23,7 @@ enum class ReadingTheme(val display: String) {
     }
 }
 
-private val LightColors = lightColorScheme(
+internal val LightColors = lightColorScheme(
     primary = BrandAccent,
     onPrimary = Color.White,
     primaryContainer = Color(0xFFCFEEEA),
@@ -50,7 +50,7 @@ private val LightColors = lightColorScheme(
     inverseOnSurface = Color(0xFFF5F0E6),
 )
 
-private val DarkColors = darkColorScheme(
+internal val DarkColors = darkColorScheme(
     primary = BrandAccentLight,
     onPrimary = Color(0xFF003B36),
     primaryContainer = Color(0xFF005D55),
