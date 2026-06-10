@@ -106,25 +106,44 @@ struct EventReadingDay: Identifiable, Equatable {
 
     /// Local midnight on this reading's civil (UTC-authored) date.
     private var localStart: Date {
-        let ymd = Self.utcCalendar.dateComponents([.year, .month, .day], from: date)
-        return Calendar.current.date(from: ymd) ?? date
+        Self.localStart(of: date, local: Calendar.current)
     }
 
     /// True once the user's local day has reached this reading's date.
     var hasArrived: Bool {
-        Calendar.current.startOfDay(for: Date()) >= localStart
+        Self.hasArrived(date, now: Date(), local: Calendar.current)
     }
 
     /// True when this reading's date is the user's current local day.
     var isToday: Bool {
-        Calendar.current.isDate(localStart, inSameDayAs: Date())
+        Self.isToday(date, now: Date(), local: Calendar.current)
     }
 
     /// Whole days from today (local) until this reading unlocks.
     var daysUntil: Int {
-        Calendar.current.dateComponents([.day],
-                                        from: Calendar.current.startOfDay(for: Date()),
-                                        to: localStart).day ?? 0
+        Self.daysUntil(date, now: Date(), local: Calendar.current)
+    }
+
+    // Pure date-gating math with injectable clock and local calendar so the
+    // UTC-civil-date rules above can be pinned by unit tests across timezones.
+
+    static func localStart(of date: Date, local: Calendar) -> Date {
+        let ymd = utcCalendar.dateComponents([.year, .month, .day], from: date)
+        return local.date(from: ymd) ?? date
+    }
+
+    static func hasArrived(_ date: Date, now: Date, local: Calendar) -> Bool {
+        local.startOfDay(for: now) >= localStart(of: date, local: local)
+    }
+
+    static func isToday(_ date: Date, now: Date, local: Calendar) -> Bool {
+        local.isDate(localStart(of: date, local: local), inSameDayAs: now)
+    }
+
+    static func daysUntil(_ date: Date, now: Date, local: Calendar) -> Int {
+        local.dateComponents([.day],
+                             from: local.startOfDay(for: now),
+                             to: localStart(of: date, local: local)).day ?? 0
     }
 
     var dateLabel: String {
