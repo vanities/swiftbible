@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct swiftbibleApp: App {
+struct SwiftBibleApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {

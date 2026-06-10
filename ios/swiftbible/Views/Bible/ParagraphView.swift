@@ -23,51 +23,43 @@ struct ParagraphView: View {
     }
 
     var body: some View {
-        VerseText()
+        verseText()
     }
 
-    func VerseText() -> Text {
-        return verses.reduce(Text(verbatim: ""), { acc, verse in
-            var verseText = acc
+    func verseText() -> Text {
+        verses.reduce(Text(verbatim: "")) { acc, verse in
+            acc + numberPrefix(for: verse) + segmentsText(for: verse)
+        }
+    }
 
-            // Append verse number if available
-            if let number = verse.number {
-                var numberText = Text(" \(number)")
-                    .foregroundColor(themeSecondaryColor ?? .gray)
-                    .font(.footnote)
-                    .baselineOffset(6.0)
-                if let suffix = verse.suffix {
-                    numberText = numberText
-                        + Text(suffix)
-                            .foregroundColor(themeSecondaryColor ?? .gray)
-                            .font(.footnote)
-                            .baselineOffset(6.0)
-                }
-                numberText = numberText
-                    + Text(verbatim: " ")
-                        .foregroundColor(themeSecondaryColor ?? .gray)
-                        .font(.footnote)
-                        .baselineOffset(6.0)
-                verseText = verseText + numberText
+    /// Superscript styling shared by the verse number, its suffix, and the
+    /// trailing spacer.
+    private func verseNumberStyled(_ text: Text) -> Text {
+        text
+            .foregroundColor(themeSecondaryColor ?? .gray)
+            .font(.footnote)
+            .baselineOffset(6.0)
+    }
+
+    private func numberPrefix(for verse: Verse) -> Text {
+        guard let number = verse.number else { return Text(verbatim: "") }
+        let numberText = verseNumberStyled(Text(" \(number)"))
+        let withSuffix = verse.suffix.map { numberText + verseNumberStyled(Text($0)) } ?? numberText
+        return withSuffix + verseNumberStyled(Text(verbatim: " "))
+    }
+
+    private func segmentsText(for verse: Verse) -> Text {
+        verse.segments.reduce(Text(verbatim: "")) { acc, segment in
+            switch segment {
+            case .regular(let text):
+                return acc + Text(text)
+                    .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
+            case .jesus(let text):
+                return acc + Text(text)
+                    .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
+                    .foregroundColor(showJesusWordsInRed ? .brandRed : .primary)
             }
-
-            // Append verse segments
-            for segment in verse.segments {
-                switch segment {
-                case .regular(let text):
-                    verseText = verseText
-                        + Text(text)
-                            .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
-                case .jesus(let text):
-                    verseText = verseText
-                        + Text(text)
-                            .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
-                            .foregroundColor(showJesusWordsInRed ? .brandRed : .primary)
-                }
-            }
-
-            return verseText
-        })
+        }
     }
 }
 

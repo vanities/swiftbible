@@ -37,16 +37,14 @@ class CacheService {
     private func createDirectoriesIfNeeded() {
         let directories = [cacheDirectory, devotionalsCacheDirectory]
 
-        for directory in directories {
-            if !fileManager.fileExists(atPath: directory.path) {
-                do {
-                    try fileManager.createDirectory(
-                        at: directory,
-                        withIntermediateDirectories: true
-                    )
-                } catch {
-                    print("Error creating cache directory: \(error)")
-                }
+        for directory in directories where !fileManager.fileExists(atPath: directory.path) {
+            do {
+                try fileManager.createDirectory(
+                    at: directory,
+                    withIntermediateDirectories: true
+                )
+            } catch {
+                print("Error creating cache directory: \(error)")
             }
         }
     }

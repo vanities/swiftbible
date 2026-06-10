@@ -80,16 +80,14 @@ struct SearchDetailView: View {
 
         for book in books {
             for chapter in book.chapters {
-                for paragraph in chapter.paragraphs {
-                    if paragraph.text.lowercased().contains(lowercasedQuery) {
-                        let result = SearchResult(
-                            bookName: book.name,
-                            chapterNumber: chapter.number,
-                            verseNumber: paragraph.startingVerse,
-                            verseText: paragraph.text
-                        )
-                        results.append(result)
-                    }
+                for paragraph in chapter.paragraphs where paragraph.text.lowercased().contains(lowercasedQuery) {
+                    let result = SearchResult(
+                        bookName: book.name,
+                        chapterNumber: chapter.number,
+                        verseNumber: paragraph.startingVerse,
+                        verseText: paragraph.text
+                    )
+                    results.append(result)
                 }
             }
         }

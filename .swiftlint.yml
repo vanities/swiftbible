@@ -10,19 +10,23 @@ opt_in_rules:
   - redundant_nil_coalescing
 
 included:
-  - swiftbible
+  - ios/swiftbible
 
 excluded:
   - Carthage
   - Pods
   - ios/swiftbible.xcodeproj
   - ios/swiftbibleUITests
+  - ios/swiftbibleTests
 
 line_length: 120
 
 identifier_name:
   min_length: 1
   max_length: 60
+  # Snake_case is intentional on Codable fields that mirror Supabase
+  # column names without CodingKeys (e.g. starting_verse, holiday_name).
+  allowed_symbols: ["_"]
 
 type_name:
   min_length: 1
@@ -32,6 +36,16 @@ file_length:
   warning: 500
   error: 1200
 
+type_body_length:
+  warning: 350
+  # Ratchet: worst current offender is ~760 lines. Tighten as the big
+  # views get split; new types should stay under the warning bar.
+  error: 800
+
+large_tuple:
+  warning: 2
+  error: 4
+
 function_body_length:
   warning: 60
   error: 100
@@ -39,3 +53,6 @@ function_body_length:
 cyclomatic_complexity:
   warning: 10
   error: 20
+  # Registry-style flat switches (badge ids → conditions) aren't real
+  # complexity; without this the badge registry can never pass.
+  ignores_case_statements: true

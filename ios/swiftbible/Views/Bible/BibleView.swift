@@ -11,7 +11,20 @@ struct BibleView: View {
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(UserViewModel.self) private var userViewModel
 
-    @State private var bibleData: (oldTestament: [Book], newTestament: [Book], apocrypha: [Book], enoch: [Book], jubilees: [Book], testaments: [Book], secondEnoch: [Book], didache: [Book], firstClement: [Book]) = ([], [], [], [], [], [], [], [], [])
+    /// All text collections rendered by this view, loaded on appear.
+    private struct Collections {
+        var oldTestament: [Book] = []
+        var newTestament: [Book] = []
+        var apocrypha: [Book] = []
+        var enoch: [Book] = []
+        var jubilees: [Book] = []
+        var testaments: [Book] = []
+        var secondEnoch: [Book] = []
+        var didache: [Book] = []
+        var firstClement: [Book] = []
+    }
+
+    @State private var bibleData = Collections()
     @State private var searchText = ""
     @AppStorage("showApocrypha") var showApocrypha = false
     @AppStorage("showJewishPseudepigraphaEnoch") var showJewishPseudepigraphaEnoch = false

@@ -9,7 +9,12 @@ enum AppEnvironment: String {
     case local
     case production
 
-    private static let localSupabaseURL = URL(string: "http://127.0.0.1:54321")!
+    private static let localSupabaseURL: URL = {
+        guard let url = URL(string: "http://127.0.0.1:54321") else {
+            preconditionFailure("Hardcoded local Supabase URL must parse")
+        }
+        return url
+    }()
 
     var supabaseURL: URL {
         switch self {
@@ -134,7 +139,10 @@ enum AppConfig {
     static let appleAppID: String = "6670373108"
 
     static var appStoreURL: URL {
-        URL(string: "https://apps.apple.com/app/id\(appleAppID)")!
+        guard let url = URL(string: "https://apps.apple.com/app/id\(appleAppID)") else {
+            preconditionFailure("App Store URL must parse")
+        }
+        return url
     }
 
     static var currentAppVersion: String {

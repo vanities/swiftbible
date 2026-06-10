@@ -574,8 +574,11 @@ enum BadgeRegistry {
     }
 
     static func tier(track: BadgeTrack, tier: BadgeTier) -> BadgeDefinition {
-        // Force-unwrap is safe: the tier ladder is generated from every
-        // (track, tier) pair, so a matching definition always exists.
-        return tiers.first { $0.track == track && $0.tier == tier }!
+        // The tier ladder is generated from every (track, tier) pair, so a
+        // matching definition always exists.
+        guard let definition = tiers.first(where: { $0.track == track && $0.tier == tier }) else {
+            preconditionFailure("Tier ladder must contain every (track, tier) pair")
+        }
+        return definition
     }
 }

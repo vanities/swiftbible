@@ -158,7 +158,7 @@ struct ParticleCrossSplashView: View {
                 targetX: point.x,
                 targetY: point.y,
                 size: CGFloat.random(in: 3...7),
-                color: colors.randomElement()!
+                color: colors.randomElement() ?? .white
             )
         }
     }

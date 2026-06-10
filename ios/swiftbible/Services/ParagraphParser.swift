@@ -8,14 +8,22 @@
 import Foundation
 
 class ParagraphParser {
-    static func parse(_ paragraph: String) -> [Verse] {
-        // Regex to identify verse numbers like "1:2" or "1:2a"
-        let versePattern = #"\b(\d+:\d+[a-z]?)\b"#
-        let verseRegex = try! NSRegularExpression(pattern: versePattern, options: [])
+    // Compiled once — parsing runs per paragraph on the reading hot path.
+    // Verse numbers look like "1:2" or "1:2a"; Jesus's words arrive wrapped
+    // in <JESUS>…</JESUS> tags from the red-letter parser.
+    private static let verseRegex = try? NSRegularExpression(
+        pattern: #"\b(\d+:\d+[a-z]?)\b"#, options: []
+    )
+    private static let jesusRegex = try? NSRegularExpression(
+        pattern: #"<JESUS>(.*?)<\/JESUS>"#, options: .dotMatchesLineSeparators
+    )
 
-        // Regex to identify <JESUS> and </JESUS> tags
-        let jesusPattern = #"<JESUS>(.*?)<\/JESUS>"#
-        let jesusRegex = try! NSRegularExpression(pattern: jesusPattern, options: .dotMatchesLineSeparators)
+    static func parse(_ paragraph: String) -> [Verse] {
+        guard let verseRegex = Self.verseRegex, let jesusRegex = Self.jesusRegex else {
+            // Unreachable with the hardcoded patterns above; degrade to one
+            // unstyled segment rather than crash mid-read.
+            return [Verse(number: nil, suffix: nil, segments: [.regular(paragraph)])]
+        }
 
         let matches = verseRegex.matches(in: paragraph, range: NSRange(paragraph.startIndex..., in: paragraph))
 

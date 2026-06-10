@@ -9,103 +9,6 @@ import SwiftUI
 import SwiftData
 import StoreKit
 import UIKit
-import MJRefresh
-
-private final class HapticNormalHeader: MJRefreshNormalHeader {
-    private let feedback = UIImpactFeedbackGenerator(style: .medium)
-    var armed = false
-    private var armTimer: Timer?
-
-    override func prepare() {
-        super.prepare()
-        arrowView?.isHidden = true
-        arrowView?.alpha = 0
-        armed = false
-    }
-
-    override func placeSubviews() {
-        super.placeSubviews()
-        arrowView?.isHidden = true
-        arrowView?.alpha = 0
-    }
-
-    override var state: MJRefreshState {
-        didSet {
-            if !armed && state == .pulling {
-                // Not armed yet — cancel the pull
-                endRefreshing()
-                return
-            }
-            if oldValue != .pulling && state == .pulling && armed {
-                feedback.impactOccurred()
-            }
-        }
-    }
-
-    /// Call when the scroll view is at rest at the top
-    func beginArming() {
-        guard !armed else { return }
-        armTimer?.invalidate()
-        armTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
-            self?.armed = true
-        }
-    }
-
-    /// Call when the scroll view moves away from the top
-    func disarm() {
-        armTimer?.invalidate()
-        armTimer = nil
-        armed = false
-    }
-}
-
-private final class HapticBackFooter: MJRefreshBackNormalFooter {
-    private let feedback = UIImpactFeedbackGenerator(style: .medium)
-    var armed = false
-    private var armTimer: Timer?
-
-    override func prepare() {
-        super.prepare()
-        arrowView?.isHidden = true
-        arrowView?.alpha = 0
-        armed = false
-    }
-
-    override func placeSubviews() {
-        super.placeSubviews()
-        arrowView?.isHidden = true
-        arrowView?.alpha = 0
-    }
-
-    override var state: MJRefreshState {
-        didSet {
-            if !armed && state == .pulling {
-                // Not armed yet — cancel the pull
-                endRefreshing()
-                return
-            }
-            if oldValue != .pulling && state == .pulling && armed {
-                feedback.impactOccurred()
-            }
-        }
-    }
-
-    /// Call when the scroll view is at rest at the bottom
-    func beginArming() {
-        guard !armed else { return }
-        armTimer?.invalidate()
-        armTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
-            self?.armed = true
-        }
-    }
-
-    /// Call when the scroll view moves away from the bottom
-    func disarm() {
-        armTimer?.invalidate()
-        armTimer = nil
-        armed = false
-    }
-}
 
 struct VerseInfoResponse: Decodable {
     let version: String
@@ -199,180 +102,37 @@ struct ChapterDetailView: View {
 
     // Attach MJRefresh header/footer to the underlying UIScrollView
     private func configureRefresh(on scrollView: UIScrollView) {
-        scrollView.alwaysBounceVertical = true
+        ChapterPullNavigation.configure(
+            on: scrollView,
+            hasPrevious: previousChapter != nil,
+            hasNext: nextChapter != nil,
+            onPrevious: goToPreviousChapter,
+            onNext: goToNextChapter
+        )
+    }
+
+    private func goToPreviousChapter() {
+        guard let prev = previousChapter else { return }
+        transitionForward = false
+        withAnimation(.easeInOut(duration: 0.25)) {
+            currentChapterNumber = prev.number
+            scrollPosition = nil
+        }
         #if DEBUG
-        print("[MJRefresh] Configuring refresh. contentSize=\(scrollView.contentSize) bounds=\(scrollView.bounds.size)")
+        print("[MJRefresh] Triggered previous chapter to \(prev.number)")
         #endif
-
-        // Reset armed state so a chapter change doesn't carry over
-        (scrollView.mj_header as? HapticNormalHeader)?.disarm()
-        (scrollView.mj_footer as? HapticBackFooter)?.disarm()
-
-        if previousChapter != nil {
-            if scrollView.mj_header == nil {
-                let header = HapticNormalHeader { [weak scrollView] in
-                    defer { scrollView?.mj_header?.endRefreshing() }
-                    guard let prev = previousChapter else { return }
-                    transitionForward = false
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        currentChapterNumber = prev.number
-                        scrollPosition = nil
-                    }
-                    #if DEBUG
-                    print("[MJRefresh] Triggered previous chapter to \(prev.number)")
-                    #endif
-                }
-                header.lastUpdatedTimeLabel?.isHidden = true
-                header.arrowView?.isHidden = true
-                header.setTitle("", for: .idle)
-                header.setTitle("↑ Previous chapter", for: .pulling)
-                header.setTitle("Loading…", for: .refreshing)
-                // Higher value = requires more deliberate drag to trigger
-                header.ignoredScrollViewContentInsetTop = 80
-                scrollView.mj_header = header
-            } else {
-                #if DEBUG
-                print("[MJRefresh] Header already attached")
-                #endif
-            }
-        } else {
-            scrollView.mj_header = nil
-            #if DEBUG
-            print("[MJRefresh] No previous chapter; header removed")
-            #endif
-        }
-
-        if nextChapter != nil {
-            if scrollView.mj_footer == nil {
-                let footer = HapticBackFooter { [weak scrollView] in
-                    defer { scrollView?.mj_footer?.endRefreshing() }
-                    guard let next = nextChapter else { return }
-                    transitionForward = true
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        currentChapterNumber = next.number
-                        scrollPosition = nil
-                    }
-                    #if DEBUG
-                    print("[MJRefresh] Triggered next chapter to \(next.number)")
-                    #endif
-                }
-                footer.arrowView?.isHidden = true
-                footer.setTitle("", for: .idle)
-                footer.setTitle("↓ Next chapter", for: .pulling)
-                footer.setTitle("Loading…", for: .refreshing)
-                // Higher value = requires more deliberate drag to trigger
-                footer.ignoredScrollViewContentInsetBottom = 80
-                scrollView.mj_footer = footer
-            } else {
-                #if DEBUG
-                print("[MJRefresh] Footer already attached")
-                #endif
-            }
-        } else {
-            scrollView.mj_footer = nil
-            #if DEBUG
-            print("[MJRefresh] No next chapter; footer removed")
-            #endif
-        }
     }
 
-    // Helper to resolve the UIScrollView used by SwiftUI ScrollView
-    private struct ScrollViewResolver: UIViewRepresentable {
-        let onResolve: (UIScrollView) -> Void
-        func makeUIView(context: Context) -> UIView { UIView() }
-        func updateUIView(_ uiView: UIView, context: Context) {
-            DispatchQueue.main.async {
-                if let scroll = findScrollView(from: uiView) {
-                    #if DEBUG
-                    print("[MJRefresh] Resolver found UIScrollView contentSize=\(scroll.contentSize) bounds=\(scroll.bounds.size)")
-                    #endif
-                    onResolve(scroll)
-                    // Attach dead-zone delegate if not already set
-                    let delegate: DeadZoneScrollDelegate
-                    if let existing = scroll.delegate as? DeadZoneScrollDelegate {
-                        delegate = existing
-                    } else {
-                        delegate = DeadZoneScrollDelegate()
-                        // Keep a strong reference via associated object
-                        objc_setAssociatedObject(scroll, &DeadZoneScrollDelegate.associatedKey, delegate, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-                        scroll.delegate = delegate
-                    }
-                    // Arm immediately if content doesn't need scrolling
-                    delegate.armIfContentFits(scroll)
-                } else {
-                    #if DEBUG
-                    print("[MJRefresh] Resolver could not find UIScrollView yet")
-                    #endif
-                }
-            }
+    private func goToNextChapter() {
+        guard let next = nextChapter else { return }
+        transitionForward = true
+        withAnimation(.easeInOut(duration: 0.25)) {
+            currentChapterNumber = next.number
+            scrollPosition = nil
         }
-        private func findScrollView(from view: UIView?) -> UIScrollView? {
-            // Walk up to a common ancestor, then search down for UIScrollView
-            var ancestor = view
-            while let current = ancestor {
-                if let scroll = current as? UIScrollView { return scroll }
-                if let found = searchDescendants(forScrollIn: current) { return found }
-                ancestor = current.superview
-            }
-            return nil
-        }
-        private func searchDescendants(forScrollIn view: UIView) -> UIScrollView? {
-            for sub in view.subviews {
-                if let s = sub as? UIScrollView { return s }
-                if let found = searchDescendants(forScrollIn: sub) { return found }
-            }
-            return nil
-        }
-    }
-
-    /// Monitors scroll position to arm/disarm the dead-zone on header and footer.
-    /// The refresh controls only become active after the user has been at rest
-    /// at the top/bottom edge for 0.5 seconds.
-    /// If content fits on screen (no scrolling needed), arms immediately.
-    private class DeadZoneScrollDelegate: NSObject, UIScrollViewDelegate {
-        static var associatedKey: UInt8 = 0
-        private let edgeThreshold: CGFloat = 10
-
-        func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            updateArmState(for: scrollView)
-        }
-
-        /// Called after layout to handle non-scrollable content
-        func armIfContentFits(_ scrollView: UIScrollView) {
-            let contentHeight = scrollView.contentSize.height
-            let frameHeight = scrollView.bounds.height
-
-            guard contentHeight > 0 && contentHeight <= frameHeight else { return }
-
-            // Content fits on screen — no scroll momentum possible, arm immediately
-            (scrollView.mj_header as? HapticNormalHeader)?.armed = true
-            (scrollView.mj_footer as? HapticBackFooter)?.armed = true
-        }
-
-        private func updateArmState(for scrollView: UIScrollView) {
-            let offsetY = scrollView.contentOffset.y
-            let contentHeight = scrollView.contentSize.height
-            let frameHeight = scrollView.bounds.height
-
-            // Top edge check
-            if let header = scrollView.mj_header as? HapticNormalHeader {
-                if offsetY <= edgeThreshold {
-                    header.beginArming()
-                } else {
-                    header.disarm()
-                }
-            }
-
-            // Bottom edge check
-            if let footer = scrollView.mj_footer as? HapticBackFooter {
-                let distanceFromBottom = contentHeight - (offsetY + frameHeight)
-                if distanceFromBottom <= edgeThreshold {
-                    footer.beginArming()
-                } else {
-                    footer.disarm()
-                }
-            }
-        }
+        #if DEBUG
+        print("[MJRefresh] Triggered next chapter to \(next.number)")
+        #endif
     }
 
     var body: some View {
@@ -484,20 +244,20 @@ struct ChapterDetailView: View {
                     Text("Bookmark")
                 }
                 Button {
-                    guard selectedParagraph != nil else { return }
+                    guard let paragraph = selectedParagraph else { return }
                     AnalyticsService.shared.capture(
                         alreadyHighlighted != nil ? .verseUnhighlighted : .verseHighlighted,
                         properties: [
                             "book": currentBook.name,
                             "chapter": currentChapter.number,
-                            "verse": selectedParagraph!.startingVerse
+                            "verse": paragraph.startingVerse
                         ]
                     )
                     let highlightedVerse = HighlightedVerse(
                         version: currentBook.version.rawValue,
                         book: currentBook.name,
                         chapter: currentChapter.number,
-                        startingVerse: selectedParagraph!.startingVerse,
+                        startingVerse: paragraph.startingVerse,
                         color: highlightedColor
                     )
 
@@ -510,7 +270,13 @@ struct ChapterDetailView: View {
                     do {
                         try context.save()
                     } catch {
-                        print(error.localizedDescription)
+                        SentryService.shared.capture(error, context: [
+                            "view": "ChapterDetailView",
+                            "operation": wasAdding ? "highlight_save" : "unhighlight_save",
+                            "book": currentBook.name,
+                            "chapter": currentChapter.number,
+                            "verse": paragraph.startingVerse
+                        ])
                     }
                     selectedParagraph = nil
                     alreadyHighlighted = nil
@@ -525,6 +291,7 @@ struct ChapterDetailView: View {
                     }
                 }
                 Button {
+                    guard selectedParagraph != nil || alreadyNoted != nil else { return }
                     AnalyticsService.shared.capture(.verseNoteOpened, properties: [
                         "book": currentBook.name,
                         "chapter": currentChapter.number,
@@ -540,19 +307,19 @@ struct ChapterDetailView: View {
                     }
                 }
                 Button {
-                    guard selectedParagraph != nil else { return }
+                    guard let paragraph = selectedParagraph else { return }
                     AnalyticsService.shared.capture(.verseExplained, properties: [
                         "book": currentBook.name,
                         "chapter": currentChapter.number,
-                        "verse": selectedParagraph!.startingVerse,
+                        "verse": paragraph.startingVerse,
                         "version": currentBook.version.rawValue
                     ])
                     explanationRequest = VerseExplanationRequest(
                         bookName: currentBook.name,
                         chapter: currentChapter.number,
-                        startingVerse: selectedParagraph!.startingVerse,
+                        startingVerse: paragraph.startingVerse,
                         translation: currentBook.version.rawValue,
-                        paragraphText: selectedParagraph!.text
+                        paragraphText: paragraph.text
                     )
                     selectedParagraph = nil
                     alreadyHighlighted = nil
@@ -586,7 +353,7 @@ struct ChapterDetailView: View {
             message: { }
         )
         .sheet(isPresented: $showNoteModal) {
-            NoteModalViewView()
+            noteModalView()
         }
         .sheet(item: $explanationRequest) { request in
             VerseExplanationSheet(request: request)
@@ -767,13 +534,13 @@ struct ChapterDetailView: View {
             $0.version == currentBook.version.rawValue &&
             $0.book == currentBook.name &&
             $0.chapter == currentChapter.number &&
-            $0.startingVerse == selectedParagraph!.startingVerse
+            $0.startingVerse == paragraph.startingVerse
         })
         alreadyNoted = notes.first(where: {
             $0.version == currentBook.version.rawValue &&
             $0.book == currentBook.name &&
             $0.chapter == currentChapter.number &&
-            $0.startingVerse == selectedParagraph!.startingVerse
+            $0.startingVerse == paragraph.startingVerse
         })
         showActionSheet = true
         AnalyticsService.shared.capture(.verseActionMenu, properties: [
@@ -785,17 +552,17 @@ struct ChapterDetailView: View {
     }
 
     func getStringFromSelectedParagraph() -> String {
-        guard selectedParagraph != nil else { return "" }
-        return "\(currentBook.version.rawValue.uppercased()) Version \(currentBook.name) Chapter \(currentChapter.number) \(selectedParagraph!.startingVerse): \(selectedParagraph!.text)"
+        guard let paragraph = selectedParagraph else { return "" }
+        return "\(currentBook.version.rawValue.uppercased()) Version \(currentBook.name) Chapter \(currentChapter.number) \(paragraph.startingVerse): \(paragraph.text)"
     }
 
-    func NoteModalViewView() -> some View {
+    func noteModalView() -> some View {
         return NoteModalView(
-            note: alreadyNoted != nil ? alreadyNoted! : Note(
+            note: alreadyNoted ?? Note(
                 version: currentBook.version.rawValue,
                 book: currentBook.name,
                 chapter: currentChapter.number,
-                startingVerse: selectedParagraph!.startingVerse,
+                startingVerse: selectedParagraph?.startingVerse ?? 0,
                 text: "",
                 created: .now
             ),
@@ -804,7 +571,13 @@ struct ChapterDetailView: View {
                 do {
                     try context.save()
                 } catch {
-                    print(error.localizedDescription)
+                    SentryService.shared.capture(error, context: [
+                        "view": "ChapterDetailView",
+                        "operation": "note_save",
+                        "book": note.book,
+                        "chapter": note.chapter,
+                        "verse": note.startingVerse
+                    ])
                 }
                 selectedParagraph = nil
                 alreadyHighlighted = nil
@@ -821,7 +594,13 @@ struct ChapterDetailView: View {
                 do {
                     try context.save()
                 } catch {
-                    print(error.localizedDescription)
+                    SentryService.shared.capture(error, context: [
+                        "view": "ChapterDetailView",
+                        "operation": "note_delete",
+                        "book": note.book,
+                        "chapter": note.chapter,
+                        "verse": note.startingVerse
+                    ])
                 }
                 selectedParagraph = nil
                 alreadyHighlighted = nil
@@ -856,51 +635,6 @@ struct ChapterDetailView: View {
         }
     }
 }
-
-#if DEBUG
-/// DEBUG-only floating badge that shows the live read-tracking timer for the
-/// current chapter: which session is tracked, accumulated foreground seconds,
-/// and whether it has crossed the 5s threshold that lets `stopReading` persist.
-private struct ReadTrackerDebugBadge: View {
-    var body: some View {
-        TimelineView(.periodic(from: .now, by: 0.5)) { _ in
-            let service = ReadingStatsService.shared
-            let elapsed = Int(service.debugElapsedSeconds.rounded())
-            let needSecs = Int(ReadingStatsService.readSecondsThreshold)
-            HStack(spacing: 6) {
-                Image(systemName: service.debugIsTracking ? "record.circle.fill" : "pause.circle")
-                    .foregroundStyle(service.debugIsTracking ? .red : .secondary)
-                if let label = service.debugTrackingLabel {
-                    Text(label)
-                        .lineLimit(1)
-                    Text("·").foregroundStyle(.secondary)
-                    // seconds — green once past the 30s read threshold
-                    Text("\(elapsed)s")
-                        .monospacedDigit()
-                        .foregroundStyle(elapsed >= needSecs ? .green : .orange)
-                    // scrolled to last verse?
-                    Text(service.debugReachedEnd ? "end✓" : "end✗")
-                        .foregroundStyle(service.debugReachedEnd ? .green : .orange)
-                    // both met → chapter counts as read
-                    if service.debugMeetsReadThreshold {
-                        Image(systemName: "checkmark.seal.fill")
-                            .foregroundStyle(.green)
-                    }
-                } else {
-                    Text("not tracking").foregroundStyle(.secondary)
-                }
-            }
-            .font(.caption2.monospaced())
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(.ultraThinMaterial, in: Capsule())
-            .overlay(Capsule().stroke(Color.white.opacity(0.15), lineWidth: 0.5))
-            .padding(.bottom, 8)
-            .allowsHitTesting(false)
-        }
-    }
-}
-#endif
 
 #Preview {
     ChapterDetailView(book: Book.genesis, chapter: .init(number: 1, paragraphs: [.init(startingVerse: 1, text: "testing")]))
