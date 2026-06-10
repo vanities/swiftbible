@@ -35,6 +35,17 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SBUT00032F0000010000TEST"
+               BuildableName = "swiftbibleTests.xctest"
+               BlueprintName = "swiftbibleTests"
+               ReferencedContainer = "container:swiftbible.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "95AB8B8E2CAB768000533AA5"
                BuildableName = "swiftbibleUITests.xctest"
                BlueprintName = "swiftbibleUITests"
