@@ -12,11 +12,13 @@ enum class SummarySource(
     val id: String,
     val displayName: String,
     val resourceName: String?,
+    /** Book-introduction asset filename (without extension), or null for OFF. */
+    val introResourceName: String?,
 ) {
-    MATTHEW_HENRY("mhcc", "Matthew Henry", "summaries_mhcc"),
-    JFB("jfb", "Jamieson-Fausset-Brown", "summaries_jfb"),
-    SWIFT_BIBLE("swiftbible", "SwiftBible Curated", "summaries_swiftbible"),
-    OFF("off", "Off", null),
+    MATTHEW_HENRY("mhcc", "Matthew Henry", "summaries_mhcc", "book_intros_mhcc"),
+    JFB("jfb", "Jamieson-Fausset-Brown", "summaries_jfb", "book_intros_jfb"),
+    SWIFT_BIBLE("swiftbible", "SwiftBible Curated", "summaries_swiftbible", "book_intros_swiftbible"),
+    OFF("off", "Off", null, null),
     ;
 
     companion object {

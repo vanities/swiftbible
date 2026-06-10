@@ -39,6 +39,7 @@ object Analytics {
         // Navigation
         TabSwitched("tab_switched"),
         BookOpened("book_opened"),
+        BookIntroViewed("book_intro_viewed"),
         ChapterViewed("chapter_viewed"),
         ChapterNavigated("chapter_navigated"),
 

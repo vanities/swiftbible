@@ -40,6 +40,7 @@ import biz.am2.swiftbible.R
 import biz.am2.swiftbible.data.AppEventRegistry
 import biz.am2.swiftbible.ui.bible.BibleScreen
 import biz.am2.swiftbible.ui.bible.BookDetailScreen
+import biz.am2.swiftbible.ui.bible.BookIntroScreen
 import biz.am2.swiftbible.ui.bible.ChapterDetailScreen
 import biz.am2.swiftbible.ui.daily.DailyDevotionalScreen
 import biz.am2.swiftbible.ui.events.EventDetailScreen
@@ -198,6 +199,15 @@ private fun SwiftBibleAppContent(appVm: AppViewModel) {
                     appVm = appVm,
                     bookName = name,
                     onChapterClick = { ch -> navController.navigate("chapter/${encode(name)}/$ch") },
+                    onAboutClick = { navController.navigate("book_intro/${encode(name)}") },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable("book_intro/{name}") { entry ->
+                val name = decode(entry.arguments?.getString("name") ?: "")
+                BookIntroScreen(
+                    appVm = appVm,
+                    bookName = name,
                     onBack = { navController.popBackStack() },
                 )
             }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import biz.am2.swiftbible.data.Analytics
 import biz.am2.swiftbible.data.AppDatabase
 import biz.am2.swiftbible.data.BibleRepository
+import biz.am2.swiftbible.data.BookIntroRepository
 import biz.am2.swiftbible.data.BookmarkEntity
 import biz.am2.swiftbible.data.DailyDevotional
 import biz.am2.swiftbible.data.DevotionalRepository
@@ -55,6 +56,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     val repository = BibleRepository(application)
     val summaries = SummariesRepository(application)
+    val bookIntros = BookIntroRepository(application)
     val devotionals = DevotionalRepository(application)
     val prefs = UserPreferences(application)
     val db = AppDatabase.get(application)
@@ -404,6 +406,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         summaries.chapterTitle(book, chapter, prefsState.value.summarySource)
     suspend fun passageSummaries(book: String, chapter: Int) =
         summaries.passageSummaries(book, chapter, prefsState.value.summarySource)
+    suspend fun bookIntroduction(book: String) =
+        bookIntros.bookIntroduction(book, prefsState.value.summarySource)
 
     fun setSummarySource(source: biz.am2.swiftbible.data.SummarySource) =
         viewModelScope.launch { prefs.setSummarySource(source) }

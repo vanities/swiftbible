@@ -92,60 +92,15 @@ class ReadingStatsRepository(private val dao: ReadingSessionDao) {
     suspend fun currentStreakWithFreeze(): StreakInfo {
         val sessions = dao.allByDay()
         if (sessions.isEmpty()) return StreakInfo(0, false)
-
-        val daySet = sessions.map { it.dayEpoch }.toSet()
-        val today = startOfDay(System.currentTimeMillis())
-        val oneDayMs = 24L * 60 * 60 * 1000
-        val yesterday = today - oneDayMs
-
-        if (today !in daySet && yesterday !in daySet) return StreakInfo(0, false)
-
-        var lookback = if (today in daySet) 0 else 1
-        var streak = 0
-        var lastFreezeLookback = -8
-        while (true) {
-            val targetDay = today - lookback * oneDayMs
-            when {
-                targetDay in daySet -> {
-                    streak += 1
-                    lookback += 1
-                }
-                isSunday(targetDay) -> {
-                    // Sabbath rest: a missed Sunday never breaks the streak and
-                    // doesn't consume the weekly freeze. Strictly more lenient —
-                    // no existing streak is shortened; a read Sunday still counts
-                    // (handled by the daySet branch above).
-                    lookback += 1
-                }
-                (lookback - lastFreezeLookback) >= 7 -> {
-                    lastFreezeLookback = lookback
-                    lookback += 1
-                }
-                else -> break
-            }
-        }
-        val freezeActive = lastFreezeLookback in 0 until 7
-        return StreakInfo(streak, freezeActive)
+        return computeStreakWithFreeze(
+            daySet = sessions.map { it.dayEpoch }.toSet(),
+            today = startOfDay(System.currentTimeMillis()),
+        )
     }
 
     /** Longest streak ever — no freeze logic, just consecutive day runs. */
-    suspend fun longestStreak(): Int {
-        val sessions = dao.allByDay()
-        val days = sessions.map { it.dayEpoch }.toSortedSet().toList()
-        if (days.isEmpty()) return 0
-        val oneDayMs = 24L * 60 * 60 * 1000
-        var longest = 1
-        var current = 1
-        for (i in 1 until days.size) {
-            if (days[i] - days[i - 1] == oneDayMs) {
-                current += 1
-                if (current > longest) longest = current
-            } else {
-                current = 1
-            }
-        }
-        return longest
-    }
+    suspend fun longestStreak(): Int =
+        computeLongestStreak(dao.allByDay().map { it.dayEpoch })
 
     /** Count of reading events grouped by day-epoch over the last N weeks. */
     suspend fun dailyReadingCounts(weeks: Int): Map<Long, Int> {
@@ -177,6 +132,65 @@ class ReadingStatsRepository(private val dao: ReadingSessionDao) {
             val cal = Calendar.getInstance()
             cal.timeInMillis = epochMs
             return cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+        }
+
+        /**
+         * Pure streak walk over a set of start-of-day epochs, anchored at
+         * [today] (also a start-of-day epoch). Allows one missed day per
+         * rolling 7-day window, and a missed Sunday never breaks the streak
+         * nor consumes the freeze. The streak must include today or yesterday
+         * to be considered alive.
+         */
+        fun computeStreakWithFreeze(daySet: Set<Long>, today: Long): StreakInfo {
+            val oneDayMs = 24L * 60 * 60 * 1000
+            val yesterday = today - oneDayMs
+
+            if (today !in daySet && yesterday !in daySet) return StreakInfo(0, false)
+
+            var lookback = if (today in daySet) 0 else 1
+            var streak = 0
+            var lastFreezeLookback = -8
+            while (true) {
+                val targetDay = today - lookback * oneDayMs
+                when {
+                    targetDay in daySet -> {
+                        streak += 1
+                        lookback += 1
+                    }
+                    isSunday(targetDay) -> {
+                        // Sabbath rest: a missed Sunday never breaks the streak and
+                        // doesn't consume the weekly freeze. Strictly more lenient —
+                        // no existing streak is shortened; a read Sunday still counts
+                        // (handled by the daySet branch above).
+                        lookback += 1
+                    }
+                    (lookback - lastFreezeLookback) >= 7 -> {
+                        lastFreezeLookback = lookback
+                        lookback += 1
+                    }
+                    else -> break
+                }
+            }
+            val freezeActive = lastFreezeLookback in 0 until 7
+            return StreakInfo(streak, freezeActive)
+        }
+
+        /** Pure longest-run scan over start-of-day epochs (duplicates collapse). */
+        fun computeLongestStreak(dayEpochs: Collection<Long>): Int {
+            val days = dayEpochs.toSortedSet().toList()
+            if (days.isEmpty()) return 0
+            val oneDayMs = 24L * 60 * 60 * 1000
+            var longest = 1
+            var current = 1
+            for (i in 1 until days.size) {
+                if (days[i] - days[i - 1] == oneDayMs) {
+                    current += 1
+                    if (current > longest) longest = current
+                } else {
+                    current = 1
+                }
+            }
+            return longest
         }
     }
 }

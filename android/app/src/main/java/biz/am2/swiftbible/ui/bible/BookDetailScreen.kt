@@ -41,10 +41,14 @@ fun BookDetailScreen(
     appVm: AppViewModel,
     bookName: String,
     onChapterClick: (Int) -> Unit,
+    onAboutClick: () -> Unit,
     onBack: () -> Unit,
 ) {
     val book = appVm.bookByName(bookName)
     var titles by remember(bookName) { mutableStateOf<Map<Int, String>>(emptyMap()) }
+    // Whether any summary source has an "About this book" introduction for
+    // this book; gates the tap-through to BookIntroScreen (mirrors iOS).
+    var hasIntro by remember(bookName) { mutableStateOf(false) }
     // Reactive set of chapters the user has read (scrolled to end + >=30s);
     // updates live as the reading_sessions table changes.
     val readChapters by remember(bookName) { appVm.readChaptersForBook(bookName) }
@@ -55,6 +59,7 @@ fun BookDetailScreen(
             biz.am2.swiftbible.data.Analytics.Event.BookOpened,
             mapOf("book" to bookName),
         )
+        hasIntro = appVm.bookIntroduction(bookName) != null
         val chapters = book?.chapters ?: return@LaunchedEffect
         val resolved = mutableMapOf<Int, String>()
         for (ch in chapters) {
@@ -96,23 +101,13 @@ fun BookDetailScreen(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             modifier = Modifier.fillMaxSize().padding(padding),
         ) {
-            if (book.description.isNotBlank()) {
+            if (hasIntro || book.description.isNotBlank()) {
                 item {
-                    OutlinedFrame(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                text = "About this book",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                            Text(
-                                text = book.description,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.padding(top = 6.dp),
-                            )
-                        }
-                    }
+                    AboutThisBookFrame(
+                        description = book.description,
+                        hasIntro = hasIntro,
+                        onClick = onAboutClick,
+                    )
                 }
             }
             items(book.chapters, key = { it.number }) { chapter ->
@@ -121,6 +116,61 @@ fun BookDetailScreen(
                     title = titles[chapter.number],
                     isRead = chapter.number in readChapters,
                     onClick = { onChapterClick(chapter.number) },
+                )
+            }
+        }
+    }
+}
+
+/**
+ * The "About this book" frame above the chapter list. When a summary source
+ * has a full introduction it becomes the entry point into [BookIntroScreen]
+ * (mirrors the iOS "About this book" row); otherwise it stays a plain frame
+ * showing the short catalog description.
+ */
+@Composable
+private fun AboutThisBookFrame(
+    description: String,
+    hasIntro: Boolean,
+    onClick: () -> Unit,
+) {
+    OutlinedFrame(modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
+        Column(
+            modifier = if (hasIntro) {
+                Modifier.fillMaxWidth().clickable(onClick = onClick).padding(16.dp)
+            } else {
+                Modifier.fillMaxWidth().padding(16.dp)
+            },
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "About this book",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(1f),
+                )
+                if (hasIntro) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.NavigateNext,
+                        contentDescription = "Open introduction",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            if (description.isNotBlank()) {
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(top = 6.dp),
+                )
+            }
+            if (hasIntro) {
+                Text(
+                    text = "Author, history & purpose",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(top = 8.dp),
                 )
             }
         }
