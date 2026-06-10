@@ -161,7 +161,7 @@ final class ReadingStatsService {
             session.bookName == bookName && session.date >= day && session.date < nextDay
         }
         let descriptor = FetchDescriptor<ReadingSession>(predicate: predicate)
-        if let existing = try? context.fetch(descriptor), !existing.isEmpty { return }
+        if !fetchSessions(descriptor, in: context, operation: "log_devotional_lookup").isEmpty { return }
 
         let session = ReadingSession(bookName: bookName, chapterNumber: 0, version: Self.devotionalVersion)
         session.date = day
@@ -180,6 +180,24 @@ final class ReadingStatsService {
 
     // MARK: - Stats Queries
 
+    /// Shared fetch wrapper: stats queries treat a failed fetch as "no
+    /// sessions", but report the failure instead of silently swallowing it.
+    private func fetchSessions(
+        _ descriptor: FetchDescriptor<ReadingSession>,
+        in context: ModelContext,
+        operation: String
+    ) -> [ReadingSession] {
+        do {
+            return try context.fetch(descriptor)
+        } catch {
+            SentryService.shared.capture(error, context: [
+                "service": "ReadingStatsService",
+                "operation": operation
+            ])
+            return []
+        }
+    }
+
     private static func bookChapterReadsDescriptor(
         sortBy sortDescriptors: [SortDescriptor<ReadingSession>] = []
     ) -> FetchDescriptor<ReadingSession> {
@@ -189,15 +207,13 @@ final class ReadingStatsService {
     }
 
     func totalChaptersRead(in context: ModelContext) -> Int {
-        let descriptor = Self.bookChapterReadsDescriptor()
-        let sessions = (try? context.fetch(descriptor)) ?? []
+        let sessions = fetchSessions(Self.bookChapterReadsDescriptor(), in: context, operation: "total_chapters_read")
         let unique = Set(sessions.map { "\($0.bookName)-\($0.chapterNumber)" })
         return unique.count
     }
 
     func totalReadingTime(in context: ModelContext) -> TimeInterval {
-        let descriptor = Self.bookChapterReadsDescriptor()
-        let sessions = (try? context.fetch(descriptor)) ?? []
+        let sessions = fetchSessions(Self.bookChapterReadsDescriptor(), in: context, operation: "total_reading_time")
         return sessions.reduce(0) { $0 + $1.duration }
     }
 
@@ -205,8 +221,7 @@ final class ReadingStatsService {
     /// (KJV, ASV, WEB). Powers the "Versions" tier track. The devotional marker
     /// is excluded by the shared descriptor, so only real versions are counted.
     func chaptersReadInAllVersions(in context: ModelContext) -> Int {
-        let descriptor = Self.bookChapterReadsDescriptor()
-        let sessions = (try? context.fetch(descriptor)) ?? []
+        let sessions = fetchSessions(Self.bookChapterReadsDescriptor(), in: context, operation: "chapters_all_versions")
         var versionsByChapter: [String: Set<String>] = [:]
         for session in sessions {
             versionsByChapter["\(session.bookName)-\(session.chapterNumber)", default: []].insert(session.version)
@@ -218,7 +233,7 @@ final class ReadingStatsService {
     func chaptersReadInBook(_ bookName: String, in context: ModelContext) -> Set<Int> {
         let predicate = #Predicate<ReadingSession> { $0.bookName == bookName }
         let descriptor = FetchDescriptor<ReadingSession>(predicate: predicate)
-        let sessions = (try? context.fetch(descriptor)) ?? []
+        let sessions = fetchSessions(descriptor, in: context, operation: "chapters_in_book")
         return Set(sessions.map { $0.chapterNumber })
     }
 
@@ -232,7 +247,7 @@ final class ReadingStatsService {
     func readChapterNumbers(forBook bookName: String, in context: ModelContext) -> Set<Int> {
         let predicate = #Predicate<ReadingSession> { $0.bookName == bookName }
         let descriptor = FetchDescriptor<ReadingSession>(predicate: predicate)
-        let sessions = (try? context.fetch(descriptor)) ?? []
+        let sessions = fetchSessions(descriptor, in: context, operation: "read_chapter_numbers")
         var reachedEndChapters: Set<Int> = []
         var totalByChapter: [Int: TimeInterval] = [:]
         for session in sessions {
@@ -251,7 +266,7 @@ final class ReadingStatsService {
 
         let predicate = #Predicate<ReadingSession> { $0.date >= start }
         let descriptor = FetchDescriptor<ReadingSession>(predicate: predicate)
-        let sessions = (try? context.fetch(descriptor)) ?? []
+        let sessions = fetchSessions(descriptor, in: context, operation: "daily_reading_counts")
 
         var counts: [Date: Int] = [:]
         for session in sessions {
@@ -264,9 +279,14 @@ final class ReadingStatsService {
     /// Current streak that survives a single missed day per rolling 7-day
     /// window. Returns the streak length (days actually read) and whether a
     /// freeze is currently in use within the last 7 days.
+    ///
+    /// This is THE streak shown anywhere in the UI and used by badges —
+    /// freeze-aware and Sunday-lenient. Don't add a plain consecutive-days
+    /// variant next to it; two streak definitions on screen at once read as
+    /// a bug to users.
     func currentStreakWithFreeze(in context: ModelContext) -> (streak: Int, freezeActive: Bool) {
         let descriptor = FetchDescriptor<ReadingSession>(sortBy: [SortDescriptor(\.date, order: .reverse)])
-        let sessions = (try? context.fetch(descriptor)) ?? []
+        let sessions = fetchSessions(descriptor, in: context, operation: "current_streak")
         let calendar = Calendar.current
         let daySet = Set(sessions.map { calendar.startOfDay(for: $0.date) })
         guard !daySet.isEmpty else { return (0, false) }
@@ -311,34 +331,12 @@ final class ReadingStatsService {
         return (streak, freezeActive)
     }
 
-    func currentStreak(in context: ModelContext) -> Int {
-        let descriptor = FetchDescriptor<ReadingSession>(sortBy: [SortDescriptor(\.date, order: .reverse)])
-        let sessions = (try? context.fetch(descriptor)) ?? []
-
-        let uniqueDays = Set(sessions.map { Calendar.current.startOfDay(for: $0.date) }).sorted(by: >)
-        guard let first = uniqueDays.first else { return 0 }
-
-        let today = Calendar.current.startOfDay(for: Date())
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
-
-        // Streak must include today or yesterday
-        guard first >= yesterday else { return 0 }
-
-        var streak = 1
-        for i in 1..<uniqueDays.count {
-            let expected = Calendar.current.date(byAdding: .day, value: -i, to: first)!
-            if Calendar.current.isDate(uniqueDays[i], inSameDayAs: expected) {
-                streak += 1
-            } else {
-                break
-            }
-        }
-        return streak
-    }
-
+    /// Longest run of strictly consecutive read days, all time. Intentionally
+    /// stricter than the current streak: no freeze or Sunday leniency applies
+    /// to the historical record.
     func longestStreak(in context: ModelContext) -> Int {
         let descriptor = FetchDescriptor<ReadingSession>(sortBy: [SortDescriptor(\.date, order: .forward)])
-        let sessions = (try? context.fetch(descriptor)) ?? []
+        let sessions = fetchSessions(descriptor, in: context, operation: "longest_streak")
 
         let uniqueDays = Set(sessions.map { Calendar.current.startOfDay(for: $0.date) }).sorted()
         guard !uniqueDays.isEmpty else { return 0 }
@@ -346,7 +344,7 @@ final class ReadingStatsService {
         var longest = 1
         var current = 1
         for i in 1..<uniqueDays.count {
-            let expected = Calendar.current.date(byAdding: .day, value: 1, to: uniqueDays[i - 1])!
+            guard let expected = Calendar.current.date(byAdding: .day, value: 1, to: uniqueDays[i - 1]) else { break }
             if Calendar.current.isDate(uniqueDays[i], inSameDayAs: expected) {
                 current += 1
                 longest = max(longest, current)
@@ -361,7 +359,7 @@ final class ReadingStatsService {
         let startOfWeek = Calendar.current.dateInterval(of: .weekOfYear, for: Date())?.start ?? Date()
         let predicate = #Predicate<ReadingSession> { $0.date >= startOfWeek }
         let descriptor = FetchDescriptor<ReadingSession>(predicate: predicate, sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
-        return (try? context.fetch(descriptor)) ?? []
+        return fetchSessions(descriptor, in: context, operation: "sessions_this_week")
     }
 
     func recentSessions(in context: ModelContext, limit: Int = 20) -> [ReadingSession] {
@@ -369,7 +367,7 @@ final class ReadingStatsService {
             sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
         )
         descriptor.fetchLimit = limit
-        return (try? context.fetch(descriptor)) ?? []
+        return fetchSessions(descriptor, in: context, operation: "recent_sessions")
     }
 
 }
@@ -407,7 +405,7 @@ extension ReadingStatsService {
             session.bookName == marker && session.date >= day && session.date < nextDay
         }
         let descriptor = FetchDescriptor<ReadingSession>(predicate: predicate)
-        return ((try? context.fetch(descriptor))?.isEmpty == false)
+        return !fetchSessions(descriptor, in: context, operation: "debug_devotional_logged").isEmpty
     }
 }
 #endif

@@ -12,6 +12,11 @@ final class SentryService {
     private init() {}
 
     func configure() {
+        // Don't report crashes/errors from unit test runs.
+        guard NSClassFromString("XCTestCase") == nil else {
+            print("[Sentry] Skipping setup — running under XCTest")
+            return
+        }
         let dsn = AppConfig.sentryDSN
         guard !dsn.isEmpty else {
             print("[Sentry] Skipping setup — no DSN configured")

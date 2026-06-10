@@ -507,7 +507,7 @@ struct MoreView: View {
 
     private func refreshStats() {
         Task { @MainActor in
-            streakDays = ReadingStatsService.shared.currentStreak(in: modelContext)
+            streakDays = ReadingStatsService.shared.currentStreakWithFreeze(in: modelContext).streak
             let weekly = ReadingStatsService.shared.sessionsThisWeek(in: modelContext)
             let unique = Set(weekly.map { "\($0.bookName)-\($0.chapterNumber)" })
             chaptersThisWeek = unique.count

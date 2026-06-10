@@ -118,6 +118,12 @@ final class AnalyticsService {
     private init() {}
 
     func configure() {
+        // Never start analytics inside a test run — unit tests exercise real
+        // code paths (badges, reads) that would otherwise emit live events.
+        guard NSClassFromString("XCTestCase") == nil else {
+            print("[PostHog] Skipping setup — running under XCTest")
+            return
+        }
         let apiKey = AppConfig.posthogAPIKey
         guard !apiKey.isEmpty else {
             print("[PostHog] Skipping setup — no API key configured")
