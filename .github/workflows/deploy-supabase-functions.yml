@@ -17,9 +17,9 @@ jobs:
       PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: supabase/setup-cli@v1
+      - uses: supabase/setup-cli@v2
         with:
           version: latest
 
