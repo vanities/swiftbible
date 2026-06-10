@@ -3,6 +3,7 @@
 	functions functions-background \
 	ngrok-up ngrok-down ngrok-background \
 	functions-deploy test_daily_devotional test_slowness fresh \
+	test test-ios test-android \
 	archive upload release \
 	pull-listings dry-listings push-listings push-listing create-version \
 	pull-screenshots dry-screenshots push-screenshots \
@@ -24,6 +25,11 @@ help:
 	@echo "Utilities:"
 	@echo "  make logs           – Show Supabase status"
 	@echo "  make clean          – Stop services and clean temp files"
+	@echo ""
+	@echo "Tests:"
+	@echo "  make test           – Run iOS + Android unit tests"
+	@echo "  make test-ios       – iOS unit tests (swiftbibleTests, simulator)"
+	@echo "  make test-android   – Android unit tests (gradle)"
 	@echo ""
 	@echo "Deploy:"
 	@echo "  make functions-deploy – Deploy all functions to remote project"
@@ -132,6 +138,20 @@ clean:
 fresh:
 	@echo "🔄 Resetting Supabase database..."
 	supabase db reset --debug # && supabase gen types typescript --local > types/database.ts
+
+# --- Tests ---
+
+# Simulator name is for local runs; CI picks its own (see .github/workflows/ci.yml)
+test-ios:
+	set -o pipefail; xcodebuild test -project ios/swiftbible.xcodeproj -scheme swiftbible \
+		-destination 'platform=iOS Simulator,name=iPhone 17' \
+		-only-testing:swiftbibleTests | grep -E "Test [Ss]uite|Executed|TEST (SUCCEEDED|FAILED)|error:"
+
+test-android:
+	cd android && ./gradlew :app:testDebugUnitTest --console=plain
+
+test: test-ios test-android
+	@echo "✅ All unit tests passed"
 
 # --- App Store ---
 

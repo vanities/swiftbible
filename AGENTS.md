@@ -201,6 +201,14 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 - Testament enum cases use lowercase
 
 ### Testing Approach
+
+**Unit tests (run these before shipping):**
+- iOS: `swiftbibleTests` target — streak/freeze/sabbath date math, badge unlock conditions, `EventReadingDay` UTC-civil-date gating, bundled-text loading. Run with `make test-ios` (or `xcodebuild test … -only-testing:swiftbibleTests`). Uses an in-memory SwiftData store with `cloudKitDatabase: .none`.
+- Android: `android/app/src/test/` — streak math, book-intro fallback chain, badge threshold registry, widget formatting. Run with `make test-android`.
+- `make test` runs both. CI (`.github/workflows/ci.yml`) runs SwiftLint + both suites on every push/PR.
+- Analytics (PostHog) and Sentry skip configuration under XCTest, so tests never emit live events.
+
+**Parser/data validation:**
 - Validate chapter counts match source material
 - Check sequential numbering preservation
 - Verify inline reference formatting
