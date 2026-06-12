@@ -92,6 +92,22 @@ android {
     }
 }
 
+// A blank client key doesn't fail the build or crash the app — the service
+// just silently no-ops at runtime (Analytics skips PostHog setup entirely).
+// Refuse to produce a release artifact unless every key resolves.
+val requiredClientKeys = listOf("SUPABASE_URL", "SUPABASE_KEY", "POSTHOG_API_KEY", "DEVOTIONAL_READ_SECRET")
+tasks.matching { it.name in setOf("preReleaseBuild", "bundleRelease", "assembleRelease") }.configureEach {
+    doFirst {
+        val missing = requiredClientKeys.filter { clientConfig(it).isBlank() }
+        if (missing.isNotEmpty()) {
+            throw GradleException(
+                "Release build refused: blank client key(s): ${missing.joinToString()}. " +
+                    "Set them in android/local.properties, the environment, or as -P gradle properties."
+            )
+        }
+    }
+}
+
 play {
     val playKey = rootProject.file("play-key.json")
     if (playKey.exists()) {

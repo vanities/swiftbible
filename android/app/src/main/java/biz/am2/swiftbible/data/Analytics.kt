@@ -1,16 +1,22 @@
 package biz.am2.swiftbible.data
 
 import android.content.Context
+import android.util.Log
 import com.posthog.PostHog
 import com.posthog.PostHogConfig
 import com.posthog.android.PostHogAndroid
 import com.posthog.android.PostHogAndroidConfig
 
 object Analytics {
+    private const val TAG = "Analytics"
     private var initialized = false
 
     fun init(context: Context) {
-        if (initialized || SupabaseConfig.POSTHOG_API_KEY.isBlank()) return
+        if (initialized) return
+        if (SupabaseConfig.POSTHOG_API_KEY.isBlank()) {
+            Log.w(TAG, "[analytics] POSTHOG_API_KEY is blank — PostHog disabled for this build")
+            return
+        }
         val cfg = PostHogAndroidConfig(
             apiKey = SupabaseConfig.POSTHOG_API_KEY,
             host = SupabaseConfig.POSTHOG_HOST,
@@ -22,6 +28,7 @@ object Analytics {
         }
         PostHogAndroid.setup(context.applicationContext, cfg)
         initialized = true
+        Log.i(TAG, "[analytics] PostHog initialized (host=${SupabaseConfig.POSTHOG_HOST})")
     }
 
     fun capture(event: Event, properties: Map<String, Any> = emptyMap()) {
