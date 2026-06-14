@@ -17,9 +17,8 @@ en-US:
   keywords: "asv,web,scripture,gospel,prayer,jesus,christian,faith,study,notes,jubilees,enoch,hebrew,catholic,god"
   promo_text: "Read the Bible in KJV, ASV, WEB & Original Hebrew/Greek. Includes Apocrypha, Enoch, Jubilees, and more. Highlight, take notes, and get AI explanations."
   whats_new: |-
-    - Your reading streak now shows the same number everywhere — the More tab matches Progress and your badges
-    - Highlights and notes save more dependably — rare failures are now caught and reported instead of lost silently
-    - Stability pass throughout: several rare crashes fixed, plus a new automated test suite guarding streaks, badges, and reading plans
+    - "About this book" introductions are now much fuller — drawn from Matthew Henry’s complete commentary, with the background, author, and purpose behind every book
+    - Cleaner Book of Enoch text — tidied up stray verse markers in the poetic passages
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -57,9 +56,8 @@ es-ES:
 
     SwiftBible es totalmente de código abierto. Lee y contribuye al código en GitHub.
   whats_new: |-
-    - Tu racha de lectura ahora muestra el mismo número en todas partes: la pestaña Más coincide con Progreso y tus insignias
-    - Los resaltados y las notas se guardan con más fiabilidad; los fallos poco comunes ahora se detectan y registran en lugar de perderse en silencio
-    - Mejoras de estabilidad: corregidos varios cierres inesperados y añadida una batería de pruebas automáticas que protege rachas, insignias y planes de lectura
+    - Las introducciones "Acerca de este libro" ahora son mucho más completas: tomadas del comentario completo de Matthew Henry, con el contexto, el autor y el propósito de cada libro
+    - Texto del Libro de Enoc más limpio: se corrigieron marcas de versículo sueltas en los pasajes poéticos
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -97,9 +95,8 @@ es-MX:
 
     SwiftBible es 100% de código abierto. Lee y contribuye en GitHub.
   whats_new: |-
-    - Tu racha de lectura ahora muestra el mismo número en todas partes: la pestaña Más coincide con Progreso y tus insignias
-    - Los resaltados y las notas se guardan con más confiabilidad; las fallas poco comunes ahora se detectan y registran en lugar de perderse en silencio
-    - Mejoras de estabilidad: corregimos varios cierres inesperados y agregamos pruebas automáticas que protegen rachas, insignias y planes de lectura
+    - Las introducciones "Acerca de este libro" ahora son mucho más completas: tomadas del comentario completo de Matthew Henry, con el contexto, el autor y el propósito de cada libro
+    - Texto del Libro de Enoc más limpio: se corrigieron marcas de versículo sueltas en los pasajes poéticos
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -137,9 +134,8 @@ pt-BR:
 
     SwiftBible é totalmente de código aberto. Veja e contribua no GitHub.
   whats_new: |-
-    - Sua sequência de leitura agora mostra o mesmo número em todo lugar: a aba Mais coincide com Progresso e seus emblemas
-    - Destaques e anotações são salvos com mais confiabilidade; falhas raras agora são detectadas e registradas em vez de se perderem em silêncio
-    - Mais estabilidade: corrigimos várias falhas raras e adicionamos uma suíte de testes automáticos que protege sequências, emblemas e planos de leitura
+    - As introduções "Sobre este livro" agora estão muito mais completas — extraídas do comentário completo de Matthew Henry, com o contexto, o autor e o propósito de cada livro
+    - Texto do Livro de Enoque mais limpo: corrigidas marcações de versículo soltas nas passagens poéticas
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -177,9 +173,8 @@ pt-PT:
 
     SwiftBible é totalmente de código aberto. Vê e contribui no GitHub.
   whats_new: |-
-    - A sua sequência de leitura mostra agora o mesmo número em todo o lado: o separador Mais coincide com Progresso e os seus emblemas
-    - Os destaques e as anotações são guardados com mais fiabilidade; falhas raras passam a ser detetadas e registadas em vez de se perderem em silêncio
-    - Mais estabilidade: corrigimos várias falhas raras e adicionámos uma bateria de testes automáticos que protege sequências, emblemas e planos de leitura
+    - As introduções "Sobre este livro" estão agora muito mais completas — extraídas do comentário completo de Matthew Henry, com o contexto, o autor e o propósito de cada livro
+    - Texto do Livro de Enoque mais limpo: corrigidas marcações de versículo soltas nas passagens poéticas
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -217,9 +212,8 @@ fr-FR:
 
     SwiftBible est entièrement open-source. Consultez et contribuez sur GitHub.
   whats_new: |-
-    - Votre série de lecture affiche désormais le même nombre partout — l'onglet Plus correspond à Progression et à vos badges
-    - Les surlignages et les notes s'enregistrent plus sûrement ; les rares échecs sont désormais détectés et signalés au lieu d'être perdus en silence
-    - Plus de stabilité : plusieurs plantages rares corrigés, et une nouvelle suite de tests automatiques protège les séries, les badges et les plans de lecture
+    - Les introductions « À propos de ce livre » sont désormais bien plus complètes — tirées du commentaire intégral de Matthew Henry, avec le contexte, l’auteur et l’objectif de chaque livre
+    - Texte du Livre d’Hénoch plus net : marques de verset isolées corrigées dans les passages poétiques
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -257,9 +251,8 @@ de-DE:
 
     SwiftBible ist vollständig Open Source. Code ansehen und beitragen auf GitHub.
   whats_new: |-
-    - Deine Leseserie zeigt jetzt überall dieselbe Zahl – der Mehr-Tab stimmt mit Fortschritt und deinen Abzeichen überein
-    - Markierungen und Notizen werden zuverlässiger gespeichert; seltene Fehler werden jetzt erkannt und gemeldet, statt still verloren zu gehen
-    - Mehr Stabilität: mehrere seltene Abstürze behoben und eine neue automatische Testsuite schützt Serien, Abzeichen und Lesepläne
+    - Die Einführungen „Über dieses Buch“ sind jetzt viel ausführlicher – aus Matthew Henrys vollständigem Kommentar, mit Hintergrund, Verfasser und Zweck jedes Buches
+    - Bereinigter Text des Buchs Henoch: vereinzelte Versmarkierungen in den poetischen Abschnitten korrigiert
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -297,9 +290,8 @@ it:
 
     SwiftBible è completamente open source. Codice e contributi su GitHub.
   whats_new: |-
-    - La tua serie di lettura ora mostra lo stesso numero ovunque: la scheda Altro coincide con Progressi e i tuoi distintivi
-    - Evidenziazioni e note si salvano in modo più affidabile; i rari errori ora vengono rilevati e registrati invece di andare persi in silenzio
-    - Più stabilità: corretti diversi arresti anomali rari e aggiunta una suite di test automatici che protegge serie, distintivi e piani di lettura
+    - Le introduzioni "Informazioni su questo libro" ora sono molto più complete: tratte dal commentario integrale di Matthew Henry, con contesto, autore e scopo di ogni libro
+    - Testo del Libro di Enoch più pulito: corrette le marcature di versetto isolate nei passaggi poetici
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -337,9 +329,8 @@ nl-NL:
 
     SwiftBible is volledig open source. Bekijk en draag bij op GitHub.
   whats_new: |-
-    - Je leesreeks toont nu overal hetzelfde getal — het tabblad Meer komt overeen met Voortgang en je badges
-    - Markeringen en notities worden betrouwbaarder opgeslagen; zeldzame fouten worden nu opgemerkt en gemeld in plaats van stilletjes verloren te gaan
-    - Meer stabiliteit: meerdere zeldzame crashes verholpen en een nieuwe automatische testsuite beschermt reeksen, badges en leesplannen
+    - De inleidingen "Over dit boek" zijn nu veel uitgebreider — uit het volledige commentaar van Matthew Henry, met de achtergrond, auteur en het doel van elk boek
+    - Schonere tekst van het boek Henoch: losse versmarkeringen in de poëtische gedeelten opgeschoond
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -377,9 +368,8 @@ pl:
 
     SwiftBible jest w pełni otwartoźródłowa. Kod i wkład w GitHubie.
   whats_new: |-
-    - Twoja seria czytania pokazuje teraz tę samą liczbę wszędzie — karta Więcej zgadza się z Postępami i Twoimi odznakami
-    - Podświetlenia i notatki zapisują się pewniej; rzadkie błędy są teraz wykrywane i rejestrowane, zamiast ginąć po cichu
-    - Większa stabilność: poprawiliśmy kilka rzadkich awarii i dodaliśmy zestaw automatycznych testów chroniący serie, odznaki i plany czytania
+    - Wprowadzenia „O tej księdze” są teraz znacznie obszerniejsze — z pełnego komentarza Matthew Henry’ego, z tłem, autorem i celem każdej księgi
+    - Czystszy tekst Księgi Henocha: poprawiono pojedyncze oznaczenia wersetów we fragmentach poetyckich
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -417,9 +407,8 @@ ru:
 
     SwiftBible полностью с открытым исходным кодом. Код и вклад на GitHub.
   whats_new: |-
-    - Серия чтения теперь показывает одно и то же число везде — вкладка «Ещё» совпадает с «Прогрессом» и значками
-    - Выделения и заметки сохраняются надёжнее; редкие сбои теперь обнаруживаются и фиксируются, а не теряются молча
-    - Больше стабильности: исправлено несколько редких сбоев, добавлен набор автотестов, защищающий серии, значки и планы чтения
+    - Введения «Об этой книге» теперь намного полнее — из полного комментария Мэтью Генри, с предысторией, автором и назначением каждой книги
+    - Чище текст Книги Еноха: исправлены случайные метки стихов в поэтических отрывках
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -457,9 +446,8 @@ ko:
 
     SwiftBible은 완전한 오픈소스입니다. GitHub에서 코드를 보고 기여할 수 있습니다.
   whats_new: |-
-    - 읽기 연속 기록이 이제 어디서나 같은 숫자로 표시됩니다 — 더보기 탭이 진행 상황 및 배지와 일치합니다
-    - 강조와 노트가 더 안정적으로 저장됩니다. 드물게 발생하는 저장 실패도 이제 조용히 사라지지 않고 감지되어 기록됩니다
-    - 안정성 향상: 드문 비정상 종료 여러 건을 수정하고, 연속 기록·배지·읽기 계획을 지키는 자동 테스트를 새로 도입했습니다
+    - ‘이 책에 대하여’ 소개가 훨씬 풍부해졌습니다 — 매튜 헨리의 전체 주석에서 가져와 각 책의 배경, 저자, 집필 목적을 담았습니다
+    - 에녹서 본문 정리: 시적 구절에 남아 있던 잘못된 절 표시를 수정했습니다
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -497,9 +485,8 @@ ja:
 
     SwiftBibleは完全にオープンソースです。GitHubでコードの閲覧・貢献ができます。
   whats_new: |-
-    - 連続記録がどこでも同じ数字で表示されるようになりました。「その他」タブが「進捗」やバッジと一致します
-    - ハイライトとメモの保存がより確実になりました。まれな保存エラーも、静かに失われずに検出・記録されます
-    - 安定性の向上：まれなクラッシュを複数修正し、連続記録・バッジ・読書プランを守る自動テストを新たに導入しました
+    - 「この書について」の紹介がより充実しました——マシュー・ヘンリーの完全な注解から、各書の背景・著者・目的を収録
+    - エノク書のテキストを整理：詩的な箇所に残っていた不要な節番号を修正しました
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -537,9 +524,8 @@ zh-Hans:
 
     SwiftBible 完全开源。可在 GitHub 查看代码并贡献。
   whats_new: |-
-    - 阅读连读天数现在在各处显示一致——“更多”标签页与“进度”及徽章保持同步
-    - 高亮和笔记保存更可靠；罕见的保存失败现在会被检测并记录，而不会悄然丢失
-    - 稳定性提升：修复了多个罕见崩溃，并新增自动测试套件守护连读、徽章与阅读计划
+    - “关于本书”简介现在更加详尽——取自马太·亨利的完整注释，介绍每卷书的背景、作者和写作目的
+    - 优化《以诺书》文本：修正了诗体段落中残留的零散经节标记
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -577,9 +563,8 @@ zh-Hant:
 
     SwiftBible 完全開源。可在 GitHub 查看程式碼並貢獻。
   whats_new: |-
-    - 閱讀連讀天數現在在各處顯示一致——「更多」分頁與「進度」及徽章保持同步
-    - 高亮和筆記儲存更可靠；罕見的儲存失敗現在會被偵測並記錄，而不會悄悄遺失
-    - 穩定性提升：修復了多個罕見當機，並新增自動測試套件守護連讀、徽章與閱讀計畫
+    - 「關於本書」簡介現在更加詳盡——取自馬太·亨利的完整註釋，介紹每卷書的背景、作者與寫作目的
+    - 優化《以諾書》文本：修正了詩體段落中殘留的零散經節標記
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -617,9 +602,8 @@ id:
 
     SwiftBible sepenuhnya sumber terbuka. Lihat kode dan berkontribusi di GitHub.
   whats_new: |-
-    - Rangkaian membaca Anda kini menampilkan angka yang sama di mana pun — tab Lainnya cocok dengan Progres dan lencana Anda
-    - Sorotan dan catatan tersimpan lebih andal; kegagalan langka kini terdeteksi dan tercatat, bukan hilang diam-diam
-    - Lebih stabil: beberapa crash langka diperbaiki dan rangkaian pengujian otomatis baru menjaga rangkaian baca, lencana, dan rencana baca
+    - Pengantar "Tentang kitab ini" kini jauh lebih lengkap — diambil dari komentar lengkap Matthew Henry, memuat latar belakang, penulis, dan tujuan setiap kitab
+    - Teks Kitab Henokh lebih rapi: penanda ayat yang tercecer di bagian-bagian puitis dirapikan
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -657,9 +641,8 @@ el:
 
     Το SwiftBible είναι πλήρως ανοιχτού κώδικα. Δες τον κώδικα και συνεισέφερε στο GitHub.
   whats_new: |-
-    - Το σερί ανάγνωσης δείχνει πλέον τον ίδιο αριθμό παντού — η καρτέλα «Περισσότερα» συμφωνεί με την Πρόοδο και τα σήματά σας
-    - Οι επισημάνσεις και οι σημειώσεις αποθηκεύονται πιο αξιόπιστα· τα σπάνια σφάλματα εντοπίζονται και καταγράφονται πλέον αντί να χάνονται σιωπηλά
-    - Περισσότερη σταθερότητα: διορθώθηκαν αρκετά σπάνια σφάλματα και προστέθηκε νέα σουίτα αυτόματων δοκιμών που προστατεύει σερί, σήματα και πλάνα ανάγνωσης
+    - Οι εισαγωγές «Σχετικά με αυτό το βιβλίο» είναι τώρα πολύ πληρέστερες — από το πλήρες υπόμνημα του Μάθιου Χένρι, με το ιστορικό, τον συγγραφέα και τον σκοπό κάθε βιβλίου
+    - Καθαρότερο κείμενο του Βιβλίου του Ενώχ: διορθώθηκαν μεμονωμένες ενδείξεις στίχων στα ποιητικά χωρία
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -697,9 +680,8 @@ ro:
 
     SwiftBible este complet open-source. Cod și contribuții pe GitHub.
   whats_new: |-
-    - Seria ta de lectură arată acum același număr peste tot — fila Mai multe coincide cu Progres și cu insignele tale
-    - Evidențierile și notițele se salvează mai fiabil; erorile rare sunt acum detectate și înregistrate, în loc să se piardă în tăcere
-    - Mai multă stabilitate: am corectat câteva blocări rare și am adăugat o suită de teste automate care protejează seriile, insignele și planurile de lectură
+    - Introducerile „Despre această carte” sunt acum mult mai ample — preluate din comentariul integral al lui Matthew Henry, cu contextul, autorul și scopul fiecărei cărți
+    - Text mai curat al Cărții lui Enoh: au fost corectate marcajele de verset rămase izolate în pasajele poetice
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -737,9 +719,8 @@ tr:
 
     SwiftBible tamamen açık kaynaktır. Kodu görüntüleyin ve GitHub'da katkıda bulunun.
   whats_new: |-
-    - Okuma seriniz artık her yerde aynı sayıyı gösteriyor — Diğer sekmesi, İlerleme ve rozetlerinizle eşleşiyor
-    - Vurgular ve notlar artık daha güvenilir kaydediliyor; nadir kayıt hataları sessizce kaybolmak yerine algılanıp kaydediliyor
-    - Daha fazla kararlılık: birkaç nadir çökme düzeltildi; serileri, rozetleri ve okuma planlarını koruyan yeni otomatik test paketi eklendi
+    - "Bu kitap hakkında" tanıtımları artık çok daha kapsamlı — Matthew Henry’nin tam tefsirinden alınmış olup her kitabın arka planını, yazarını ve amacını içeriyor
+    - Hanok Kitabı metni daha düzenli: şiirsel bölümlerde kalan dağınık ayet işaretleri düzeltildi
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -777,9 +758,8 @@ hi:
 
     SwiftBible पूरी तरह ओपन-सोर्स है। GitHub पर कोड देखें और योगदान करें।
   whats_new: |-
-    - आपकी पठन लय अब हर जगह एक ही संख्या दिखाती है — "अधिक" टैब अब प्रगति और आपके बैज से मेल खाता है
-    - हाइलाइट और नोट्स अब अधिक भरोसे से सहेजे जाते हैं; दुर्लभ त्रुटियाँ अब चुपचाप खोने के बजाय पकड़ी और दर्ज की जाती हैं
-    - अधिक स्थिरता: कई दुर्लभ क्रैश ठीक किए गए और लय, बैज व पठन योजनाओं की रक्षा करने वाला नया स्वचालित परीक्षण सेट जोड़ा गया
+    - "इस पुस्तक के बारे में" परिचय अब कहीं अधिक विस्तृत हैं — मैथ्यू हेनरी की संपूर्ण टीका से, हर पुस्तक की पृष्ठभूमि, लेखक और उद्देश्य के साथ
+    - हनोक की पुस्तक का पाठ अधिक स्वच्छ: काव्यात्मक अंशों में छूटे हुए पद-चिह्न ठीक किए गए
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
