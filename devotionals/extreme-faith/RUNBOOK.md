@@ -282,6 +282,20 @@ Technical anchors used: *anamnesis* (Luke 22:19, 1 Cor 11:24-25, **Heb 10:3**); 
 
 **Matt Bassford research (TODO before final edit):** search the archive for posts on the Lord's Supper / communion, "remembrance," and Passover. Likely-rich; borrow phrasing if anything fits.
 
+### To be seen — handpick candidate, date TBD
+
+Drafted 2026-06-14 (`to-be-seen.md`). Sister piece to *Remember me* from the same word-excavation brainstorm. **Date unassigned.** Idols-of-the-socialites / social-media idolatry.
+
+The reframe: the comfortable Christian treats social media as a neutral habit ("everyone's on it, I just use it in moderation"). The extreme: it is idolatry, on both ends. The Greek for idol is **eidolon** (εἴδωλον), root *eidos* = the look/appearance of a thing (cognate with *idea*, *video*, "I see") — an image, a phantom, a thing whose whole existence is being looked at. You spend the day looking at *eidola*, and you make one of yourself to be looked at. Two things Adam wanted centered (2026-06-14): (1) **addiction to the pull** — the likes, comments, engagement, the engineered variable-reward loop ("the same machinery as a slot machine"); (2) **the fear of becoming jealous** of others "doing better," and (3) the follow-up question, **is comparing yourself even a sin** — answered un-preachy as "not wise" (2 Cor 10:12) and mainly a *waste of your one life* (Eccl 4:4; John 21 "what is that to thee? follow thou me").
+
+The theological hinge that ties the envy to the idol frame: **Colossians 3:5, "covetousness, which is idolatry."** So the jealousy isn't a side effect of the idol; it IS the idol. Anchors: 1 John 5:21 (lead — the abrupt last line of the epistle); Col 3:5; Ex 20:17 (the tenth commandment = the feed is an infinite scroll of "any thing that is thy neighbour's"); 1 Sam 18:7-9 (Saul poisoned for life by the comparison *song* — David's ten thousands vs his thousands — "the feed sings you that song about everyone"); Matt 6:24 / 1 Cor 6:12 (the idol promotes itself to master); 2 Cor 10:12 + Eccl 4:4 + John 21:21-22 (comparison as folly/waste); Prov 14:30 (envy = rottenness of the bones); Ps 115:8 + 2 Cor 3:18 (you become like what you behold). **Grace exit:** Gen 16:13 — Hagar's *El Roi*, "Thou God seest me" (you exhaust yourself to be seen by people barely looking, while the God who truly sees you already has); 1 Tim 6:6 (contentment) and Rom 12:15 (the redeemed flip of envy: *rejoice with them that do rejoice*).
+
+Five beats: **The pull** (addiction) → **The thing you'd never post** (envy + the fear) → **The word** (idol diagnosis / Col 3:5) → **What is that to thee** (comparison as folly + waste, un-preachy per Adam) → **What it makes you** (cost + grace exit). Subtitle leads with the vulnerable envy admission ("a friend's good news landed... something in me went quiet, and I hated that it did"); lighter addiction-only alternative on hand if it reads too hot ("I told myself I didn't care who saw it, then checked the number eleven times before lunch").
+
+**CoC framing:** idolatry named as real sin; covetousness=idolatry (Col 3:5); heart-worship belongs to God; grace + repentance, no legalistic screen-shaming ("the line was never the device"). No instrumental/eschatological flags here.
+
+**Matt Bassford research (TODO before final edit):** search the archive for posts on envy, covetousness, contentment, and the dangers of the world's approval / "to be seen of men." Likely-rich on contentment and the heart.
+
 ### Week 13 — That's someone's son (2027-04-04, week after Easter)
 
 The reframe: most Christians have abstracted the cross into theology. *"He died for my sins."* Said often enough, it stops landing. The pivot: Jesus had a mother. Mary stood at the foot of the cross (John 19:25-27) and watched her son be tortured to death — fulfilling Simeon's prophecy from 33 years earlier that a sword would pierce through her own soul (Luke 2:35). The Father sent him *knowing.* Whatever you can imagine about watching your own son die, that is what the Father chose. John 3:16: *"For God so loved the world that he gave his only begotten Son."* The verb is *gave.* He handed his son over.

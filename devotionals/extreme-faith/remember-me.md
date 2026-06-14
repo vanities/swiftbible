@@ -49,9 +49,9 @@ He remembered Abraham, and reached into a city that was already on fire to pull 
 
 The very next thing in the story is a bush on fire and a man named Moses. Every time God remembers, the ground moves.
 
-And people learned to pray it back to him. Hannah, before God ever remembered her, stood in the temple and begged him to: *remember me, and forget not thine handmaid* (1 Samuel 1:11). Blind Samson, chained between the pillars with his strength gone, prayed *remember me, I pray thee, and strengthen me only this once,* and brought the whole house down (Judges 16:28). Hezekiah, told to set his affairs in order and die, turned his face to the wall and asked God to *remember* how he had walked before him, and got fifteen more years of life (2 Kings 20:3). *Remember me* is the oldest prayer there is.
+And people learned to pray it back to him. Hannah, before God ever remembered her, stood in the temple and begged him to: *remember me, and not forget thine handmaid* (1 Samuel 1:11). Blind Samson, chained between the pillars with his strength gone, prayed *remember me, I pray thee, and strengthen me ... only this once,* and brought the whole house down (Judges 16:28). Hezekiah, told to set his affairs in order and die, turned his face to the wall and asked God to *remember* how he had walked before him, and got fifteen more years of life (2 Kings 20:3). *Remember me* is the oldest prayer there is.
 
-It reaches its rawest version on a hill outside Jerusalem, prayed by a man with nothing left to bring. A criminal, hours from death, with no baptism and no resume and nothing left to bargain with, turns his head toward the next cross over and asks for the one thing that saves a man:
+It reaches its rawest version on a hill outside Jerusalem, in the last hours before the new covenant had even begun. A criminal hangs dying next to Jesus, with no resume and nothing left to bargain with, and turns his head toward him to ask for the only thing he has the breath left to want:
 
 > *"Lord, remember me when thou comest into thy kingdom."*
 > **Luke 23:42**
