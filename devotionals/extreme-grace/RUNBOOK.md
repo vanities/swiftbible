@@ -115,6 +115,24 @@ Structure beats: 3:10→4:1 whiplash cold open (city saved, preacher furious) �
 
 Prayer: returns to God's question as refrain — *"Doest thou well to be angry? Stay with me until I can say no."*
 
+### Remember me — Grace #6 (2026-09-27)
+
+**✅ Published 2026-06-14 to Supabase (id 680) for for_date 2026-09-27** (`remember-me.md`), `--series-part 6`. Drafted 2026-06-14 originally as a Faith piece; Adam moved it to **Grace** on 2026-06-14 ("run remember me as grace"). Takes the Grace #6 slot, skipping past the 08-02 thief entry so Luke 23 doesn't double; *The persecutor becomes the apostle* (Saul) slides one Grace Sunday. It reads as a genuine grace arc — *we forget him; he remembers us, and his remembering has hands* — on the tender end of the series (closest in register to W1 *The Father runs*). Lord's Supper / Greek *anamnesis* theme. Sister piece to the Faith entry *To be seen* (`../extreme-faith/`) from the same word-excavation brainstorm.
+
+The grace claim: the comfortable Christian frets over taking the Lord's Supper on autopilot ("who's already thinking about where we're going to lunch?"), while the staggering thing is how God *remembers* — and in scripture his remembering is never sentiment, it's rescue (Noah → flood sinks; Abraham → Lot pulled from the fire; Rachel/Hannah → wombs opened; the covenant in Egypt → the Exodus; the thief's *"remember me"* → *"today… in paradise"*). At the table he remembers *you*, and your sins **no more** (Heb 10:17 quoting Jer 31:34). Your spotty memory of him meets his perfect memory of you.
+
+**Series-fit note:** softer than the scandalous-mercy wince of most Grace entries (ex-murderers, the prostitute, the thief in five minutes). It's a deepening more than a wince. **Grace tilt (applied 2026-06-14):** the ending now lands on mercy — it keeps the reader's part ("the remembering is the part he left for you") but gives the final beat to *his* memory: "your shaky memory of him was never the thing holding this together. His memory of you is. He remembers you. And your sins... he has promised to remember no more."
+
+**⚠️ Thief overlap:** Grace W4 *Five minutes is enough* (2026-08-02) is entirely the thief (Luke 23:39-43); this piece leans on the thief too. Schedule them apart so Luke 23 doesn't run twice in a Grace cluster.
+
+Technical anchors: *anamnesis* (Luke 22:19, 1 Cor 11:24-25, **Heb 10:3** — same word for the old yearly sin-remembrance); Hebrew **zakar** / **zikkaron** (Ex 12:14 Passover — the Supper instituted *inside* Passover, Jesus as the Lamb); the "God remembered ___" litany (Gen 8:1, 19:29, 30:22; 1 Sam 1:19; Ex 2:24) plus people praying it back (1 Sam 1:11 Hannah, Judg 16:28 Samson, 2 Kgs 20:3 Hezekiah); Heb 10:17 / Jer 31:34 (sins remembered no more); 1 Cor 10:17 grounding the re-member/dis-member wordplay.
+
+**Honesty flag (kept in-text):** the "re-member = opposite of dis-member" move is folk etymology (English *remember* < Latin *memor*; *member*/limb < *membrum*). The draft says so out loud and grounds the real claim in 1 Cor 10:17. Don't let a final pass assert it as etymology.
+
+**CoC framing (audited clean 2026-06-14):** Lord's Supper weekly, memorial-symbolic, anti-transubstantiation ("nothing magic in the bread… a memorial, not a medicine"); grace + obedience as two halves. The thief (Luke 23:42) is now framed "in the last hours before the new covenant had even begun" and used only as an illustration of God's remembering — no baptism-optional soteriology (the original "no baptism… the one thing that saves a man" was cut). Independent CoC audit passed: all blockquotes verbatim, references correct, Greek/Hebrew accurate, no faith-only/universalism/premillennial leaks.
+
+**Matt Bassford research (TODO before final edit):** search the archive for posts on the Lord's Supper / communion, "remembrance," and Passover. Likely-rich; borrow phrasing if anything fits.
+
 ---
 
 ## Drafting workflow

@@ -1,4 +1,4 @@
-# [date TBD] — 1 John 5:21: To be seen
+# September 20 — 1 John 5:21: To be seen
 
 **A friend's good news landed in the group chat and something in me went quiet, and I hated that it did.**
 

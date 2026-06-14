@@ -1,4 +1,4 @@
-# [date TBD] — Luke 22:19: Remember me
+# September 27 — Luke 22:19: Remember me
 
 **Somebody in the room is already thinking about lunch. Some Sundays it's me.**
 
@@ -78,7 +78,7 @@ And remember what Hebrews said the old sacrifices were. An *anamnesis* of sins, 
 
 That is God quoting his own promise from Jeremiah, and it means two rememberings meet at this table. You remember him. And the one thing the old bread kept dragging back up, your sin, is the thing he now refuses to recall. He remembers you, and your sins no more.
 
-I won't pretend staying present is easy. Your mind is going to wander; mine does. Lunch really is waiting, and the line really does get long. But hold the two halves of this together. You ask him *remember me,* the way the thief did. And he hands you bread and says *remember me* right back. Every Sunday, the cure for amnesia gets set in your open hand, and you are asked to do the deliberate thing, to haul it back up on purpose: who died for you, and who you became when he did. Grace puts the bread there. The remembering is the part he left for you.
+I won't pretend staying present is easy. Your mind is going to wander; mine does. Lunch really is waiting, and the line really does get long. But hold the two halves of this together. You ask him *remember me,* the way the thief did. And he hands you bread and says *remember me* right back. Every Sunday, the cure for amnesia gets set in your open hand, and you are asked to do the deliberate thing, to haul it back up on purpose: who died for you, and who you became when he did. Grace puts the bread there, and the remembering is the part he left for you. You will do it imperfectly. Some Sundays you'll lose him again before the cars are out of the parking lot. But your shaky memory of him was never the thing holding this together. His memory of you is. He remembers you. And your sins, the thing the old bread kept dragging back up, he has promised to remember no more.
 
 ## A prayer
 

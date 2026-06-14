@@ -182,6 +182,8 @@ Order is not fixed — Adam may handpick the next Faith topic each cycle based o
 | 2026-08-09 | Rest #4 |
 | 2026-08-16 | Delight #4 |
 | 2026-08-23 | **Faith #5 (The Mystery of Miracles)** ✅ published — handpicked |
+| 2026-09-20 | **Faith #6 (To be seen)** ✅ published — handpicked (social-media idolatry) |
+| 2026-09-27 | **Grace #6 (Remember me)** ✅ published — handpicked (Lord's Supper) |
 | ... | (continues rotating) |
 
 The rotation prevents the audience from getting only hard demands every Sunday. Each series has its own RUNBOOK with full schedule and per-devotional notes:
@@ -268,23 +270,9 @@ Lead verse: Mark 9:24 (the father of the sick child, believing and doubting at o
 
 Prayer: returns to the subtitle refrain — *"Lord, I believe. Help my unbelief."*
 
-### Remember me — handpick candidate, date TBD
+### To be seen — Faith #6 (2026-09-20)
 
-Drafted 2026-06-14 (`remember-me.md`). Titled *Remember me* because the lead verse (Luke 22:19, *"this do in remembrance of me"*) is literally Jesus saying it; the title sits on top of the verse and ties the Supper, the thief (Luke 23:42), and the God-remembers litany into one word. (Working title during drafting was "The opposite of amnesia," now a section header.) **Series note:** soft end of Faith; ports cleanly to Grace if centered on the thief / God-remembering-the-man-with-nothing — keep in Faith unless spreading the word-excavation device across the rotation. Came out of an Adam brainstorm on word-excavation devotionals (sister idea: "idols of the socialites" / *eidolon*, still to be drafted). **Date unassigned** — slot it into the next open Faith Sunday Adam wants it.
-
-The reframe: the comfortable Christian takes the Lord's Supper on autopilot ("who's already thinking about where we're going to lunch?") and calls it remembering Jesus. The extreme: *remembrance* is the Greek **anamnesis** (ἀνάμνησις) — the literal opposite of **amnesia** (privative `a` + `mnesis`), memory hauled back up on purpose. Hebrews 10:3 uses the *same word* for the old sacrifices that only reminded Israel of an open debt; Jesus reuses it the night he closes the debt. And in scripture, when *God* remembers a person it always has hands (Noah → flood sinks; Abraham → Lot pulled from the fire; Rachel/Hannah → wombs opened; the covenant in Egypt → the Exodus; the thief's *"remember me"* → *"today… in paradise"*). At the table the remembrance is mutual: you say *remember me*, he hands you bread and says *remember me* back.
-
-Technical anchors used: *anamnesis* (Luke 22:19, 1 Cor 11:24-25, **Heb 10:3**); Hebrew **zakar** / **zikkaron** memorial (Ex 12:14 Passover — the Supper instituted *inside* Passover, Jesus as the Lamb the memorial pointed at); the "God remembered ___" litany (Gen 8:1, 19:29, 30:22; 1 Sam 1:19; Ex 2:24); 1 Cor 10:17 (one bread, one body) grounding the re-member/dis-member wordplay.
-
-**Honesty flag (kept in-text):** the "re-member = put the members back, opposite of dis-member" move is folk etymology (English *remember* < Latin *memor*; *member*/limb < *membrum*). The draft says so out loud and grounds the real claim in 1 Cor 10:17 instead. Don't let a final pass quietly assert it as etymology.
-
-**CoC framing:** Lord's Supper weekly, memorial-symbolic, anti-transubstantiation ("nothing magic in the bread… a memorial, not a medicine"); grace + obedience as two halves ("grace puts the bread there; the remembering is the part he left for you"). **CoC care flag:** the thief (Luke 23:42) is used only as an illustration of God's remembering, with his lack of baptism left honest and *not* turned into a soteriology claim (pre-Pentecost, Old Covenant). If that brush feels risky beside "obedience of faith," cut the thief from the body and keep him only in the prayer — Adam to decide on the edit pass.
-
-**Matt Bassford research (TODO before final edit):** search the archive for posts on the Lord's Supper / communion, "remembrance," and Passover. Likely-rich; borrow phrasing if anything fits.
-
-### To be seen — handpick candidate, date TBD
-
-Drafted 2026-06-14 (`to-be-seen.md`). Sister piece to *Remember me* from the same word-excavation brainstorm. **Date unassigned.** Idols-of-the-socialites / social-media idolatry.
+**✅ Published 2026-06-14 to Supabase (id 681) for for_date 2026-09-20** (`to-be-seen.md`), `--series-part 6`. Sister piece to *Remember me* (which Adam moved to the Grace series) from the same word-excavation brainstorm. Idols-of-the-socialites / social-media idolatry. Takes the next open Faith Sunday; the numbered backlog (*Seventy times seven*, etc.) slides one. CoC-audited clean 2026-06-14 (independent pass: all blockquotes verbatim, references correct, Greek/Hebrew accurate, no faith-only/universalism/premillennial leaks).
 
 The reframe: the comfortable Christian treats social media as a neutral habit ("everyone's on it, I just use it in moderation"). The extreme: it is idolatry, on both ends. The Greek for idol is **eidolon** (εἴδωλον), root *eidos* = the look/appearance of a thing (cognate with *idea*, *video*, "I see") — an image, a phantom, a thing whose whole existence is being looked at. You spend the day looking at *eidola*, and you make one of yourself to be looked at. Two things Adam wanted centered (2026-06-14): (1) **addiction to the pull** — the likes, comments, engagement, the engineered variable-reward loop ("the same machinery as a slot machine"); (2) **the fear of becoming jealous** of others "doing better," and (3) the follow-up question, **is comparing yourself even a sin** — answered un-preachy as "not wise" (2 Cor 10:12) and mainly a *waste of your one life* (Eccl 4:4; John 21 "what is that to thee? follow thou me").
 
