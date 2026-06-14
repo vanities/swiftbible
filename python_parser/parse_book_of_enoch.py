@@ -113,6 +113,10 @@ def parse_enoch_text(input_file):
     current_verse_num = 1
     current_verse_text = ""
     expected_inline_verse = None
+    # Tracks the verse digit of the most recent lettered sub-line label (e.g. the
+    # ``6`` in ``6a``) so that the bare-letter continuation lines that follow
+    # (``b``, ``e`` ...) can be restored to their full ``6b``/``6e`` form.
+    current_letter_base = None
 
     # Matches inline verse numbers like " 2", " 4,5" or " 9, 10" (optionally with letter suffixes)
     inline_verse_pattern = re.compile(
@@ -201,6 +205,27 @@ def parse_enoch_text(input_file):
                 current_verse_num = 1
                 current_verse_text = ""
                 expected_inline_verse = None
+                current_letter_base = None
+                continue
+
+            # Lettered sub-line labels like "6a ..." / "7c ..." mark poetic
+            # sub-lines of the current verse (not a new verse, since the digit is
+            # followed by a letter rather than a space). Remember the digit so the
+            # bare-letter lines that follow can inherit it.
+            label_match = re.match(r'^(\d+)[a-z]\s', line)
+            if label_match:
+                current_letter_base = int(label_match.group(1))
+                current_verse_text = f"{current_verse_text} {line}".strip()
+                continue
+
+            # Bare-letter continuation of a lettered sub-verse sequence ("b And by
+            # you ..."). Restore the most recently seen verse digit so the inline
+            # reference parser/superscripter renders it as e.g. "6b" instead of
+            # leaving a stray "b" floating in the body text.
+            bare_letter_match = re.match(r'^([a-z])\s+(.*)', line)
+            if bare_letter_match and current_letter_base is not None:
+                line = f"{current_letter_base}{bare_letter_match.group(1)} {bare_letter_match.group(2)}"
+                current_verse_text = f"{current_verse_text} {line}".strip()
                 continue
 
             # Check for verse number at start of line
@@ -213,6 +238,7 @@ def parse_enoch_text(input_file):
                 current_verse_num = int(verse_match.group(1))
                 current_verse_text = verse_match.group(2)
                 expected_inline_verse = current_verse_num + 1
+                current_letter_base = None
             else:
                 # Continue current verse text
                 if current_verse_text:
