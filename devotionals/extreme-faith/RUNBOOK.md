@@ -268,6 +268,20 @@ Lead verse: Mark 9:24 (the father of the sick child, believing and doubting at o
 
 Prayer: returns to the subtitle refrain — *"Lord, I believe. Help my unbelief."*
 
+### Remember me — handpick candidate, date TBD
+
+Drafted 2026-06-14 (`remember-me.md`). Titled *Remember me* because the lead verse (Luke 22:19, *"this do in remembrance of me"*) is literally Jesus saying it; the title sits on top of the verse and ties the Supper, the thief (Luke 23:42), and the God-remembers litany into one word. (Working title during drafting was "The opposite of amnesia," now a section header.) **Series note:** soft end of Faith; ports cleanly to Grace if centered on the thief / God-remembering-the-man-with-nothing — keep in Faith unless spreading the word-excavation device across the rotation. Came out of an Adam brainstorm on word-excavation devotionals (sister idea: "idols of the socialites" / *eidolon*, still to be drafted). **Date unassigned** — slot it into the next open Faith Sunday Adam wants it.
+
+The reframe: the comfortable Christian takes the Lord's Supper on autopilot ("who's already thinking about where we're going to lunch?") and calls it remembering Jesus. The extreme: *remembrance* is the Greek **anamnesis** (ἀνάμνησις) — the literal opposite of **amnesia** (privative `a` + `mnesis`), memory hauled back up on purpose. Hebrews 10:3 uses the *same word* for the old sacrifices that only reminded Israel of an open debt; Jesus reuses it the night he closes the debt. And in scripture, when *God* remembers a person it always has hands (Noah → flood sinks; Abraham → Lot pulled from the fire; Rachel/Hannah → wombs opened; the covenant in Egypt → the Exodus; the thief's *"remember me"* → *"today… in paradise"*). At the table the remembrance is mutual: you say *remember me*, he hands you bread and says *remember me* back.
+
+Technical anchors used: *anamnesis* (Luke 22:19, 1 Cor 11:24-25, **Heb 10:3**); Hebrew **zakar** / **zikkaron** memorial (Ex 12:14 Passover — the Supper instituted *inside* Passover, Jesus as the Lamb the memorial pointed at); the "God remembered ___" litany (Gen 8:1, 19:29, 30:22; 1 Sam 1:19; Ex 2:24); 1 Cor 10:17 (one bread, one body) grounding the re-member/dis-member wordplay.
+
+**Honesty flag (kept in-text):** the "re-member = put the members back, opposite of dis-member" move is folk etymology (English *remember* < Latin *memor*; *member*/limb < *membrum*). The draft says so out loud and grounds the real claim in 1 Cor 10:17 instead. Don't let a final pass quietly assert it as etymology.
+
+**CoC framing:** Lord's Supper weekly, memorial-symbolic, anti-transubstantiation ("nothing magic in the bread… a memorial, not a medicine"); grace + obedience as two halves ("grace puts the bread there; the remembering is the part he left for you"). **CoC care flag:** the thief (Luke 23:42) is used only as an illustration of God's remembering, with his lack of baptism left honest and *not* turned into a soteriology claim (pre-Pentecost, Old Covenant). If that brush feels risky beside "obedience of faith," cut the thief from the body and keep him only in the prayer — Adam to decide on the edit pass.
+
+**Matt Bassford research (TODO before final edit):** search the archive for posts on the Lord's Supper / communion, "remembrance," and Passover. Likely-rich; borrow phrasing if anything fits.
+
 ### Week 13 — That's someone's son (2027-04-04, week after Easter)
 
 The reframe: most Christians have abstracted the cross into theology. *"He died for my sins."* Said often enough, it stops landing. The pivot: Jesus had a mother. Mary stood at the foot of the cross (John 19:25-27) and watched her son be tortured to death — fulfilling Simeon's prophecy from 33 years earlier that a sword would pierce through her own soul (Luke 2:35). The Father sent him *knowing.* Whatever you can imagine about watching your own son die, that is what the Father chose. John 3:16: *"For God so loved the world that he gave his only begotten Son."* The verb is *gave.* He handed his son over.
