@@ -41,27 +41,26 @@ import re
 from pathlib import Path
 
 import parse_jfb
-import parse_mhcc
+import parse_mhc_unabridged
 
 REPO = Path(__file__).resolve().parents[1]
 TEXT_DIR = REPO / "ios" / "swiftbible" / "Text"
+# The apps bundle byte-identical copies; both must be regenerated together so
+# iOS and Android never drift (see cross-platform-parity).
+ANDROID_ASSET_DIR = REPO / "android" / "app" / "src" / "main" / "assets"
 
-MHCC_SOURCE = parse_mhcc.SOURCE
 JFB_SOURCE = parse_jfb.SOURCE
 
-MHCC_OUTPUT = TEXT_DIR / "book_intros_mhcc.json"
-JFB_OUTPUT = TEXT_DIR / "book_intros_jfb.json"
+# iOS Text/ + Android assets/ — same filename, written to both.
+MHCC_OUTPUTS = [TEXT_DIR / "book_intros_mhcc.json", ANDROID_ASSET_DIR / "book_intros_mhcc.json"]
+JFB_OUTPUTS = [TEXT_DIR / "book_intros_jfb.json", ANDROID_ASSET_DIR / "book_intros_jfb.json"]
 
-MHCC_SOURCE_INFO = {
-    "name": "Matthew Henry's Concise Commentary",
-    "shortName": "Matthew Henry",
-    "year": 1706,
-    "license": "Public Domain",
-    "attribution": (
-        "Matthew Henry (1662–1714). Concise Commentary on the Bible, "
-        "sourced from the Christian Classics Ethereal Library (CCEL)."
-    ),
-}
+# "About this book" Matthew Henry intros come from his full, unabridged
+# Exposition (parse_mhc_unabridged), NOT the Concise abridgment — the Concise
+# opens each book with a sentence or two, whereas these are the full essays.
+# (The Concise text is still the source for the per-chapter summaries that
+# parse_mhcc.py / generate_chapter_summaries.py produce — that's untouched.)
+MHCC_SOURCE_INFO = parse_mhc_unabridged.SOURCE_INFO
 
 JFB_SOURCE_INFO = {
     "name": "Jamieson, Fausset & Brown — Commentary on the Whole Bible",
@@ -206,23 +205,11 @@ def collect_paragraphs(lines: list[str], start: int, end: int) -> list[str]:
 # ---------------------------------------------------------------------------
 
 def parse_mhcc_intros() -> dict[str, dict]:
-    lines = MHCC_SOURCE.read_text(encoding="utf-8").splitlines()
-    book_starts = parse_mhcc.find_book_start_indices(lines)
-    ordered = sorted(book_starts.items(), key=lambda kv: kv[1])
-
+    """Book intros from Matthew Henry's unabridged Exposition. The structural
+    extraction (and its canonical-count assertion) lives in
+    parse_mhc_unabridged; here we apply the shared readability re-flow."""
     intros: dict[str, dict] = {}
-    for idx, (book, start) in enumerate(ordered):
-        book_end = ordered[idx + 1][1] if idx + 1 < len(ordered) else len(lines)
-        # Intro runs from just after the centered book header to the first
-        # "Chapter 1" marker.
-        chapter_one = None
-        for i in range(start + 1, book_end):
-            if parse_mhcc.CHAPTER_RE.match(lines[i].strip()):
-                chapter_one = i
-                break
-        if chapter_one is None:
-            continue
-        paragraphs = collect_paragraphs(lines, start + 1, chapter_one)
+    for book, paragraphs in parse_mhc_unabridged.parse_raw_intros().items():
         if sum(len(p) for p in paragraphs) < MIN_INTRO_CHARS:
             continue
         intros[book] = {
@@ -352,20 +339,21 @@ def extract_jfb_single_chapter(lines: list[str], title_token: str, book: str) ->
 
 # ---------------------------------------------------------------------------
 
-def write_output(path: Path, source_info: dict, intros: dict[str, dict]) -> None:
-    payload = {"source": source_info, "bookIntros": intros}
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+def write_output(paths: list[Path], source_info: dict, intros: dict[str, dict]) -> None:
+    payload = json.dumps({"source": source_info, "bookIntros": intros}, indent=2, ensure_ascii=False) + "\n"
+    for path in paths:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(payload, encoding="utf-8")
 
 
 def main() -> None:
     mhcc = parse_mhcc_intros()
-    write_output(MHCC_OUTPUT, MHCC_SOURCE_INFO, mhcc)
-    print(f"MHCC: {len(mhcc)} book intros → {MHCC_OUTPUT.relative_to(REPO)}")
+    write_output(MHCC_OUTPUTS, MHCC_SOURCE_INFO, mhcc)
+    print(f"MHCC (unabridged): {len(mhcc)} book intros → {', '.join(str(p.relative_to(REPO)) for p in MHCC_OUTPUTS)}")
 
     jfb = parse_jfb_intros()
-    write_output(JFB_OUTPUT, JFB_SOURCE_INFO, jfb)
-    print(f"JFB:  {len(jfb)} book intros → {JFB_OUTPUT.relative_to(REPO)}")
+    write_output(JFB_OUTPUTS, JFB_SOURCE_INFO, jfb)
+    print(f"JFB:  {len(jfb)} book intros → {', '.join(str(p.relative_to(REPO)) for p in JFB_OUTPUTS)}")
 
 
 if __name__ == "__main__":
