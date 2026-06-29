@@ -176,10 +176,21 @@ const VERSE_SELECTION_MODEL =
 //               reflection-question bullet list, italic final meditation.
 //               Heavier on biblical-historical content, lighter on modern
 //               empathy. Mixed in for voice variety and reader range.
-const EMPATHY_PROMPT_VERSION = "empathy-v7";
-const TECHNICAL_PROMPT_VERSION = "technical-v2";
-const NARRATIVE_PROMPT_VERSION = "narrative-v2";
-const PRACTICAL_PROMPT_VERSION = "practical-v3";
+//
+//   prayer address (empathy-v8 / technical-v3 / narrative-v3 / practical-v4):
+//             all four tracks now default the closing prayer's address to the
+//             Father, reserving a direct address to Jesus ("Lord Jesus") for
+//             verses that themselves model prayer or a cry to Jesus (the dying
+//             thief's "Lord, remember me," or "Come, Lord Jesus"), and drop the
+//             Holy Spirit as an address entirely. The NT prayer pattern is to
+//             the Father, through the Son; the Spirit carries prayer rather
+//             than receiving it. The narrative few-shot (Zacchaeus) was
+//             re-aimed Father-ward to match, since few-shots steer harder than
+//             rules.
+const EMPATHY_PROMPT_VERSION = "empathy-v8";
+const TECHNICAL_PROMPT_VERSION = "technical-v3";
+const NARRATIVE_PROMPT_VERSION = "narrative-v3";
+const PRACTICAL_PROMPT_VERSION = "practical-v4";
 
 // Per-model pricing in USD per million tokens (input, output).
 // Source: OpenAI pricing page, snapshotted 2026-05-02.
@@ -1099,7 +1110,7 @@ STRUCTURE (four beats, in this order)
 1. Empathy — open with a concrete, *observable* scene or recognizable posture, NOT a presumed personal experience. Good: "Someone at dinner mentions their father is failing. The room goes still." / "You read the verse, nod, and forget it by lunch." / "The phone is in your hand again before you noticed picking it up." Bad: "the voicemail you can't delete" (presumes loss), "the addiction you can't kick" (presumes biography). Keep it observable, not autobiographical. Vary sentence shape inside this beat — mix at least one fragment or inverted construction with declarative sentences.
 2. Bible — what the verse(s) actually say. Surrounding scripture as needed, in markdown blockquotes with bolded citations. Include ONE short Hebrew/Greek nuance when an original-language word genuinely opens up the meaning (e.g., *hamartia* = "miss the mark"; *eremos* = "wilderness, stripped down"). Keep the etymology to a sentence or two — never a multi-paragraph word study, never a forced insert when no word in the verse has a meaningful etymology. Aim for 3–4 paragraphs of unpacking in this beat; do not exceed 6.
 3. Mix — bring beats 1 and 2 together. Show how the verse meets the reader where they actually are. Acknowledge the cost. End on the real difficulty, not a tidy bow.
-4. Prayer — short, open-handed, addressed by appropriate name (Lord / Father / Lord Jesus / Holy Spirit) based on verse content. Anyone reading should be able to pray it honestly. Format as a single italic paragraph using *single asterisks* (NOT markdown blockquote — the iOS app's verse-link detector treats blockquotes as verse references). Flowing prose, no internal line breaks. End with "Amen."
+4. Prayer — short, open-handed, addressed to the Father by default ("Lord" is fine where it reads more naturally). Use a direct address to Jesus ("Lord Jesus") ONLY when the verse itself models prayer or a cry to Jesus (e.g. the dying thief's "Lord, remember me," or "Come, Lord Jesus"). Do NOT address the prayer to the Holy Spirit — in the New Testament pattern the Spirit carries prayer to the Father through the Son rather than receiving it. Anyone reading should be able to pray it honestly. Format as a single italic paragraph using *single asterisks* (NOT markdown blockquote — the iOS app's verse-link detector treats blockquotes as verse references). Flowing prose, no internal line breaks. End with "Amen."
 
 AVOID (these are AI tells / preachy patterns; strict)
 - "In a world where..." / "In our busy lives..."
@@ -1216,7 +1227,7 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 ## A prayer
 
-*{Address — Lord / Father / Lord Jesus / Holy Spirit}, {short open-handed prayer body in flowing prose — single paragraph, italic, no blockquote, no line breaks. Anyone reading should be able to pray it honestly.} Amen.*
+*{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verse itself models prayer to Jesus; never the Holy Spirit}, {short open-handed prayer body in flowing prose — single paragraph, italic, no blockquote, no line breaks. Anyone reading should be able to pray it honestly.} Amen.*
 `;
 }
 
@@ -1405,7 +1416,7 @@ ${versesBlockquote}
 
 ## A prayer
 
-*{Address — Lord / Father / Lord Jesus / Holy Spirit}, {short open-handed prayer drawing from all the verses together — single paragraph in flowing prose, italic, no blockquote, no line breaks. Anyone reading should be able to pray it honestly.} Amen.*
+*{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verses themselves model prayer to Jesus; never the Holy Spirit}, {short open-handed prayer drawing from all the verses together — single paragraph in flowing prose, italic, no blockquote, no line breaks. Anyone reading should be able to pray it honestly.} Amen.*
 `;
 }
 
@@ -1448,7 +1459,7 @@ Devotional Guidelines:
 
 6. Personal Reflection and Application: Include 4–6 reflective questions formatted as a Markdown bulleted list.
 
-7. Final Meditation: Close with a short prayerful reflection formatted as a single paragraph in italics using *single asterisks* (NOT markdown blockquote — the iOS app's verse-link detector treats blockquotes as verse references). End with "Amen."
+7. Final Meditation: Close with a short prayerful reflection formatted as a single paragraph in italics using *single asterisks* (NOT markdown blockquote — the iOS app's verse-link detector treats blockquotes as verse references). If it addresses God directly, address the Father by default; address Jesus directly ("Lord Jesus") only when the verse itself models prayer to Jesus, and do not address the Holy Spirit. End with "Amen."
 `;
 }
 
@@ -1490,7 +1501,7 @@ Devotional Guidelines:
 
 7. Personal Reflection and Application: Include 4–6 reflective questions formatted as a Markdown bulleted list. At least one question should ask the reader to consider what the verses together reveal that no single verse alone does.
 
-8. Final Meditation: Close with a short prayerful reflection drawing from all the verses, formatted as a single paragraph in italics using *single asterisks* (NOT markdown blockquote). End with "Amen."
+8. Final Meditation: Close with a short prayerful reflection drawing from all the verses, formatted as a single paragraph in italics using *single asterisks* (NOT markdown blockquote). If it addresses God directly, address the Father by default; address Jesus directly ("Lord Jesus") only when the verses themselves model prayer to Jesus, and do not address the Holy Spirit. End with "Amen."
 `;
 }
 
@@ -1513,7 +1524,7 @@ STRUCTURE (four beats)
 1. Scene — open inside the moment. Describe what a careful observer would have seen and heard. Build the room with specific, grounded detail (the rope coiled by the boat, the sweat on a forehead, the shadow of a tree). Vary sentence rhythm.
 2. The moment the verse lands — quote the verse in a blockquote with bolded reference. Place it in the action. Why these specific words, in this specific moment. One short Hebrew/Greek nuance is allowed if a word genuinely opens the scene; otherwise skip.
 3. And now — short bridge that pulls the scene into the reader's life. Honor that the cost back then echoes the cost now. Don't preach; observe. End on the real difficulty, not a tidy bow.
-4. Prayer — short open-handed italic paragraph using *single asterisks* (NOT a blockquote — the iOS verse-link detector treats blockquotes as verse references). End with "Amen."
+4. Prayer — short open-handed italic paragraph using *single asterisks* (NOT a blockquote — the iOS verse-link detector treats blockquotes as verse references). Address the Father by default; address Jesus directly ("Lord Jesus") only when the verse itself models prayer or a cry to Jesus, and do not address the Holy Spirit. End with "Amen."
 
 AVOID
 - Invented dialogue or internal thoughts that scripture doesn't supply
@@ -1562,7 +1573,7 @@ Christ has a habit of stopping under exactly that tree.
 
 ## A prayer
 
-*Lord Jesus, You found Zacchaeus in a hiding place and called him out of it by name. Find the tree I am in. Look up. Speak. And give me the strength to come down. Amen.*`;
+*Father, You sent Your Son to find Zacchaeus in his hiding place and call him down by name. Find the tree I am in. Call me out of it, and give me the strength to come down. Amen.*`;
 
 function createNarrativePrompt(
   verse: SelectedVerse,
@@ -1611,7 +1622,7 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 ## A prayer
 
-*{Address — Lord / Father / Lord Jesus / Holy Spirit}, {short open-handed prayer in flowing prose, single italic paragraph, no line breaks.} Amen.*
+*{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verse itself models prayer to Jesus; never the Holy Spirit}, {short open-handed prayer in flowing prose, single italic paragraph, no line breaks.} Amen.*
 `;
 }
 
@@ -1668,7 +1679,7 @@ ${versesBlockquote}
 
 ## A prayer
 
-*{Address}, {short open-handed prayer drawing from the unified thread, single italic paragraph, no line breaks.} Amen.*
+*{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verses themselves model prayer to Jesus; never the Holy Spirit}, {short open-handed prayer drawing from the unified thread, single italic paragraph, no line breaks.} Amen.*
 `;
 }
 
@@ -1689,7 +1700,7 @@ STRUCTURE (five beats — aim for ~350-450 words total)
 2. What it says — one paragraph (3-5 sentences). What is this verse actually telling us, in plain language? No theology jargon. No "the Greek word here is..." — that's another track's job.
 3. Today — header "## Today" (or one-word variant like "## Do this"). One concrete action in the imperative. Specific enough that the reader knows exactly what it looks like today. Then a sentence or two on why this is hard — name the cost honestly. Don't moralize.
 4. When you try — header "## When you try" (or "## Where it gets hard"). Short honest paragraph naming the specific failure mode for THIS action: how it tends to go sideways in the actual doing of it. What the verse says to do when it falls apart mid-attempt. Don't moralize the failure. Be specific — not "you might find it hard" but "you will draft the message and then add a 'but'."
-5. Prayer — single italic paragraph using *single asterisks* (NOT blockquote). Brief. Asks for help with the actual thing the reader is being asked to do. End with "Amen."
+5. Prayer — single italic paragraph using *single asterisks* (NOT blockquote). Brief. Asks for help with the actual thing the reader is being asked to do. Address the Father by default; address Jesus directly ("Lord Jesus") only when the verse itself models prayer or a cry to Jesus, and do not address the Holy Spirit. End with "Amen."
 
 ACTION EXAMPLES (seeds for the kind of specificity to aim for — do not reuse verbatim)
 - "Text someone you owe an apology. Don't pad it with explanations or conditions."
@@ -1784,7 +1795,7 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 ## A prayer
 
-*{Address — Lord / Father / Lord Jesus / Holy Spirit}, {brief open-handed prayer asking for help with the actual action.} Amen.*
+*{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verse itself models prayer to Jesus; never the Holy Spirit}, {brief open-handed prayer asking for help with the actual action.} Amen.*
 `;
 }
 
@@ -1841,7 +1852,7 @@ ${versesBlockquote}
 
 ## A prayer
 
-*{Address}, {brief open-handed prayer for the action.} Amen.*
+*{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verses themselves model prayer to Jesus; never the Holy Spirit}, {brief open-handed prayer for the action.} Amen.*
 `;
 }
 

@@ -74,7 +74,7 @@ Beats 1–3 can span 2–3 `##` sections depending on how the argument unfolds; 
 - Acknowledge the cost. Don't be glib.
 - End the empathy beat on the real difficulty, not a tidy resolution.
 - Keep the final prayer specific. Not flowery.
-- Match the prayer's address to the devotional's content — *Father*, *King Jesus*, *Lord*, *Holy Spirit*, etc. No fixed series-wide form.
+- **Address the prayer to the Father by default** (*Father*, or a plain *Lord*). Address Jesus directly (*Lord Jesus* / *King Jesus*) only when the passage itself models prayer or a cry to Jesus — the dying thief's *"Lord, remember me"* (Luke 23:42), *Maranatha* (1 Cor 16:22), Stephen (Acts 7:59). Don't address the Holy Spirit: the NT pattern is prayer to the Father, through the Son, *by* the Spirit (Rom 8:26, Eph 2:18) — the Spirit carries prayer, he isn't its addressee. (Full rationale in the [CoC theological framework](#coc-theological-framework) audit item below.)
 
 **Tone:** Light talking, morale. A pastor who knows you, not a preacher on a stage. Concrete, frank, warm, willing to be uncomfortable.
 
@@ -94,6 +94,7 @@ These devotionals are written from a (non-institutional) Church of Christ lens. 
 - **Free will + responsibility.** Anti-Calvinist on individual predestination.
 - **Grace and obedience are inseparable.** Salvation by grace through faith, with obedience as the response. Not antinomianism; not works-righteousness. (Matt Bassford: *"two halves of the same whole."*)
 - **Anti-premillennial.** Kingdom = Christ's present reign over hearts and the church, not a future earthly millennium.
+- **Prayer is addressed to the Father, through the Son.** Default every closing `## A prayer` to the Father (Matt 6:9, John 16:23). Addressing Jesus directly is *not* forbidden — the apostles did it (Stephen, Acts 7:59; Paul, 2 Cor 12:8), and it's defensible within the tradition (Matt Bassford, *Singing and Praying to Jesus*) — but reserve it for passages that themselves model a prayer or cry to Jesus (the dying thief, *Maranatha*). Don't address the Holy Spirit at all: no NT prayer is addressed to him; his role is to *carry* prayer (Rom 8:26, Jude 20). **Audit step:** for every draft, check who the prayer is addressed to and whether the passage warrants anything other than the Father.
 
 When using the Matt Bassford research skill (`skills/matt-bassford/`), Matt's positions match this framework — see `references/theology.md` for anchor posts on each.
 

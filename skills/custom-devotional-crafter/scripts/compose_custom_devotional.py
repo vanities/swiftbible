@@ -87,7 +87,7 @@ Today we reflect on **{theme.lower()}** with a {tone.lower()} posture for {audie
 - Share encouragement with one person this week.
 
 ## Prayer
-Lord Jesus, shape my heart by Your Word. Help me live this truth faithfully today.
+Father, shape my heart by Your Word. Help me live this truth faithfully today.
 
 ## Reflection Questions
 - What is God highlighting to me through these passages?
