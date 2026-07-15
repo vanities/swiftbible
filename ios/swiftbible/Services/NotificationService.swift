@@ -74,7 +74,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         content.sound = .default
 
         if let devotional = CacheService.shared.loadDevotional(for: date),
-           let teaser = extractTeaser(from: devotional.message) {
+           let teaser = extractTeaser(from: devotional.cleanedForDisplay.message) {
             content.title = "Daily Devotional"
             content.body = teaser
         } else {

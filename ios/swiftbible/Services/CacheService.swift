@@ -59,7 +59,7 @@ class CacheService {
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
-            let data = try encoder.encode(devotional)
+            let data = try encoder.encode(devotional.cleanedForDisplay)
             try data.write(to: fileURL, options: .atomic)
         } catch {
             print("Error saving devotional to cache: \(error)")
@@ -81,7 +81,7 @@ class CacheService {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
             let devotional = try decoder.decode(DailyDevotional.self, from: data)
-            return devotional
+            return devotional.cleanedForDisplay
         } catch {
             print("Error loading devotional from cache: \(error)")
             return nil

@@ -322,7 +322,7 @@ struct DailyDevotionalView: View {
 
     @MainActor
     private func applyDevotional(_ devotional: DailyDevotional) {
-        message = devotional.message
+        message = devotional.cleanedForDisplay.message
         devotionalType = devotional.devotional_type ?? "single"
         seriesName = devotional.series_name
         seriesPart = devotional.series_part
@@ -503,7 +503,7 @@ struct DailyDevotionalView: View {
             )
 
             // Save to cache
-            CacheService.shared.saveDevotional(devotional, for: date)
+            CacheService.shared.saveDevotional(devotional.cleanedForDisplay, for: date)
             updateSavedState(for: date)
         } catch {
             print("No devotional found for \(dateString): \(error)")
@@ -568,7 +568,7 @@ struct DailyDevotionalView: View {
                 isFavorite = false
             }
         } else {
-            let devotional = SavedDevotional(date: selectedDate, message: message)
+            let devotional = SavedDevotional(date: selectedDate, message: message.removingRedLetterTags())
             context.insert(devotional)
             try? context.save()
             AnalyticsService.shared.capture(.devotionalSaved, properties: devotionalAnalyticsProperties())
