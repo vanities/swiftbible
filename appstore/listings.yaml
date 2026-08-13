@@ -17,8 +17,8 @@ en-US:
   keywords: "asv,web,scripture,gospel,prayer,jesus,christian,faith,study,notes,jubilees,enoch,hebrew,catholic,god"
   promo_text: "Read the Bible in KJV, ASV, WEB & Original Hebrew/Greek. Includes Apocrypha, Enoch, Jubilees, and more. Highlight, take notes, and get AI explanations."
   whats_new: |-
-    - "About this book" introductions are now much fuller — drawn from Matthew Henry’s complete commentary, with the background, author, and purpose behind every book
-    - Cleaner Book of Enoch text — tidied up stray verse markers in the poetic passages
+    - Fixed stray formatting markers that could appear inside the daily devotional’s verse quote
+    - Daily devotional polish — prayers now consistently address the Father
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -56,8 +56,8 @@ es-ES:
 
     SwiftBible es totalmente de código abierto. Lee y contribuye al código en GitHub.
   whats_new: |-
-    - Las introducciones "Acerca de este libro" ahora son mucho más completas: tomadas del comentario completo de Matthew Henry, con el contexto, el autor y el propósito de cada libro
-    - Texto del Libro de Enoc más limpio: se corrigieron marcas de versículo sueltas en los pasajes poéticos
+    - Se corrigieron marcas de formato sueltas que podían aparecer dentro de la cita bíblica del devocional diario
+    - Mejoras en el devocional diario: las oraciones ahora se dirigen siempre al Padre
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -95,8 +95,8 @@ es-MX:
 
     SwiftBible es 100% de código abierto. Lee y contribuye en GitHub.
   whats_new: |-
-    - Las introducciones "Acerca de este libro" ahora son mucho más completas: tomadas del comentario completo de Matthew Henry, con el contexto, el autor y el propósito de cada libro
-    - Texto del Libro de Enoc más limpio: se corrigieron marcas de versículo sueltas en los pasajes poéticos
+    - Se corrigieron marcas de formato sueltas que podían aparecer dentro de la cita bíblica del devocional diario
+    - Mejoras en el devocional diario: las oraciones ahora se dirigen siempre al Padre
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -134,8 +134,8 @@ pt-BR:
 
     SwiftBible é totalmente de código aberto. Veja e contribua no GitHub.
   whats_new: |-
-    - As introduções "Sobre este livro" agora estão muito mais completas — extraídas do comentário completo de Matthew Henry, com o contexto, o autor e o propósito de cada livro
-    - Texto do Livro de Enoque mais limpo: corrigidas marcações de versículo soltas nas passagens poéticas
+    - Corrigidas marcas de formatação perdidas que podiam aparecer dentro da citação bíblica do devocional diário
+    - Melhorias no devocional diário: as orações agora se dirigem sempre ao Pai
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -173,8 +173,8 @@ pt-PT:
 
     SwiftBible é totalmente de código aberto. Vê e contribui no GitHub.
   whats_new: |-
-    - As introduções "Sobre este livro" estão agora muito mais completas — extraídas do comentário completo de Matthew Henry, com o contexto, o autor e o propósito de cada livro
-    - Texto do Livro de Enoque mais limpo: corrigidas marcações de versículo soltas nas passagens poéticas
+    - Corrigidas marcas de formatação perdidas que podiam aparecer dentro da citação bíblica do devocional diário
+    - Melhorias no devocional diário: as orações agora dirigem-se sempre ao Pai
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -212,8 +212,8 @@ fr-FR:
 
     SwiftBible est entièrement open-source. Consultez et contribuez sur GitHub.
   whats_new: |-
-    - Les introductions « À propos de ce livre » sont désormais bien plus complètes — tirées du commentaire intégral de Matthew Henry, avec le contexte, l’auteur et l’objectif de chaque livre
-    - Texte du Livre d’Hénoch plus net : marques de verset isolées corrigées dans les passages poétiques
+    - Correction de marqueurs de mise en forme parasites qui pouvaient apparaître dans la citation biblique de la méditation quotidienne
+    - Améliorations de la méditation quotidienne : les prières s’adressent désormais toujours au Père
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -251,8 +251,8 @@ de-DE:
 
     SwiftBible ist vollständig Open Source. Code ansehen und beitragen auf GitHub.
   whats_new: |-
-    - Die Einführungen „Über dieses Buch“ sind jetzt viel ausführlicher – aus Matthew Henrys vollständigem Kommentar, mit Hintergrund, Verfasser und Zweck jedes Buches
-    - Bereinigter Text des Buchs Henoch: vereinzelte Versmarkierungen in den poetischen Abschnitten korrigiert
+    - Fehlerhafte Formatierungszeichen behoben, die im Bibelzitat der täglichen Andacht erscheinen konnten
+    - Verbesserungen der täglichen Andacht – Gebete richten sich jetzt durchgängig an den Vater
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -290,8 +290,8 @@ it:
 
     SwiftBible è completamente open source. Codice e contributi su GitHub.
   whats_new: |-
-    - Le introduzioni "Informazioni su questo libro" ora sono molto più complete: tratte dal commentario integrale di Matthew Henry, con contesto, autore e scopo di ogni libro
-    - Testo del Libro di Enoch più pulito: corrette le marcature di versetto isolate nei passaggi poetici
+    - Corretti i marcatori di formattazione che potevano comparire nella citazione biblica della meditazione quotidiana
+    - Miglioramenti alla meditazione quotidiana: le preghiere ora si rivolgono sempre al Padre
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -329,8 +329,8 @@ nl-NL:
 
     SwiftBible is volledig open source. Bekijk en draag bij op GitHub.
   whats_new: |-
-    - De inleidingen "Over dit boek" zijn nu veel uitgebreider — uit het volledige commentaar van Matthew Henry, met de achtergrond, auteur en het doel van elk boek
-    - Schonere tekst van het boek Henoch: losse versmarkeringen in de poëtische gedeelten opgeschoond
+    - Losse opmaakmarkeringen verholpen die in het Bijbelcitaat van de dagelijkse overdenking konden verschijnen
+    - Verbeteringen aan de dagelijkse overdenking — gebeden richten zich nu consequent tot de Vader
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -368,8 +368,8 @@ pl:
 
     SwiftBible jest w pełni otwartoźródłowa. Kod i wkład w GitHubie.
   whats_new: |-
-    - Wprowadzenia „O tej księdze” są teraz znacznie obszerniejsze — z pełnego komentarza Matthew Henry’ego, z tłem, autorem i celem każdej księgi
-    - Czystszy tekst Księgi Henocha: poprawiono pojedyncze oznaczenia wersetów we fragmentach poetyckich
+    - Naprawiono błędne znaczniki formatowania, które mogły pojawiać się w cytacie biblijnym w codziennym rozważaniu
+    - Ulepszenia codziennego rozważania — modlitwy są teraz zawsze kierowane do Ojca
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -407,8 +407,8 @@ ru:
 
     SwiftBible полностью с открытым исходным кодом. Код и вклад на GitHub.
   whats_new: |-
-    - Введения «Об этой книге» теперь намного полнее — из полного комментария Мэтью Генри, с предысторией, автором и назначением каждой книги
-    - Чище текст Книги Еноха: исправлены случайные метки стихов в поэтических отрывках
+    - Исправлены лишние символы форматирования, которые могли появляться в библейской цитате ежедневного размышления
+    - Улучшения ежедневного размышления — молитвы теперь всегда обращены к Отцу
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -446,8 +446,8 @@ ko:
 
     SwiftBible은 완전한 오픈소스입니다. GitHub에서 코드를 보고 기여할 수 있습니다.
   whats_new: |-
-    - ‘이 책에 대하여’ 소개가 훨씬 풍부해졌습니다 — 매튜 헨리의 전체 주석에서 가져와 각 책의 배경, 저자, 집필 목적을 담았습니다
-    - 에녹서 본문 정리: 시적 구절에 남아 있던 잘못된 절 표시를 수정했습니다
+    - 매일 묵상의 성경 구절 인용문에 나타날 수 있던 서식 기호 오류를 수정했습니다
+    - 매일 묵상 개선 — 기도가 이제 일관되게 아버지께 드려집니다
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -485,8 +485,8 @@ ja:
 
     SwiftBibleは完全にオープンソースです。GitHubでコードの閲覧・貢献ができます。
   whats_new: |-
-    - 「この書について」の紹介がより充実しました——マシュー・ヘンリーの完全な注解から、各書の背景・著者・目的を収録
-    - エノク書のテキストを整理：詩的な箇所に残っていた不要な節番号を修正しました
+    - デイリーデボーションの聖句引用に表示されることがあった書式記号の不具合を修正しました
+    - デイリーデボーションの改善 — 祈りが一貫して父なる神に向けられるようになりました
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -524,8 +524,8 @@ zh-Hans:
 
     SwiftBible 完全开源。可在 GitHub 查看代码并贡献。
   whats_new: |-
-    - “关于本书”简介现在更加详尽——取自马太·亨利的完整注释，介绍每卷书的背景、作者和写作目的
-    - 优化《以诺书》文本：修正了诗体段落中残留的零散经节标记
+    - 修复了每日灵修经文引用中可能出现的多余格式标记
+    - 每日灵修优化 — 祷告现在统一向天父祷告
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -563,8 +563,8 @@ zh-Hant:
 
     SwiftBible 完全開源。可在 GitHub 查看程式碼並貢獻。
   whats_new: |-
-    - 「關於本書」簡介現在更加詳盡——取自馬太·亨利的完整註釋，介紹每卷書的背景、作者與寫作目的
-    - 優化《以諾書》文本：修正了詩體段落中殘留的零散經節標記
+    - 修復了每日靈修經文引用中可能出現的多餘格式標記
+    - 每日靈修優化 — 禱告現在統一向天父禱告
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -602,8 +602,8 @@ id:
 
     SwiftBible sepenuhnya sumber terbuka. Lihat kode dan berkontribusi di GitHub.
   whats_new: |-
-    - Pengantar "Tentang kitab ini" kini jauh lebih lengkap — diambil dari komentar lengkap Matthew Henry, memuat latar belakang, penulis, dan tujuan setiap kitab
-    - Teks Kitab Henokh lebih rapi: penanda ayat yang tercecer di bagian-bagian puitis dirapikan
+    - Memperbaiki penanda format yang bisa muncul di dalam kutipan ayat renungan harian
+    - Penyempurnaan renungan harian — doa kini selalu ditujukan kepada Bapa
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -641,8 +641,8 @@ el:
 
     Το SwiftBible είναι πλήρως ανοιχτού κώδικα. Δες τον κώδικα και συνεισέφερε στο GitHub.
   whats_new: |-
-    - Οι εισαγωγές «Σχετικά με αυτό το βιβλίο» είναι τώρα πολύ πληρέστερες — από το πλήρες υπόμνημα του Μάθιου Χένρι, με το ιστορικό, τον συγγραφέα και τον σκοπό κάθε βιβλίου
-    - Καθαρότερο κείμενο του Βιβλίου του Ενώχ: διορθώθηκαν μεμονωμένες ενδείξεις στίχων στα ποιητικά χωρία
+    - Διορθώθηκαν περιττοί χαρακτήρες μορφοποίησης που μπορούσαν να εμφανιστούν στο βιβλικό απόσπασμα του καθημερινού στοχασμού
+    - Βελτιώσεις στον καθημερινό στοχασμό — οι προσευχές απευθύνονται πλέον σταθερά στον Πατέρα
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -680,8 +680,8 @@ ro:
 
     SwiftBible este complet open-source. Cod și contribuții pe GitHub.
   whats_new: |-
-    - Introducerile „Despre această carte” sunt acum mult mai ample — preluate din comentariul integral al lui Matthew Henry, cu contextul, autorul și scopul fiecărei cărți
-    - Text mai curat al Cărții lui Enoh: au fost corectate marcajele de verset rămase izolate în pasajele poetice
+    - Am corectat marcajele de formatare rătăcite care puteau apărea în citatul biblic al devoționalului zilnic
+    - Îmbunătățiri ale devoționalului zilnic — rugăciunile se adresează acum constant Tatălui
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -719,8 +719,8 @@ tr:
 
     SwiftBible tamamen açık kaynaktır. Kodu görüntüleyin ve GitHub'da katkıda bulunun.
   whats_new: |-
-    - "Bu kitap hakkında" tanıtımları artık çok daha kapsamlı — Matthew Henry’nin tam tefsirinden alınmış olup her kitabın arka planını, yazarını ve amacını içeriyor
-    - Hanok Kitabı metni daha düzenli: şiirsel bölümlerde kalan dağınık ayet işaretleri düzeltildi
+    - Günlük adanmışlığın ayet alıntısında görünebilen hatalı biçimlendirme işaretleri düzeltildi
+    - Günlük adanmışlık iyileştirmeleri — dualar artık tutarlı biçimde Baba’ya yöneltiliyor
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -758,8 +758,8 @@ hi:
 
     SwiftBible पूरी तरह ओपन-सोर्स है। GitHub पर कोड देखें और योगदान करें।
   whats_new: |-
-    - "इस पुस्तक के बारे में" परिचय अब कहीं अधिक विस्तृत हैं — मैथ्यू हेनरी की संपूर्ण टीका से, हर पुस्तक की पृष्ठभूमि, लेखक और उद्देश्य के साथ
-    - हनोक की पुस्तक का पाठ अधिक स्वच्छ: काव्यात्मक अंशों में छूटे हुए पद-चिह्न ठीक किए गए
+    - दैनिक भक्ति के पद उद्धरण में दिखने वाले अनावश्यक फ़ॉर्मेटिंग चिह्न ठीक किए गए
+    - दैनिक भक्ति में सुधार — प्रार्थनाएँ अब लगातार पिता को संबोधित की जाती हैं
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
