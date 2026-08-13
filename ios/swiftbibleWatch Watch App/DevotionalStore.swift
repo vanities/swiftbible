@@ -12,6 +12,19 @@ private let supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJz
 /// Minimal Codable struct matching what the iOS app / widget writes to the shared container.
 struct SharedDevotional: Codable {
     let message: String
+
+    /// The watch fetches the Edge Function directly and also reads the shared
+    /// container, so it strips `<JESUS>…</JESUS>` red-letter markup itself
+    /// rather than rely on the phone having cleaned the text first.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let raw = try container.decode(String.self, forKey: .message)
+        message = raw.replacingOccurrences(
+            of: "</?JESUS>",
+            with: "",
+            options: .regularExpression
+        )
+    }
 }
 
 /// The "Daily Devotional" table no longer allows direct anon/authenticated

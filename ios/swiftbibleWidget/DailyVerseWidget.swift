@@ -246,6 +246,19 @@ struct DailyDevotionalProvider: TimelineProvider {
 /// Minimal Codable struct matching what the main app writes to the shared container.
 struct SharedDevotional: Codable {
     let message: String
+
+    /// The shared container can hold text cached before the main app learned to
+    /// strip `<JESUS>…</JESUS>` red-letter markup, so strip on read too rather
+    /// than surface raw tags on the home screen.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let raw = try container.decode(String.self, forKey: .message)
+        message = raw.replacingOccurrences(
+            of: "</?JESUS>",
+            with: "",
+            options: .regularExpression
+        )
+    }
 }
 
 // MARK: - Widget Views

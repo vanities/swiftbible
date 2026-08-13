@@ -46,6 +46,26 @@ data class DailyDevotional(
 @Serializable
 private data class DailyDevotionalRequest(val forDate: String)
 
+/**
+ * bible.json marks Jesus's words with `<JESUS>…</JESUS>` for red-letter
+ * rendering. Devotional text is generated server-side from those verses, so a
+ * generator regression can inline the raw tags into the published message —
+ * readers then see `"<JESUS>I am that bread of life. </JESUS>"`. Stripping at
+ * decode keeps any such leak, past or future, off the screen.
+ *
+ * Only the tags go — never the whitespace hugging them. 418 KJV paragraphs
+ * carry an inline verse number between two tags (`…against thee;
+ * </JESUS>5:24<JESUS> Leave there…`), so eating the adjacent space would run
+ * words and verse numbers together.
+ */
+internal fun String.stripRedLetterTags(): String =
+    if (!contains("JESUS>")) this else replace(RED_LETTER_TAG, "")
+
+private val RED_LETTER_TAG = Regex("</?JESUS>")
+
+private fun DailyDevotional.stripRedLetterTags(): DailyDevotional =
+    if (message.contains("JESUS>")) copy(message = message.stripRedLetterTags()) else this
+
 private val Context.devotionalCache by preferencesDataStore(name = "devotional_cache")
 
 class DevotionalRepository(private val context: Context) {
@@ -94,7 +114,7 @@ class DevotionalRepository(private val context: Context) {
                     if (response.code == 404) return@withContext Result.NotFound
                     return@withContext Result.Failure("HTTP ${response.code}: $body")
                 }
-                val devotional = json.decodeFromString<DailyDevotional>(body)
+                val devotional = json.decodeFromString<DailyDevotional>(body).stripRedLetterTags()
                 cache(key, devotional)
                 // Today's devotional just landed — refresh the home-screen widget.
                 if (date == LocalDate.now()) runCatching { DailyDevotionalWidget().updateAll(context) }
@@ -108,7 +128,7 @@ class DevotionalRepository(private val context: Context) {
     private suspend fun cached(dateKey: String): DailyDevotional? {
         val k = stringPreferencesKey("d_$dateKey")
         val str = context.devotionalCache.data.first()[k] ?: return null
-        return runCatching { json.decodeFromString<DailyDevotional>(str) }.getOrNull()
+        return runCatching { json.decodeFromString<DailyDevotional>(str).stripRedLetterTags() }.getOrNull()
     }
 
     private suspend fun cache(dateKey: String, devotional: DailyDevotional) {

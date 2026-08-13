@@ -108,6 +108,21 @@ const NT_BOOKS = bibleData.slice(39);
 
 // ─── Verse text lookup from bible.json ──────────────────────────────
 
+// bible.json carries <JESUS>...</JESUS> red-letter markup. Every path that
+// hands verse text to a prompt (or straight into the devotional blockquote)
+// must strip it, or the raw tags render verbatim in the app.
+//
+// Only the tags go — never the whitespace hugging them. 418 KJV paragraphs
+// carry an inline verse number between two tags ("…against thee; </JESUS>5:24
+// <JESUS> Leave there…"), so eating the adjacent space would run words and
+// verse numbers together. The trailing space that "…life. </JESUS>" leaves is
+// handled by trim(): the surrounding quote comes from the prompt template, not
+// from the verse text. The iOS/Android clients and the 20260812090000 backfill
+// migration apply the same substitution — keep all four in step.
+export function stripJesusTags(text: string): string {
+  return text.replace(/<\/?JESUS>/g, "").trim();
+}
+
 function lookupVerseText(
   bookName: string,
   chapterNum: number,
@@ -138,11 +153,7 @@ function lookupVerseText(
   }
 
   if (!paragraph) return null;
-  // Strip <JESUS>...</JESUS> tags used for red-letter markup in bible.json
-  return paragraph.text
-    .trim()
-    .replace(/<\/?JESUS>/g, "")
-    .trim();
+  return stripJesusTags(paragraph.text);
 }
 
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
@@ -1040,7 +1051,7 @@ function selectRandomVerse(testament: "old" | "new"): SelectedVerse {
       book: book.name,
       chapter: chapter.number,
       verse: paragraph.startingVerse,
-      text: paragraph.text.trim(),
+      text: stripJesusTags(paragraph.text),
       testament,
     };
   }
@@ -1060,7 +1071,7 @@ function selectRandomVerse(testament: "old" | "new"): SelectedVerse {
     book: fallbackBook.name,
     chapter: chapter.number,
     verse: paragraph.startingVerse,
-    text: paragraph.text.trim(),
+    text: stripJesusTags(paragraph.text),
     testament,
   };
 }

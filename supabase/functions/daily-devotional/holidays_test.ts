@@ -749,6 +749,94 @@ Deno.test("lookupVerseText strips JESUS tags from red-letter text", () => {
   }
 });
 
+// Regression: selectRandomVerse used to return `paragraph.text.trim()` raw,
+// so non-holiday devotionals leaked "<JESUS>I am that bread of life. </JESUS>"
+// straight into the published blockquote (John 6:48, Aug 12 2026).
+// index.ts calls Deno.serve at top level, so assert on the source instead of
+// importing it — every verse `text:` built from a paragraph must be stripped.
+Deno.test("every verse text built from bible.json strips JESUS tags", () => {
+  const source = Deno.readTextFileSync(
+    new URL("./index.ts", import.meta.url).pathname
+  );
+
+  const rawAssignments = [...source.matchAll(/text:\s*paragraph\.text[^,\n]*/g)]
+    .map((m) => m[0].trim());
+
+  if (rawAssignments.length > 0) {
+    throw new Error(
+      "Verse text assigned straight from paragraph.text without " +
+        `stripJesusTags(): ${rawAssignments.join(" | ")}`
+    );
+  }
+});
+
+Deno.test("stripJesusTags removes red-letter markup without joining words", () => {
+  // Mirrors stripJesusTags() in index.ts, which cannot be imported here
+  // (top-level Deno.serve). The source guard above pins the call sites; this
+  // pins the semantics the clients and the backfill migration also implement.
+  const strip = (text: string) => text.replace(/<\/?JESUS>/g, "").trim();
+
+  const cases: Array<[string, string]> = [
+    // The exact string that shipped broken on Aug 12, 2026. The trailing space
+    // is trimmed; the quote around it comes from the prompt template.
+    ["<JESUS>I am that bread of life. </JESUS>", "I am that bread of life."],
+    // Mixed narration + red-letter — the common Gospel paragraph shape.
+    [
+      "And Jesus said unto them, <JESUS>Follow me.</JESUS> Then he rose.",
+      "And Jesus said unto them, Follow me. Then he rose.",
+    ],
+    // Inline verse numbers sit *between* two tags in 418 KJV paragraphs.
+    // Stripping the hugging whitespace here would yield "thee;5:24Leave".
+    [
+      "against thee; </JESUS>5:24<JESUS> Leave there thy gift",
+      "against thee; 5:24 Leave there thy gift",
+    ],
+    // Untagged text is returned untouched.
+    ["In the beginning God created the heaven.", "In the beginning God created the heaven."],
+  ];
+
+  for (const [input, expected] of cases) {
+    const actual = strip(input);
+    if (actual !== expected) {
+      throw new Error(`strip("${input}") => "${actual}", expected "${expected}"`);
+    }
+  }
+});
+
+// The 418 inline-verse-number paragraphs are the reason stripJesusTags() must
+// not touch whitespace. Prove the real data survives the real substitution.
+Deno.test("stripping tags never joins words anywhere in bible.json", () => {
+  const bible = JSON.parse(
+    Deno.readTextFileSync(new URL("./bible.json", import.meta.url).pathname)
+  );
+
+  let checked = 0;
+  for (const book of bible) {
+    for (const chapter of book.chapters) {
+      for (const p of chapter.paragraphs) {
+        if (!p.text.includes("JESUS>")) continue;
+        checked++;
+        const stripped = p.text.replace(/<\/?JESUS>/g, "").trim();
+        if (stripped.includes("JESUS>")) {
+          throw new Error(`Tags survived in ${book.name} ${chapter.number}`);
+        }
+        // A letter or digit butting straight against a verse number, or
+        // punctuation with no space, means whitespace was lost.
+        if (/[;:,.][0-9]+:[0-9]+/.test(stripped)) {
+          throw new Error(
+            `Words joined in ${book.name} ${chapter.number}:${p.startingVerse}: ` +
+              `"${stripped.substring(0, 100)}"`
+          );
+        }
+      }
+    }
+  }
+
+  if (checked < 1600) {
+    throw new Error(`Expected ~1677 red-letter paragraphs, only checked ${checked}`);
+  }
+});
+
 Deno.test("lookupVerseText returns exact text for well-known verses", () => {
   const knownVerses: Array<{ book: string; chapter: number; verse: number; contains: string }> = [
     { book: "Genesis", chapter: 1, verse: 1, contains: "In the beginning God created" },
@@ -1001,20 +1089,21 @@ Deno.test("selectMultiVerses uses VERSE_SELECTION_MODEL constant (gpt-5.4-mini)"
 Deno.test("all holiday verse books are in the iOS bookNames list", () => {
   // The iOS app has a static list of book names for verse link detection
   // Resolve path relative to this test file, handling spaces in "Daily Devotional"
+  // DailyDevotionalView builds bookNameVariants from CanonicalBibleBooks.all,
+  // so that enum is the real source of truth for verse-link detection.
   const testDir = new URL(".", import.meta.url).pathname;
-  const swiftPath = testDir + "../../../ios/swiftbible/Views/Daily Devotional/DailyDevotionalView.swift";
+  const swiftPath = testDir + "../../../ios/swiftbible/Views/Progress/CanonicalBibleBooks.swift";
   const swiftSource = Deno.readTextFileSync(swiftPath);
 
-  const bookNamesMatch = swiftSource.match(
-    /private static let bookNames: \[String\] = \[([\s\S]*?)\]/
+  const iosBooks = [...swiftSource.matchAll(/\("([^"]+)",\s*\d+\)/g)].map(
+    (m) => m[1]
   );
-  if (!bookNamesMatch) {
-    throw new Error("Could not find bookNames list in DailyDevotionalView.swift");
-  }
 
-  const iosBooks = (bookNamesMatch[1].match(/"([^"]+)"/g) || []).map((s) =>
-    s.replace(/"/g, "")
-  );
+  if (iosBooks.length !== 66) {
+    throw new Error(
+      `Expected 66 canonical books in CanonicalBibleBooks.swift, found ${iosBooks.length}`
+    );
+  }
 
   const holidayVerses = parseHolidayVersesFromSource();
   const missingBooks: string[] = [];
