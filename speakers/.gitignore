@@ -1,0 +1,8 @@
+# Transcripts are NOT tracked. They are verbatim transcriptions of another
+# congregation's sermons and worship services (including congregational singing
+# captured in the livestreams). This repo is public, so the transcripts stay
+# local as a research archive and are regenerated from the tooling instead.
+#
+# Rebuild:  see speakers/README.md "Runbook"
+josh-tolbert/sermons/
+matt-bassford/sermons/

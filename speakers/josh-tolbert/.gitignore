@@ -1,0 +1,9 @@
+# Transient working state — all regenerable by the scripts here.
+.all_ids.txt
+.josh_ids.txt
+.josh_new.txt
+.matt_new.txt
+.rest_ids.txt
+.want.txt
+.p4a.done
+.p4b.done

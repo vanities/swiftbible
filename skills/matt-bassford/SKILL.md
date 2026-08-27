@@ -1,11 +1,26 @@
 ---
-description: Research, voice reference, and search tools for Matt Bassford's writings (1639 posts, 2014-2024). Use when drafting devotionals (especially the Extreme Faith series at devotionals/extreme-faith/), looking for Matt-flavored phrasing, checking what Matt said on a theme, suggesting edits informed by his voice, or discussing his theology. Matt was a non-institutional Church of Christ preacher who died ~mid-November 2023 of ALS. Archive lives at speakers/matt-bassford/posts/.
+description: Research, voice reference, and search tools for Matt Bassford's writings (1639 posts, 2014-2024) AND his preaching (66 solo sermons, ~453k words, 2020-2022, transcribed from audio). Use when drafting devotionals (especially the Extreme Faith series at devotionals/extreme-faith/), looking for Matt-flavored phrasing, checking what Matt said on a theme, suggesting edits informed by his voice, or discussing his theology. Use references/preaching-voice.md when you want his spoken/pulpit register rather than his prose — they differ substantially. Matt was a non-institutional Church of Christ preacher who died ~mid-November 2023 of ALS. Archives at speakers/matt-bassford/posts/ and speakers/matt-bassford/sermons/.
 allowed-tools: Bash(python3:*) Bash(grep:*) Bash(ls:*) Bash(rg:*) Bash(wc:*) Read
 ---
 
 # Matt Bassford
 
-Research and voice reference for Matt Bassford's blog archive — **1639 posts** (2014-02-18 to 2024-05-15) at `speakers/matt-bassford/posts/`. Use this when drafting devotionals, when his voice or perspective on a theme would inform the work, or when checking whether a draft would line up with or push against his theology.
+Research and voice reference for Matt Bassford, drawing on two distinct bodies of material:
+
+| Source | Size | Span | Use for |
+|---|---|---|---|
+| Blog posts — `speakers/matt-bassford/posts/` | 1639 posts | 2014–2024 | his **written** voice (this file, [voice.md](references/voice.md)) |
+| Sermon transcripts — `speakers/matt-bassford/sermons/` | 66 solo (~453k words) of 88 | Nov 2020 – Mar 2022 | his **preaching** voice ([preaching-voice.md](references/preaching-voice.md)) |
+
+Use this when drafting devotionals, when his voice or perspective on a theme would inform the work, or when checking whether a draft would line up with or push against his theology.
+
+> **The two voices are not the same.** The blog is aphoristic, compressed, first-person confessional.
+> The pulpit is architectural, patient, enumerated, and addresses the room as *brethren*. The tells
+> below are the **written** ones. For spoken Matt, start at
+> [references/preaching-voice.md](references/preaching-voice.md).
+>
+> The sermon window (Nov 2020 – Mar 2022) straddles his ALS diagnosis, so it carries the same late-voice
+> arc as his writing — audible as flat logistical asides mid-sermon, never dwelt on.
 
 ## Who Matt was
 
