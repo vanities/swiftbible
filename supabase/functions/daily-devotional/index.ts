@@ -1173,6 +1173,26 @@ function holidayPromptSection(holiday: Holiday): string {
 // in beat 3, open-handed prayer. The model mirrors this far more reliably
 // than it follows abstract rules. Keep this verse (Mark 1:35) different
 // from any common selection so the model doesn't accidentally recycle it.
+// AI-tell guardrails. The empathy track carries its own richer inline AVOID
+// list; every other track pulls these in. Sourced from the hand-editing rules
+// Adam applies to anything published in his name (see the adam-voice skill):
+// no em dashes, no antithesis pivots, no manufactured threes, no self-narration.
+const PROMPT_AI_TELLS = `AVOID (AI tells; strict)
+- Em dashes (—) in prose. Use commas, periods, semicolons, or parentheses. Strong AI tell.
+  Exception: the structural title line "# Date — Reference: Title" and directly quoted scripture.
+- Antithesis constructions: "It's not X, it's Y" / "Not X, but Y" / "X is not the point. Y is."
+  Rephrase positively, or rebuild the sentence so the contrast isn't the structure carrying it.
+- Manufactured threes. Do not reach for three parallel adjectives, three-clause sentences, or
+  three-item lists as a rhythm device. Use the number of items the content actually has, usually
+  two or four. A real three is fine; a padded one is the tell. Same for symmetric sentences or
+  stacked fragments in a row: vary the shape, or condense to two.
+- Throat-clearing and self-narration. Never announce what you are about to do, and never comment on
+  the writing while doing it. Cut on sight: "to be honest", "I want to be clear", "worth noting",
+  "here's the thing", "let me be direct". A section that opens by explaining why the section
+  matters should open with its first real sentence instead.
+- "In a world where..." / "In our busy lives..." / "Let us not forget..." / "We must remember..."
+- Generic "may you..." benedictions, moralistic call-outs, and seminary tone.`;
+
 const PROMPT_FEW_SHOT = `# May 15 — Mark 1:35: Before the world wakes
 
 **Why does the answer to the busiest day arrive at the quietest hour?**
@@ -1484,6 +1504,8 @@ Devotional Guidelines:
 6. Personal Reflection and Application: Include 4–6 reflective questions formatted as a Markdown bulleted list.
 
 7. Final Meditation: Close with a short prayerful reflection formatted as a single paragraph in italics using *single asterisks* (NOT markdown blockquote — the iOS app's verse-link detector treats blockquotes as verse references). If it addresses God directly, address the Father by default; address Jesus directly ("Lord Jesus") only when the verse itself models prayer to Jesus, and do not address the Holy Spirit. End with "Amen."
+
+${PROMPT_AI_TELLS}
 `;
 }
 
@@ -1526,6 +1548,8 @@ Devotional Guidelines:
 7. Personal Reflection and Application: Include 4–6 reflective questions formatted as a Markdown bulleted list. At least one question should ask the reader to consider what the verses together reveal that no single verse alone does.
 
 8. Final Meditation: Close with a short prayerful reflection drawing from all the verses, formatted as a single paragraph in italics using *single asterisks* (NOT markdown blockquote). If it addresses God directly, address the Father by default; address Jesus directly ("Lord Jesus") only when the verses themselves model prayer to Jesus, and do not address the Holy Spirit. End with "Amen."
+
+${PROMPT_AI_TELLS}
 `;
 }
 
@@ -1647,6 +1671,8 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 ## A prayer
 
 *{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verse itself models prayer to Jesus; never the Holy Spirit}, {short open-handed prayer in flowing prose, single italic paragraph, no line breaks.} Amen.*
+
+${PROMPT_AI_TELLS}
 `;
 }
 
@@ -1704,6 +1730,8 @@ ${versesBlockquote}
 ## A prayer
 
 *{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verses themselves model prayer to Jesus; never the Holy Spirit}, {short open-handed prayer drawing from the unified thread, single italic paragraph, no line breaks.} Amen.*
+
+${PROMPT_AI_TELLS}
 `;
 }
 
@@ -1820,6 +1848,8 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 ## A prayer
 
 *{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verse itself models prayer to Jesus; never the Holy Spirit}, {brief open-handed prayer asking for help with the actual action.} Amen.*
+
+${PROMPT_AI_TELLS}
 `;
 }
 
@@ -1877,6 +1907,8 @@ ${versesBlockquote}
 ## A prayer
 
 *{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verses themselves model prayer to Jesus; never the Holy Spirit}, {brief open-handed prayer for the action.} Amen.*
+
+${PROMPT_AI_TELLS}
 `;
 }
 
@@ -2078,6 +2110,8 @@ ${newTrackRules(track)}
 MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 ${newTrackSkeleton(track, ref, verseBlock, formattedDate)}
+
+${PROMPT_AI_TELLS}
 `;
 }
 
@@ -2115,6 +2149,8 @@ time; the devotional should read as one movement that happens to draw on several
 MARKDOWN OUTPUT (use exactly this skeleton; copy the verse texts verbatim)
 
 ${newTrackSkeleton(track, refs, versesBlockquote, formattedDate)}
+
+${PROMPT_AI_TELLS}
 `;
 }
 
