@@ -15,7 +15,7 @@ Updates marketing version and build number in **both** the iOS Xcode project and
 | iOS | `ios/swiftbible.xcodeproj/project.pbxproj` | `MARKETING_VERSION` | `CURRENT_PROJECT_VERSION` |
 | Android | `android/app/build.gradle.kts` | `versionName` | `versionCode` |
 
-iOS fields appear 8 times each in pbxproj (one per build configuration × target) — always update with `replace_all`. Android fields appear once each.
+iOS fields appear once per build configuration × target in pbxproj — always update with `replace_all`. The count tracks the target list, so it grows when a target is added (5 targets — app, Widget, watchkitapp, Tests, UITests — gave 10 as of 1.60). Android fields appear once each.
 
 `versionCode` cannot decrease — Google Play rejects uploads ≤ what's already on the track.
 
@@ -53,12 +53,14 @@ Bump major (e.g. 1.40 → 2.0), increment build by 1.
    grep -E 'versionCode|versionName' android/app/build.gradle.kts
    ```
 2. If the two platforms' marketing versions disagree, **stop and ask** which to use as the basis (or whether the user wants to resync them). Don't auto-pick.
-3. For iOS pbxproj fields, verify `grep -c "MARKETING_VERSION = X.YY"` returns 8 (one per config × target). If not, stop and check.
+3. For iOS pbxproj fields, verify every occurrence holds the *same* current version:
+   `grep -c "MARKETING_VERSION = X.YY"` should equal the total `grep -c MARKETING_VERSION`
+   (2 × target count — 10 as of 1.60). A mismatch means targets have drifted apart; stop and check.
 4. Compute new values per the bump rules.
 5. Apply edits:
    - iOS: `Edit` with `replace_all=true` for both fields.
    - Android: single `Edit` per field (each appears once).
-6. Re-grep to verify. iOS fields should still be 8 each.
+6. Re-grep to verify: the new version's count matches the old count, and zero occurrences of the old version remain.
 7. Report: `1.40 (iOS build 5, Android build 5) → 1.41 (iOS build 6, Android build 6)`.
 
 ## What this skill does NOT do
