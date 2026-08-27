@@ -13,7 +13,7 @@ import SwiftUI
 enum AIAttribution {
     /// Used when a row has no `model` value (older rows or local cache misses).
     /// Should be kept roughly in sync with the Edge Function's DEVOTIONAL_MODEL.
-    static let fallbackModel = "GPT-5.4"
+    static let fallbackModel = "GPT-5.6 Terra"
 
     private static let disclaimer = """
         Large language models can make mistakes, produce inaccurate \
@@ -57,11 +57,47 @@ enum AIAttribution {
         the verse is asking of you.
         """
 
+    static let stylePlainspoken = """
+        Plainspoken style — short, flat sentences that land like verdicts. \
+        Opens on something ordinary, stays precise about what the text actually \
+        says, and closes with a few blunt imperatives instead of a summary.
+        """
+
+    static let styleClassroom = """
+        Classroom style — opens with a real question, then earns the passage by \
+        setting up its world first: who wrote it, to whom, and what the words \
+        meant then. Says plainly where the text doesn't settle a question.
+        """
+
+    static let styleLament = """
+        Lament style — for the days that aren't okay. It sits inside the grief of \
+        a passage without hurrying to comfort, and doesn't explain away pain that \
+        scripture itself leaves unexplained.
+        """
+
+    static let styleQuestion = """
+        Question style — takes one honest question seriously, including the \
+        uncomfortable form of it, and separates what scripture states from what \
+        it implies. Ends with the question sharpened rather than dissolved.
+        """
+
+    static let stylePortrait = """
+        Portrait style — one person in scripture across a whole arc: who they \
+        were, what happened to them, and what God did with their failure rather \
+        than around it.
+        """
+
     /// Renders a stored model identifier (e.g. "gpt-5.4") in the human-readable
     /// form the UI uses (e.g. "GPT-5.4"). Falls back to `fallbackModel` when the
     /// stored value is nil or empty.
     private static func displayName(for raw: String?) -> String {
         guard let raw, !raw.isEmpty else { return fallbackModel }
+        // "gpt-5.6-terra" -> "GPT-5.6 Terra"; anything unexpected falls back to
+        // a plain prefix swap so an unknown id still renders sensibly.
+        let parts = raw.split(separator: "-").map(String.init)
+        if parts.count == 3, parts[0].lowercased() == "gpt" {
+            return "GPT-\(parts[1]) \(parts[2].capitalized)"
+        }
         return raw.replacingOccurrences(
             of: "gpt-",
             with: "GPT-",
@@ -325,6 +361,11 @@ struct DevotionalStyleChip: View {
         case "technical": return "🧠"
         case "narrative": return "🌅"
         case "practical": return "🛠️"
+        case "matt": return "✒️"
+        case "josh": return "🎓"
+        case "lament": return "🕯️"
+        case "question": return "🤔"
+        case "character": return "👤"
         default: return nil
         }
     }
@@ -335,6 +376,11 @@ struct DevotionalStyleChip: View {
         case "technical": return "Technical"
         case "narrative": return "Narrative"
         case "practical": return "Practical"
+        case "matt": return "Plainspoken"
+        case "josh": return "Classroom"
+        case "lament": return "Lament"
+        case "question": return "Question"
+        case "character": return "Portrait"
         default: return nil
         }
     }
@@ -345,6 +391,11 @@ struct DevotionalStyleChip: View {
         case "technical": return .indigo
         case "narrative": return .orange
         case "practical": return .green
+        case "matt": return .brown
+        case "josh": return .teal
+        case "lament": return .blue
+        case "question": return .cyan
+        case "character": return .purple
         default: return .secondary
         }
     }
@@ -355,6 +406,11 @@ struct DevotionalStyleChip: View {
         case "technical": return AIAttribution.styleTechnical
         case "narrative": return AIAttribution.styleNarrative
         case "practical": return AIAttribution.stylePractical
+        case "matt": return AIAttribution.stylePlainspoken
+        case "josh": return AIAttribution.styleClassroom
+        case "lament": return AIAttribution.styleLament
+        case "question": return AIAttribution.styleQuestion
+        case "character": return AIAttribution.stylePortrait
         default: return ""
         }
     }

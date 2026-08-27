@@ -291,7 +291,11 @@ private fun Loaded(
     onShare: () -> Unit,
 ) {
     Column {
-        if (devotional.track in setOf("empathy", "technical", "narrative", "practical")) {
+        if (devotional.track in setOf(
+                "empathy", "technical", "narrative", "practical",
+                "matt", "josh", "lament", "question", "character",
+            )
+        ) {
             biz.am2.swiftbible.ui.components.DevotionalStyleChip(track = devotional.track)
             Spacer(Modifier.size(8.dp))
         }

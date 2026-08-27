@@ -42,7 +42,7 @@ import biz.am2.swiftbible.ui.theme.BrandPeridot
 import biz.am2.swiftbible.ui.theme.BrandRed
 
 object AIAttribution {
-    const val FALLBACK_MODEL = "GPT-5.4"
+    const val FALLBACK_MODEL = "GPT-5.6 Terra"
     private const val DISCLAIMER =
         "Large language models can make mistakes, produce inaccurate information, " +
             "or generate content that may not align with biblical teaching. Always verify " +
@@ -73,8 +73,40 @@ object AIAttribution {
         "Practical style — one concrete action for today. Plain language, honest about the cost. " +
             "No \"five ways to...\" — just the one thing the verse is asking of you."
 
+    // Style names describe the method, never the preacher whose archive the
+    // track's voice profile was derived from. These are not attributions.
+    const val STYLE_PLAINSPOKEN =
+        "Plainspoken style — short, flat sentences that land like verdicts. Opens on something " +
+            "ordinary, stays precise about what the text actually says, and closes with a few " +
+            "blunt imperatives instead of a summary."
+
+    const val STYLE_CLASSROOM =
+        "Classroom style — opens with a real question, then earns the passage by setting up its " +
+            "world first: who wrote it, to whom, and what the words meant then. Says plainly " +
+            "where the text doesn't settle a question."
+
+    const val STYLE_LAMENT =
+        "Lament style — for the days that aren't okay. It sits inside the grief of a passage " +
+            "without hurrying to comfort, and doesn't explain away pain that scripture itself " +
+            "leaves unexplained."
+
+    const val STYLE_QUESTION =
+        "Question style — takes one honest question seriously, including the uncomfortable form " +
+            "of it, and separates what scripture states from what it implies. Ends with the " +
+            "question sharpened rather than dissolved."
+
+    const val STYLE_PORTRAIT =
+        "Portrait style — one person in scripture across a whole arc: who they were, what " +
+            "happened to them, and what God did with their failure rather than around it."
+
     fun displayName(raw: String?): String {
         if (raw.isNullOrEmpty()) return FALLBACK_MODEL
+        // "gpt-5.6-terra" -> "GPT-5.6 Terra"; anything unexpected falls back to
+        // a plain prefix swap so an unknown id still renders sensibly.
+        val parts = raw.split("-")
+        if (parts.size == 3 && parts[0].lowercase() == "gpt") {
+            return "GPT-${parts[1]} ${parts[2].replaceFirstChar { it.uppercase() }}"
+        }
         return raw.replace(Regex("(?i)gpt-"), "GPT-")
     }
 }
@@ -236,6 +268,11 @@ fun DevotionalStyleChip(track: String?) {
         "technical" -> StyleChipData("🧠", "Technical", Color(0xFF6366F1), AIAttribution.STYLE_TECHNICAL)
         "narrative" -> StyleChipData("🌅", "Narrative", Color(0xFFF59E0B), AIAttribution.STYLE_NARRATIVE)
         "practical" -> StyleChipData("🛠️", "Practical", Color(0xFF10B981), AIAttribution.STYLE_PRACTICAL)
+        "matt" -> StyleChipData("✒️", "Plainspoken", Color(0xFF8D6E63), AIAttribution.STYLE_PLAINSPOKEN)
+        "josh" -> StyleChipData("🎓", "Classroom", Color(0xFF009688), AIAttribution.STYLE_CLASSROOM)
+        "lament" -> StyleChipData("🕯️", "Lament", Color(0xFF3B82F6), AIAttribution.STYLE_LAMENT)
+        "question" -> StyleChipData("🤔", "Question", Color(0xFF06B6D4), AIAttribution.STYLE_QUESTION)
+        "character" -> StyleChipData("👤", "Portrait", Color(0xFFA855F7), AIAttribution.STYLE_PORTRAIT)
         else -> return
     }
 

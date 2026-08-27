@@ -162,10 +162,12 @@ const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 // The model used for each devotional is also persisted to the
 // "Daily Devotional".model column so the iOS app can attribute it
 // accurately in its disclosure alerts.
+// Pinned to explicit tier ids, never the bare "gpt-5.6" alias — that alias
+// routes to Sol and would silently change both quality and price under us.
 const DEVOTIONAL_MODEL =
-  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.4";
+  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.6-terra";
 const VERSE_SELECTION_MODEL =
-  Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.4-mini";
+  Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.6-luna";
 
 // Two parallel prompt tracks rotate randomly to vary the daily devotional
 // voice. The "Daily Devotional" table's prompt_version column records
@@ -202,12 +204,23 @@ const EMPATHY_PROMPT_VERSION = "empathy-v8";
 const TECHNICAL_PROMPT_VERSION = "technical-v3";
 const NARRATIVE_PROMPT_VERSION = "narrative-v3";
 const PRACTICAL_PROMPT_VERSION = "practical-v4";
+const MATT_PROMPT_VERSION = "matt-v1";
+const JOSH_PROMPT_VERSION = "josh-v1";
+const LAMENT_PROMPT_VERSION = "lament-v1";
+const QUESTION_PROMPT_VERSION = "question-v1";
+const CHARACTER_PROMPT_VERSION = "character-v1";
 
 // Per-model pricing in USD per million tokens (input, output).
-// Source: OpenAI pricing page, snapshotted 2026-05-02.
+// Source: OpenAI pricing page, snapshotted 2026-08-27.
 // Update when pricing changes; cost is locked-in at generation time so
-// historical rows keep the price actually paid.
+// historical rows keep the price actually paid. Retired models stay listed
+// so historical rows can still be costed.
 const MODEL_PRICING: Record<string, { input: number; output: number }> = {
+  // GPT-5.6 family (GA 2026-07-09)
+  "gpt-5.6-sol":   { input: 5.00,  output: 30.00 },
+  "gpt-5.6-terra": { input: 2.00,  output: 12.00 },
+  "gpt-5.6-luna":  { input: 0.20,  output:  1.20 },
+  // retired — kept for historical cost lookup
   "gpt-5.5":      { input: 5.00,  output: 30.00 },
   "gpt-5.4":      { input: 2.50,  output: 15.00 },
   "gpt-5.4-mini": { input: 0.75,  output:  4.50 },
@@ -1940,14 +1953,181 @@ function createSupabaseClient() {
 // new tracks to the end and they get picked up automatically. Custom
 // (Sunday) rows have a NULL track and don't advance the cycle — the next
 // AI day picks up where the previous AI day left off.
-const TRACK_CYCLE = ["empathy", "technical", "narrative", "practical"] as const;
+// Order matters: it is the round-robin. Interleave the speaker-voice and
+// mood tracks between the originals so no two adjacent days feel alike.
+const TRACK_CYCLE = [
+  "empathy", "technical", "narrative", "practical",
+  "matt", "josh", "lament", "question", "character",
+] as const;
 type Track = typeof TRACK_CYCLE[number];
+
+
+// ─── Six additional tracks ──────────────────────────────────────────
+// matt / josh distil the *teaching method* of two real preachers whose
+// archives live in speakers/. They are deliberately NOT impersonations:
+// no first-person biography, no signature, no attribution. See
+// speakers/matt-bassford/ and speakers/josh-tolbert/ for the voice
+// profiles these were derived from.
+
+const PROMPT_MATT_RULES = `VOICE — Bassford track (structural homage, NOT impersonation)
+This track borrows the *shape* of a particular preacher's prose. Never sign it, never
+attribute it, never invent a first-person life for the author. The shared VOICE rule against
+fabricated personal admissions is absolute here.
+- Short flat declaratives that land as verdicts. A whole paragraph may be one sentence.
+- One inverted aphorism that pivots an expectation — of the form "X isn't the thing. Y is."
+  Earn it; do not stack more than one.
+- Open on concrete domestic detail — a kitchen, a waiting room, a dog, a hallway. Never abstraction.
+- Precision about the text. Name exactly what the passage says, including which half of a verse
+  is doing the work. Dry accuracy is the register, not warmth.
+- Close on three to five short imperative clauses. Command voice, no flourish, no summary.
+- Dry wit is allowed; sentiment is not. Never sentimental, never rousing.
+- Grace is not earned and not exhausted. Suffering is not explained away — it strips illusions.`;
+
+const PROMPT_JOSH_RULES = `VOICE — classroom track (teacher's method, NOT impersonation)
+This track borrows the *method* of a Bible-class teacher. Never sign or attribute it.
+- Open with a genuine question the reader must try to answer before you answer it.
+- Earn the passage with its world first: who wrote it, to whom, into what situation. Background
+  before application, always.
+- Price every claim. If a historical detail is disputed, say so. If the text does not settle a
+  question, say that plainly rather than resolving it artificially.
+- Guard against reading a modern definition back into the text — name the difference between what
+  the word means to us and what it meant there.
+- Qualify generalisations the moment you make them ("this is not universal").
+- Confidence should be visible and variable. Uncertainty stated out loud is the register.
+- End by handing the question back to the reader, not by closing it for them.`;
+
+const PROMPT_LAMENT_RULES = `VOICE — lament track
+- This track does NOT resolve. That is its whole purpose; the other tracks resolve and this one
+  fills the gap for readers who are not okay today.
+- Sit inside the grief, doubt, or anger of the passage without hurrying to comfort.
+- Never say "but" in the pivot position. No silver lining, no lesson-of-suffering, no theodicy.
+- Do not explain why God permitted the thing. Scripture frequently does not, and neither should you.
+- Name what is actually lost, plainly, without decorating it.
+- The honest ending is often unresolved — the psalmists end mid-complaint more often than we admit.
+  You may end on address rather than answer: the sufferer is still speaking to God.
+- The prayer may ask for nothing but presence. It must not tidy the grief up.`;
+
+const PROMPT_QUESTION_RULES = `VOICE — question-led track
+- Open with one real question — one a thoughtful reader might actually ask, including the
+  uncomfortable ones. Not rhetorical, not a set-up for an answer you already hold.
+- Work toward it visibly. Let the reader watch the reasoning, including where it runs out.
+- Consider the strongest objection in its strongest form, in the objector's own words, before
+  answering. If it is not fully answerable, say so.
+- Distinguish what scripture states, what it implies, and what is inference. Keep those separate.
+- End with the question sharpened rather than dissolved, and one thing to do with it today.`;
+
+const PROMPT_CHARACTER_RULES = `VOICE — character-study track
+- One biblical person across an arc, not a single scene (that is the narrative track's job).
+- Show change over time: who they were, what happened, who they became — and what God did with
+  the failure rather than around it.
+- Keep them a person, not a moral type. Specific, embodied, capable of being wrong.
+- Do not flatten the ending. Some arcs in scripture end badly, and those still teach.
+- Resist the hero read. The text is usually more interested in God's faithfulness than their virtue.
+- Land on the reader's own arc without forcing a parallel that is not there.`;
+
+
+// Markdown skeletons per new track. `h` is the heading line already built
+// with date + reference, so each track only defines its own body sections.
+function newTrackSkeleton(track: string, headingRef: string, verseBlock: string, formattedDate: string): string {
+  const head = `# ${formattedDate} — ${headingRef}: {Title}`;
+  const prayer = `## A prayer\n\n*{Address — "Father" by default (or "Lord"); "Lord Jesus" only if the verse itself models prayer to Jesus; never the Holy Spirit}, {short open-handed prayer in flowing prose, single italic paragraph, no line breaks.} Amen.*`;
+  switch (track) {
+    case "matt":
+      return `${head}\n\n**{One-line bolded subtitle — flat and declarative, not a question.}**\n\n${verseBlock}\n\n## The thing itself\n\n{Open on concrete domestic detail. Short sentences. Let one land alone.}\n\n## What it actually says\n\n{Precise on the text — name which part of the passage carries the weight. Dry, accurate, unsentimental.}\n\n## So\n\n{Three to five short imperative clauses. Command voice. No summary, no flourish.}\n\n${prayer}`;
+    case "josh":
+      return `${head}\n\n**{One-line bolded subtitle — phrased as the question the lesson works on.}**\n\n${verseBlock}\n\n## A question first\n\n{Ask it plainly. Give the reader room to answer before you do.}\n\n## The world it was written into\n\n{Who wrote it, to whom, into what situation. Price your claims — say what is disputed or uncertain.}\n\n## Whose definition?\n\n{Name where a modern reading of a key word differs from what it meant there.}\n\n## Back to you\n\n{Hand the question back, sharpened. One thing to sit with today.}\n\n${prayer}`;
+    case "lament":
+      return `${head}\n\n**{One-line bolded subtitle — do not console in it.}**\n\n${verseBlock}\n\n## What is lost\n\n{Name it plainly and specifically. No decoration, no cushioning.}\n\n## The passage does not tidy this\n\n{Stay inside the text's own grief or protest. Do not supply a reason God has not supplied.}\n\n## Still speaking\n\n{The sufferer is still addressing God. That is the only resolution on offer, and it may be enough. Do not resolve further.}\n\n${prayer}`;
+    case "question":
+      return `${head}\n\n**{One-line bolded subtitle — the question itself.}**\n\n${verseBlock}\n\n## The question\n\n{One real question, including the uncomfortable form of it.}\n\n## The strongest objection\n\n{State it in its strongest form, in the objector's own words, before answering.}\n\n## What the text does and does not settle\n\n{Separate what scripture states, what it implies, and what is inference.}\n\n## Sharpened\n\n{End with the question sharpened rather than dissolved, plus one thing to do with it today.}\n\n${prayer}`;
+    default: // character
+      return `${head}\n\n**{One-line bolded subtitle — names the person and the turn.}**\n\n${verseBlock}\n\n## Who they were\n\n{Specific and embodied. A person, not a moral type.}\n\n## What happened\n\n{The turn. What God did with the failure rather than around it.}\n\n## How it ends\n\n{Do not flatten it. Some arcs end badly and still teach.}\n\n## Your arc\n\n{Land on the reader without forcing a parallel that is not there.}\n\n${prayer}`;
+  }
+}
+
+function newTrackRules(track: string): string {
+  switch (track) {
+    case "matt": return PROMPT_MATT_RULES;
+    case "josh": return PROMPT_JOSH_RULES;
+    case "lament": return PROMPT_LAMENT_RULES;
+    case "question": return PROMPT_QUESTION_RULES;
+    default: return PROMPT_CHARACTER_RULES;
+  }
+}
+
+function createNewTrackPrompt(
+  track: string,
+  verse: SelectedVerse,
+  formattedDate: string,
+  holiday: Holiday | null
+): string {
+  const ref = `${verse.book} ${verse.chapter}:${verse.verse}`;
+  const verseBlock = `> *"${verse.text}"*\n> **${ref}**`;
+  return `${PROMPT_INTRO}
+
+VERSE
+${ref} — "${verse.text}"
+
+DATE
+${formattedDate}
+${holiday ? holidayPromptSection(holiday) : ""}
+${PROMPT_THEOLOGY_GUARDRAILS}
+
+${newTrackRules(track)}
+
+MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
+
+${newTrackSkeleton(track, ref, verseBlock, formattedDate)}
+`;
+}
+
+function createNewTrackMultiVersePrompt(
+  track: string,
+  verses: SelectedVerse[],
+  formattedDate: string,
+  holiday: Holiday | null
+): string {
+  const versesList = verses
+    .map((v) => `- ${v.book} ${v.chapter}:${v.verse} — "${v.text}"`)
+    .join("\n");
+  const versesBlockquote = verses
+    .map((v) => `> *"${v.text}"*\n> **${v.book} ${v.chapter}:${v.verse}**`)
+    .join("\n>\n");
+  const refs = verses
+    .map((v) => `${v.book} ${v.chapter}:${v.verse}`)
+    .join(", ");
+  return `${PROMPT_INTRO}
+
+VERSES (weave these together — do not treat them as a list)
+${versesList}
+
+DATE
+${formattedDate}
+${holiday ? holidayPromptSection(holiday) : ""}
+${PROMPT_THEOLOGY_GUARDRAILS}
+
+${newTrackRules(track)}
+
+MULTI-VERSE NOTE
+Find the single thread running through these passages and follow it. Do not walk them one at a
+time; the devotional should read as one movement that happens to draw on several texts.
+
+MARKDOWN OUTPUT (use exactly this skeleton; copy the verse texts verbatim)
+
+${newTrackSkeleton(track, refs, versesBlockquote, formattedDate)}
+`;
+}
 
 const PROMPT_VERSION_BY_TRACK: Record<Track, string> = {
   empathy: EMPATHY_PROMPT_VERSION,
   technical: TECHNICAL_PROMPT_VERSION,
   narrative: NARRATIVE_PROMPT_VERSION,
   practical: PRACTICAL_PROMPT_VERSION,
+  matt: MATT_PROMPT_VERSION,
+  josh: JOSH_PROMPT_VERSION,
+  lament: LAMENT_PROMPT_VERSION,
+  question: QUESTION_PROMPT_VERSION,
+  character: CHARACTER_PROMPT_VERSION,
 };
 
 function buildSinglePrompt(
@@ -1961,6 +2141,7 @@ function buildSinglePrompt(
     case "technical": return createTechnicalPrompt(verse, formattedDate, holiday);
     case "narrative": return createNarrativePrompt(verse, formattedDate, holiday);
     case "practical": return createPracticalPrompt(verse, formattedDate, holiday);
+    default: return createNewTrackPrompt(track, verse, formattedDate, holiday);
   }
 }
 
@@ -1975,6 +2156,7 @@ function buildMultiPrompt(
     case "technical": return createTechnicalMultiVersePrompt(verses, formattedDate, holiday);
     case "narrative": return createNarrativeMultiVersePrompt(verses, formattedDate, holiday);
     case "practical": return createPracticalMultiVersePrompt(verses, formattedDate, holiday);
+    default: return createNewTrackMultiVersePrompt(track, verses, formattedDate, holiday);
   }
 }
 

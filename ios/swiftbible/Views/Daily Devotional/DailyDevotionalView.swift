@@ -352,7 +352,8 @@ struct DailyDevotionalView: View {
     private var themeContextRow: some View {
         let chipTrack: String? = {
             switch track {
-            case "empathy", "technical", "narrative", "practical": return track
+            case "empathy", "technical", "narrative", "practical",
+                 "matt", "josh", "lament", "question", "character": return track
             default: return nil
             }
         }()
