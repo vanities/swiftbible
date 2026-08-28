@@ -158,16 +158,21 @@ function lookupVerseText(
 
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 
-// LLM models — overridable via env so we can swap without redeploy.
-// The model used for each devotional is also persisted to the
-// "Daily Devotional".model column so the iOS app can attribute it
-// accurately in its disclosure alerts.
+// LLM models. SINGLE SOURCE OF TRUTH — set here, nowhere else.
+//
+// These were previously overridable via Supabase secrets. That override sat on
+// gpt-5.5 from 2026-05-02 while this file claimed otherwise, so a model "change"
+// in code shipped nothing for months. The secret has been removed; do not
+// reintroduce an env fallback. Change the model by editing these two lines and
+// deploying, then confirm against the `model` column on a freshly generated row.
+//
 // Pinned to explicit tier ids, never the bare "gpt-5.6" alias — that alias
 // routes to Sol and would silently change both quality and price under us.
-const DEVOTIONAL_MODEL =
-  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.6-terra";
-const VERSE_SELECTION_MODEL =
-  Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.6-luna";
+//
+// The model used for each devotional is persisted to the "Daily Devotional".model
+// column so the iOS and Android apps can attribute it accurately.
+const DEVOTIONAL_MODEL = "gpt-5.6-terra";
+const VERSE_SELECTION_MODEL = "gpt-5.6-luna";
 
 // Two parallel prompt tracks rotate randomly to vary the daily devotional
 // voice. The "Daily Devotional" table's prompt_version column records
