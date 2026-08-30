@@ -2,6 +2,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { initSentry, captureException } from "../_shared/sentry.ts";
+import { selectRandomVerse as sharedSelectRandomVerse } from "../_shared/verse-selection.ts";
 import {
   PROMPT_THEOLOGY_GUARDRAILS,
   PROMPT_MATT_RULES,
@@ -1052,51 +1053,14 @@ function getHolidayInternal(date: Date): Holiday | null {
 
 // ─── Verse selection ────────────────────────────────────────────────
 
+// Verse selection lives in ../_shared/verse-selection.ts so it can be
+// imported and tested directly; this file cannot (top-level Deno.serve).
 function selectRandomVerse(testament: "old" | "new"): SelectedVerse {
-  const books = testament === "old" ? OT_BOOKS : NT_BOOKS;
-  const maxAttempts = 10;
-
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    const book = books[Math.floor(Math.random() * books.length)];
-    const chapter =
-      book.chapters[Math.floor(Math.random() * book.chapters.length)];
-    const paragraph =
-      chapter.paragraphs[
-        Math.floor(Math.random() * chapter.paragraphs.length)
-      ];
-
-    // Skip very long paragraphs (genealogies, census lists)
-    if (paragraph.text.length > 400) continue;
-    // Skip very short paragraphs
-    if (paragraph.text.trim().length < 20) continue;
-
-    return {
-      book: book.name,
-      chapter: chapter.number,
-      verse: paragraph.startingVerse,
-      text: stripJesusTags(paragraph.text),
-      testament,
-    };
-  }
-
-  // Fallback: pick from Psalms (OT) or John (NT) — always devotional-worthy
-  const fallbackBook = testament === "old"
-    ? OT_BOOKS.find((b) => b.name === "Psalms")!
-    : NT_BOOKS.find((b) => b.name === "John")!;
-  const chapter =
-    fallbackBook.chapters[
-      Math.floor(Math.random() * fallbackBook.chapters.length)
-    ];
-  const paragraph =
-    chapter.paragraphs[Math.floor(Math.random() * chapter.paragraphs.length)];
-
-  return {
-    book: fallbackBook.name,
-    chapter: chapter.number,
-    verse: paragraph.startingVerse,
-    text: stripJesusTags(paragraph.text),
+  return sharedSelectRandomVerse(
+    testament === "old" ? OT_BOOKS : NT_BOOKS,
     testament,
-  };
+    testament === "old" ? "Psalms" : "John",
+  );
 }
 
 function selectVerse(

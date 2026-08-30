@@ -21,6 +21,23 @@ jobs:
       - name: Lint
         run: swiftlint lint --reporter github-actions-logging
 
+  edge-function-tests:
+    name: Edge function tests (Deno)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      # Covers the daily-devotional suite: holiday/date logic, the model
+      # single-source-of-truth guards, the voice-prompt anti-drift guards, and
+      # the verse-selection distribution (which pins Psalms/Luke against a
+      # regression to uniform-by-book sampling).
+      - name: Run edge function tests
+        run: deno test --allow-all supabase/functions/
+
   ios-unit-tests:
     name: iOS unit tests
     runs-on: macos-15
