@@ -22,8 +22,8 @@ These are the indispensable six. Everything in his late writing is in here.
 ## Voice formation / early (the wry settled register)
 
 10. **`2014-02-18-introducing-my-blog.md`** — His first post. The voice is already largely there — wry, methodical, slightly self-deprecating.
-11. **`2014-08-05-your-kingdom-come.md`** — Anti-premillennialism. His kingdom theology in 400 words.
-12. **`2016-09-28-fixing-our-hope.md`** — 1 Pet 1:13. The law-school grading metaphor. Closes: *"There is no other sensible way to live our lives than to go all-in on Jesus."*
+11. **`2014-08-05-your-kingdom-come.md`** — Anti-premillennialism. His kingdom theology in under 300 words.
+12. **`2016-09-28-fixing-our-hope.md`** — 1 Peter 1:12 (the verse a Facebook friend posted, which sets the post off). The law-school grading metaphor. Closes: *"There is no other sensible way to live our lives than to go all-in on Jesus."*
 
 ## Theological positions (where his arguments show)
 

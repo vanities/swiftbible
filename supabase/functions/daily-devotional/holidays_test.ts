@@ -1057,7 +1057,7 @@ Deno.test("saveDevotional persists prompt capture columns", () => {
   }
 });
 
-Deno.test("selectMultiVerses uses VERSE_SELECTION_MODEL constant (gpt-5.4-mini)", () => {
+Deno.test("selectMultiVerses uses the VERSE_SELECTION_MODEL literal constant", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
@@ -1070,13 +1070,19 @@ Deno.test("selectMultiVerses uses VERSE_SELECTION_MODEL constant (gpt-5.4-mini)"
       "selectMultiVerses should reference the VERSE_SELECTION_MODEL constant"
     );
   }
-  if (
-    !source.includes(
-      'VERSE_SELECTION_MODEL =\n  Deno.env.get("VERSE_SELECTION_MODEL") ?? "gpt-5.4-mini"'
-    )
-  ) {
+  // Deliberately does NOT assert a model name — that goes stale on every bump.
+  // It asserts the *contract*: a single literal, no env fallback. An env
+  // fallback silently diverged the live model from this file once already,
+  // which is why the fallback was removed.
+  const m = source.match(/const VERSE_SELECTION_MODEL = "([^"]+)";/);
+  if (!m) {
     throw new Error(
-      "VERSE_SELECTION_MODEL should default to gpt-5.4-mini and read from env"
+      "VERSE_SELECTION_MODEL must be a single string literal: const VERSE_SELECTION_MODEL = \"...\";"
+    );
+  }
+  if (/VERSE_SELECTION_MODEL\s*=\s*[\s\S]{0,40}Deno\.env\.get/.test(source)) {
+    throw new Error(
+      "VERSE_SELECTION_MODEL must not read from env — one source of truth (see cdb0f5f)"
     );
   }
   if (!source.includes("response_format")) {
@@ -1145,23 +1151,30 @@ Deno.test("handler accepts forDate request body param", () => {
   }
 });
 
-Deno.test("DEVOTIONAL_MODEL constant defaults to gpt-5.4 and is used for generation", () => {
+Deno.test("DEVOTIONAL_MODEL is a literal constant and is used for generation", () => {
   const source = Deno.readTextFileSync(
     new URL("./index.ts", import.meta.url).pathname
   );
 
-  if (
-    !source.includes(
-      'DEVOTIONAL_MODEL =\n  Deno.env.get("DEVOTIONAL_MODEL") ?? "gpt-5.4"'
-    )
-  ) {
+  const m = source.match(/const DEVOTIONAL_MODEL = "([^"]+)";/);
+  if (!m) {
     throw new Error(
-      "DEVOTIONAL_MODEL should default to gpt-5.4 and read from env"
+      'DEVOTIONAL_MODEL must be a single string literal: const DEVOTIONAL_MODEL = "...";'
+    );
+  }
+  if (/DEVOTIONAL_MODEL\s*=\s*[\s\S]{0,40}Deno\.env\.get/.test(source)) {
+    throw new Error(
+      "DEVOTIONAL_MODEL must not read from env — one source of truth (see cdb0f5f)"
     );
   }
   if (!source.includes("const model = DEVOTIONAL_MODEL")) {
     throw new Error(
       "generateDevotional should reference the DEVOTIONAL_MODEL constant"
     );
+  }
+  // The model actually used is persisted to the "Daily Devotional".model column,
+  // so a divergence here is visible in the data, not just the code.
+  if (!source.includes("MODEL_PRICING[model]") && !source.includes("MODEL_PRICING")) {
+    throw new Error("cost accounting should look the model up in MODEL_PRICING");
   }
 });

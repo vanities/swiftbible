@@ -72,8 +72,9 @@ Whisper does not diarize. Three consequences:
 - **Classes are dialogic** — members answer at length; a quote is not the teacher's by default.
 - **Livestreams are whole worship services** — another man's announcements, prayers, and
   congregational singing precede the lesson. Word counts overstate the speaker.
-- **Some series are two-person shows.** 22 of Matt's 86 transcripts are dialogues with Clay Gentry
-  ("The Matt and Clay Show") and cannot yield a clean voice profile at all.
+- **Some series are multi-speaker.** 22 of Matt's 88 transcripts have a second voice: 19 with Clay
+  Gentry (13 of them titled "The Matt and Clay Show"), 1 with Josh Tolbert, and 2 singing nights
+  with Ben Prasser / Mike Young. None yield a clean voice profile. The other 66 are solo Matt.
 
 Always check surrounding lines before attributing a quote, and prefer solo recordings for voice work.
 

@@ -9,14 +9,14 @@ When using this skill to generate AI devotionals "in Matt's voice," embed these 
 3. Always cite the filename and date alongside the excerpt — never let an AI read it as context-free template.
 4. **Anchors are research input, not text to be reproduced.** The output devotional must say something new in Matt's register, not paraphrase him.
 
-## Anchor 1 — `2023-01-23-white-noise.md` (Meditation, ~330 words)
+## Anchor 1 — `2023-01-23-white-noise.md` (Meditation, ~260 words)
 
-**Date:** January 23, 2023 — his last personal post before death (~10 months later)
+**Date:** January 23, 2023 — his last personal post; he died nine months later, on Oct 25, 2023
 **Topic:** Sin as chronic illness; the danger of comfortable familiar sins
 
 **Why this anchor works:** Late voice in its most distilled form. Deploys the diagnosis-stamped opener, the inverted aphorism (sin as white noise), the verdict-style closing imperative ("Fear them. Hate them. Fling them away…"), and the medical-fact-as-spiritual-metaphor. Short. Compressed. Furious without being shrill.
 
-**Use for:** verses about repentance, sin's deceitfulness, urgency of obedience, persistent/habitual sin, comfortable-Christianity rebuke, the Hebrews-3-style "today if you hear his voice" register. Use as a closing-pattern model for any devotional that needs a verdict to land.
+**Use for:** verses about repentance, sin's deceitfulness, urgency of obedience, persistent/habitual sin, comfortable-Christianity rebuke, the Hebrews-3-style "today, if you hear His voice" register (the allusion is the editor's, not a phrase Matt uses in this post). Use as a closing-pattern model for any devotional that needs a verdict to land.
 
 **Do NOT use as anchor for:** topics about gentleness, hospitality, comfort to the suffering. White-noise is for waking sleepers, not consoling them.
 
@@ -32,7 +32,7 @@ When using this skill to generate AI devotionals "in Matt's voice," embed these 
 >
 > Fear them. Hate them. Fling them away from you as you would a viper or scorpion. Now is the time, not tomorrow or the next new year. Unless you act, the white noise of your sin will lull you into continued sleep.
 
-## Anchor 2 — `2022-12-07-disgusting.md` (Bulletin Article, ~580 words)
+## Anchor 2 — `2022-12-07-disgusting.md` (Bulletin Article, ~510 words)
 
 **Date:** December 7, 2022
 **Topic:** Grace despite God's disgust at sin; God loathes sin, rescues anyway
@@ -67,7 +67,7 @@ When using this skill to generate AI devotionals "in Matt's voice," embed these 
 >
 > However, he was wrong about God. We can never be so disgusting that God will cease to love us. We can never be so stained with sin that his mercy cannot purify and renew us.
 
-## Anchor 3 — `2022-08-16-uselessness.md` (Meditation, ~750 words)
+## Anchor 3 — `2022-08-16-uselessness.md` (Meditation, ~670 words)
 
 **Date:** August 16, 2022
 **Topic:** Uselessness; suffering as final witness; Milton's "On His Blindness"
@@ -104,12 +104,12 @@ When using this skill to generate AI devotionals "in Matt's voice," embed these 
 >
 > May I have the courage to take it.
 
-## Anchor 4 — `2022-01-11-to-live-is-christ-to-die-is-gain.md` (Bulletin Article, ~720 words)
+## Anchor 4 — `2022-01-11-to-live-is-christ-to-die-is-gain.md` (Bulletin Article, ~520 words)
 
 **Date:** January 11, 2022
 **Topic:** Philippians 1:21–24; what it means to read the back half of Phil 1:21 from inside terminal diagnosis
 
-**Why this anchor works:** Models the "I read this passage as Paul being Paul" → "actually, neither half" structural move. Bible-geek precision (*"the back half of Philippians 1:21"*). The flat confession (*"I'm not eager to die."*). The list of specific losses he mourns (*"I bitterly regret that I probably won't be able to finish raising my children. I grieve that I won't be able to give my wife a lifetime of being happily married. I mourn that I will have to step away from the pulpit and the keyboard…"*). The pivot from selfish gain to other-directed Christ-life as the actual Phil 1:21 frame. Closes with the redirected bucket list.
+**Why this anchor works:** Models the "I read this passage as Paul being Paul" → "actually, neither half" structural move. Bible-geek precision (*"it doesn't really reckon with either half of Philippians 1:21. Let's start with the back half."*). The flat confession (*"I'm not eager to die."*). The list of specific losses he mourns (*"I bitterly regret that I probably won't be able to finish raising my children. I grieve that I won't be able to give my wife a lifetime of being happily married. I mourn that I will have to step away from the pulpit and the keyboard…"*). The pivot from selfish gain to other-directed Christ-life as the actual Phil 1:21 frame. Closes with the redirected bucket list.
 
 **Use for:** Philippians, mortality, eternal life, vocation as service, parenting and unfinished work, anything that needs a "what we mourn losing reveals what we live for" frame. This is the single most-quoted Matt post for any devotional touching mortality.
 
@@ -131,7 +131,7 @@ When using this skill to generate AI devotionals "in Matt's voice," embed these 
 >
 > The Christian's bucket list, then, doesn't consist of travel and skydiving. There's nothing wrong with them, of course, but they are of no lasting value. Instead, the truly valuable things in life are the times when we can put a family member or a friend ahead of ourselves, take on that Bible class at church that nobody else wants to teach, or gather our courage and invite an outsider to worship with us. Those, not our possessions or abilities, are our true gifts. As Paul found, they are the only things in this life that are worthy to be compared to the joys of heaven.
 
-## Anchor 5 — `2023-01-02-grudges.md` (Meditation, ~480 words)
+## Anchor 5 — `2023-01-02-grudges.md` (Meditation, ~640 words)
 
 **Date:** January 2, 2023
 **Topic:** Holding grudges; the toxic effect of resentment; love that doesn't keep an account of wrongs
@@ -164,7 +164,7 @@ When using this skill to generate AI devotionals "in Matt's voice," embed these 
 >
 > I get you (Really! I do!), but it's time to do the hard work of letting go. You will be glad you did, and so will God.
 
-## Anchor 6 — `2022-03-17-its-not-a-wonderful-world.md` (Meditation, ~520 words)
+## Anchor 6 — `2022-03-17-its-not-a-wonderful-world.md` (Meditation, ~570 words)
 
 **Date:** March 17, 2022
 **Topic:** Anti-secular-optimism; Lviv refugee + COVID + ALS as proof world is unfixable
@@ -197,7 +197,7 @@ When using this skill to generate AI devotionals "in Matt's voice," embed these 
 >
 > This world isn't wonderful, and it never will be. Our Savior is wonderful, and He never will be anything else.
 
-## Anchor 7 — `2022-04-25-loyalty.md` (Meditation, ~400 words)
+## Anchor 7 — `2022-04-25-loyalty.md` (Meditation, ~590 words)
 
 **Date:** April 25, 2022
 **Topic:** Boomer the chihuahua's loyalty; God delights in loyalty
@@ -228,7 +228,7 @@ When using this skill to generate AI devotionals "in Matt's voice," embed these 
 >
 > If the loyalty of a dog matters to me, how much more does our loyalty matter to God! "I delight in loyalty," He says. Delight! When we seek Him diligently despite our imperfections, our Creator is delighted!
 
-## Anchor 8 — `2022-05-04-create-more-than-you-consume.md` (Bulletin Article, ~410 words)
+## Anchor 8 — `2022-05-04-create-more-than-you-consume.md` (Bulletin Article, ~520 words)
 
 **Date:** May 4, 2022
 **Topic:** Creating vs. consuming; epigram from Bezos read through Christ
@@ -257,7 +257,7 @@ When using this skill to generate AI devotionals "in Matt's voice," embed these 
 >
 > Create. Give. Lose. The world will think you're an idiot, but God won't.
 
-## Anchor 9 — `2015-02-02-why-i-want-to-go-to-heaven.md` (Meditation, pre-ALS, ~600 words)
+## Anchor 9 — `2015-02-02-why-i-want-to-go-to-heaven.md` (Meditation, pre-ALS, ~860 words)
 
 **Date:** February 2, 2015
 **Topic:** Heaven as relational fulfillment; "Hell isn't other people. Heaven is."
@@ -292,15 +292,15 @@ These are valuable for research but dangerous as exemplars because they would le
 
 - **`2015-10-20-talking-about-macy-part-1.md`** — Macy stillbirth post. Essential biographical context but the grief is so specific (full-term stillbirth, never determined cause) that any AI imitation would produce false biography.
 - **`2018-03-05-why-should-i-be-baptized.md`** — Theological position post. Heavy on the CoC distinctives (rebutting original sin, infant baptism, sinner's prayer). An AI given this as anchor might fabricate sectarian arguments that don't fit the user's tradition.
-- **`2017-01-09-philippians-part-1.md`** — Pre-ALS sermon, 3,200 words, heavy bolded structure. Wrong scale and wrong texture for a daily devotional. Use only as research for what Matt thinks about Phil 1, not as voice exemplar.
-- **`2022-09-13-the-bible.md`** — Final sermon. Profound, but it's a 2,500-word farewell sermon with a specific congregation arc (kindness/unity/Bible trio) that will not transfer to a generic devotional context.
+- **`2017-01-09-philippians-part-1.md`** — Pre-ALS sermon, ~2,800 words, heavy bolded structure. Wrong scale and wrong texture for a daily devotional. Use only as research for what Matt thinks about Phil 1, not as voice exemplar.
+- **`2022-09-13-the-bible.md`** — Final sermon. Profound, but it's a ~1,300-word farewell sermon with a specific congregation arc (kindness/unity/Bible trio) that will not transfer to a generic devotional context.
 - **`2024-05-15-a-new-life.md`** — Wife Lauren's post-mortem tribute. Not Matt's voice. Useful biographical context only.
 - **`2022-01-14-antidepressants-six-months-in.md`** — Specific to mental-health medication advocacy. Important Matt-distinctive (he was pro-mental-health-meds for Christians) but too narrow as voice exemplar.
 - **Any Bible Reviews label post** — translation comparison / paper-weight commentary. The voice fingerprint is there but the topic is too specific to be a useful exemplar.
 
 ## A note on biographical material
 
-Matt's voice depends heavily on specific biographical anchoring (Boomer, Lauren, Marky, Zoë, Westley Pollard, Joliet, Jackson Heights, "the back half of Phil 1:21," ALS). This is hazardous for AI imitation.
+Matt's voice depends heavily on specific biographical anchoring (Boomer, Lauren, Marky, Zoë, Westley Pollard, Joliet, Jackson Heights, the halves of Phil 1:21, ALS). This is hazardous for AI imitation.
 
 **Two safe paths for using these anchors:**
 

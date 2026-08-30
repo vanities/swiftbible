@@ -1,7 +1,7 @@
 # Matt Bassford — the preaching voice
 
 Everything else in this skill is built from **1639 blog posts**. This file is built from
-**66 solo sermons and classes (~453,000 words), Nov 2020 – Mar 2022**, transcribed from the
+**66 solo sermons and classes (453,280 words), Nov 2020 – Aug 2022**, transcribed from the
 Jackson Heights congregation's YouTube channel. Transcripts live at `speakers/matt-bassford/sermons/` — **local only, gitignored**; rebuild them
 with the runbook in [`speakers/README.md`](../../../speakers/README.md).
 
@@ -11,11 +11,13 @@ when you want how he *taught a room*.
 
 ## Why this window matters
 
-The recordings run Nov 2020 → Mar 2022. His ALS diagnosis lands in **spring/early summer 2021**,
-squarely inside that range, and his final Jackson Heights sermon was Sept 2022. So this corpus
+The recordings run Nov 2020 → Aug 2022 (earliest recording 11/22/20; the last two are the Aug 2022
+"Unity" Bible classes). His ALS diagnosis lands in **July 2021**, squarely inside that range, and his
+final Jackson Heights sermon was preached Aug 28, 2022 (published as `2022-09-13-the-bible.md`). So this corpus
 captures the same arc [late-voice.md](late-voice.md) traces through his writing — except here you
 can hear it. The illness enters the sermons as *logistics*, stated flatly and without self-pity,
-mid-argument: **"For the sake of my voice, I'm going to skip on down to verse 46."** No comment on
+mid-argument: **"For the sake of my voice, I'm going to skip on down to verse 46."**
+(`20220302-sunday-am-worship-if-christ-is-raised-9IsN5c1sH8U.txt`) No comment on
 it, no pause for sympathy; he simply routes around a failing body and keeps preaching.
 
 That is the single most characteristic thing in the spoken corpus, and it matches the written
@@ -37,16 +39,17 @@ and he uses them: long passages read aloud in full, then unpacked.
 
 ## Measured spoken tells
 
-Rates per 10,000 words across the solo recordings. The denominator includes whole-service
-material (announcements, singing), so treat these as lower bounds.
+Rates per 10,000 words across the 66 solo recordings (453,280 words). Counted case-insensitively
+with the regex in the right-hand column. The denominator includes whole-service material
+(announcements, singing), so treat these as lower bounds.
 
-| Tell | Count | per 10k |
-|---|---:|---:|
-| `brethren` | 117 | 2.7 |
-| `the first/second/third of these` | 25 | 0.6 |
-| `turn with me` / `turn to` | 27 | 0.6 |
-| `look with me` | 16 | 0.4 |
-| `notice that` / `notice how` | 18 | 0.4 |
+| Tell | Count | per 10k | Regex |
+|---|---:|---:|---|
+| `brethren` | 120 | 2.6 | `\bbrethren\b` |
+| `the first/second/third of these` | 27 | 0.6 | `\b(first\|second\|third\|fourth\|fifth) of these\b` |
+| `turn with me` / `turn to` | 33 | 0.7 | `\bturn (with me\|to)\b` |
+| `look with me` | 18 | 0.4 | `\blook with me\b` |
+| `notice that` / `notice how` | 19 | 0.4 | `\bnotice (that\|how)\b` |
 
 **`brethren` is the signature.** It is his default address to the congregation and essentially
 absent from the blog. If you are writing spoken-Matt and not reaching for it, you are writing
@@ -85,9 +88,13 @@ blog-Matt.
 
 ## Caveats
 
-1. **22 of the 88 transcripts are two-person dialogues** with Clay Gentry ("The Matt and Clay Show").
-   Those are excluded from everything above and **cannot** be used for voice work — Whisper does not
-   diarize, so Matt's words and Clay's are indistinguishable in the text.
+1. **22 of the 88 transcripts have more than one speaker** and are excluded from everything above.
+   19 are with Clay Gentry — the 13 titled "The Matt and Clay Show" plus the joint "Introduction to
+   Romans" evenings and the Esther classes; 1 is with Josh Tolbert; 2 are singing nights with Ben
+   Prasser (one also with Mike Young). None of them can be used for voice work — Whisper does not
+   diarize, so Matt's words and the other speaker's are indistinguishable in the text. Speaker
+   attribution comes from the `speakers` column of `speakers/josh-tolbert/manifest.tsv`, keyed on
+   the YouTube id at the end of each transcript filename.
 2. **Even "solo" recordings are whole worship services.** A file labelled Matt opens with another
    man's announcements, prayers, and congregational singing. His sermon often starts hundreds of
    lines in — in the Mar 2022 recording, around line 490 of 823. Locate the sermon before quoting.
@@ -100,4 +107,6 @@ blog-Matt.
    speaker, and it is 81 minutes of other people speaking about him. Including it would attribute
    their words to him and corrupt every measurement here. It is kept outside the repo at
    `~/.cache/swiftbible-speakers/excluded/`. **A corpus rebuild will re-resolve it as his — drop it
-   again.**
+   again.** It is still usable as a *biographical* source — the obituary read aloud in it is the
+   only record of his birth and death dates (see [biography.md](biography.md)) — but never as a
+   voice source.

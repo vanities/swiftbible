@@ -131,7 +131,7 @@ positions:
 ### Read the sermon
 
 Start with the reading copy:
-[speakers/james-edgar-green/sermons/the-day-christ-came.md](../../../speakers/james-edgar-green/sermons/the-day-christ-came.md).
+[speakers/james-edgar-green/sermons/the-day-christ-came.md](../../speakers/james-edgar-green/sermons/the-day-christ-came.md).
 The verbatim auto-caption (with timestamps) is beside it as `.transcript.txt` for provenance.
 
 ### Search the sermon text
@@ -155,7 +155,7 @@ a devotional in his voice, lean on: narrative over outline; one repeated drumbea
 
 - **Drafting devotionals** in Brother Jim's voice — above all the *judgment / second-coming /
   "obey now, not later"* family of themes. The devotional built from this sermon lives at
-  [devotionals/extreme-faith/the-day-christ-came.md](../../../devotionals/extreme-faith/the-day-christ-came.md).
+  [devotionals/extreme-faith/the-day-christ-came.md](../../devotionals/extreme-faith/the-day-christ-came.md).
 - **Borrowing his cadence** — narrative on-ramp, the repeated line, the direct-address plea.
 - **Measuring a draft against him** — does it call for a decision *today*? Does it keep baptism and
   obedience with grace? Does it build dread from ordinary detail rather than abstraction?

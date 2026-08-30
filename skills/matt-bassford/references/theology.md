@@ -97,7 +97,7 @@ Primary Bible was a Crossway Large-Print Thinline Reference (ESV). Recommends NA
 ## 12. Other distinctives
 
 - **Mental health: pro-medication for Christians.** Defends antidepressants against brethren who'd think them un-spiritual. He took Trazodone + Lexapro starting July 2021. (`2022-01-14-antidepressants-six-months-in.md`)
-- **Apologetics: presuppositional-leaning.** Problem of evil best answered existentially, not philosophically. *"We make decisions with the Biblical heart… not the Western mind."* (`2021-07-07-the-problem-of-other-peoples-suffering.md`)
+- **Apologetics: presuppositional-leaning.** Problem of evil best answered existentially, not philosophically. *"We make such decisions with the Biblical heart, the Eastern mind-and-heart, not the Western mind."* (`2021-07-07-the-problem-of-other-peoples-suffering.md`)
 - **Self-righteousness is the great religious-people sin.** Apply rebuking Scripture to yourself first. (`2022-09-13-the-bible.md`)
 - **Anti-Catholic on tradition** but appreciative of patristic witness when it converges with NT-only practice. (`2016-08-02-joy-and-a-cappella-worship.md`)
 

@@ -1,7 +1,7 @@
 # James Edgar Green — Voice Analysis
 
 A close read of the one surviving sermon, **"The Day Christ Came"**
-([speakers/james-edgar-green/sermons/the-day-christ-came.md](../../../../speakers/james-edgar-green/sermons/the-day-christ-came.md)).
+([speakers/james-edgar-green/sermons/the-day-christ-came.md](../../../speakers/james-edgar-green/sermons/the-day-christ-came.md)).
 Built for one job: writing in Brother Jim's voice, or measuring a draft against it. Every quotation
 is from that sermon.
 

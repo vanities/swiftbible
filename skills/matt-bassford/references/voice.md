@@ -49,9 +49,9 @@ Three to five short clauses, command voice, no flourish. His late closings are g
 
 ## 5. Bible-geek precision
 
-Quotes "the back half of Phil 1:21," names paper weights and editors, distinguishes textual variants. He's a working preacher *and* a translation nerd, and he doesn't hide it.
+Splits a verse into halves and argues each one, names paper weights and editors, distinguishes textual variants. He's a working preacher *and* a translation nerd, and he doesn't hide it.
 
-- *"the back half of Philippians 1:21"* — `2022-01-11-to-live-is-christ-to-die-is-gain.md`
+- *"it doesn't really reckon with either half of Philippians 1:21. Let's start with the back half."* — `2022-01-11-to-live-is-christ-to-die-is-gain.md`
 - *"the 38-gsm Tervakowski ThinOpaque in my Cambridge Wide-Margin"* — `2017-01-13-crossway-single-column-journaling-bible-preaching-teaching-and-study.md`
 - *"Look here at Philippians 1:1-2."* — `2017-01-09-philippians-part-1.md`
 - *"Consider Jesus' description of it in Mark 9:42-48."* — `2021-11-11-straight-talk-about-hell.md`
@@ -60,7 +60,7 @@ Quotes "the back half of Phil 1:21," names paper weights and editors, distinguis
 
 Wry footnote on himself mid-argument. The parenthetical never advances the argument; it acknowledges that he's aware of how he sounds.
 
-- *"(my poor wife has discovered far too often)"* — `2023-01-02-grudges.md`
+- *"(as my poor wife has discovered far too often)"* — `2023-01-02-grudges.md`
 - *"(though I certainly would have been thankful if they had!)"* — `2022-07-06-thoughts-and-prayers.md`
 - *"(Really! I do!)"* — `2023-01-02-grudges.md`
 
@@ -155,30 +155,37 @@ Matt uses a colon to set up a deliberate three- or four-part list more often tha
 
 - *"All my life, I have wanted to be useful: to my family, to my friends, to my church, and to my God."* (`2022-08-16-uselessness.md`)
 - *"Three guiding aims of the Christian, then, are these: Love God with everything you have. Love your neighbor as much as you love yourself. Love your brother more than you love yourself."* (`2015-02-02-why-i-want-to-go-to-heaven.md`)
-- *"He gave us a conscience. We all had the opportunity to honor Him and walk righteously before Him. Did we take it? We did not."* (`2021-11-11-straight-talk-about-hell.md` — colon-style cadence without the literal colon)
+- *"He's given every one of us a conscience. We all had the opportunity to honor Him and walk righteously before Him. Did we take it? We did not."* (`2021-11-11-straight-talk-about-hell.md` — colon-style cadence without the literal colon)
 
-### The em-dash for the sharp pivot
+### The em-dash: snap-appositive and interruptive aside
 
-Em-dashes are reserved for the **sharp pivot** — the moment where he wants the reader to turn, fast.
+Em-dashes are uncommon in his prose — 762 of them across 409 of the 1639 posts — and when they
+appear they do one of two jobs:
 
-- *"Most successful personal worker I've ever known is Westley Pollard, elder of the Dowlen Rd. church in Beaumont — When Lauren and I still lived there, she once ran into him at Walmart."* (`2022-04-05-passing-for-normal.md`)
-- *"He gave us the opportunity to find salvation through His Son. Do most take advantage of that? They do not."* (`2021-11-11-straight-talk-about-hell.md`)
+1. **The snap appositive.** He withholds the noun to the end of a clause, then lands it after a dash.
+   - *"Everyone in Jesus' day would have known who got a cut from all the commerce—the chief priests."* (`2020-10-02-jesus-turns-up-the-pressure.md`)
+   - *"there is one significant area in which the Windsor differs from its peers—price."* (`2015-01-23-trinitarian-bible-society-windsor-physical-form.md`)
+2. **The paired interruptive aside.** Two dashes bracketing a mid-sentence intrusion.
+   - *"so he resolved never to eat peanut butter—not even in peanut butter cups!—for fear of cross-contamination"* (`2022-09-20-sons.md`)
+   - *"What if somebody has done us wrong—really wrong!—and we've got all this rage and indignation built up inside of us?"* (`2019-10-16-when-words-become-gossip.md`)
 
-He does NOT use the em-dash for parenthetical asides — for those he uses literal parentheses (see tell #6 above). This is consistent across the archive.
+He also uses literal parentheses heavily for the self-aware aside (tell #6). The two are not
+interchangeable: the parentheses are wry commentary on *himself*; the paired dashes intensify the
+*sentence he is already in*.
 
 ---
 
 ## Transition phrases he favors
 
-Watch for these transition phrases as Matt-voice signatures. Frequencies are number-of-posts-containing-the-phrase across the 1639-post archive (case-insensitive, counted via `grep -li`).
+Watch for these transition phrases as Matt-voice signatures. Frequencies are number-of-posts containing the word or phrase across the 1639-post archive, counted case-insensitively **without** the trailing comma (`grep -li 'however' *.md | wc -l`). Requiring the comma lowers every figure — "However," is in 1242 posts, "Of course," in 451, "Years ago," in 124.
 
-- **"However,"** — appears in 1242 posts. His default mid-paragraph pivot. Heavily used.
+- **"However,"** — appears in 1250 posts. His default mid-paragraph pivot. Heavily used.
 
-- **"Instead,"** — appears in 801 posts. The pivot from refusal to recommendation. *"Instead, our hope is in Jesus."* (`2022-03-17-its-not-a-wonderful-world.md`); *"Instead, the losses that I mourn the most are of my opportunities to serve others."* (`2022-01-11-to-live-is-christ-to-die-is-gain.md`).
+- **"Instead,"** — appears in 961 posts. The pivot from refusal to recommendation. *"Instead, our hope is in Jesus."* (`2022-03-17-its-not-a-wonderful-world.md`); *"Instead, the losses that I mourn the most are of my opportunities to serve others."* (`2022-01-11-to-live-is-christ-to-die-is-gain.md`).
 
 - **"Of course,"** — appears in 479 posts. Used to concede to an obvious objection in two words and roll past it. *"Of course, NBC painted her as a Symbol Of Hope…"* (`2022-03-17-its-not-a-wonderful-world.md`); *"Of course, this appalling language is hardly gratuitous."* (`2022-12-07-disgusting.md`); *"Of course, when ALS takes my ability to speak…"* (`2022-08-16-uselessness.md`).
 
-- **"Indeed,"** — appears in 399 posts. Used to reinforce. Where another writer would say "really" or "in fact," Matt writes *"Indeed, more subtly, the weakness that is the subject of Paul's boasting is not only the thorn in the flesh."* (`2022-02-10-a-man-is-judged-by-his-strength.md`); *"Indeed, the belief that we can rely on the latter is one of the great illusions of Western civilization."* (`2021-07-07-the-problem-of-other-peoples-suffering.md`).
+- **"Indeed,"** — appears in 568 posts. Used to reinforce. Where another writer would say "really" or "in fact," Matt writes *"Indeed, more subtly, the weakness that is the subject of Paul's boasting is not only the thorn in the flesh."* (`2022-02-10-a-man-is-judged-by-his-strength.md`); *"Indeed, the belief that we can rely on the latter is one of the great illusions of Western civilization."* (`2021-07-07-the-problem-of-other-peoples-suffering.md`).
 
 - **"Years ago,"** — appears in 253 posts. His preferred memory-opener. Almost always followed by a contrast with the present: *"Years ago, I read this passage as Paul being Paul."* (`2022-01-11-to-live-is-christ-to-die-is-gain.md`).
 
@@ -188,13 +195,13 @@ Watch for these transition phrases as Matt-voice signatures. Frequencies are num
 
 - **"Of late,"** — appears in only 8 posts (5 pre-ALS, 3 late). Rare, but when it appears in late voice it carries weight as a marker of recent change. *"Of late, it seems like I've been collecting a lot of compliments…"* (`2022-08-16-uselessness.md`); *"Of late, I have been drawn to James' discussion of suffering…"* (`2022-08-16-uselessness.md`); *"However, my opinion of Boomer has changed of late."* (`2022-04-25-loyalty.md`).
 
-What he **doesn't** use much: "Notwithstanding," "Be that as it may," "On the other hand" (rare). His transitions are mostly the handful above, deployed in characteristic positions.
+What he **doesn't** use: "Be that as it may" (0 posts) and, largely, "Notwithstanding" (11). Note that "On the other hand" is *not* rare — 156 posts, more than "Nonetheless" — it just isn't a signature the way the list above is. His transitions are mostly the handful above, deployed in characteristic positions.
 
 ---
 
 ## Pre-ALS voice vs late voice — what's distinct?
 
-The voice fingerprint is continuous across both periods. What changes is **what he does with it**. See `references/late-voice.md` for the full treatment, but in short:
+The voice fingerprint is continuous across both periods. What changes is **what he does with it**. See [late-voice.md](late-voice.md) for the full treatment, but in short:
 
 **Pre-ALS register (2014–early 2021):**
 - Longer pieces (Sermons run 3,000–5,000 words; even Meditations often over 1,000)
@@ -214,7 +221,7 @@ The voice fingerprint is continuous across both periods. What changes is **what 
 - Grace gets louder; obedience-policing gets quieter
 - "Of late" / "At the end of my life" / "Now that I know that my life is going to be considerably shorter" become signature openers
 
-When you want the late-voice register specifically, read the eight anchors listed in `references/few-shot-anchors.md`.
+When you want the late-voice register specifically, read the nine anchors listed in [few-shot-anchors.md](few-shot-anchors.md), or the eight in [late-voice.md](late-voice.md).
 
 ---
 
@@ -243,8 +250,8 @@ Matt asks a lot of rhetorical questions, and they have a specific rhythm. Watch 
 Matt's humor is **dry, specific, and self-deprecating, almost never aggressive toward people he knows.** When humor turns sharp, it turns on secular pieties or on himself.
 
 - **Self-deprecation.** *"I'm a terrible poker player."* (`2016-01-15-powerball-and-covetousness.md`); *"I'm a writer, and sometimes it takes me 1500 words to say 'Good morning.'"* (`2015-10-20-talking-about-macy-part-1.md`); *"By contrast, the guy who is focused on what he wants is sitting at home on the couch watching *The Price Is Right*…"* (`2022-05-04-create-more-than-you-consume.md`).
-- **Concrete absurdity in service of theology.** *"At my urging, my wife once put a set of rat traps in my mother-in-law's Christmas stocking to help her with her infestation."* (`2022-04-25-loyalty.md` — used to land that he was no fan of Boomer); *"the pickles in his storage room that were canned in 1994 are going away FOREVER"* (`2014-02-19-decluttering.md`).
+- **Concrete absurdity in service of theology.** *"At my urging, my wife once put a set of rat traps in my mother-in-law's Christmas stocking to help her with her infestation."* (`2022-04-25-loyalty.md` — used to land that he was no fan of Boomer); *"those jars of pickles in his storage room that were canned in 1994 are going away FOREVER"* (`2014-02-19-decluttering.md`).
 - **Imagined Bible characters as commentary.** *"If Kermit The Frog were a Bible student, he might wonder why there are so many songs about Revelation 3:20."* (`2022-04-11-he-stands-at-the-door-and-knocks.md`); *"It's like pitting this year's NBA All-Star team against an all-star team of the greatest basketball players of all time."* (`2018-04-05-the-future-of-song-worship.md`).
-- **Capitalization as scorn.** *"Symbol Of Hope amid devastation and despair, a promise of Better Days Ahead"* (`2022-03-17-its-not-a-wonderful-world.md`); *"to Pay Good Money for things"* (`2014-02-19-decluttering.md`); *"Bible classes I love so much"* — italicized/capitalized for sarcastic emphasis.
+- **Capitalization as scorn.** *"Symbol Of Hope amid devastation and despair, a promise of Better Days Ahead"* (`2022-03-17-its-not-a-wonderful-world.md`); *"If it stings to throw away things for which we Paid Good Money, maybe we should remember that the next time we are tempted to Pay Good Money for things."* (`2014-02-19-decluttering.md`).
 
-What his humor is NOT: ironic detachment from his own positions, "edgy" punching down at outgroups, joke-for-joke's-sake one-liners disconnected from the theology, mockery of named individuals (the political pollster Boomer bit gets joked about, but the pollster isn't named or made a point of derision; the dog is). He's wry, not mean.
+What his humor is NOT: ironic detachment from his own positions, "edgy" punching down at outgroups, joke-for-joke's-sake one-liners disconnected from the theology, mockery of named individuals. When a person is the butt of a joke, it is Matt himself or an unnamed abstraction; when the joke has a name attached, the name belongs to a dog (Boomer), not a person. He's wry, not mean.

@@ -1155,7 +1155,14 @@ AVOID (these are AI tells / preachy patterns; strict)
 
 // Shared theological guardrails for the narrative + practical tracks. Keeps
 // the new tracks aligned with the non-denominational / non-institutional
-// Church of Christ sensibility that this app's audience leans on. Not added
+// Church of Christ sensibility that this app's audience leans on.
+//
+// SOURCE OF TRUTH for the tradition behind these rules is the `church-of-christ`
+// skill (.claude/skills/church-of-christ/). This function is deployed and cannot
+// read the repo, so these lines are a hand-copied derivative — when the skill's
+// doctrine.md or non-institutional.md changes materially, update here too.
+// Same applies to the Bassford and classroom voice tracks below, which derive
+// from the matt-bassford and josh-tolbert skills. Not added
 // to the empathy/technical tracks because their behavior is already tuned;
 // these guardrails are explicit because narrative and practical are easier
 // to drift into eisegesis (invented scenes) or moralistic therapeutic deism
@@ -1167,7 +1174,10 @@ const PROMPT_THEOLOGY_GUARDRAILS = `THEOLOGICAL GROUNDING (non-denominational; n
 - The world is broken and Christ remakes it. Avoid utopian or world-improvement framing.
 - "Kingdom" refers to Christ's present reign over His church and over hearts — not a future earthly millennial reign.
 - Don't soften hell. Don't drift toward universalism.
-- Self-righteousness is the great religious-people sin. Apply any rebuke to writer/reader first, never to outsiders.`;
+- Self-righteousness is the great religious-people sin. Apply any rebuke to writer/reader first, never to outsiders.
+- Don't present a prayer as the moment a person is saved. This audience does not hold the sinner's-prayer framing; leave the mechanism alone rather than asserting one.
+- Don't assert "once saved, always saved." This tradition holds that a Christian can fall away. Don't argue the point either — just don't assume perseverance.
+- Vocabulary: "assembly" over "worship service", "gospel meeting" over "revival", "brother/sister" over "church family". Wrong vocabulary reads as an outsider writing about them.`;
 
 function holidayPromptSection(holiday: Holiday): string {
   return `\nHOLIDAY\nThis devotional is for ${holiday.name}. ${holiday.themeHint}\n- Reference "${holiday.name}" in the title.\n- Beat 1's empathy can lean on what ${holiday.name} typically evokes for readers, without presuming any reader's experience.\n`;

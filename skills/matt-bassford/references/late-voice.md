@@ -52,15 +52,15 @@ When using late voice as inspiration: this re-reading move is one of his stronge
 
 ### 4. He drops the long expository structure for short paragraphs
 
-Pre-ALS sermons run 3,000–5,000 words with bolded-heading multi-point structure (FIRST, SECOND, THIRD). Look at `2017-01-09-philippians-part-1.md` (~3,200 words, six bolded section headers) or `2017-07-24-why-peter-failed.md` (~5,000 words, seven bolded subsections in three Roman-numeral sections).
+Pre-ALS sermons run to 3,000 words with bolded-heading multi-point structure (FIRST, SECOND, THIRD). Look at `2017-01-09-philippians-part-1.md` (~2,800 words, 13 bolded headers — 3 section titles plus 10 ALL-CAPS sub-points) or `2017-07-24-why-peter-failed.md` (~2,950 words, same shape: 3 sections — Pre-Betrayal Problems / Post-Betrayal Problems / Why Jesus Succeeded — with 10 ALL-CAPS sub-points under them).
 
-Late Bulletin Articles and Meditations are usually 600–900 words, no bolded headers, paragraphs of 3–5 sentences, escalating step by step:
+Late Bulletin Articles and Meditations are usually 250–700 words, no bolded headers, paragraphs of 3–5 sentences, escalating step by step:
 
-- `2022-01-11-to-live-is-christ-to-die-is-gain.md` — ~720 words, no headers
-- `2022-12-07-disgusting.md` — ~580 words, no headers
-- `2022-08-16-uselessness.md` — ~750 words, no headers
-- `2023-01-23-white-noise.md` — ~330 words, no headers (the shortest of his late landmarks)
-- `2022-10-27-the-memory-of-the-righteous.md` — ~500 words, no headers
+- `2022-01-11-to-live-is-christ-to-die-is-gain.md` — ~520 words, no headers
+- `2022-12-07-disgusting.md` — ~510 words, no headers
+- `2022-08-16-uselessness.md` — ~670 words, no headers
+- `2023-01-23-white-noise.md` — ~260 words, no headers (the shortest of his late landmarks)
+- `2022-10-27-the-memory-of-the-righteous.md` — ~520 words, no headers
 
 The compression matters. He trims because he doesn't have the energy to over-explain anymore (he writes by dictation from August 2022 onward), and the prose tightens as a result.
 
@@ -83,7 +83,7 @@ Pre-ALS Matt is comfortable making the argument-from-silence case for non-instit
 
 What he writes in his last 18 months sounds like a man who knows that grace, not his own correctness, is what saves him:
 
-- *"Today, despite my grim prognosis, I find that my mental health is as good as it has ever been."* — followed immediately by an explanation that puts the credit on prayer and grace, not himself (`2022-07-06-thoughts-and-prayers.md`)
+- *"Today, despite my grim prognosis, I find that my mental health is as good as it has ever been."* (`2022-01-14-antidepressants-six-months-in.md`) — and see `2022-07-06-thoughts-and-prayers.md`, where he puts the credit for that on the prayers of others rather than on himself
 - *"Such confidence can only come from putting my trust in the grace of the Lord. It is so great that I no longer need to fret over to the sufficiency of my own goodness. Whether that goodness be little or much, His grace is sufficient."* (`2022-09-14-salvation-by-grace.md`)
 - *"My motivation is simple just as my life is simple. Thanks to ALS, I have no options remaining but to trust in Jesus."* (`2022-10-31-lukewarmness.md`)
 - *"If I have to be good enough, I assuredly have not been. I have not been diligent enough. I have not been wise enough. I have not been holy enough. I have not been loving enough."* (`2022-09-14-salvation-by-grace.md`)

@@ -13,7 +13,7 @@ Heaven matters because the people we love (and Christ) are there. He pushes back
 - `2022-09-13-the-bible.md`
 - `2018-08-29-johns-vision-of-heaven.md`
 
-**Quote:** *"Sartre was dead wrong. Hell isn't other people. Heaven is. It's impossible for us to get to heaven without loving others, and heaven will be filled with those who return our love."*
+**Quote:** *"In No Exit, Sartre famously declares that hell is other people. He is exactly wrong. Hell isn't other people. Heaven is. It's impossible for us to get to heaven without loving others, and heaven will be filled with those who return our love."* (`2018-12-03-heaven-the-eternal-party.md`. The shorter *"Sartre was dead wrong. Hell isn't other people. Heaven is."* is the 2015 version, in `2015-02-02-why-i-want-to-go-to-heaven.md` — the two are separate sentences from separate posts, so don't splice them.)
 
 ## 2. Suffering as clarifying lens
 
@@ -237,7 +237,7 @@ Pre-ALS theme that runs throughout, but worth naming separately. Matt resists si
 - **Anti-political-substitutionalism** (politics is not discipleship) — `2018-01-18-pro-life-and-politics.md`, `2016-09-28-fixing-our-hope.md`
 - **Anti-greed / anti-gambling** — `2016-01-15-powerball-and-covetousness.md`
 - **Anti-decluttering-as-virtue / consumerism** — `2014-02-19-decluttering.md`
-- **The quiet-life ideal** — *"They will spend eternity with their friends. By coming here, we associate ourselves with those who will help us on to where we want to go."* (`2017-04-10-why-come-to-church-more.md`)
+- **Who you assemble with is who you will spend eternity with** — *"It is most likely true that wherever they go, we will spend eternity with our friends. By coming here, we associate ourselves with those who will help us on to where we want to go."* (`2017-04-10-why-come-to-church-more.md`)
 
 ## How to use this when drafting
 
