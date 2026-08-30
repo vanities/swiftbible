@@ -2,6 +2,11 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 import { initSentry, captureException } from "../_shared/sentry.ts";
+import {
+  PROMPT_THEOLOGY_GUARDRAILS,
+  PROMPT_MATT_RULES,
+  PROMPT_JOSH_RULES,
+} from "../_shared/devotional-voice.ts";
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -1167,17 +1172,6 @@ AVOID (these are AI tells / preachy patterns; strict)
 // these guardrails are explicit because narrative and practical are easier
 // to drift into eisegesis (invented scenes) or moralistic therapeutic deism
 // (action-as-self-improvement) without them.
-const PROMPT_THEOLOGY_GUARDRAILS = `THEOLOGICAL GROUNDING (non-denominational; non-institutional CoC sensibility)
-- Stay close to what the text actually says. Don't invent dialogue, motivations, or scenes that scripture doesn't supply.
-- Grace and obedience are two halves of the same whole. No feelings-only piety. No works-based earning of grace.
-- Refuse moralistic therapeutic deism — "live your truth," "be your best self," "you've got this," "everything happens for a reason" are out of bounds.
-- The world is broken and Christ remakes it. Avoid utopian or world-improvement framing.
-- "Kingdom" refers to Christ's present reign over His church and over hearts — not a future earthly millennial reign.
-- Don't soften hell. Don't drift toward universalism.
-- Self-righteousness is the great religious-people sin. Apply any rebuke to writer/reader first, never to outsiders.
-- Don't present a prayer as the moment a person is saved. This audience does not hold the sinner's-prayer framing; leave the mechanism alone rather than asserting one.
-- Don't assert "once saved, always saved." This tradition holds that a Christian can fall away. Don't argue the point either — just don't assume perseverance.
-- Vocabulary: "assembly" over "worship service", "gospel meeting" over "revival", "brother/sister" over "church family". Wrong vocabulary reads as an outsider writing about them.`;
 
 function holidayPromptSection(holiday: Holiday): string {
   return `\nHOLIDAY\nThis devotional is for ${holiday.name}. ${holiday.themeHint}\n- Reference "${holiday.name}" in the title.\n- Beat 1's empathy can lean on what ${holiday.name} typically evokes for readers, without presuming any reader's experience.\n`;
@@ -2016,32 +2010,7 @@ type Track = typeof TRACK_CYCLE[number];
 // speakers/matt-bassford/ and speakers/josh-tolbert/ for the voice
 // profiles these were derived from.
 
-const PROMPT_MATT_RULES = `VOICE — Bassford track (structural homage, NOT impersonation)
-This track borrows the *shape* of a particular preacher's prose. Never sign it, never
-attribute it, never invent a first-person life for the author. The shared VOICE rule against
-fabricated personal admissions is absolute here.
-- Short flat declaratives that land as verdicts. A whole paragraph may be one sentence.
-- One inverted aphorism that pivots an expectation — of the form "X isn't the thing. Y is."
-  Earn it; do not stack more than one.
-- Open on concrete domestic detail — a kitchen, a waiting room, a dog, a hallway. Never abstraction.
-- Precision about the text. Name exactly what the passage says, including which half of a verse
-  is doing the work. Dry accuracy is the register, not warmth.
-- Close on three to five short imperative clauses. Command voice, no flourish, no summary.
-- Dry wit is allowed; sentiment is not. Never sentimental, never rousing.
-- Grace is not earned and not exhausted. Suffering is not explained away — it strips illusions.`;
 
-const PROMPT_JOSH_RULES = `VOICE — classroom track (teacher's method, NOT impersonation)
-This track borrows the *method* of a Bible-class teacher. Never sign or attribute it.
-- Open with a genuine question the reader must try to answer before you answer it.
-- Earn the passage with its world first: who wrote it, to whom, into what situation. Background
-  before application, always.
-- Price every claim. If a historical detail is disputed, say so. If the text does not settle a
-  question, say that plainly rather than resolving it artificially.
-- Guard against reading a modern definition back into the text — name the difference between what
-  the word means to us and what it meant there.
-- Qualify generalisations the moment you make them ("this is not universal").
-- Confidence should be visible and variable. Uncertainty stated out loud is the register.
-- End by handing the question back to the reader, not by closing it for them.`;
 
 const PROMPT_LAMENT_RULES = `VOICE — lament track
 - This track does NOT resolve. That is its whole purpose; the other tracks resolve and this one

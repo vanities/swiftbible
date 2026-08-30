@@ -1178,3 +1178,59 @@ Deno.test("DEVOTIONAL_MODEL is a literal constant and is used for generation", (
     throw new Error("cost accounting should look the model up in MODEL_PRICING");
   }
 });
+
+// ─── Voice prompts: single source of truth ─────────────────────────
+
+Deno.test("voice + theology prompts are imported, never re-inlined", () => {
+  const source = Deno.readTextFileSync(
+    new URL("./index.ts", import.meta.url).pathname
+  );
+
+  if (!source.includes('from "../_shared/devotional-voice.ts"')) {
+    throw new Error(
+      "index.ts must import the voice prompts from ../_shared/devotional-voice.ts"
+    );
+  }
+  // Re-inlining is exactly how these drifted from the skills before: the
+  // shared file is symlinked into three skills, so a local copy silently
+  // detaches the deployed prompt from the documented one.
+  for (
+    const name of [
+      "PROMPT_THEOLOGY_GUARDRAILS",
+      "PROMPT_MATT_RULES",
+      "PROMPT_JOSH_RULES",
+    ]
+  ) {
+    if (new RegExp(`const ${name}\\s*=`).test(source)) {
+      throw new Error(
+        `${name} is defined locally in index.ts — it must come from ` +
+          `../_shared/devotional-voice.ts (symlinked into skills/*/references/devotional-prompt.ts)`
+      );
+    }
+    if (!source.includes(name)) {
+      throw new Error(`${name} is imported but never used`);
+    }
+  }
+});
+
+Deno.test("shared voice file is reachable and carries all three prompts", () => {
+  const shared = Deno.readTextFileSync(
+    new URL("../_shared/devotional-voice.ts", import.meta.url).pathname
+  );
+  for (
+    const name of [
+      "PROMPT_THEOLOGY_GUARDRAILS",
+      "PROMPT_MATT_RULES",
+      "PROMPT_JOSH_RULES",
+    ]
+  ) {
+    if (!shared.includes(`export const ${name}`)) {
+      throw new Error(`_shared/devotional-voice.ts must export ${name}`);
+    }
+  }
+  if (!shared.includes("NOT impersonation")) {
+    throw new Error(
+      "the no-impersonation rule must stay in the shared voice file"
+    );
+  }
+});

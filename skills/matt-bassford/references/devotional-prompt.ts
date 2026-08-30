@@ -1,0 +1,1 @@
+../../../supabase/functions/_shared/devotional-voice.ts

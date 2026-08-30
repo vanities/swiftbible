@@ -128,6 +128,25 @@ The archive is at `speakers/matt-bassford/posts/`. Filenames are `YYYY-MM-DD-slu
 - [references/late-voice.md](references/late-voice.md) — the post-ALS voice in isolation (8 concentrated late-voice anchors)
 - [references/few-shot-anchors.md](references/few-shot-anchors.md) — 9 ready-to-use few-shot anchors with full excerpts and "use for" / "do NOT use for" tags. **Start here when building an AI prompt that needs to write in Matt's voice.**
 
+## The deployed devotional prompt
+
+`references/devotional-prompt.ts` is a **symlink** to
+`supabase/functions/_shared/devotional-voice.ts` — the exact text the
+`daily-devotional` edge function sends to the model. It is one file with four
+paths, so it cannot drift from this skill; editing it through this symlink edits
+the deployed prompt.
+
+That file is a *distillation*, not a copy of this research — the function can't
+read the repo at runtime, and the full references would swamp the prompt. When
+you materially change this skill's voice or theology findings, update it.
+A test in `holidays_test.ts` fails if the constants get re-inlined into
+`index.ts`, which is how they drifted last time.
+
+**Structural homage, never impersonation** — never sign, attribute, or invent a
+first-person life for the author.
+
+---
+
 ## When to use this skill
 
 - **Drafting devotionals** (especially `devotionals/extreme-faith/`) — when you want Matt's voice or theme as inspiration

@@ -112,6 +112,25 @@ Also worth knowing: the text is ASR output, so proper nouns are unreliable ("Ter
 Tertullus), and *Why I Am Still a Christian* exists as two independently transcribed cuts of the
 same sermon whose punctuation and small wordings differ.
 
+## The deployed devotional prompt
+
+`references/devotional-prompt.ts` is a **symlink** to
+`supabase/functions/_shared/devotional-voice.ts` — the exact text the
+`daily-devotional` edge function sends to the model. It is one file with four
+paths, so it cannot drift from this skill; editing it through this symlink edits
+the deployed prompt.
+
+That file is a *distillation*, not a copy of this research — the function can't
+read the repo at runtime, and the full references would swamp the prompt. When
+you materially change this skill's voice or theology findings, update it.
+A test in `holidays_test.ts` fails if the constants get re-inlined into
+`index.ts`, which is how they drifted last time.
+
+**Structural homage, never impersonation** — never sign, attribute, or invent a
+first-person life for the author.
+
+---
+
 ## When to use this skill
 
 - **Drafting a lesson or devotional in a teaching register** — question-led, background-first,
