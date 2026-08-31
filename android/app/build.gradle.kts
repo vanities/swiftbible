@@ -28,12 +28,12 @@ fun quotedBuildConfig(value: String): String = "\"${value.replace("\\", "\\\\").
 
 android {
     namespace = "biz.am2.swiftbible"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "biz.am2.swiftbible"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 25
         versionName = "1.60"
         buildConfigField("String", "SUPABASE_URL", quotedBuildConfig(clientConfig("SUPABASE_URL")))
@@ -156,7 +156,7 @@ dependencies {
     implementation("com.posthog:posthog-android:3.13.0")
 
     // Google Play Billing (donations)
-    implementation("com.android.billingclient:billing-ktx:7.1.1")
+    implementation("com.android.billingclient:billing-ktx:9.1.0")
 
     // Google Play In-App Review
     implementation("com.google.android.play:review-ktx:2.0.2")

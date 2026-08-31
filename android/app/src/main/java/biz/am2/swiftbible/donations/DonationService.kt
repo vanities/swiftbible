@@ -55,6 +55,7 @@ class DonationService private constructor(private val appContext: Context) : Pur
                 .enableOneTimeProducts()
                 .build()
         )
+        .enableAutoServiceReconnection()
         .build()
 
     @Volatile private var connected: Boolean = false
@@ -92,9 +93,13 @@ class DonationService private constructor(private val appContext: Context) : Pur
                 }
             )
             .build()
-        client.queryProductDetailsAsync(params) { result, list ->
+        client.queryProductDetailsAsync(params) { result, detailsResult ->
             if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                _products.value = list.sortedBy { DonationProducts.amountCents(it.productId) }
+                _products.value = detailsResult.productDetailsList
+                    .sortedBy { DonationProducts.amountCents(it.productId) }
+                detailsResult.unfetchedProductList.forEach {
+                    Log.w(TAG, "queryProductDetails: unfetched ${it.productId} status=${it.statusCode}")
+                }
             } else {
                 Log.w(TAG, "queryProductDetails: ${result.debugMessage}")
             }
