@@ -32,6 +32,10 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          # Play metadata is plain text in git (see .gitattributes), but pull LFS
+          # anyway so any future LFS-tracked asset the build reads is real content
+          # and not a pointer file.
+          lfs: true
 
       - name: Extract version
         id: version

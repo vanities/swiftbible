@@ -1,3 +1,37 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:22c15fc62fc2d6595cb6bc09350eb5b277651d8438017f81a62d83ec4080fbd7
-size 1572
+SwiftBible is a quiet, beautiful place to read scripture.
+
+THE TEXTS YOU KNOW
+• King James Version (KJV) — the classic, 1611
+• American Standard Version (ASV) — literal, scholarly, 1901
+• World English Bible (WEB) — modern English, public domain
+• Original Hebrew & Greek source texts
+
+AND THE TEXTS YOU MAY NOT
+• Deuterocanonical Apocrypha — Tobit, Judith, Wisdom of Solomon, Ecclesiasticus, Baruch, 1 & 2 Maccabees, additions to Esther and Daniel, plus Orthodox-only books
+• 1 Enoch — five sections including the Watchers, Parables, and Astronomical Book
+• 2 Enoch (Slavonic), Jubilees, Testaments of the Twelve Patriarchs
+• Didache and 1 Clement — earliest Christian writings outside the canon
+
+A BEAUTIFUL READING EXPERIENCE
+• Light, Dark, and Sepia reading themes
+• Choose between Lora, Source Serif, Cormorant Garamond, or Inter
+• Adjustable font size (12–30pt)
+• Jesus's words shown in red in the gospels
+• Chapter and passage summaries — at-a-glance overviews
+
+MAKE IT YOURS
+• Highlight verses in six colors
+• Write notes on any verse
+• Bookmark verses to return to
+• Resume from where you left off
+
+DAILY DEVOTIONAL
+A fresh verse and reflection every day, with a different theme — faith, hope, love, peace, joy, strength, wisdom, courage.
+
+WORKS COMPLETELY OFFLINE
+The entire library is bundled with the app. No account, no sign-in, no internet required.
+
+NO ADS. NO TRACKING.
+SwiftBible does not collect data about you. Your highlights, notes, and history stay on your device.
+
+Open source and made with care.

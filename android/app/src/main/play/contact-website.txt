@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:24dcab68a735a4df230bb986bfa80be14818bd94dae62bc46f7a87f4cfaa7565
-size 27
+https://am2.biz/swiftbible

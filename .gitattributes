@@ -1,1 +1,10 @@
+# Large source texts (raw scripture, commentaries, sermon transcripts) live in LFS.
 *.txt filter=lfs diff=lfs merge=lfs -text
+
+# ...but store-listing metadata does NOT. These are a few hundred bytes each and
+# are read by gradle-play-publisher straight from the checkout, so if they are
+# LFS pointers a CI run without `lfs: true` publishes the pointer text itself as
+# the listing / release notes. That shipped a literal
+# "version https://git-lfs.github.com/spec/v1..." to the Play internal track's
+# What's New during the 1.62 release.
+android/app/src/main/play/** -filter -diff -merge text=auto

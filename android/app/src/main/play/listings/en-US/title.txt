@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:aa2141fe7b16fcac006165e2ac6f37e03b7d78e2ee5fa11d23992f9e794cbc5e
-size 23
+Bible KJV - SwiftBible

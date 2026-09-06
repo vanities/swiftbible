@@ -1,3 +1,3 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3286d44ef08b5f87b5b16d3b35214fe77d9b11f1fbbbe37fbbeae2bae1811ebd
-size 351
+• Jesus's words in KJV and ASV are now taken from the source texts' own red-letter editions instead of being inferred, correcting hundreds of verses.
+• Replies spoken to Jesus are no longer shown in red, and verses where he speaks twice, or is quoted inside someone else's sentence, now read correctly.
+• Maintenance and stability improvements.

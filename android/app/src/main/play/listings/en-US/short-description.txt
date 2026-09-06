@@ -1,3 +1,1 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fbbeea19d2bd675e4fcc8858a4cf02ddadcad6d7fa2a694a3bb3c35c3e649eb0
-size 79
+Read the Bible, Apocrypha, and Book of Enoch offline. Beautiful, fast, no ads.
