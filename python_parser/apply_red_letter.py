@@ -20,9 +20,9 @@ import os
 import sys
 
 from red_letter_common import (
+    LEADING_PUNCTUATION,
     TRAILING_PUNCTUATION,
     paragraph_segments,
-    strip_jesus_tags,
     words_in,
 )
 
@@ -60,9 +60,10 @@ def tag_text(text, ranges):
     """Wrap the given word ranges of `text` in <JESUS> tags.
 
     Ranges are [start, end) indices into the text's word list. A span keeps the
-    punctuation that closes it — "…do this?" takes its question mark — but
-    never the whitespace after it, so an inline verse marker following a span
-    stays outside the tags.
+    punctuation that closes it — "…do this?" takes its question mark, and a
+    bracket hugging its first word opens with it — but never the whitespace
+    either side, so an inline verse marker between two spans stays outside the
+    tags.
     """
     words = words_in(text)
     if not words:
@@ -75,6 +76,8 @@ def tag_text(text, ranges):
         if start >= len(words) or end > len(words) or start >= end:
             continue
         open_at = words[start][1]
+        while open_at > 0 and text[open_at - 1] in LEADING_PUNCTUATION:
+            open_at -= 1
         close_at = TRAILING_PUNCTUATION.match(text, words[end - 1][2]).end()
         cuts.append((open_at, close_at))
 

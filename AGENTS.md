@@ -222,14 +222,19 @@ Nothing here is inferred from the text. Spans are imported, reconciled between t
 | Translation | Where its red letters come from |
 |---|---|
 | WEB | Its own `<wj>` markup, carried through by `parse_web.py`. Nothing to do. |
-| KJV | `eng-kjv.osis.xml` (`seven1m/open-bibles`) marks `<q who="Jesus">` on the KJV text itself. 2,081 spans, 99.7% of them located verbatim. |
-| ASV | No red-letter ASV exists in any public domain format. Projected from the KJV by word alignment (the ASV is a KJV revision), cross-checked against WEB, and taken from WEB for the verses the KJV renders indirectly. |
+| KJV | Two editions that mark Jesus's words on the KJV text itself: `eng-kjv.osis.xml` (`seven1m/open-bibles`, `<q who="Jesus">`) as the base, reconciled against `eng-kjv_usfx.xml` (ebible.org, USFX `<wj>`) and WEB. |
+| ASV | No red-letter ASV exists in any public domain format. Projected from the reconciled KJV by word alignment (the ASV is a KJV revision), cross-checked against WEB, and taken from WEB for the verses the KJV renders indirectly. |
 
-The OSIS module is authoritative but not flawless, so `build_red_letter_map.py` reconciles it against WEB. Every correction needs two witnesses, and each run prints what it did:
-- **dropped** (17) — OSIS leaves a quotation open across whole paragraphs (Luke 7:1-8, Mark 8:22-25, Matthew 24:1). A verse OSIS reddens *entirely* while WEB reddens *none* of it is that bleed.
-- **trimmed** (9) — the milestone sits at a paragraph start and swallows the narrative introduction (Mark 8:34) or the trailing narrative (Luke 17:14). Only edges are trimmed, only when WEB agrees the edge is narrative.
+**Why two KJV sources.** They have opposite flaws, so each covers the other's. OSIS is the fuller — it marks glosses ("which is, being interpreted, My God, my God…"), Jesus quoted inside someone else's sentence (John 8:33), and verses carrying two separate spans (Luke 8:45) — and the sloppier: it leaves quotations open across whole paragraphs of narrative and drops the KJV's italicised supplied words out of mid-sentence. ebible.org's is cleaner and, being on the same text, gives exact boundaries rather than projected ones — but it marks no glosses or quoted speech at all. After reconciliation the shipped KJV agrees with ebible.org word-for-word on **2,018 of 2,027** shared verses (99.6%), with **no verse it marks that we miss**; the 9 remaining are ones where OSIS and WEB agree against it.
+
+Every correction takes two witnesses, and each run prints what it did:
+- **dropped** (17) — OSIS leaves a quotation open across whole paragraphs (Luke 7:1-8, Mark 8:22-25, Matthew 24:1). A verse OSIS reddens *entirely* while WEB reddens *none* of is that bleed.
+- **trimmed** (13) — the milestone swallows the narrative introduction (Mark 8:34, "Saying," in Matthew 22:42) or the trailing narrative (Luke 17:14). The two edges are judged differently, and deliberately: **the exact witness decides a verse's opening alone** — its blind spot trails a quotation rather than opening a verse, and it is right in all 11 such verses, including the two where WEB shares the bleed — but **an ending needs WEB to second it**, since a gloss ebible declined to mark sits exactly there and Mark 15:34 would otherwise lose half its verse.
+- **rejoined** (2) — Mark 5:41 marks "Damsel," and "arise." but not the "I say unto thee," between them. A gap closes only when WEB marks it as spoken too.
 - **overrides** (2) — `red_letter_overrides.json`, hand-reviewed, for what no rule can settle: OSIS omits a quotation the KJV plainly attributes (Matthew 13:57, Luke 22:61). Spans are written as the KJV's own wording, so a stale one is reported rather than silently applied.
-- **still differing from WEB** (14 KJV, 8 ASV) — left as OSIS has them; the KJV's own markup is the authority for the KJV. Reviewed: Revelation 21:5-8 / 22:14-15 (whether the voice from the throne is Christ's), John 16:17-18 (the disciples quoting Jesus), Mark 10:49 (the KJV reports the summons indirectly).
+- **still differing from WEB** (12 KJV, 8 ASV) — left as the KJV's own markup has them. Reviewed: Revelation 21:5-8 / 22:14-15 (whether the voice from the throne is Christ's), John 16:17-18 (the disciples quoting Jesus), Mark 10:49 (the KJV reports the summons indirectly).
+
+The KJV's italicised supplied words are claimed for the quotation they sit inside, so John 18:5 reads "I am he" rather than a red "I am" with a black "he".
 
 To rebuild:
 ```bash

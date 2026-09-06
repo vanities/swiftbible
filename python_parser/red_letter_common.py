@@ -15,9 +15,16 @@ import re
 # so punctuation and spelling of the surrounding text stay irrelevant.
 WORD_PATTERN = re.compile(r"[A-Za-z]+")
 
-# Punctuation that belongs to the speech it follows: "...do this?" keeps its
-# question mark inside the tag.
-TRAILING_PUNCTUATION = re.compile(r"[^\w\s]*")
+# Punctuation that belongs to the speech it closes: "…do this?" keeps its
+# question mark. Deliberately no opening bracket — Matthew 9:6 ends a span at
+# "to forgive sins, (" and the matching ")" is three words into the narrative
+# aside that follows.
+TRAILING_PUNCTUATION = re.compile(r"[.,;:!?…—\-)\]}]*")
+
+# ...and the mirror: a bracket hugging the first word opens the speech with it,
+# so the ASV's "[If any man hath ears to hear, let him hear.]" is red on both
+# sides rather than losing its opening bracket to the narrative.
+LEADING_PUNCTUATION = "([{"
 
 INLINE_VERSE_PATTERN = re.compile(r"\b(\d+):(\d+[a-z]?)\b")
 

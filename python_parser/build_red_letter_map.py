@@ -3,20 +3,35 @@ Build red_letter_map.json — the word-level Words of Jesus map for KJV and ASV.
 
 Where the markup comes from
 ---------------------------
-KJV  Imported, not inferred. eng-kjv.osis.xml (seven1m/open-bibles, the same
-     upstream the ASV text comes from) marks Jesus's words on the KJV text
-     itself with <q who="Jesus">, word for word — including verses with two
-     separate spans (Luke 8:45) and phrases quoted inside someone else's
-     sentence (John 8:33), neither of which any heuristic can find.
+KJV  Imported, not inferred, from two editions that mark Jesus's words on the
+     KJV text itself:
+
+       eng-kjv.osis.xml   seven1m/open-bibles, the upstream the ASV text also
+                          comes from. <q who="Jesus">, word for word. The
+                          fuller of the two: it marks glosses ("My God, my
+                          God…") and Jesus quoted inside someone else's
+                          sentence (John 8:33), and it carries verses with two
+                          separate spans (Luke 8:45). It is also the sloppier —
+                          it leaves quotations open across whole paragraphs of
+                          narrative, and drops the KJV's italicised supplied
+                          words out of the middle of a sentence.
+
+       eng-kjv_usfx.xml   ebible.org, USFX <wj>. Independent, on the same text,
+                          so its boundaries are exact rather than projected.
+                          Cleaner, but it declines to mark glosses and quoted
+                          speech at all.
+
+     The first is the base; the second and WEB reconcile it. Every correction
+     takes two witnesses, and the report says what moved and why.
 
 ASV  No red letter edition of the ASV exists in any public domain format, so
-     its spans are projected from the KJV by word alignment (the ASV is a
-     revision of the KJV, so the two track each other closely) and then
-     cross-checked against WEB's independent <wj> markup. Verses where the two
-     projections disagree are reported, loudly, rather than quietly shipped.
+     its spans are projected from the reconciled KJV by word alignment (the ASV
+     is a revision of the KJV, so the two track each other closely) and then
+     cross-checked against WEB. Verses where the two disagree are reported,
+     loudly, rather than quietly shipped.
 
 WEB  Needs nothing: parse_web.py carries its native <wj> tags straight into
-     web.json. It is used here only as the second opinion for the ASV.
+     web.json. Here it is a witness, not an output.
 
 Usage:
     python3 build_red_letter_map.py            # build the map + print the report
@@ -25,17 +40,20 @@ Usage:
 
 import difflib
 import hashlib
+import io
 import json
 import os
 import re
 import sys
 import urllib.request
+import zipfile
 
 from red_letter_common import WORD_PATTERN, strip_jesus_tags, verse_map
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEXT_DIR = os.path.join(HERE, "..", "ios", "swiftbible", "Text")
 OSIS_PATH = os.path.join(HERE, "sources", "eng-kjv.osis.xml")
+USFX_PATH = os.path.join(HERE, "sources", "eng-kjv_usfx.xml")
 MAP_PATH = os.path.join(HERE, "red_letter_map.json")
 OVERRIDES_PATH = os.path.join(HERE, "red_letter_overrides.json")
 
@@ -44,14 +62,26 @@ OVERRIDES_PATH = os.path.join(HERE, "red_letter_overrides.json")
 OSIS_URL = "https://raw.githubusercontent.com/seven1m/open-bibles/master/eng-kjv.osis.xml"
 OSIS_SHA256 = "eeeae647fc28360ce47f9c0d5cc3b397b7fdd9913fe53dc9f44eb6deee50e253"
 
+# The second witness on the KJV: ebible.org's edition marks Jesus's words with
+# USFX <wj>, independently of the OSIS module and on the same text, so its
+# boundaries need no alignment to compare.
+USFX_URL = "https://ebible.org/Scriptures/eng-kjv_usfx.zip"
+USFX_SHA256 = "2a4aa57b3ad1dab01f030c29b9e996be64c4957fcfba98fadd22457ce1b2868c"
+
 # How far two sources may differ before the verse is worth a human's time. One
 # or two words is boundary jitter — whether "Verily" or a closing "he said"
 # falls inside — not a wrong speaker.
 REVIEW_THRESHOLD = 4
 
-# How much narrative WEB must see at a verse edge before an OSIS span is
-# trimmed back off it. Below this it is jitter, not a swallowed introduction.
+# How much narrative a projected witness must see at a verse edge before an
+# OSIS span is trimmed back off it. Below this it is jitter, not a swallowed
+# introduction. The witness that marks the KJV text itself needs no such margin.
 MIN_EDGE_WORDS = 3
+
+# The longest stretch of unmarked words that may be rejoined to the speech
+# around it — long enough for "I say unto thee," never long enough for a
+# narrative aside.
+MAX_CLOSED_GAP = 6
 
 OSIS_BOOKS = {
     "Matt": "Matthew", "Mark": "Mark", "Luke": "Luke", "John": "John",
@@ -66,67 +96,207 @@ OSIS_BOOKS = {
 
 # OSIS marks both verses and quotations as milestones — empty elements carrying
 # a start id (sID) and a matching end id (eID) — rather than as nesting.
+# <transChange type="added"> wraps the words the KJV prints in italics because
+# the translators supplied them; they matter here because the module often
+# leaves them outside the quotation they belong to.
 OSIS_TOKEN = re.compile(
     r'<verse osisID="([^"]+)"[^>]*sID[^>]*/>'
     r'|(<verse eID[^>]*/>)'
     r'|<q who="Jesus"[^>]*sID="([^"]+)"[^>]*/>'
     r'|<q eID="([^"]+)"[^>]*/>'
+    r'|(<transChange[^>]*>)'
+    r'|(</transChange>)'
     r'|<[^>]+>'
 )
 
 
-def download_osis():
-    """Fetch the OSIS KJV once, into sources/."""
-    if os.path.exists(OSIS_PATH):
-        return
-    os.makedirs(os.path.dirname(OSIS_PATH), exist_ok=True)
-    print(f"Downloading {OSIS_URL} ...")
-    with urllib.request.urlopen(OSIS_URL, timeout=300) as response:
-        data = response.read()
-    digest = hashlib.sha256(data).hexdigest()
-    if digest != OSIS_SHA256:
-        print(f"  NOTE: checksum is {digest}, expected {OSIS_SHA256}.")
-        print("  Upstream changed. Review the report below before committing the map.")
-    with open(OSIS_PATH, "wb") as f:
-        f.write(data)
-    print(f"  Saved to {OSIS_PATH} ({len(data)} bytes)")
+def fetch(url, expected_sha256, attempts=4):
+    """Download a source, checking it against its pinned digest."""
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(url, timeout=300) as response:
+                data = response.read()
+        except Exception as error:  # noqa: BLE001 — any transport failure retries
+            print(f"  attempt {attempt} failed: {error}")
+            continue
+        digest = hashlib.sha256(data).hexdigest()
+        if digest != expected_sha256:
+            print(f"  NOTE: checksum is {digest}, expected {expected_sha256}.")
+            print("  Upstream changed. Read the report below before committing the map.")
+        return data
+    raise SystemExit(f"could not download {url}")
+
+
+def download_sources():
+    """Fetch both KJV markup sources once, into sources/."""
+    os.makedirs(os.path.join(HERE, "sources"), exist_ok=True)
+
+    if not os.path.exists(OSIS_PATH):
+        print(f"Downloading {OSIS_URL} ...")
+        with open(OSIS_PATH, "wb") as f:
+            f.write(fetch(OSIS_URL, OSIS_SHA256))
+        print(f"  Saved to {OSIS_PATH}")
+
+    if not os.path.exists(USFX_PATH):
+        print(f"Downloading {USFX_URL} ...")
+        archive = fetch(USFX_URL, USFX_SHA256)
+        with zipfile.ZipFile(io.BytesIO(archive)) as bundle:
+            name = next(n for n in bundle.namelist() if n.endswith("usfx.xml"))
+            with open(USFX_PATH, "wb") as f:
+                f.write(bundle.read(name))
+        print(f"  Saved to {USFX_PATH}")
 
 
 def read_osis_spans():
-    """{(book, chapter, verse): [span text, ...]} from <q who="Jesus"> markers."""
+    """{(book, chapter, verse): [[word, ...], ...]} from <q who="Jesus"> markers."""
     with open(OSIS_PATH, "r", encoding="utf-8") as f:
         osis = f.read()
 
-    raw = {}
-    verse, open_quote, buffer, position = None, None, [], 0
+    # Per verse, every word with the two flags that decide whether it is spoken.
+    tagged = {}
+    verse, in_quote, in_added, position = None, False, False, 0
+
+    def take(chunk):
+        if verse:
+            tagged.setdefault(verse, []).extend(
+                (m.group(0).lower(), in_quote, in_added)
+                for m in WORD_PATTERN.finditer(chunk)
+            )
 
     for match in OSIS_TOKEN.finditer(osis):
-        if verse and open_quote:
-            buffer.append(osis[position:match.start()])
+        take(osis[position:match.start()])
         position = match.end()
 
         if match.group(1):
-            verse, open_quote, buffer = match.group(1), None, []
+            verse, in_quote, in_added = match.group(1), False, False
         elif match.group(2):
             verse = None
         elif match.group(3):
-            open_quote, buffer = match.group(3), []
-        elif match.group(4) and open_quote == match.group(4):
-            raw.setdefault(verse, []).append("".join(buffer))
-            open_quote = None
+            in_quote = True
+        elif match.group(4):
+            in_quote = False
+        elif match.group(5):
+            in_added = True
+        elif match.group(6):
+            in_added = False
 
     spans = {}
-    for osis_id, texts in raw.items():
+    for osis_id, words_ in tagged.items():
         book, chapter, verse_number = osis_id.split(".")
-        if book in OSIS_BOOKS:
-            kept = [t for t in texts if t.strip()]
-            if kept:
-                spans[(OSIS_BOOKS[book], int(chapter), int(verse_number))] = kept
+        if book not in OSIS_BOOKS:
+            continue
+        flags = claim_supplied_words(words_)
+        ranges = spans_from_flags(flags)
+        if ranges:
+            key = (OSIS_BOOKS[book], int(chapter), int(verse_number))
+            spans[key] = [[w for w, _, _ in words_[s:e]] for s, e in ranges]
+    return spans
+
+
+def claim_supplied_words(words_):
+    """Italicised words the module left just outside a quotation are inside it.
+
+    The KJV prints translator-supplied words in italics, and the module tends to
+    close the quotation around them: John 18:5 marks "I am" and leaves "he"
+    out, Luke 17:22 ends at "ye shall not see" and drops "it". Rendered, that is
+    a red sentence with black holes in it. Such a word belongs to the speech
+    when the speech runs up to it on either side — and never otherwise, so
+    "The Son" in Matthew 22:42, supplied inside the crowd's answer, stays black.
+    """
+    flags = [in_quote for _, in_quote, _ in words_]
+
+    index = 0
+    while index < len(flags):
+        if flags[index] or not words_[index][2]:
+            index += 1
+            continue
+        end = index
+        while end < len(flags) and words_[end][2] and not flags[end]:
+            end += 1
+        touches_speech = (index > 0 and flags[index - 1]) or (end < len(flags) and flags[end])
+        if touches_speech:
+            for i in range(index, end):
+                flags[i] = True
+        index = max(end, index + 1)
+
+    return flags
+
+
+USFX_BOOKS = {
+    "MAT": "Matthew", "MRK": "Mark", "LUK": "Luke", "JHN": "John", "ACT": "Acts",
+    "ROM": "Romans", "1CO": "1 Corinthians", "2CO": "2 Corinthians",
+    "GAL": "Galatians", "EPH": "Ephesians", "PHP": "Philippians",
+    "COL": "Colossians", "1TH": "1 Thessalonians", "2TH": "2 Thessalonians",
+    "1TI": "1 Timothy", "2TI": "2 Timothy", "TIT": "Titus", "PHM": "Philemon",
+    "HEB": "Hebrews", "JAS": "James", "1PE": "1 Peter", "2PE": "2 Peter",
+    "1JN": "1 John", "2JN": "2 John", "3JN": "3 John", "JUD": "Jude",
+    "REV": "Revelation",
+}
+
+USFX_TOKEN = re.compile(
+    r'<v id="[^"]*" bcv="([^"]+)"\s*/>'
+    r'|(<wj>)'
+    r'|(</wj>)'
+    r'|<[^>]+>'
+)
+
+
+def read_usfx_spans():
+    """{(book, chapter, verse): [[word, ...], ...]} from ebible.org's <wj>."""
+    with open(USFX_PATH, "r", encoding="utf-8") as f:
+        usfx = f.read()
+
+    spans, ref, inside, buffer, position = {}, None, False, [], 0
+
+    def close():
+        if ref and buffer:
+            spans.setdefault(ref, []).append(list(buffer))
+        buffer.clear()
+
+    for match in USFX_TOKEN.finditer(usfx):
+        if ref and inside:
+            buffer.extend(m.group(0).lower() for m in WORD_PATTERN.finditer(usfx[position:match.start()]))
+        position = match.end()
+
+        if match.group(1):
+            close()  # a quotation running past a verse boundary ends with it
+            book, chapter, verse = match.group(1).split(".")
+            name = USFX_BOOKS.get(book)
+            ref = (name, int(chapter), int(verse)) if name else None
+        elif match.group(2):
+            inside, buffer = True, []
+        elif match.group(3):
+            close()
+            inside = False
+
     return spans
 
 
 def words(text):
     return [m.group(0).lower() for m in WORD_PATTERN.finditer(text)]
+
+
+def locate_all(spans_by_ref, verse_text):
+    """Turn a source's spans into per-word flags on the shipped KJV text."""
+    flags = {}
+    for ref, span_words in spans_by_ref.items():
+        text = verse_text.get(ref)
+        if text is None:
+            continue
+        verse_words = words(text)
+        marks, cursor, found = [False] * len(verse_words), 0, False
+        for span in span_words:
+            if not span:
+                continue
+            located = locate(span, verse_words, cursor)
+            if located is None:
+                continue
+            for index in range(*located):
+                marks[index] = True
+            cursor, found = located[1], True
+        if found:
+            flags[ref] = marks
+    return flags
 
 
 def locate(span_words, verse_words, after=0):
@@ -156,7 +326,7 @@ def locate(span_words, verse_words, after=0):
     return None
 
 
-def reconcile(osis_flags, web_flags_on_kjv):
+def reconcile(osis_flags, web_flags_on_kjv, usfx_flags=None):
     """Trim an OSIS span that ran over a verse edge into narrative.
 
     The OSIS module places its <q who="Jesus"> milestone at the start of the
@@ -167,32 +337,81 @@ def reconcile(osis_flags, web_flags_on_kjv):
     they were cleansed.").
 
     Both are structural: the span reaches a verse edge that is plainly
-    narrative. Trimming needs two independent witnesses — the span touches the
-    edge, AND WEB's own <wj> markup says that edge is not Jesus — so a noisy
-    projection alone can never move a boundary, and a boundary in the middle of
-    a verse is never touched. Returns (flags, "start"/"end"/None).
+    narrative. Trimming takes two independent witnesses, so a single noisy
+    reading can never move a boundary, and a boundary in the middle of a verse
+    is never touched.
+
+    ebible.org's KJV is the better witness where it has an opinion: it marks
+    the same text, so its boundary is exact rather than projected, and a single
+    word of narrative is enough to act on. What it will not do is mark a gloss
+    — it leaves "which is, being interpreted, My God, my God…" black — and a
+    gloss follows the words it explains. So the two edges are not judged alike:
+
+      start  the exact witness decides alone. Its blind spot trails a
+             quotation, it does not open a verse, and it is right in every one
+             of these — including "Saying," in Mark 10:33 and "And he said also
+             to the people," in Luke 12:54, where WEB opens its own quotation
+             just as early and would veto the cut.
+      end    the exact witness needs WEB to second it, since this is exactly
+             where a gloss it declined to mark would be, and Mark 15:34 would
+             otherwise lose half its verse.
+
+    Where ebible has nothing to say, WEB decides alone and its projected
+    boundary needs the wider margin.
+
+    Returns (flags, "start"/"end"/"both"/None).
     """
     if not any(osis_flags) or not any(web_flags_on_kjv):
         return osis_flags, None
 
     flags = list(osis_flags)
-    web_start = web_flags_on_kjv.index(True)
-    web_end = len(web_flags_on_kjv) - web_flags_on_kjv[::-1].index(True)
+    exact = usfx_flags if usfx_flags and any(usfx_flags) else None
+    witness = exact or web_flags_on_kjv
+    margin = 1 if exact else MIN_EDGE_WORDS
+
+    start = witness.index(True)
+    end = len(witness) - witness[::-1].index(True)
     trimmed = None
 
-    # Opening narrative: OSIS starts at the first word, WEB says it is narrative.
-    if flags[0] and not web_flags_on_kjv[0] and web_start >= MIN_EDGE_WORDS:
-        for i in range(web_start):
-            flags[i] = False
+    # Opening narrative the span swallowed.
+    seconded = exact is not None or not web_flags_on_kjv[0]
+    if flags[0] and not witness[0] and seconded and start >= margin:
+        for index in range(start):
+            flags[index] = False
         trimmed = "start"
 
-    # Trailing narrative: OSIS runs to the last word, WEB says it is narrative.
-    if flags[-1] and not web_flags_on_kjv[-1] and len(flags) - web_end >= MIN_EDGE_WORDS:
-        for i in range(web_end, len(flags)):
-            flags[i] = False
+    # Trailing narrative — here a second opinion is always required.
+    if (flags[-1] and not witness[-1] and not web_flags_on_kjv[-1]
+            and len(flags) - end >= margin):
+        for index in range(end, len(flags)):
+            flags[index] = False
         trimmed = "both" if trimmed else "end"
 
     return (flags, trimmed) if any(flags) else (osis_flags, None)
+
+
+def close_gaps(flags, web_flags_on_kjv):
+    """Rejoin spans the module split around words it left unmarked.
+
+    Mark 5:41 marks "Damsel," and "arise." but not the "I say unto thee,"
+    between them, which reads as one sentence flickering in and out of red. The
+    gap closes only when WEB marks it as spoken too — a gap both sources leave
+    black, like "which is, being interpreted," in Mark 15:34, stays black.
+    """
+    ranges = spans_from_flags(flags)
+    if len(ranges) < 2 or not any(web_flags_on_kjv):
+        return flags, False
+
+    closed = list(flags)
+    joined = False
+    for (_, gap_start), (gap_end, _) in zip(ranges, ranges[1:]):
+        if gap_end - gap_start > MAX_CLOSED_GAP:
+            continue
+        if all(web_flags_on_kjv[gap_start:gap_end]):
+            for index in range(gap_start, gap_end):
+                closed[index] = True
+            joined = True
+    return closed, joined
 
 
 def apply_overrides(spans, verse_text, overrides_path=None):
@@ -221,9 +440,12 @@ def apply_overrides(spans, verse_text, overrides_path=None):
             applied.append((ref, "MISSING: no such verse"))
             continue
 
+        replacing = "set" in entry
+        quotations = entry["set"] if replacing else entry.get("add", [])
+
         verse_words = words(text)
         ranges, cursor, failed = [], 0, None
-        for quotation in entry.get("add", []):
+        for quotation in quotations:
             located = locate(words(quotation), verse_words, cursor)
             if located is None:
                 failed = quotation[:60]
@@ -235,8 +457,9 @@ def apply_overrides(spans, verse_text, overrides_path=None):
             applied.append((ref, f"STALE: no longer matches {failed!r}"))
             continue
 
+        existing = [] if replacing else spans.get(ref, [])
         spans[ref] = spans_from_flags(
-            flags_from_spans(sorted(spans.get(ref, []) + ranges), len(verse_words))
+            flags_from_spans(sorted(existing + ranges), len(verse_words))
         )
         applied.append((ref, entry.get("reason", "")))
     return applied
@@ -250,8 +473,9 @@ def build_kjv_spans():
     osis_spans = read_osis_spans()
     verse_text = verse_map(os.path.join(TEXT_DIR, "bible.json"))
     web_text = verse_map(os.path.join(TEXT_DIR, "web.json"), strip=False)
+    usfx_flags = locate_all(read_usfx_spans(), verse_text)
 
-    spans, unlocated, trimmed, dropped, disputed = {}, [], [], [], []
+    spans, unlocated, trimmed, dropped, disputed, joined = {}, [], [], [], [], []
     for ref, texts in sorted(osis_spans.items()):
         text = verse_text.get(ref)
         if text is None:
@@ -259,13 +483,12 @@ def build_kjv_spans():
             continue
         verse_words = words(text)
         found, cursor = [], 0
-        for span_text in texts:
-            span_words = words(span_text)
+        for span_words in texts:
             if not span_words:
                 continue
             located = locate(span_words, verse_words, cursor)
             if located is None:
-                unlocated.append((ref, span_text.strip()[:70]))
+                unlocated.append((ref, " ".join(span_words)[:70]))
                 continue
             found.append(located)
             cursor = located[1]
@@ -287,9 +510,12 @@ def build_kjv_spans():
         if web_verse and "<JESUS>" in web_verse:
             on_kjv = project(words(strip_jesus_tags(web_verse)), web_flags(web_verse),
                              verse_words, text)
-            flags, edge = reconcile(flags, on_kjv)
+            flags, edge = reconcile(flags, on_kjv, usfx_flags.get(ref))
             if edge:
                 trimmed.append((ref, edge))
+            flags, gap = close_gaps(flags, on_kjv)
+            if gap:
+                joined.append(ref)
             difference = sum(1 for a, b in zip(flags, on_kjv) if a != b)
             if difference >= REVIEW_THRESHOLD:
                 # Left as OSIS has it — the KJV's own markup is the authority
@@ -299,7 +525,7 @@ def build_kjv_spans():
         spans[ref] = spans_from_flags(flags)
 
     added = apply_overrides(spans, verse_text)
-    return spans, unlocated, trimmed, dropped, disputed, added
+    return spans, unlocated, trimmed, dropped, joined, disputed, added
 
 
 def flags_from_spans(ranges, length):
@@ -496,10 +722,10 @@ def nest(spans):
 def main():
     report_only = "--report" in sys.argv
 
-    download_osis()
+    download_sources()
 
     print("Reading OSIS <q who=\"Jesus\"> markers ...")
-    kjv_spans, unlocated, trimmed, dropped, disputed, added = build_kjv_spans()
+    kjv_spans, unlocated, trimmed, dropped, joined, disputed, added = build_kjv_spans()
     total_spans = sum(len(v) for v in kjv_spans.values())
     multi = sum(1 for v in kjv_spans.values() if len(v) > 1)
     print(f"  KJV: {len(kjv_spans)} verses, {total_spans} spans "
@@ -514,6 +740,9 @@ def main():
     print(f"  trimmed off a narrative verse edge, WEB concurring: {len(trimmed)}")
     for ref, edge in trimmed:
         print(f"    {ref[0]} {ref[1]}:{ref[2]} ({edge})")
+    print(f"  spans rejoined across an unmarked gap, WEB concurring: {len(joined)}")
+    for ref in joined:
+        print(f"    {ref[0]} {ref[1]}:{ref[2]}")
     print(f"  hand-reviewed overrides applied: {len(added)}")
     for ref, note in added:
         print(f"    {ref[0]} {ref[1]}:{ref[2]}  {note[:90]}")

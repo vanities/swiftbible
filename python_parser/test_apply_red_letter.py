@@ -16,6 +16,7 @@ import re
 import unittest
 
 from apply_red_letter import load_spans, tag_text
+from build_red_letter_map import claim_supplied_words, close_gaps, reconcile
 from red_letter_common import paragraph_segments, verse_map
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -65,6 +66,22 @@ class TagPlacementTests(unittest.TestCase):
         verse = "Follow me. "
         self.assertEqual(tag_text(verse, [[0, 2]]), "<JESUS>Follow me.</JESUS> ")
 
+    def test_a_bracket_hugging_the_first_word_opens_with_it(self):
+        """The ASV brackets whole verses of Jesus's speech."""
+        verse = "[If any man hath ears to hear, let him hear.] "
+        self.assertEqual(
+            tag_text(verse, [[0, 10]]),
+            "<JESUS>[If any man hath ears to hear, let him hear.]</JESUS> ",
+        )
+
+    def test_an_opening_bracket_is_not_swept_up_at_a_spans_end(self):
+        """Matthew 9:6 — the "(" belongs to the aside, whose ")" is inside it."""
+        verse = "to forgive sins, (then saith he to the sick of the palsy,) Arise. "
+        tagged = tag_text(verse, [[0, 3]])
+        self.assertEqual(
+            tagged, "<JESUS>to forgive sins,</JESUS> (then saith he to the sick of the palsy,) Arise. "
+        )
+
     def test_a_verse_with_no_spans_is_untouched(self):
         verse = "And he did not many mighty works there because of their unbelief. "
         self.assertEqual(tag_text(verse, []), verse)
@@ -72,6 +89,82 @@ class TagPlacementTests(unittest.TestCase):
     def test_out_of_range_spans_are_ignored_rather_than_crashing(self):
         verse = "Peace, be still. "
         self.assertEqual(tag_text(verse, [[0, 99]]), verse)
+
+
+class ReconciliationTests(unittest.TestCase):
+    """The rules that decide between the three sources.
+
+    Each is a real verse where the sources disagree, reduced to flags. They pin
+    the asymmetry the rules rest on: the witness that marks the KJV text itself
+    decides a verse's opening alone, but never its ending on its own, because
+    the gloss it declines to mark is exactly what sits there.
+    """
+
+    def test_the_exact_witness_alone_trims_a_swallowed_introduction(self):
+        """Luke 12:54 — WEB opens its own quotation just as early."""
+        osis = [True] * 10
+        exact = [False] * 3 + [True] * 7
+        web = [True] * 10  # WEB shares the bleed
+        flags, edge = reconcile(osis, web, exact)
+        self.assertEqual(edge, "start")
+        self.assertEqual(flags, exact)
+
+    def test_the_exact_witness_alone_does_not_trim_an_ending(self):
+        """Mark 15:34 — it declines to mark the gloss, WEB marks it."""
+        osis = [True] * 10
+        exact = [True] * 6 + [False] * 4     # gloss left unmarked
+        web = [True] * 10                    # WEB marks the gloss
+        flags, edge = reconcile(osis, web, exact)
+        self.assertIsNone(edge)
+        self.assertEqual(flags, osis)
+
+    def test_both_witnesses_agreeing_do_trim_an_ending(self):
+        """Luke 17:14 — "And it came to pass…" is narrative in both."""
+        osis = [True] * 10
+        exact = [True] * 6 + [False] * 4
+        web = [True] * 6 + [False] * 4
+        flags, edge = reconcile(osis, web, exact)
+        self.assertEqual(edge, "end")
+        self.assertEqual(flags, exact)
+
+    def test_a_boundary_inside_a_verse_is_never_moved(self):
+        osis = [False] * 4 + [True] * 6
+        exact = [False] * 6 + [True] * 4
+        web = [False] * 6 + [True] * 4
+        flags, edge = reconcile(osis, web, exact)
+        self.assertIsNone(edge)
+        self.assertEqual(flags, osis)
+
+    def test_a_gap_both_sources_leave_black_stays_black(self):
+        """Mark 15:34's "which is, being interpreted," is narrative."""
+        flags = [True, True, False, False, True, True]
+        web = [True, True, False, False, True, True]
+        closed, joined = close_gaps(flags, web)
+        self.assertFalse(joined)
+        self.assertEqual(closed, flags)
+
+    def test_a_gap_web_marks_as_spoken_is_closed(self):
+        """Mark 5:41 — "I say unto thee," between "Damsel," and "arise."."""
+        flags = [True, False, False, True]
+        web = [True, True, True, True]
+        closed, joined = close_gaps(flags, web)
+        self.assertTrue(joined)
+        self.assertEqual(closed, [True] * 4)
+
+    def test_supplied_words_beside_a_quotation_join_it(self):
+        """John 18:5 — the module marks "I am" and leaves italic "he" out."""
+        words_ = [("i", True, False), ("am", True, False), ("he", False, True),
+                  ("and", False, False), ("judas", False, False)]
+        self.assertEqual(claim_supplied_words(words_),
+                         [True, True, True, False, False])
+
+    def test_supplied_words_elsewhere_in_the_verse_do_not(self):
+        """Matthew 22:42 — "The Son" is supplied inside the crowd's answer."""
+        words_ = [("what", True, False), ("think", True, False),
+                  ("they", False, False), ("say", False, False),
+                  ("the", False, True), ("son", False, True)]
+        self.assertEqual(claim_supplied_words(words_),
+                         [True, True, False, False, False, False])
 
 
 class ShippedTextTests(unittest.TestCase):
