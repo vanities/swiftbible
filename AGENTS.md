@@ -205,7 +205,8 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 **Unit tests (run these before shipping):**
 - iOS: `swiftbibleTests` target — streak/freeze/sabbath date math, badge unlock conditions, `EventReadingDay` UTC-civil-date gating, bundled-text loading. Run with `make test-ios` (or `xcodebuild test … -only-testing:swiftbibleTests`). Uses an in-memory SwiftData store with `cloudKitDatabase: .none`.
 - Android: `android/app/src/test/` — streak math, book-intro fallback chain, badge threshold registry, widget formatting. Run with `make test-android`.
-- `make test` runs both. CI (`.github/workflows/ci.yml`) runs SwiftLint + both suites on every push/PR.
+- Parsers: `python_parser/test_*.py` — red-letter speaker attribution (which half of a question-and-answer verse the `<JESUS>` tags land on). Stdlib `unittest`, no dependencies. Run with `make test-parsers`.
+- `make test` runs all three. CI (`.github/workflows/ci.yml`) runs SwiftLint + every suite on every push/PR.
 - Analytics (PostHog) and Sentry skip configuration under XCTest, so tests never emit live events.
 
 **Parser/data validation:**
@@ -213,6 +214,12 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 - Check sequential numbering preservation
 - Verify inline reference formatting
 - Ensure JSON structure consistency
+
+**Red letter (Words of Jesus):**
+- WEB has native `<wj>` markup; KJV and ASV do not, so `apply_red_letter.py` infers the span from speech-introducing verbs, using WEB only for *which* verses contain Jesus's words (`red_letter_verses.json`) and whether they carry narrative before/after (`red_letter_verse_types.json`).
+- After editing the tagger, regenerate **and copy to all three homes** — they are byte-identical:
+  `ios/swiftbible/Text/`, `android/app/src/main/assets/`, `supabase/functions/daily-devotional/bible.json`.
+- Known limitation: where another speaker *quotes* Jesus inside their own words (John 8:33, 12:34, 16:18), WEB reddens only the quoted phrase; the KJV/ASV tagger has no way to find it and reddens the whole reply.
 
 ## Technical Decisions
 

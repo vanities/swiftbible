@@ -84,20 +84,44 @@ TRAIL_PATTERN = re.compile(
 )
 
 
-def find_speech_start(text):
-    """Find where Jesus's speech begins in a verse with narrative intro.
+# Sentence boundaries, used to find where one speaker's turn ends and the
+# next begins. The index kept is just past the mark, so "...do this? They
+# said" splits after the question mark.
+SENTENCE_END_PATTERN = re.compile(r"[.!?][\"')\]]*(?=\s)")
 
-    Strategy: find the LAST speech-introducing verb, then scan forward to the
-    next comma, semicolon, or colon. Everything after that boundary is speech.
+# Ways a speech-introducing clause names Jesus as the speaker. Only explicit
+# names count: "he said," is just as often the person answering him.
+JESUS_SPEAKER_PATTERN = re.compile(r"\b(?:Jesus|the\s+Lord|Christ)\b", re.IGNORECASE)
+
+
+def introduces_jesus(text, verb_start, speech_start):
+    """Does the clause holding this speech verb name Jesus as the speaker?
+
+    Looks at the clause the verb sits in — from the punctuation before it up to
+    the speech it introduces — so both "Jesus saith unto them," and the inverted
+    "Then said Jesus unto them," count, while "They said unto him," does not.
+    """
+    clause_start = max(
+        (text.rfind(mark, 0, verb_start) for mark in ",;:.!?"),
+        default=-1,
+    )
+    clause = text[clause_start + 1:speech_start]
+    return JESUS_SPEAKER_PATTERN.search(clause) is not None
+
+
+def find_speech_intros(text):
+    """Return every speech introduction as (verb_start, speech_start) pairs.
+
+    `verb_start` is where the introducing verb begins; `speech_start` is where
+    the words it introduces begin (just past the following comma, semicolon or
+    colon). Pairs come out in the order the verbs appear.
 
     This handles patterns like:
       "said unto him,"  /  "saith Jesus unto them,"
       "spake he unto them;"  /  "began to say,"
       "asked the scribes,"  /  "said unto the sick of the palsy,"
-
-    Returns the character index where Jesus's words start, or None.
     """
-    last_boundary = None
+    intros = []
 
     # Check for "began to say/speak/preach" (must come before verb check
     # since "say" would also match as a standalone verb)
@@ -106,23 +130,31 @@ def find_speech_start(text):
         # Look for the next [,;:] after the "began to say" phrase
         boundary = re.search(r"[,;:]\s*", rest)
         if boundary:
-            last_boundary = m.end() + boundary.end()
+            intros.append((m.start(), m.end() + boundary.end()))
         else:
             # "began to say," — the comma might be right at the end of the match
             # or the speech starts immediately
-            last_boundary = m.end()
+            intros.append((m.start(), m.end()))
 
-    # Find all speech-introducing verbs and take the LAST one's boundary
     for verb_match in SPEECH_VERB_PATTERN.finditer(text):
         rest = text[verb_match.end():]
         # Scan forward to find the next [,;:] — this is the speech boundary
         boundary = re.search(r"[,;:]\s*", rest)
         if boundary:
-            candidate = verb_match.end() + boundary.end()
-            # Take the LAST verb's boundary (handles "answered and said,")
-            last_boundary = candidate
+            intros.append((verb_match.start(), verb_match.end() + boundary.end()))
 
-    return last_boundary
+    intros.sort()
+    return intros
+
+
+def find_speech_start(text):
+    """Find where Jesus's speech begins in a verse with narrative intro.
+
+    Takes the LAST speech introduction, which is what "answered and said,"
+    needs. Returns the character index where Jesus's words start, or None.
+    """
+    intros = find_speech_intros(text)
+    return intros[-1][1] if intros else None
 
 
 def find_speech_end(text, speech_start):
@@ -155,6 +187,52 @@ def find_speech_end(text, speech_start):
     return None
 
 
+def find_speech_before_reply(text):
+    """Re-locate Jesus's speech when the last speech verb introduces a reply.
+
+    `find_speech_start` takes the last speech-introducing verb, which is right
+    for "answered and said," but wrong when the verse ends with someone else's
+    answer: "and Jesus saith unto them, Believe ye that I am able to do this?
+    They said unto him, Yea, Lord." There the last verb ("They said") belongs to
+    the blind men, so tagging everything after it puts their answer in red.
+
+    The reply starts its own sentence, so walk back to the sentence boundary
+    before that verb and re-run the intro search on what precedes it. Using the
+    boundary rather than a vocabulary of narrative openings keeps this working
+    for "They say unto him," and "Peter answering said," alike.
+
+    Returns (speech_start, speech_end), or (None, None) if no earlier
+    introduction yields a plausible span.
+    """
+    intros = find_speech_intros(text)
+    if not intros:
+        return None, None
+
+    reply_verb_start, reply_start = intros[-1]
+
+    # Only step back on evidence that someone else is speaking. Without it the
+    # trail simply went unrecognised — "Jesus saith unto them, I am he. And
+    # Judas also, which betrayed him, stood with them." — and the last verb is
+    # still the right one.
+    if introduces_jesus(text, reply_verb_start, reply_start):
+        return None, None
+
+    for m in reversed(list(SENTENCE_END_PATTERN.finditer(text))):
+        speech_end = m.end()
+        # The boundary has to precede the reply's own verb, or we are just
+        # splitting the reply rather than stepping back before it.
+        if speech_end > reply_verb_start:
+            continue
+        speech_start = find_speech_start(text[:speech_end])
+        if speech_start is None:
+            continue
+        # Sanity check: Jesus's speech should be non-trivial
+        if len(text[speech_start:speech_end].strip()) > 2:
+            return speech_start, speech_end
+
+    return None, None
+
+
 def tag_verse_text(text, verse_type):
     """Apply <JESUS> tags to a single verse's text based on its type.
 
@@ -175,6 +253,14 @@ def tag_verse_text(text, verse_type):
 
         if verse_type == "both":
             speech_end = find_speech_end(text, speech_start)
+            if speech_end is None:
+                # The verse is known to have trailing narrative, yet none was
+                # found after the last speech verb. That verb introduces someone
+                # else's reply, so look for Jesus's words ahead of it.
+                earlier_start, speech_end = find_speech_before_reply(text)
+                if speech_end is not None:
+                    speech_start = earlier_start
+
             if speech_end is not None:
                 # Tag only the speech portion
                 intro = text[:speech_start]

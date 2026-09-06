@@ -3,7 +3,7 @@
 	functions functions-background \
 	ngrok-up ngrok-down ngrok-background \
 	functions-deploy test_daily_devotional test_slowness fresh \
-	test test-ios test-android \
+	test test-ios test-android test-parsers \
 	archive upload release \
 	pull-listings dry-listings push-listings push-listing create-version \
 	pull-screenshots dry-screenshots push-screenshots \
@@ -27,9 +27,10 @@ help:
 	@echo "  make clean          – Stop services and clean temp files"
 	@echo ""
 	@echo "Tests:"
-	@echo "  make test           – Run iOS + Android unit tests"
+	@echo "  make test           – Run iOS + Android + parser unit tests"
 	@echo "  make test-ios       – iOS unit tests (swiftbibleTests, simulator)"
 	@echo "  make test-android   – Android unit tests (gradle)"
+	@echo "  make test-parsers   – Python parser unit tests (stdlib unittest)"
 	@echo ""
 	@echo "Deploy:"
 	@echo "  make functions-deploy – Deploy all functions to remote project"
@@ -150,7 +151,10 @@ test-ios:
 test-android:
 	cd android && ./gradlew :app:testDebugUnitTest --console=plain
 
-test: test-ios test-android
+test-parsers:
+	python3 -m unittest discover -s python_parser
+
+test: test-ios test-android test-parsers
 	@echo "✅ All unit tests passed"
 
 # --- App Store ---
