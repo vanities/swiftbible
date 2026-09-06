@@ -205,7 +205,8 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 **Unit tests (run these before shipping):**
 - iOS: `swiftbibleTests` target — streak/freeze/sabbath date math, badge unlock conditions, `EventReadingDay` UTC-civil-date gating, bundled-text loading. Run with `make test-ios` (or `xcodebuild test … -only-testing:swiftbibleTests`). Uses an in-memory SwiftData store with `cloudKitDatabase: .none`.
 - Android: `android/app/src/test/` — streak math, book-intro fallback chain, badge threshold registry, widget formatting. Run with `make test-android`.
-- `make test` runs both. CI (`.github/workflows/ci.yml`) runs SwiftLint + both suites on every push/PR.
+- Parsers: `python_parser/test_*.py` — red-letter span placement, plus a guard that the shipped `bible.json`/`asv.json` tags still match `red_letter_map.json` exactly (this is what catches a hand-edited verse or a half-finished rebuild). Stdlib `unittest`, no dependencies. Run with `make test-parsers`.
+- `make test` runs all three. CI (`.github/workflows/ci.yml`) runs SwiftLint + every suite on every push/PR.
 - Analytics (PostHog) and Sentry skip configuration under XCTest, so tests never emit live events.
 
 **Parser/data validation:**
@@ -213,6 +214,39 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 - Check sequential numbering preservation
 - Verify inline reference formatting
 - Ensure JSON structure consistency
+
+**Red letter (Words of Jesus):**
+
+Nothing here is inferred from the text. Spans are imported, reconciled between two independent sources, and stored as word indices in `red_letter_map.json`; `apply_red_letter.py` only turns those indices into `<JESUS>` tags.
+
+| Translation | Where its red letters come from |
+|---|---|
+| WEB | Its own `<wj>` markup, carried through by `parse_web.py`. Nothing to do. |
+| KJV | Two editions that mark Jesus's words on the KJV text itself: `eng-kjv.osis.xml` (`seven1m/open-bibles`, `<q who="Jesus">`) as the base, reconciled against `eng-kjv_usfx.xml` (ebible.org, USFX `<wj>`) and WEB. |
+| ASV | No red-letter ASV exists in any public domain format. Projected from the reconciled KJV by word alignment (the ASV is a KJV revision), cross-checked against WEB, and taken from WEB for the verses the KJV renders indirectly. |
+
+**Why two KJV sources.** They have opposite flaws, so each covers the other's. OSIS is the fuller — it marks glosses ("which is, being interpreted, My God, my God…"), Jesus quoted inside someone else's sentence (John 8:33), and verses carrying two separate spans (Luke 8:45) — and the sloppier: it leaves quotations open across whole paragraphs of narrative and drops the KJV's italicised supplied words out of mid-sentence. ebible.org's is cleaner and, being on the same text, gives exact boundaries rather than projected ones — but it marks no glosses or quoted speech at all. After reconciliation the shipped KJV agrees with ebible.org word-for-word on **2,018 of 2,027** shared verses (99.6%), with **no verse it marks that we miss**; the 9 remaining are ones where OSIS and WEB agree against it.
+
+Every correction takes two witnesses, and each run prints what it did:
+- **dropped** (17) — OSIS leaves a quotation open across whole paragraphs (Luke 7:1-8, Mark 8:22-25, Matthew 24:1). A verse OSIS reddens *entirely* while WEB reddens *none* of is that bleed.
+- **trimmed** (13) — the milestone swallows the narrative introduction (Mark 8:34, "Saying," in Matthew 22:42) or the trailing narrative (Luke 17:14). The two edges are judged differently, and deliberately: **the exact witness decides a verse's opening alone** — its blind spot trails a quotation rather than opening a verse, and it is right in all 11 such verses, including the two where WEB shares the bleed — but **an ending needs WEB to second it**, since a gloss ebible declined to mark sits exactly there and Mark 15:34 would otherwise lose half its verse.
+- **rejoined** (2) — Mark 5:41 marks "Damsel," and "arise." but not the "I say unto thee," between them. A gap closes only when WEB marks it as spoken too.
+- **overrides** (8) — `red_letter_overrides.json`, hand-reviewed, for what no rule can settle: OSIS omits a quotation the KJV plainly attributes (Matthew 13:57, Luke 22:61), and the throne speeches of Revelation 21:5-8 / 22:14-15, which neither KJV edition marks though WEB and the ASV do (22:14-15 sat as a black gap between the already-red 22:13 and 22:16). Spans are written as the KJV's own wording, so a stale one is reported rather than silently applied.
+- **still differing from WEB** (13 KJV, 9 ASV) — left as the KJV's own markup has them. Reviewed: John 16:17-18 (the disciples quoting Jesus), Mark 10:49 (the KJV reports the summons indirectly), and Revelation 21:6, where the ASV now carries "They are come to pass." into the speech from the KJV override and WEB has no clause to match it.
+
+The KJV's italicised supplied words are claimed for the quotation they sit inside, so John 18:5 reads "I am he" rather than a red "I am" with a black "he".
+
+To rebuild:
+```bash
+cd python_parser
+python3 build_red_letter_map.py          # downloads the OSIS source, prints the report
+python3 apply_red_letter.py ../ios/swiftbible/Text/bible.json
+python3 apply_red_letter.py ../ios/swiftbible/Text/asv.json
+```
+Then copy to **all three homes** — they are byte-identical:
+`ios/swiftbible/Text/`, `android/app/src/main/assets/`, `supabase/functions/daily-devotional/bible.json`.
+
+Read the report before committing: new entries under "dropped", "trimmed" or "still differing" mean a source changed, and a stale override means the text moved under it.
 
 ## Technical Decisions
 

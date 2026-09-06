@@ -25,11 +25,19 @@ class RedLetterTagStrippingTest {
     }
 
     /**
-     * 418 KJV paragraphs carry an inline verse number *between* two tags.
-     * Stripping the whitespace hugging those tags would yield "thee;5:24Leave".
+     * 350 KJV paragraphs carry an inline verse number *between* two tags, where
+     * Jesus goes on speaking across a verse boundary. Stripping the whitespace
+     * hugging those tags would yield "thee;5:24Leave".
      */
     @Test
     fun `does not join words around an inline verse number`() {
+        val inline = "against thee;</JESUS> 5:24 <JESUS>Leave there thy gift"
+        assertEquals("against thee; 5:24 Leave there thy gift", inline.stripRedLetterTags())
+    }
+
+    /** The same, in the tighter shape the tagger used to emit. */
+    @Test
+    fun `does not join words when the tags hug the verse number`() {
         val inline = "against thee; </JESUS>5:24<JESUS> Leave there thy gift"
         assertEquals("against thee; 5:24 Leave there thy gift", inline.stripRedLetterTags())
     }

@@ -38,6 +38,21 @@ jobs:
       - name: Run edge function tests
         run: deno test --allow-all supabase/functions/
 
+  parser-tests:
+    name: Parser unit tests (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      # Covers red-letter speaker attribution — which half of a
+      # question-and-answer verse the <JESUS> tags land on. Stdlib only.
+      - name: Run parser tests
+        run: python3 -m unittest discover -s python_parser
+
   ios-unit-tests:
     name: iOS unit tests
     runs-on: macos-15

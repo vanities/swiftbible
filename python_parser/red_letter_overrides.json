@@ -1,0 +1,71 @@
+{
+  "_comment": [
+    "Hand-reviewed corrections to the OSIS KJV's Words of Jesus markup, applied",
+    "by build_red_letter_map.py after its automatic reconciliation against the",
+    "two other witnesses (ebible.org's KJV and WEB).",
+    "",
+    "Only verses belong here that no rule can settle, because the two witnesses",
+    "do not agree with each other. 'add' keeps the module's spans and adds one;",
+    "'set' replaces them. Spans are given as the KJV's own wording, not as",
+    "offsets, so they are readable and so the build reports it loudly if the",
+    "text they quote ever changes.",
+    "",
+    "Verses where OSIS and WEB simply disagree about who is speaking are NOT",
+    "overridden — the KJV's own markup is the authority for the KJV. The build",
+    "lists them under 'still differing from WEB' each run. Reviewed and left",
+    "alone: John 16:17-18 (the disciples quoting Jesus; WEB reddens the quoted",
+    "words, OSIS does not), Mark 10:49 (the KJV reports the summons indirectly,",
+    "so the words quoted there are the crowd's)."
+  ],
+  "kjv": {
+    "Luke 22:61": {
+      "reason": "OSIS marks nothing, though the KJV quotes the saying directly ('how he had said unto him'). WEB reddens the same words.",
+      "add": [
+        "Before the cock crow, thou shalt deny me thrice."
+      ]
+    },
+    "Matthew 13:57": {
+      "reason": "OSIS marks no quotation in this verse at all, though the KJV introduces it with 'But Jesus said unto them'. WEB reddens the same words.",
+      "add": [
+        "A prophet is not without honour, save in his own country, and in his own house."
+      ]
+    },
+    "Revelation 21:5": {
+      "reason": "The one on the throne. Both KJV editions leave it unmarked; WEB and the ASV both redden it, and the app rendered the same words red in ASV and black in KJV. Reviewed: taken as Christ's.",
+      "add": [
+        "Behold, I make all things new.",
+        "Write: for these words are true and faithful."
+      ]
+    },
+    "Revelation 21:6": {
+      "reason": "Continues the throne speech of 21:5. 'It is done.' is inside the quotation the KJV introduces with 'And he said unto me'; WEB has no clause to align it to, which is why the projected ASV leaves it black.",
+      "add": [
+        "It is done. I am Alpha and Omega, the beginning and the end. I will give unto him that is athirst of the fountain of the water of life freely."
+      ]
+    },
+    "Revelation 21:7": {
+      "reason": "Continues the throne speech of 21:5-6. Red in WEB and ASV.",
+      "add": [
+        "He that overcometh shall inherit all things; and I will be his God, and he shall be my son."
+      ]
+    },
+    "Revelation 21:8": {
+      "reason": "Closes the throne speech of 21:5-7. Red in WEB and ASV.",
+      "add": [
+        "But the fearful, and unbelieving, and the abominable, and murderers, and whoremongers, and sorcerers, and idolaters, and all liars, shall have their part in the lake which burneth with fire and brimstone: which is the second death."
+      ]
+    },
+    "Revelation 22:14": {
+      "reason": "A black gap inside one continuous speech: the KJV already reddens 22:12, 22:13 and 22:16 around it. Red in WEB and ASV.",
+      "add": [
+        "Blessed are they that do his commandments, that they may have right to the tree of life, and may enter in through the gates into the city."
+      ]
+    },
+    "Revelation 22:15": {
+      "reason": "Same continuous speech as 22:14, before 'I Jesus have sent mine angel' in 22:16. Red in WEB and ASV.",
+      "add": [
+        "For without are dogs, and sorcerers, and whoremongers, and murderers, and idolaters, and whosoever loveth and maketh a lie."
+      ]
+    }
+  }
+}
