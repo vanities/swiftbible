@@ -205,7 +205,7 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 **Unit tests (run these before shipping):**
 - iOS: `swiftbibleTests` target — streak/freeze/sabbath date math, badge unlock conditions, `EventReadingDay` UTC-civil-date gating, bundled-text loading. Run with `make test-ios` (or `xcodebuild test … -only-testing:swiftbibleTests`). Uses an in-memory SwiftData store with `cloudKitDatabase: .none`.
 - Android: `android/app/src/test/` — streak math, book-intro fallback chain, badge threshold registry, widget formatting. Run with `make test-android`.
-- Parsers: `python_parser/test_*.py` — red-letter speaker attribution (which half of a question-and-answer verse the `<JESUS>` tags land on). Stdlib `unittest`, no dependencies. Run with `make test-parsers`.
+- Parsers: `python_parser/test_*.py` — red-letter span placement, plus a guard that the shipped `bible.json`/`asv.json` tags still match `red_letter_map.json` exactly (this is what catches a hand-edited verse or a half-finished rebuild). Stdlib `unittest`, no dependencies. Run with `make test-parsers`.
 - `make test` runs all three. CI (`.github/workflows/ci.yml`) runs SwiftLint + every suite on every push/PR.
 - Analytics (PostHog) and Sentry skip configuration under XCTest, so tests never emit live events.
 
@@ -216,10 +216,32 @@ BibleView → BibleService.fetchEnochData() → enoch.json → UI rendering
 - Ensure JSON structure consistency
 
 **Red letter (Words of Jesus):**
-- WEB has native `<wj>` markup; KJV and ASV do not, so `apply_red_letter.py` infers the span from speech-introducing verbs, using WEB only for *which* verses contain Jesus's words (`red_letter_verses.json`) and whether they carry narrative before/after (`red_letter_verse_types.json`).
-- After editing the tagger, regenerate **and copy to all three homes** — they are byte-identical:
-  `ios/swiftbible/Text/`, `android/app/src/main/assets/`, `supabase/functions/daily-devotional/bible.json`.
-- Known limitation: where another speaker *quotes* Jesus inside their own words (John 8:33, 12:34, 16:18), WEB reddens only the quoted phrase; the KJV/ASV tagger has no way to find it and reddens the whole reply.
+
+Nothing here is inferred from the text. Spans are imported, reconciled between two independent sources, and stored as word indices in `red_letter_map.json`; `apply_red_letter.py` only turns those indices into `<JESUS>` tags.
+
+| Translation | Where its red letters come from |
+|---|---|
+| WEB | Its own `<wj>` markup, carried through by `parse_web.py`. Nothing to do. |
+| KJV | `eng-kjv.osis.xml` (`seven1m/open-bibles`) marks `<q who="Jesus">` on the KJV text itself. 2,081 spans, 99.7% of them located verbatim. |
+| ASV | No red-letter ASV exists in any public domain format. Projected from the KJV by word alignment (the ASV is a KJV revision), cross-checked against WEB, and taken from WEB for the verses the KJV renders indirectly. |
+
+The OSIS module is authoritative but not flawless, so `build_red_letter_map.py` reconciles it against WEB. Every correction needs two witnesses, and each run prints what it did:
+- **dropped** (17) — OSIS leaves a quotation open across whole paragraphs (Luke 7:1-8, Mark 8:22-25, Matthew 24:1). A verse OSIS reddens *entirely* while WEB reddens *none* of it is that bleed.
+- **trimmed** (9) — the milestone sits at a paragraph start and swallows the narrative introduction (Mark 8:34) or the trailing narrative (Luke 17:14). Only edges are trimmed, only when WEB agrees the edge is narrative.
+- **overrides** (2) — `red_letter_overrides.json`, hand-reviewed, for what no rule can settle: OSIS omits a quotation the KJV plainly attributes (Matthew 13:57, Luke 22:61). Spans are written as the KJV's own wording, so a stale one is reported rather than silently applied.
+- **still differing from WEB** (14 KJV, 8 ASV) — left as OSIS has them; the KJV's own markup is the authority for the KJV. Reviewed: Revelation 21:5-8 / 22:14-15 (whether the voice from the throne is Christ's), John 16:17-18 (the disciples quoting Jesus), Mark 10:49 (the KJV reports the summons indirectly).
+
+To rebuild:
+```bash
+cd python_parser
+python3 build_red_letter_map.py          # downloads the OSIS source, prints the report
+python3 apply_red_letter.py ../ios/swiftbible/Text/bible.json
+python3 apply_red_letter.py ../ios/swiftbible/Text/asv.json
+```
+Then copy to **all three homes** — they are byte-identical:
+`ios/swiftbible/Text/`, `android/app/src/main/assets/`, `supabase/functions/daily-devotional/bible.json`.
+
+Read the report before committing: new entries under "dropped", "trimmed" or "still differing" mean a source changed, and a stale override means the text moved under it.
 
 ## Technical Decisions
 

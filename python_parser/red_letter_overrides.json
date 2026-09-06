@@ -1,0 +1,34 @@
+{
+  "_comment": [
+    "Hand-reviewed corrections to the OSIS KJV's Words of Jesus markup, applied",
+    "by build_red_letter_map.py after its automatic reconciliation against WEB.",
+    "",
+    "Only verses belong here that no rule can settle: the module omits a",
+    "quotation the KJV text itself plainly attributes to Jesus. Spans are given",
+    "as the KJV's own wording, not as offsets, so they are readable and so the",
+    "build reports it loudly if the text they quote ever changes.",
+    "",
+    "Verses where OSIS and WEB simply disagree about who is speaking are NOT",
+    "overridden — the KJV's own markup is the authority for the KJV. The build",
+    "lists them under 'still differing from WEB' each run. Reviewed and left",
+    "alone: John 16:17-18 (the disciples quoting Jesus; WEB reddens the quoted",
+    "words, OSIS does not), Mark 10:49 (the KJV reports the summons indirectly,",
+    "so the words quoted there are the crowd's), Revelation 21:5-8 and 22:14-15",
+    "(whether the voice from the throne is Christ's — a reading the two",
+    "editions take differently)."
+  ],
+  "kjv": {
+    "Matthew 13:57": {
+      "reason": "OSIS marks no quotation in this verse at all, though the KJV introduces it with 'But Jesus said unto them'. WEB reddens the same words.",
+      "add": [
+        "A prophet is not without honour, save in his own country, and in his own house."
+      ]
+    },
+    "Luke 22:61": {
+      "reason": "OSIS marks nothing, though the KJV quotes the saying directly ('how he had said unto him'). WEB reddens the same words.",
+      "add": [
+        "Before the cock crow, thou shalt deny me thrice."
+      ]
+    }
+  }
+}

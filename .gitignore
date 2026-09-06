@@ -92,3 +92,7 @@ python_parser/summary_quality_report.json
 # workflow environment variables; local copies must stay out of git.
 ios/ci_scripts/.env.local
 ios/swiftbible/GeneratedSecrets.xcconfig
+
+# Red letter source: 10 MB, re-downloaded by python_parser/build_red_letter_map.py
+# (pinned by checksum). The derived red_letter_map.json is what is committed.
+python_parser/sources/eng-kjv.osis.xml

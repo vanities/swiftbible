@@ -1,145 +1,178 @@
 """
-Tests for the red letter post-processor's speaker attribution.
+Tests for the red letter (Words of Jesus) pipeline.
 
-KJV and ASV have no native red letter markup, so apply_red_letter.py infers
-where Jesus's words start and end from the speech-introducing verbs, using WEB's
-<wj> tags only for *which* verses contain them. The failure mode these pin down
-is a verse ending in someone else's reply — Matthew 9:28's "They said unto him,
-Yea, Lord." — where the last speech verb belongs to the other speaker and the
-reply, not Jesus's question, ended up in red.
+The tags in bible.json and asv.json are no longer inferred from the text: they
+come from red_letter_map.json, built from the KJV's own OSIS <q who="Jesus">
+markup. So there are two things to pin — that a span becomes the right
+characters of a verse, and that the shipped files still say what the map says.
 
 Run with:
     python3 -m unittest discover -s python_parser
 """
 
+import json
+import os
+import re
 import unittest
 
-from apply_red_letter import tag_verse_text
+from apply_red_letter import load_spans, tag_text
+from red_letter_common import paragraph_segments, verse_map
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+TEXT_DIR = os.path.join(HERE, "..", "ios", "swiftbible", "Text")
 
 
-class ReplyAttributionTests(unittest.TestCase):
-    """Verses that end with another speaker answering Jesus."""
+class TagPlacementTests(unittest.TestCase):
+    """Turning a word range into <JESUS> tags."""
 
-    def test_blind_mens_answer_stays_out_of_red(self):
-        """The reported bug: Matthew 9:28 put "Yea, Lord." on Jesus."""
+    def test_span_keeps_the_punctuation_that_closes_it(self):
         verse = (
             "And when he was come into the house, the blind men came to him: "
             "and Jesus saith unto them, Believe ye that I am able to do this? "
             "They said unto him, Yea, Lord. "
         )
         self.assertEqual(
-            tag_verse_text(verse, "both"),
+            tag_text(verse, [[19, 28]]),
             "And when he was come into the house, the blind men came to him: "
             "and Jesus saith unto them, "
             "<JESUS>Believe ye that I am able to do this?</JESUS>"
             " They said unto him, Yea, Lord. ",
         )
 
-    def test_reply_opening_the_trail_pattern_does_not_know(self):
-        """Matthew 13:51 answers with "They say", not "They said"."""
+    def test_two_spans_in_one_verse(self):
+        """Luke 8:45 quotes Jesus twice, with the crowd in between."""
         verse = (
-            "Jesus saith unto them, Have ye understood all these things? "
-            "They say unto him, Yea, Lord. "
+            "And Jesus said, Who touched me? When all denied, Peter and they "
+            "that were with him said, Master, and sayest thou, Who touched me? "
         )
-        self.assertEqual(
-            tag_verse_text(verse, "both"),
-            "Jesus saith unto them, "
-            "<JESUS>Have ye understood all these things?</JESUS>"
-            " They say unto him, Yea, Lord. ",
-        )
+        tagged = tag_text(verse, [[3, 6], [21, 24]])
+        self.assertEqual(tagged.count("<JESUS>"), 2)
+        self.assertIn("<JESUS>Who touched me?</JESUS> When all denied", tagged)
+        self.assertTrue(tagged.rstrip().endswith("<JESUS>Who touched me?</JESUS>"))
 
-    def test_reply_introduced_by_a_named_disciple(self):
-        """Luke 9:20 — "Peter answering said," is a reply, not Jesus."""
+    def test_a_phrase_quoted_inside_someone_elses_sentence(self):
+        """John 8:33 — the crowd speaks, quoting four words of Jesus."""
         verse = (
-            "He said unto them, But whom say ye that I am? "
-            "Peter answering said, The Christ of God. "
+            "They answered him, We be Abraham's seed, and were never in bondage "
+            "to any man: how sayest thou, Ye shall be made free? "
         )
-        self.assertEqual(
-            tag_verse_text(verse, "both"),
-            "He said unto them, <JESUS>But whom say ye that I am?</JESUS>"
-            " Peter answering said, The Christ of God. ",
-        )
+        tagged = tag_text(verse, [[19, 24]])
+        self.assertIn("how sayest thou, <JESUS>Ye shall be made free?</JESUS>", tagged)
+        self.assertNotIn("<JESUS>They answered", tagged)
 
-    def test_reply_introduced_by_a_pronoun(self):
-        """Mark 9:21 — the father answers, and both intros are "he"."""
-        verse = (
-            "And he asked his father, How long is it ago since this came unto him? "
-            "And he said, Of a child. "
-        )
-        self.assertEqual(
-            tag_verse_text(verse, "both"),
-            "And he asked his father, "
-            "<JESUS>How long is it ago since this came unto him?</JESUS>"
-            " And he said, Of a child. ",
-        )
+    def test_a_span_ending_before_an_inline_verse_marker(self):
+        """The marker between two verses must stay outside the tags."""
+        verse = "Follow me. "
+        self.assertEqual(tag_text(verse, [[0, 2]]), "<JESUS>Follow me.</JESUS> ")
 
-    def test_jesus_speaking_last_is_left_alone(self):
-        """John 18:5 — the crowd answers first and Jesus speaks last.
+    def test_a_verse_with_no_spans_is_untouched(self):
+        verse = "And he did not many mighty works there because of their unbelief. "
+        self.assertEqual(tag_text(verse, []), verse)
 
-        The trailing narrative ("And Judas also...") is not one the trail
-        pattern recognises, so the tagger finds no speech end. That must not be
-        read as evidence of a reply: the last verb names Jesus.
-        """
-        verse = (
-            "They answered him, Jesus of Nazareth. Jesus saith unto them, "
-            "I am he.  And Judas also, which betrayed him, stood with them. "
-        )
-        self.assertIn(
-            "<JESUS>I am he.",
-            tag_verse_text(verse, "both"),
-        )
+    def test_out_of_range_spans_are_ignored_rather_than_crashing(self):
+        verse = "Peace, be still. "
+        self.assertEqual(tag_text(verse, [[0, 99]]), verse)
 
 
-class UnchangedBehaviourTests(unittest.TestCase):
-    """The paths the reply handling must not disturb."""
+class ShippedTextTests(unittest.TestCase):
+    """The tags in the app's JSON must be exactly what the map says.
 
-    def test_full_verse_is_tagged_whole(self):
-        verse = "Come unto me, all ye that labour and are heavy laden. "
-        self.assertEqual(
-            tag_verse_text(verse, "full"),
-            f"<JESUS>{verse}</JESUS>",
-        )
+    This is the guard against the files and the map drifting apart — someone
+    hand-editing a verse, or rebuilding one without the other.
+    """
 
-    def test_narrative_intro_then_speech_to_the_end(self):
-        verse = "And he said unto them, Follow me, and I will make you fishers of men. "
-        self.assertEqual(
-            tag_verse_text(verse, "intro_only"),
-            "And he said unto them, "
-            "<JESUS>Follow me, and I will make you fishers of men. </JESUS>",
-        )
+    @classmethod
+    def setUpClass(cls):
+        cls.files = {
+            "kjv": os.path.join(TEXT_DIR, "bible.json"),
+            "asv": os.path.join(TEXT_DIR, "asv.json"),
+        }
 
-    def test_recognised_trailing_narrative_still_ends_the_speech(self):
-        verse = "And he saith unto them, Why are ye fearful, O ye of little faith? Then he arose. "
-        self.assertEqual(
-            tag_verse_text(verse, "both"),
-            "And he saith unto them, "
-            "<JESUS>Why are ye fearful, O ye of little faith?</JESUS>"
-            " Then he arose. ",
-        )
+    def test_every_shipped_tag_comes_from_the_map(self):
+        for version, path in self.files.items():
+            with self.subTest(version=version):
+                spans = load_spans(version)
+                with open(path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
 
-    def test_answered_and_said_takes_the_later_verb(self):
-        """"answered and said," is one introduction, not two speakers."""
-        verse = "But he answered and said unto them, An evil generation seeketh after a sign. "
-        self.assertEqual(
-            tag_verse_text(verse, "intro_only"),
-            "But he answered and said unto them, "
-            "<JESUS>An evil generation seeketh after a sign. </JESUS>",
-        )
+                seen = 0
+                for book in data:
+                    for chapter in book["chapters"]:
+                        for paragraph in chapter["paragraphs"]:
+                            plain, segments = paragraph_segments(paragraph, chapter["number"])
+                            tagged, _ = paragraph_segments(
+                                paragraph, chapter["number"], strip=False
+                            )
+                            for verse, start, end in segments:
+                                ranges = spans.get((book["name"], chapter["number"], verse))
+                                if not ranges:
+                                    continue
+                                self.assertIn(
+                                    tag_text(plain[start:end], ranges).strip(),
+                                    tagged,
+                                    f"{book['name']} {chapter['number']}:{verse} "
+                                    f"does not match the map — rerun apply_red_letter.py",
+                                )
+                                seen += 1
+                self.assertGreater(seen, 2000)
 
-    def test_speech_first_then_narrative(self):
-        verse = "Peace, be still. And the wind ceased, and there was a great calm. "
-        self.assertEqual(
-            tag_verse_text(verse, "trail_only"),
-            "<JESUS>Peace, be still.</JESUS>"
-            " And the wind ceased, and there was a great calm. ",
-        )
+    def test_tags_are_balanced_and_never_empty(self):
+        for version, path in self.files.items():
+            with self.subTest(version=version):
+                with open(path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                for book in data:
+                    for chapter in book["chapters"]:
+                        for paragraph in chapter["paragraphs"]:
+                            text = paragraph["text"]
+                            self.assertEqual(
+                                text.count("<JESUS>"), text.count("</JESUS>"),
+                                f"unbalanced tags in {book['name']} {chapter['number']}",
+                            )
+                            for match in re.finditer(r"<JESUS>(.*?)</JESUS>", text, re.S):
+                                self.assertTrue(
+                                    match.group(1).strip(),
+                                    f"empty tag in {book['name']} {chapter['number']}",
+                                )
 
-    def test_verse_with_no_speech_intro_falls_back_to_the_whole_verse(self):
-        verse = "For the Son of man is Lord even of the sabbath day. "
-        self.assertEqual(
-            tag_verse_text(verse, "intro_only"),
-            f"<JESUS>{verse}</JESUS>",
-        )
+
+class KnownVerseTests(unittest.TestCase):
+    """The verses that drove this pipeline, checked against the shipped text."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.kjv = verse_map(os.path.join(TEXT_DIR, "bible.json"), strip=False)
+
+    def test_the_blind_mens_answer_is_not_in_red(self):
+        """Matthew 9:28 — the bug that started this."""
+        verse = self.kjv[("Matthew", 9, 28)]
+        self.assertIn("<JESUS>Believe ye that I am able to do this?</JESUS>", verse)
+        self.assertNotIn("<JESUS>Yea, Lord.", verse)
+
+    def test_a_verse_carrying_two_separate_quotations(self):
+        """Luke 8:45 — one span the old single-span model could not express."""
+        self.assertEqual(self.kjv[("Luke", 8, 45)].count("<JESUS>"), 2)
+
+    def test_only_the_quoted_phrase_of_an_opponents_speech(self):
+        """John 8:33 — the crowd's words are theirs; four of them are Jesus's."""
+        verse = self.kjv[("John", 8, 33)]
+        self.assertIn("<JESUS>Ye shall be made free?</JESUS>", verse)
+        self.assertNotIn("<JESUS>They answered", verse)
+
+    def test_narrative_after_the_last_words_stays_black(self):
+        """John 19:30 — "and he bowed his head" is the evangelist, not Jesus."""
+        verse = self.kjv[("John", 19, 30)]
+        self.assertIn("<JESUS>It is finished:</JESUS>", verse)
+        self.assertNotIn("bowed his head</JESUS>", verse)
+
+    def test_a_narrative_verse_the_source_reddened_by_mistake(self):
+        """Matthew 24:1 — an OSIS quotation left open over a whole paragraph."""
+        self.assertNotIn("<JESUS>", self.kjv[("Matthew", 24, 1)])
+
+    def test_a_quotation_the_source_omits_is_restored_by_override(self):
+        """Matthew 13:57 — red_letter_overrides.json puts it back."""
+        self.assertIn("<JESUS>A prophet is not without honour",
+                      self.kjv[("Matthew", 13, 57)])
 
 
 if __name__ == "__main__":
