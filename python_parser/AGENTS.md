@@ -27,6 +27,13 @@ This project feeds generated scriptures into the Swift client living one level u
   - Streams progress with `tqdm`, logs to both console and `verse_info.log`, writes successes to `verse_info.csv`, failures to `verse_info_failed.csv`, and upserts each result into Supabase table `verse_info`.
   - Tight loop: editing the JSON schema here means also keeping the Supabase upsert payload in sync.
 
+- Commentary summaries and "About this book" intros
+  - `generate_mhcc_summaries.py` / `generate_jfb_summaries.py` → `summaries_{mhcc,jfb}.json` (chapter-list titles + passage summaries).
+  - `parse_book_intros.py` → `book_intros_{mhcc,jfb}.json` (the "About this book" essays, re-flowed into readable paragraphs by `soft_wrap`).
+  - All four write the iOS bundle **and** the Android assets copy in one run; the two must stay byte-identical.
+  - Sources are git-LFS (`sources/mhc/mhc{1..6}.txt`, `sources/jfb/jfb.txt`, `sources/mhcc/mhcc.txt`). Without `git lfs pull` you only have pointer files — re-fetch from CCEL instead: `https://www.ccel.org/ccel/h/henry/mhc{n}/cache/mhc{n}.txt` and `https://www.ccel.org/ccel/j/jamieson/jfb/cache/jfb.txt`.
+  - Chapter-list titles are never truncated (rows are variable height); the re-flow never changes a word of the text. `test_book_intros.py` pins both.
+
 ## Inline Verse Markers
 - Keep inline references formatted as `CHAPTER:VERSE` (e.g. `39:10`). **Do not swap them to superscripts inside the JSON.** The Swift code handles presentation and assumes the colon syntax.
 - The parser now allows a verse suffix (`a`, `b`, etc.) inside inline markers: `5:6a`, `5:7c`, etc. Presence of any suffix loosens the sequencing guard so mid-verse fragments are still picked up.

@@ -15,9 +15,9 @@ Inputs (git-LFS; run `git lfs pull` first):
   python_parser/sources/mhcc/mhcc.txt
   python_parser/sources/jfb/jfb.txt
 
-Outputs:
-  ios/swiftbible/Text/book_intros_mhcc.json
-  ios/swiftbible/Text/book_intros_jfb.json
+Outputs (the iOS bundle and the Android assets get byte-identical copies):
+  ios/swiftbible/Text/book_intros_{mhcc,jfb}.json
+  android/app/src/main/assets/book_intros_{mhcc,jfb}.json
 
 The SwiftBible-curated intros for the apocrypha / pseudepigrapha (which MHCC
 and JFB don't cover) live in a hand-authored file and are NOT generated here:
@@ -120,10 +120,29 @@ _ABBREVIATIONS = {
 # false splits before digits, e.g. "about A. D. 97," and "ch. 21:22".
 _BOUNDARY_RE = re.compile(r'[.!?]["”\')\]]?\s+(?=["“\'(]?[A-Z])')
 
+# Both commentaries number the points of an introduction, nesting roman, arabic
+# and bracketed markers: "...we must enquire, I. Into the divine authority of
+# it; ... II. As to the divine amanuensis...". A marker belongs to the point it
+# opens, but it trails a sentence-ending period, so the splitter above reads it
+# as the close of the point before — which strands a bare "II." at the end of a
+# paragraph. These two patterns recognise one so it can be carried forward.
+_ENUMERATOR_RE = re.compile(r"^[\[(]?([0-9]{1,3}|[A-Za-z]+)[.)\]]{1,2}$")
+_ROMAN_RE = re.compile(r"(?i)^(?=[mdclxvi]+$)m*(?:c[md]|d?c{0,3})(?:x[cl]|l?x{0,3})(?:i[xv]|v?i{0,3})$")
+
+
+def _is_enumerator(token: str) -> bool:
+    match = _ENUMERATOR_RE.match(token)
+    if match is None:
+        return False
+    word = match.group(1)
+    # A number, a single letter, or a roman numeral — but not a one-word
+    # sentence that happens to stand alone ("No.", "Ill.").
+    return word.isdigit() or len(word) == 1 or _ROMAN_RE.match(word) is not None
+
 
 def _ends_sentence(text: str, dot: int) -> bool:
     """Whether the punctuation char at index `dot` actually ends a sentence
-    (vs. trailing an abbreviation or an initial)."""
+    (vs. trailing an abbreviation, an initial, or a cited chapter number)."""
     if text[dot] != ".":
         return True  # "!" and "?" are unambiguous
     k = dot - 1
@@ -132,6 +151,8 @@ def _ends_sentence(text: str, dot: int) -> bool:
     token = text[k + 1:dot]
     if len(token) == 1 and token.isupper():
         return False  # initial: "A.", "D.", "R."
+    if _ROMAN_RE.match(token):
+        return False  # "ch. xi.", "Hos. viii. 12." — a citation, not a close
     return token.lower() not in _ABBREVIATIONS
 
 
@@ -141,7 +162,39 @@ def split_sentences(text: str) -> list[str]:
         if _ends_sentence(text, m.start()):
             cuts.append(m.end())
     cuts.append(len(text))
-    return [text[a:b].strip() for a, b in zip(cuts, cuts[1:]) if text[a:b].strip()]
+    sentences = [text[a:b].strip() for a, b in zip(cuts, cuts[1:]) if text[a:b].strip()]
+    return _carry_enumerators_forward(sentences)
+
+
+def _trailing_enumerator(sentence: str) -> tuple[str, str]:
+    """Peel a trailing enumerator off a sentence: the marker opens the point
+    that follows, so "...two hundred years. 2." splits into the sentence and
+    the "2." that belongs with what comes next. A numeral finishing a citation
+    ("Hos. viii. 12.") is left alone — what precedes it is not a full stop."""
+    head, _, last = sentence.rpartition(" ")
+    if not _is_enumerator(last):
+        return sentence, ""
+    if head and not (head.endswith((".", "!", "?")) and _ends_sentence(head, len(head) - 1)):
+        return sentence, ""
+    return head, last
+
+
+def _carry_enumerators_forward(sentences: list[str]) -> list[str]:
+    out: list[str] = []
+    carried = ""
+    for sentence in sentences:
+        head, enumerator = _trailing_enumerator(sentence)
+        if head:
+            out.append(f"{carried} {head}".strip() if carried else head)
+            carried = enumerator
+        else:  # the whole sentence was a marker — keep collecting
+            carried = f"{carried} {enumerator}".strip()
+    if carried:  # nothing followed it; leave it where it was
+        if out:
+            out[-1] = f"{out[-1]} {carried}"
+        else:
+            out.append(carried)
+    return out
 
 
 def soft_wrap(text: str) -> list[str]:
@@ -158,9 +211,13 @@ def soft_wrap(text: str) -> list[str]:
             current = f"{current} {sentence}".strip()
     if current:
         chunks.append(current)
-    # Fold a too-short tail back into the prior chunk.
+    # Fold a too-short tail back into the prior chunk. Pop first: `chunks[-2]`
+    # on the left of the assignment is resolved after the right side has
+    # already shortened the list, so folding in one statement writes the merged
+    # text over the wrong chunk — dropping one and duplicating another.
     if len(chunks) > 1 and len(chunks[-1]) < MIN_TAIL_CHARS:
-        chunks[-2] = f"{chunks[-2]} {chunks.pop()}"
+        tail = chunks.pop()
+        chunks[-1] = f"{chunks[-1]} {tail}"
     return chunks
 
 
