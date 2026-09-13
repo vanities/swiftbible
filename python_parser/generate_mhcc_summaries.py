@@ -1,11 +1,12 @@
 """
-Generate ios/swiftbible/Text/Summaries/mhcc.json from the parsed MHCC outline data.
+Generate summaries_mhcc.json from the parsed MHCC outline data.
 
 Inputs:
   python_parser/sources/mhcc/mhcc_parsed.json  (produced by parse_mhcc.py)
 
-Output:
-  ios/swiftbible/Text/Summaries/mhcc.json
+Outputs (byte-identical):
+  ios/swiftbible/Text/summaries_mhcc.json
+  android/app/src/main/assets/summaries_mhcc.json
 
 Rules:
 - Chapter title = first outline entry's title, verbatim.
@@ -24,7 +25,11 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 MHCC_PARSED = REPO / "python_parser" / "sources" / "mhcc" / "mhcc_parsed.json"
-OUTPUT = REPO / "swiftbible" / "Text" / "summaries_mhcc.json"
+# The iOS bundle and the Android assets carry byte-identical copies.
+OUTPUTS = [
+    REPO / "ios" / "swiftbible" / "Text" / "summaries_mhcc.json",
+    REPO / "android" / "app" / "src" / "main" / "assets" / "summaries_mhcc.json",
+]
 
 # Hand-written entries for the 4 canonical chapters MHCC's outline parser
 # couldn't extract from the CCEL plain text. Each entry mirrors MHCC's voice
@@ -73,28 +78,26 @@ MANUAL_FALLBACKS: dict[str, dict[str, dict]] = {
     },
 }
 
-# For the chapter-list view we want terse titles. A handful of MHCC chapters
-# (notably Psalms 119, Ezekiel 47) have no structured outline — MHCC just
-# provides a multi-sentence prose paragraph as the whole-chapter intro. Those
-# are valuable content for the passage-summary surface, but unusable as a
-# list-row label. We extract the first sentence (or truncate on a word
-# boundary) for the chapter title and keep the full paragraph for the
-# passage summary.
-MAX_TITLE_LENGTH = 90
+# Chapter-list rows are variable height, so a long title wraps rather than
+# being cut off — a title is never truncated and never ends in an ellipsis.
+# A handful of MHCC chapters (notably Psalms 119, Ezekiel 47) have no
+# structured outline, though — MHCC just provides a multi-sentence prose
+# paragraph as the whole-chapter intro. Those are valuable content for the
+# passage-summary surface, but a whole paragraph is not a list-row label, so
+# for them we take the first sentence and keep the full paragraph for the
+# passage summary. Anything under the threshold is a real outline title and
+# passes through verbatim.
+PROSE_PARAGRAPH_LENGTH = 90
 
 
-def _shorten_for_chapter_list(full_title: str) -> str:
-    if len(full_title) <= MAX_TITLE_LENGTH:
+def _chapter_list_title(full_title: str) -> str:
+    if len(full_title) <= PROSE_PARAGRAPH_LENGTH:
         return full_title
-    # First sentence
+    # Multi-sentence prose: keep the first sentence, without its period.
     first_sentence_match = re.match(r"[^.!?]+[.!?]", full_title)
     if first_sentence_match:
-        candidate = first_sentence_match.group(0).strip().rstrip(".")
-        if len(candidate) <= MAX_TITLE_LENGTH:
-            return candidate
-    # Fall back to a word-boundary truncation with an ellipsis.
-    truncated = full_title[:MAX_TITLE_LENGTH].rsplit(" ", 1)[0].rstrip(",;:")
-    return truncated + "…"
+        return first_sentence_match.group(0).strip().rstrip(".")
+    return full_title
 
 
 def main() -> None:
@@ -115,7 +118,7 @@ def main() -> None:
             if not entries:
                 continue
             # Chapter title = first section's title, shortened for the list row.
-            book_titles[chap_num] = _shorten_for_chapter_list(entries[0]["title"])
+            book_titles[chap_num] = _chapter_list_title(entries[0]["title"])
             # Passage summaries = all entries, schema rename
             book_passages[chap_num] = [
                 {
@@ -162,14 +165,17 @@ def main() -> None:
         "passageSummaries": passage_summaries,
     }
 
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
+    serialized = json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+    for output in OUTPUTS:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(serialized)
 
     title_count = sum(len(v) for v in chapter_titles.values())
     passage_count = sum(
         len(entries) for book in passage_summaries.values() for entries in book.values()
     )
-    print(f"Wrote {OUTPUT.relative_to(REPO)}")
+    for output in OUTPUTS:
+        print(f"Wrote {output.relative_to(REPO)}")
     print(f"  chapter titles:    {title_count} across {len(chapter_titles)} books")
     print(f"  passage summaries: {passage_count} across {len(passage_summaries)} books")
     if manual_added:

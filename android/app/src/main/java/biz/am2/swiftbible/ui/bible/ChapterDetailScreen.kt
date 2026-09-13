@@ -57,6 +57,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -126,10 +127,15 @@ fun ChapterDetailScreen(
                                 fontWeight = FontWeight.SemiBold,
                             )
                             chapterTitle?.let {
+                                // The app bar is fixed height, so this one cuts
+                                // off — the chapter list is where the full
+                                // summary is shown, on a row that grows to fit.
                                 Text(
                                     text = it,
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.primary,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
