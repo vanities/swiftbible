@@ -153,7 +153,21 @@ def _ends_sentence(text: str, dot: int) -> bool:
         return False  # initial: "A.", "D.", "R."
     if _ROMAN_RE.match(token):
         return False  # "ch. xi.", "Hos. viii. 12." — a citation, not a close
+    if not token and _is_inline_enumerator(text, dot):
+        return False  # "we may observe, 1. That he relates..."
     return token.lower() not in _ABBREVIATIONS
+
+
+# A marker introduced by a comma — "we may observe, 1. That..." — sits
+# mid-sentence, the arabic twin of "we must enquire, I. Into...". A verse list
+# ("ch. xxvii. 2, 3.") also puts a number after a comma, but a number or roman
+# numeral precedes that comma rather than a word.
+_INLINE_ENUMERATOR_RE = re.compile(r"(?:^|\s)([A-Za-z]+),\s+\d{1,3}$")
+
+
+def _is_inline_enumerator(text: str, dot: int) -> bool:
+    match = _INLINE_ENUMERATOR_RE.search(text[max(0, dot - 40):dot])
+    return match is not None and _ROMAN_RE.match(match.group(1)) is None
 
 
 def split_sentences(text: str) -> list[str]:
@@ -174,9 +188,16 @@ def _trailing_enumerator(sentence: str) -> tuple[str, str]:
     head, _, last = sentence.rpartition(" ")
     if not _is_enumerator(last):
         return sentence, ""
-    if head and not (head.endswith((".", "!", "?")) and _ends_sentence(head, len(head) - 1)):
+    if _CHAPTER_RANGE_RE.search(head):
+        return head, last  # "ch. xiii.-xxi. 4." — a range takes no verse number
+    # The point before may close inside a quotation: 'saying the same?" 2.'
+    closed = head.rstrip("\"”')]")
+    if head and not (closed.endswith((".", "!", "?")) and _ends_sentence(closed, len(closed) - 1)):
         return sentence, ""
     return head, last
+
+
+_CHAPTER_RANGE_RE = re.compile(r"(?i)\b[mdclxvi]+\.-[mdclxvi]+\.$")
 
 
 def _carry_enumerators_forward(sentences: list[str]) -> list[str]:

@@ -15,6 +15,7 @@ Run with:
 
 import json
 import os
+import re
 import unittest
 
 from parse_book_intros import (
@@ -114,6 +115,35 @@ class SentenceSplitTests(unittest.TestCase):
         self.assertEqual(_trailing_enumerator("Counted as a strange thing, Hos. viii. 12."), ("Counted as a strange thing, Hos. viii. 12.", ""))
         self.assertEqual(len(split_sentences(text)), 2)
 
+    def test_an_enumerator_after_a_closing_quote_is_carried_forward(self):
+        # Micah: the point before ends on a quoted question.
+        text = 'Why then should we punish Jeremiah for saying the same?" 2. Another is a prediction.'
+        sentences = split_sentences(text)
+        self.assertTrue(sentences[0].endswith('the same?"'))
+        self.assertTrue(sentences[1].startswith("2. Another"))
+
+    def test_an_enumerator_introduced_by_a_comma_stays_inline(self):
+        # John: "we may observe, 1. That he relates..." — like "enquire, I. Into",
+        # the marker sits mid-sentence and must not be read as a full stop.
+        text = "Comparing his gospel with theirs, we may observe, 1. That he relates what they had omitted."
+        self.assertEqual(split_sentences(text), [text])
+
+    def test_a_verse_list_closing_a_citation_still_ends_the_sentence(self):
+        # "2, 3." is a verse list, not a comma-introduced marker; the "3." after
+        # it opens the next point.
+        text = "It was written upon great stones, ch. xxvii. 2, 3. 3. It was to be read publicly."
+        sentences = split_sentences(text)
+        self.assertTrue(sentences[0].endswith("ch. xxvii. 2, 3."))
+        self.assertTrue(sentences[1].startswith("3. It was"))
+
+    def test_a_number_after_a_chapter_range_opens_the_next_point(self):
+        # Joshua: "ch. xiii.-xxi. 4." — a range of chapters takes no verse
+        # number, so the "4." numbers the point that follows.
+        text = "In the distribution of the land, ch. xiii.-xxi. 4. In the settlement of religion, ch. xxii.-xxiv."
+        sentences = split_sentences(text)
+        self.assertTrue(sentences[0].endswith("ch. xiii.-xxi."))
+        self.assertTrue(sentences[1].startswith("4. In the settlement"))
+
     def test_a_one_word_sentence_is_not_mistaken_for_an_enumerator(self):
         self.assertEqual(_trailing_enumerator("He asked whether it was canonical. No."), ("He asked whether it was canonical. No.", ""))
 
@@ -134,6 +164,19 @@ class ShippedIntroTests(unittest.TestCase):
                 for paragraph in intro["paragraphs"]:
                     _, stranded = _trailing_enumerator(paragraph)
                     self.assertEqual(stranded, "", f"{name} / {book}: paragraph ends on {stranded!r}")
+
+    def test_no_paragraph_ends_on_a_marker_after_a_word(self):
+        # Independent of _trailing_enumerator, which the check above shares with
+        # the parser and so cannot see its blind spots. A numeral closing a
+        # paragraph is a citation only when a reference precedes it ("viii. 12.",
+        # "2, 3.", "A.D. 57."); after a plain word, comma, closing quote or chapter
+        # range it is a stranded marker ("we may observe, 1.", 'the same?" 2.',
+        # "ch. xiii.-xxi. 4.").
+        stranded_re = re.compile(r'(?:[a-z]{2,},|["”]|[ivxlc]+\.-[ivxlc]+\.)\s+(?:\d{1,3}|[IVX]+)\.$')
+        for name, books in self.intros.items():
+            for book, intro in books.items():
+                for paragraph in intro["paragraphs"]:
+                    self.assertIsNone(stranded_re.search(paragraph), f"{name} / {book}: …{paragraph[-60:]}")
 
     def test_no_paragraph_is_empty(self):
         for name, books in self.intros.items():
