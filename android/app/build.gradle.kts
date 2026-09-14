@@ -34,8 +34,8 @@ android {
         applicationId = "biz.am2.swiftbible"
         minSdk = 26
         targetSdk = 36
-        versionCode = 27
-        versionName = "1.62"
+        versionCode = 28
+        versionName = "1.63"
         buildConfigField("String", "SUPABASE_URL", quotedBuildConfig(clientConfig("SUPABASE_URL")))
         buildConfigField("String", "SUPABASE_KEY", quotedBuildConfig(clientConfig("SUPABASE_KEY")))
         buildConfigField("String", "POSTHOG_API_KEY", quotedBuildConfig(clientConfig("POSTHOG_API_KEY")))
