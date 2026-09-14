@@ -41,11 +41,24 @@ struct BookIntroView: View {
                     .accessibilityAddTraits(.isHeader)
 
                 ForEach(Array(resolved.intro.paragraphs.enumerated()), id: \.offset) { _, paragraph in
-                    Text(paragraph)
-                        .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
-                        .foregroundStyle(textColor)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
+                    if let heading = IntroMarkup.heading(paragraph) {
+                        Text(heading)
+                            .font(Font.custom(fontName, size: CGFloat(fontSize) + 2, relativeTo: .title3))
+                            .fontWeight(.semibold)
+                            .foregroundStyle(textColor)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                            // Sit with the section it heads, apart from the one before.
+                            .padding(.top, 10)
+                            .padding(.bottom, -10)
+                            .accessibilityAddTraits(.isHeader)
+                    } else {
+                        Text(styled(paragraph))
+                            .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
+                            .foregroundStyle(textColor)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
 
                 attribution
@@ -66,6 +79,17 @@ struct BookIntroView: View {
                 "book": bookName,
                 "source": resolved.attribution.shortName
             ])
+        }
+    }
+
+    /// Bold runs carry their own font; plain runs inherit the Text's.
+    private func styled(_ paragraph: String) -> AttributedString {
+        IntroMarkup.runs(paragraph).reduce(into: AttributedString()) { result, run in
+            var piece = AttributedString(run.text)
+            if run.isBold {
+                piece.font = Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body).bold()
+            }
+            result += piece
         }
     }
 

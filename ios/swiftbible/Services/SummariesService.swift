@@ -94,6 +94,35 @@ struct BookIntrosFile: Codable {
     let bookIntros: [String: BookIntro]
 }
 
+/// The typography the intro generator restores from the printed commentaries
+/// (python_parser/parse_book_intros.py `format_intro`): a paragraph opening
+/// "## " is a section heading, and "**text**" is bold — JFB's small-caps
+/// emphasis and both authors' numbered points. Nothing else is markup.
+/// Mirrored on Android by `IntroMarkup` in BookIntroRepository.kt.
+enum IntroMarkup {
+    struct Run: Equatable {
+        let text: String
+        let isBold: Bool
+    }
+
+    static func heading(_ paragraph: String) -> String? {
+        paragraph.hasPrefix("## ") ? String(paragraph.dropFirst(3)) : nil
+    }
+
+    static func runs(_ paragraph: String) -> [Run] {
+        var parts = paragraph.components(separatedBy: "**")
+        // An unpaired "**" is literal text, not the start of a bold run that
+        // swallows the rest of the paragraph.
+        if parts.count > 1, parts.count.isMultiple(of: 2) {
+            let tail = parts.removeLast()
+            parts[parts.count - 1] += "**" + tail
+        }
+        return parts.enumerated().compactMap { index, text in
+            text.isEmpty ? nil : Run(text: text, isBold: !index.isMultiple(of: 2))
+        }
+    }
+}
+
 /// A resolved introduction together with the attribution of whichever source
 /// actually supplied it (which may differ from the user's selection when the
 /// chosen source doesn't cover that book and the fallback chain kicks in).

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,10 +29,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import biz.am2.swiftbible.data.IntroMarkup
 import biz.am2.swiftbible.data.ResolvedBookIntro
 import biz.am2.swiftbible.data.SummariesSourceInfo
 import biz.am2.swiftbible.ui.AppViewModel
@@ -136,18 +144,46 @@ private fun IntroBody(
             )
         }
         items(paragraphs.size) { index ->
-            Text(
-                text = paragraphs[index],
-                fontSize = fontSize.sp,
-                fontFamily = fontFamily,
-                lineHeight = fontSize.sp * 1.55f,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
+            val paragraph = paragraphs[index]
+            val headingText = IntroMarkup.heading(paragraph)
+            if (headingText != null) {
+                Text(
+                    text = headingText,
+                    fontSize = (fontSize + 2).sp,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    lineHeight = (fontSize + 2).sp * 1.3f,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    // Sit with the section it heads, apart from the one before
+                    // (30dp above, 10dp below — as on iOS).
+                    modifier = Modifier
+                        .offset(y = 10.dp)
+                        .semantics { heading() },
+                )
+            } else {
+                Text(
+                    text = styled(paragraph),
+                    fontSize = fontSize.sp,
+                    fontFamily = fontFamily,
+                    lineHeight = fontSize.sp * 1.55f,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+            }
         }
         if (attribution != null) {
             item { Attribution(attribution) }
         }
         item { Spacer(Modifier.size(48.dp)) }
+    }
+}
+
+private fun styled(paragraph: String): AnnotatedString = buildAnnotatedString {
+    for (run in IntroMarkup.runs(paragraph)) {
+        if (run.bold) {
+            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(run.text) }
+        } else {
+            append(run.text)
+        }
     }
 }
 

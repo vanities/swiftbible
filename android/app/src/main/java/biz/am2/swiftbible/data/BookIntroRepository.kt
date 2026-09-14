@@ -26,6 +26,33 @@ data class BookIntro(
     val paragraphs: List<String> = emptyList(),
 )
 
+/**
+ * The typography the intro generator restores from the printed commentaries
+ * (python_parser/parse_book_intros.py `format_intro`): a paragraph opening
+ * "## " is a section heading, and "**text**" is bold — JFB's small-caps
+ * emphasis and both authors' numbered points. Nothing else is markup.
+ * Mirrors `IntroMarkup` in SummariesService.swift on iOS.
+ */
+object IntroMarkup {
+    data class Run(val text: String, val bold: Boolean)
+
+    fun heading(paragraph: String): String? =
+        if (paragraph.startsWith("## ")) paragraph.removePrefix("## ") else null
+
+    fun runs(paragraph: String): List<Run> {
+        val parts = paragraph.split("**").toMutableList()
+        // An unpaired "**" is literal text, not the start of a bold run that
+        // swallows the rest of the paragraph.
+        if (parts.size > 1 && parts.size % 2 == 0) {
+            val tail = parts.removeAt(parts.lastIndex)
+            parts[parts.lastIndex] = parts.last() + "**" + tail
+        }
+        return parts.mapIndexedNotNull { index, text ->
+            if (text.isEmpty()) null else Run(text, bold = index % 2 == 1)
+        }
+    }
+}
+
 @Serializable
 data class BookIntrosPayload(
     val source: SummariesSourceInfo,

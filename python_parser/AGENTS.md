@@ -32,7 +32,9 @@ This project feeds generated scriptures into the Swift client living one level u
   - `parse_book_intros.py` → `book_intros_{mhcc,jfb}.json` (the "About this book" essays, re-flowed into readable paragraphs by `soft_wrap`).
   - All four write the iOS bundle **and** the Android assets copy in one run; the two must stay byte-identical.
   - Sources are git-LFS (`sources/mhc/mhc{1..6}.txt`, `sources/jfb/jfb.txt`, `sources/mhcc/mhcc.txt`). Without `git lfs pull` you only have pointer files — re-fetch from CCEL instead: `https://www.ccel.org/ccel/h/henry/mhc{n}/cache/mhc{n}.txt` and `https://www.ccel.org/ccel/j/jamieson/jfb/cache/jfb.txt`.
-  - Chapter-list titles are never truncated (rows are variable height); the re-flow never changes a word of the text. `test_book_intros.py` pins both.
+  - The generators never truncate chapter-list titles (rows are variable height). **Known gap:** `parse_jfb.py` reads only the first line of a section header, and JFB wraps long ones, so ~24% of JFB chapter titles still stop mid-phrase ("…the Afflicted State of"). Its headers mix pure titles, "Title. commentary…", "Name--commentary…" and whole prose paragraphs (Psalms), so a fix needs a rule per shape.
+  - Intros carry a two-construct markup added by `format_intro`, rendered by `BookIntroView` (iOS) and `BookIntroScreen` (Android) via `IntroMarkup`: a paragraph `## Heading` (JFB run-in heads like "Where Job Lived.--", JFB only) and inline `**bold**` (numbered points I./2./[3.]/(4), JFB small-caps emphasis lowercased). `--` becomes `—`. Nothing else is markup — a literal `*` or `#` would break it.
+  - The re-flow and formatting never change a word: `test_book_intros.py` holds the text to the source with markup stripped.
 
 ## Inline Verse Markers
 - Keep inline references formatted as `CHAPTER:VERSE` (e.g. `39:10`). **Do not swap them to superscripts inside the JSON.** The Swift code handles presentation and assumes the colon syntax.

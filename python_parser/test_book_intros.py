@@ -21,6 +21,7 @@ import unittest
 from parse_book_intros import (
     MIN_TAIL_CHARS,
     SOFT_MAX_CHARS,
+    format_intro,
     readable_paragraphs,
     soft_wrap,
     split_sentences,
@@ -63,6 +64,11 @@ class ReflowTests(unittest.TestCase):
         self.assertTrue(chunks[-1].endswith("A short tail."))
         self.assertGreaterEqual(len(chunks[-1]), MIN_TAIL_CHARS)
         self.assertEqual(words(" ".join(chunks)), words(paragraph))
+
+    def test_a_short_opening_sentence_is_not_left_as_its_own_chunk(self):
+        long_sentence = "The design of the epistle " + "is to show the superiority of Christ, " * 20 + "and so on."
+        chunks = soft_wrap(f"Design.--{long_sentence} {long_sentence}")
+        self.assertTrue(chunks[0].startswith("Design.-- The design"), chunks[0][:40])
 
     def test_chunks_break_between_sentences_never_inside_one(self):
         paragraph = " ".join(f"Sentence {n} says something worth saying about the book." for n in range(20))
@@ -148,6 +154,87 @@ class SentenceSplitTests(unittest.TestCase):
         self.assertEqual(_trailing_enumerator("He asked whether it was canonical. No."), ("He asked whether it was canonical. No.", ""))
 
 
+class TypographyTests(unittest.TestCase):
+    """The markup format_intro adds: "## " headings, **bold**, em dashes."""
+
+    def test_a_run_in_head_becomes_a_heading_paragraph(self):
+        self.assertEqual(
+            format_intro(['Where Job Lived.--"Uz," according to Gesenius, means a light soil.'], run_in_heads=True),
+            ["## Where Job Lived", '"Uz," according to Gesenius, means a light soil.'],
+        )
+
+    def test_a_numbered_run_in_head_keeps_its_number(self):
+        self.assertEqual(
+            format_intro(["II. Inspiration and Authorship.--With no important exception, it is received."], run_in_heads=True)[0],
+            "## II. Inspiration and Authorship",
+        )
+
+    def test_a_head_set_in_small_caps_reads_in_sentence_case(self):
+        self.assertEqual(
+            format_intro(["The OBJECT OF THE EPISTLE.--Thessalonica was at this time capital."], run_in_heads=True),
+            ["## The object of the epistle", "Thessalonica was at this time capital."],
+        )
+
+    def test_a_capitalised_opening_word_is_not_emphasis(self):
+        self.assertEqual(format_intro(["Date of writing.--AS the Epistle is written jointly."], run_in_heads=True)[1], "As the Epistle is written jointly.")
+
+    def test_small_caps_emphasis_becomes_bold(self):
+        self.assertEqual(
+            format_intro(["The TIME OF WRITING was after Pentecost."]),
+            ["The **time of writing** was after Pentecost."],
+        )
+
+    def test_true_capitals_are_left_alone(self):
+        text = "The LXX renders it so, and Psalm CXIX. agrees."
+        self.assertEqual(format_intro([text]), [text])
+
+    def test_double_hyphens_become_em_dashes(self):
+        self.assertEqual(format_intro(["As to the name Job--repentance--it was common."]), ["As to the name Job—repentance—it was common."])
+
+    def test_only_jfb_sets_run_in_heads(self):
+        text = "It is so.--The book was thus entitled."
+        self.assertEqual(format_intro([text]), ["It is so. The book was thus entitled."])
+
+    def test_a_dash_joining_punctuation_is_dropped(self):
+        self.assertEqual(format_intro(["They may be thus briefly given:--David the devout."]), ["They may be thus briefly given: David the devout."])
+        self.assertEqual(format_intro(["It perishes in a night.-- The Bible began."]), ["It perishes in a night. The Bible began."])
+
+    def test_a_sentence_run_on_with_a_dash_can_be_split(self):
+        self.assertEqual(split_sentences("It perishes in a night.--The Bible began."), ["It perishes in a night.--", "The Bible began."])
+
+    def test_point_markers_are_bold(self):
+        self.assertEqual(
+            format_intro(["Concerning this epistle we must enquire, I. Into its authority. 2. Into its penman. [3.] Its scope: (1) the Jews."]),
+            ["Concerning this epistle we must enquire, **I.** Into its authority. **2.** Into its penman. **[3.]** Its scope: **(1)** the Jews."],
+        )
+
+    def test_an_outline_point_after_a_chapter_citation_is_bold(self):
+        self.assertEqual(
+            format_intro(["Their reigns, ch. xv. and xvi. V. Elijah's miracles, ch. xvii.-xix."]),
+            ["Their reigns, ch. xv. and xvi. **V.** Elijah's miracles, ch. xvii.-xix."],
+        )
+
+    def test_a_parenthesised_point_after_a_word_is_bold(self):
+        self.assertEqual(format_intro(["Devotional, expressive of (1) Penitence."]), ["Devotional, expressive of **(1)** Penitence."])
+        self.assertEqual(format_intro(["Psalms 18 (1) of them."]), ["Psalms 18 (1) of them."])
+
+    def test_citations_are_not_mistaken_for_markers(self):
+        for text in [
+            "Counted as a strange thing, Hos. viii. 12. The prophet complains.",
+            "Written upon great stones, ch. xxvii. 2, 3. It was read.",
+            "About A.D. 57. Paul left Ephesus.",
+            "The number of them in all 299. It was so.",
+            "See 1 Sam. ii. 7, 8; Ps. cxiii. 7-9.",
+        ]:
+            self.assertEqual(format_intro([text]), [text], text)
+
+    def test_a_number_after_a_chapter_range_is_a_marker(self):
+        self.assertEqual(
+            format_intro(["In their conquest, ch. vi.-xii. 3. In the distribution."]),
+            ["In their conquest, ch. vi.-xii. **3.** In the distribution."],
+        )
+
+
 class ShippedIntroTests(unittest.TestCase):
     """Invariants of the JSON the apps actually bundle."""
 
@@ -194,6 +281,22 @@ class ShippedIntroTests(unittest.TestCase):
             for book, intro in books.items():
                 openings = [p[:120] for p in intro["paragraphs"] if len(p) >= 120]
                 self.assertEqual(len(openings), len(set(openings)), f"{name} / {book}: paragraph repeated")
+
+    def test_markup_is_well_formed(self):
+        # The apps parse exactly two constructs; anything else would render as
+        # literal punctuation.
+        for name, books in self.intros.items():
+            for book, intro in books.items():
+                for paragraph in intro["paragraphs"]:
+                    where = f"{name} / {book}: {paragraph[:60]}"
+                    self.assertEqual(paragraph.count("**") % 2, 0, where)
+                    self.assertNotIn("--", paragraph, where)
+                    self.assertNotIn("****", paragraph, where)
+                    if paragraph.startswith("## "):
+                        self.assertLessEqual(len(paragraph), 80, where)
+                        self.assertNotIn("**", paragraph, where)
+                    else:
+                        self.assertNotIn("## ", paragraph, where)
 
     def test_ios_and_android_bundle_the_same_bytes(self):
         for name in INTRO_FILES:

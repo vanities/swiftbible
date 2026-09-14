@@ -117,8 +117,10 @@ _ABBREVIATIONS = {
 # A sentence-ending punctuation mark (optionally followed by a closing quote)
 # then whitespace then the start of the next sentence (a capital, optionally
 # behind an opening quote/paren). Restricting the next char to a capital avoids
-# false splits before digits, e.g. "about A. D. 97," and "ch. 21:22".
-_BOUNDARY_RE = re.compile(r'[.!?]["”\')\]]?\s+(?=["“\'(]?[A-Z])')
+# false splits before digits, e.g. "about A. D. 97," and "ch. 21:22". Henry
+# also runs sentences together with a dash and no space: "perishes in a
+# night.--The Bible began".
+_BOUNDARY_RE = re.compile(r'[.!?]["”\')\]]?\s+(?=["“\'(]?[A-Z])|[.!?]--(?=[A-Z])')
 
 # Both commentaries number the points of an introduction, nesting roman, arabic
 # and bracketed markers: "...we must enquire, I. Into the divine authority of
@@ -225,7 +227,9 @@ def soft_wrap(text: str) -> list[str]:
     chunks: list[str] = []
     current = ""
     for sentence in split_sentences(text):
-        if current and len(current) + 1 + len(sentence) > TARGET_CHARS:
+        # Never close a runt chunk either — a lone run-in head ("Design.--")
+        # would be split from the section it heads.
+        if len(current) >= MIN_TAIL_CHARS and len(current) + 1 + len(sentence) > TARGET_CHARS:
             chunks.append(current)
             current = sentence
         else:
@@ -248,6 +252,127 @@ def readable_paragraphs(paragraphs: list[str]) -> list[str]:
     for paragraph in paragraphs:
         out.extend(soft_wrap(paragraph))
     return out
+
+
+# ---------------------------------------------------------------------------
+# Typography
+#
+# The plain-text sources flatten what the printed commentaries showed with type:
+# JFB's run-in section heads ("Where Job Lived.--"), its small-caps emphasis
+# ("The TIME OF WRITING was"), both authors' numbered points, and the em dash
+# typed as "--". The re-flowed paragraphs get a deliberately tiny markup the
+# apps render (BookIntroView on iOS, BookIntroScreen on Android):
+#
+#   "## Heading"   a whole paragraph that is a section heading
+#   "**text**"     bold, inline
+#
+# and "--" becomes "—". Formatting never changes a word: plain_text() strips it
+# back off, and the tests hold the result to the unformatted text.
+# ---------------------------------------------------------------------------
+
+# "Where Job Lived.--Uz, according to..." — a run-in head, optionally numbered
+# ("II. Inspiration and Authorship.--"). No period inside the head itself.
+_RUN_IN_HEAD_RE = re.compile(r"^((?:[IVX]+\. )?[A-Z][^.]{1,70}?)\.--\s*(.+)$", re.S)
+
+# Small-caps emphasis, flattened to capitals: a run of all-caps words. Roman
+# numerals and "LXX" (the Septuagint) are genuinely capitals, not emphasis.
+_CAPS_RUN_RE = re.compile(r"\b[A-Z]{2,}(?:\s+[A-Z]{2,})*\b")
+_TRUE_CAPITALS = {"LXX", "MS", "MSS", "KJV"}
+
+# A numbered point: "I.", "12.", "[1.]", "(1)".
+_MARKER = r"(?:[IVX]{1,4}\.|\d{1,2}\.|\[\d{1,2}\.?\]|\(\d{1,2}\))"
+_MARKER_RE = re.compile(rf"(?:(?<=^)|(?<=\s)|(?<=—)){_MARKER}(?=\s+[\"“(]?[A-Za-z])")
+
+
+def _is_true_capital(word: str) -> bool:
+    return word in _TRUE_CAPITALS or _ROMAN_RE.match(word) is not None
+
+
+def _small_caps_to_bold(text: str) -> str:
+    def replace(match: re.Match) -> str:
+        run = match.group(0)
+        if all(_is_true_capital(w) for w in run.split()):
+            return run
+        return f"**{run.lower()}**"
+
+    return _CAPS_RUN_RE.sub(replace, text)
+
+
+def _opens_point(text: str, start: int, marker: str) -> bool:
+    """Whether the marker at `start` numbers a point, rather than finishing a
+    citation ("Hos. viii. 12. The") or a count ("in all 299. It")."""
+    before = text[:start].rstrip()
+    if not before:
+        return True  # opens the paragraph
+    after = text[start + len(marker):].lstrip("\"“( ")
+    if marker.startswith("("):
+        # JFB cites as "Ps 18:1", so "(4) Prophetic" is always a list item.
+        return before[-1] in ":;,.—" or after[:1].isupper()
+    last = before[-1]
+    if last == "." and re.fullmatch(r"[IVX]+\.", marker):
+        # Henry cites chapters in lowercase roman, so a capital numeral after
+        # one opens the next point of his outline: "ch. xv. and xvi. V. Elijah's".
+        return True
+    if last in ",;:—":
+        # "we must enquire, I. Into" / "we may observe, 1. That" — but not a
+        # verse list, "ch. xxvii. 2, 3.", where a number precedes the comma.
+        word = re.search(r"(\S+)[,;:—]$", before)
+        return word is not None and not re.search(r"\d|^[ivxlc]+\.?$", word.group(1))
+    if last in "!?\"”')":
+        return True
+    if last == ".":
+        # "two hundred years. 2. He" — or "ch. xiii.-xxi. 4. In", since a range
+        # of chapters takes no verse number.
+        return _ends_sentence(before, len(before) - 1) or _CHAPTER_RANGE_RE.search(before) is not None
+    return False
+
+
+def _bold_markers(text: str) -> str:
+    out: list[str] = []
+    cursor = 0
+    for match in _MARKER_RE.finditer(text):
+        if _opens_point(text, match.start(), match.group(0)):
+            out.append(text[cursor:match.start()])
+            out.append(f"**{match.group(0)}**")
+            cursor = match.end()
+    out.append(text[cursor:])
+    return "".join(out)
+
+
+def _format_body(text: str) -> str:
+    text = text.replace("--", "—")
+    # A dash that only joins punctuation to what follows — the old colon-dash
+    # ("thus briefly given:—David") or a sentence run into the next ("in a
+    # night.—The Bible") — reads as a typo on screen; the punctuation suffices.
+    text = re.sub(r"([.!?:])—\s*", r"\1 ", text).strip()
+    return _bold_markers(_small_caps_to_bold(text))
+
+
+def format_intro(paragraphs: list[str], run_in_heads: bool = False) -> list[str]:
+    """Apply the intro markup to re-flowed paragraphs. Only JFB sets run-in
+    heads; in Henry a short sentence run on with a dash ("It is so.--The
+    book...") would look like one, so heads are recognised only when asked."""
+    out: list[str] = []
+    for paragraph in paragraphs:
+        head = _RUN_IN_HEAD_RE.match(paragraph) if run_in_heads else None
+        if head:
+            title, body = head.group(1), head.group(2)
+            # "The OBJECT OF THE EPISTLE" is a head set in small caps, not
+            # emphasis within one; and the body's first word is often set in
+            # capitals as a typographic opening ("AS the Epistle is written").
+            title = re.sub(r"\b[A-Z]{2,}\b", lambda m: m.group(0) if _is_true_capital(m.group(0)) else m.group(0).lower(), title)
+            body = re.sub(r"^([A-Z])([A-Z]+)\b", lambda m: m.group(1) + m.group(2).lower(), body)
+            out.append(f"## {title[0].upper()}{title[1:]}")
+            out.append(_format_body(body))
+        else:
+            out.append(_format_body(paragraph))
+    return out
+
+
+def plain_text(paragraphs: list[str]) -> str:
+    """Undo format_intro, for comparing words against the source."""
+    text = " ".join(p.removeprefix("## ") for p in paragraphs)
+    return " ".join(text.replace("**", "").replace("—", "--").split())
 
 # A "Commentary by ..." byline sits directly under every JFB book-title header.
 # If one appears between an INTRODUCTION and the chapter anchor, the
@@ -292,7 +417,7 @@ def parse_mhcc_intros() -> dict[str, dict]:
             continue
         intros[book] = {
             "title": f"Introduction to {book}",
-            "paragraphs": readable_paragraphs(paragraphs),
+            "paragraphs": format_intro(readable_paragraphs(paragraphs)),
         }
     return intros
 
@@ -354,7 +479,7 @@ def parse_jfb_intros() -> dict[str, dict]:
             continue
         intros[book] = {
             "title": f"Introduction to {book}",
-            "paragraphs": readable_paragraphs(paragraphs),
+            "paragraphs": format_intro(readable_paragraphs(paragraphs), run_in_heads=True),
         }
 
     # Single-chapter books (Philemon, Jude, 2 John, 3 John) have no CHAPTER/
@@ -412,7 +537,7 @@ def extract_jfb_single_chapter(lines: list[str], title_token: str, book: str) ->
     paragraphs = collect_paragraphs(lines, intro_line + 1, end)
     if sum(len(p) for p in paragraphs) < MIN_INTRO_CHARS:
         return None
-    return {"title": f"Introduction to {book}", "paragraphs": readable_paragraphs(paragraphs)}
+    return {"title": f"Introduction to {book}", "paragraphs": format_intro(readable_paragraphs(paragraphs), run_in_heads=True)}
 
 
 # ---------------------------------------------------------------------------
