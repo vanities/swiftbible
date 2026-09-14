@@ -83,6 +83,11 @@ jobs:
       - name: Set up Android SDK
         if: steps.check.outputs.exists == 'false'
         uses: android-actions/setup-android@v4
+        with:
+          # The action's default also installs the legacy "tools" package, which
+          # cmdline-tools 20.0 (runner image, Sep 2026) no longer ships — the
+          # step exits 1. AGP fetches build-tools and platforms on its own.
+          packages: platform-tools
 
       - name: Decode upload keystore
         if: steps.check.outputs.exists == 'false'

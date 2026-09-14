@@ -1,3 +1,4 @@
-• Jesus's words in KJV and ASV are now taken from the source texts' own red-letter editions instead of being inferred, correcting hundreds of verses.
-• Replies spoken to Jesus are no longer shown in red, and verses where he speaks twice, or is quoted inside someone else's sentence, now read correctly.
+• "About this book" introductions are easier to read, with section headings and bold numbered points.
+• Restored paragraphs that were missing from 22 book introductions, including Ruth, Isaiah and Matthew.
+• Matthew Henry chapter summaries now show in full instead of being cut off.
 • Maintenance and stability improvements.

@@ -17,8 +17,9 @@ en-US:
   keywords: "asv,web,scripture,gospel,prayer,jesus,christian,faith,study,notes,jubilees,enoch,hebrew,catholic,god"
   promo_text: "Read the Bible in KJV, ASV, WEB & Original Hebrew/Greek. Includes Apocrypha, Enoch, Jubilees, and more. Highlight, take notes, and get AI explanations."
   whats_new: |-
-    - The words of Jesus in KJV and ASV are now taken from the source texts' own red-letter editions instead of being inferred, correcting hundreds of verses
-    - Replies spoken to Jesus are no longer shown in red, and verses where he speaks twice, or is quoted inside someone else's sentence, now read correctly
+    - "About this book" introductions are easier to read, with section headings and bold numbered points
+    - Restored paragraphs that were missing from 22 book introductions, including Ruth, Isaiah and Matthew
+    - Matthew Henry chapter summaries now show in full instead of being cut off
     - Maintenance and stability improvements
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -57,8 +58,9 @@ es-ES:
 
     SwiftBible es totalmente de código abierto. Lee y contribuye al código en GitHub.
   whats_new: |-
-    - Las palabras de Jesús en KJV y ASV ahora provienen de las ediciones de letra roja de los propios textos en lugar de deducirse, corrigiendo cientos de versículos
-    - Las respuestas dirigidas a Jesús ya no aparecen en rojo, y los versículos donde él habla dos veces, o es citado dentro de la frase de otra persona, se muestran correctamente
+    - Las introducciones de «Acerca de este libro» son más fáciles de leer, con títulos de sección y puntos numerados en negrita
+    - Se han restaurado párrafos que faltaban en 22 introducciones de libros, entre ellas Rut, Isaías y Mateo
+    - Los resúmenes de capítulo de Matthew Henry ahora se muestran completos en lugar de cortarse
     - Mejoras de mantenimiento y estabilidad
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -97,8 +99,9 @@ es-MX:
 
     SwiftBible es 100% de código abierto. Lee y contribuye en GitHub.
   whats_new: |-
-    - Las palabras de Jesús en KJV y ASV ahora provienen de las ediciones de letra roja de los propios textos en lugar de deducirse, corrigiendo cientos de versículos
-    - Las respuestas dirigidas a Jesús ya no aparecen en rojo, y los versículos donde él habla dos veces, o es citado dentro de la frase de otra persona, se muestran correctamente
+    - Las introducciones de «Acerca de este libro» son más fáciles de leer, con títulos de sección y puntos numerados en negritas
+    - Se restauraron párrafos que faltaban en 22 introducciones de libros, entre ellas Rut, Isaías y Mateo
+    - Los resúmenes de capítulo de Matthew Henry ahora se muestran completos en lugar de cortarse
     - Mejoras de mantenimiento y estabilidad
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -137,8 +140,9 @@ pt-BR:
 
     SwiftBible é totalmente de código aberto. Veja e contribua no GitHub.
   whats_new: |-
-    - As palavras de Jesus na KJV e na ASV agora vêm das edições em letras vermelhas dos próprios textos, em vez de serem inferidas, corrigindo centenas de versículos
-    - As respostas dirigidas a Jesus não aparecem mais em vermelho, e os versículos em que ele fala duas vezes, ou é citado dentro da frase de outra pessoa, são exibidos corretamente
+    - As introduções de "Sobre este livro" estão mais fáceis de ler, com títulos de seção e pontos numerados em negrito
+    - Restauramos parágrafos que faltavam em 22 introduções de livros, incluindo Rute, Isaías e Mateus
+    - Os resumos de capítulo de Matthew Henry agora aparecem completos em vez de cortados
     - Melhorias de manutenção e estabilidade
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -177,8 +181,9 @@ pt-PT:
 
     SwiftBible é totalmente de código aberto. Vê e contribui no GitHub.
   whats_new: |-
-    - As palavras de Jesus na KJV e na ASV provêm agora das edições em letras vermelhas dos próprios textos, em vez de serem inferidas, corrigindo centenas de versículos
-    - As respostas dirigidas a Jesus deixam de aparecer a vermelho, e os versículos em que Ele fala duas vezes, ou é citado dentro da frase de outra pessoa, são apresentados corretamente
+    - As introduções de "Sobre este livro" estão mais fáceis de ler, com títulos de secção e pontos numerados a negrito
+    - Foram restaurados parágrafos em falta em 22 introduções de livros, incluindo Rute, Isaías e Mateus
+    - Os resumos de capítulo de Matthew Henry são agora apresentados na íntegra em vez de cortados
     - Melhorias de manutenção e estabilidade
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -217,8 +222,9 @@ fr-FR:
 
     SwiftBible est entièrement open-source. Consultez et contribuez sur GitHub.
   whats_new: |-
-    - Les paroles de Jésus dans la KJV et l'ASV proviennent désormais des éditions en lettres rouges des textes eux-mêmes, au lieu d'être déduites, corrigeant des centaines de versets
-    - Les réponses adressées à Jésus n'apparaissent plus en rouge, et les versets où il parle deux fois, ou est cité au sein de la phrase d'un autre, s'affichent correctement
+    - Les introductions « À propos de ce livre » sont plus lisibles, avec des titres de section et des points numérotés en gras
+    - Des paragraphes manquants ont été rétablis dans 22 introductions, dont Ruth, Ésaïe et Matthieu
+    - Les résumés de chapitre de Matthew Henry s'affichent désormais en entier au lieu d'être tronqués
     - Améliorations de maintenance et de stabilité
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -257,8 +263,9 @@ de-DE:
 
     SwiftBible ist vollständig Open Source. Code ansehen und beitragen auf GitHub.
   whats_new: |-
-    - Die Worte Jesu in KJV und ASV stammen jetzt aus den Rotbuchstaben-Ausgaben der Texte selbst, statt abgeleitet zu werden — Hunderte von Versen wurden korrigiert
-    - Antworten an Jesus erscheinen nicht mehr in Rot, und Verse, in denen er zweimal spricht oder innerhalb des Satzes eines anderen zitiert wird, werden korrekt dargestellt
+    - Die Einführungen unter „Über dieses Buch“ sind leichter lesbar – mit Abschnittsüberschriften und fett gesetzten nummerierten Punkten
+    - Fehlende Absätze in 22 Bucheinführungen wurden wiederhergestellt, darunter Rut, Jesaja und Matthäus
+    - Die Kapitelzusammenfassungen von Matthew Henry werden jetzt vollständig statt abgeschnitten angezeigt
     - Wartungs- und Stabilitätsverbesserungen
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -297,8 +304,9 @@ it:
 
     SwiftBible è completamente open source. Codice e contributi su GitHub.
   whats_new: |-
-    - Le parole di Gesù in KJV e ASV provengono ora dalle edizioni a lettere rosse dei testi stessi, invece di essere dedotte, correggendo centinaia di versetti
-    - Le risposte rivolte a Gesù non appaiono più in rosso, e i versetti in cui parla due volte, o è citato all'interno della frase di un altro, vengono visualizzati correttamente
+    - Le introduzioni di "Informazioni sul libro" sono più facili da leggere, con titoli di sezione e punti numerati in grassetto
+    - Ripristinati i paragrafi mancanti in 22 introduzioni ai libri, tra cui Rut, Isaia e Matteo
+    - I riassunti dei capitoli di Matthew Henry ora vengono mostrati per intero invece di essere troncati
     - Miglioramenti di manutenzione e stabilità
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -337,8 +345,9 @@ nl-NL:
 
     SwiftBible is volledig open source. Bekijk en draag bij op GitHub.
   whats_new: |-
-    - De woorden van Jezus in KJV en ASV komen nu uit de roodletter-edities van de teksten zelf in plaats van te worden afgeleid — honderden verzen zijn gecorrigeerd
-    - Antwoorden aan Jezus worden niet langer in rood weergegeven, en verzen waarin hij twee keer spreekt of binnen de zin van iemand anders wordt geciteerd, worden correct getoond
+    - De inleidingen bij 'Over dit boek' lezen makkelijker, met sectiekoppen en vetgedrukte genummerde punten
+    - Ontbrekende alinea's in 22 boekinleidingen zijn hersteld, waaronder Ruth, Jesaja en Matteüs
+    - De hoofdstuksamenvattingen van Matthew Henry worden nu volledig getoond in plaats van afgekapt
     - Onderhouds- en stabiliteitsverbeteringen
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -377,9 +386,10 @@ pl:
 
     SwiftBible jest w pełni otwartoźródłowa. Kod i wkład w GitHubie.
   whats_new: |-
-    - Słowa Jezusa w KJV i ASV pochodzą teraz z czerwonoliterowych wydań samych tekstów, zamiast być wywnioskowane — poprawiono setki wersetów
-    - Odpowiedzi kierowane do Jezusa nie są już wyświetlane na czerwono, a wersety, w których mówi dwukrotnie lub jest cytowany wewnątrz zdania innej osoby, wyświetlają się poprawnie
-    - Ulepszenia konserwacyjne i stabilności
+    - Wstępy „O tej księdze” są czytelniejsze dzięki nagłówkom sekcji i pogrubionym numerowanym punktom
+    - Przywrócono brakujące akapity w 22 wstępach do ksiąg, m.in. Rut, Izajasza i Mateusza
+    - Streszczenia rozdziałów Matthew Henry’ego są teraz wyświetlane w całości, a nie ucinane
+    - Poprawki konserwacyjne i stabilności
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -417,9 +427,10 @@ ru:
 
     SwiftBible полностью с открытым исходным кодом. Код и вклад на GitHub.
   whats_new: |-
-    - Слова Иисуса в KJV и ASV теперь берутся из изданий с красными буквами самих текстов, а не выводятся автоматически — исправлены сотни стихов
-    - Ответы, обращённые к Иисусу, больше не отображаются красным, а стихи, где Он говорит дважды или цитируется внутри чужой фразы, отображаются правильно
-    - Улучшения стабильности и обслуживания
+    - Вступления «Об этой книге» стало легче читать: появились заголовки разделов и выделенные жирным нумерованные пункты
+    - Восстановлены абзацы, пропавшие из 22 вступлений к книгам, в том числе Руфь, Исаия и Матфей
+    - Краткие содержания глав Мэтью Генри теперь показываются полностью, а не обрезаются
+    - Улучшения обслуживания и стабильности
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -457,9 +468,10 @@ ko:
 
     SwiftBible은 완전한 오픈소스입니다. GitHub에서 코드를 보고 기여할 수 있습니다.
   whats_new: |-
-    - KJV와 ASV의 예수님 말씀이 추론이 아니라 본문 자체의 적색 활자판에서 옮겨져, 수백 구절이 수정되었습니다
-    - 예수님께 드린 대답은 더 이상 빨간색으로 표시되지 않으며, 한 절에서 두 번 말씀하시거나 다른 사람의 문장 안에 인용된 구절도 올바르게 표시됩니다
-    - 유지 관리 및 안정성 개선
+    - '이 책에 대하여' 소개글에 섹션 제목과 굵은 번호 항목이 추가되어 읽기가 쉬워졌습니다
+    - 룻기, 이사야, 마태복음 등 22권의 소개글에서 빠져 있던 문단을 복원했습니다
+    - 매튜 헨리의 장 요약이 잘리지 않고 전체가 표시됩니다
+    - 유지보수 및 안정성 개선
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -497,9 +509,10 @@ ja:
 
     SwiftBibleは完全にオープンソースです。GitHubでコードの閲覧・貢献ができます。
   whats_new: |-
-    - KJVとASVのイエスの言葉が、推測ではなく本文自体の赤文字版から取得されるようになり、数百の節が修正されました
-    - イエスへの返答が赤字で表示されなくなり、1つの節で二度語る箇所や、他者の文中に引用された箇所も正しく表示されます
-    - メンテナンスと安定性の改善
+    - 「この書について」の紹介文に見出しと太字の番号付き項目が加わり、読みやすくなりました
+    - ルツ記、イザヤ書、マタイによる福音書など22書の紹介文で欠けていた段落を復元しました
+    - マシュー・ヘンリーの章の要約が途中で切れずに全文表示されるようになりました
+    - メンテナンスと安定性の向上
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
   marketing_url: https://am2.biz/swiftbible
@@ -537,8 +550,9 @@ zh-Hans:
 
     SwiftBible 完全开源。可在 GitHub 查看代码并贡献。
   whats_new: |-
-    - KJV 和 ASV 中耶稣的话语现在直接取自经文本身的红字版本，而非推断得出，已修正数百节经文
-    - 对耶稣所说的回答不再显示为红色；一节中耶稣两次说话，或被引用在他人话语之中的经文，现在都能正确显示
+    - “关于本书”简介更易阅读，新增章节标题和加粗的编号要点
+    - 恢复了 22 卷书简介中缺失的段落，包括路得记、以赛亚书和马太福音
+    - 马太·亨利的章节摘要现在完整显示，不再被截断
     - 维护与稳定性改进
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -577,8 +591,9 @@ zh-Hant:
 
     SwiftBible 完全開源。可在 GitHub 查看程式碼並貢獻。
   whats_new: |-
-    - KJV 與 ASV 中耶穌的話語現在直接取自經文本身的紅字版本，而非推斷得出，已修正數百節經文
-    - 對耶穌所說的回答不再顯示為紅色；一節中耶穌兩次說話，或被引用在他人話語之中的經文，現在都能正確顯示
+    - 「關於本書」簡介更易閱讀，新增章節標題和粗體的編號要點
+    - 恢復了 22 卷書簡介中缺漏的段落，包括路得記、以賽亞書和馬太福音
+    - 馬太·亨利的章節摘要現在完整顯示，不再被截斷
     - 維護與穩定性改進
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -617,8 +632,9 @@ id:
 
     SwiftBible sepenuhnya sumber terbuka. Lihat kode dan berkontribusi di GitHub.
   whats_new: |-
-    - Perkataan Yesus dalam KJV dan ASV kini diambil dari edisi huruf merah teks aslinya, bukan disimpulkan — ratusan ayat telah diperbaiki
-    - Jawaban yang ditujukan kepada Yesus tidak lagi ditampilkan merah, dan ayat di mana Ia berbicara dua kali, atau dikutip di dalam kalimat orang lain, kini tampil dengan benar
+    - Pengantar "Tentang kitab ini" kini lebih mudah dibaca, dengan judul bagian dan poin bernomor bercetak tebal
+    - Memulihkan paragraf yang hilang dari 22 pengantar kitab, termasuk Rut, Yesaya, dan Matius
+    - Ringkasan pasal dari Matthew Henry kini ditampilkan utuh, tidak lagi terpotong
     - Peningkatan pemeliharaan dan stabilitas
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -657,8 +673,9 @@ el:
 
     Το SwiftBible είναι πλήρως ανοιχτού κώδικα. Δες τον κώδικα και συνεισέφερε στο GitHub.
   whats_new: |-
-    - Τα λόγια του Ιησού στις KJV και ASV προέρχονται πλέον από τις εκδόσεις με κόκκινα γράμματα των ίδιων των κειμένων αντί να συνάγονται — διορθώθηκαν εκατοντάδες εδάφια
-    - Οι απαντήσεις προς τον Ιησού δεν εμφανίζονται πια με κόκκινο, και τα εδάφια όπου μιλάει δύο φορές ή παρατίθεται μέσα στη φράση κάποιου άλλου εμφανίζονται σωστά
+    - Οι εισαγωγές «Σχετικά με αυτό το βιβλίο» διαβάζονται πιο εύκολα, με επικεφαλίδες ενοτήτων και αριθμημένα σημεία με έντονη γραφή
+    - Αποκαταστάθηκαν παράγραφοι που έλειπαν από 22 εισαγωγές βιβλίων, όπως της Ρουθ, του Ησαΐα και του Ματθαίου
+    - Οι περιλήψεις κεφαλαίων του Matthew Henry εμφανίζονται πλέον ολόκληρες αντί να κόβονται
     - Βελτιώσεις συντήρησης και σταθερότητας
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -697,8 +714,9 @@ ro:
 
     SwiftBible este complet open-source. Cod și contribuții pe GitHub.
   whats_new: |-
-    - Cuvintele lui Isus din KJV și ASV sunt acum preluate din edițiile cu litere roșii ale textelor înseși, în loc să fie deduse — sute de versete au fost corectate
-    - Răspunsurile adresate lui Isus nu mai apar cu roșu, iar versetele în care vorbește de două ori sau este citat în interiorul frazei altcuiva se afișează corect
+    - Introducerile „Despre această carte” se citesc mai ușor, cu titluri de secțiune și puncte numerotate îngroșate
+    - Au fost restaurate paragrafele lipsă din 22 de introduceri, printre care Rut, Isaia și Matei
+    - Rezumatele capitolelor de Matthew Henry apar acum integral, nu trunchiate
     - Îmbunătățiri de întreținere și stabilitate
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -737,8 +755,9 @@ tr:
 
     SwiftBible tamamen açık kaynaktır. Kodu görüntüleyin ve GitHub'da katkıda bulunun.
   whats_new: |-
-    - KJV ve ASV'deki İsa'nın sözleri artık çıkarım yoluyla değil, metinlerin kendi kırmızı harfli baskılarından alınıyor — yüzlerce ayet düzeltildi
-    - İsa'ya verilen yanıtlar artık kırmızı gösterilmiyor; onun bir ayette iki kez konuştuğu ya da bir başkasının cümlesi içinde alıntılandığı ayetler doğru görüntüleniyor
+    - "Bu kitap hakkında" girişleri artık bölüm başlıkları ve kalın numaralı maddelerle daha kolay okunuyor
+    - Rut, Yeşaya ve Matta dahil 22 kitap girişinde eksik olan paragraflar geri getirildi
+    - Matthew Henry'nin bölüm özetleri artık kesilmeden tam olarak gösteriliyor
     - Bakım ve kararlılık iyileştirmeleri
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
@@ -777,8 +796,9 @@ hi:
 
     SwiftBible पूरी तरह ओपन-सोर्स है। GitHub पर कोड देखें और योगदान करें।
   whats_new: |-
-    - KJV और ASV में यीशु के वचन अब अनुमान से नहीं, बल्कि मूल पाठों के अपने लाल-अक्षर संस्करणों से लिए जाते हैं — सैकड़ों वचन सुधारे गए
-    - यीशु को दिए गए उत्तर अब लाल रंग में नहीं दिखते, और जिन वचनों में वे दो बार बोलते हैं या किसी और के वाक्य के भीतर उद्धृत हैं, वे सही दिखते हैं
+    - "इस पुस्तक के बारे में" परिचय अब पढ़ने में आसान हैं, जिनमें खंड शीर्षक और बोल्ड क्रमांकित बिंदु हैं
+    - रूत, यशायाह और मत्ती सहित 22 पुस्तकों के परिचय में छूटे हुए अनुच्छेद वापस जोड़े गए
+    - मैथ्यू हेनरी के अध्याय सारांश अब कटने के बजाय पूरे दिखते हैं
     - रखरखाव और स्थिरता में सुधार
 
   privacy_policy_url: https://www.freeprivacypolicy.com/live/954a0e6c-c2db-4bce-aa84-9500ce83fa5e
