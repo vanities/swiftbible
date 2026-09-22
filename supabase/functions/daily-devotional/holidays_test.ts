@@ -1177,6 +1177,11 @@ Deno.test("DEVOTIONAL_MODEL is a literal constant and is used for generation", (
   if (!source.includes("MODEL_PRICING[model]") && !source.includes("MODEL_PRICING")) {
     throw new Error("cost accounting should look the model up in MODEL_PRICING");
   }
+  // computeCost returns 0 for an unpriced model, so a model swap without a
+  // pricing entry would silently record every devotional as free.
+  if (!source.includes(`"${m[1]}":`)) {
+    throw new Error(`DEVOTIONAL_MODEL "${m[1]}" has no MODEL_PRICING entry`);
+  }
 });
 
 // ─── Voice prompts: single source of truth ─────────────────────────

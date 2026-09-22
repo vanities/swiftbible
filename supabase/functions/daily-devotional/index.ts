@@ -172,12 +172,12 @@ const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 // reintroduce an env fallback. Change the model by editing these two lines and
 // deploying, then confirm against the `model` column on a freshly generated row.
 //
-// Pinned to explicit tier ids, never the bare "gpt-5.6" alias — that alias
-// routes to Sol and would silently change both quality and price under us.
+// Pinned to explicit tier ids, never a bare family alias (e.g. "gpt-5.6"
+// routes to Sol) — an alias would silently change quality and price under us.
 //
 // The model used for each devotional is persisted to the "Daily Devotional".model
 // column so the iOS and Android apps can attribute it accurately.
-const DEVOTIONAL_MODEL = "gpt-5.6-terra";
+const DEVOTIONAL_MODEL = "gpt-6-sol";
 const VERSE_SELECTION_MODEL = "gpt-5.6-luna";
 
 // Two parallel prompt tracks rotate randomly to vary the daily devotional
@@ -222,16 +222,19 @@ const QUESTION_PROMPT_VERSION = "question-v1";
 const CHARACTER_PROMPT_VERSION = "character-v1";
 
 // Per-model pricing in USD per million tokens (input, output).
-// Source: OpenAI pricing page, snapshotted 2026-08-27.
+// Source: OpenAI pricing page, snapshotted 2026-09-22.
 // Update when pricing changes; cost is locked-in at generation time so
 // historical rows keep the price actually paid. Retired models stay listed
 // so historical rows can still be costed.
 const MODEL_PRICING: Record<string, { input: number; output: number }> = {
+  // GPT-6 family
+  "gpt-6-sol":     { input: 2.00,  output: 10.00 },
+  "gpt-6-luna":    { input: 0.10,  output:  0.50 },
   // GPT-5.6 family (GA 2026-07-09)
-  "gpt-5.6-sol":   { input: 5.00,  output: 30.00 },
-  "gpt-5.6-terra": { input: 2.00,  output: 12.00 },
+  "gpt-5.6-sol":   { input: 4.00,  output: 20.00 },
   "gpt-5.6-luna":  { input: 0.20,  output:  1.20 },
   // retired — kept for historical cost lookup
+  "gpt-5.6-terra": { input: 2.00,  output: 12.00 },
   "gpt-5.5":      { input: 5.00,  output: 30.00 },
   "gpt-5.4":      { input: 2.50,  output: 15.00 },
   "gpt-5.4-mini": { input: 0.75,  output:  4.50 },
