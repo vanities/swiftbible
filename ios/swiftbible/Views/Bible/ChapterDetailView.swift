@@ -37,7 +37,6 @@ struct ChapterDetailView: View {
     private var readingTheme: ReadingTheme {
         ReadingTheme(rawValue: readingThemeRaw) ?? .system
     }
-    // Swipe navigation removed in favor of pull up/down
 
     @Query private var highlightedVerses: [HighlightedVerse] = []
     @Query private var notes: [Note] = []
@@ -47,16 +46,25 @@ struct ChapterDetailView: View {
     @Environment(AppViewModel.self) private var appViewModel
     @Environment(\.modelContext) private var context
     @Environment(\.requestReview) private var requestReview
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     // Store only identifying info - the actual data is derived from current version
     let bookName: String
     let initialChapterNumber: Int
     @State private var currentChapterNumber: Int
+    @State private var activeChapterNumber: Int
+    @State private var selectedParagraphChapterNumber: Int = 1
+    @State private var rightScrollPosition: Int?
+    @State private var collapsedPageAnchor: Int?
+    @State private var reachedChapterEnds: Set<Int> = []
 
     init(book: Book, chapter: Chapter) {
         self.bookName = book.name
         self.initialChapterNumber = chapter.number
         _currentChapterNumber = State(initialValue: chapter.number)
+        _activeChapterNumber = State(initialValue: chapter.number)
     }
 
     // Computed properties that always reflect the current version
@@ -119,7 +127,7 @@ struct ChapterDetailView: View {
             scrollPosition = nil
         }
         #if DEBUG
-        print("[MJRefresh] Triggered previous chapter to \(prev.number)")
+            print("[MJRefresh] Triggered previous chapter to \(prev.number)")
         #endif
     }
 
@@ -131,51 +139,28 @@ struct ChapterDetailView: View {
             scrollPosition = nil
         }
         #if DEBUG
-        print("[MJRefresh] Triggered next chapter to \(next.number)")
+            print("[MJRefresh] Triggered next chapter to \(next.number)")
         #endif
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 10) {
-                    ForEach(
-                        currentChapter.paragraphs,
-                        id: \.startingVerse
-                    ) { paragraph in
-                        paragraphRow(for: paragraph)
-                    }
-                    // Scroll-to-end sentinel: once the last verse is visible the
-                    // chapter is flagged reached-end (with ≥30s dwell → "read").
-                    Color.clear
-                        .frame(height: 1)
-                        .onAppear { ReadingStatsService.shared.markReachedEnd() }
-                }
-                .id(currentChapterNumber)
-                .transition(.asymmetric(
-                    insertion: .move(edge: transitionForward ? .trailing : .leading),
-                    removal: .move(edge: transitionForward ? .leading : .trailing)
-                ))
-                .animation(.easeInOut(duration: 0.25), value: currentChapterNumber)
-                .scrollTargetLayout()
-                .padding()
-                .onAppear {
-                    if hideNavAndTab {
-                        withAnimation(.easeIn) {
-                            showNavAndTab = false
-                        }
-                    }
-                }
-                .toolbar(showNavAndTab ? .visible : .hidden, for: .navigationBar)
-                .toolbar(showNavAndTab ? .visible : .hidden, for: .tabBar)
+        GeometryReader { geometry in
+            if usesBookSpread(in: geometry.size) {
+                bookSpread
+            } else {
+                singlePage
             }
-            .background(ScrollViewResolver { scroll in
-                configureRefresh(on: scroll)
-            })
+        }
+        .onGeometryChange(for: Bool.self) { geometry in
+            usesBookSpread(in: geometry.size)
+        } action: { isSpread in
+            if !isSpread, activeChapterNumber != currentChapterNumber {
+                collapsedPageAnchor = rightScrollPosition
+                currentChapterNumber = activeChapterNumber
+            }
         }
         .background(readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color.clear)
         // Removed overlay NavigationLinks; navigation happens in-place
-        .scrollPosition(id: $scrollPosition, anchor: .top)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -210,13 +195,13 @@ struct ChapterDetailView: View {
             }
         }
         .confirmationDialog(
-            "Selected Verse \(currentBook.name) \(currentChapter.number):\(selectedParagraph?.startingVerse ?? 0)",
+            "Selected Verse \(currentBook.name) \(selectedParagraphChapterNumber):\(selectedParagraph?.startingVerse ?? 0)",
             isPresented: $showActionSheet,
             actions: {
                 Button {
                     AnalyticsService.shared.capture(.verseCopied, properties: [
                         "book": currentBook.name,
-                        "chapter": currentChapter.number,
+                        "chapter": selectedParagraphChapterNumber,
                         "verse": selectedParagraph?.startingVerse ?? 0
                     ])
                     UIPasteboard.general.string = getStringFromSelectedParagraph()
@@ -229,11 +214,11 @@ struct ChapterDetailView: View {
                     guard let selectedParagraph else { return }
                     AnalyticsService.shared.capture(.verseBookmarked, properties: [
                         "book": currentBook.name,
-                        "chapter": currentChapter.number,
+                        "chapter": selectedParagraphChapterNumber,
                         "verse": selectedParagraph.startingVerse
                     ])
                     bookmarkedBookName = currentBook.name
-                    bookmarkedChapterNumber = currentChapter.number
+                    bookmarkedChapterNumber = selectedParagraphChapterNumber
                     bookmarkedVerseNumber = selectedParagraph.startingVerse
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     self.selectedParagraph = nil
@@ -249,14 +234,14 @@ struct ChapterDetailView: View {
                         alreadyHighlighted != nil ? .verseUnhighlighted : .verseHighlighted,
                         properties: [
                             "book": currentBook.name,
-                            "chapter": currentChapter.number,
+                            "chapter": selectedParagraphChapterNumber,
                             "verse": paragraph.startingVerse
                         ]
                     )
                     let highlightedVerse = HighlightedVerse(
                         version: currentBook.version.rawValue,
                         book: currentBook.name,
-                        chapter: currentChapter.number,
+                        chapter: selectedParagraphChapterNumber,
                         startingVerse: paragraph.startingVerse,
                         color: highlightedColor
                     )
@@ -274,7 +259,7 @@ struct ChapterDetailView: View {
                             "view": "ChapterDetailView",
                             "operation": wasAdding ? "highlight_save" : "unhighlight_save",
                             "book": currentBook.name,
-                            "chapter": currentChapter.number,
+                            "chapter": selectedParagraphChapterNumber,
                             "verse": paragraph.startingVerse
                         ])
                     }
@@ -294,7 +279,7 @@ struct ChapterDetailView: View {
                     guard selectedParagraph != nil || alreadyNoted != nil else { return }
                     AnalyticsService.shared.capture(.verseNoteOpened, properties: [
                         "book": currentBook.name,
-                        "chapter": currentChapter.number,
+                        "chapter": selectedParagraphChapterNumber,
                         "verse": selectedParagraph?.startingVerse ?? 0,
                         "has_existing_note": alreadyNoted != nil
                     ])
@@ -310,13 +295,13 @@ struct ChapterDetailView: View {
                     guard let paragraph = selectedParagraph else { return }
                     AnalyticsService.shared.capture(.verseExplained, properties: [
                         "book": currentBook.name,
-                        "chapter": currentChapter.number,
+                        "chapter": selectedParagraphChapterNumber,
                         "verse": paragraph.startingVerse,
                         "version": currentBook.version.rawValue
                     ])
                     explanationRequest = VerseExplanationRequest(
                         bookName: currentBook.name,
-                        chapter: currentChapter.number,
+                        chapter: selectedParagraphChapterNumber,
                         startingVerse: paragraph.startingVerse,
                         translation: currentBook.version.rawValue,
                         paragraphText: paragraph.text
@@ -331,7 +316,7 @@ struct ChapterDetailView: View {
                 Button {
                     AnalyticsService.shared.capture(.verseShared, properties: [
                         "book": currentBook.name,
-                        "chapter": currentChapter.number,
+                        "chapter": selectedParagraphChapterNumber,
                         "verse": selectedParagraph?.startingVerse ?? 0
                     ])
                     let shareText = getStringFromSelectedParagraph()
@@ -358,15 +343,10 @@ struct ChapterDetailView: View {
         .sheet(item: $explanationRequest) { request in
             VerseExplanationSheet(request: request)
         }
-        // Removed left/right swipe gesture navigation in favor of pull-to-refresh style
         .onAppear {
             updateScrollPositionForContext()
             ReadingStatsService.shared.setModelContext(context)
-            ReadingStatsService.shared.startReading(
-                bookName: bookName,
-                chapterNumber: currentChapterNumber,
-                version: appViewModel.selectedVersion.rawValue
-            )
+            activateChapter(currentChapterNumber)
             AnalyticsService.shared.capture(.chapterViewed, properties: [
                 "book": currentBook.name,
                 "chapter": currentChapterNumber,
@@ -383,8 +363,15 @@ struct ChapterDetailView: View {
             selectedParagraph = nil
             alreadyHighlighted = nil
             alreadyNoted = nil
-            // Jump to the top of the new chapter
-            updateScrollPositionForContext()
+            reachedChapterEnds = []
+            activeChapterNumber = currentChapterNumber
+            rightScrollPosition = nil
+            if let anchor = collapsedPageAnchor {
+                scrollPosition = anchor
+                collapsedPageAnchor = nil
+            } else {
+                updateScrollPositionForContext()
+            }
             // Track new chapter reading session
             ReadingStatsService.shared.startReading(
                 bookName: bookName,
@@ -401,23 +388,259 @@ struct ChapterDetailView: View {
         .onChange(of: appViewModel.selectedVerse?.verse) {
             updateScrollPositionForContext()
         }
+        .onChange(of: appViewModel.selectedVersion) {
+            activateChapter(activeChapterNumber)
+        }
         #if DEBUG
-        .overlay(alignment: .bottom) { ReadTrackerDebugBadge() }
+        .overlay(alignment: .bottom) {
+            if ProcessInfo.processInfo.environment["SCREENSHOT_MODE"] != "1" { ReadTrackerDebugBadge() }
+        }
         #endif
+    }
+
+    private func usesBookSpread(in size: CGSize) -> Bool {
+        horizontalSizeClass == .regular && size.width >= 580 && size.height >= 350
+            && !dynamicTypeSize.isAccessibilitySize
+    }
+
+    private var singlePage: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 10) {
+                    ForEach(
+                        currentChapter.paragraphs,
+                        id: \.startingVerse
+                    ) { paragraph in
+                        paragraphRow(for: paragraph, chapterNumber: currentChapterNumber)
+                    }
+                    // Scroll-to-end sentinel: once the last verse is visible the
+                    // chapter is flagged reached-end (with ≥30s dwell → "read").
+                    Color.clear
+                        .frame(height: 1)
+                        .onAppear { reachedEnd(of: currentChapterNumber) }
+                }
+                .id(currentChapterNumber)
+                .transition(.asymmetric(
+                    insertion: .move(edge: transitionForward ? .trailing : .leading),
+                    removal: .move(edge: transitionForward ? .leading : .trailing)
+                ))
+                .animation(.easeInOut(duration: 0.25), value: currentChapterNumber)
+                .scrollTargetLayout()
+                .frame(maxWidth: 640, alignment: .leading)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(ScrollViewResolver { scroll in
+                    configureRefresh(on: scroll)
+                })
+                .onAppear {
+                    if hideNavAndTab {
+                        withAnimation(.easeIn) {
+                            showNavAndTab = false
+                        }
+                    }
+                }
+                .toolbar(showNavAndTab ? .visible : .hidden, for: .navigationBar)
+                .toolbar(showNavAndTab ? .visible : .hidden, for: .tabBar)
+            }
+        }
+        .scrollPosition(id: $scrollPosition, anchor: .top)
+    }
+
+    private var pagePaper: Color {
+        readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme)
+            : Color(uiColor: .secondarySystemGroupedBackground)
+    }
+
+    private var bookSpread: some View {
+        VStack(spacing: 0) {
+            GeometryReader { geometry in
+                spreadPages(in: geometry)
+            }
+            .id(currentChapterNumber)
+            .transition(reduceMotion ? .opacity : .asymmetric(
+                insertion: .modifier(active: BookPageTurn(rotation: transitionForward ? -12 : 12),
+                                     identity: BookPageTurn(rotation: 0)),
+                removal: .opacity
+            ))
+            .padding(.horizontal, 24)
+            .padding(.top, 14)
+            .overlay(alignment: .leading) { pageEdge(forward: false) }
+            .overlay(alignment: .trailing) { pageEdge(forward: true) }
+
+            HStack {
+                Button("Previous chapters", systemImage: "chevron.left") { turnSpread(forward: false) }
+                    .labelStyle(.iconOnly)
+                    .frame(width: 44, height: 44)
+                    .disabled((currentChapterIndex ?? 0) == 0)
+                Spacer()
+                Text(nextChapter.map { "Chapters \(currentChapterNumber)–\($0.number)" }
+                    ?? "Chapter \(currentChapterNumber)")
+                    .font(.subheadline.weight(.medium).monospacedDigit())
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Button("Next chapters", systemImage: "chevron.right") { turnSpread(forward: true) }
+                    .labelStyle(.iconOnly)
+                    .frame(width: 44, height: 44)
+                    .disabled((currentChapterIndex ?? 0) + 2 >= currentBook.chapters.count)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 4)
+        }
+        .background(readingTheme.isCustom ? pagePaper : Color(uiColor: .systemGroupedBackground))
+        .simultaneousGesture(DragGesture(minimumDistance: 40).onEnded { value in
+            guard abs(value.translation.width) > 70,
+                  abs(value.translation.width) > abs(value.translation.height) * 1.8 else { return }
+            turnSpread(forward: value.translation.width < 0)
+        })
+    }
+
+    private func pageEdge(forward: Bool) -> some View {
+        Button {
+            turnSpread(forward: forward)
+        } label: {
+            Image(systemName: forward ? "chevron.right" : "chevron.left")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary.opacity(0.35))
+                .frame(width: 44)
+                .frame(maxHeight: .infinity)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(forward ? "Turn to next chapters" : "Turn to previous chapters")
+        .accessibilityIdentifier(forward ? "BookNextPageEdge" : "BookPreviousPageEdge")
+        .disabled(forward ? (currentChapterIndex ?? 0) + 2 >= currentBook.chapters.count
+                          : (currentChapterIndex ?? 0) == 0)
+    }
+
+    @ViewBuilder
+    private func spreadPages(in geometry: GeometryProxy) -> some View {
+        #if IPHONE_DUO_LAYOUTS
+            if #available(iOS 27.1, *), !geometry.reservedRegions(kind: .division).isEmpty {
+                // When bent, each page stays entirely in its own region. Tabletop
+                // poses may place the pages above and below the hinge.
+                ArrangementView {
+                    bookPage(currentChapter, isRight: false)
+                } secondary: {
+                    followingPage
+                }
+                .arrangementViewStyle(.split)
+                .splitArrangementLayoutRatio(0.5)
+            } else {
+                flatSpread
+            }
+        #else
+            flatSpread
+        #endif
+    }
+
+    private var flatSpread: some View {
+        HStack(spacing: 0) {
+            bookPage(currentChapter, isRight: false)
+            LinearGradient(colors: [.black.opacity(0.06), .clear, .black.opacity(0.06)],
+                           startPoint: .leading, endPoint: .trailing)
+                .frame(width: 20)
+                .accessibilityHidden(true)
+            followingPage
+        }
+    }
+
+    @ViewBuilder
+    private var followingPage: some View {
+        if let nextChapter {
+            bookPage(nextChapter, isRight: true)
+        } else {
+            VStack(spacing: 12) {
+                Image(systemName: "book.closed")
+                    .font(.largeTitle)
+                    .foregroundStyle(Color.brandGold)
+                Text("End of \(currentBook.name)")
+                    .font(.title3.weight(.medium))
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(pagePaper, in: RoundedRectangle(cornerRadius: 6))
+        }
+    }
+
+    private func bookPage(_ chapter: Chapter, isRight: Bool) -> some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 12) {
+                VStack(spacing: 8) {
+                    Text(currentBook.name.uppercased())
+                        .font(.caption.weight(.semibold))
+                        .tracking(2)
+                        .foregroundStyle(.secondary)
+                    Text("Chapter \(chapter.number)")
+                        .font(.system(.title, design: .serif).weight(.medium))
+                    Rectangle().fill(Color.brandGold.opacity(0.55))
+                        .frame(width: 40, height: 1)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .id(0)
+                ForEach(chapter.paragraphs, id: \.startingVerse) { paragraph in
+                    paragraphRow(for: paragraph, chapterNumber: chapter.number)
+                }
+                Color.clear.frame(height: 1)
+                    .onAppear { reachedEnd(of: chapter.number) }
+            }
+            .scrollTargetLayout()
+            .padding(.horizontal, 22)
+            .padding(.bottom, 24)
+        }
+        .scrollPosition(id: bookPagePosition(for: chapter, isRight: isRight), anchor: .top)
+        .scrollIndicators(.hidden)
+        .frame(maxWidth: .infinity)
+        .background(pagePaper, in: RoundedRectangle(cornerRadius: 6))
+        .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.primary.opacity(0.06)))
+        .simultaneousGesture(DragGesture(minimumDistance: 2).onChanged { _ in activateChapter(chapter.number) })
+        .accessibilityIdentifier("BookPageChapter\(chapter.number)")
+    }
+
+    private func bookPagePosition(for chapter: Chapter, isRight: Bool) -> Binding<Int?> {
+        Binding {
+            let position = isRight ? rightScrollPosition : scrollPosition
+            return position == chapter.paragraphs.first?.startingVerse ? 0 : position
+        } set: { position in
+            if isRight { rightScrollPosition = position } else { scrollPosition = position }
+        }
+    }
+
+    private func turnSpread(forward: Bool) {
+        guard let index = currentChapterIndex else { return }
+        let target = forward ? index + 2 : max(0, index - 2)
+        guard currentBook.chapters.indices.contains(target), target != index else { return }
+        transitionForward = forward
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.4)) {
+            currentChapterNumber = currentBook.chapters[target].number
+            scrollPosition = nil
+            rightScrollPosition = nil
+        }
+    }
+
+    private func activateChapter(_ number: Int) {
+        activeChapterNumber = number
+        ReadingStatsService.shared.startReading(bookName: bookName, chapterNumber: number,
+                                                version: appViewModel.selectedVersion.rawValue)
+        if reachedChapterEnds.contains(number) { ReadingStatsService.shared.markReachedEnd() }
+    }
+
+    private func reachedEnd(of number: Int) {
+        reachedChapterEnds.insert(number)
+        if activeChapterNumber == number { ReadingStatsService.shared.markReachedEnd() }
     }
 
     // MARK: - Helper View Methods
 
     @ViewBuilder
-    private func paragraphRow(for paragraph: Paragraph) -> some View {
-        let isHighlighted = checkIfHighlighted(paragraph: paragraph)
-        let isBookmarked = checkIfBookmarked(paragraph: paragraph)
-        let hasNote = checkIfNoted(paragraph: paragraph)
+    private func paragraphRow(for paragraph: Paragraph, chapterNumber: Int) -> some View {
+        let isHighlighted = checkIfHighlighted(paragraph: paragraph, chapterNumber: chapterNumber)
+        let isBookmarked = checkIfBookmarked(paragraph: paragraph, chapterNumber: chapterNumber)
+        let hasNote = checkIfNoted(paragraph: paragraph, chapterNumber: chapterNumber)
 
         Group {
             if let summary = SummariesService.shared.passageSummary(
                 book: currentBook.name,
-                chapter: currentChapter.number,
+                chapter: chapterNumber,
                 startVerse: paragraph.startingVerse,
                 source: summarySource
             ) {
@@ -436,6 +659,7 @@ struct ChapterDetailView: View {
 
                 paragraphContent(
                     paragraph: paragraph,
+                    chapterNumber: chapterNumber,
                     isHighlighted: isHighlighted,
                     isBookmarked: isBookmarked
                 )
@@ -467,8 +691,8 @@ struct ChapterDetailView: View {
     }
 
     @ViewBuilder
-    private func paragraphContent(paragraph: Paragraph, isHighlighted: Bool, isBookmarked: Bool) -> some View {
-        let effectiveHighlightHex = highlightColor(for: paragraph) ?? highlightedColor
+    private func paragraphContent(paragraph: Paragraph, chapterNumber: Int, isHighlighted: Bool, isBookmarked: Bool) -> some View {
+        let effectiveHighlightHex = highlightColor(for: paragraph, chapterNumber: chapterNumber) ?? highlightedColor
         let backgroundColor: Color = isHighlighted ? Color(hex: effectiveHighlightHex) : .clear
         let defaultTextColor: Color = readingTheme.isCustom ? readingTheme.textColor(for: colorScheme) : .primary
         let foregroundColor: Color = isHighlighted ? Color(hex: effectiveHighlightHex).accessibleFontColor : defaultTextColor
@@ -484,68 +708,70 @@ struct ChapterDetailView: View {
             appViewModel.selectedVersion == .original && currentBook.testament == .old
                 ? .trailing : .leading
         )
-        .underline(selectedParagraph == paragraph)
+        .underline(selectedParagraph == paragraph && selectedParagraphChapterNumber == chapterNumber)
         .accessibilityHint("Long press for verse actions")
         .onLongPressGesture {
-            handleLongPress(paragraph: paragraph)
+            handleLongPress(paragraph: paragraph, chapterNumber: chapterNumber)
         }
     }
 
     // MARK: - Helper Methods
 
-    private func checkIfHighlighted(paragraph: Paragraph) -> Bool {
+    private func checkIfHighlighted(paragraph: Paragraph, chapterNumber: Int) -> Bool {
         highlightedVerses.contains {
             $0.version == currentBook.version.rawValue &&
-            $0.book == currentBook.name &&
-            $0.startingVerse == paragraph.startingVerse &&
-            $0.chapter == currentChapter.number
+                $0.book == currentBook.name &&
+                $0.startingVerse == paragraph.startingVerse &&
+                $0.chapter == chapterNumber
         }
     }
 
-    private func highlightColor(for paragraph: Paragraph) -> String? {
+    private func highlightColor(for paragraph: Paragraph, chapterNumber: Int) -> String? {
         let match = highlightedVerses.first {
             $0.version == currentBook.version.rawValue &&
-            $0.book == currentBook.name &&
-            $0.startingVerse == paragraph.startingVerse &&
-            $0.chapter == currentChapter.number
+                $0.book == currentBook.name &&
+                $0.startingVerse == paragraph.startingVerse &&
+                $0.chapter == chapterNumber
         }
         guard let hex = match?.color, !hex.isEmpty else { return nil }
         return hex
     }
 
-    private func checkIfBookmarked(paragraph: Paragraph) -> Bool {
+    private func checkIfBookmarked(paragraph: Paragraph, chapterNumber: Int) -> Bool {
         bookmarkedBookName == currentBook.name &&
-        bookmarkedChapterNumber == currentChapter.number &&
-        bookmarkedVerseNumber == paragraph.startingVerse
+            bookmarkedChapterNumber == chapterNumber &&
+            bookmarkedVerseNumber == paragraph.startingVerse
     }
 
-    private func checkIfNoted(paragraph: Paragraph) -> Bool {
+    private func checkIfNoted(paragraph: Paragraph, chapterNumber: Int) -> Bool {
         notes.contains {
             $0.version == currentBook.version.rawValue &&
-            $0.book == currentBook.name &&
-            $0.chapter == currentChapter.number &&
-            $0.startingVerse == paragraph.startingVerse
+                $0.book == currentBook.name &&
+                $0.chapter == chapterNumber &&
+                $0.startingVerse == paragraph.startingVerse
         }
     }
 
-    func handleLongPress(paragraph: Paragraph) {
+    func handleLongPress(paragraph: Paragraph, chapterNumber: Int) {
+        selectedParagraphChapterNumber = chapterNumber
+        activateChapter(chapterNumber)
         selectedParagraph = paragraph
         alreadyHighlighted = highlightedVerses.first(where: {
             $0.version == currentBook.version.rawValue &&
-            $0.book == currentBook.name &&
-            $0.chapter == currentChapter.number &&
-            $0.startingVerse == paragraph.startingVerse
+                $0.book == currentBook.name &&
+                $0.chapter == chapterNumber &&
+                $0.startingVerse == paragraph.startingVerse
         })
         alreadyNoted = notes.first(where: {
             $0.version == currentBook.version.rawValue &&
-            $0.book == currentBook.name &&
-            $0.chapter == currentChapter.number &&
-            $0.startingVerse == paragraph.startingVerse
+                $0.book == currentBook.name &&
+                $0.chapter == chapterNumber &&
+                $0.startingVerse == paragraph.startingVerse
         })
         showActionSheet = true
         AnalyticsService.shared.capture(.verseActionMenu, properties: [
             "book": currentBook.name,
-            "chapter": currentChapter.number,
+            "chapter": chapterNumber,
             "verse": paragraph.startingVerse,
             "version": currentBook.version.rawValue
         ])
@@ -553,7 +779,7 @@ struct ChapterDetailView: View {
 
     func getStringFromSelectedParagraph() -> String {
         guard let paragraph = selectedParagraph else { return "" }
-        return "\(currentBook.version.rawValue.uppercased()) Version \(currentBook.name) Chapter \(currentChapter.number) \(paragraph.startingVerse): \(paragraph.text)"
+        return "\(currentBook.version.rawValue.uppercased()) Version \(currentBook.name) Chapter \(selectedParagraphChapterNumber) \(paragraph.startingVerse): \(paragraph.text)"
     }
 
     func noteModalView() -> some View {
@@ -561,7 +787,7 @@ struct ChapterDetailView: View {
             note: alreadyNoted ?? Note(
                 version: currentBook.version.rawValue,
                 book: currentBook.name,
-                chapter: currentChapter.number,
+                chapter: selectedParagraphChapterNumber,
                 startingVerse: selectedParagraph?.startingVerse ?? 0,
                 text: "",
                 created: .now
@@ -633,6 +859,15 @@ struct ChapterDetailView: View {
         } else {
             scrollPosition = nil
         }
+    }
+}
+
+private struct BookPageTurn: ViewModifier {
+    let rotation: Double
+    func body(content: Content) -> some View {
+        content
+            .rotation3DEffect(.degrees(rotation), axis: (x: 0, y: 1, z: 0), anchor: .center, perspective: 0.35)
+            .opacity(rotation == 0 ? 1 : 0.4)
     }
 }
 

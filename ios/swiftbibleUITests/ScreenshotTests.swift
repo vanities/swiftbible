@@ -37,7 +37,7 @@ final class ScreenshotTests: XCTestCase {
             "-showFirstClement", "YES",
             // Skip onboarding so the test lands directly on the Bible book list.
             "-onboardingHasLaunchedBefore", "YES",
-            "-onboardingSeenFeatures", "welcome,dailyReminder,watchApp,widget,explain",
+            "-onboardingSeenFeatures", "welcome,dailyReminder,achievements,watchApp,widget,explain",
             // Pre-populate state so the More view shows a richer screenshot:
             // an existing bookmark + a recently-opened history article surface
             // the "Continue reading" / bookmark cards (Zeigarnik effect).
@@ -55,7 +55,42 @@ final class ScreenshotTests: XCTestCase {
         // Apple Intelligence isn't available in the simulator, so route the
         // Explain feature through MockExplainStream (DEBUG-only canned text).
         app.launchEnvironment["MOCK_EXPLAIN"] = "1"
+        app.launchEnvironment["SCREENSHOT_MODE"] = "1"
+        if ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1" {
+            XCUIDevice.shared.orientation = .landscapeLeft
+        }
         app.launch()
+    }
+
+    @MainActor
+    func testBookSpreadKeepsRightPageVerseActionsAndTurnsChapters() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1",
+                          "Run this Duo walkthrough with TEST_RUNNER_DUO_CAPTURE=1 on an open Duo simulator.")
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .landscapeLeft
+        XCTAssertTrue(app.staticTexts["Genesis"].waitForExistence(timeout: 15))
+        app.staticTexts["Genesis"].tap()
+        XCTAssertTrue(app.staticTexts["Chapter 1"].waitForExistence(timeout: 10))
+        app.staticTexts["Chapter 1"].tap()
+        let left = app.descendants(matching: .any)["BookPageChapter1"].firstMatch
+        let right = app.descendants(matching: .any)["BookPageChapter2"].firstMatch
+        XCTAssertTrue(left.waitForExistence(timeout: 10))
+        XCTAssertTrue(right.exists)
+        saveScreenshot(named: "book_01_chapters_1_2")
+        let verse = right.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "Thus the heavens")).firstMatch
+        XCTAssertTrue(verse.waitForExistence(timeout: 10))
+        verse.press(forDuration: 1)
+        app.buttons["Bookmark"].tap()
+        XCTAssertTrue(right.images["Bookmarked verse"].waitForExistence(timeout: 5))
+        saveScreenshot(named: "book_02_right_page_bookmark")
+        app.buttons["BookNextPageEdge"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)["BookPageChapter3"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["BookPageChapter4"].firstMatch.exists)
+        saveScreenshot(named: "book_03_chapters_3_4")
+        app.buttons["BookPreviousPageEdge"].tap()
+        XCTAssertTrue(left.waitForExistence(timeout: 5))
+        XCTAssertTrue(right.images["Bookmarked verse"].exists)
+        saveScreenshot(named: "book_04_returned_spread")
     }
 
     @MainActor
@@ -84,87 +119,8 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(verseText.waitForExistence(timeout: 10))
         saveScreenshot(named: "03_verses")
 
-        // 4. Show translation switcher FIRST (cleaner state — no popover to fight).
-        // The button has .accessibilityLabel("Bible translation: ..."), which
-        // overrides the visible "KJV" text for query matching, so we query by
-        // accessibilityIdentifier instead.
-        let versionButton = app.buttons["VersionPickerButton"]
-        if versionButton.waitForExistence(timeout: 5) {
-            versionButton.tap()
-            let menuItem = app.buttons.containing(
-                NSPredicate(format: "label CONTAINS[c] %@", "King James Version")
-            ).firstMatch
-            _ = menuItem.waitForExistence(timeout: 3)
-            Thread.sleep(forTimeInterval: 0.5)
-            saveScreenshot(named: "05_translations")
-            // Dismiss the menu by re-tapping the picker button (iOS toggles)
-            versionButton.tap()
-            Thread.sleep(forTimeInterval: 0.7)
-        } else {
-            XCTFail("VersionPickerButton not found — translation switcher screenshot skipped")
-        }
-
-        // 5. Long press a verse to show verse options popover.
-        // Re-query the verse text in case the view shifted while the menu was up.
-        let verseTextForLongPress = app.staticTexts.containing(
-            NSPredicate(format: "label CONTAINS[c] %@", "In the beginning")
-        ).firstMatch
-        if verseTextForLongPress.waitForExistence(timeout: 5) {
-            verseTextForLongPress.press(forDuration: 1.0)
-            let explainButton = app.buttons["Explain"]
-            if explainButton.waitForExistence(timeout: 5) {
-                saveScreenshot(named: "04_verse_options")
-
-                // 4b. Tap Explain to open the AI explanation sheet.
-                // MOCK_EXPLAIN=1 routes through canned text so the simulator
-                // (which can't run Apple Intelligence) produces a realistic
-                // streaming result.
-                explainButton.tap()
-                // Mock streams ~28 tokens/sec; the body is ~80 tokens so it
-                // finishes in ~3s. Wait long enough for visible body text.
-                Thread.sleep(forTimeInterval: 4)
-                saveScreenshot(named: "04b_explain")
-
-                // Dismiss the explanation sheet via the Done button.
-                let doneButton = app.buttons["Done"].firstMatch
-                if doneButton.waitForExistence(timeout: 3) {
-                    doneButton.tap()
-                }
-                Thread.sleep(forTimeInterval: 0.7)
-            }
-        }
-
-        // 5b. Navigate to Matthew Chapter 5 (Sermon on the Mount) to capture
-        //     a screen where Jesus's words appear in red — Genesis has none.
-        let backButton = app.navigationBars.buttons.firstMatch
-        if backButton.waitForExistence(timeout: 3) {
-            backButton.tap()  // verses → chapters
-            Thread.sleep(forTimeInterval: 0.4)
-            backButton.tap()  // chapters → book list
-            Thread.sleep(forTimeInterval: 0.6)
-        }
-        // Use the search field — deterministic across iPhone/iPad and avoids
-        // long swipe sequences (Matthew is past 39 OT books + apocrypha).
-        let bookSearchField = app.textFields["Search"]
-        if bookSearchField.waitForExistence(timeout: 5) {
-            bookSearchField.tap()
-            bookSearchField.typeText("Matthew")
-            Thread.sleep(forTimeInterval: 0.6)
-            let matthew = app.staticTexts["Matthew"]
-            if matthew.waitForExistence(timeout: 3) {
-                matthew.tap()
-                let chapter5 = app.staticTexts["Chapter 5"]
-                if chapter5.waitForExistence(timeout: 5) {
-                    chapter5.tap()
-                    Thread.sleep(forTimeInterval: 1.2)
-                    saveScreenshot(named: "03_red_letter")
-                } else {
-                    XCTFail("Matthew Chapter 5 not found — red letter screenshot skipped")
-                }
-            } else {
-                XCTFail("Matthew not found via search — red letter screenshot skipped")
-            }
-        }
+        captureTranslationAndVerseActions()
+        captureRedLetterChapter()
 
         // 6. Daily Devotional tab
         tapTab(named: "Devotional")
@@ -215,19 +171,103 @@ final class ScreenshotTests: XCTestCase {
                 searchFieldForClear.typeText(XCUIKeyboardKey.delete.rawValue)
             }
             Thread.sleep(forTimeInterval: 0.5)
-            // Dismiss keyboard so it doesn't cover the list.
-            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.4)).tap()
-            Thread.sleep(forTimeInterval: 0.5)
+            searchFieldForClear.typeText("Tobit\n")
         }
-
-        for _ in 0..<8 {
-            app.swipeUp()
-        }
-        Thread.sleep(forTimeInterval: 0.6)
-        saveScreenshot(named: "01b_apocrypha_books")
+        XCTAssertTrue(app.staticTexts["Tobit"].waitForExistence(timeout: 5))
+        saveScreenshot(named: "01b_apocrypha_search")
     }
 
     // MARK: - Helpers
+
+    private func captureTranslationAndVerseActions() {
+        // 4. Show translation switcher FIRST (cleaner state — no popover to fight).
+        // The button has .accessibilityLabel("Bible translation: ..."), which
+        // overrides the visible "KJV" text for query matching, so we query by
+        // accessibilityIdentifier instead.
+        let versionButton = app.buttons["VersionPickerButton"]
+        if versionButton.waitForExistence(timeout: 5) {
+            versionButton.tap()
+            let menuItem = app.buttons.containing(
+                NSPredicate(format: "label CONTAINS[c] %@", "King James Version")
+            ).firstMatch
+            _ = menuItem.waitForExistence(timeout: 3)
+            Thread.sleep(forTimeInterval: 0.5)
+            saveScreenshot(named: "05_translations")
+            // Select the current translation to dismiss the menu. On Duo the
+            // system presents a separate surface that hides the picker button.
+            menuItem.tap()
+            Thread.sleep(forTimeInterval: 0.7)
+        } else {
+            XCTFail("VersionPickerButton not found — translation switcher screenshot skipped")
+        }
+
+        // 5. Long press a verse to show verse options popover.
+        // Re-query the verse text in case the view shifted while the menu was up.
+        let verseTextForLongPress = app.staticTexts.containing(
+            NSPredicate(format: "label CONTAINS[c] %@", "In the beginning")
+        ).firstMatch
+        if verseTextForLongPress.waitForExistence(timeout: 5) {
+            verseTextForLongPress.press(forDuration: 1.0)
+            let explainButton = app.buttons["Explain"]
+            if explainButton.waitForExistence(timeout: 5) {
+                saveScreenshot(named: "04_verse_options")
+
+                // 4b. Tap Explain to open the AI explanation sheet.
+                // MOCK_EXPLAIN=1 routes through canned text so the simulator
+                // (which can't run Apple Intelligence) produces a realistic
+                // streaming result.
+                explainButton.tap()
+                // Mock streams ~28 tokens/sec; the body is ~80 tokens so it
+                // finishes in ~3s. Wait long enough for visible body text.
+                Thread.sleep(forTimeInterval: 4)
+                saveScreenshot(named: "04b_explain")
+
+                // Dismiss the explanation sheet via the Done button.
+                let doneButton = app.buttons["Done"].firstMatch
+                if doneButton.waitForExistence(timeout: 3) {
+                    doneButton.tap()
+                }
+                Thread.sleep(forTimeInterval: 0.7)
+            }
+        }
+
+    }
+
+    private func captureRedLetterChapter() {
+        // 5b. Navigate to Matthew Chapter 5 (Sermon on the Mount) to capture
+        //     a screen where Jesus's words appear in red — Genesis has none.
+        let backButton = app.buttons["BackButton"].firstMatch.exists
+            ? app.buttons["BackButton"].firstMatch : app.navigationBars.buttons.firstMatch
+        if backButton.waitForExistence(timeout: 3) {
+            backButton.tap()  // verses → chapters
+            Thread.sleep(forTimeInterval: 0.4)
+            backButton.tap()  // chapters → book list
+            Thread.sleep(forTimeInterval: 0.6)
+        }
+        // Use the search field — deterministic across iPhone/iPad and avoids
+        // long swipe sequences (Matthew is past 39 OT books + apocrypha).
+        let bookSearchField = app.textFields["Search"]
+        if bookSearchField.waitForExistence(timeout: 5) {
+            bookSearchField.tap()
+            bookSearchField.typeText("Matthew")
+            Thread.sleep(forTimeInterval: 0.6)
+            let matthew = app.staticTexts["Matthew"]
+            if matthew.waitForExistence(timeout: 3) {
+                matthew.tap()
+                let chapter5 = app.staticTexts["Chapter 5"]
+                if chapter5.waitForExistence(timeout: 5) {
+                    chapter5.tap()
+                    Thread.sleep(forTimeInterval: 1.2)
+                    saveScreenshot(named: "03_red_letter")
+                } else {
+                    XCTFail("Matthew Chapter 5 not found — red letter screenshot skipped")
+                }
+            } else {
+                XCTFail("Matthew not found via search — red letter screenshot skipped")
+            }
+        }
+
+    }
 
     private func tapTab(named label: String) {
         // Try tab bar first (iPhone)
@@ -245,6 +285,10 @@ final class ScreenshotTests: XCTestCase {
     }
 
     private func saveScreenshot(named name: String) {
+        if ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1" {
+            print("DUO_CAPTURE:swiftbible-\(name)")
+            Thread.sleep(forTimeInterval: 4)
+        }
         let screenshot = app.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)
         attachment.name = "\(name)\(screenshotSuffix)"

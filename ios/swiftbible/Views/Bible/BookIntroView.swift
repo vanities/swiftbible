@@ -64,9 +64,10 @@ struct BookIntroView: View {
                 attribution
                     .padding(.top, 4)
             }
+            .frame(maxWidth: 640, alignment: .leading)
             .padding(.horizontal)
             .padding(.vertical, 12)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity)
         }
         .readingThemeScreen(readingTheme, colorScheme: colorScheme)
         // No nav-bar title here: the themed in-content "Introduction to <book>"
