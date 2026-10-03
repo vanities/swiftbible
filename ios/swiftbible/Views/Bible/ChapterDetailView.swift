@@ -165,11 +165,10 @@ struct ChapterDetailView: View {
         .background(readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color.clear)
         // Removed overlay NavigationLinks; navigation happens in-place
         .navigationBarTitleDisplayMode(.inline)
+        // Facing pages already identify their chapters. Keep the native bar's
+        // center clear instead of duplicating a title across the hinge.
+        .navigationTitle(isBookSpread ? "" : "\(currentBook.name) \(currentChapter.number)")
         .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("\(currentBook.name) \(currentChapter.number)")
-                    .font(.headline)
-            }
             if supportsVersionSwitching {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
