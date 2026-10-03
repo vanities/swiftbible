@@ -146,14 +146,14 @@ struct ChapterDetailView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            if usesBookSpread(in: geometry.size) {
+            if usesBookSpread(in: geometry) {
                 bookSpread
             } else {
                 singlePage
             }
         }
         .onGeometryChange(for: Bool.self) { geometry in
-            usesBookSpread(in: geometry.size)
+            usesBookSpread(in: geometry)
         } action: { isSpread in
             isBookSpread = isSpread
             if !isSpread, activeChapterNumber != currentChapterNumber {
@@ -401,9 +401,19 @@ struct ChapterDetailView: View {
         #endif
     }
 
-    private func usesBookSpread(in size: CGSize) -> Bool {
-        horizontalSizeClass == .regular && size.width >= 580 && size.height >= 350
-            && !dynamicTypeSize.isAccessibilitySize
+    private func usesBookSpread(in geometry: GeometryProxy) -> Bool {
+        guard horizontalSizeClass == .regular, geometry.size.width >= 580, geometry.size.height >= 350 else {
+            return false
+        }
+        if !dynamicTypeSize.isAccessibilitySize { return true }
+        #if IPHONE_DUO_LAYOUTS
+            if #available(iOS 27.1, *) {
+                // A wide accessibility page is useful when flat, but would run
+                // text through the hinge when bent. Keep folded pages separate.
+                return !geometry.reservedRegions(kind: .division).isEmpty
+            }
+        #endif
+        return false
     }
 
     private var singlePage: some View {

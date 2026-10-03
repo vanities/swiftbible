@@ -133,6 +133,36 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testFoldedAccessibilityTextKeepsEachChapterClearOfHinge() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1"
+                          && ProcessInfo.processInfo.environment["DUO_FOLDED"] == "1"
+                          && ProcessInfo.processInfo.environment["DUO_LARGE_TEXT"] == "1",
+                          "Run at the largest text size with an active vertical Duo hinge region.")
+        continueAfterFailure = false
+        XCTAssertTrue(app.staticTexts["Genesis"].waitForExistence(timeout: 15))
+        app.staticTexts["Genesis"].tap()
+        app.staticTexts["Chapter 1"].tap()
+        let left = app.descendants(matching: .any)["BookPageChapter1"].firstMatch
+        let right = app.descendants(matching: .any)["BookPageChapter2"].firstMatch
+        XCTAssertTrue(left.waitForExistence(timeout: 10))
+        XCTAssertTrue(right.exists)
+        let firstVerse = left.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "In the beginning")).firstMatch
+        let nextVerse = right.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "Thus the heavens")).firstMatch
+        XCTAssertTrue(firstVerse.exists)
+        XCTAssertTrue(nextVerse.exists)
+        print("DUO_ACCESSIBLE_PAGE_FRAMES: left=\(left.frame); right=\(right.frame); leftText=\(firstVerse.frame); rightText=\(nextVerse.frame)")
+        XCTAssertLessThanOrEqual(firstVerse.frame.maxX, 455.7,
+                                 "The large-text first chapter must stay before the hinge.")
+        XCTAssertGreaterThanOrEqual(nextVerse.frame.minX, 495.5,
+                                    "The large-text next chapter must stay beyond the hinge.")
+        saveScreenshot(named: "folded_large_01_separate_chapters")
+        app.buttons["BookNextPageEdge"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)["BookPageChapter3"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["BookPageChapter4"].firstMatch.exists)
+        saveScreenshot(named: "folded_large_02_next_chapters")
+    }
+
+    @MainActor
     func testRightPageNoteEditorAndSearchWithKeyboard() throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1",
                           "Run this keyboard regression on the Duo simulator.")
