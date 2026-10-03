@@ -63,6 +63,42 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testFlatBookSpreadHasEqualPagesWithoutOuterMargins() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1",
+                          "Run this layout regression on the fully open, flat Duo simulator.")
+        continueAfterFailure = false
+        XCTAssertTrue(app.staticTexts["Genesis"].waitForExistence(timeout: 15))
+        app.staticTexts["Genesis"].tap()
+        app.staticTexts["Chapter 1"].tap()
+        let left = app.descendants(matching: .any)["BookPageChapter1"].firstMatch
+        let right = app.descendants(matching: .any)["BookPageChapter2"].firstMatch
+        XCTAssertTrue(left.waitForExistence(timeout: 10))
+        XCTAssertTrue(right.exists)
+        let leftHeading = left.staticTexts["Chapter 1"]
+        let rightHeading = right.staticTexts["Chapter 2"]
+        // The native right scroll surface extends beneath Duo's vertical bars.
+        // Centered headings measure the visible page widths without that underlap.
+        let leftWidth = (leftHeading.frame.midX - left.frame.minX) * 2
+        let rightWidth = (rightHeading.frame.midX - right.frame.minX) * 2
+        print("DUO_PAGE_FRAMES: visible widths=\(leftWidth),\(rightWidth); left=\(left.frame), right=\(right.frame)")
+        saveScreenshot(named: "flat_01_equal_full_bleed_pages")
+        XCTAssertEqual(leftWidth, rightWidth, accuracy: 1,
+                       "Facing chapters must have equal widths when fully flat.")
+        XCTAssertEqual(leftHeading.frame.minY, rightHeading.frame.minY, accuracy: 1,
+                       "Both chapter headings must align despite the left page's restored scroll position.")
+        XCTAssertEqual(left.frame.minX, app.frame.minX, accuracy: 1,
+                       "The book must reach the leading edge without an outer margin.")
+        XCTAssertEqual(right.frame.minX - left.frame.maxX, 1, accuracy: 1,
+                       "Only the book seam should separate the pages.")
+        XCTAssertEqual(left.staticTexts["1"].firstMatch.frame.minX - left.frame.minX, 10, accuracy: 1,
+                       "Keep a small outside text inset so characters do not clip at the edge.")
+        app.buttons["BookNextPageEdge"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)["BookPageChapter3"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["BookPageChapter4"].firstMatch.exists)
+        saveScreenshot(named: "flat_02_next_chapters")
+    }
+
+    @MainActor
     func testRightPageNoteEditorAndSearchWithKeyboard() throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1",
                           "Run this keyboard regression on the Duo simulator.")

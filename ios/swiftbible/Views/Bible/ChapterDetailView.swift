@@ -426,9 +426,9 @@ struct ChapterDetailView: View {
                 ))
                 .animation(.easeInOut(duration: 0.25), value: currentChapterNumber)
                 .scrollTargetLayout()
-                .frame(maxWidth: 640, alignment: .leading)
-                .padding()
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
                 .background(ScrollViewResolver { scroll in
                     configureRefresh(on: scroll)
                 })
@@ -452,41 +452,18 @@ struct ChapterDetailView: View {
     }
 
     private var bookSpread: some View {
-        VStack(spacing: 0) {
-            GeometryReader { geometry in
-                spreadPages(in: geometry)
-            }
-            .id(currentChapterNumber)
-            .transition(reduceMotion ? .opacity : .asymmetric(
-                insertion: .modifier(active: BookPageTurn(rotation: transitionForward ? -12 : 12),
-                                     identity: BookPageTurn(rotation: 0)),
-                removal: .opacity
-            ))
-            .padding(.horizontal, 24)
-            .padding(.top, 14)
-            .overlay(alignment: .leading) { pageEdge(forward: false) }
-            .overlay(alignment: .trailing) { pageEdge(forward: true) }
-
-            HStack {
-                Button("Previous chapters", systemImage: "chevron.left") { turnSpread(forward: false) }
-                    .labelStyle(.iconOnly)
-                    .frame(width: 44, height: 44)
-                    .disabled((currentChapterIndex ?? 0) == 0)
-                Spacer()
-                Text(nextChapter.map { "Chapters \(currentChapterNumber)–\($0.number)" }
-                    ?? "Chapter \(currentChapterNumber)")
-                    .font(.subheadline.weight(.medium).monospacedDigit())
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Button("Next chapters", systemImage: "chevron.right") { turnSpread(forward: true) }
-                    .labelStyle(.iconOnly)
-                    .frame(width: 44, height: 44)
-                    .disabled((currentChapterIndex ?? 0) + 2 >= currentBook.chapters.count)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 4)
+        GeometryReader { geometry in
+            spreadPages(in: geometry)
         }
-        .background(readingTheme.isCustom ? pagePaper : Color(uiColor: .systemGroupedBackground))
+        .id(currentChapterNumber)
+        .transition(reduceMotion ? .opacity : .asymmetric(
+            insertion: .modifier(active: BookPageTurn(rotation: transitionForward ? -12 : 12),
+                                 identity: BookPageTurn(rotation: 0)),
+            removal: .opacity
+        ))
+        .overlay(alignment: .leading) { pageEdge(forward: false) }
+        .overlay(alignment: .trailing) { pageEdge(forward: true) }
+        .background(pagePaper.ignoresSafeArea())
         .simultaneousGesture(DragGesture(minimumDistance: 40).onEnded { value in
             guard abs(value.translation.width) > 70,
                   abs(value.translation.width) > abs(value.translation.height) * 1.8 else { return }
@@ -502,7 +479,7 @@ struct ChapterDetailView: View {
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary.opacity(0.35))
                 .frame(width: 44)
-                .frame(maxHeight: .infinity)
+                .frame(height: 88)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -526,21 +503,24 @@ struct ChapterDetailView: View {
                 .arrangementViewStyle(.split)
                 .splitArrangementLayoutRatio(0.5)
             } else {
-                flatSpread
+                flatSpread(in: geometry.size)
             }
         #else
-            flatSpread
+            flatSpread(in: geometry.size)
         #endif
     }
 
-    private var flatSpread: some View {
-        HStack(spacing: 0) {
+    private func flatSpread(in size: CGSize) -> some View {
+        let pageWidth = max(0, (size.width - 1) / 2)
+        return HStack(spacing: 0) {
             bookPage(currentChapter, isRight: false)
-            LinearGradient(colors: [.black.opacity(0.06), .clear, .black.opacity(0.06)],
-                           startPoint: .leading, endPoint: .trailing)
-                .frame(width: 20)
+                .frame(width: pageWidth)
+            Rectangle()
+                .fill(.primary.opacity(0.12))
+                .frame(width: 1)
                 .accessibilityHidden(true)
             followingPage
+                .frame(width: pageWidth)
         }
     }
 
@@ -557,42 +537,45 @@ struct ChapterDetailView: View {
                     .font(.title3.weight(.medium))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(pagePaper, in: RoundedRectangle(cornerRadius: 6))
+            .background(pagePaper)
         }
     }
 
     private func bookPage(_ chapter: Chapter, isRight: Bool) -> some View {
-        ScrollView {
-            LazyVStack(alignment: .leading, spacing: 12) {
-                VStack(spacing: 8) {
-                    Text(currentBook.name.uppercased())
-                        .font(.caption.weight(.semibold))
-                        .tracking(2)
-                        .foregroundStyle(.secondary)
-                    Text("Chapter \(chapter.number)")
-                        .font(.system(.title, design: .serif).weight(.medium))
-                    Rectangle().fill(Color.brandGold.opacity(0.55))
-                        .frame(width: 40, height: 1)
+        ZStack {
+            pagePaper
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 12) {
+                    VStack(spacing: 8) {
+                        Text(currentBook.name.uppercased())
+                            .font(.caption.weight(.semibold))
+                            .tracking(2)
+                            .foregroundStyle(.secondary)
+                        Text("Chapter \(chapter.number)")
+                            .font(.system(.title, design: .serif).weight(.medium))
+                        Rectangle().fill(Color.brandGold.opacity(0.55))
+                            .frame(width: 40, height: 1)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 8)
+                    .id(0)
+                    ForEach(chapter.paragraphs, id: \.startingVerse) { paragraph in
+                        paragraphRow(for: paragraph, chapterNumber: chapter.number)
+                    }
+                    Color.clear.frame(height: 1)
+                        .onAppear { reachedEnd(of: chapter.number) }
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .id(0)
-                ForEach(chapter.paragraphs, id: \.startingVerse) { paragraph in
-                    paragraphRow(for: paragraph, chapterNumber: chapter.number)
-                }
-                Color.clear.frame(height: 1)
-                    .onAppear { reachedEnd(of: chapter.number) }
+                .scrollTargetLayout()
+                .padding(.horizontal, 10)
+                .padding(.bottom, 8)
             }
-            .scrollTargetLayout()
-            .padding(.horizontal, 22)
-            .padding(.bottom, 24)
+            .scrollPosition(id: bookPagePosition(for: chapter, isRight: isRight), anchor: .top)
+            .scrollIndicators(.hidden)
         }
-        .scrollPosition(id: bookPagePosition(for: chapter, isRight: isRight), anchor: .top)
-        .scrollIndicators(.hidden)
         .frame(maxWidth: .infinity)
-        .background(pagePaper, in: RoundedRectangle(cornerRadius: 6))
-        .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.primary.opacity(0.06)))
+        .clipped()
         .simultaneousGesture(DragGesture(minimumDistance: 2).onChanged { _ in activateChapter(chapter.number) })
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("BookPageChapter\(chapter.number)")
     }
 
@@ -646,7 +629,6 @@ struct ChapterDetailView: View {
             ) {
                 Text(summary)
                     .bold()
-                    .padding(.top)
                     .font(Font.custom(fontName, size: CGFloat(fontSize + 1), relativeTo: .body))
             }
 
