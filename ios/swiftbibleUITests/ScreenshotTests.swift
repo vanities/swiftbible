@@ -63,6 +63,41 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testRightPageNoteEditorAndSearchWithKeyboard() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1",
+                          "Run this keyboard regression on the Duo simulator.")
+        continueAfterFailure = false
+        XCTAssertTrue(app.staticTexts["Genesis"].waitForExistence(timeout: 15))
+        app.staticTexts["Genesis"].tap()
+        app.staticTexts["Chapter 1"].tap()
+        let right = app.descendants(matching: .any)["BookPageChapter2"].firstMatch
+        XCTAssertTrue(right.waitForExistence(timeout: 10))
+        let verse = right.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "Thus the heavens")).firstMatch
+        verse.press(forDuration: 1)
+        app.buttons["Add Note"].tap()
+        XCTAssertTrue(app.navigationBars["Edit Note"].waitForExistence(timeout: 10), app.debugDescription)
+        XCTAssertTrue(app.staticTexts["KJV Genesis 2:1"].exists, app.debugDescription)
+        saveScreenshot(named: "extra_10_note_editor")
+        let editor = app.textViews["NoteEditorText"].firstMatch
+        XCTAssertTrue(editor.exists, app.debugDescription)
+        editor.tap()
+        editor.typeText("Sample reflection for layout review.")
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5), app.debugDescription)
+        saveScreenshot(named: "extra_11_note_keyboard")
+        app.buttons["Cancel"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["Edit Note"].waitForNonExistence(timeout: 5))
+        app.buttons["Search"].firstMatch.tap()
+        let search = app.searchFields.firstMatch
+        XCTAssertTrue(search.waitForExistence(timeout: 10), app.debugDescription)
+        search.tap()
+        search.typeText("In the beginning")
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5), app.debugDescription)
+        saveScreenshot(named: "extra_12_search_keyboard")
+        search.typeText("\n")
+        saveScreenshot(named: "extra_13_search_results")
+    }
+
+    @MainActor
     func testProgressReturnsToMoreNavigation() throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1",
                           "Run this navigation regression on the Duo simulator.")

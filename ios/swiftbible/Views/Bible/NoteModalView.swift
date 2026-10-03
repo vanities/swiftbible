@@ -32,48 +32,43 @@ struct NoteModalView: View {
     }
 
     var body: some View {
-        NavigationView {
-            VStack {
-                Form {
-                    Section(header: Text("Note Details")) {
-                        Text("\(note.version.uppercased()) \(note.book) \(note.chapter):\(note.startingVerse)")
-                            .foregroundColor(themedTextColor)
-                    }
-
-                    Section(header: Text("Note")) {
-                        TextEditor(text: $note.text)
-                            .frame(minHeight: 100)
-                            .scrollContentBackground(.hidden)
-                            .foregroundColor(themedTextColor)
-                    }
-                    .listRowBackground(readingTheme.isCustom ? editorFill : nil)
+        NavigationStack {
+            Form {
+                Section(header: Text("Note Details")) {
+                    Text("\(note.version.uppercased()) \(note.book) \(note.chapter):\(note.startingVerse)")
+                        .foregroundColor(themedTextColor)
                 }
-                .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
+
+                Section(header: Text("Note")) {
+                    TextEditor(text: $note.text)
+                        .frame(minHeight: 180)
+                        .scrollContentBackground(.hidden)
+                        .foregroundColor(themedTextColor)
+                        .accessibilityIdentifier("NoteEditorText")
+                }
+                .listRowBackground(readingTheme.isCustom ? editorFill : nil)
+
                 Section {
-                    Button("Save") {
-                        onSave(note)
-                    }
-                    .bold()
-                    .padding()
-                    .accessibilityHint("Save this note")
-                    Button("Cancel") {
-                        onCancel()
-                    }
-                    .foregroundColor(.gray)
-                    .padding()
-                    Button("Delete") {
+                    Button("Delete", role: .destructive) {
                         onDelete(note)
                     }
-                    .padding()
-                    .foregroundColor(.red)
                     .accessibilityHint("Permanently delete this note")
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .readingThemeContentBackground(readingTheme, colorScheme: colorScheme)
             .readingThemeBackground(readingTheme, colorScheme: colorScheme)
             .font(Font.custom(fontName, size: CGFloat(fontSize), relativeTo: .body))
-            .navigationBarTitle("Edit Note", displayMode: .inline)
-            .navigationBarItems(trailing: EmptyView())
+            .navigationTitle("Edit Note")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", action: onCancel)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") { onSave(note) }
+                        .accessibilityHint("Save this note")
+                }
+            }
         }
     }
 }
