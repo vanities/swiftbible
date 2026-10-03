@@ -59,6 +59,7 @@ struct ChapterDetailView: View {
     @State private var rightScrollPosition: Int?
     @State private var collapsedPageAnchor: Int?
     @State private var reachedChapterEnds: Set<Int> = []
+    @State private var isBookSpread = false
 
     init(book: Book, chapter: Chapter) {
         self.bookName = book.name
@@ -154,11 +155,13 @@ struct ChapterDetailView: View {
         .onGeometryChange(for: Bool.self) { geometry in
             usesBookSpread(in: geometry.size)
         } action: { isSpread in
+            isBookSpread = isSpread
             if !isSpread, activeChapterNumber != currentChapterNumber {
                 collapsedPageAnchor = rightScrollPosition
                 currentChapterNumber = activeChapterNumber
             }
         }
+        .modifier(BookReadingToolbarLayout(useHorizontalBars: isBookSpread))
         .background(readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color.clear)
         // Removed overlay NavigationLinks; navigation happens in-place
         .navigationBarTitleDisplayMode(.inline)
@@ -850,6 +853,25 @@ private struct BookPageTurn: ViewModifier {
         content
             .rotation3DEffect(.degrees(rotation), axis: (x: 0, y: 1, z: 0), anchor: .center, perspective: 0.35)
             .opacity(rotation == 0 ? 1 : 0.4)
+    }
+}
+
+private struct BookReadingToolbarLayout: ViewModifier {
+    let useHorizontalBars: Bool
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        #if IPHONE_DUO_LAYOUTS
+            if #available(iOS 27.1, *) {
+                // Facing pages need the full width of both physical regions;
+                // vertical bars would make the trailing page narrower when bent.
+                content.toolbarVerticalBehavior(useHorizontalBars ? .disabled : .automatic)
+            } else {
+                content
+            }
+        #else
+            content
+        #endif
     }
 }
 
