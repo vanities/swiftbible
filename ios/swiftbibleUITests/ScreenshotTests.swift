@@ -63,6 +63,34 @@ final class ScreenshotTests: XCTestCase {
     }
 
     @MainActor
+    func testProgressReturnsToMoreNavigation() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1",
+                          "Run this navigation regression on the Duo simulator.")
+        continueAfterFailure = false
+        tapTab(named: "More")
+        func reveal(_ card: XCUIElement) {
+            for _ in 0..<12 {
+                if card.exists, card.frame.minY >= 82, card.frame.maxY <= 595 { return }
+                let upward = !card.exists || card.frame.maxY > 595
+                let scroll = app.scrollViews.firstMatch
+                scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.25, dy: upward ? 0.7 : 0.3))
+                    .press(forDuration: 0.05, thenDragTo: scroll.coordinate(withNormalizedOffset: CGVector(dx: 0.25, dy: upward ? 0.3 : 0.7)))
+            }
+            XCTFail("Card did not become visible: \(app.debugDescription)")
+        }
+        let progress = app.buttons["MoreProgress"].firstMatch
+        reveal(progress)
+        progress.coordinate(withNormalizedOffset: CGVector(dx: 0.18, dy: 0.5)).tap()
+        XCTAssertTrue(app.navigationBars["Progress"].waitForExistence(timeout: 5))
+        app.buttons["BackButton"].firstMatch.tap()
+        XCTAssertTrue(app.navigationBars["More"].waitForExistence(timeout: 5), app.debugDescription)
+        let settings = app.buttons["MoreSettings"].firstMatch
+        reveal(settings)
+        settings.coordinate(withNormalizedOffset: CGVector(dx: 0.18, dy: 0.5)).tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
     func testBookSpreadKeepsRightPageVerseActionsAndTurnsChapters() throws {
         try XCTSkipUnless(ProcessInfo.processInfo.environment["DUO_CAPTURE"] == "1",
                           "Run this Duo walkthrough with TEST_RUNNER_DUO_CAPTURE=1 on an open Duo simulator.")

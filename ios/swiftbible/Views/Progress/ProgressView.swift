@@ -37,36 +37,34 @@ struct ProgressTabView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            scrollContent
-                .navigationTitle("Progress")
-                .background((readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color(.systemGroupedBackground)).ignoresSafeArea())
-                .readingThemeNavBar(readingTheme, colorScheme: colorScheme)
-                .onAppear(perform: handleAppear)
-                .sheet(isPresented: $showingGallery) {
-                    BadgeGallerySheet()
-                }
-                #if DEBUG
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            ToastService.shared.enqueueDebugSample()
-                        } label: {
-                            Image(systemName: "party.popper.fill")
-                        }
-                        .accessibilityLabel("Trigger test badge toast")
+        scrollContent
+            .navigationTitle("Progress")
+            .background((readingTheme.isCustom ? readingTheme.backgroundColor(for: colorScheme) : Color(.systemGroupedBackground)).ignoresSafeArea())
+            .readingThemeNavBar(readingTheme, colorScheme: colorScheme)
+            .onAppear(perform: handleAppear)
+            .sheet(isPresented: $showingGallery) {
+                BadgeGallerySheet()
+            }
+            #if DEBUG
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        ToastService.shared.enqueueDebugSample()
+                    } label: {
+                        Image(systemName: "party.popper.fill")
                     }
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            grantFreeBadge()
-                        } label: {
-                            Image(systemName: "gift.fill")
-                        }
-                        .accessibilityLabel("DEBUG: grant next badge (persists an EarnedBadge so CD_EarnedBadge syncs to CloudKit)")
-                    }
+                    .accessibilityLabel("Trigger test badge toast")
                 }
-                #endif
-        }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        grantFreeBadge()
+                    } label: {
+                        Image(systemName: "gift.fill")
+                    }
+                    .accessibilityLabel("DEBUG: grant next badge (persists an EarnedBadge so CD_EarnedBadge syncs to CloudKit)")
+                }
+            }
+            #endif
     }
 
     @ViewBuilder
@@ -591,6 +589,6 @@ struct TierMedal: View {
 }
 
 #Preview {
-    ProgressTabView()
+    NavigationStack { ProgressTabView() }
         .modelContainer(for: [ReadingSession.self, EarnedBadge.self], inMemory: true)
 }

@@ -496,6 +496,7 @@ struct MoreView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("MoreProgress")
     }
 
     private var progressSubtitle: String {
@@ -526,6 +527,7 @@ struct MoreView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("MoreSettings")
     }
 
     private func cardRow(icon: String, tint: Color, title: String, subtitle: String) -> some View {
