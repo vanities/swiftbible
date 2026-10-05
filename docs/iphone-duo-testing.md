@@ -73,6 +73,10 @@ A single-panel recording can show a live flat/book transition, but does not prov
 
 Distinguish these outcomes: a prepared state; saved state restored after reopening; an existing process reactivated after a pose change; and the same app staying foreground throughout a recorded fold. Assert visible content and interaction, not only an offscreen DOM title or a retained model identifier.
 
+## Physical quarter-turn verification
+
+On 2026-10-04 a scoped Xcode 27.1 XCTest set XCUIDevice.shared.orientation to landscapeLeft while the Duo was in Tabletop. Its real landscape-window expectation failed. The fresh native probe still reported viewport 669 x 951 and an active horizontal division at y=455.5, height 40, with top/bottom margins 20. Standard iPad XCTest orientation preparation passes; do not infer Duo physical rotation support from it. Native agent-device hinge changes remain verified. Use the Simulator's manual quarter-turn for Duo, then read native region geometry. This establishes the tested limitation of these current commands, not a claim that every future automation path is unavailable.
+
 ## App-specific checks
 
 Keep equal physical chapter pages, the current chapter on the left and the next chapter on the right, and a small outside text inset. Verify edge turns, verse actions, and the selected chapter pair across folding.
