@@ -53,6 +53,8 @@ The hinge helper depends on private simulator HID behavior and the selected simu
 
 `orientation portrait` and `orientation landscape-right` returned success here, but the live native probe still reported the same 951 x 669 pt viewport and active vertical division. Therefore automated tabletop rotation is **unverified**. Do not label a book capture as tabletop, or treat an orientation command's success message as proof. A tabletop check must observe an active horizontal division in the app and inspect the actual rendered controls. Use the simulator's physical rotation control when available, and retain this manual requirement until app-visible geometry confirms a working automation path.
 
+The user's physical quarter-turn was verified on 2026-10-04: the native viewport became 669 x 951 pt, with an active horizontal division at y=455.5, height=40, width=669 pt, and 20 pt top/bottom margins. This proves the manual tabletop geometry; it does not prove an automated rotation command. Capture harnesses must preserve that orientation instead of setting landscape again during setup. Native arrangement views can then place primary and secondary content above and below the fold.
+
 ## Screenshots, video, and continuity evidence
 
 Always name the lit display. On this simulator:
