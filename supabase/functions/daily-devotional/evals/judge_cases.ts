@@ -1,4 +1,4 @@
-import { EMPATHY_EXAMPLE } from "../../_shared/devotional-examples.ts";
+import { EMPATHY_EXAMPLE, NARRATIVE_EXAMPLE } from "../../_shared/devotional-examples.ts";
 // Labelled cases for the devotional judge (see ../judge_eval_test.ts).
 //
 // Each case is a devotional the judge must get right. `expect` is the
@@ -121,6 +121,15 @@ You may not have a hillside. You may have ten minutes in a parked car before wal
 ## A prayer
 
 *Father, before the day asks me for anything, let me ask You first. Teach me the hour You chose. Make me unhurried in it. You are worth the full attention, even when I have none to spare. Amen.*`,
+  },
+
+  {
+    id: "house-example-luke-19-5-narrative",
+    expect: "pass",
+    why: "The narrative writer's actual example distinguishes Luke's account from inference and supplies no imagined physical details or motives.",
+    track: "narrative",
+    verses: [{ book: "Luke", chapter: 19, verse: 5, text: "And when Jesus came to the place, he looked up, and saw him, and said unto him, Zacchaeus, make haste, and come down; for to day I must abide at thy house." }],
+    message: NARRATIVE_EXAMPLE,
   },
 
   {
@@ -286,7 +295,7 @@ Take a few moments today to be still before God. Turn off distractions and simpl
       verse: 19,
       text: "And they departed from Rithmah, and pitched at Rimmonparez.",
     }],
-    hardFails: ["verse_cannot_carry_devotional"],
+    hardFails: ["verse_cannot_carry_devotional", "theological_error", "factual_error"],
     message: `# July 14, 2026 — Numbers 33:19: Pitching the tent again
 
 **What do you do on the day you have to start over somewhere new?**

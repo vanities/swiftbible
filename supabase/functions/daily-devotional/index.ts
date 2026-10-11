@@ -1,6 +1,6 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { EMPATHY_EXAMPLE } from "../_shared/devotional-examples.ts";
+import { EMPATHY_EXAMPLE, NARRATIVE_EXAMPLE } from "../_shared/devotional-examples.ts";
 import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { initSentry, captureException } from "../_shared/sentry.ts";
 import { selectRandomVerse as sharedSelectRandomVerse, verseKey, unsuitableReason } from "../_shared/verse-selection.ts";
@@ -229,7 +229,7 @@ const JUDGE_MODEL = "gpt-6-sol";
 //             rules.
 const EMPATHY_PROMPT_VERSION = "empathy-v9";
 const TECHNICAL_PROMPT_VERSION = "technical-v3";
-const NARRATIVE_PROMPT_VERSION = "narrative-v3";
+const NARRATIVE_PROMPT_VERSION = "narrative-v4";
 const PRACTICAL_PROMPT_VERSION = "practical-v4";
 const MATT_PROMPT_VERSION = "matt-v1";
 const JOSH_PROMPT_VERSION = "josh-v1";
@@ -1511,16 +1511,16 @@ ${PROMPT_AI_TELLS}
 // scene with Jesus" framings — kept observational, not invocational.
 
 const PROMPT_NARRATIVE_RULES = `VOICE — narrative track
-- Drop the reader inside the biblical scene. Sensory, observational, alive.
-- Present tense, third-person observer ("Peter sees the door swing shut...") or limited second-person ("You're standing at the edge of the crowd...").
-- Anchor concretely in 1st-century reality: heat, dust, lamp oil, crowd noise, the smell of fish, the sound of sandals on stone. Geographical and cultural inference is allowed.
+- Retell the biblical scene using the concrete actions and details scripture actually supplies. Be vivid through those details, not through invented scenery.
+- Present tense, third-person observer. Distinguish the anchor verse from any surrounding passage you use.
+- Stay in the period and place of the selected passage, whether Old or New Testament. Do not add dust, sounds, clothing, gestures or physical sensations that the passage does not report. If background is needed, label it as background rather than an observed event.
 - DO NOT invent dialogue, internal monologue, or character motivations that scripture doesn't supply. If a character doesn't say it in the text, don't put words in their mouth. If we don't know what someone thought or felt, don't tell us they thought or felt it.
 - One scene, not a montage. Hold the camera in one place.
 - No anachronisms. No phones, no traffic, no "in our 21st-century lives."
 - Avoid Ignatian "place yourself in the scene with Jesus and ask Him a question" framings — keep it observational, not invocational.
 
 STRUCTURE (four beats)
-1. Scene — open inside the moment. Describe what a careful observer would have seen and heard. Build the room with specific, grounded detail (the rope coiled by the boat, the sweat on a forehead, the shadow of a tree). Vary sentence rhythm.
+1. Scene — open with the people, setting and actions the text actually names. If the anchor is a saying or poem, follow its own imagery and speaker; do not invent a historical scene around it. Vary sentence rhythm.
 2. The moment the verse lands — quote the verse in a blockquote with bolded reference. Place it in the action. Why these specific words, in this specific moment. One short Hebrew/Greek nuance is allowed if a word genuinely opens the scene; otherwise skip.
 3. And now — short bridge that pulls the scene into the reader's life. Honor that the cost back then echoes the cost now. Don't preach; observe. End on the real difficulty, not a tidy bow.
 4. Prayer — short open-handed italic paragraph using *single asterisks* (NOT a blockquote — the iOS verse-link detector treats blockquotes as verse references). Address the Father by default; address Jesus directly ("Lord Jesus") only when the verse itself models prayer or a cry to Jesus, and do not address the Holy Spirit. End with "Amen."
@@ -1539,40 +1539,7 @@ AVOID
 // Few-shot example for the narrative track. Luke 19:5 (Zacchaeus) — picked
 // because the scripture supplies enough scene material (sycamore, crowd,
 // "looked up") that the example can be vivid without inventing anything.
-const PROMPT_NARRATIVE_FEW_SHOT = `# October 12 — Luke 19:5: Under the sycamore
-
-**The tree is the only place left.**
-
-> *"And when Jesus came to the place, he looked up, and saw him, and said unto him, Zacchaeus, make haste, and come down; for to day I must abide at thy house."*
-> **Luke 19:5**
-
-## The tree
-
-The road into Jericho is dust and sandals. The crowd ahead is thick. Shoulders, robes, voices climbing over each other. Somewhere in the middle of it, the rabbi is moving slowly toward the city gate.
-
-Behind the crowd, a short man has run ahead. His tunic is hiked up. His sandals slap the stones. He is not used to running like this.
-
-A sycamore stands beside the road, ancient and wide, the branches starting low. He climbs. The bark scrapes his palms.
-
-From up here he can see the road. He can see the back of the rabbi's head moving through the press. He cannot, from up here, be seen. That's the point. A tax collector is not loved in Jericho. A short, rich tax collector is the kind of man who watches from above.
-
-## The moment
-
-The crowd reaches the tree. The rabbi stops walking. He looks up.
-
-The Greek behind "must" is *dei*, which carries the weight of necessity. Today. Your house.
-
-The words are said publicly. Anyone in the crowd could have heard them. The branches above Jericho stop being a hiding place. They become a name spoken out loud in front of everyone who hates him.
-
-## And now
-
-You may know the version of climbing into a tree. The corner of a room where the conversation can't reach. The polite distance from the people who would not be glad to see you. The carefully arranged life where you are not, exactly, available.
-
-Christ has a habit of stopping under exactly that tree.
-
-## A prayer
-
-*Father, You sent Your Son to find Zacchaeus in his hiding place and call him down by name. Find the tree I am in. Call me out of it, and give me the strength to come down. Amen.*`;
+const PROMPT_NARRATIVE_FEW_SHOT = NARRATIVE_EXAMPLE;
 
 function createNarrativePrompt(
   verse: SelectedVerse,

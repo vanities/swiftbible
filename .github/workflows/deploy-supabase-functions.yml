@@ -17,6 +17,8 @@ concurrency:
 jobs:
   migrations:
     uses: ./.github/workflows/deploy-supabase-migrations.yml
+    with:
+      serialized_by_caller: true
     secrets: inherit
 
   deploy:

@@ -92,10 +92,10 @@ calls a live model or database. CI also checks request-handler types.
 
 Live evaluations are opt-in and bill model calls. They include the rejected
 2026-10-11 Numbers 26:58 devotional, positive examples, invented scenes,
-misreadings, theological errors and broken structure. The empathy writer and
-its positive evaluation fixture import the same corrected example from
-`_shared/devotional-examples.ts`; the former invented-scene example remains
-as a negative control. Re-run evaluations when models, rubric or examples
+misreadings, theological errors and broken structure. The empathy and narrative writers
+share their corrected examples with the positive evaluation fixtures in
+`_shared/devotional-examples.ts`; the former empathy invented-scene example
+remains as a negative control. Re-run evaluations when models, rubric or examples
 change. Bump the corresponding prompt version when its prompt changes.
 
 ## Deployment
