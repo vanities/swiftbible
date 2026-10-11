@@ -19,7 +19,13 @@ There are two devotional types that rotate on a 3-day cycle:
 
 ## Quality gate (judge)
 
-Every draft is graded before it is saved. The flows below show one
+Two layers. Before generation, verse selection drops passage shapes that
+cannot carry a devotional (clan lists, begat chains, wilderness itineraries,
+tabernacle measurements; `UNSUITABLE_PATTERNS` in
+`_shared/verse-selection.ts`, ~0.7% of the pool). It is free and catches the
+predictable failures; it is deliberately narrow and will miss others.
+
+After generation, every draft is graded before it is saved. The flows below show one
 generation; in practice the `generateDevotional` → `saveDevotional` step is:
 
 ```
