@@ -8,6 +8,15 @@ import {
   PROMPT_MATT_RULES,
   PROMPT_JOSH_RULES,
 } from "../_shared/devotional-voice.ts";
+import {
+  buildJudgePrompt,
+  callJudgeModel,
+  generateWithJudge,
+  JUDGE_MAX_ATTEMPTS,
+  parseJudgeResponse,
+  type JudgedAttempt,
+  type JudgeResult,
+} from "../_shared/devotional-judge.ts";
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -179,6 +188,11 @@ const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 // column so the iOS and Android apps can attribute it accurately.
 const DEVOTIONAL_MODEL = "gpt-6-sol";
 const VERSE_SELECTION_MODEL = "gpt-5.6-luna";
+// Grades each draft before it is saved (see _shared/devotional-judge.ts).
+// Same tier as the writer: a weaker grader misses the subtle failures
+// (stretched verses, quiet misreadings) the gate exists to catch, and at one
+// short call per attempt the cost is a fraction of generation.
+const JUDGE_MODEL = "gpt-6-sol";
 
 // Two parallel prompt tracks rotate randomly to vary the daily devotional
 // voice. The "Daily Devotional" table's prompt_version column records
@@ -267,6 +281,7 @@ interface TokenUsage {
 interface DevotionalUsage {
   generation: TokenUsage;
   selection?: TokenUsage;
+  judge?: TokenUsage;
 }
 
 function extractUsage(
@@ -1064,16 +1079,6 @@ function selectRandomVerse(testament: "old" | "new"): SelectedVerse {
     testament,
     testament === "old" ? "Psalms" : "John",
   );
-}
-
-function selectVerse(
-  targetTestament: "old" | "new",
-  holiday: Holiday | null
-): SelectedVerse {
-  if (holiday && holiday.verses.length > 0) {
-    return holiday.verses[Math.floor(Math.random() * holiday.verses.length)];
-  }
-  return selectRandomVerse(targetTestament);
 }
 
 // ─── Date formatting ────────────────────────────────────────────────
@@ -2247,7 +2252,8 @@ async function saveDevotional(
   model: string,
   usage: DevotionalUsage,
   promptCapture: PromptCapture,
-  themeMetadata: ThemeMetadata = {}
+  themeMetadata: ThemeMetadata = {},
+  judge: StoredJudge | null = null
 ): Promise<void> {
   const versesJson = verses.map((v) => ({
     book: v.book,
@@ -2273,10 +2279,183 @@ async function saveDevotional(
         holiday_name: themeMetadata.holidayName ?? null,
         holiday_url: themeMetadata.holidayUrl ?? null,
         anchor_verse: themeMetadata.anchorVerse ?? null,
+        judge,
       },
       { onConflict: "for_date" }
     );
   if (error) throw error;
+}
+
+// ─── Quality gate (judge + regenerate) ──────────────────────────────
+
+// One verse choice plus the prompt built from it. A retry builds a new one on
+// the same track, type and testament, so "the same theme from a different
+// verse" is literal: only the scripture changes.
+interface Candidate {
+  verses: SelectedVerse[];
+  prompt: string;
+  verseSelectionPrompt: string | null;
+  selectionUsage?: TokenUsage;
+}
+
+interface Generation {
+  message: string;
+  usage: TokenUsage;
+  judgeUsage?: TokenUsage;
+}
+
+// Judge result as persisted on the published row (Daily Devotional.judge).
+// passed=false here only ever means every attempt failed and this was the
+// best of them; null judge means the grader was unavailable.
+interface StoredJudge {
+  model: string;
+  attempt: number;
+  attempts: number;
+  exhausted: boolean;
+  result: JudgeResult | null;
+  error?: string;
+}
+
+function verseKey(v: { book: string; chapter: number; verse: number }): string {
+  return `${v.book} ${v.chapter}:${v.verse}`;
+}
+
+async function buildCandidate(
+  devotionalType: "single" | "multi",
+  targetTestament: "old" | "new",
+  track: Track,
+  holiday: Holiday | null,
+  formattedDate: string,
+  tried: Candidate[],
+): Promise<Candidate> {
+  const used = new Set(tried.flatMap((c) => c.verses.map(verseKey)));
+
+  if (devotionalType === "multi") {
+    // Non-holiday multi-verse: random seed + GPT companion. The seed is
+    // random each call, so a retry lands on a different pair.
+    const { verses: verseRefs, usage, prompt: selPrompt } =
+      await selectMultiVerses(2, null);
+    const verses = verseRefs.map((ref) => {
+      const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
+      const isOT = OT_BOOKS.some((b) => b.name === ref.book);
+      return {
+        book: ref.book,
+        chapter: ref.chapter,
+        verse: ref.verse,
+        text: text || `[${ref.book} ${ref.chapter}:${ref.verse}]`,
+        testament: isOT ? ("old" as const) : ("new" as const),
+      };
+    });
+    return {
+      verses,
+      prompt: buildMultiPrompt(track, verses, formattedDate, holiday),
+      verseSelectionPrompt: selPrompt,
+      selectionUsage: usage,
+    };
+  }
+
+  // Single: holidays draw from their curated pool first; once that is spent
+  // on failed attempts, fall back to the ordinary testament pool.
+  let verse: SelectedVerse | undefined;
+  if (holiday) {
+    const fresh = holiday.verses.filter((v) => !used.has(verseKey(v)));
+    if (fresh.length > 0) {
+      verse = { ...fresh[Math.floor(Math.random() * fresh.length)] };
+      const resolvedText = lookupVerseText(verse.book, verse.chapter, verse.verse);
+      if (resolvedText) verse.text = resolvedText;
+    }
+  }
+  for (let i = 0; !verse && i < 20; i++) {
+    const pick = selectRandomVerse(targetTestament);
+    if (!used.has(verseKey(pick))) verse = pick;
+  }
+  verse ??= selectRandomVerse(targetTestament);
+
+  return {
+    verses: [verse],
+    prompt: buildSinglePrompt(track, verse, formattedDate, holiday),
+    verseSelectionPrompt: null,
+  };
+}
+
+async function judgeDraft(
+  candidate: Candidate,
+  generation: Generation,
+  track: Track,
+  holiday: Holiday | null,
+): Promise<JudgeResult> {
+  const apiKey = Deno.env.get("OPENAI_API_KEY");
+  if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
+  const { content, data } = await callJudgeModel({
+    apiKey,
+    model: JUDGE_MODEL,
+    url: OPENAI_CHAT_URL,
+    prompt: buildJudgePrompt({
+      message: generation.message,
+      track,
+      verses: candidate.verses,
+      holidayName: holiday?.name ?? null,
+    }),
+  });
+  // deno-lint-ignore no-explicit-any
+  generation.judgeUsage = extractUsage(data as any, JUDGE_MODEL);
+  const result = parseJudgeResponse(content);
+  console.log("Judge result:", JSON.stringify(result));
+  return result;
+}
+
+// Failed drafts go to their own table so nothing that reads "Daily
+// Devotional" (the apps, get-daily-devotional, the track rotation) can ever
+// pick one up. A write failure here is logged, never fatal: losing the audit
+// row is better than losing the day's devotional.
+async function recordRejections(
+  supabase: ReturnType<typeof createClient>,
+  forDate: string,
+  devotionalType: string,
+  testament: string,
+  track: Track,
+  promptVersion: string,
+  holiday: Holiday | null,
+  rejected: JudgedAttempt<Candidate, Generation>[],
+): Promise<void> {
+  if (rejected.length === 0) return;
+  const rows = rejected.map((a) => ({
+    for_date: forDate,
+    attempt: a.attempt,
+    track,
+    prompt_version: promptVersion,
+    devotional_type: devotionalType,
+    testament,
+    verses: a.candidate.verses.map((v) => ({
+      book: v.book,
+      chapter: v.chapter,
+      verse: v.verse,
+      testament: v.testament,
+    })),
+    holiday_name: holiday?.name ?? null,
+    message: a.generation.message,
+    prompt: a.candidate.prompt,
+    verse_selection_prompt: a.candidate.verseSelectionPrompt,
+    model: DEVOTIONAL_MODEL,
+    usage: {
+      generation: a.generation.usage,
+      ...(a.candidate.selectionUsage ? { selection: a.candidate.selectionUsage } : {}),
+      ...(a.generation.judgeUsage ? { judge: a.generation.judgeUsage } : {}),
+    },
+    judge_model: JUDGE_MODEL,
+    judge_version: a.judge?.version ?? null,
+    judge_score: a.judge?.overall ?? null,
+    judge_threshold: a.judge?.threshold ?? null,
+    judge: a.judge,
+  }));
+  const { error } = await supabase.from("daily_devotional_rejections").insert(rows);
+  if (error) {
+    console.error("[daily-devotional] failed to record rejected drafts", error);
+    await captureException(error, {
+      functionName: "daily-devotional",
+      tags: { stage: "record-rejections" },
+    });
+  }
 }
 
 async function fetchExistingDevotional(
@@ -2381,59 +2560,64 @@ Deno.serve(async (req) => {
       `Devotional type: ${devotionalType}, testament: ${targetTestament}, track: ${track} (${promptVersion})`
     );
 
-    // Select verse(s) and create prompt
-    let prompt: string;
-    let verseSelectionPrompt: string | null = null;
-    let versesUsed: SelectedVerse[];
-    let selectionUsage: TokenUsage | undefined;
+    // Select verse(s), generate, and judge. A draft below the judge's
+    // threshold is set aside and the same track/type/testament is tried
+    // again from a different verse (see _shared/devotional-judge.ts).
+    const tryCandidate = (tried: Candidate[]) =>
+      buildCandidate(devotionalType, targetTestament, track, holiday, formatted, tried);
 
-    if (devotionalType === "multi") {
-      // Non-holiday multi-verse: random seed + GPT companion
-      const { verses: verseRefs, usage, prompt: selPrompt } =
-        await selectMultiVerses(2, null);
-      selectionUsage = usage;
-      verseSelectionPrompt = selPrompt;
-
-      versesUsed = verseRefs.map((ref) => {
-        const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
-        const isOT = OT_BOOKS.some((b) => b.name === ref.book);
-        return {
-          book: ref.book,
-          chapter: ref.chapter,
-          verse: ref.verse,
-          text: text || `[${ref.book} ${ref.chapter}:${ref.verse}]`,
-          testament: isOT ? ("old" as const) : ("new" as const),
-        };
-      });
-
-      prompt = buildMultiPrompt(track, versesUsed, formatted, holiday);
-    } else {
-      const verse = selectVerse(targetTestament, holiday);
-      // Resolve exact text from bible.json for holiday verses
-      if (holiday) {
-        const resolvedText = lookupVerseText(
-          verse.book,
-          verse.chapter,
-          verse.verse
+    const outcome = await generateWithJudge<Candidate, Generation>({
+      first: await tryCandidate([]),
+      next: tryCandidate,
+      generate: async (candidate) => {
+        console.log(
+          `Verses: ${candidate.verses.map(verseKey).join(", ")}`
         );
-        if (resolvedText) verse.text = resolvedText;
-      }
-      versesUsed = [verse];
-      prompt = buildSinglePrompt(track, verse, formatted, holiday);
+        const generation = await generateDevotional(candidate.prompt);
+        console.log("Generated Devotional:\n", generation.message);
+        return generation;
+      },
+      judge: (candidate, generation) => judgeDraft(candidate, generation, track, holiday),
+      maxAttempts: JUDGE_MAX_ATTEMPTS,
+    });
+
+    const { accepted, rejected, exhausted } = outcome;
+    const { prompt, verseSelectionPrompt, selectionUsage } = accepted.candidate;
+    const versesUsed = accepted.candidate.verses;
+    const devotional = accepted.generation.message;
+
+    await recordRejections(
+      supabase,
+      isoDate,
+      devotionalType,
+      targetTestament,
+      track,
+      promptVersion,
+      holiday,
+      rejected,
+    );
+    if (exhausted) {
+      await captureException(
+        new Error(
+          `daily-devotional judge: all ${JUDGE_MAX_ATTEMPTS} drafts for ${isoDate} scored below threshold; published best (${accepted.judge?.overall})`,
+        ),
+        { functionName: "daily-devotional", tags: { stage: "judge-exhausted", track } },
+      );
     }
 
-    console.log(
-      `Verses: ${versesUsed.map((v) => `${v.book} ${v.chapter}:${v.verse}`).join(", ")}`
-    );
-
-    // Generate devotional
-    const { message: devotional, usage: generationUsage } =
-      await generateDevotional(prompt);
-    console.log("Generated Devotional:\n", devotional);
-
     const devotionalUsage: DevotionalUsage = {
-      generation: generationUsage,
+      generation: accepted.generation.usage,
       ...(selectionUsage ? { selection: selectionUsage } : {}),
+      ...(accepted.generation.judgeUsage ? { judge: accepted.generation.judgeUsage } : {}),
+    };
+
+    const storedJudge: StoredJudge = {
+      model: JUDGE_MODEL,
+      attempt: accepted.attempt,
+      attempts: rejected.length + 1,
+      exhausted,
+      result: accepted.judge,
+      ...(accepted.judgeError ? { error: accepted.judgeError } : {}),
     };
 
     // Theme metadata for the iOS app's "why am I seeing this?" display.
@@ -2461,7 +2645,8 @@ Deno.serve(async (req) => {
         track,
         verseSelectionPrompt,
       },
-      themeMetadata
+      themeMetadata,
+      storedJudge
     );
 
     return new Response(devotional, {

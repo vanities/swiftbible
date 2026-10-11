@@ -17,6 +17,68 @@ There are two devotional types that rotate on a 3-day cycle:
 
 ---
 
+## Quality gate (judge)
+
+Every draft is graded before it is saved. The flows below show one
+generation; in practice the `generateDevotional` → `saveDevotional` step is:
+
+```
+generateWithJudge()                         [_shared/devotional-judge.ts]
+  ├── generateDevotional(prompt)            [DEVOTIONAL_MODEL]
+  ├── judgeDraft()                          [JUDGE_MODEL, JSON mode]
+  │     └── scores 1–5: verse_weight, faithfulness, substance, track_fit, craft
+  │         + hard fails (misquoted_scripture, factual_error, theological_error,
+  │           verse_cannot_carry_devotional, broken_format, inappropriate_content)
+  ├── PASS → publish
+  └── FAIL → buildCandidate(): same track, type and testament, different verse
+             (holidays: next unused curated verse, then the testament pool)
+             … up to JUDGE_MAX_ATTEMPTS (3) drafts
+
+recordRejections()   → daily_devotional_rejections (one row per failed draft)
+saveDevotional()     → "Daily Devotional", with the judge result in `judge`
+```
+
+- **Pass rule** (decided in code, never by a verdict the model writes):
+  weighted overall ≥ `JUDGE_PASS_THRESHOLD` (7.0 / 10), no criterion at or
+  below 2, no hard fails.
+- **Failed drafts are never published.** They live only in
+  `daily_devotional_rejections` (RLS on, service role only), with the draft,
+  prompt, verses, cost and the judge's scores and reasons.
+- **All attempts fail:** the highest-scoring draft is published so the day is
+  not empty, its `judge.exhausted` is `true`, and a Sentry error is raised.
+- **Judge unavailable** (network, bad JSON): fail open. The draft is
+  published with `judge.result = null` and `judge.error` set.
+
+Useful queries:
+
+```sql
+-- what got thrown away, and why
+select for_date, attempt, track, verses, judge_score, judge->'hard_fails', judge->'reasons'
+from daily_devotional_rejections order by created_at desc;
+
+-- published rows that only got through on exhaustion or unjudged
+select for_date, judge from "Daily Devotional"
+where (judge->>'exhausted')::boolean or judge->'result' = 'null'::jsonb;
+```
+
+### Evals
+
+- `judge_test.ts` (always runs in CI): parser, pass rule, retry loop with
+  stubbed model calls, index.ts wiring, and checks on the eval fixtures.
+- `judge_eval_test.ts` (opt-in, live model): runs the real judge over the
+  labelled cases in `evals/judge_cases.ts` and fails on any disagreement.
+
+  ```bash
+  OPENAI_API_KEY=sk-... make eval-devotional-judge           # one pass
+  OPENAI_API_KEY=sk-... TRIALS=3 make eval-devotional-judge  # stability
+  ```
+
+  Run it after changing the rubric, weights, threshold or `JUDGE_MODEL`, and
+  bump `JUDGE_PROMPT_VERSION` when the rubric changes. When the judge gets a
+  real day wrong, add that day to `evals/judge_cases.ts` with the right label.
+
+---
+
 ## Flow: Single Verse (Old Testament)
 
 ```
