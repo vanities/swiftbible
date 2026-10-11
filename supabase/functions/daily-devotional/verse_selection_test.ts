@@ -10,6 +10,8 @@ import {
   MAX_PARAGRAPH_CHARS,
   MIN_PARAGRAPH_CHARS,
   selectRandomVerse,
+  UNSUITABLE_PATTERNS,
+  unsuitableReason,
   type VerseBook,
 } from "../_shared/verse-selection.ts";
 import bibleJson from "./bible.json" with { type: "json" };
@@ -104,5 +106,67 @@ Deno.test("sampling the real function tracks the pool distribution", () => {
     throw new Error(
       `Luke at ${(observed * 100).toFixed(2)}% suggests uniform-by-book (3.7%)`
     );
+  }
+});
+
+// ─── Unsuitable passage shapes ──────────────────────────────────────
+
+const inPool = (pool: ReturnType<typeof eligibleParagraphs>, book: string, chapter: number, verse: number) =>
+  pool.some((v) => v.book === book && v.chapter === chapter && v.verse === verse);
+
+Deno.test("census, itinerary, begat and measurement passages never reach the pool", () => {
+  const ot = eligibleParagraphs(OT, "old");
+  const nt = eligibleParagraphs(NT, "new");
+  const blocked: Array<[typeof ot, string, number, number, string]> = [
+    [ot, "Numbers", 26, 58, "clan-list"], // 2026-10-11, the day that prompted this
+    [ot, "Numbers", 33, 19, "itinerary"],
+    [ot, "Genesis", 5, 18, "begat-chain"],
+    [ot, "Exodus", 26, 16, "measurements"],
+    [nt, "Acts", 7, 8, "begat-chain"],
+  ];
+  for (const [pool, book, ch, v, rule] of blocked) {
+    if (inPool(pool, book, ch, v)) throw new Error(`${book} ${ch}:${v} (${rule}) should be filtered out`);
+  }
+});
+
+Deno.test("passages a broader name/measure rule wrongly caught stay in the pool", () => {
+  // The rejected "too many proper names" rule took every one of these, and
+  // "talents" as a measurement took the parable. Keep the rules narrow.
+  const nt = eligibleParagraphs(NT, "new");
+  const kept: Array<[string, number, number]> = [
+    ["John", 19, 19], // the title on the cross
+    ["Mark", 15, 47], // Mary Magdalene sees where he was laid
+    ["Matthew", 10, 2], // the twelve named
+    ["Matthew", 25, 20], // parable of the talents
+    ["John", 1, 40], // Andrew follows
+  ];
+  for (const [book, ch, v] of kept) {
+    if (!inPool(nt, book, ch, v)) throw new Error(`${book} ${ch}:${v} should stay eligible`);
+  }
+  const ot = eligibleParagraphs(OT, "old");
+  for (const [book, ch, v] of [["Psalms", 23, 1], ["Isaiah", 40, 30], ["Ruth", 1, 16]] as const) {
+    if (!inPool(ot, book, ch, v)) throw new Error(`${book} ${ch}:${v} should stay eligible`);
+  }
+});
+
+Deno.test("unsuitable rules stay narrow: under 1% of the pool, almost all OT", () => {
+  // Measured at introduction: ~177 of ~24,000, one NT. A jump here means a
+  // rule got broader and is now eating real devotional material.
+  let ot = 0, nt = 0, total = 0;
+  for (const [books, testament] of [[OT, "old"], [NT, "new"]] as const) {
+    for (const b of books) for (const c of b.chapters) for (const p of c.paragraphs) {
+      if (p.text.length > MAX_PARAGRAPH_CHARS || p.text.trim().length < MIN_PARAGRAPH_CHARS) continue;
+      total++;
+      if (unsuitableReason(p.text.replace(/<\/?JESUS>/g, ""))) testament === "old" ? ot++ : nt++;
+    }
+  }
+  if ((ot + nt) / total > 0.01) throw new Error(`rules drop ${ot + nt}/${total} (>1%)`);
+  if (nt > 3) throw new Error(`rules drop ${nt} NT paragraphs; expected ~1`);
+});
+
+Deno.test("each unsuitable rule has a sane minimum", () => {
+  for (const r of UNSUITABLE_PATTERNS) {
+    if (!r.pattern.global) throw new Error(`${r.name}: pattern must be /g so matches are counted`);
+    if (r.min < 1) throw new Error(`${r.name}: min must be >= 1`);
   }
 });

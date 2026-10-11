@@ -38,6 +38,9 @@ jobs:
       - name: Run edge function tests
         run: deno test --allow-all supabase/functions/
 
+      - name: Check devotional request handler
+        run: deno check supabase/functions/daily-devotional/index.ts
+
   parser-tests:
     name: Parser unit tests (Python)
     runs-on: ubuntu-latest

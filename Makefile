@@ -3,7 +3,7 @@
 	functions functions-background \
 	ngrok-up ngrok-down ngrok-background \
 	functions-deploy test_daily_devotional test_slowness fresh \
-	test test-ios test-android test-parsers \
+	test test-ios test-android test-parsers test-edge eval-devotional-judge \
 	archive upload release \
 	pull-listings dry-listings push-listings push-listing create-version \
 	pull-screenshots dry-screenshots push-screenshots \
@@ -31,6 +31,8 @@ help:
 	@echo "  make test-ios       – iOS unit tests (swiftbibleTests, simulator)"
 	@echo "  make test-android   – Android unit tests (gradle)"
 	@echo "  make test-parsers   – Python parser unit tests (stdlib unittest)"
+	@echo "  make test-edge      – Edge function tests (Deno)"
+	@echo "  make eval-devotional-judge – Live devotional-judge evals (needs OPENAI_API_KEY)"
 	@echo ""
 	@echo "Deploy:"
 	@echo "  make functions-deploy – Deploy all functions to remote project"
@@ -153,6 +155,15 @@ test-android:
 
 test-parsers:
 	python3 -m unittest discover -s python_parser
+
+test-edge:
+	deno test --allow-all supabase/functions/
+
+# Live evals for the daily-devotional quality judge. Calls OpenAI (costs a few
+# cents); needs OPENAI_API_KEY. TRIALS=3 runs each labelled case 3 times.
+eval-devotional-judge:
+	RUN_JUDGE_EVALS=1 JUDGE_EVAL_TRIALS=$${TRIALS:-1} \
+	deno test --allow-all supabase/functions/daily-devotional/judge_eval_test.ts
 
 test: test-ios test-android test-parsers
 	@echo "✅ All unit tests passed"
