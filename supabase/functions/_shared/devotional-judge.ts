@@ -2,7 +2,7 @@
 //
 // After a devotional is generated and before it is saved, a second model call
 // grades it against a fixed rubric. Below the threshold (or on any hard fail)
-// the draft is recorded in daily_devotional_rejections and never published;
+// the failed judgment is recorded in daily_devotional_rejections;
 // the function regenerates on the same track, type and testament from a
 // different verse.
 //
@@ -41,6 +41,10 @@ export const JUDGE_CRITERION_FLOOR = 2;
 // generation (~20–60s) plus one judge call, and the Edge Function has a wall
 // clock limit, so keep this small.
 export const JUDGE_MAX_ATTEMPTS = 3;
+
+// Leave 30 seconds below Supabase's 150-second request timeout for audit,
+// persistence and error reporting. All model calls share this deadline.
+export const GENERATION_BUDGET_MS = 120_000;
 
 export const JUDGE_CRITERIA = [
   "verse_weight",
@@ -266,6 +270,7 @@ export async function callJudgeModel(opts: {
   prompt: string;
   fetchFn?: typeof fetch;
   url?: string;
+  signal?: AbortSignal;
 }): Promise<{ content: string; data: unknown }> {
   const doFetch = opts.fetchFn ?? fetch;
   const response = await doFetch(
@@ -289,7 +294,7 @@ export async function callJudgeModel(opts: {
         response_format: { type: "json_object" },
         max_completion_tokens: 1500,
       }),
-      signal: AbortSignal.timeout(60000),
+      signal: AbortSignal.any([AbortSignal.timeout(60000), ...(opts.signal ? [opts.signal] : [])]),
     },
   );
   if (!response.ok) {
@@ -316,27 +321,31 @@ export interface JudgedAttempt<C, G> {
 }
 
 export interface JudgedOutcome<C, G> {
-  accepted: JudgedAttempt<C, G>;
+  accepted: JudgedAttempt<C, G> | null;
   // Every attempt that will NOT be published. Record these; never show them.
   rejected: JudgedAttempt<C, G>[];
   // True when every attempt failed and `accepted` is the best of the failures.
   exhausted: boolean;
+  retryError?: string;
 }
 
 // Generates, judges, and on failure moves to a fresh candidate (a different
 // verse on the same track) until one passes or attempts run out. Generic over
 // the candidate and generation shapes so the test can drive it with stubs.
 //
-// On exhaustion the highest-scoring draft is published rather than leaving the
-// day empty — every app reads today's row and an empty day is worse than a
-// mediocre one. That draft is NOT in `rejected`, and its stored judge result
-// shows passed=false, so it is easy to find and review.
+// On exhaustion or a retry error, use the best completed draft only if it has
+// no hard failures and no criterion below the floor. A low overall score may
+// be tolerable; known errors are not. With no usable draft return null so the
+// handler preserves any existing row. Audit failed judgments immediately,
+// including a draft subsequently used as a soft-score fallback.
 export async function generateWithJudge<C, G>(opts: {
   first: C;
   next: (tried: C[]) => Promise<C>;
   generate: (candidate: C) => Promise<G>;
   judge: (candidate: C, generation: G) => Promise<JudgeResult>;
   maxAttempts?: number;
+  signal?: AbortSignal;
+  onFailedAttempt?: (attempt: JudgedAttempt<C, G>) => Promise<void>;
   log?: (msg: string) => void;
 }): Promise<JudgedOutcome<C, G>> {
   const max = Math.max(1, opts.maxAttempts ?? JUDGE_MAX_ATTEMPTS);
@@ -344,12 +353,21 @@ export async function generateWithJudge<C, G>(opts: {
   const attempts: JudgedAttempt<C, G>[] = [];
   const tried: C[] = [];
   let candidate = opts.first;
+  let retryError: string | undefined;
 
   for (let n = 1; n <= max; n++) {
-    if (n > 1) candidate = await opts.next(tried);
-    tried.push(candidate);
-
-    const generation = await opts.generate(candidate);
+    let generation: G;
+    try {
+      opts.signal?.throwIfAborted();
+      if (n > 1) candidate = await opts.next(tried);
+      tried.push(candidate);
+      generation = await opts.generate(candidate);
+    } catch (err) {
+      if (attempts.length === 0) throw err;
+      retryError = err instanceof Error ? err.message : String(err);
+      log(`judge attempt ${n}: retry stopped (${retryError})`);
+      break;
+    }
     let judge: JudgeResult | null = null;
     let judgeError: string | undefined;
     try {
@@ -370,10 +388,20 @@ export async function generateWithJudge<C, G>(opts: {
       `judge attempt ${n}: FAIL ${judge.overall}/${judge.threshold}` +
         (judge.hard_fails.length ? ` hard_fails=${judge.hard_fails.join(",")}` : ""),
     );
+    // Persist before starting another slow external request. Audit errors do
+    // not discard the completed draft or stop the remaining quality checks.
+    try {
+      await opts.onFailedAttempt?.(attempt);
+    } catch (err) {
+      log(`judge attempt ${n}: audit failed (${String(err)})`);
+    }
   }
 
-  // Every attempt was judged and failed. Earliest wins ties.
-  const best = attempts.reduce((a, b) => (b.judge!.overall > a.judge!.overall ? b : a));
-  log(`judge: all ${max} attempts failed; publishing best (attempt ${best.attempt}, ${best.judge!.overall})`);
-  return { accepted: best, rejected: attempts.filter((a) => a !== best), exhausted: true };
+  const usable = attempts.filter((a) => a.judge && a.judge.hard_fails.length === 0 &&
+    JUDGE_CRITERIA.every((c) => a.judge!.scores[c] > JUDGE_CRITERION_FLOOR));
+  const best = usable.reduce<JudgedAttempt<C, G> | null>(
+    (a, b) => !a || b.judge!.overall > a.judge!.overall ? b : a, null,
+  );
+  log(best ? `judge: using soft-score fallback (attempt ${best.attempt}, ${best.judge!.overall})` : "judge: no usable draft; preserving existing content");
+  return { accepted: best, rejected: attempts.filter((a) => a !== best), exhausted: true, retryError };
 }

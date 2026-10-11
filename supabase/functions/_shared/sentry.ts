@@ -89,6 +89,7 @@ export async function captureException(
         "X-Sentry-Auth": `Sentry sentry_version=7, sentry_key=${sentryPublicKey}`,
       },
       body: envelope,
+      signal: AbortSignal.timeout(5000),
     });
     if (!resp.ok) {
       console.warn("[sentry] ingest responded", resp.status);

@@ -1,8 +1,9 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import { EMPATHY_EXAMPLE } from "../_shared/devotional-examples.ts";
+import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { initSentry, captureException } from "../_shared/sentry.ts";
-import { selectRandomVerse as sharedSelectRandomVerse } from "../_shared/verse-selection.ts";
+import { selectRandomVerse as sharedSelectRandomVerse, verseKey, unsuitableReason } from "../_shared/verse-selection.ts";
 import {
   PROMPT_THEOLOGY_GUARDRAILS,
   PROMPT_MATT_RULES,
@@ -13,6 +14,7 @@ import {
   callJudgeModel,
   generateWithJudge,
   JUDGE_MAX_ATTEMPTS,
+  GENERATION_BUDGET_MS,
   parseJudgeResponse,
   type JudgedAttempt,
   type JudgeResult,
@@ -225,7 +227,7 @@ const JUDGE_MODEL = "gpt-6-sol";
 //             than receiving it. The narrative few-shot (Zacchaeus) was
 //             re-aimed Father-ward to match, since few-shots steer harder than
 //             rules.
-const EMPATHY_PROMPT_VERSION = "empathy-v8";
+const EMPATHY_PROMPT_VERSION = "empathy-v9";
 const TECHNICAL_PROMPT_VERSION = "technical-v3";
 const NARRATIVE_PROMPT_VERSION = "narrative-v3";
 const PRACTICAL_PROMPT_VERSION = "practical-v4";
@@ -1073,11 +1075,12 @@ function getHolidayInternal(date: Date): Holiday | null {
 
 // Verse selection lives in ../_shared/verse-selection.ts so it can be
 // imported and tested directly; this file cannot (top-level Deno.serve).
-function selectRandomVerse(testament: "old" | "new"): SelectedVerse {
+function selectRandomVerse(testament: "old" | "new", excluded: ReadonlySet<string> = new Set()): SelectedVerse {
   return sharedSelectRandomVerse(
     testament === "old" ? OT_BOOKS : NT_BOOKS,
     testament,
     testament === "old" ? "Psalms" : "John",
+    excluded,
   );
 }
 
@@ -1174,38 +1177,7 @@ const PROMPT_AI_TELLS = `AVOID (AI tells; strict)
 - "In a world where..." / "In our busy lives..." / "Let us not forget..." / "We must remember..."
 - Generic "may you..." benedictions, moralistic call-outs, and seminary tone.`;
 
-const PROMPT_FEW_SHOT = `# May 15 — Mark 1:35: Before the world wakes
-
-**Why does the answer to the busiest day arrive at the quietest hour?**
-
-> *"And in the morning, rising up a great while before day, he went out, and departed into a solitary place, and there prayed."*
-> **Mark 1:35**
-
-## The hour before the work
-
-The first sound is the door clicking shut behind him. Not a slam. Careful, as if afraid of waking the world. He stops on the threshold a moment, listening. Around him is the small hum of a town that has not woken up: a distant dog, the wind, nothing else. No crowd. No one needing to be healed. Not yet.
-
-There is, for now, just him, and the cold, and the dark, and the long walk to whatever solitary place he has in mind.
-
-## What he chose
-
-The Greek for "solitary place" is *eremos*, the same word the Gospels use for the wilderness where Jesus was tempted. Not just "alone." Stripped down. Without props.
-
-He has just had what any of us would call a successful day. The whole city pressed at the door (Mark 1:33). Demons cast out. Fevers gone. The kind of day a ministry would build a website around.
-
-And before any of it could harden into an identity, he leaves it.
-
-## Your version of the hour
-
-If you have ever felt like the day's noise starts the moment you open your eyes, you know how thin the margin gets. The hour Jesus chose is not magic. It is just the only hour the world has not yet asked for.
-
-You may not have a hillside. You may have ten minutes in a parked car before walking into the building.
-
-The geography is not the point. The order is.
-
-## A prayer
-
-*Father, before the day asks me for anything, let me ask You first. Teach me the hour You chose. Make me unhurried in it. You are worth the full attention, even when I have none to spare. Amen.*`;
+const PROMPT_FEW_SHOT = EMPATHY_EXAMPLE;
 
 function createPrompt(
   verse: SelectedVerse,
@@ -1260,7 +1232,10 @@ MARKDOWN OUTPUT (use exactly this skeleton; copy the verse text verbatim)
 
 async function selectMultiVerses(
   count: number,
-  holiday: Holiday | null
+  holiday: Holiday | null,
+  excluded: ReadonlySet<string> = new Set(),
+  signal?: AbortSignal,
+  firstTestament: "old" | "new" = Math.random() < 0.5 ? "old" : "new",
 ): Promise<{
   verses: Array<{ book: string; chapter: number; verse: number }>;
   usage: TokenUsage;
@@ -1270,8 +1245,7 @@ async function selectMultiVerses(
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
 
   // Step 1: Pick the first verse randomly (guarantees variety)
-  const firstTestament: "old" | "new" = Math.random() < 0.5 ? "old" : "new";
-  const seedVerse = selectRandomVerse(firstTestament);
+  const seedVerse = selectRandomVerse(firstTestament, excluded);
   console.log(
     `Multi-verse seed (random): ${seedVerse.book} ${seedVerse.chapter}:${seedVerse.verse}`
   );
@@ -1292,6 +1266,7 @@ Rules:
 - The companion should add a new dimension to the theme — not just echo the same idea
 - Use exact book names as they appear in the KJV (e.g. "Psalms" not "Psalm", "1 Corinthians" not "First Corinthians", "Song of Solomon" not "Song of Songs")
 - Only use books from the 66-book Protestant canon
+- Do not reuse any of these previously tried references: ${[...excluded].join(", ") || "none"}
 
 Return ONLY a JSON object in this exact format:
 {
@@ -1301,11 +1276,10 @@ Return ONLY a JSON object in this exact format:
 }`;
 
   const maxRetries = 2;
-  let content: string | undefined;
   let lastError: Error | undefined;
-  let usage: TokenUsage = extractUsage(null, VERSE_SELECTION_MODEL);
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    signal?.throwIfAborted();
     if (attempt > 0) {
       const delay = attempt * 1000;
       console.log(`selectMultiVerses retry ${attempt}/${maxRetries} after ${delay}ms`);
@@ -1332,53 +1306,49 @@ Return ONLY a JSON object in this exact format:
           response_format: { type: "json_object" },
           max_completion_tokens: 300,
         }),
-        signal: AbortSignal.timeout(30000),
+        signal: AbortSignal.any([AbortSignal.timeout(30000), ...(signal ? [signal] : [])]),
       });
 
       if (!response.ok) {
-        let errorText: string | undefined;
-        try {
-          errorText = JSON.stringify(await response.json());
-        } catch (_) {
-          errorText = await response.text();
-        }
+        const errorText = await response.text();
         lastError = new Error(`Verse selection failed (${response.status}): ${errorText}`);
         continue;
       }
 
       const data = await response.json();
       console.log("selectMultiVerses response:", JSON.stringify(data, null, 2));
-      content = data?.choices?.[0]?.message?.content;
-      usage = extractUsage(data, VERSE_SELECTION_MODEL);
+      const content = data?.choices?.[0]?.message?.content;
+      const usage = extractUsage(data, VERSE_SELECTION_MODEL);
       if (!content) {
         lastError = new Error(`Empty verse selection response: ${JSON.stringify(data)}`);
         continue;
       }
 
-      break;
+      const parsed = JSON.parse(content);
+      if (!Array.isArray(parsed.verses) || parsed.verses.length !== companionCount) {
+        throw new Error("Invalid verse selection count");
+      }
+      const seen = new Set([...excluded, verseKey(seedVerse)]);
+      for (const ref of parsed.verses) {
+        if (!ref || typeof ref.book !== "string" || !Number.isInteger(ref.chapter) || !Number.isInteger(ref.verse)) {
+          throw new Error("Invalid verse reference");
+        }
+        const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
+        if (seen.has(verseKey(ref)) || ref.book === seedVerse.book || !text || unsuitableReason(text)) {
+          throw new Error(`Unusable or repeated companion: ${verseKey(ref)}`);
+        }
+        seen.add(verseKey(ref));
+      }
+      return {
+        verses: [{ book: seedVerse.book, chapter: seedVerse.chapter, verse: seedVerse.verse }, ...parsed.verses],
+        usage, prompt,
+      };
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err));
     }
   }
 
-  if (!content) throw lastError ?? new Error("Verse selection failed after retries");
-
-  const parsed = JSON.parse(content);
-  if (!Array.isArray(parsed.verses) || parsed.verses.length === 0) {
-    throw new Error("Invalid verse selection format");
-  }
-
-  // Combine: random seed verse + GPT companion(s)
-  const allVerses = [
-    { book: seedVerse.book, chapter: seedVerse.chapter, verse: seedVerse.verse },
-    ...parsed.verses,
-  ];
-
-  console.log(
-    `Verse selection: ${allVerses.map((v: { book: string; chapter: number; verse: number }) => `${v.book} ${v.chapter}:${v.verse}`).join(", ")}`
-  );
-
-  return { verses: allVerses, usage, prompt };
+  throw lastError ?? new Error("Verse selection failed after retries");
 }
 
 // ─── Multi-verse prompt creation ────────────────────────────────────
@@ -1896,7 +1866,8 @@ ${PROMPT_AI_TELLS}
 // ─── Devotional generation (OpenAI) ─────────────────────────────────
 
 async function generateDevotional(
-  prompt: string
+  prompt: string,
+  signal?: AbortSignal,
 ): Promise<{ message: string; usage: TokenUsage }> {
   const apiKey = Deno.env.get("OPENAI_API_KEY");
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
@@ -1920,7 +1891,7 @@ async function generateDevotional(
       ],
       max_completion_tokens: 4000,
     }),
-    signal: AbortSignal.timeout(120000),
+    signal: AbortSignal.any([AbortSignal.timeout(120000), ...(signal ? [signal] : [])]),
   });
 
   if (!response.ok) {
@@ -1957,6 +1928,7 @@ function createSupabaseClient() {
   return createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    { global: { fetch: (input, init) => fetch(input, { ...init, signal: AbortSignal.any([AbortSignal.timeout(5000), ...(init?.signal ? [init.signal] : [])]) }) } },
   );
 }
 
@@ -2160,7 +2132,7 @@ function nextTrack(prev: string | null | undefined): Track {
 }
 
 async function determineDevotionalType(
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient,
   today: Date,
   holiday: Holiday | null
 ): Promise<{
@@ -2243,7 +2215,7 @@ interface PromptCapture {
 }
 
 async function saveDevotional(
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient,
   message: string,
   forDate: string,
   testament: string,
@@ -2308,16 +2280,14 @@ interface Generation {
 // passed=false here only ever means every attempt failed and this was the
 // best of them; null judge means the grader was unavailable.
 interface StoredJudge {
+  run_id: string;
+  retry_error?: string;
   model: string;
   attempt: number;
   attempts: number;
   exhausted: boolean;
   result: JudgeResult | null;
   error?: string;
-}
-
-function verseKey(v: { book: string; chapter: number; verse: number }): string {
-  return `${v.book} ${v.chapter}:${v.verse}`;
 }
 
 async function buildCandidate(
@@ -2327,14 +2297,14 @@ async function buildCandidate(
   holiday: Holiday | null,
   formattedDate: string,
   tried: Candidate[],
+  signal?: AbortSignal,
 ): Promise<Candidate> {
   const used = new Set(tried.flatMap((c) => c.verses.map(verseKey)));
 
   if (devotionalType === "multi") {
-    // Non-holiday multi-verse: random seed + GPT companion. The seed is
-    // random each call, so a retry lands on a different pair.
+    // Both seed and companion exclude every previously attempted reference.
     const { verses: verseRefs, usage, prompt: selPrompt } =
-      await selectMultiVerses(2, null);
+      await selectMultiVerses(2, null, used, signal, targetTestament);
     const verses = verseRefs.map((ref) => {
       const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
       const isOT = OT_BOOKS.some((b) => b.name === ref.book);
@@ -2365,11 +2335,7 @@ async function buildCandidate(
       if (resolvedText) verse.text = resolvedText;
     }
   }
-  for (let i = 0; !verse && i < 20; i++) {
-    const pick = selectRandomVerse(targetTestament);
-    if (!used.has(verseKey(pick))) verse = pick;
-  }
-  verse ??= selectRandomVerse(targetTestament);
+  verse ??= selectRandomVerse(targetTestament, used);
 
   return {
     verses: [verse],
@@ -2383,6 +2349,7 @@ async function judgeDraft(
   generation: Generation,
   track: Track,
   holiday: Holiday | null,
+  signal?: AbortSignal,
 ): Promise<JudgeResult> {
   const apiKey = Deno.env.get("OPENAI_API_KEY");
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
@@ -2390,6 +2357,7 @@ async function judgeDraft(
     apiKey,
     model: JUDGE_MODEL,
     url: OPENAI_CHAT_URL,
+    signal,
     prompt: buildJudgePrompt({
       message: generation.message,
       track,
@@ -2404,12 +2372,11 @@ async function judgeDraft(
   return result;
 }
 
-// Failed drafts go to their own table so nothing that reads "Daily
-// Devotional" (the apps, get-daily-devotional, the track rotation) can ever
-// pick one up. A write failure here is logged, never fatal: losing the audit
-// row is better than losing the day's devotional.
+// Persist every failed judgment before retrying. A soft-score fallback can
+// later be published; run_id and attempt connect its audit to the final row.
+// A write failure is reported without discarding the completed draft.
 async function recordRejections(
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient,
   forDate: string,
   devotionalType: string,
   testament: string,
@@ -2417,9 +2384,11 @@ async function recordRejections(
   promptVersion: string,
   holiday: Holiday | null,
   rejected: JudgedAttempt<Candidate, Generation>[],
+  runId: string,
 ): Promise<void> {
   if (rejected.length === 0) return;
   const rows = rejected.map((a) => ({
+    run_id: runId,
     for_date: forDate,
     attempt: a.attempt,
     track,
@@ -2459,7 +2428,7 @@ async function recordRejections(
 }
 
 async function fetchExistingDevotional(
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient,
   forDate: string
 ): Promise<string | null> {
   const { data, error } = await supabase
@@ -2480,9 +2449,9 @@ async function fetchExistingDevotional(
 
 // ─── Main handler ───────────────────────────────────────────────────
 
-initSentry("daily-devotional");
-
-Deno.serve(async (req) => {
+export async function handleRequest(req: Request): Promise<Response> {
+  const signal = AbortSignal.timeout(GENERATION_BUDGET_MS);
+  const runId = crypto.randomUUID();
   // The shared secret is stored on the function as `SUPER_SECRET`. The caller
   // (daily cron) sends it in the `SuperSecret` header. Reading any other env
   // name leaves configuredSecret empty and 403s every request.
@@ -2564,7 +2533,7 @@ Deno.serve(async (req) => {
     // threshold is set aside and the same track/type/testament is tried
     // again from a different verse (see _shared/devotional-judge.ts).
     const tryCandidate = (tried: Candidate[]) =>
-      buildCandidate(devotionalType, targetTestament, track, holiday, formatted, tried);
+      buildCandidate(devotionalType, targetTestament, track, holiday, formatted, tried, signal);
 
     const outcome = await generateWithJudge<Candidate, Generation>({
       first: await tryCandidate([]),
@@ -2573,37 +2542,34 @@ Deno.serve(async (req) => {
         console.log(
           `Verses: ${candidate.verses.map(verseKey).join(", ")}`
         );
-        const generation = await generateDevotional(candidate.prompt);
+        const generation = await generateDevotional(candidate.prompt, signal);
         console.log("Generated Devotional:\n", generation.message);
         return generation;
       },
-      judge: (candidate, generation) => judgeDraft(candidate, generation, track, holiday),
+      judge: (candidate, generation) => judgeDraft(candidate, generation, track, holiday, signal),
       maxAttempts: JUDGE_MAX_ATTEMPTS,
+      signal,
+      onFailedAttempt: (attempt) => recordRejections(
+        supabase, isoDate, devotionalType, targetTestament, track,
+        promptVersion, holiday, [attempt], runId,
+      ),
     });
 
-    const { accepted, rejected, exhausted } = outcome;
+    const { accepted, rejected, exhausted, retryError } = outcome;
+    if (exhausted) {
+      await captureException(
+        new Error(`daily-devotional judge: ${isoDate}: ${accepted ? "using soft-score fallback" : "no usable draft"}${retryError ? `; ${retryError}` : ""}`),
+        { functionName: "daily-devotional", tags: { stage: "judge-exhausted", track }, extra: { runId } },
+      );
+    }
+    if (!accepted) {
+      return new Response(JSON.stringify({ error: "No draft passed the safety criteria; existing devotional preserved", runId }), {
+        status: 503, headers: { "Content-Type": "application/json" },
+      });
+    }
     const { prompt, verseSelectionPrompt, selectionUsage } = accepted.candidate;
     const versesUsed = accepted.candidate.verses;
     const devotional = accepted.generation.message;
-
-    await recordRejections(
-      supabase,
-      isoDate,
-      devotionalType,
-      targetTestament,
-      track,
-      promptVersion,
-      holiday,
-      rejected,
-    );
-    if (exhausted) {
-      await captureException(
-        new Error(
-          `daily-devotional judge: all ${JUDGE_MAX_ATTEMPTS} drafts for ${isoDate} scored below threshold; published best (${accepted.judge?.overall})`,
-        ),
-        { functionName: "daily-devotional", tags: { stage: "judge-exhausted", track } },
-      );
-    }
 
     const devotionalUsage: DevotionalUsage = {
       generation: accepted.generation.usage,
@@ -2612,6 +2578,8 @@ Deno.serve(async (req) => {
     };
 
     const storedJudge: StoredJudge = {
+      run_id: runId,
+      ...(retryError ? { retry_error: retryError } : {}),
       model: JUDGE_MODEL,
       attempt: accepted.attempt,
       attempts: rejected.length + 1,
@@ -2660,7 +2628,12 @@ Deno.serve(async (req) => {
       headers: { "Content-Type": "application/json" },
     });
   }
-});
+}
+
+if (import.meta.main) {
+  initSentry("daily-devotional");
+  Deno.serve(handleRequest);
+}
 
 /* To invoke locally:
 

@@ -5,11 +5,22 @@ on:
     branches: [master]
     paths:
       - "supabase/functions/**"
+      - "supabase/migrations/**"
       - ".github/workflows/deploy-supabase-functions.yml"
+      - ".github/workflows/deploy-supabase-migrations.yml"
   workflow_dispatch:
 
+concurrency:
+  group: supabase-production
+  cancel-in-progress: false
+
 jobs:
+  migrations:
+    uses: ./.github/workflows/deploy-supabase-migrations.yml
+    secrets: inherit
+
   deploy:
+    needs: migrations
     runs-on: ubuntu-latest
 
     env:

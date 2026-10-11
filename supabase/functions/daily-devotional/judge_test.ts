@@ -152,7 +152,7 @@ Deno.test("callJudgeModel throws on HTTP error and empty content", async () => {
 // ─── Retry loop ─────────────────────────────────────────────────────
 
 const pass = (overall = 8): JudgeResult => ({
-  version: "t", scores: {} as never, overall, threshold: 7, hard_fails: [], passed: true, reasons: [],
+  version: "t", scores: Object.fromEntries(JUDGE_CRITERIA.map((c) => [c, 4])) as JudgeResult["scores"], overall, threshold: 7, hard_fails: [], passed: true, reasons: [],
 });
 const fail = (overall: number): JudgeResult => ({ ...pass(overall), passed: false });
 
@@ -176,7 +176,8 @@ async function run(script: Array<JudgeResult | Error>, maxAttempts = 3) {
     maxAttempts,
     log: () => {},
   });
-  return { outcome, nextCalls, judgeCalls: i };
+  assert(outcome.accepted, "script should produce a usable draft");
+  return { outcome: { ...outcome, accepted: outcome.accepted }, nextCalls, judgeCalls: i };
 }
 
 Deno.test("first draft passes: published, nothing rejected, no retry", async () => {
@@ -251,8 +252,8 @@ Deno.test("handler gates generation through the judge and records rejections", (
   const source = indexSource();
   for (const marker of [
     "generateWithJudge<Candidate, Generation>",
-    "judgeDraft(candidate, generation, track, holiday)",
-    "await recordRejections(",
+    "judgeDraft(candidate, generation, track, holiday, signal)",
+    "onFailedAttempt: (attempt) => recordRejections(",
     '.from("daily_devotional_rejections").insert(',
     "judge,\n", // saveDevotional persists the judge column
   ]) {
@@ -261,7 +262,7 @@ Deno.test("handler gates generation through the judge and records rejections", (
   // Rejections must be written before the published row, so a failed save
   // can't lose the record of why earlier drafts were thrown away.
   assert(
-    source.indexOf("await recordRejections(") < source.indexOf("await saveDevotional("),
+    source.indexOf("onFailedAttempt: (attempt) => recordRejections(") < source.indexOf("await saveDevotional("),
     "recordRejections must run before saveDevotional",
   );
 });
@@ -269,7 +270,7 @@ Deno.test("handler gates generation through the judge and records rejections", (
 Deno.test("retries keep track, type and testament; only the verse changes", () => {
   const source = indexSource();
   assert(
-    source.includes("buildCandidate(devotionalType, targetTestament, track, holiday, formatted, tried)"),
+    source.includes("buildCandidate(devotionalType, targetTestament, track, holiday, formatted, tried, signal)"),
     "retry candidates must be built from the same devotionalType/targetTestament/track",
   );
 });

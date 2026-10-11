@@ -1,3 +1,4 @@
+import { EMPATHY_EXAMPLE } from "../../_shared/devotional-examples.ts";
 // Labelled cases for the devotional judge (see ../judge_eval_test.ts).
 //
 // Each case is a devotional the judge must get right. `expect` is the
@@ -80,6 +81,16 @@ Father, I can say their names to You. I do not know what to do with the silence 
       text:
         "And in the morning, rising up a great while before day, he went out, and departed into a solitary place, and there prayed.",
     }],
+    message: EMPATHY_EXAMPLE,
+  },
+
+  {
+    id: "invented-scene-mark-1-35",
+    expect: "fail",
+    why: "The former house example invents Jesus's movements and motives; polished prose must not excuse those claims.",
+    hardFails: ["factual_error"],
+    track: "empathy",
+    verses: [{ book: "Mark", chapter: 1, verse: 35, text: "And in the morning, rising up a great while before day, he went out, and departed into a solitary place, and there prayed." }],
     message: `# May 15 — Mark 1:35: Before the world wakes
 
 **Why does the answer to the busiest day arrive at the quietest hour?**
@@ -133,19 +144,19 @@ You may not have a hillside. You may have ten minutes in a parked car before wal
 
 ## What is lost
 
-The thing David has lost is the sense of being seen. He does not say God is gone; he says God has forgotten him and turned His face away. Those are worse in a way, because they mean God is still there and still looking elsewhere.
+The thing David has lost is the sense of being seen. He does not say God is gone; he says God has forgotten him and turned His face away. The questions describe the pain of feeling forgotten. They do not establish that God has stopped attending to him.
 
 "How long" comes four times in two verses. Anyone who has waited on a diagnosis, a phone call, or a prodigal knows that a question repeated is not a question asked for information. It is the sound of a person who has run out of other things to say.
 
 ## The passage does not tidy this
 
-David adds "for ever?" to his first question, and the psalm lets it stand. He does not soften it with a reminder of God's past faithfulness, and the next verse makes it worse: "sorrow in my heart daily." Scripture keeps this complaint in the hymnbook of Israel without a footnote explaining why the delay was good for him.
+David adds "for ever?" to his first question, and the psalm lets it stand. In this opening verse he does not yet turn to God's past faithfulness. The next verse names "sorrow in my heart daily." Scripture keeps this complaint in the hymnbook of Israel without a footnote explaining why the delay was good for him.
 
 The temptation, reading it, is to hurry on to verse 5 where he says he has trusted in God's mercy. That verse is real. So is this one, and it comes first.
 
 ## Still speaking
 
-The address never changes. Every "how long" is aimed at "O LORD." David is furious and bewildered, and he is saying so to the only One who could do anything about it. If that is where you are today, the psalm gives you permission to stay there and keep talking.
+The address never changes. Every "how long" is aimed at "O LORD." The complaint is addressed to God. Even the question about being forgotten remains a form of speaking to Him. If that is where you are today, the psalm gives you permission to stay there and keep talking.
 
 ## A prayer
 

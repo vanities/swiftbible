@@ -35,6 +35,10 @@ export interface VerseBook {
   }>;
 }
 
+export function verseKey(v: { book: string; chapter: number; verse: number }): string {
+  return `${v.book} ${v.chapter}:${v.verse}`;
+}
+
 // Paragraphs shorter than this are fragments; longer ones are genealogies and
 // census lists (short ones are caught by UNSUITABLE_PATTERNS below). Applied
 // once when the index is built, not per attempt.
@@ -123,12 +127,15 @@ export function eligibleParagraphs(
 export function selectRandomVerse(
   books: VerseBook[],
   testament: "old" | "new",
-  fallbackBookName: string
+  fallbackBookName: string,
+  excluded: ReadonlySet<string> = new Set(),
 ): SelectedVerse {
-  const pool = eligibleParagraphs(books, testament);
+  const eligible = eligibleParagraphs(books, testament);
+  const pool = excluded.size ? eligible.filter((v) => !excluded.has(verseKey(v))) : eligible;
   if (pool.length > 0) {
     return pool[Math.floor(Math.random() * pool.length)];
   }
+  if (eligible.length) throw new Error("verse selection: no unused eligible passages remain");
 
   // Unreachable unless the bundled text failed to load.
   const fallbackBook = books.find((b) => b.name === fallbackBookName);
