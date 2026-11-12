@@ -4,7 +4,9 @@
 // grades it against a fixed rubric. Below the threshold (or on any hard fail)
 // the failed judgment is recorded in daily_devotional_rejections;
 // the function regenerates on the same track, type and testament from a
-// different verse.
+// different verse. A track that ends with no usable draft hands the day to
+// the next track (daily-devotional/index.ts), so one hard track cannot leave
+// the app without a devotional.
 //
 // Lives in _shared for the same reason verse-selection.ts does:
 // daily-devotional/index.ts calls Deno.serve at top level and cannot be
@@ -344,11 +346,15 @@ export async function generateWithJudge<C, G>(opts: {
   generate: (candidate: C) => Promise<G>;
   judge: (candidate: C, generation: G) => Promise<JudgeResult>;
   maxAttempts?: number;
+  // Number of the first draft. A second track in the same run continues the
+  // count, so (run_id, attempt) stays unique in daily_devotional_rejections.
+  firstAttempt?: number;
   signal?: AbortSignal;
   onFailedAttempt?: (attempt: JudgedAttempt<C, G>) => Promise<void>;
   log?: (msg: string) => void;
 }): Promise<JudgedOutcome<C, G>> {
   const max = Math.max(1, opts.maxAttempts ?? JUDGE_MAX_ATTEMPTS);
+  const offset = Math.max(1, opts.firstAttempt ?? 1) - 1;
   const log = opts.log ?? console.log;
   const attempts: JudgedAttempt<C, G>[] = [];
   const tried: C[] = [];
@@ -356,6 +362,7 @@ export async function generateWithJudge<C, G>(opts: {
   let retryError: string | undefined;
 
   for (let n = 1; n <= max; n++) {
+    const number = offset + n;
     let generation: G;
     try {
       opts.signal?.throwIfAborted();
@@ -365,7 +372,7 @@ export async function generateWithJudge<C, G>(opts: {
     } catch (err) {
       if (attempts.length === 0) throw err;
       retryError = err instanceof Error ? err.message : String(err);
-      log(`judge attempt ${n}: retry stopped (${retryError})`);
+      log(`judge attempt ${number}: retry stopped (${retryError})`);
       break;
     }
     let judge: JudgeResult | null = null;
@@ -374,18 +381,18 @@ export async function generateWithJudge<C, G>(opts: {
       judge = await opts.judge(candidate, generation);
     } catch (err) {
       judgeError = err instanceof Error ? err.message : String(err);
-      log(`judge attempt ${n}: judge unavailable, accepting unjudged (${judgeError})`);
+      log(`judge attempt ${number}: judge unavailable, accepting unjudged (${judgeError})`);
     }
 
-    const attempt: JudgedAttempt<C, G> = { attempt: n, candidate, generation, judge, judgeError };
+    const attempt: JudgedAttempt<C, G> = { attempt: number, candidate, generation, judge, judgeError };
     attempts.push(attempt);
 
     if (judge === null || judge.passed) {
-      if (judge) log(`judge attempt ${n}: PASS ${judge.overall}/${judge.threshold}`);
+      if (judge) log(`judge attempt ${number}: PASS ${judge.overall}/${judge.threshold}`);
       return { accepted: attempt, rejected: attempts.slice(0, -1), exhausted: false };
     }
     log(
-      `judge attempt ${n}: FAIL ${judge.overall}/${judge.threshold}` +
+      `judge attempt ${number}: FAIL ${judge.overall}/${judge.threshold}` +
         (judge.hard_fails.length ? ` hard_fails=${judge.hard_fails.join(",")}` : ""),
     );
     // Persist before starting another slow external request. Audit errors do
@@ -393,7 +400,7 @@ export async function generateWithJudge<C, G>(opts: {
     try {
       await opts.onFailedAttempt?.(attempt);
     } catch (err) {
-      log(`judge attempt ${n}: audit failed (${String(err)})`);
+      log(`judge attempt ${number}: audit failed (${String(err)})`);
     }
   }
 
