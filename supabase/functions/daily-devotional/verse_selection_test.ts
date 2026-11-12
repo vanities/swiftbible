@@ -216,8 +216,24 @@ Deno.test("lament pool drops the anchors the judge rejected for importing a loss
   }
 });
 
+Deno.test("lament pool drops passages that resolve their grief", () => {
+  // A lament must not resolve; these name grief only to end it.
+  const ot = lamentParagraphs(OT, "old");
+  const nt = lamentParagraphs(NT, "new");
+  const resolving: Array<[typeof ot, string, number, number]> = [
+    [ot, "Isaiah", 35, 9], // sorrow and sighing shall flee away
+    [ot, "Psalms", 30, 5], // joy cometh in the morning
+    [ot, "Psalms", 126, 5], // They that sow in tears shall reap in joy
+    [nt, "Revelation", 21, 4], // God shall wipe away all tears
+    [nt, "Matthew", 5, 4], // Blessed are they that mourn: for they shall be comforted
+  ];
+  for (const [pool, book, ch, v] of resolving) {
+    if (inPool(pool, book, ch, v)) throw new Error(`${book} ${ch}:${v} resolves its grief and should be excluded`);
+  }
+});
+
 Deno.test("lament pool is a few percent of each testament, enough to rotate", () => {
-  // Measured at introduction: 738/18000 OT (4.1%), 148/5829 NT (2.5%). Too
+  // Measured at introduction: 731/18000 OT (4.1%), 145/5829 NT (2.5%). Too
   // small and the track repeats verses; too large and the filter has stopped
   // filtering.
   for (const [books, testament, lo, hi] of [[OT, "old", 0.02, 0.08], [NT, "new", 0.01, 0.06]] as const) {
@@ -242,7 +258,10 @@ Deno.test("lament selection only draws from the lament pool", () => {
 
 Deno.test("lament words match whole words, case-insensitively", () => {
   const yes = ["How long, O LORD?", "Jesus wept.", "and SORROW and sighing", "why hast thou forsaken me"];
-  const no = ["he received his sight", "his commandments are not grievous", "a cry of joy", "Let not your heart be troubled"];
+  const no = [
+    "he received his sight", "his commandments are not grievous", "a cry of joy", "Let not your heart be troubled",
+    "God shall wipe away all tears from their eyes", "weeping may endure for a night, but joy cometh in the morning",
+  ];
   for (const s of yes) if (!isLamentCapable(s)) throw new Error(`should match: ${s}`);
   for (const s of no) if (isLamentCapable(s)) throw new Error(`should not match: ${s}`);
 });

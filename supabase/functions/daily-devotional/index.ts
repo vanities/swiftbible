@@ -3,7 +3,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { EMPATHY_EXAMPLE, NARRATIVE_EXAMPLE } from "../_shared/devotional-examples.ts";
 import { createClient, type SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { initSentry, captureException } from "../_shared/sentry.ts";
-import { selectRandomVerse as sharedSelectRandomVerse, verseKey, unsuitableReason } from "../_shared/verse-selection.ts";
+import { isLamentCapable, selectRandomVerse as sharedSelectRandomVerse, verseKey, unsuitableReason } from "../_shared/verse-selection.ts";
 import {
   PROMPT_THEOLOGY_GUARDRAILS,
   PROMPT_MATT_RULES,
@@ -17,6 +17,7 @@ import {
   GENERATION_BUDGET_MS,
   parseJudgeResponse,
   type JudgedAttempt,
+  type JudgedOutcome,
   type JudgeResult,
 } from "../_shared/devotional-judge.ts";
 
@@ -1366,6 +1367,10 @@ Return ONLY a JSON object in this exact format:
         if (seen.has(verseKey(ref)) || ref.book === seedVerse.book || !text || unsuitableReason(text)) {
           throw new Error(`Unusable or repeated companion: ${verseKey(ref)}`);
         }
+        // The prompt asks for a grieving companion; this checks it got one.
+        if (lament && !isLamentCapable(text)) {
+          throw new Error(`Lament companion carries no grief: ${verseKey(ref)}`);
+        }
         seen.add(verseKey(ref));
       }
       return {
@@ -2604,14 +2609,29 @@ export async function handleRequest(req: Request): Promise<Response> {
     };
 
     let track = scheduledTrack;
-    let outcome = await runTrack(track);
+    let outcome: JudgedOutcome<Candidate, Generation> | undefined;
+    // Set when the scheduled track errored before any draft was judged: a
+    // selection or generation outage, or three lament companions with no
+    // grief. The rescue track gets one chance before that becomes a 500.
+    let scheduledError: unknown;
+    try {
+      outcome = await runTrack(track);
+    } catch (error) {
+      scheduledError = error;
+      console.error(`[daily-devotional] ${isoDate}: ${scheduledTrack} failed before any draft`, error);
+      await captureException(error, {
+        functionName: "daily-devotional",
+        tags: { stage: "scheduled-track", track: scheduledTrack },
+        extra: { runId },
+      });
+    }
     // A day with no usable draft saves no row, so the next day's rotation
     // lands on the same track and usually fails the same way: that is how
     // lament blanked 2026-10-29 to 11-01 and 2026-11-11 to 11-12. Hand the day
     // to the next track inside the same deadline. Known errors are still
     // never published.
     const rescueTrack = fallbackTrack(scheduledTrack);
-    if (!outcome.accepted) {
+    if (!outcome?.accepted && !signal.aborted) {
       console.warn(
         `[daily-devotional] ${isoDate}: no usable ${scheduledTrack} draft in ${attemptsSoFar} attempt(s); falling back to ${rescueTrack}`,
       );
@@ -2625,8 +2645,8 @@ export async function handleRequest(req: Request): Promise<Response> {
           console.warn(`[daily-devotional] ${isoDate}: ${rescueTrack} also produced no usable draft`);
         }
       } catch (error) {
-        // The scheduled track already used its attempts. A deadline or outage
-        // during the rescue keeps the 503 below instead of becoming a 500.
+        // A deadline or outage during the rescue keeps the 503 below (or the
+        // 500 when nothing was drafted at all) rather than a second throw.
         console.error(`[daily-devotional] ${isoDate}: ${rescueTrack} fallback failed`, error);
         await captureException(error, {
           functionName: "daily-devotional",
@@ -2636,8 +2656,14 @@ export async function handleRequest(req: Request): Promise<Response> {
       }
     }
 
-    const { accepted, exhausted, retryError } = outcome;
-    if (!accepted) {
+    if (!outcome?.accepted) {
+      if (scheduledError !== undefined && attemptsSoFar === 0) {
+        // Neither track drafted anything; already reported above.
+        return new Response(JSON.stringify({ error: "Failed to generate devotional", runId }), {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
       return new Response(JSON.stringify({
         error: "No draft passed the safety criteria; existing devotional preserved",
         runId,
@@ -2646,6 +2672,7 @@ export async function handleRequest(req: Request): Promise<Response> {
         status: 503, headers: { "Content-Type": "application/json" },
       });
     }
+    const { accepted, exhausted, retryError } = outcome;
     const promptVersion = PROMPT_VERSION_BY_TRACK[track];
     const { prompt, verseSelectionPrompt, selectionUsage } = accepted.candidate;
     const versesUsed = accepted.candidate.verses;

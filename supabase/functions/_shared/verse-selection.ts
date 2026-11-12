@@ -122,8 +122,16 @@ const LAMENT_WORDS = [
 ];
 export const LAMENT_PATTERN = new RegExp(`\\b(?:${LAMENT_WORDS.join("|")})\\b`, "i");
 
+// Passages that name grief only to end it ("God shall wipe away all tears",
+// "sorrow and sighing shall flee away", "joy cometh in the morning"). They hit
+// LAMENT_PATTERN but resolve, which is the one thing a lament must not do.
+// Measured at introduction it removed 10 of 886 lament passages, all of them
+// resolutions (Isaiah 35:9, Revelation 21:4, Psalms 30:5, Matthew 5:4...).
+export const RESOLVING_PATTERN =
+  /\b(?:(?:shall|shalt|will) flee away|wipe away|(?:turned?|turneth)\b[^.;:]{0,40}\b(?:into|to) (?:joy|dancing|gladness)|joy for mourning|joy cometh|reap in joy|shall be comforted|(?:mourning|sorrow) shall be ended|no more (?:sorrow|crying|weeping|tears)|neither sorrow)\b/i;
+
 export function isLamentCapable(text: string): boolean {
-  return LAMENT_PATTERN.test(text);
+  return LAMENT_PATTERN.test(text) && !RESOLVING_PATTERN.test(text);
 }
 
 function stripJesusTags(text: string): string {

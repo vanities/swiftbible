@@ -26,6 +26,10 @@ interface Scenario {
   prevTrack?: string;
   multi?: boolean;
   holiday?: boolean;
+  // Companion the selector returns on each call, in order; the default is a
+  // grieving companion so multi-verse lament days can pass validation.
+  companions?: Array<{ book: string; chapter: number; verse: number }>;
+  generationDown?: boolean;
   failGeneration?: number;
   failSelectionAfter?: number;
   repeatedCompanion?: boolean;
@@ -129,14 +133,15 @@ Deno.test("real devotional handler recovery and persistence", async (t) => {
           scenario.failSelectionAfter !== undefined &&
           selected > scenario.failSelectionAfter
         ) return Promise.resolve(json({ error: "selection down" }, 503));
-        const companion = scenario.repeatedCompanion || selected === 1
-          ? { book: "Matthew", chapter: 6, verse: 33 }
-          : { book: "John", chapter: 3, verse: 16 };
+        const companion = scenario.companions?.[selected - 1] ??
+          (scenario.repeatedCompanion || selected === 1
+            ? { book: "Matthew", chapter: 26, verse: 38 } // My soul is exceeding sorrowful
+            : { book: "Luke", chapter: 19, verse: 41 }); // he beheld the city, and wept over it
         content = JSON.stringify({ verses: [companion] });
       } else {
         generated++;
         order.push(`generate-${generated}`);
-        if (generated === scenario.failGeneration) {
+        if (scenario.generationDown || generated === scenario.failGeneration) {
           return Promise.resolve(json({ error: "generation down" }, 503));
         }
         content = `# Draft ${generated}`;
@@ -336,12 +341,54 @@ Deno.test("real devotional handler recovery and persistence", async (t) => {
         const multi = await run({ judgments: [4], multi: true });
         assert(multi.published?.track === "lament", "expected a multi-verse lament day");
         assert(
-          isLamentCapable(paragraphText(multi.published.verses[0])),
-          "multi-verse lament seed carries no grief",
+          multi.published.verses.every((v: Row) => isLamentCapable(paragraphText(v))),
+          "multi-verse lament seed or companion carries no grief",
         );
         assert(
           multi.published.verse_selection_prompt.includes("This devotional is a lament."),
           "companion selection was not told the devotional is a lament",
+        );
+      },
+    );
+    await t.step(
+      "a lament companion with no grief is reselected before drafting",
+      async () => {
+        const r = await run({
+          judgments: [4],
+          multi: true,
+          companions: [
+            { book: "Matthew", chapter: 6, verse: 33 }, // seek ye first the kingdom
+            { book: "Matthew", chapter: 26, verse: 38 },
+          ],
+        });
+        assert(r.selected === 2 && r.generated === 1, `selected ${r.selected}, generated ${r.generated}`);
+        assert(
+          r.published?.track === "lament" &&
+            `${r.published.verses[1].book} ${r.published.verses[1].chapter}:${r.published.verses[1].verse}` ===
+              "Matthew 26:38",
+          "the grieving companion should replace the rejected one",
+        );
+      },
+    );
+    await t.step(
+      "a scheduled track that fails before any draft is rescued",
+      async () => {
+        // The first generation errors (the shape of the unexplained 2026-11-01
+        // and 2026-09-12 blanks); the rescue track drafts and publishes.
+        const r = await run({ judgments: [4], failGeneration: 1 });
+        assert(r.status === 200 && r.published, `status ${r.status}`);
+        assert(
+          r.published.track === "question" && r.published.judge.fallback_from === "lament",
+          `published ${r.published.track} from ${r.published.judge.fallback_from}`,
+        );
+        assert(
+          r.published.judge.attempt === 1 && r.rejected.length === 0,
+          "no draft was judged before the rescue, so it is attempt 1",
+        );
+        const down = await run({ judgments: [], generationDown: true });
+        assert(
+          down.status === 500 && !down.published && down.rejected.length === 0,
+          `a total outage must stay a 500 with nothing written (status ${down.status})`,
         );
       },
     );

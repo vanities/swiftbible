@@ -36,9 +36,12 @@ pool). The rules do not infer importance from proper names.
 The lament track draws its anchor (and a multi-verse seed) only from passages
 that voice grief, loss or protest in the KJV's own words (`isLamentCapable`:
 wept, mourn, sorrow, groan, forsaken, "how long", "why hast thou"...), about 4%
-of the OT pool and 2.5% of the NT pool. Drawn from the whole pool, lament
-drafts almost always had to import a loss: the judge rejected 15 of the 16 it
-saw between 2026-10-29 and 2026-11-12.
+of the OT pool and 2.5% of the NT pool. Passages that name grief only to end it
+("God shall wipe away all tears", "joy cometh in the morning") are excluded,
+and a multi-verse lament companion must pass the same check or the selector
+asks again. Drawn from the whole pool, lament drafts almost always had to
+import a loss: the judge rejected 15 of the 16 it saw between 2026-10-29 and
+2026-11-12.
 
 Multi-verse selection chooses a random seed and asks for a companion from
 another book. References must resolve to bundled KJV text. Both seed and
@@ -83,7 +86,9 @@ Outcomes:
 - **Judge unavailable:** retain the established fail-open behavior: publish
   the completed draft with `judge.result = null` and `judge.error` populated.
   An unavailable judge is distinct from a known failed judgment.
-- **First generation fails:** return 500 without changing existing content.
+- **Scheduled track fails before any draft** (selection or generation error):
+  the rescue track gets one chance. If neither track drafts anything, return
+  500 without changing existing content.
 
 ```sql
 select for_date, run_id, attempt, track, verses, judge_score,
