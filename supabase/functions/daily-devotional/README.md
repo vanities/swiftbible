@@ -17,6 +17,8 @@ rotates independently through old-testament single, new-testament single, and
 multi-verse; and through empathy, technical, narrative, practical, matt, josh,
 lament, question and character tracks. Custom rows do not advance the track.
 Holidays use one curated verse and retain holiday metadata through retries.
+Holidays skip the lament track and take the next one: their curated verses are
+chosen for the day's theme and almost never voice grief.
 
 Model IDs live in `index.ts`: `DEVOTIONAL_MODEL`, `VERSE_SELECTION_MODEL`,
 and `JUDGE_MODEL`. Model, prompt, prompt version and token usage are stored
@@ -29,6 +31,13 @@ chance is proportional to its usable material. `_shared/verse-selection.ts`
 filters fragments, very long paragraphs, and narrow patterns for census,
 genealogy, itinerary and measurement passages (about 0.7% of the eligible
 pool). The rules do not infer importance from proper names.
+
+The lament track draws its anchor (and a multi-verse seed) only from passages
+that voice grief, loss or protest in the KJV's own words (`isLamentCapable`:
+wept, mourn, sorrow, groan, forsaken, "how long", "why hast thou"...), about 4%
+of the OT pool and 2.5% of the NT pool. Drawn from the whole pool, lament
+drafts almost always had to import a loss: the judge rejected 15 of the 16 it
+saw between 2026-10-29 and 2026-11-12.
 
 Multi-verse selection chooses a random seed and asks for a companion from
 another book. References must resolve to bundled KJV text. Both seed and
@@ -61,8 +70,15 @@ Outcomes:
   `judge.exhausted = true`, retain `judge.retry_error` if present, and report to
   Sentry. This soft-score fallback remains audited because its judgment failed
   the overall threshold.
-- **No usable draft:** return 503, retain all failed judgments, and leave any
-  existing devotional untouched. Known errors are never a fallback.
+- **No usable draft on the scheduled track:** hand the day to the next track
+  in the cycle (never lament), within the same deadline. Its drafts continue the
+  run's attempt numbers, skip every verse already tried, and are judged the same
+  way; the published row records `judge.fallback_from`. Without this, a day
+  with no row left the rotation on the same track, which then failed again the
+  next day (lament blanked 2026-10-29 to 11-01 and 2026-11-11 to 11-12).
+- **No usable draft on either track:** return 503, retain all failed
+  judgments, and leave any existing devotional untouched. Known errors are
+  never a fallback.
 - **Judge unavailable:** retain the established fail-open behavior: publish
   the completed draft with `judge.result = null` and `judge.error` populated.
   An unavailable judge is distinct from a known failed judgment.
@@ -75,7 +91,14 @@ from daily_devotional_rejections order by created_at desc;
 
 select for_date, judge from "Daily Devotional"
 where (judge->>'exhausted')::boolean or judge->'result' = 'null'::jsonb;
+
+select for_date, track, judge->>'fallback_from' as fallback_from
+from "Daily Devotional" where judge ? 'fallback_from' order by for_date desc;
 ```
+
+The cron fires once a day at 00:00 UTC and nothing retries a failed run, so a
+503 or an outage still leaves that date empty until someone backfills it with
+`forDate`.
 
 ## Tests and evaluations
 

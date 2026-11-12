@@ -2,14 +2,28 @@
 // The fetch boundary is intercepted: no production data or model traffic.
 import { handleRequest } from "./index.ts";
 import { JUDGE_CRITERIA } from "../_shared/devotional-judge.ts";
+import { isLamentCapable, type VerseBook } from "../_shared/verse-selection.ts";
+import bibleJson from "./bible.json" with { type: "json" };
 
 function assert(value: unknown, message: string): asserts value {
   if (!value) throw new Error(message);
 }
 // deno-lint-ignore no-explicit-any
 type Row = Record<string, any>;
+
+// Selection returns paragraph starts, so a stored verse ref names a paragraph.
+function paragraphText(v: Row): string {
+  const paragraph = (bibleJson as unknown as VerseBook[])
+    .find((b) => b.name === v.book)?.chapters.find((c) => c.number === v.chapter)
+    ?.paragraphs.find((p) => p.startingVerse === v.verse);
+  assert(paragraph, `${v.book} ${v.chapter}:${v.verse} is not a paragraph start`);
+  return paragraph.text;
+}
+const HARD = "hard" as const;
 interface Scenario {
   judgments: Array<number | "hard" | "down">;
+  // Yesterday's track; the default (josh) schedules lament for today.
+  prevTrack?: string;
   multi?: boolean;
   holiday?: boolean;
   failGeneration?: number;
@@ -61,7 +75,7 @@ Deno.test("real devotional handler recovery and persistence", async (t) => {
             );
           }
           if (select === "track") {
-            return Promise.resolve(json({ track: "josh" }));
+            return Promise.resolve(json({ track: scenario.prevTrack ?? "josh" }));
           }
           if (select === "testament,devotional_type") {
             return Promise.resolve(
@@ -234,11 +248,100 @@ Deno.test("real devotional handler recovery and persistence", async (t) => {
             r.rejected.length === 3,
           "hard failure selected or audit missing",
         );
-        const blocked = await run({ judgments: ["hard", "hard", "hard"] });
+        // Every draft on the scheduled track and on its rescue track is unsafe.
+        const blocked = await run({ judgments: Array(6).fill(HARD) });
+        assert(blocked.status === 503 && !blocked.published, "unsafe draft published");
         assert(
-          blocked.status === 503 && !blocked.published &&
-            blocked.rejected.length === 3,
-          "unsafe draft published",
+          blocked.rejected.length === 6,
+          `expected both tracks' 6 drafts audited, got ${blocked.rejected.length}`,
+        );
+        assert(
+          blocked.rejected.map((x) => x.attempt).join(",") === "1,2,3,4,5,6",
+          `audit attempts must be unique per run: ${blocked.rejected.map((x) => x.attempt)}`,
+        );
+        assert(
+          blocked.rejected.map((x) => x.track).join(",") ===
+            "lament,lament,lament,question,question,question",
+          `audit rows must record the track that wrote them: ${blocked.rejected.map((x) => x.track)}`,
+        );
+      },
+    );
+    await t.step(
+      "a track with no usable draft hands the day to the next track",
+      async () => {
+        // The 2026-11-11 shape: three lament drafts, each with a floor-level
+        // criterion, used to leave the day blank and stall the rotation.
+        const r = await run({ judgments: [HARD, HARD, HARD, 4] });
+        assert(r.status === 200 && r.published, `day left blank (status ${r.status})`);
+        assert(
+          r.published.track === "question" &&
+            r.published.prompt_version === "question-v1",
+          `published ${r.published.track}/${r.published.prompt_version}, expected question/question-v1`,
+        );
+        assert(r.published.judge.fallback_from === "lament", "row must say which track it replaced");
+        assert(
+          r.published.judge.attempt === 4 && r.published.judge.attempts === 4,
+          `attempt ${r.published.judge.attempt}/${r.published.judge.attempts}, expected 4/4`,
+        );
+        assert(
+          r.rejected.length === 3 &&
+            r.rejected.every((x) => x.track === "lament" && x.run_id === r.published!.judge.run_id),
+          "the failed lament drafts must stay audited under the same run",
+        );
+        const tried = new Set(
+          r.rejected.flatMap((x) => x.verses.map((v: Row) => `${v.book} ${v.chapter}:${v.verse}`)),
+        );
+        assert(
+          r.published.verses.every((v: Row) => !tried.has(`${v.book} ${v.chapter}:${v.verse}`)),
+          "the rescue track redrafted a verse already rejected today",
+        );
+        const passedFirst = await run({ judgments: [4] });
+        assert(
+          passedFirst.published?.track === "lament" && !("fallback_from" in passedFirst.published.judge),
+          "a passing scheduled track must not be marked as a fallback",
+        );
+      },
+    );
+    await t.step(
+      "the rescue track is never lament",
+      async () => {
+        // Yesterday matt, so today is josh and the next track in the cycle
+        // would be lament: the rescue skips to question.
+        const r = await run({ judgments: [HARD, HARD, HARD, 4], prevTrack: "matt" });
+        assert(
+          r.published?.track === "question" && r.published.judge.fallback_from === "josh",
+          `rescued by ${r.published?.track} from ${r.published?.judge.fallback_from}, expected question from josh`,
+        );
+      },
+    );
+    await t.step(
+      "a rescue that cannot run keeps the 503 instead of a 500",
+      async () => {
+        const r = await run({ judgments: [HARD, HARD, HARD], failGeneration: 4 });
+        assert(
+          r.status === 503 && !r.published && r.rejected.length === 3,
+          `status ${r.status}, published ${!!r.published}, rejected ${r.rejected.length}`,
+        );
+      },
+    );
+    await t.step(
+      "lament anchors voice grief, loss or protest",
+      async () => {
+        const single = await run({ judgments: [2, 4] });
+        assert(single.published?.track === "lament", "expected a lament day");
+        assert(single.published.prompt_version === "lament-v2", `prompt ${single.published.prompt_version}`);
+        for (const v of [...single.published.verses, ...single.rejected.flatMap((x) => x.verses)]) {
+          assert(isLamentCapable(paragraphText(v)), `${v.book} ${v.chapter}:${v.verse} carries no grief`);
+        }
+        const multi = await run({ judgments: [4], multi: true });
+        assert(multi.published?.track === "lament", "expected a multi-verse lament day");
+        assert(
+          isLamentCapable(paragraphText(multi.published.verses[0])),
+          "multi-verse lament seed carries no grief",
+        );
+        assert(
+          multi.published.verse_selection_prompt.includes("This devotional is a lament."),
+          "companion selection was not told the devotional is a lament",
         );
       },
     );
@@ -280,6 +383,13 @@ Deno.test("real devotional handler recovery and persistence", async (t) => {
           r.status === 200 && r.published &&
             r.published.holiday_name?.startsWith("Christmas"),
           "holiday metadata lost",
+        );
+        // Yesterday josh schedules lament; holidays skip it before any draft.
+        assert(
+          r.published.track === "question" &&
+            r.rejected.every((x) => x.track === "question") &&
+            !("fallback_from" in r.published.judge),
+          `holiday ran ${r.published.track} (rejections: ${r.rejected.map((x) => x.track)})`,
         );
         assert(
           JSON.stringify(r.published.verses) !==

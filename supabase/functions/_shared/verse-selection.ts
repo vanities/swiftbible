@@ -87,6 +87,45 @@ export function unsuitableReason(text: string): string | null {
   return null;
 }
 
+// The lament track can only be written on a passage that itself mourns, fears
+// or protests. Drawn from the whole pool, almost every anchor had none: 15 of
+// the 16 lament drafts judged between 2026-10-29 and 2026-11-12 failed, 13 of
+// them with track_fit <= 2 for importing a loss the verse does not name (Nahum 1:2,
+// Numbers 1:20, Psalms 147:5, Isaiah 6:8...). A failed day saves no row, so
+// the rotation chose lament again the next day and the devotional went blank
+// for days at a time.
+//
+// The vocabulary is the KJV's own words for grief and complaint. Measured at
+// introduction: ~4% of the OT pool and ~2.5% of the NT pool, and it keeps the
+// classic laments (Psalms 13:1, 22:1, 137:1, Lamentations 1, Matthew 27:46).
+// It also keeps judgment oracles ("the land shall be desolate"): the judge
+// scored a curse passage as real loss (Deuteronomy 28:49, track_fit 5).
+// Deliberately not here: "cry" (praise and proclamation), "grievous" ("his
+// commandments are not grievous"), "died"/"dead" (genealogies, resurrection),
+// "trouble" ("let not your heart be troubled"). The judge stays the backstop.
+const LAMENT_WORDS = [
+  "wept", "weep(?:est|eth|ing)?",
+  "mourn(?:ed|est|eth|ing|ers?)?",
+  "tears",
+  "sorrow(?:s|ed|est|eth|ful|ing)?",
+  "grie(?:f|fs|ve|ved|vest|veth|ving)",
+  "lament(?:ed|ing|ation|ations)?",
+  "wail(?:ed|ing)?", "howl(?:ed|ing)?",
+  "groan(?:ed|eth|ing|ings)?",
+  "sigh(?:ed|est|eth|ing|s)?",
+  "anguish", "bitterly", "sackcloth",
+  "bereave(?:d|th)?", "desolate", "forsaken",
+  "afflict(?:ed|ion|ions)",
+  // Protest addressed to God: "How long, O LORD?", "why hast thou forsaken me?"
+  "woe is me", "how long", "why hast thou", "why art thou",
+  "why standest thou", "wherefore hast thou", "hidest thou",
+];
+export const LAMENT_PATTERN = new RegExp(`\\b(?:${LAMENT_WORDS.join("|")})\\b`, "i");
+
+export function isLamentCapable(text: string): boolean {
+  return LAMENT_PATTERN.test(text);
+}
+
 function stripJesusTags(text: string): string {
   return text.replace(/<\/?JESUS>/g, "").trim();
 }
@@ -124,13 +163,30 @@ export function eligibleParagraphs(
   return out;
 }
 
+const lamentPoolCache = new WeakMap<object, SelectedVerse[]>();
+
+// The eligible pool narrowed to passages that voice grief, loss or protest.
+export function lamentParagraphs(
+  books: VerseBook[],
+  testament: "old" | "new"
+): SelectedVerse[] {
+  const cached = lamentPoolCache.get(books);
+  if (cached) return cached;
+  const out = eligibleParagraphs(books, testament).filter((v) => isLamentCapable(v.text));
+  lamentPoolCache.set(books, out);
+  return out;
+}
+
 export function selectRandomVerse(
   books: VerseBook[],
   testament: "old" | "new",
   fallbackBookName: string,
   excluded: ReadonlySet<string> = new Set(),
+  opts: { lament?: boolean } = {},
 ): SelectedVerse {
-  const eligible = eligibleParagraphs(books, testament);
+  const eligible = opts.lament
+    ? lamentParagraphs(books, testament)
+    : eligibleParagraphs(books, testament);
   const pool = excluded.size ? eligible.filter((v) => !excluded.has(verseKey(v))) : eligible;
   if (pool.length > 0) {
     return pool[Math.floor(Math.random() * pool.length)];

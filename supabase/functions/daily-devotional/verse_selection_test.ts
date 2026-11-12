@@ -7,6 +7,8 @@
 // file can exercise the actual code path.
 import {
   eligibleParagraphs,
+  isLamentCapable,
+  lamentParagraphs,
   MAX_PARAGRAPH_CHARS,
   MIN_PARAGRAPH_CHARS,
   selectRandomVerse,
@@ -169,4 +171,78 @@ Deno.test("each unsuitable rule has a sane minimum", () => {
     if (!r.pattern.global) throw new Error(`${r.name}: pattern must be /g so matches are counted`);
     if (r.min < 1) throw new Error(`${r.name}: min must be >= 1`);
   }
+});
+
+// ─── Lament pool ────────────────────────────────────────────────────
+
+Deno.test("lament pool keeps passages that voice grief, loss or protest", () => {
+  const ot = lamentParagraphs(OT, "old");
+  const nt = lamentParagraphs(NT, "new");
+  const kept: Array<[typeof ot, string, number, number]> = [
+    [ot, "Psalms", 13, 1], // How long wilt thou forget me, O LORD?
+    [ot, "Psalms", 22, 1], // why hast thou forsaken me?
+    [ot, "Psalms", 137, 1], // By the rivers of Babylon ... we wept
+    [ot, "Psalms", 42, 3], // My tears have been my meat
+    [ot, "Lamentations", 1, 1],
+    [ot, "Job", 3, 24], // my sighing cometh before I eat
+    [ot, "Habakkuk", 1, 2], // O LORD, how long shall I cry
+    [ot, "Ruth", 1, 19], // Call me Mara ... dealt very bitterly with me
+    [ot, "2 Samuel", 18, 33], // O my son Absalom
+    [ot, "Isaiah", 53, 3], // a man of sorrows, and acquainted with grief
+    [nt, "Matthew", 27, 46], // Eli, Eli, lama sabachthani
+    [nt, "Matthew", 26, 38], // My soul is exceeding sorrowful
+    [nt, "Luke", 19, 41], // he beheld the city, and wept over it
+    [nt, "Romans", 8, 22], // the whole creation groaneth
+  ];
+  for (const [pool, book, ch, v] of kept) {
+    if (!inPool(pool, book, ch, v)) throw new Error(`${book} ${ch}:${v} should be in the lament pool`);
+  }
+});
+
+Deno.test("lament pool drops the anchors the judge rejected for importing a loss", () => {
+  // Every lament draft from 2026-10-29 to 2026-11-12 with track_fit <= 2
+  // (daily_devotional_rejections). Each blanked a day.
+  const ot = lamentParagraphs(OT, "old");
+  const nt = lamentParagraphs(NT, "new");
+  const rejected: Array<[typeof ot, string, number, number]> = [
+    [ot, "Nahum", 1, 2], [ot, "Judges", 13, 8], [ot, "Psalms", 18, 37],
+    [ot, "Psalms", 147, 5], [ot, "Numbers", 1, 20], [ot, "Genesis", 15, 11],
+    [ot, "Isaiah", 6, 8], [ot, "Joshua", 1, 9], [ot, "Proverbs", 26, 1],
+    [nt, "Ephesians", 2, 8], [nt, "Romans", 1, 17], [nt, "Hebrews", 4, 12],
+    [nt, "Romans", 13, 7],
+  ];
+  for (const [pool, book, ch, v] of rejected) {
+    if (inPool(pool, book, ch, v)) throw new Error(`${book} ${ch}:${v} carries no grief and should be excluded`);
+  }
+});
+
+Deno.test("lament pool is a few percent of each testament, enough to rotate", () => {
+  // Measured at introduction: 738/18000 OT (4.1%), 148/5829 NT (2.5%). Too
+  // small and the track repeats verses; too large and the filter has stopped
+  // filtering.
+  for (const [books, testament, lo, hi] of [[OT, "old", 0.02, 0.08], [NT, "new", 0.01, 0.06]] as const) {
+    const all = eligibleParagraphs(books, testament).length;
+    const lament = lamentParagraphs(books, testament).length;
+    const share = lament / all;
+    if (share < lo || share > hi) {
+      throw new Error(`${testament} lament pool ${lament}/${all} (${(share * 100).toFixed(1)}%) outside ${lo * 100}-${hi * 100}%`);
+    }
+    if (lament < 100) throw new Error(`${testament} lament pool has only ${lament} passages`);
+  }
+});
+
+Deno.test("lament selection only draws from the lament pool", () => {
+  for (const [books, testament, fallback] of [[OT, "old", "Psalms"], [NT, "new", "John"]] as const) {
+    for (let i = 0; i < 2000; i++) {
+      const v = selectRandomVerse(books, testament, fallback, new Set(), { lament: true });
+      if (!isLamentCapable(v.text)) throw new Error(`drew ${v.book} ${v.chapter}:${v.verse}, which carries no grief`);
+    }
+  }
+});
+
+Deno.test("lament words match whole words, case-insensitively", () => {
+  const yes = ["How long, O LORD?", "Jesus wept.", "and SORROW and sighing", "why hast thou forsaken me"];
+  const no = ["he received his sight", "his commandments are not grievous", "a cry of joy", "Let not your heart be troubled"];
+  for (const s of yes) if (!isLamentCapable(s)) throw new Error(`should match: ${s}`);
+  for (const s of no) if (isLamentCapable(s)) throw new Error(`should not match: ${s}`);
 });

@@ -233,7 +233,13 @@ const NARRATIVE_PROMPT_VERSION = "narrative-v4";
 const PRACTICAL_PROMPT_VERSION = "practical-v4";
 const MATT_PROMPT_VERSION = "matt-v1";
 const JOSH_PROMPT_VERSION = "josh-v1";
-const LAMENT_PROMPT_VERSION = "lament-v1";
+// lament-v2: the loss must be the passage's own, one specific observation
+// carries the substance, and "Still speaking" is third person rather than a
+// second prayer. These are the three complaints the judge kept making about
+// the 15 lament-v1 drafts it rejected from 2026-10-29 to 2026-11-12: an
+// imported loss (13), little specific insight (substance 2 on 10), and "Still
+// speaking" repeating the prayer (5).
+const LAMENT_PROMPT_VERSION = "lament-v2";
 const QUESTION_PROMPT_VERSION = "question-v1";
 const CHARACTER_PROMPT_VERSION = "character-v1";
 
@@ -1075,13 +1081,22 @@ function getHolidayInternal(date: Date): Holiday | null {
 
 // Verse selection lives in ../_shared/verse-selection.ts so it can be
 // imported and tested directly; this file cannot (top-level Deno.serve).
-function selectRandomVerse(testament: "old" | "new", excluded: ReadonlySet<string> = new Set()): SelectedVerse {
-  return sharedSelectRandomVerse(
+function selectRandomVerse(
+  testament: "old" | "new",
+  excluded: ReadonlySet<string> = new Set(),
+  opts: { lament?: boolean } = {},
+): SelectedVerse {
+  const verse = sharedSelectRandomVerse(
     testament === "old" ? OT_BOOKS : NT_BOOKS,
     testament,
     testament === "old" ? "Psalms" : "John",
     excluded,
+    opts,
   );
+  if (opts.lament) {
+    console.log(`[verse-selection] lament anchor ${verse.book} ${verse.chapter}:${verse.verse} (${testament}, ${excluded.size} excluded)`);
+  }
+  return verse;
 }
 
 // ─── Date formatting ────────────────────────────────────────────────
@@ -1236,6 +1251,7 @@ async function selectMultiVerses(
   excluded: ReadonlySet<string> = new Set(),
   signal?: AbortSignal,
   firstTestament: "old" | "new" = Math.random() < 0.5 ? "old" : "new",
+  lament = false,
 ): Promise<{
   verses: Array<{ book: string; chapter: number; verse: number }>;
   usage: TokenUsage;
@@ -1244,8 +1260,9 @@ async function selectMultiVerses(
   const apiKey = Deno.env.get("OPENAI_API_KEY");
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY env var");
 
-  // Step 1: Pick the first verse randomly (guarantees variety)
-  const seedVerse = selectRandomVerse(firstTestament, excluded);
+  // Step 1: Pick the first verse randomly (guarantees variety). A lament seed
+  // comes from passages that voice grief, loss or protest.
+  const seedVerse = selectRandomVerse(firstTestament, excluded, { lament });
   console.log(
     `Multi-verse seed (random): ${seedVerse.book} ${seedVerse.chapter}:${seedVerse.verse}`
   );
@@ -1254,12 +1271,15 @@ async function selectMultiVerses(
   const holidayContext = holiday
     ? `\n\nThis devotional is for ${holiday.name}. ${holiday.themeHint}`
     : "";
+  const lamentContext = lament
+    ? "\n\nThis devotional is a lament. The companion must also voice grief, loss or protest; do not choose a verse that answers or resolves it."
+    : "";
 
   const prompt = `Given this Bible verse from the King James Version (KJV):
 
 ${seedVerse.book} ${seedVerse.chapter}:${seedVerse.verse} — "${seedVerse.text}"
 
-Select exactly ${companionCount} companion verse${companionCount > 1 ? "s" : ""} that ${companionCount > 1 ? "connect" : "connects"} thematically to create a powerful multi-verse devotional.${holidayContext}
+Select exactly ${companionCount} companion verse${companionCount > 1 ? "s" : ""} that ${companionCount > 1 ? "connect" : "connects"} thematically to create a powerful multi-verse devotional.${holidayContext}${lamentContext}
 
 Rules:
 - Choose from a DIFFERENT book than ${seedVerse.book}
@@ -1929,9 +1949,16 @@ const PROMPT_LAMENT_RULES = `VOICE — lament track
 - Sit inside the grief, doubt, or anger of the passage without hurrying to comfort.
 - Never say "but" in the pivot position. No silver lining, no lesson-of-suffering, no theodicy.
 - Do not explain why God permitted the thing. Scripture frequently does not, and neither should you.
-- Name what is actually lost, plainly, without decorating it.
+- Name what is actually lost, plainly, without decorating it. The loss must be the passage's own:
+  what this text itself mourns, fears or protests. Do not bring in a death, illness or grief the
+  passage does not contain. A lament that has to import its grief has misread the verse.
+- Give the reader one specific, true observation about how the passage voices its grief: a word it
+  repeats, the question it asks, whom it addresses, what it leaves unsaid. That observation is the
+  substance of the piece. It is not a lesson.
 - The honest ending is often unresolved — the psalmists end mid-complaint more often than we admit.
   You may end on address rather than answer: the sufferer is still speaking to God.
+- "Still speaking" is written about the people in the passage, in the third person. It is not a
+  second prayer. The closing prayer is the only place this devotional speaks to God.
 - The prayer may ask for nothing but presence. It must not tidy the grief up.`;
 
 const PROMPT_QUESTION_RULES = `VOICE — question-led track
@@ -1964,7 +1991,7 @@ function newTrackSkeleton(track: string, headingRef: string, verseBlock: string,
     case "josh":
       return `${head}\n\n**{One-line bolded subtitle — phrased as the question the lesson works on.}**\n\n${verseBlock}\n\n## A question first\n\n{Ask it plainly. Give the reader room to answer before you do.}\n\n## The world it was written into\n\n{Who wrote it, to whom, into what situation. Price your claims — say what is disputed or uncertain.}\n\n## Whose definition?\n\n{Name where a modern reading of a key word differs from what it meant there.}\n\n## Back to you\n\n{Hand the question back, sharpened. One thing to sit with today.}\n\n${prayer}`;
     case "lament":
-      return `${head}\n\n**{One-line bolded subtitle — do not console in it.}**\n\n${verseBlock}\n\n## What is lost\n\n{Name it plainly and specifically. No decoration, no cushioning.}\n\n## The passage does not tidy this\n\n{Stay inside the text's own grief or protest. Do not supply a reason God has not supplied.}\n\n## Still speaking\n\n{The sufferer is still addressing God. That is the only resolution on offer, and it may be enough. Do not resolve further.}\n\n${prayer}`;
+      return `${head}\n\n**{One-line bolded subtitle — do not console in it.}**\n\n${verseBlock}\n\n## What is lost\n\n{Name what the passage itself mourns, fears or protests, plainly and specifically. No decoration, no cushioning, and no loss the text does not contain.}\n\n## The passage does not tidy this\n\n{Stay inside the text's own grief or protest. Make one specific observation about how it is voiced: a repeated word, the question asked, whom it addresses. Do not supply a reason God has not supplied.}\n\n## Still speaking\n\n{In the third person: the sufferer in the passage is still addressing God. That is the only resolution on offer, and it may be enough. Do not pray here; the prayer below does that. Do not resolve further.}\n\n${prayer}`;
     case "question":
       return `${head}\n\n**{One-line bolded subtitle — the question itself.}**\n\n${verseBlock}\n\n## The question\n\n{One real question, including the uncomfortable form of it.}\n\n## The strongest objection\n\n{State it in its strongest form, in the objector's own words, before answering.}\n\n## What the text does and does not settle\n\n{Separate what scripture states, what it implies, and what is inference.}\n\n## Sharpened\n\n{End with the question sharpened rather than dissolved, plus one thing to do with it today.}\n\n${prayer}`;
     default: // character
@@ -2098,6 +2125,14 @@ function nextTrack(prev: string | null | undefined): Track {
   return TRACK_CYCLE[(idx + 1) % TRACK_CYCLE.length];
 }
 
+// The track a day falls back to when `track` produced nothing publishable.
+// Never lament: it needs a passage that carries grief and fails the judge
+// most often, so it is the worst track to rescue a day with.
+function fallbackTrack(track: Track): Track {
+  const next = nextTrack(track);
+  return next === "lament" ? nextTrack(next) : next;
+}
+
 async function determineDevotionalType(
   supabase: SupabaseClient,
   today: Date,
@@ -2125,7 +2160,16 @@ async function determineDevotionalType(
       // ignore lookup errors and keep walking
     }
   }
-  const track = nextTrack(mostRecentTrack);
+  let track = nextTrack(mostRecentTrack);
+  // A holiday's curated verses are chosen for the day's theme, and almost none
+  // voice grief (5 of 52 holidays have one that does, and three of those are
+  // "rejoice" Sundays or political). Both holiday laments the judge saw,
+  // Reformation Day 2026-10-31 and Veterans Day 2026-11-11, failed all three
+  // drafts for importing a loss. Holidays take the next track instead.
+  if (holiday && track === "lament") {
+    track = nextTrack(track);
+    console.log(`Track cycle: lament skipped on ${holiday.name}; using ${track}`);
+  }
   console.log(`Track cycle: prev=${mostRecentTrack ?? "none"}, next=${track}`);
 
   // Holidays: pick one curated verse (single-verse devotional)
@@ -2250,9 +2294,14 @@ interface StoredJudge {
   run_id: string;
   retry_error?: string;
   model: string;
+  // Numbered across the whole run: with a track fallback, attempts covers
+  // the failed track's drafts too.
   attempt: number;
   attempts: number;
   exhausted: boolean;
+  // The scheduled track that produced no usable draft, when this row came
+  // from the fallback track instead.
+  fallback_from?: string;
   result: JudgeResult | null;
   error?: string;
 }
@@ -2267,11 +2316,14 @@ async function buildCandidate(
   signal?: AbortSignal,
 ): Promise<Candidate> {
   const used = new Set(tried.flatMap((c) => c.verses.map(verseKey)));
+  // Lament can only be written on a passage that voices grief, loss or
+  // protest (see isLamentCapable in _shared/verse-selection.ts).
+  const lament = track === "lament";
 
   if (devotionalType === "multi") {
     // Both seed and companion exclude every previously attempted reference.
     const { verses: verseRefs, usage, prompt: selPrompt } =
-      await selectMultiVerses(2, null, used, signal, targetTestament);
+      await selectMultiVerses(2, null, used, signal, targetTestament, lament);
     const verses = verseRefs.map((ref) => {
       const text = lookupVerseText(ref.book, ref.chapter, ref.verse);
       const isOT = OT_BOOKS.some((b) => b.name === ref.book);
@@ -2302,7 +2354,7 @@ async function buildCandidate(
       if (resolvedText) verse.text = resolvedText;
     }
   }
-  verse ??= selectRandomVerse(targetTestament, used);
+  verse ??= selectRandomVerse(targetTestament, used, { lament });
 
   return {
     verses: [verse],
@@ -2489,51 +2541,103 @@ export async function handleRequest(req: Request): Promise<Response> {
     //   - type/testament: old single → new single → multi → repeat
     //   - track:          empathy → technical → narrative → practical → repeat (round-robin via TRACK_CYCLE)
     //   - holidays override type to single, but still advance the track cycle
-    const { type: devotionalType, targetTestament, track } =
+    //     (and skip lament; see determineDevotionalType)
+    const { type: devotionalType, targetTestament, track: scheduledTrack } =
       await determineDevotionalType(supabase, today, holiday);
-    const promptVersion = PROMPT_VERSION_BY_TRACK[track];
-    console.log(
-      `Devotional type: ${devotionalType}, testament: ${targetTestament}, track: ${track} (${promptVersion})`
-    );
 
     // Select verse(s), generate, and judge. A draft below the judge's
     // threshold is set aside and the same track/type/testament is tried
     // again from a different verse (see _shared/devotional-judge.ts).
-    const tryCandidate = (tried: Candidate[]) =>
-      buildCandidate(devotionalType, targetTestament, track, holiday, formatted, tried, signal);
-
-    const outcome = await generateWithJudge<Candidate, Generation>({
-      first: await tryCandidate([]),
-      next: tryCandidate,
-      generate: async (candidate) => {
-        console.log(
-          `Verses: ${candidate.verses.map(verseKey).join(", ")}`
-        );
-        const generation = await generateDevotional(candidate.prompt, signal);
-        console.log("Generated Devotional:\n", generation.message);
-        return generation;
-      },
-      judge: (candidate, generation) => judgeDraft(candidate, generation, track, holiday, signal),
-      maxAttempts: JUDGE_MAX_ATTEMPTS,
-      signal,
-      onFailedAttempt: (attempt) => recordRejections(
-        supabase, isoDate, devotionalType, targetTestament, track,
-        promptVersion, holiday, [attempt], runId,
-      ),
-    });
-
-    const { accepted, rejected, exhausted, retryError } = outcome;
-    if (exhausted) {
-      await captureException(
-        new Error(`daily-devotional judge: ${isoDate}: ${accepted ? "using soft-score fallback" : "no usable draft"}${retryError ? `; ${retryError}` : ""}`),
-        { functionName: "daily-devotional", tags: { stage: "judge-exhausted", track }, extra: { runId } },
+    // Verses and attempt numbers carry across tracks: a fallback track never
+    // redrafts a verse already tried today, and its audit rows continue the
+    // run's attempt count.
+    const triedEarlier: Candidate[] = [];
+    let attemptsSoFar = 0;
+    const runTrack = async (track: Track) => {
+      const promptVersion = PROMPT_VERSION_BY_TRACK[track];
+      console.log(
+        `Devotional type: ${devotionalType}, testament: ${targetTestament}, track: ${track} (${promptVersion})`
       );
+      const tryCandidate = (tried: Candidate[]) =>
+        buildCandidate(devotionalType, targetTestament, track, holiday, formatted, [...triedEarlier, ...tried], signal);
+
+      const trackOutcome = await generateWithJudge<Candidate, Generation>({
+        first: await tryCandidate([]),
+        next: tryCandidate,
+        generate: async (candidate) => {
+          console.log(
+            `Verses: ${candidate.verses.map(verseKey).join(", ")}`
+          );
+          const generation = await generateDevotional(candidate.prompt, signal);
+          console.log("Generated Devotional:\n", generation.message);
+          return generation;
+        },
+        judge: (candidate, generation) => judgeDraft(candidate, generation, track, holiday, signal),
+        maxAttempts: JUDGE_MAX_ATTEMPTS,
+        firstAttempt: attemptsSoFar + 1,
+        signal,
+        onFailedAttempt: (attempt) => recordRejections(
+          supabase, isoDate, devotionalType, targetTestament, track,
+          promptVersion, holiday, [attempt], runId,
+        ),
+      });
+
+      const drafts = [...trackOutcome.rejected, ...(trackOutcome.accepted ? [trackOutcome.accepted] : [])];
+      attemptsSoFar += drafts.length;
+      triedEarlier.push(...drafts.map((d) => d.candidate));
+      if (trackOutcome.exhausted) {
+        await captureException(
+          new Error(`daily-devotional judge: ${isoDate} ${track}: ${trackOutcome.accepted ? "using soft-score fallback" : "no usable draft"}${trackOutcome.retryError ? `; ${trackOutcome.retryError}` : ""}`),
+          { functionName: "daily-devotional", tags: { stage: "judge-exhausted", track }, extra: { runId } },
+        );
+      }
+      return trackOutcome;
+    };
+
+    let track = scheduledTrack;
+    let outcome = await runTrack(track);
+    // A day with no usable draft saves no row, so the next day's rotation
+    // lands on the same track and usually fails the same way: that is how
+    // lament blanked 2026-10-29 to 11-01 and 2026-11-11 to 11-12. Hand the day
+    // to the next track inside the same deadline. Known errors are still
+    // never published.
+    const rescueTrack = fallbackTrack(scheduledTrack);
+    if (!outcome.accepted) {
+      console.warn(
+        `[daily-devotional] ${isoDate}: no usable ${scheduledTrack} draft in ${attemptsSoFar} attempt(s); falling back to ${rescueTrack}`,
+      );
+      try {
+        const rescued = await runTrack(rescueTrack);
+        if (rescued.accepted) {
+          track = rescueTrack;
+          outcome = rescued;
+          console.log(`[daily-devotional] ${isoDate}: ${rescueTrack} published on attempt ${rescued.accepted.attempt} of ${attemptsSoFar}`);
+        } else {
+          console.warn(`[daily-devotional] ${isoDate}: ${rescueTrack} also produced no usable draft`);
+        }
+      } catch (error) {
+        // The scheduled track already used its attempts. A deadline or outage
+        // during the rescue keeps the 503 below instead of becoming a 500.
+        console.error(`[daily-devotional] ${isoDate}: ${rescueTrack} fallback failed`, error);
+        await captureException(error, {
+          functionName: "daily-devotional",
+          tags: { stage: "track-fallback", track: rescueTrack },
+          extra: { runId },
+        });
+      }
     }
+
+    const { accepted, exhausted, retryError } = outcome;
     if (!accepted) {
-      return new Response(JSON.stringify({ error: "No draft passed the safety criteria; existing devotional preserved", runId }), {
+      return new Response(JSON.stringify({
+        error: "No draft passed the safety criteria; existing devotional preserved",
+        runId,
+        tracks: [scheduledTrack, rescueTrack],
+      }), {
         status: 503, headers: { "Content-Type": "application/json" },
       });
     }
+    const promptVersion = PROMPT_VERSION_BY_TRACK[track];
     const { prompt, verseSelectionPrompt, selectionUsage } = accepted.candidate;
     const versesUsed = accepted.candidate.verses;
     const devotional = accepted.generation.message;
@@ -2549,8 +2653,9 @@ export async function handleRequest(req: Request): Promise<Response> {
       ...(retryError ? { retry_error: retryError } : {}),
       model: JUDGE_MODEL,
       attempt: accepted.attempt,
-      attempts: rejected.length + 1,
+      attempts: attemptsSoFar,
       exhausted,
+      ...(track !== scheduledTrack ? { fallback_from: scheduledTrack } : {}),
       result: accepted.judge,
       ...(accepted.judgeError ? { error: accepted.judgeError } : {}),
     };
