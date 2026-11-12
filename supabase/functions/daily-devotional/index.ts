@@ -180,21 +180,28 @@ const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 // These were previously overridable via Supabase secrets. That override sat on
 // gpt-5.5 from 2026-05-02 while this file claimed otherwise, so a model "change"
 // in code shipped nothing for months. The secret has been removed; do not
-// reintroduce an env fallback. Change the model by editing these two lines and
+// reintroduce an env fallback. Change the model by editing these lines and
 // deploying, then confirm against the `model` column on a freshly generated row.
 //
 // Pinned to explicit tier ids, never a bare family alias (e.g. "gpt-5.6"
 // routes to Sol) — an alias would silently change quality and price under us.
 //
+// gpt-6.1-sol and gpt-6-luna chosen 2026-11-11 from OpenAI's pricing page as
+// the newest Sol and Luna tiers (gpt-6.1-sol: same $2/$10 as gpt-6-sol). Both
+// default to medium reasoning, as gpt-6-sol and gpt-5.6-luna did, so token
+// budgets carry over: before the switch selection used at most 161 of its 300
+// completion tokens, generation 1520 of 4000, the judge 645 of 1500.
+//
 // The model used for each devotional is persisted to the "Daily Devotional".model
 // column so the iOS and Android apps can attribute it accurately.
-const DEVOTIONAL_MODEL = "gpt-6-sol";
-const VERSE_SELECTION_MODEL = "gpt-5.6-luna";
+const DEVOTIONAL_MODEL = "gpt-6.1-sol";
+const VERSE_SELECTION_MODEL = "gpt-6-luna";
 // Grades each draft before it is saved (see _shared/devotional-judge.ts).
 // Same tier as the writer: a weaker grader misses the subtle failures
 // (stretched verses, quiet misreadings) the gate exists to catch, and at one
 // short call per attempt the cost is a fraction of generation.
-const JUDGE_MODEL = "gpt-6-sol";
+// Re-run `make eval-devotional-judge TRIALS=3` whenever this changes.
+const JUDGE_MODEL = "gpt-6.1-sol";
 
 // Two parallel prompt tracks rotate randomly to vary the daily devotional
 // voice. The "Daily Devotional" table's prompt_version column records
@@ -244,12 +251,14 @@ const QUESTION_PROMPT_VERSION = "question-v1";
 const CHARACTER_PROMPT_VERSION = "character-v1";
 
 // Per-model pricing in USD per million tokens (input, output).
-// Source: OpenAI pricing page, snapshotted 2026-09-22.
+// Source: OpenAI pricing page, snapshotted 2026-09-22; gpt-6.1-sol added
+// 2026-11-11 from the same page.
 // Update when pricing changes; cost is locked-in at generation time so
 // historical rows keep the price actually paid. Retired models stay listed
 // so historical rows can still be costed.
 const MODEL_PRICING: Record<string, { input: number; output: number }> = {
   // GPT-6 family
+  "gpt-6.1-sol":   { input: 2.00,  output: 10.00 },
   "gpt-6-sol":     { input: 2.00,  output: 10.00 },
   "gpt-6-luna":    { input: 0.10,  output:  0.50 },
   // GPT-5.6 family (GA 2026-07-09)

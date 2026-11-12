@@ -20,9 +20,10 @@ Holidays use one curated verse and retain holiday metadata through retries.
 Holidays skip the lament track and take the next one: their curated verses are
 chosen for the day's theme and almost never voice grief.
 
-Model IDs live in `index.ts`: `DEVOTIONAL_MODEL`, `VERSE_SELECTION_MODEL`,
-and `JUDGE_MODEL`. Model, prompt, prompt version and token usage are stored
-with each draft. Environment variables do not override model constants.
+Model IDs live in `index.ts`: `DEVOTIONAL_MODEL` and `JUDGE_MODEL`
+(`gpt-6.1-sol`) and `VERSE_SELECTION_MODEL` (`gpt-6-luna`), chosen 2026-11-11.
+Model, prompt, prompt version and token usage are stored with each draft.
+Environment variables do not override model constants.
 
 ## Selection and quality gate
 
@@ -120,6 +121,10 @@ share their corrected examples with the positive evaluation fixtures in
 `_shared/devotional-examples.ts`; the former empathy invented-scene example
 remains as a negative control. Re-run evaluations when models, rubric or examples
 change. Bump the corresponding prompt version when its prompt changes.
+
+Judge evals verified on: `gpt-6-sol` (2026-10-11, PR #44: 11 cases x 3
+trials, 33/33 decisions correct). `gpt-6.1-sol`: pending, run
+`make eval-devotional-judge TRIALS=3` before relying on it.
 
 ## Deployment
 
