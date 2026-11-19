@@ -198,11 +198,12 @@ const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 const DEVOTIONAL_MODEL = "gpt-6.1-sol";
 const VERSE_SELECTION_MODEL = "gpt-6-luna";
 // Grades each draft before it is saved (see _shared/devotional-judge.ts).
-// Same tier as the writer: a weaker grader misses the subtle failures
+// Sol tier like the writer: a weaker grader misses the subtle failures
 // (stretched verses, quiet misreadings) the gate exists to catch, and at one
 // short call per attempt the cost is a fraction of generation.
-// Re-run `make eval-devotional-judge TRIALS=3` whenever this changes.
-const JUDGE_MODEL = "gpt-6.1-sol";
+// Pinned to the model its evals passed on (README), not to the writer's: it
+// moves only after `make eval-devotional-judge TRIALS=3` passes on the new one.
+const JUDGE_MODEL = "gpt-6-sol";
 
 // Two parallel prompt tracks rotate randomly to vary the daily devotional
 // voice. The "Daily Devotional" table's prompt_version column records
