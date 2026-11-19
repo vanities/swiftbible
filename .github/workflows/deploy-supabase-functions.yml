@@ -34,7 +34,8 @@ jobs:
 
       - uses: supabase/setup-cli@v2
         with:
-          version: latest
+          # Pinned with deploy-supabase-migrations.yml; see the note there.
+          version: 2.122.0
 
       # Deploy create-donation-session WITHOUT JWT verification (anonymous donations only)
       - name: Deploy create-donation-session function

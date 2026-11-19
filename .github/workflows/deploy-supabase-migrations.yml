@@ -30,7 +30,11 @@ jobs:
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v2
         with:
-          version: latest
+          # Pinned: `latest` picked up CLI 3.0 (2026-11-02), which rejects the
+          # [inbucket] section in supabase/config.toml, and the deploy of #45
+          # failed. Matches the local CLI. Move to 3.x together with
+          # deploy-supabase-functions.yml, after renaming inbucket to local_smtp.
+          version: 2.122.0
 
       - name: Link Supabase project
         run: |
