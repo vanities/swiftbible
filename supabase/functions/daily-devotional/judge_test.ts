@@ -270,9 +270,36 @@ Deno.test("handler gates generation through the judge and records rejections", (
 Deno.test("retries keep track, type and testament; only the verse changes", () => {
   const source = indexSource();
   assert(
-    source.includes("buildCandidate(devotionalType, targetTestament, track, holiday, formatted, tried, signal)"),
-    "retry candidates must be built from the same devotionalType/targetTestament/track",
+    source.includes(
+      "buildCandidate(devotionalType, targetTestament, track, holiday, formatted, [...triedEarlier, ...tried], signal)",
+    ),
+    "retry candidates must be built from the same devotionalType/targetTestament/track and exclude every verse tried today",
   );
+  // The track changes only when a whole track produced nothing usable.
+  assert(
+    source.includes("const rescueTrack = fallbackTrack(scheduledTrack);"),
+    "the rescue track must come from fallbackTrack()",
+  );
+});
+
+Deno.test("firstAttempt continues the numbering for a second track in the same run", async () => {
+  // daily_devotional_rejections is UNIQUE (run_id, attempt): a fallback track
+  // restarting at 1 would collide with the first track's audit rows.
+  const audited: number[] = [];
+  const outcome = await generateWithJudge<string, { message: string }>({
+    first: "Psalms 13:1",
+    next: async (tried) => ["Psalms 13:1", "Psalms 22:1", "Job 3:24"][tried.length],
+    generate: async (v) => ({ message: `devotional on ${v}` }),
+    judge: async () => fail(5),
+    maxAttempts: 2,
+    firstAttempt: 4,
+    onFailedAttempt: async (a) => {
+      audited.push(a.attempt);
+    },
+    log: () => {},
+  });
+  assert(audited.join(",") === "4,5", `audited attempts ${audited.join(",")}, expected 4,5`);
+  assert(outcome.accepted?.attempt === 4, "the soft-score fallback keeps its run-wide number");
 });
 
 Deno.test("migration creates the rejections table locked to service_role", () => {
