@@ -141,6 +141,65 @@ books = [
 ]
 
 
+# kjv.txt starts about 6,100 verses mid-line, right after the verse before.
+# Within a chapter that is harmless: the marker stays inline and both apps
+# render it as a verse number. But 48 of those verses open the next chapter
+# (33 chapters in all), and parse_bible_file starts a chapter only at the
+# beginning of a line, so each stayed glued to the end of the previous chapter.
+# The apps render an inline marker without its chapter, so John 6:1 showed as a
+# stray verse "1" at the end of John 5 and John 6 began at verse 2 (reported
+# 2026-11-19). test_bible_structure.py checks every chapter of every shipped
+# translation runs 1..N.
+LINE_START_MARKER = re.compile(r"(\d+):\d+")
+MID_LINE_MARKER = re.compile(r"(?<=\s)(\d+):(\d+)(?=\s|$)")
+
+
+def expand_chapter_openings(lines):
+    """Yield `lines`, moving each mid-line chapter opening onto its own line.
+
+    A blank line goes between the two halves, as between any two verses in
+    kjv.txt, so the verse before the cut keeps the trailing space every
+    paragraph ends with. A marker that ends its line (2 Samuel 2:1, Job 27:1,
+    Acts 22:1) is carried onto the next line, where its text is. A mid-line
+    marker that is neither in the current chapter nor the first verse of the
+    next one raises instead of guessing.
+    """
+    chapter = None
+    carried = None
+    for line in lines:
+        if carried is not None:
+            if not line or line in book_titles:
+                raise ValueError(f"verse marker {carried!r} has no text after it")
+            line = f"{carried} {line}"
+            carried = None
+        if line in book_titles:
+            chapter = None
+            yield line
+            continue
+        start = LINE_START_MARKER.match(line)
+        if start:
+            chapter = int(start.group(1))
+        cut = 0
+        if chapter is not None:
+            for marker in MID_LINE_MARKER.finditer(line):
+                number, verse = int(marker.group(1)), int(marker.group(2))
+                if number == chapter:
+                    continue
+                if (number, verse) != (chapter + 1, 1):
+                    raise ValueError(
+                        f"unexpected verse marker {marker.group(0)!r} in chapter {chapter}: {line!r}"
+                    )
+                yield line[cut:marker.start()].rstrip()
+                yield ""
+                cut = marker.start()
+                chapter = number
+        rest = line[cut:]
+        if cut and LINE_START_MARKER.fullmatch(rest):
+            carried = rest
+        else:
+            yield rest
+
+
 def parse_bible_file(file_path):
     bible_data = []
     current_book = {}
@@ -153,9 +212,9 @@ def parse_bible_file(file_path):
         content = file.read()
         lines = content.split("\n")
 
-        for line in lines:
-            line = line.strip().translate(transl_table)
-
+        for line in expand_chapter_openings(
+            raw.strip().translate(transl_table) for raw in lines
+        ):
             if line in book_titles:
                 # Save the last paragraph and chapter of the previous book
                 if current_book:
@@ -232,6 +291,6 @@ def save_to_json(bible_data, output_file):
     print(f"Saved to {output_file}")
 
 
-bible_file = "kjv.txt"
-bible_data = parse_bible_file(bible_file)
-save_to_json(bible_data, "../ios/swiftbible/Text/bible.json")
+if __name__ == "__main__":
+    bible_data = parse_bible_file("kjv.txt")
+    save_to_json(bible_data, "../ios/swiftbible/Text/bible.json")
