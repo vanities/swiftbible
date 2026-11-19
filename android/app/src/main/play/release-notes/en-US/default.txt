@@ -1,4 +1,2 @@
-• "About this book" introductions are easier to read, with section headings and bold numbered points.
-• Restored paragraphs that were missing from 22 book introductions, including Ruth, Isaiah and Matthew.
-• Matthew Henry chapter summaries now show in full instead of being cut off.
-• Maintenance and stability improvements.
+• King James Version (KJV): 48 verses that appeared at the end of the previous chapter, including John 6:1, now begin their own chapter.
+• Daily devotionals are more reliable.
