@@ -146,12 +146,44 @@ def add_version_item(token, submission_id, version_id, dry_run):
     try:
         api("POST", "/reviewSubmissionItems", token, json=body)
     except requests.exceptions.HTTPError as e:
-        # 409 = this version is already an item on the submission. Safe on a
-        # retry after a transient failure — treat as already present.
-        if e.response is not None and e.response.status_code == 409:
-            print(f"  Version {version_id} already on submission {submission_id} (409 — treating as present)")
-        else:
+        if e.response is None or e.response.status_code != 409:
             raise
+        # A 409 is a duplicate only if the version really is on the submission.
+        # Otherwise Apple is refusing the version itself, and its
+        # associatedErrors say why. Treating every 409 as a duplicate hid a new
+        # required age-rating answer (socialMedia, 1.65 on 2026-11-19): the run
+        # went on to fail with a bare 409 when marking the submission submitted.
+        items = list_submission_items(token, submission_id)
+        if any(item_version_id(i) == version_id for i in items):
+            print(f"  Version {version_id} already on submission {submission_id}")
+            return
+        sys.exit(
+            f"ERROR: Apple refused version {version_id} for review:\n"
+            f"{describe_refusal(e.response)}\n"
+            "Fix it in App Store Connect (an unanswered age-rating question shows as"
+            " ageRatingDeclarations ... REQUIRED), then rerun `make submit-version`."
+        )
+
+
+def item_version_id(item):
+    """The appStoreVersion id a reviewSubmissionItem points at, or None."""
+    return (item.get("relationships", {}).get("appStoreVersion", {}).get("data") or {}).get("id")
+
+
+def describe_refusal(response):
+    """Apple's errors and associatedErrors as readable lines."""
+    try:
+        errors = response.json().get("errors", [])
+    except ValueError:
+        return response.text
+    lines = []
+    for error in errors:
+        lines.append(f"  {error.get('code')}: {error.get('detail') or error.get('title')}")
+        for path, related in ((error.get("meta") or {}).get("associatedErrors") or {}).items():
+            for r in related:
+                pointer = (r.get("source") or {}).get("pointer", "")
+                lines.append(f"    {path} {pointer}: {r.get('detail') or r.get('title')}")
+    return "\n".join(lines) or response.text
 
 
 def list_submission_items(token, submission_id):
@@ -213,10 +245,7 @@ def main():
     # Add the version as an item if it isn't already
     if existing and not args.dry_run:
         items = list_submission_items(token, sub_id)
-        already = any(
-            (i.get("relationships", {}).get("appStoreVersion", {}).get("data", {}) or {}).get("id") == version_id
-            for i in items
-        )
+        already = any(item_version_id(i) == version_id for i in items)
         if already:
             print(f"  Version {vstr} already on submission {sub_id}")
         else:
